@@ -9,7 +9,6 @@ import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRunt
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.schema.module.lobby.DeleteLobbyRuntimeRefRequest;
 import com.omgservers.schema.module.lobby.DeleteLobbyRuntimeRefResponse;
@@ -25,16 +24,12 @@ import com.omgservers.schema.module.runtime.DeleteRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeAssignmentResponse;
 import com.omgservers.schema.module.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeCommandResponse;
-import com.omgservers.schema.module.runtime.DeleteRuntimePermissionRequest;
-import com.omgservers.schema.module.runtime.DeleteRuntimePermissionResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
-import com.omgservers.schema.module.runtime.ViewRuntimePermissionsRequest;
-import com.omgservers.schema.module.runtime.ViewRuntimePermissionsResponse;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
 import com.omgservers.schema.service.system.job.DeleteJobRequest;
@@ -51,6 +46,8 @@ import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.server.operation.getServers.GetServersOperation;
 import com.omgservers.service.server.service.job.JobService;
+import com.omgservers.service.server.service.room.RoomService;
+import com.omgservers.service.server.service.room.dto.RemoveRoomRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -72,6 +69,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final UserModule userModule;
     final PoolModule poolModule;
 
+    final RoomService roomService;
     final JobService jobService;
 
     final GetServersOperation getServersOperation;
@@ -100,7 +98,8 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             runtime.getVersionId());
 
                     // TODO: cleanup container user
-                    return deleteRuntimeCommands(runtimeId)
+                    return deleteRoom(runtimeId)
+                            .flatMap(voidItem -> deleteRuntimeCommands(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeAssignments(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeRef(runtime))
                             .flatMap(voidItem -> deleteRuntimeContainer(runtimeId))
@@ -115,16 +114,10 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<List<RuntimePermissionModel>> viewRuntimePermissions(final Long runtimeId) {
-        final var request = new ViewRuntimePermissionsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimePermissions(request)
-                .map(ViewRuntimePermissionsResponse::getRuntimePermissions);
-    }
-
-    Uni<Boolean> deleteRuntimePermission(final Long runtimeId, final Long id) {
-        final var request = new DeleteRuntimePermissionRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimePermission(request)
-                .map(DeleteRuntimePermissionResponse::getDeleted);
+    Uni<Void> deleteRoom(final Long runtimeId) {
+        final var request = new RemoveRoomRequest(runtimeId);
+        return roomService.removeRoom(request)
+                .replaceWithVoid();
     }
 
     Uni<Void> deleteRuntimeCommands(final Long runtimeId) {

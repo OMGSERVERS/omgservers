@@ -2,10 +2,12 @@ package com.omgservers.service.server.service.room.impl;
 
 import com.omgservers.service.server.service.room.dto.AddConnectionRequest;
 import com.omgservers.service.server.service.room.dto.CreateRoomRequest;
+import com.omgservers.service.server.service.room.dto.CreateRoomResponse;
 import com.omgservers.service.server.service.room.dto.HandleBinaryMessageRequest;
 import com.omgservers.service.server.service.room.dto.HandleTextMessageRequest;
 import com.omgservers.service.server.service.room.dto.RemoveConnectionRequest;
 import com.omgservers.service.server.service.room.dto.RemoveRoomRequest;
+import com.omgservers.service.server.service.room.dto.RemoveRoomResponse;
 import com.omgservers.service.server.service.room.impl.method.addConnection.AddConnectionMethod;
 import com.omgservers.service.server.service.room.impl.method.createRoom.CreateRoomMethod;
 import com.omgservers.service.server.service.room.impl.method.handleBinaryMessage.HandleBinaryMessageMethod;
@@ -45,12 +47,12 @@ class RoomServiceImpl implements RoomService {
     final RemoveRoomMethod removeRoomMethod;
 
     @Override
-    public Uni<Void> createRoom(@Valid final CreateRoomRequest request) {
+    public Uni<CreateRoomResponse> createRoom(@Valid final CreateRoomRequest request) {
         return createRoomMethod.creteRoom(request);
     }
 
     @Override
-    public Uni<Void> removeRoom(@Valid final RemoveRoomRequest request) {
+    public Uni<RemoveRoomResponse> removeRoom(@Valid final RemoveRoomRequest request) {
         return removeRoomMethod.removeRoom(request);
     }
 

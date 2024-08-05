@@ -4,7 +4,8 @@ omgservers = {
 		ENVIRONMENT_EXIT_CODE = 1,
 		TOKEN_EXIT_CODE = 2,
 		CONFIG_EXIT_CODE = 3,
-		API_EXIT_CODE = 4
+		API_EXIT_CODE = 4,
+		WS_EXIT_CODE = 5,
 	},
 	settings = {
 		debug = true,
@@ -33,6 +34,7 @@ omgservers = {
 				exchanging = false,
 				outgoing_commands = {},
 				consumed_commands = {},
+				server_events = {},
 				-- methods
 				add_outgoing_command = function(server_state, command)
 					server_state.outgoing_commands[#server_state.outgoing_commands + 1] = command
@@ -40,6 +42,9 @@ omgservers = {
 				add_consumed_command = function(server_state, command)
 					assert(command.id, "Consumed command must have id")
 					server_state.consumed_commands[#server_state.consumed_commands + 1] = command.id
+				end,
+				add_server_event = function(server_state, event)
+					server_state.server_events[#server_state.server_events + 1] = event
 				end,
 				pull_outgoing_commands = function(server_state)
 					local outgoing_commands = server_state.outgoing_commands
@@ -50,6 +55,11 @@ omgservers = {
 					local consumed_commands = server_state.consumed_commands
 					server_state.consumed_commands = {}
 					return consumed_commands
+				end,
+				pull_server_events = function(server_state)
+					local server_events = server_state.server_events
+					server_state.server_events = {}
+					return server_events
 				end,
 			}
 		end,
@@ -68,6 +78,11 @@ omgservers = {
 		set_config = function(components, version_config)
 			components.config = {
 				version_config = version_config,
+			}
+		end,
+		set_connection = function(components, ws_connection)
+			components.connection = {
+				ws_connection = ws_connection,
 			}
 		end,
 	},
@@ -153,7 +168,40 @@ omgservers = {
 		local request_url = self.components.service_urls.get_config
 		self:request_server(request_url, request_body, response_handler, api_token)
 	end,
-	ws_connect = function(self)
+	ws_connect = function(self, callback)
+		assert(self.components.server_environment, "Component server_environment must be set")
+		assert(self.components.service_urls, "Component service_urls must be set")
+		assert(self.components.tokens, "Component tokens must be set")
+
+		local runtime_id = self.components.server_environment.runtime_id
+		local ws_token = self.components.tokens.ws_token
+		
+		local connection_url = self.components.service_urls.connection .. "?runtime_id=" .. runtime_id .. "&ws_token=" .. ws_token
+		local params = {
+			protocol = "omgservers"
+		}
+
+		print("[OMGSERVER] Connect websocket, url=" .. connection_url)
+
+		local ws_connection = websocket.connect(connection_url, params, function(_, _, data)
+			if data.event == websocket.EVENT_DISCONNECTED then
+				self:terminate_server(self.constants.WS_EXIT_CODE, "ws connection disconnected, message=" .. data.message)
+			elseif data.event == websocket.EVENT_CONNECTED then
+				print("[OMGSERVER] Websocket connected")
+				if callback then
+					callback()
+				end
+			elseif data.event == websocket.EVENT_ERROR then
+				self:terminate_server(self.constants.WS_EXIT_CODE, "ws connection failed, message=" .. data.message)
+			elseif data.event == websocket.EVENT_MESSAGE then
+				self.components.server_state:add_server_event({
+					qualifier = "WS_MESSAGE_RECEIVED",
+					message = data.message
+				})
+			end
+		end)
+
+		self.components:set_connection(ws_connection)
 	end,
 	interchange = function(self, api_token, outgoing_commands, consumed_commands, callback)
 		assert(self.components.server_environment, "Server environment must be set")
@@ -171,21 +219,7 @@ omgservers = {
 		local request_url = self.components.service_urls.interchange
 		self:request_server(request_url, request_body, response_handler, api_token)
 	end,
-	handle_command = function(self, command_handler, command_qualifier, command_body)
-		assert(self.components.server_state, "Server state must be created")
-
-		local outgoing_commands = command_handler(command_qualifier, command_body)
-		if outgoing_commands and #outgoing_commands > 0 then
-			if self.settings.debug then
-				print("[OMGSERVER] Outgoing commands")
-				pprint(outgoing_commands)
-			end
-			for command_index, outgoing_command in ipairs(outgoing_commands) do
-				self.components.server_state:add_outgoing_command(outgoing_command)
-			end
-		end
-	end,
-	iterate = function(self, api_token, command_handler)
+	iterate = function(self, api_token)
 		assert(self.components.server_state, "Server state must be created")
 		
 		local outgoing_commands = self.components.server_state:pull_outgoing_commands()
@@ -203,31 +237,44 @@ omgservers = {
 						print("[OMGSERVER] Handle command, id=" .. string.format("%.0f", command_id) .. ", qualifier=" .. command_qualifier)
 						pprint(command_body)
 					end
-					self:handle_command(command_handler, command_qualifier, command_body)
-
 					self.components.server_state:add_consumed_command(incoming_command)
-				end
 
-				self:handle_command(command_handler, "UPDATE_RUNTIME", {})
+					self.components.server_state:add_server_event({
+						qualifier = "COMMAND_RECEIVED",
+						command = {
+							qualifier = command_qualifier,
+							body = command_body
+						}
+					})
+				end
 			end
 		end)
 	end,
-	update = function(self, dt, command_handler)
+	handle = function(self, handler)
+		assert(self.components.server_state, "Server state must be created")
+
+		local server_events = self.components.server_state:pull_server_events()
+		for _, server_event in ipairs(server_events) do
+			handler(server_event)
+		end
+	end,
+	update = function(self, dt, handler)
 		assert(self.components.server_state, "Server state must be created")
 		
 		if self.components.tokens then
 			if self.components.server_state.exchanging then
 				-- 
 			else
-				local api_token = self.components.tokens.api_token
 				local internal_state = self.components.internal_state
-
 				internal_state.iterate_timer = internal_state.iterate_timer + dt
 				if internal_state.iterate_timer >= internal_state.iterate_interval then
 					internal_state.iterate_timer = internal_state.iterate_timer - internal_state.iterate_interval
-					omgservers:iterate(api_token, command_handler)
+					local api_token = self.components.tokens.api_token
+					omgservers:iterate(api_token)
 				end
 			end
+
+			self:handle(handler)
 		end
 	end,
 	init = function(self, callback)
@@ -277,9 +324,12 @@ omgservers = {
 					if response_status == 200 then
 						local version_config = decoded_response.version_config
 						self.components:set_config(version_config)
-						if callback then
-							callback(version_config)
-						end
+
+						self:ws_connect(function()
+							if callback then
+								callback(runtime_qualifier, version_config)
+							end
+						end)
 					else
 						self:terminate_server(self.constants.CONFIG_EXIT_CODE, "version config was not got")
 					end
@@ -296,14 +346,32 @@ return {
 		omgservers:init(callback)
 	end,
 	get_qualifier = function(self)
-		assert(omgservers.components.server_environment, "Init server first")
+		assert(omgservers.components.server_environment, "Server was not initialized")
 		return omgservers.components.server_environment.runtime_qualifier
 	end,
 	get_version = function(self)
-		assert(omgservers.components.config, "Init server first")
+		assert(omgservers.components.config, "Server was not initialized")
 		return omgservers.components.config.version_config
 	end,
-	update = function(self, dt, command_handler)
-		omgservers:update(dt, command_handler)
+	send_service_command = function(self, command)
+		assert(omgservers.components.server_state, "Server was not initialized")
+		omgservers.components.server_state:add_outgoing_command(command)
+	end,
+	send_text_message = function(self, message)
+		assert(omgservers.components.connection, "Connection was not created")
+		
+		websocket.send(omgservers.components.connection.ws_connection, message, {
+			type = websocket.DATA_TYPE_TEXT
+		})
+	end,
+	send_binary_message = function(self, message)
+		assert(omgservers.components.connection, "Connection was not created")
+
+		websocket.send(omgservers.components.connection.ws_connection, message, {
+			type = websocket.DATA_TYPE_BINARY
+		})
+	end,
+	update = function(self, dt, handler)
+		omgservers:update(dt, handler)
 	end,
 }

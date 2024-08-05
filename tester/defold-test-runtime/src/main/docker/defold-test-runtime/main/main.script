@@ -1,18 +1,16 @@
 local omgserver = require("omgservers.omgserver")
 
 function init()
-	omgserver:init(function(version_config)
-		local runtime_qualifier = omgserver:get_qualifier()
+	omgserver:init(function(runtime_qualifier, version_config)
 		print("[GAME] Server was initialized, qualifier=" .. runtime_qualifier)
-
-		local config = omgserver:get_version()
 		print("[GAME] Version config")
-		pprint(config)
+		pprint(version_config)
 	end)
 end
 
 function update(self, dt)
-	omgserver:update(dt, function(command_qualifier, command_body)
-		print("[GAME] Command was received, qualifier=" .. command_qualifier)
+	omgserver:update(dt, function(event)
+		print("[GAME] Event was received")
+		pprint(event)
 	end)
 end

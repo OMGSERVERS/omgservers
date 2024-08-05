@@ -13,4 +13,9 @@ input_method = HiddenInputField
 
 [project]
 title = defold-test-runtime
+dependencies#0 = https://github.com/defold/extension-websocket/archive/refs/tags/4.0.0.zip
+
+[websocket]
+debug = 1
+socket_timeout = 10000000
 
