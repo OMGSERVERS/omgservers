@@ -14,6 +14,9 @@ import lombok.ToString;
 public class CreateTokenWorkerRequest {
 
     @NotNull
+    Long runtimeId;
+
+    @NotNull
     Long userId;
 
     @NotBlank

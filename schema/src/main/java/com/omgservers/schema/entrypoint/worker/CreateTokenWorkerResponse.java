@@ -11,5 +11,8 @@ import lombok.ToString;
 public class CreateTokenWorkerResponse {
 
     @ToString.Exclude
-    String rawToken;
+    String apiToken;
+
+    @ToString.Exclude
+    String wsToken;
 }
