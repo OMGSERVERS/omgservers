@@ -15,7 +15,7 @@ import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientMo
 import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.version.VersionModeModel;
+import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
@@ -65,7 +65,7 @@ public class MatchmakerTestDataFactory {
     public MatchmakerMatchModel createMatchmakerMatch(MatchmakerModel matchmaker) {
         final var matchmakerId = matchmaker.getId();
 
-        final var config = new MatchmakerMatchConfigModel(VersionModeModel.create("mode", 2, 16));
+        final var config = new MatchmakerMatchConfigModel(VersionModeDto.create("mode", 2, 16));
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmakerId, config);
         final var syncMatchmakerMatchRequest = new SyncMatchmakerMatchRequest(matchmakerMatch);
         matchmakerService.syncMatchmakerMatch(syncMatchmakerMatchRequest);

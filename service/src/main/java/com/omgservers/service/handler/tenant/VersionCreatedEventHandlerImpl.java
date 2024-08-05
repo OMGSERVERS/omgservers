@@ -4,7 +4,7 @@ import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.schema.event.body.module.tenant.VersionCreatedEventBodyModel;
-import com.omgservers.schema.model.version.VersionModeModel;
+import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.module.tenant.GetVersionRequest;
 import com.omgservers.schema.module.tenant.GetVersionResponse;
@@ -56,7 +56,7 @@ public class VersionCreatedEventHandlerImpl implements EventHandler {
                             tenantId,
                             versionId,
                             version.getStageId(),
-                            version.getConfig().getModes().stream().map(VersionModeModel::getName).toList(),
+                            version.getConfig().getModes().stream().map(VersionModeDto::getName).toList(),
                             version.getBase64Archive().getBytes(StandardCharsets.UTF_8).length);
 
                     final var idempotencyKey = event.getId().toString();

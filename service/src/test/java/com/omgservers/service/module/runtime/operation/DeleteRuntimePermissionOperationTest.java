@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
@@ -43,7 +43,7 @@ class DeleteRuntimePermissionOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeAssignment = runtimeAssignmentModelFactory

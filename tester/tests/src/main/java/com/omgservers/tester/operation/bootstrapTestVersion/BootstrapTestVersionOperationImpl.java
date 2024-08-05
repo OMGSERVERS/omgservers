@@ -1,7 +1,7 @@
 package com.omgservers.tester.operation.bootstrapTestVersion;
 
 import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -30,12 +30,12 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
 
     @Override
     public TestVersionDto bootstrapTestVersion(final String mainLua) throws IOException {
-        return bootstrapTestVersion(mainLua, VersionConfigModel.create());
+        return bootstrapTestVersion(mainLua, VersionConfigDto.create());
     }
 
     @Override
     public TestVersionDto bootstrapTestVersion(final String mainLua,
-                                               final VersionConfigModel versionConfig) throws IOException {
+                                               final VersionConfigDto versionConfig) throws IOException {
         final var adminToken = adminApiTester.createAdminToken();
 
         final var supportToken = supportApiTester.createSupportToken();

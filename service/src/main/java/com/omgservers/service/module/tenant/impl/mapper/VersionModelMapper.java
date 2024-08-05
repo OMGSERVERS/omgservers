@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -30,7 +30,7 @@ public class VersionModelMapper {
         version.setIdempotencyKey(row.getString("idempotency_key"));
         version.setDeleted(row.getBoolean("deleted"));
         try {
-            version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigModel.class));
+            version.setConfig(objectMapper.readValue(row.getString("config"), VersionConfigDto.class));
             version.setBase64Archive(Base64.getEncoder().encodeToString(row.getBuffer("archive").getBytes()));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,

@@ -22,7 +22,7 @@ import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse
 import com.omgservers.schema.entrypoint.developer.dto.StageDashboardDto;
 import com.omgservers.schema.entrypoint.developer.dto.TenantDashboardDto;
 import com.omgservers.schema.entrypoint.developer.dto.VersionDashboardDto;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.tester.operation.createVersionArchive.CreateVersionArchiveOperation;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import com.omgservers.tester.operation.getLuaFile.GetLuaFileOperation;
@@ -115,7 +115,7 @@ public class DeveloperApiTester {
     public CreateVersionDeveloperResponse createVersion(final String token,
                                                         final Long tenantId,
                                                         final Long stageId,
-                                                        final VersionConfigModel versionConfig) throws IOException {
+                                                        final VersionConfigDto versionConfig) throws IOException {
         final var responseSpecification = RestAssured
                 .with()
                 .filter(new LoggingFilter("Developer"))
@@ -152,7 +152,7 @@ public class DeveloperApiTester {
     public UploadVersionDeveloperResponse uploadVersion(final String token,
                                                         final Long tenantId,
                                                         final Long stageId,
-                                                        final VersionConfigModel versionConfig,
+                                                        final VersionConfigDto versionConfig,
                                                         final String mainLua) throws IOException {
 
         final var archiveBytes = createVersionArchiveOperation.createArchive(Map.of(

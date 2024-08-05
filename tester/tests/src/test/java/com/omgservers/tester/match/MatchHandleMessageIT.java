@@ -2,9 +2,9 @@ package com.omgservers.tester.match;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.schema.model.version.VersionConfigModel;
-import com.omgservers.schema.model.version.VersionGroupModel;
-import com.omgservers.schema.model.version.VersionModeModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
+import com.omgservers.schema.model.version.VersionGroupDto;
+import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -79,11 +79,11 @@ public class MatchHandleMessageIT extends BaseTestClass {
                             end,
                         })               
                         """,
-                new VersionConfigModel(new ArrayList<>() {{
-                    add(VersionModeModel.create("test", 1, 16, new ArrayList<>() {{
-                        add(new VersionGroupModel("players", 1, 16));
+                new VersionConfigDto(new ArrayList<>() {{
+                    add(VersionModeDto.create("test", 1, 16, new ArrayList<>() {{
+                        add(new VersionGroupDto("players", 1, 16));
                     }}));
-                }})
+                }}, null)
         );
 
         try {

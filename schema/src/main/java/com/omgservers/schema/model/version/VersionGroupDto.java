@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VersionGroupModel {
+public class VersionGroupDto {
 
-    static public VersionGroupModel create(final String name,
-                                           final Integer minPlayers,
-                                           final Integer maxPlayers) {
-        final var group = new VersionGroupModel();
+    static public VersionGroupDto create(final String name,
+                                         final Integer minPlayers,
+                                         final Integer maxPlayers) {
+        final var group = new VersionGroupDto();
         group.setName(name);
         group.setMinPlayers(minPlayers);
         group.setMaxPlayers(maxPlayers);

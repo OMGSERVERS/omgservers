@@ -1,7 +1,6 @@
 package com.omgservers.schema.module.tenant;
 
-import com.omgservers.schema.model.version.VersionConfigModel;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetVersionConfigResponse {
 
-    VersionConfigModel versionConfig;
+    VersionConfigDto versionConfig;
 }

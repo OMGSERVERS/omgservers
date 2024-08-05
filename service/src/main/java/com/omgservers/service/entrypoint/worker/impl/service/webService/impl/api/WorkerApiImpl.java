@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.worker.impl.service.webService.impl.ap
 
 import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerRequest;
 import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerResponse;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerRequest;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerResponse;
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerResponse;
 import com.omgservers.schema.entrypoint.worker.InterchangeWorkerRequest;
 import com.omgservers.schema.entrypoint.worker.InterchangeWorkerResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -32,8 +32,8 @@ class WorkerApiImpl implements WorkerApi {
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.WORKER})
-    public Uni<GetVersionWorkerResponse> getVersion(@NotNull final GetVersionWorkerRequest request) {
-        return webService.getVersion(request);
+    public Uni<GetConfigWorkerResponse> getConfig(@NotNull final GetConfigWorkerRequest request) {
+        return webService.getConfig(request);
     }
 
     @Override

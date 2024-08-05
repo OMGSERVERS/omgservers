@@ -14,19 +14,19 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VersionModeModel {
+public class VersionModeDto {
 
-    static public VersionModeModel create(final String name,
-                                          final Integer minPlayers,
-                                          final Integer maxPlayers) {
+    static public VersionModeDto create(final String name,
+                                        final Integer minPlayers,
+                                        final Integer maxPlayers) {
         return create(name, minPlayers, maxPlayers, new ArrayList<>());
     }
 
-    static public VersionModeModel create(final String name,
-                                          final Integer minPlayers,
-                                          final Integer maxPlayers,
-                                          final List<VersionGroupModel> groups) {
-        final var config = new VersionModeModel();
+    static public VersionModeDto create(final String name,
+                                        final Integer minPlayers,
+                                        final Integer maxPlayers,
+                                        final List<VersionGroupDto> groups) {
+        final var config = new VersionModeDto();
         config.setName(name);
         config.setMinPlayers(minPlayers);
         config.setMaxPlayers(maxPlayers);
@@ -45,5 +45,5 @@ public class VersionModeModel {
     Integer maxPlayers;
 
     @NotEmpty
-    List<VersionGroupModel> groups;
+    List<VersionGroupDto> groups;
 }

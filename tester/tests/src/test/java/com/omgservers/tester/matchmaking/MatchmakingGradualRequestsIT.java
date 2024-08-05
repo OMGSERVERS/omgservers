@@ -1,9 +1,9 @@
 package com.omgservers.tester.matchmaking;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.version.VersionConfigModel;
-import com.omgservers.schema.model.version.VersionGroupModel;
-import com.omgservers.schema.model.version.VersionModeModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
+import com.omgservers.schema.model.version.VersionGroupDto;
+import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -63,11 +63,11 @@ public class MatchmakingGradualRequestsIT extends BaseTestClass {
                             end,
                         })
                         """,
-                new VersionConfigModel(new ArrayList<>() {{
-                    add(VersionModeModel.create("test", 5, 16, new ArrayList<>() {{
-                        add(new VersionGroupModel("players", 5, 16));
+                new VersionConfigDto(new ArrayList<>() {{
+                    add(VersionModeDto.create("test", 5, 16, new ArrayList<>() {{
+                        add(new VersionGroupDto("players", 5, 16));
                     }}));
-                }})
+                }}, null)
         );
 
         try {

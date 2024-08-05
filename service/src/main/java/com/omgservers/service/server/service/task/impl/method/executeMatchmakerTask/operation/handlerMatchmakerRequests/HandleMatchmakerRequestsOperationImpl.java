@@ -7,9 +7,8 @@ import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfSta
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.server.service.task.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.server.service.task.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -46,7 +45,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                 .replaceWithVoid();
     }
 
-    Uni<VersionConfigModel> getVersionConfig(final Long tenantId, final Long versionId) {
+    Uni<VersionConfigDto> getVersionConfig(final Long tenantId, final Long versionId) {
         final var request = new GetVersionConfigRequest(tenantId, versionId);
         return tenantModule.getVersionService().getVersionConfig(request)
                 .map(GetVersionConfigResponse::getVersionConfig);
@@ -55,7 +54,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     void executeMatchmaker(final Long matchmakerId,
                            final MatchmakerStateModel currentState,
                            final MatchmakerChangeOfStateModel changeOfState,
-                           final VersionConfigModel versionConfig) {
+                           final VersionConfigDto versionConfig) {
         final var requests = currentState.getRequests();
 
         if (!requests.isEmpty()) {
@@ -66,7 +65,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     void doMatchmaking(final Long matchmakerId,
                        final MatchmakerStateModel currentState,
                        final MatchmakerChangeOfStateModel changeOfState,
-                       final VersionConfigModel versionConfig) {
+                       final VersionConfigDto versionConfig) {
 
         final var requests = currentState.getRequests().stream()
                 .collect(Collectors.groupingBy(MatchmakerRequestModel::getMode));

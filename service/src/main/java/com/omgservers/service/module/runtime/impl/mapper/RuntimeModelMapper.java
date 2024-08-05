@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
@@ -33,7 +33,7 @@ public class RuntimeModelMapper {
         runtime.setUserId(row.getLong("user_id"));
         runtime.setLastActivity(row.getOffsetDateTime("last_activity").toInstant());
         try {
-            runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigModel.class));
+            runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "runtime can't be parsed, runtime=" + runtime, e);

@@ -1,6 +1,6 @@
 package com.omgservers.tester.operation.uploadTestVersion;
 
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.dto.TestVersionDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,13 +22,13 @@ class UploadTestVersionOperationImpl implements UploadTestVersionOperation {
                                   final String mainLua) throws IOException {
         return uploadTestVersion(testVersion,
                 mainLua,
-                VersionConfigModel.create());
+                VersionConfigDto.create());
     }
 
     @Override
     public Long uploadTestVersion(final TestVersionDto testVersion,
                                   final String mainLua,
-                                  final VersionConfigModel newVersionConfig) throws IOException {
+                                  final VersionConfigDto newVersionConfig) throws IOException {
         final var uploadVersionDeveloperResponse = developerApiTester.uploadVersion(testVersion.getDeveloperToken(),
                 testVersion.getTenantId(),
                 testVersion.getStageId(),

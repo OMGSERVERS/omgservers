@@ -3,7 +3,7 @@ package com.omgservers.service.server.service.task.impl.method.executeMatchmaker
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.version.VersionModeModel;
+import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ class DoGreedyMatchmakingOperationImpl implements DoGreedyMatchmakingOperation {
 
     @Override
     public DoGreedyMatchmakingResult doGreedyMatchmaking(final Long matchmakerId,
-                                                         final VersionModeModel config,
+                                                         final VersionModeDto config,
                                                          final List<MatchmakerRequestModel> requests,
                                                          final List<MatchmakerMatchModel> matches,
                                                          final List<MatchmakerMatchClientModel> clients) {

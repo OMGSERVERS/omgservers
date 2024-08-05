@@ -5,7 +5,7 @@ import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
@@ -36,8 +36,8 @@ public class RuntimeTestDataFactory {
 
         final var runtimeId = lobby.getRuntimeId();
 
-        final var config = RuntimeConfigModel.create();
-        config.setLobbyConfig(new RuntimeConfigModel.LobbyConfig(lobby.getId()));
+        final var config = RuntimeConfigDto.create();
+        config.setLobbyConfig(new RuntimeConfigDto.LobbyConfigDto(lobby.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 tenantId,
                 versionId,
@@ -56,8 +56,8 @@ public class RuntimeTestDataFactory {
 
         final var runtimeId = match.getRuntimeId();
 
-        final var config = RuntimeConfigModel.create();
-        config.setMatchConfig(new RuntimeConfigModel.MatchConfig(match.getMatchmakerId(), match.getId()));
+        final var config = RuntimeConfigDto.create();
+        config.setMatchConfig(new RuntimeConfigDto.MatchConfigDto(match.getMatchmakerId(), match.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 tenantId,
                 versionId,

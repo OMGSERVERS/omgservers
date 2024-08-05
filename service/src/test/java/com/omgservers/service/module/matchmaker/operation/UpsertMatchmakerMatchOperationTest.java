@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
-import com.omgservers.schema.model.version.VersionGroupModel;
-import com.omgservers.schema.model.version.VersionModeModel;
+import com.omgservers.schema.model.version.VersionGroupDto;
+import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -45,9 +45,9 @@ class UpsertMatchmakerMatchOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
-            add(VersionGroupModel.create("red", 1, 4));
-            add(VersionGroupModel.create("blue", 1, 4));
+        final var modeConfig = VersionModeDto.create(modeName(), 4, 8, new ArrayList<>() {{
+            add(VersionGroupDto.create("red", 1, 4));
+            add(VersionGroupDto.create("blue", 1, 4));
         }});
         final var matchmakerMatchConfig = new MatchmakerMatchConfigModel(modeConfig);
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmaker.getId(), matchmakerMatchConfig);
@@ -61,9 +61,9 @@ class UpsertMatchmakerMatchOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
-            add(VersionGroupModel.create("red", 1, 4));
-            add(VersionGroupModel.create("blue", 1, 4));
+        final var modeConfig = VersionModeDto.create(modeName(), 4, 8, new ArrayList<>() {{
+            add(VersionGroupDto.create("red", 1, 4));
+            add(VersionGroupDto.create("blue", 1, 4));
         }});
         final var matchmakerMatchConfig = new MatchmakerMatchConfigModel(modeConfig);
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmaker.getId(), matchmakerMatchConfig);
@@ -76,9 +76,9 @@ class UpsertMatchmakerMatchOperationTest extends Assertions {
     @Test
     void givenUnknownIds_whenUpsertMatchmakerMatch_thenException() {
         final var shard = 0;
-        final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
-            add(VersionGroupModel.create("red", 1, 4));
-            add(VersionGroupModel.create("blue", 1, 4));
+        final var modeConfig = VersionModeDto.create(modeName(), 4, 8, new ArrayList<>() {{
+            add(VersionGroupDto.create("red", 1, 4));
+            add(VersionGroupDto.create("blue", 1, 4));
         }});
         final var matchmakerMatchConfig = new MatchmakerMatchConfigModel(modeConfig);
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmakerId(), matchmakerMatchConfig);
@@ -92,9 +92,9 @@ class UpsertMatchmakerMatchOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var modeConfig = VersionModeModel.create(modeName(), 4, 8, new ArrayList<>() {{
-            add(VersionGroupModel.create("red", 1, 4));
-            add(VersionGroupModel.create("blue", 1, 4));
+        final var modeConfig = VersionModeDto.create(modeName(), 4, 8, new ArrayList<>() {{
+            add(VersionGroupDto.create("red", 1, 4));
+            add(VersionGroupDto.create("blue", 1, 4));
         }});
         final var matchmakerMatchConfig = new MatchmakerMatchConfigModel(modeConfig);
         final var matchmakerMatch1 = matchmakerMatchModelFactory.create(matchmaker.getId(), matchmakerMatchConfig);

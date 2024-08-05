@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.service.factory.tenant.ProjectModelFactory;
 import com.omgservers.service.factory.tenant.StageModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
@@ -69,7 +69,7 @@ class DeleteVersionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var stage = stageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
-        final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigModel.create(),
+        final var version = versionModelFactory.create(tenant.getId(), stage.getId(), VersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         final var id = version.getId();
         upsertVersionOperation.upsertVersion(shard, version);

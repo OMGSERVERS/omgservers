@@ -8,21 +8,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RuntimeConfigModel {
+public class RuntimeConfigDto {
 
-    static public RuntimeConfigModel create() {
-        final var runtimeConfig = new RuntimeConfigModel();
+    static public RuntimeConfigDto create() {
+        final var runtimeConfig = new RuntimeConfigDto();
         return runtimeConfig;
     }
 
-    LobbyConfig lobbyConfig;
-    MatchConfig matchConfig;
+    LobbyConfigDto lobbyConfig;
+    MatchConfigDto matchConfig;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class LobbyConfig {
+    public static class LobbyConfigDto {
         Long lobbyId;
     }
 
@@ -30,7 +30,7 @@ public class RuntimeConfigModel {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MatchConfig {
+    public static class MatchConfigDto {
         Long matchmakerId;
         Long matchId;
     }

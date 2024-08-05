@@ -10,7 +10,7 @@ import com.omgservers.schema.event.EventModel;
 import com.omgservers.schema.event.EventQualifierEnum;
 import com.omgservers.schema.event.body.module.lobby.LobbyCreatedEventBodyModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
@@ -78,8 +78,8 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
         final var versionId = lobby.getVersionId();
         final var runtimeId = lobby.getRuntimeId();
 
-        final var runtimeConfig = RuntimeConfigModel.create();
-        runtimeConfig.setLobbyConfig(RuntimeConfigModel.LobbyConfig.builder()
+        final var runtimeConfig = RuntimeConfigDto.create();
+        runtimeConfig.setLobbyConfig(RuntimeConfigDto.LobbyConfigDto.builder()
                 .lobbyId(lobbyId)
                 .build());
         final var runtime = runtimeModelFactory.create(runtimeId,

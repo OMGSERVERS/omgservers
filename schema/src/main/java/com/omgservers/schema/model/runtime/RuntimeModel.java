@@ -44,7 +44,7 @@ public class RuntimeModel {
     Instant lastActivity;
 
     @NotNull
-    RuntimeConfigModel config;
+    RuntimeConfigDto config;
 
     @NotNull
     Boolean deleted;

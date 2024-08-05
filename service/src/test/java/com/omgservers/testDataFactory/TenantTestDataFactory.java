@@ -15,7 +15,7 @@ import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.project.ProjectModel;
 import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
 import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
@@ -93,7 +93,7 @@ public class TenantTestDataFactory {
     public VersionModel createVersion(final StageModel stage) {
         final var tenantId = stage.getTenantId();
         final var stageId = stage.getId();
-        final var versionConfig = VersionConfigModel.create();
+        final var versionConfig = VersionConfigDto.create();
         final var base64Archive = Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8));
         final var version = versionModelFactory.create(tenantId,
                 stageId,

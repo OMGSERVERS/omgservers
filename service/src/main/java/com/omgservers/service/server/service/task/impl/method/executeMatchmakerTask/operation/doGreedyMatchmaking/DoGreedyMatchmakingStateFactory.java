@@ -5,8 +5,8 @@ import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.version.VersionGroupModel;
-import com.omgservers.schema.model.version.VersionModeModel;
+import com.omgservers.schema.model.version.VersionGroupDto;
+import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +28,7 @@ public class DoGreedyMatchmakingStateFactory {
     final MatchmakerMatchModelFactory matchmakerMatchModelFactory;
 
     public DoGreedyMatchmakingState build(final Long matchmakerId,
-                                          final VersionModeModel config,
+                                          final VersionModeDto config,
                                           final List<MatchmakerMatchModel> matches,
                                           final List<MatchmakerMatchClientModel> clients) {
         final var matchmakingMatches = matches.stream()
@@ -54,11 +54,11 @@ public class DoGreedyMatchmakingStateFactory {
         final List<MatchmakerRequestModel> failedRequests;
         final List<MatchmakingMatch> currentMatches;
         final List<MatchmakingMatch> createdMatches;
-        final VersionModeModel modeConfig;
+        final VersionModeDto modeConfig;
         final Long matchmakerId;
 
         public DoGreedyMatchmakingState(final Long matchmakerId,
-                                        final VersionModeModel modeConfig,
+                                        final VersionModeDto modeConfig,
                                         final List<MatchmakingMatch> currentMatches) {
             this.currentMatches = currentMatches;
             this.matchmakerId = matchmakerId;
@@ -134,7 +134,7 @@ public class DoGreedyMatchmakingStateFactory {
         final List<MatchmakerRequestModel> matchedRequests;
         final MatchmakerMatchModel matchmakerMatch;
         final Map<String, MatchmakingGroup> groups;
-        final VersionModeModel modeConfig;
+        final VersionModeDto modeConfig;
 
         int size;
 
@@ -214,10 +214,10 @@ public class DoGreedyMatchmakingStateFactory {
     class MatchmakingGroup {
 
         List<MatchmakerMatchClientModel> clients;
-        VersionGroupModel config;
+        VersionGroupDto config;
         long matchId;
 
-        public MatchmakingGroup(final long matchId, final VersionGroupModel config) {
+        public MatchmakingGroup(final long matchId, final VersionGroupDto config) {
             this.matchId = matchId;
             this.config = config;
 

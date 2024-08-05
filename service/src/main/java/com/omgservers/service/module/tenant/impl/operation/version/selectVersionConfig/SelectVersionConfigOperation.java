@@ -1,15 +1,12 @@
 package com.omgservers.service.module.tenant.impl.operation.version.selectVersionConfig;
 
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
-import java.time.Duration;
-
 public interface SelectVersionConfigOperation {
-    Uni<VersionConfigModel> selectVersionConfig(SqlConnection sqlConnection,
-                                                int shard,
-                                                Long tenantId,
-                                                Long versionId);
+    Uni<VersionConfigDto> selectVersionConfig(SqlConnection sqlConnection,
+                                              int shard,
+                                              Long tenantId,
+                                              Long versionId);
 }

@@ -1,6 +1,6 @@
 package com.omgservers.tester.operation.uploadTestVersion;
 
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.tester.dto.TestVersionDto;
 
 import java.io.IOException;
@@ -12,5 +12,5 @@ public interface UploadTestVersionOperation {
 
     Long uploadTestVersion(TestVersionDto testVersion,
                            String mainLua,
-                           VersionConfigModel newVersionConfig) throws IOException;
+                           VersionConfigDto newVersionConfig) throws IOException;
 }

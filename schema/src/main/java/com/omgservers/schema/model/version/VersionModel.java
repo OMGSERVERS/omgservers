@@ -38,7 +38,7 @@ public class VersionModel {
     @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    VersionConfigModel config;
+    VersionConfigDto config;
 
     @NotNull
     @ToString.Exclude

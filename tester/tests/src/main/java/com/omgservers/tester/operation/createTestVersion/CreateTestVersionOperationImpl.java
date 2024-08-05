@@ -1,7 +1,7 @@
 package com.omgservers.tester.operation.createTestVersion;
 
 import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -30,11 +30,11 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
 
     @Override
     public TestVersionDto createTestVersion() throws IOException {
-        return createTestVersion(VersionConfigModel.create());
+        return createTestVersion(VersionConfigDto.create());
     }
 
     @Override
-    public TestVersionDto createTestVersion(final VersionConfigModel versionConfig) throws IOException {
+    public TestVersionDto createTestVersion(final VersionConfigDto versionConfig) throws IOException {
         final var adminToken = adminApiTester.createAdminToken();
 
         final var supportToken = supportApiTester.createSupportToken();

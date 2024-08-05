@@ -1,5 +1,6 @@
 package com.omgservers.tester.defold;
 
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -9,6 +10,9 @@ import com.omgservers.tester.operation.pushTestVersionImage.PushTestVersionImage
 import com.omgservers.tester.operation.waitForDeployment.WaitForDeploymentOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +40,9 @@ public class DefoldDeployVersionIT extends BaseTestClass {
 
     @Test
     void defoldDeployVersionIT() throws Exception {
-        final var testVersion = createTestVersionOperation.createTestVersion();
+        final var versionConfig = VersionConfigDto.create();
+        versionConfig.setUserData(new UserData("deploy-version"));
+        final var testVersion = createTestVersionOperation.createTestVersion(versionConfig);
 
         final var developerUserId = testVersion.getDeveloperUserId();
         final var developerPassword = testVersion.getDeveloperPassword();
@@ -62,5 +68,12 @@ public class DefoldDeployVersionIT extends BaseTestClass {
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    class UserData {
+        String testId;
     }
 }

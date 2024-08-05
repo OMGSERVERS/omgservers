@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -33,7 +33,7 @@ class UpsertRuntimeOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_CREATED));
@@ -45,7 +45,7 @@ class UpsertRuntimeOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
@@ -59,13 +59,13 @@ class UpsertRuntimeOperationTest extends Assertions {
         final var runtime1 = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime1);
 
         final var runtime2 = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel(),
+                new RuntimeConfigDto(),
                 runtime1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertRuntimeOperation.upsertRuntime(shard, runtime2));

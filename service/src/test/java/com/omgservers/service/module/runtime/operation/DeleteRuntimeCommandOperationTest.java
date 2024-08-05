@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.operation;
 
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
@@ -46,7 +46,7 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
     void givenRuntimeCommand_whenDeleteRuntimeCommand_thenDeleted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand =

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -73,7 +73,7 @@ class UpsertVersionMatchmakerRequestOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var version = versionModelFactory.create(tenant.getId(),
                 stage.getId(),
-                VersionConfigModel.create(),
+                VersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         upsertVersionOperation.upsertVersion(shard, version);
 
@@ -96,7 +96,7 @@ class UpsertVersionMatchmakerRequestOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var version = versionModelFactory.create(tenant.getId(),
                 stage.getId(),
-                VersionConfigModel.create(),
+                VersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         upsertVersionOperation.upsertVersion(shard, version);
         final var versionMatchmakerRequest = versionMatchmakerRequestModelFactory.create(tenant.getId(),
@@ -129,7 +129,7 @@ class UpsertVersionMatchmakerRequestOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var version = versionModelFactory.create(tenant.getId(),
                 stage.getId(),
-                VersionConfigModel.create(),
+                VersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         upsertVersionOperation.upsertVersion(shard, version);
         final var versionMatchmakerRequest1 = versionMatchmakerRequestModelFactory.create(tenant.getId(),

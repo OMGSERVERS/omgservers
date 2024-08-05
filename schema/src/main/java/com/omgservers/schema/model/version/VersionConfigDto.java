@@ -11,14 +11,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VersionConfigModel {
+public class VersionConfigDto {
 
-    static public VersionConfigModel create() {
-        final var config = new VersionConfigModel();
+    static public VersionConfigDto create() {
+        final var config = new VersionConfigDto();
         config.setModes(new ArrayList<>());
         return config;
     }
 
     @NotNull
-    List<VersionModeModel> modes;
+    List<VersionModeDto> modes;
+
+    Object userData;
 }

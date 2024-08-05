@@ -1,10 +1,7 @@
 package com.omgservers.schema.model.message.body;
 
 import com.omgservers.schema.model.message.MessageBodyModel;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
-import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.schema.model.message.MessageBodyModel;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,5 +23,5 @@ public class RuntimeAssignmentMessageBodyModel extends MessageBodyModel {
     RuntimeQualifierEnum runtimeQualifier;
 
     @NotNull
-    RuntimeConfigModel runtimeConfig;
+    RuntimeConfigDto runtimeConfig;
 }

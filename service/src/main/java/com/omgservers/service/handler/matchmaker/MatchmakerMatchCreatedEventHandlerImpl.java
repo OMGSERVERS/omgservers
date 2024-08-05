@@ -6,7 +6,7 @@ import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchCreated
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
@@ -91,8 +91,8 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
         final var matchmakerId = matchmaker.getId();
         final var matchId = matchmakerMatch.getId();
         final var runtimeId = matchmakerMatch.getRuntimeId();
-        final var runtimeConfig = new RuntimeConfigModel();
-        runtimeConfig.setMatchConfig(new RuntimeConfigModel.MatchConfig(matchmakerId, matchId));
+        final var runtimeConfig = new RuntimeConfigDto();
+        runtimeConfig.setMatchConfig(new RuntimeConfigDto.MatchConfigDto(matchmakerId, matchId));
         final var runtime = runtimeModelFactory.create(
                 runtimeId,
                 tenantId,

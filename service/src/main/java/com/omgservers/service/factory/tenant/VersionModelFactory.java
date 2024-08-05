@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ public class VersionModelFactory {
     public VersionModel create(
             final Long tenantId,
             final Long stageId,
-            final VersionConfigModel versionConfig,
+            final VersionConfigDto versionConfig,
             final String base64Archive) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
@@ -35,7 +35,7 @@ public class VersionModelFactory {
     public VersionModel create(
             final Long tenantId,
             final Long stageId,
-            final VersionConfigModel versionConfig,
+            final VersionConfigDto versionConfig,
             final String base64Archive,
             final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
@@ -50,7 +50,7 @@ public class VersionModelFactory {
     public VersionModel create(final Long id,
                                final Long tenantId,
                                final Long stageId,
-                               final VersionConfigModel versionConfig,
+                               final VersionConfigDto versionConfig,
                                final String base64Archive,
                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);

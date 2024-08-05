@@ -7,7 +7,7 @@ import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
 import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
 import com.omgservers.schema.module.tenant.SyncVersionRequest;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.entrypoint.developer.impl.operation.encodeFiles.EncodeFilesOperation;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
@@ -61,13 +61,13 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
                 .map(UploadVersionDeveloperResponse::new);
     }
 
-    VersionConfigModel getVersionConfig(final UploadVersionDeveloperRequest request) {
+    VersionConfigDto getVersionConfig(final UploadVersionDeveloperRequest request) {
         return request.getFiles().stream()
                 .filter(fileUpload -> fileUpload.name().equals(CONFIG_JSON))
                 .map(fileUpload -> {
                     try {
                         final var fileContent = Files.readString(fileUpload.filePath());
-                        final var configModel = objectMapper.readValue(fileContent, VersionConfigModel.class);
+                        final var configModel = objectMapper.readValue(fileContent, VersionConfigDto.class);
                         return configModel;
                     } catch (IOException e) {
                         throw new ServerSideBadRequestException(ExceptionQualifierEnum.CONFIG_JSON_WRONG,
@@ -122,7 +122,7 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
 
     Uni<VersionModel> createVersion(final Long tenantId,
                                     final Long stageId,
-                                    final VersionConfigModel versionConfig,
+                                    final VersionConfigDto versionConfig,
                                     final String base64Archive) {
         final var version = versionModelFactory.create(tenantId, stageId, versionConfig, base64Archive);
         final var request = new SyncVersionRequest(version);

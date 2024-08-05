@@ -8,7 +8,7 @@ import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
 import com.omgservers.schema.module.tenant.SyncVersionRequest;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.VersionModelFactory;
@@ -72,7 +72,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
 
     Uni<VersionModel> createVersion(final Long tenantId,
                                     final Long stageId,
-                                    final VersionConfigModel versionConfig) {
+                                    final VersionConfigDto versionConfig) {
         // TODO: fix empty archive field
         final var version = versionModelFactory.create(tenantId, stageId, versionConfig, "");
         final var request = new SyncVersionRequest(version);

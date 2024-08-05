@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.runtime;
 
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
@@ -21,7 +21,7 @@ public class RuntimeModelFactory {
     public RuntimeModel create(final Long tenantId,
                                final Long versionId,
                                final RuntimeQualifierEnum qualifier,
-                               final RuntimeConfigModel config) {
+                               final RuntimeConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var userId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
@@ -32,7 +32,7 @@ public class RuntimeModelFactory {
                                final Long tenantId,
                                final Long versionId,
                                final RuntimeQualifierEnum qualifier,
-                               final RuntimeConfigModel config) {
+                               final RuntimeConfigDto config) {
         final var userId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, versionId, qualifier, userId, config, idempotencyKey);
@@ -41,7 +41,7 @@ public class RuntimeModelFactory {
     public RuntimeModel create(final Long tenantId,
                                final Long versionId,
                                final RuntimeQualifierEnum qualifier,
-                               final RuntimeConfigModel config,
+                               final RuntimeConfigDto config,
                                final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         final var userId = generateIdOperation.generateId();
@@ -53,7 +53,7 @@ public class RuntimeModelFactory {
                                final Long versionId,
                                final RuntimeQualifierEnum qualifier,
                                final Long userId,
-                               final RuntimeConfigModel config,
+                               final RuntimeConfigDto config,
                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

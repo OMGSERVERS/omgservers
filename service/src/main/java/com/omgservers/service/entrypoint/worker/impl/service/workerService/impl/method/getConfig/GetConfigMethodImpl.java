@@ -1,14 +1,14 @@
-package com.omgservers.service.entrypoint.worker.impl.service.workerService.impl.method.getVersion;
+package com.omgservers.service.entrypoint.worker.impl.service.workerService.impl.method.getConfig;
 
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.tenant.GetVersionRequest;
 import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerRequest;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerResponse;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -23,7 +23,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class GetVersionMethodImpl implements GetVersionMethod {
+class GetConfigMethodImpl implements GetConfigMethod {
 
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
@@ -31,8 +31,8 @@ class GetVersionMethodImpl implements GetVersionMethod {
     final JsonWebToken jwt;
 
     @Override
-    public Uni<GetVersionWorkerResponse> getVersion(final GetVersionWorkerRequest request) {
-        log.debug("Get version, request={}", request);
+    public Uni<GetConfigWorkerResponse> getConfig(final GetConfigWorkerRequest request) {
+        log.debug("Get config, request={}", request);
 
         final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
 
@@ -43,13 +43,14 @@ class GetVersionMethodImpl implements GetVersionMethod {
                     if (runtime.getUserId().equals(userId)) {
                         final var tenantId = runtime.getTenantId();
                         final var versionId = runtime.getVersionId();
-                        return getVersion(tenantId, versionId);
+                        return getVersion(tenantId, versionId)
+                                .map(VersionModel::getConfig);
                     } else {
                         throw new ServerSideBadRequestException(ExceptionQualifierEnum.RUNTIME_ID_WRONG,
                                 "wrong runtimeId, runtimeId=" + runtimeId);
                     }
                 })
-                .map(GetVersionWorkerResponse::new);
+                .map(GetConfigWorkerResponse::new);
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {

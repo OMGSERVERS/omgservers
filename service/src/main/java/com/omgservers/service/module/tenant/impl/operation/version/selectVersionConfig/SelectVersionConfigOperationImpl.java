@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.version.selectVersionConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.version.VersionConfigModel;
+import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.server.operation.selectObject.SelectObjectOperation;
@@ -24,10 +24,10 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<VersionConfigModel> selectVersionConfig(final SqlConnection sqlConnection,
-                                                       final int shard,
-                                                       final Long tenantId,
-                                                       final Long versionId) {
+    public Uni<VersionConfigDto> selectVersionConfig(final SqlConnection sqlConnection,
+                                                     final int shard,
+                                                     final Long tenantId,
+                                                     final Long versionId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
@@ -41,7 +41,7 @@ class SelectVersionConfigOperationImpl implements SelectVersionConfigOperation {
                 "Version",
                 row -> {
                     try {
-                        return objectMapper.readValue(row.getString("config"), VersionConfigModel.class);
+                        return objectMapper.readValue(row.getString("config"), VersionConfigDto.class);
                     } catch (IOException e) {
                         throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                                 String.format("config can't be parsed, tenantId=%d, versionId=%d",

@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.worker.impl.service.webService.impl;
 
 import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerRequest;
 import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerResponse;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerRequest;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerResponse;
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerResponse;
 import com.omgservers.schema.entrypoint.worker.InterchangeWorkerRequest;
 import com.omgservers.schema.entrypoint.worker.InterchangeWorkerResponse;
 import com.omgservers.service.entrypoint.worker.impl.service.workerService.WorkerService;
@@ -27,8 +27,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetVersionWorkerResponse> getVersion(final GetVersionWorkerRequest request) {
-        return workerService.getVersion(request);
+    public Uni<GetConfigWorkerResponse> getConfig(final GetConfigWorkerRequest request) {
+        return workerService.getConfig(request);
     }
 
     @Override

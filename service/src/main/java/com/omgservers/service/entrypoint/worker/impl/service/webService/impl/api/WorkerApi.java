@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.worker.impl.service.webService.impl.ap
 
 import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerRequest;
 import com.omgservers.schema.entrypoint.worker.CreateTokenWorkerResponse;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerRequest;
-import com.omgservers.schema.entrypoint.worker.GetVersionWorkerResponse;
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerRequest;
+import com.omgservers.schema.entrypoint.worker.GetConfigWorkerResponse;
 import com.omgservers.schema.entrypoint.worker.InterchangeWorkerRequest;
 import com.omgservers.schema.entrypoint.worker.InterchangeWorkerResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
@@ -24,8 +24,8 @@ public interface WorkerApi {
     Uni<CreateTokenWorkerResponse> createToken(@NotNull CreateTokenWorkerRequest request);
 
     @PUT
-    @Path("/get-version")
-    Uni<GetVersionWorkerResponse> getVersion(@NotNull GetVersionWorkerRequest request);
+    @Path("/get-config")
+    Uni<GetConfigWorkerResponse> getConfig(@NotNull GetConfigWorkerRequest request);
 
     @PUT
     @Path("/interchange")

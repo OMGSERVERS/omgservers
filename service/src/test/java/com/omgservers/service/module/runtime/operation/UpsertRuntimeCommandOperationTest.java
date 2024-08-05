@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.operation;
 
-import com.omgservers.schema.model.runtime.RuntimeConfigModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
@@ -42,7 +42,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(),
@@ -57,7 +57,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(),
@@ -82,7 +82,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
-                new RuntimeConfigModel());
+                new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand1 = runtimeCommandModelFactory.create(runtime.getId(),
