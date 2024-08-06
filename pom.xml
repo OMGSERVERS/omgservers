@@ -7,6 +7,7 @@
     <groupId>com.omgservers</groupId>
     <artifactId>omgservers</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+
     <packaging>pom</packaging>
 
     <properties>
@@ -28,12 +29,13 @@
     </properties>
 
     <modules>
-        <module>documents</module>
-        <module>environments</module>
-        <module>schema</module>
-        <module>service</module>
-        <module>sidecontainers</module>
-        <module>tester</module>
+        <module>omgservers-documents</module>
+        <module>omgservers-environments</module>
+        <module>omgservers-schema</module>
+        <module>omgservers-sdk</module>
+        <module>omgservers-service</module>
+        <module>omgservers-sidecontainers</module>
+        <module>omgservers-tests</module>
     </modules>
 
     <dependencies>

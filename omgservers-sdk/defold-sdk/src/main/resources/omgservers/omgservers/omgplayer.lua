@@ -1,0 +1,6 @@
+local omgplayer
+omgplayer = {
+}
+
+return {
+}
