@@ -19,7 +19,7 @@
     </properties>
 
     <modules>
-        <module>integration-tests</module>
+        <module>functional-tests</module>
         <module>test-containers</module>
     </modules>
 
