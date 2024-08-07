@@ -1,51 +1,25 @@
-function init(self)
-	-- Add initialization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
+local omgplayer = require("omgservers.omgplayer")
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+local service_url = os.getenv("OMGSERVERS_URL")
+local tenant_id = os.getenv("OMGSERVERS_TENANT_ID")
+local stage_id = os.getenv("OMGSERVERS_STAGE_ID")
+local stage_secret = os.getenv("OMGSERVERS_STAGE_SECRET")
+
+function init(self)
+	omgplayer:init(service_url, tenant_id, stage_id, stage_secret, function(event)
+		print("[GAME] Event was received")
+		pprint(event)
+	end)
+
+	omgplayer:sign_up(function(user_id, password)
+		print("[GAME] User was created, user_id=" .. user_id)
+
+		omgplayer:sign_in(user_id, password, function(api_token, client_id)
+			print("[GAME] Client was created, client_id=" .. client_id)
+		end)
+	end)
 end
 
 function update(self, dt)
-	print(dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function fixed_update(self, dt)
-	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
-	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
-	-- Physics section of game.project
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
-end
-
-function on_input(self, action_id, action)
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
+	omgplayer:update(dt)
 end

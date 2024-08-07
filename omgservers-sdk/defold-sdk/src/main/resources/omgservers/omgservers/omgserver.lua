@@ -1,11 +1,21 @@
 local omgservers
 omgservers = {
 	constants = {
+		-- Server environment variables
+		URL_ENVIRONMENT_VARIABLE = "OMGSERVERS_URL",
+		USER_ID_ENVIRONMENT_VARIABLE = "OMGSERVERS_USER_ID",
+		PASSWORD_ENVIRONMENT_VARIABLE = "OMGSERVERS_PASSWORD",
+		RUNTIME_ID_ENVIRONMENT_VARIABLE = "OMGSERVERS_RUNTIME_ID",
+		RUNTIME_QUALIFIER_ENVIRONMENT_VARIABLE = "OMGSERVERS_RUNTIME_QUALIFIER",
+		-- Server exit codes
 		ENVIRONMENT_EXIT_CODE = 1,
 		TOKEN_EXIT_CODE = 2,
 		CONFIG_EXIT_CODE = 3,
 		API_EXIT_CODE = 4,
 		WS_EXIT_CODE = 5,
+		-- Event qualifiers
+		COMMAND_RECEIVED_EVENT_QUALIFIER = "COMMAND_RECEIVED",
+		MESSAGE_RECEIVED_EVENT_QUALIFIER = "MESSAGE_RECEIVED",
 	},
 	settings = {
 		debug = true,
@@ -30,11 +40,11 @@ omgservers = {
 		end,
 		set_server_state = function(components)
 			components.server_state = {
-				exchanging = false,
+				waiting_for_response = false,
 				outgoing_commands = {},
 				consumed_commands = {},
 				server_events = {},
-				-- methods
+				-- Methods
 				add_outgoing_command = function(server_state, command)
 					server_state.outgoing_commands[#server_state.outgoing_commands + 1] = command
 				end,
@@ -85,28 +95,33 @@ omgservers = {
 			}
 		end,
 	},
+	-- Methods
 	terminate_server = function(self, code, reason)
 		print("[OMGSERVER] Terminated, code=" .. code .. ", reason=" .. reason)
 		os.exit(code)
 	end,
 	build_handler = function(self, callback)
 		return function(_, id, response)
-			self.components.server_state.exchanging = false
+			self.components.server_state.waiting_for_response = false
 
 			local response_status = response.status
 			local response_body = response.response
-
-			if response_status >= 300 then
-				self:terminate_server(self.constants.API_EXIT_CODE, "api request failed, status=" .. response_status .. ", body=" .. response_body)
-			end
-
-			if self.settings.debug then
-				print("[OMGSERVER] Response, status=" .. response_status .. ", body=" .. response_body)
-			end
 			
-			local decoded_response = json.decode(response_body)
-			if callback then
-				callback(response_status, decoded_response)
+			if response_status < 300 then
+				if self.settings.debug then
+					print("[OMGSERVER] Response, status=" .. response_status .. ", body=" .. response_body)
+				end
+
+				local decoded_body
+				if response_body then
+					decoded_body = json.decode(response_body)
+				end
+				
+				if callback then
+					callback(response_status, decoded_body)
+				end
+			else
+				self:terminate_server(self.constants.API_EXIT_CODE, "api request failed, status=" .. response_status .. ", body=" .. response_body)
 			end
 		end
 	end,
@@ -132,7 +147,7 @@ omgservers = {
 			print("[OMGSERVER] Request, " .. method .. " " .. url .. ", body=" .. encoded_body)
 		end
 
-		self.components.server_state.exchanging = true
+		self.components.server_state.waiting_for_response = true
 		http.request(url, method, response_handler, request_headers, encoded_body)
 	end,
 	create_token = function(self, callback)
@@ -194,7 +209,7 @@ omgservers = {
 				self:terminate_server(self.constants.WS_EXIT_CODE, "ws connection failed, message=" .. data.message)
 			elseif data.event == websocket.EVENT_MESSAGE then
 				self.components.server_state:add_server_event({
-					qualifier = "WS_MESSAGE_RECEIVED",
+					qualifier = omgservers.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER,
 					message = data.message
 				})
 			end
@@ -239,7 +254,7 @@ omgservers = {
 					self.components.server_state:add_consumed_command(incoming_command)
 
 					self.components.server_state:add_server_event({
-						qualifier = "COMMAND_RECEIVED",
+						qualifier = omgservers.constants.COMMAND_RECEIVED_EVENT_QUALIFIER,
 						command = {
 							qualifier = command_qualifier,
 							body = command_body
@@ -261,7 +276,7 @@ omgservers = {
 		assert(self.components.server_state, "Server state must be created")
 		
 		if self.components.tokens then
-			if self.components.server_state.exchanging then
+			if self.components.server_state.waiting_for_response then
 				-- 
 			else
 				local internal_state = self.components.internal_state
@@ -277,27 +292,27 @@ omgservers = {
 		end
 	end,
 	init = function(self, callback)
-		local service_url = os.getenv("OMGSERVERS_URL")
+		local service_url = os.getenv(omgservers.constants.URL_ENVIRONMENT_VARIABLE)
 		if not service_url then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=service_url")
 		end
 
-		local user_id = os.getenv("OMGSERVERS_USER_ID")
+		local user_id = os.getenv(omgservers.constants.USER_ID_ENVIRONMENT_VARIABLE)
 		if not user_id then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=user_id")
 		end
 
-		local password = os.getenv("OMGSERVERS_PASSWORD")
+		local password = os.getenv(omgservers.constants.PASSWORD_ENVIRONMENT_VARIABLE)
 		if not password then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=password")
 		end
 
-		local runtime_id = os.getenv("OMGSERVERS_RUNTIME_ID")
+		local runtime_id = os.getenv(omgservers.constants.RUNTIME_ID_ENVIRONMENT_VARIABLE)
 		if not runtime_id then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=runtime_id")
 		end
 
-		local runtime_qualifier = os.getenv("OMGSERVERS_RUNTIME_QUALIFIER")
+		local runtime_qualifier = os.getenv(omgservers.constants.RUNTIME_QUALIFIER_ENVIRONMENT_VARIABLE)
 		if not runtime_qualifier then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=runtime_qualifier")
 		end
@@ -340,6 +355,7 @@ omgservers = {
 	end,
 }
 
+-- Entryptoint
 return {
 	init = function(self, callback)
 		omgservers:init(callback)
