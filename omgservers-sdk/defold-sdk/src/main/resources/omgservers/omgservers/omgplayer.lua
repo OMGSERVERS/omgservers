@@ -2,8 +2,8 @@ local omgplayer
 omgplayer = {
 	constants = {
 		-- Runtime qualifiers
-		LOBBY_RUNTIME = "LOBBY",
-		MATCH_RUNTIME = "MATCH",
+		LOBBY_RUNTIME_QUALIFIER = "LOBBY",
+		MATCH_RUNTIME_QUALIFIER = "MATCH",
 		-- Message qualifiers
 		SERVER_WELCOME_MESSAGE = "SERVER_WELCOME_MESSAGE",
 		MATCHMAKER_ASSIGNMENT_MESSAGE = "MATCHMAKER_ASSIGNMENT_MESSAGE",
@@ -490,7 +490,7 @@ omgplayer = {
 			elseif message_qualifier == omgplayer_constants.RUNTIME_ASSIGNMENT_MESSAGE then
 				local runtime_id = incoming_message.body.runtime_id
 				local runtime_qualifier = incoming_message.body.runtime_qualifier
-				if runtime_qualifier == omgplayer_constants.LOBBY_RUNTIME then
+				if runtime_qualifier == omgplayer_constants.LOBBY_RUNTIME_QUALIFIER then
 					if not flow_components.client_assignments then
 						flow_components:set_client_assignments(runtime_id, nil, nil)
 					end
@@ -505,7 +505,7 @@ omgplayer = {
 					
 					omgplayer.trigger:trigger_player_was_assigned(runtime_qualifier, runtime_id)
 
-				elseif runtime_qualifier == omgplayer_constants.MATCH_RUNTIME then
+				elseif runtime_qualifier == omgplayer_constants.MATCH_RUNTIME_QUALIFIER then
 					flow_components.client_assignments:set_match(runtime_id)
 					omgplayer.trigger:trigger_player_was_assigned(runtime_qualifier, runtime_id)
 
