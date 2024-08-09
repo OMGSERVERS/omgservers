@@ -6,12 +6,28 @@ omgplayer = {
 		MATCH_RUNTIME_QUALIFIER = "MATCH",
 		-- Message qualifiers
 		SERVER_WELCOME_MESSAGE = "SERVER_WELCOME_MESSAGE",
-		MATCHMAKER_ASSIGNMENT_MESSAGE = "MATCHMAKER_ASSIGNMENT_MESSAGE",
 		RUNTIME_ASSIGNMENT_MESSAGE = "RUNTIME_ASSIGNMENT_MESSAGE",
+		MATCHMAKER_ASSIGNMENT_MESSAGE = "MATCHMAKER_ASSIGNMENT_MESSAGE",
+		CONNECTION_UPGRADE_MESSAGE = "CONNECTION_UPGRADE_MESSAGE",
+		DISCONNECTION_REASON_MESSAGE = "DISCONNECTION_REASON_MESSAGE",
 		SERVER_OUTGOING_MESSAGE = "SERVER_OUTGOING_MESSAGE",
+		-- Player events
+		INITIALIZED_EVENT_QUALIFIER = "INITIALIZED",
+		SIGNED_UP_EVENT_QUALIFIER = "SIGNED_UP",
+		SIGNED_IN_EVENT_QUALIFIER = "SIGNED_IN",
+		GREETED_EVENT_QUALIFIER = "GREETED",
+		ASSSIGNED_EVENT_QUALIFIER = "ASSIGNED",
+		MESSAGE_RECEIVED_EVENT_QUALIFIER = "MESSAGE_RECEIVED",
+		CONNECTION_UPGRADED_EVENT_QUALIFIER = "CONNECTION_UPGRADED",
+		FAILED_EVENT_QUALIFIER = "FAILED",
+		-- Disonnection reasons
+		CLIENT_INACTIVITY_DISCONNECTION_REASON = "CLIENT_INACTIVITY",
+		INTERNAL_FAILURE_DISCONNECTION_REASON = "INTERNAL_FAILURE",
+		-- Misilanious
+		CONNECTION_UPGRADE_WEBSOCKET_PROTOCOL = "WEBSOCKET",
 	},
 	settings = {
-		debug = true,
+		debug = false,
 	},
 	components = {
 		set_event_handler = function(components, handler)
@@ -23,76 +39,103 @@ omgplayer = {
 	-- Event trigger
 	trigger = {
 		components = {
-			player_events = {
+			client_events = {
 				events = {},
 				-- Methods
-				add_event = function(player_events, event)
-					player_events.events[#player_events.events + 1] = event
+				add_event = function(client_events, event)
+					client_events.events[#client_events.events + 1] = event
 				end,
-				pull_events = function(player_events)
-					local events = player_events.events
-					player_events.events = {}
+				pull_events = function(client_events)
+					local events = client_events.events
+					client_events.events = {}
 					return events
 				end,
 			},
 		},
 		-- Methods
-		add_player_event = function(trigger, event)
+		add_client_event = function(trigger, event)
 			if omgplayer.settings.debug then
 				print("[OMGPLAYER] Triggered, event=" .. json.encode(event))
 			end
-			trigger.components.player_events:add_event(event)
-		end,
-		trigger_player_signed_up = function(trigger, user_id, password)
-			local event = {
-				qualifier = "player_signed_up",
-				user_id = user_id,
-				password = password,
-			}
-			trigger:add_player_event(event)
-		end,
-		trigger_player_signed_in = function(trigger, client_id)
-			local event = {
-				qualifier = "player_signed_in",
-				client_id = client_id,
-			}
-			trigger:add_player_event(event)
-		end,
-		trigger_player_was_greeted = function(trigger, version_id, version_created)
-			local event = {
-				qualifier = "player_was_greeted",
-				version_id = version_id,
-				version_created = version_created,
-			}
-			trigger:add_player_event(event)
-		end,
-		trigger_player_was_assigned = function(trigger, runtime_qualifier, runtime_id)
-			local event = {
-				qualifier = "player_was_assigned",
-				runtime_qualifier = runtime_qualifier,
-				runtime_id = runtime_id,
-			}
-			trigger:add_player_event(event)
-		end,
-		trigger_service_message_received = function(trigger, message_body)
-			local event = {
-				qualifier = "service_message_received",
-				message = message_body,
-			}
-			trigger:add_player_event(event)
-		end,
-		trigger_player_failed = function(trigger, reason)
-			local event = {
-				qualifier = "player_failed",
-				reason = reason,
-			}
-			trigger:add_player_event(event)
+			trigger.components.client_events:add_event(event)
 		end,
 		handle_events = function(trigger, event_handler)
-			local player_events = trigger.components.player_events:pull_events()
-			for event_index, player_event in ipairs(player_events) do
+			local client_events = trigger.components.client_events:pull_events()
+			for event_index, player_event in ipairs(client_events) do
 				event_handler(player_event)
 			end
+		end,
+		trigger_initialized_event = function(trigger)
+			local event = {
+				qualifier = omgplayer.constants.INITIALIZED_EVENT_QUALIFIER,
+				body = {
+				},
+			}
+			trigger:add_client_event(event)
+		end,
+		trigger_signed_up_event = function(trigger, user_id, password)
+			local event = {
+				qualifier = omgplayer.constants.SIGNED_UP_EVENT_QUALIFIER,
+				body = {
+					user_id = user_id,
+					password = password,
+				},
+			}
+			trigger:add_client_event(event)
+		end,
+		trigger_signed_in_event = function(trigger, client_id)
+			local event = {
+				qualifier = omgplayer.constants.SIGNED_IN_EVENT_QUALIFIER,
+				body = {
+					client_id = client_id,
+				},
+			}
+			trigger:add_client_event(event)
+		end,
+		trigger_greeted_event = function(trigger, version_id, version_created)
+			local event = {
+				qualifier = omgplayer.constants.GREETED_EVENT_QUALIFIER,
+				body = {
+					version_id = version_id,
+					version_created = version_created,
+				},
+			}
+			trigger:add_client_event(event)
+		end,
+		trigger_assigned_event = function(trigger, runtime_qualifier, runtime_id)
+			local event = {
+				qualifier = omgplayer.constants.ASSSIGNED_EVENT_QUALIFIER,
+				body = {
+					runtime_qualifier = runtime_qualifier,
+					runtime_id = runtime_id,
+				},
+			}
+			trigger:add_client_event(event)
+		end,
+		trigger_message_received_event = function(trigger, message_body)
+			local event = {
+				qualifier = omgplayer.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER,
+				body = {
+					message = message_body,
+				}
+			}
+			trigger:add_client_event(event)
+		end,
+		trigger_connection_upgraded_event = function(trigger)
+			local event = {
+				qualifier = omgplayer.constants.CONNECTION_UPGRADED_EVENT_QUALIFIER,
+				body = {},
+			}
+			trigger:add_client_event(event)
+		end,
+		trigger_failed_event = function(trigger, reason)
+			local event = {
+				qualifier = omgplayer.constants.FAILED_EVENT_QUALIFIER,
+				body = {
+					reason = reason,
+				},
+			}
+			trigger:add_client_event(event)
 		end,
 	},
 	-- Http client
@@ -244,6 +287,11 @@ omgplayer = {
 					end,
 				}
 			end,
+			set_connection = function(components, ws_connection)
+				components.connection = {
+					ws_connection = ws_connection,
+				}
+			end,
 		},
 		-- Methods
 		use_url = function(server, url)
@@ -275,7 +323,7 @@ omgplayer = {
 				if response_body then
 					inlined_body = json.encode(response_body)
 				end
-				omgplayer.trigger:trigger_player_failed("user was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+				omgplayer.trigger:trigger_failed_event("user was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 			end
 
 			omgplayer.http_client:request_server(request_url, request_body, response_handler, failure_handler, 2)
@@ -309,7 +357,7 @@ omgplayer = {
 				if decoded_body then
 					inlined_body = json.encode(decoded_body)
 				end
-				omgplayer.trigger:trigger_player_failed("token was not received, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+				omgplayer.trigger:trigger_failed_event("token was not received, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 			end
 
 			omgplayer.http_client:request_server(request_url, request_body, response_handler, failure_handler, 2)
@@ -344,7 +392,7 @@ omgplayer = {
 				if response_body then
 					inlined_body = json.encode(response_body)
 				end
-				omgplayer.trigger:trigger_player_failed("client was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+				omgplayer.trigger:trigger_failed_event("client was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 			end
 
 			local request_token = server_components.api_token.raw_token
@@ -377,27 +425,64 @@ omgplayer = {
 				if response_body then
 					inlined_body = json.encode(response_body)
 				end
-				omgplayer.trigger:trigger_player_failed("interchange failed, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+				omgplayer.trigger:trigger_failed_event("interchange failed, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 			end
 
 			local request_token = server_components.api_token.raw_token
 			omgplayer.http_client:request_server(request_url, request_body, response_handler, failure_handler, 4, request_token)
 		end,
-		send_client_message = function(server, message_data)
+		ws_connect = function(server, runtime_id, ws_token, callback)
+			local connection_url = server.components.server_urls.connection .. "?runtime_id=" .. runtime_id .. "&ws_token=" .. ws_token
+			local params = {
+				protocol = "omgservers"
+			}
+
+			print("[OMGSERVER] Connect websocket, url=" .. connection_url)
+
+			local ws_connection = websocket.connect(connection_url, params, function(_, _, data)
+				if data.event == websocket.EVENT_DISCONNECTED then
+					print("[OMGSERVER] Websocket disconnected")
+
+				elseif data.event == websocket.EVENT_CONNECTED then
+					print("[OMGSERVER] Websocket connected")
+					if callback then
+						callback()
+					end
+					
+				elseif data.event == websocket.EVENT_ERROR then
+					omgplayer.trigger:trigger_failed_event("ws connection failed, message=" .. data.message)
+					
+				elseif data.event == websocket.EVENT_MESSAGE then
+					omgplayer.trigger:trigger_message_received_event(data.message)
+				end
+			end)
+
+			server.components:set_connection(ws_connection)
+		end,
+		send_message = function(server, message)
 			assert(server.components.server_client, "Component server_client must be created")
 
 			local server_components = server.components
 
-			local message_id = server_components.server_client:generate_message_id()
+			-- Send using connection if it exists
+			if server_components.connection then
+				local encoded_message = json.encode(message)
+				websocket.send(server_components.connection.ws_connection, encoded_message, {
+					type = websocket.DATA_TYPE_TEXT
+				})
+			else
+				-- Send using service command
+				local message_id = server_components.server_client:generate_message_id()
 
-			local outgoing_message = {
-				id = message_id,
-				qualifier = "CLIENT_OUTGOING_MESSAGE",
-				body = {
-					data = message_data
+				local outgoing_message = {
+					id = message_id,
+					qualifier = "CLIENT_OUTGOING_MESSAGE",
+					body = {
+						data = message
+					}
 				}
-			}
-			server_components.server_client:add_outgoing_message(outgoing_message)
+				server_components.server_client:add_outgoing_message(outgoing_message)
+			end
 		end,
 	},
 	-- Flow
@@ -428,17 +513,16 @@ omgplayer = {
 						client_assignments.lobby_id = nil
 						client_assignments.match_id = assigned_match_id
 					end,
+					get_runtime_id = function(client_assignments)
+						return client_assignments.lobby_id or client_assignments.match_id
+					end,
 				}
 			end,
 		},
 		-- Methods
-		sign_up = function(flow, callback)
+		sign_up = function(flow)
 			omgplayer.server:create_user(function(user_id, password)
-				omgplayer.trigger:trigger_player_signed_up(user_id, password)
-
-				if callback then
-					callback(user_id, password)
-				end
+				omgplayer.trigger:trigger_signed_up_event(user_id, password)
 			end)
 		end,
 		sign_in = function(flow, user_id, password, callback)
@@ -446,11 +530,7 @@ omgplayer = {
 
 			omgplayer.server:create_token(function(raw_token)
 				omgplayer.server:create_client(function(client_id)
-					omgplayer.trigger:trigger_player_signed_in(client_id)
-
-					if callback then
-						callback(raw_token, client_id)
-					end
+					omgplayer.trigger:trigger_signed_in_event(client_id)
 				end)
 			end)
 		end,
@@ -471,20 +551,20 @@ omgplayer = {
 				local version_id = incoming_message.body.version_id
 				local version_created = incoming_message.body.version_created
 				flow_components:set_server_version(version_id, version_created)
-				
+
 			elseif message_qualifier == omgplayer_constants.MATCHMAKER_ASSIGNMENT_MESSAGE then
 				local matchmaker_id = incoming_message.body.matchmaker_id
 
 				if not flow_components.client_assignments then
 					flow_components:set_client_assignments(nil, matchmaker_id, nil)
 				end
-				
+
 				if not flow_components.client_assignments.matchmaker_id then
 					if flow_components.client_assignments.lobby_id then
-						omgplayer.trigger:trigger_player_was_greeted(flow_components.server_version.version_id, flow_components.server_version.version_created)
+						omgplayer.trigger:trigger_greeted_event(flow_components.server_version.version_id, flow_components.server_version.version_created)
 					end
 				end
-				
+
 				flow_components.client_assignments.matchmaker_id = matchmaker_id
 
 			elseif message_qualifier == omgplayer_constants.RUNTIME_ASSIGNMENT_MESSAGE then
@@ -497,17 +577,17 @@ omgplayer = {
 
 					if not flow_components.client_assignments.lobby_id and not flow_components.client_assignments.match_id then
 						if flow_components.client_assignments.matchmaker_id then
-							omgplayer.trigger:trigger_player_was_greeted(flow_components.server_version.version_id, flow_components.server_version.version_created)
+							omgplayer.trigger:trigger_greeted_event(flow_components.server_version.version_id, flow_components.server_version.version_created)
 						end
 					end
-					
+
 					flow_components.client_assignments:set_lobby(runtime_id)
-					
-					omgplayer.trigger:trigger_player_was_assigned(runtime_qualifier, runtime_id)
+
+					omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
 
 				elseif runtime_qualifier == omgplayer_constants.MATCH_RUNTIME_QUALIFIER then
 					flow_components.client_assignments:set_match(runtime_id)
-					omgplayer.trigger:trigger_player_was_assigned(runtime_qualifier, runtime_id)
+					omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
 
 				else
 					print("[OMGPLAYER] Unknown runtime qualifier was received, runtime_qualifier=" .. runtime_qualifier)
@@ -515,7 +595,24 @@ omgplayer = {
 
 			elseif message_qualifier == omgplayer_constants.SERVER_OUTGOING_MESSAGE then
 				local message_body = incoming_message.body.message
-				omgplayer.trigger:trigger_service_message_received(message_body)
+				omgplayer.trigger:trigger_message_received_event(message_body)
+
+			elseif message_qualifier == omgplayer_constants.CONNECTION_UPGRADE_MESSAGE then
+				local upgrade_protocol = incoming_message.body.protocol
+				if upgrade_protocol == omgplayer.constants.CONNECTION_UPGRADE_WEBSOCKET_PROTOCOL then
+					local web_socket_config = incoming_message.body.web_socket_config
+					local ws_token = web_socket_config.ws_token
+
+					local runtime_id = flow_components.client_assignments:get_runtime_id()
+					omgplayer.server:ws_connect(runtime_id, ws_token, function()
+						omgplayer.trigger:trigger_connection_upgraded_event()
+					end)
+				else
+					omgplayer.trigger:trigger_failed_event("unsupported connection upgrade protocol, protocol=" .. upgrade_protocol)
+				end
+			elseif message_qualifier == omgplayer_constants.DISCONNECTION_REASON_MESSAGE then
+				local reason = incoming_message.body.reason
+				omgplayer.trigger:trigger_failed_event("client was diconnected by server, reason=" .. reason)
 			end
 		end,
 		iterate = function(flow, dt)
@@ -544,10 +641,14 @@ omgplayer = {
 		end,
 	},
 	-- Methods
-	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler)
+	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler, debug)
+		self.settings.debug = debug or false
+		print("[OMGPLAYER] Setting, debug=" .. tostring(self.settings.debug))
+		
 		self.server:use_url(server_url)
 		self.server:use_project(tenant_id, stage_id, stage_secret)
 		self.components:set_event_handler(handler)
+		self.trigger:trigger_initialized_event()
 	end,
 	update = function(self, dt)
 		assert(self.components.event_handler, "Component handler must be set")
@@ -560,14 +661,19 @@ omgplayer = {
 
 -- Entrypoint
 return {
-	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler)
-		omgplayer:init(server_url, tenant_id, stage_id, stage_secret, handler)
+	constants = omgplayer.constants,
+	-- Methods
+	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler, debug)
+		omgplayer:init(server_url, tenant_id, stage_id, stage_secret, handler, debug)
 	end,
-	sign_up = function(self, callback)
-		omgplayer.flow:sign_up(callback)
+	sign_up = function(self)
+		omgplayer.flow:sign_up()
 	end,
-	sign_in = function(self, user_id, password, callback)
-		omgplayer.flow:sign_in(user_id, password, callback)
+	sign_in = function(self, user_id, password)
+		omgplayer.flow:sign_in(user_id, password)
+	end,
+	send_message = function(self, message)
+		omgplayer.server:send_message(message)
 	end,
 	update = function(self, dt)
 		omgplayer:update(dt)

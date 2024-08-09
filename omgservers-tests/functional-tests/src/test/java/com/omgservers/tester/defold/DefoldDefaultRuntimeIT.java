@@ -1,12 +1,16 @@
 package com.omgservers.tester.defold;
 
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.version.VersionGroupDto;
 import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.DeveloperApiTester;
+import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.dto.TestVersionDto;
+import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
 import com.omgservers.tester.operation.createTestVersion.CreateTestVersionOperation;
 import com.omgservers.tester.operation.getDockerClient.GetDockerClientOperation;
 import com.omgservers.tester.operation.pushTestVersionImage.PushTestVersionImageOperation;
@@ -21,15 +25,18 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @QuarkusTest
-public class DefoldLobbyRuntimeIT extends BaseTestClass {
+public class DefoldDefaultRuntimeIT extends BaseTestClass {
 
     @Inject
     CreateTestVersionOperation createTestVersionOperation;
+
+    @Inject
+    BootstrapTestClientOperation bootstrapTestClientOperation;
 
     @Inject
     GetDockerClientOperation getDockerClientOperation;
@@ -46,8 +53,11 @@ public class DefoldLobbyRuntimeIT extends BaseTestClass {
     @Inject
     SupportApiTester supportApiTester;
 
+    @Inject
+    PlayerApiTester playerApiTester;
+
     @Test
-    void defoldUpgradeConnectionIT() throws Exception {
+    void defoldDefaultRuntimeIT() throws Exception {
         final var versionConfig = VersionConfigDto.create();
         versionConfig.setModes(new ArrayList<>() {{
             add(VersionModeDto.create("test", 1, 16, new ArrayList<>() {{
@@ -73,10 +83,35 @@ public class DefoldLobbyRuntimeIT extends BaseTestClass {
 
             waitForDeploymentOperation.waitForDeployment(testVersion);
 
+            final var supervisorClient = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
+
+            final var welcomeMessage = playerApiTester.waitMessage(supervisorClient,
+                    MessageQualifierEnum.SERVER_WELCOME_MESSAGE);
+            final var lobbyAssignment = playerApiTester.waitMessage(supervisorClient,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(welcomeMessage.getId()));
+            final var matchmakerAssignment = playerApiTester.waitMessage(supervisorClient,
+                    MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(lobbyAssignment.getId()));
+            final var matchAssignment = playerApiTester.waitMessage(supervisorClient,
+                    MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
+                    Collections.singletonList(matchmakerAssignment.getId()));
+
             try (final var defoldClient1 = startDefoldTestClient(testVersion)) {
                 defoldClient1.start();
+                log.info("Defold test client has been started, containerName={}", defoldClient1.getContainerName());
 
-                log.info("Defold test client started");
+                final var serverMessage1 = playerApiTester.waitMessage(supervisorClient,
+                        MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
+                        Collections.singletonList(matchAssignment.getId()));
+                assertEquals("{text=hello_message}",
+                        ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+
+                final var serverMessage2 = playerApiTester.waitMessage(supervisorClient,
+                        MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
+                        Collections.singletonList(serverMessage1.getId()));
+                assertEquals("{text=confirm_message}",
+                        ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
             }
 
         } finally {
@@ -99,5 +134,13 @@ public class DefoldLobbyRuntimeIT extends BaseTestClass {
     @AllArgsConstructor
     class UserData {
         String testId;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    class TesterNotification {
+        Long clientId;
+        String text;
     }
 }
