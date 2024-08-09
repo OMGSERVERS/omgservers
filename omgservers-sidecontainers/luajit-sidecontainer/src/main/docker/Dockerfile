@@ -4,3 +4,4 @@ RUN luarocks install luasocket
 RUN luarocks install lua-cjson
 RUN luarocks install inspect
 RUN luarocks install base64
+COPY src/main/docker/omgserver.lua /usr/local/share/lua/5.1

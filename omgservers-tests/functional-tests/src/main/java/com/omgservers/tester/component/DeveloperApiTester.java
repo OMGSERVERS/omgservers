@@ -155,11 +155,7 @@ public class DeveloperApiTester {
                                                         final VersionConfigDto versionConfig,
                                                         final String mainLua) throws IOException {
 
-        final var archiveBytes = createVersionArchiveOperation.createArchive(Map.of(
-                        "main.lua", mainLua,
-                        "omgserver.lua", getLuaFileOperation.getOmgserverLua()
-                )
-        );
+        final var archiveBytes = createVersionArchiveOperation.createArchive(Map.of("main.lua", mainLua));
 
         final var responseSpecification = RestAssured
                 .with()

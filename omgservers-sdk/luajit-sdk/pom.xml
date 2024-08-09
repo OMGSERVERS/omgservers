@@ -6,23 +6,16 @@
 
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers</artifactId>
+        <artifactId>omgservers-sdk</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <packaging>pom</packaging>
-
-    <artifactId>omgservers-sdk</artifactId>
+    <artifactId>luajit-sdk</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <modules>
-        <module>defold-sdk</module>
-        <module>luajit-sdk</module>
-    </modules>
 
 </project>
