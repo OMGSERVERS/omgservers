@@ -36,7 +36,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
 
         final var authorizationHeader = request.getAuthorizationHeader();
         if (Objects.isNull(authorizationHeader)) {
-            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.CREDENTIALS_WRONG);
+            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_CREDENTIALS);
         }
 
         try {
@@ -65,7 +65,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
                                 });
                     });
         } catch (ServerSideBadRequestException e) {
-            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.CREDENTIALS_WRONG, e.getMessage(), e);
+            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_CREDENTIALS, e.getMessage(), e);
         }
     }
 
@@ -74,7 +74,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
         return userModule.getUserService().createToken(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken)
                 .onFailure(ServerSideNotFoundException.class)
-                .transform(t -> new ServerSideUnauthorizedException(ExceptionQualifierEnum.CREDENTIALS_WRONG,
+                .transform(t -> new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_CREDENTIALS,
                         t.getMessage(), t));
     }
 }

@@ -60,7 +60,7 @@ class UpsertPoolRequestOperationImpl implements UpsertPoolRequestOperation {
         try {
             return objectMapper.writeValueAsString(poolRequest.getConfig());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
         }
     }
 }

@@ -43,7 +43,7 @@ public class RegistryApiImpl implements RegistryApi {
             final var request = objectMapper.treeToValue(jsonNode, HandleEventsRegistryRequest.class);
             return handleApiRequestOperation.handleApiRequest(log, request, webService::handleEvents);
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.REQUEST_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_REQUEST, e.getMessage(), e);
         }
     }
 

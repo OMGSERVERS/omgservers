@@ -70,7 +70,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                             .flatMap(voidItem -> receiveMessages(shard, clientId, consumedMessages));
                                 }
                             } else {
-                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
+                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_CLIENT_ID,
                                         "wrong clientId, clientId=" + clientId);
                             }
                         })
@@ -91,7 +91,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                         case CLIENT_OUTGOING_MESSAGE -> new ClientMessageReceivedEventBodyModel(clientId,
                                 message);
                         default ->
-                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.MESSAGE_QUALIFIER_WRONG,
+                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_MESSAGE_QUALIFIER,
                                         "unsupported message has been received, " + message.getQualifier());
                     };
 

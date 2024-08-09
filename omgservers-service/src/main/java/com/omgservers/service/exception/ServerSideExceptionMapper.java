@@ -25,7 +25,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.ARGUMENT_WRONG);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.WRONG_ARGUMENT);
         return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
     }
 
@@ -49,7 +49,7 @@ public class ServerSideExceptionMapper {
                 e.getMessage());
 
         if (Objects.nonNull(e.getResponse()) && e.getResponse().getStatus() == 400) {
-            final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.REQUEST_WRONG);
+            final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.WRONG_REQUEST);
             return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
         } else {
             return throwable(e, uriInfo);
@@ -63,7 +63,7 @@ public class ServerSideExceptionMapper {
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.MEDIA_TYPE_WRONG);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.WRONG_MEDIA_TYPE);
         return RestResponse.status(Response.Status.BAD_REQUEST, exceptionErrorResponse);
     }
 

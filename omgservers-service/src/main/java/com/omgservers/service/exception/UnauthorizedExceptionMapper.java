@@ -16,7 +16,7 @@ public class UnauthorizedExceptionMapper implements ExceptionMapper<Unauthorized
     public Response toResponse(UnauthorizedException e) {
         log.warn("Unauthorized exception, {}:{}", e.getClass().getSimpleName(), e.getMessage());
 
-        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.CREDENTIALS_WRONG);
+        final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum.WRONG_CREDENTIALS);
         return Response.status(Response.Status.UNAUTHORIZED.getStatusCode())
                 .entity(exceptionErrorResponse).build();
     }

@@ -64,7 +64,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
         try {
             return objectMapper.writeValueAsString(player.getAttributes());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
         }
     }
 
@@ -72,7 +72,7 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
         try {
             return objectMapper.writeValueAsString(player.getProfile());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
         }
     }
 }

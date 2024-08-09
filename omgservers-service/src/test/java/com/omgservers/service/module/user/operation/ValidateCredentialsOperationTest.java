@@ -35,7 +35,7 @@ class ValidateCredentialsOperationTest extends Assertions {
 
         final var exception = assertThrows(ServerSideUnauthorizedException.class, () ->
                 validateCredentialsOperation.validateCredentials(user, "wrongpassword"));
-        assertEquals(ExceptionQualifierEnum.CREDENTIALS_WRONG, exception.getQualifier());
+        assertEquals(ExceptionQualifierEnum.WRONG_CREDENTIALS, exception.getQualifier());
     }
 
     @Test

@@ -22,7 +22,7 @@ class CheckShardOperationImpl implements CheckShardOperation {
         return calculateShardOperation.calculateShard(keys)
                 .map(shard -> {
                     if (shard.foreign()) {
-                        throw new ServerSideGoneException(ExceptionQualifierEnum.SHARD_WRONG,
+                        throw new ServerSideGoneException(ExceptionQualifierEnum.WRONG_SHARD,
                                 "wrong shard server, shard=" + shard.shard());
                     }
                     if (shard.locked()) {

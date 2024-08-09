@@ -67,7 +67,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                         .flatMap(voidItem -> receiveCommands(shard, runtimeId, consumedCommands));
 
                             } else {
-                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.RUNTIME_ID_WRONG,
+                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_RUNTIME_ID,
                                         "wrong runtimeId, runtimeId=" + runtimeId);
                             }
                         })

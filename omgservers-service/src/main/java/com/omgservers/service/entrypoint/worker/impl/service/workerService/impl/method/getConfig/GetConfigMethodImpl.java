@@ -46,7 +46,7 @@ class GetConfigMethodImpl implements GetConfigMethod {
                         return getVersion(tenantId, versionId)
                                 .map(VersionModel::getConfig);
                     } else {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.RUNTIME_ID_WRONG,
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_RUNTIME_ID,
                                 "wrong runtimeId, runtimeId=" + runtimeId);
                     }
                 })

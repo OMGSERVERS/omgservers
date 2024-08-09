@@ -30,7 +30,7 @@ class ValidateStageSecretMethodImpl implements ValidateStageSecretMethod {
                 .map(response -> {
                     final var stage = response.getStage();
                     if (!stage.getSecret().equals(secret)) {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.STAGE_SECRET_WRONG,
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_STAGE_SECRET,
                                 String.format("stage secret is wrong, tenantId=%s, stageId=%s", tenantId, stageId));
                     }
                     return stage;

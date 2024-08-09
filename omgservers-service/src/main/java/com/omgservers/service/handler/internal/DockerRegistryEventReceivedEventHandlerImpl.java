@@ -83,7 +83,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
                     idempotencyKey)
                     .replaceWithVoid();
         } catch (NumberFormatException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.ARGUMENT_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, e.getMessage(), e);
         }
     }
 
@@ -120,7 +120,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
                 return host + ":" + port;
             }
         } catch (Exception e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG,
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT,
                     "target url couldn't be parsed");
         }
     }

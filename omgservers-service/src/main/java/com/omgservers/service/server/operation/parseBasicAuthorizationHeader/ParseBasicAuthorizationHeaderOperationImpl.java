@@ -19,31 +19,31 @@ class ParseBasicAuthorizationHeaderOperationImpl implements ParseBasicAuthorizat
     public BasicCredentialsDto parseBasicAuthorizationHeader(final String authorizationHeader) {
         final var headerParts = authorizationHeader.split(" ");
         if (headerParts.length != 2) {
-            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.ARGUMENT_WRONG,
+            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_ARGUMENT,
                     "wrong authorization header structure");
         }
         if (!headerParts[0].equalsIgnoreCase("Basic")) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.ARGUMENT_WRONG,
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT,
                     "authorization schema is not a basic");
         }
         try {
             final var credentials = new String(Base64.getDecoder().decode(headerParts[1]));
             final var usernamePassword = credentials.split(":");
             if (usernamePassword.length != 2) {
-                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.ARGUMENT_WRONG,
+                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_ARGUMENT,
                         "wrong credentials structure");
             }
 
             final var userId = Long.valueOf(usernamePassword[0]);
             final var password = usernamePassword[1];
             if (password.isEmpty()) {
-                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.ARGUMENT_WRONG,
+                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_ARGUMENT,
                         "password is empty");
             }
 
             return new BasicCredentialsDto(userId, password);
         } catch (IllegalArgumentException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.ARGUMENT_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, e.getMessage(), e);
         }
     }
 }

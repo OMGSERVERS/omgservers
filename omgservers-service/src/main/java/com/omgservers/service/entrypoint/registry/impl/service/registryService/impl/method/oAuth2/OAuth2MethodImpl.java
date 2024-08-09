@@ -34,7 +34,7 @@ class OAuth2MethodImpl implements OAuth2Method {
         if (grantType.equals("refresh_token")) {
             final var refreshToken = request.getRefreshToken();
             if (Objects.isNull(refreshToken)) {
-                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.REQUEST_WRONG);
+                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_REQUEST);
             }
 
             try {
@@ -56,11 +56,11 @@ class OAuth2MethodImpl implements OAuth2Method {
                         });
 
             } catch (ParseException | NumberFormatException e) {
-                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.REQUEST_WRONG, e.getMessage(), e);
+                throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_REQUEST, e.getMessage(), e);
             }
 
         } else {
-            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.REQUEST_WRONG,
+            throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_REQUEST,
                     "unsupported grant type, type=" + grantType);
         }
     }

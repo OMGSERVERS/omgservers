@@ -27,7 +27,7 @@ class ValidateCredentialsOperationImpl implements ValidateCredentialsOperation {
             return Uni.createFrom().item(user);
         } else {
             throw new ServerSideUnauthorizedException(
-                    ExceptionQualifierEnum.CREDENTIALS_WRONG,
+                    ExceptionQualifierEnum.WRONG_CREDENTIALS,
                     String.format("wrong credentials, user=%s", user));
         }
     }

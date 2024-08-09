@@ -61,7 +61,7 @@ public class ClientMessageReceivedEventHandlerImpl implements EventHandler {
                             messageBody.getData(), event.getIdempotencyKey()))
                     .replaceWithVoid();
         } else {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_MESSAGE_BODY_TYPE_MISMATCHED,
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_CLIENT_MESSAGE_BODY_TYPE,
                     "body type mismatch, " + message.getBody().getClass().getSimpleName());
         }
     }

@@ -46,7 +46,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                                             .issueWsJwtToken(userId, runtimeId, UserRoleEnum.WORKER);
                                     return new CreateTokenWorkerResponse(apiToken, wsToken);
                                 } else {
-                                    throw new ServerSideBadRequestException(ExceptionQualifierEnum.RUNTIME_ID_WRONG,
+                                    throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_RUNTIME_ID,
                                             "wrong runtimeId, runtimeId=" + runtimeId);
                                 }
                             });

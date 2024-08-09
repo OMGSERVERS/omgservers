@@ -60,7 +60,7 @@ class UpsertRuntimeCommandOperationImpl implements UpsertRuntimeCommandOperation
         try {
             return objectMapper.writeValueAsString(runtimeCommand.getBody());
         } catch (IOException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
         }
     }
 }

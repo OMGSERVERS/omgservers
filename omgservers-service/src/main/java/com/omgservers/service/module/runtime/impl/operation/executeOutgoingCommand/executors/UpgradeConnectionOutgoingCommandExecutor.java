@@ -66,7 +66,7 @@ public class UpgradeConnectionOutgoingCommandExecutor implements OutgoingCommand
                                     if (has) {
                                         return upgradeConnection(runtimeId, clientId, protocol);
                                     } else {
-                                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.CLIENT_ID_WRONG,
+                                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_CLIENT_ID,
                                                 String.format("wrong clientId, runtimeId=%s, clientId=%s",
                                                         runtimeId, clientId));
                                     }

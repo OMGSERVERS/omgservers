@@ -13,9 +13,6 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.server.service.event.component.eventEmitter.EventEmitter;
 import com.omgservers.service.server.service.event.operation.deleteEventAndUpdateStatus.DeleteEventAndUpdateStatusOperation;
 import com.omgservers.service.server.service.event.operation.selectEvent.SelectEventOperation;
-import com.omgservers.service.server.service.event.component.eventEmitter.EventEmitter;
-import com.omgservers.service.server.service.event.operation.deleteEventAndUpdateStatus.DeleteEventAndUpdateStatusOperation;
-import com.omgservers.service.server.service.event.operation.selectEvent.SelectEventOperation;
 import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
@@ -129,7 +126,7 @@ public class HandleEventMethodImpl implements HandleEventMethod {
                 return eventEmitter.forwardEvent(eventMessage)
                         .replaceWith(Boolean.TRUE);
             } catch (IOException e) {
-                throw new ServerSideBadRequestException(ExceptionQualifierEnum.OBJECT_WRONG, e.getMessage(), e);
+                throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
             }
         } else {
             return Uni.createFrom().item(Boolean.FALSE);

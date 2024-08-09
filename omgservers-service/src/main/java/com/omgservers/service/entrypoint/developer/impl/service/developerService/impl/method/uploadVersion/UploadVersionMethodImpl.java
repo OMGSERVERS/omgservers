@@ -70,7 +70,7 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
                         final var configModel = objectMapper.readValue(fileContent, VersionConfigDto.class);
                         return configModel;
                     } catch (IOException e) {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.CONFIG_JSON_WRONG,
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_CONFIG_JSON,
                                 String.format(CONFIG_JSON + " was not parsed, request=%s, %s",
                                         request, e.getMessage()), e);
                     }
@@ -89,7 +89,7 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
                         final var base64Archive = Base64.getEncoder().encodeToString(fileContent);
                         return base64Archive;
                     } catch (IOException e) {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.VERSION_ZIP_WRONG,
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_VERSION_ZIP,
                                 String.format(VERSION_ZIP + " was not parsed, request=%s, %s",
                                         request, e.getMessage()), e);
                     }

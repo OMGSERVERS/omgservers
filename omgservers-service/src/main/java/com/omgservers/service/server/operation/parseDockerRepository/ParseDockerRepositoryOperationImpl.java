@@ -19,7 +19,7 @@ class ParseDockerRepositoryOperationImpl implements ParseDockerRepositoryOperati
         final var parts = repository.split("/");
 
         if (parts.length != 5) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.ARGUMENT_WRONG,
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT,
                     "repository has wrong structure");
         }
 
@@ -32,7 +32,7 @@ class ParseDockerRepositoryOperationImpl implements ParseDockerRepositoryOperati
 
             return new DockerRegistryRepositoryDto(namespace, tenantId, projectId, stageId, qualifier);
         } catch (IllegalArgumentException e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.ARGUMENT_WRONG, e.getMessage(), e);
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, e.getMessage(), e);
         }
     }
 }
