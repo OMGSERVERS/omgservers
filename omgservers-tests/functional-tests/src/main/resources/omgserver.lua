@@ -153,10 +153,12 @@ local server = {
         assert(self_components.server_environment, "Server environment must be set")
         assert(self_components.service_urls, "Service urls must be set")
 
+        local runtime_id = self_components.server_environment.runtime_id
         local user_id = self_components.server_environment.user_id
         local password = self_components.server_environment.password
 
         local request_body = {
+            runtime_id = runtime_id,
             user_id = user_id,
             password = password
         }
@@ -164,7 +166,7 @@ local server = {
         local request_url = self_components.service_urls.create_token_url
         local response_body, status_code = exchanger:request_endpoint(request_url, request_body)
         if response_body then
-            local raw_token = response_body["raw_token"]
+            local raw_token = response_body.api_token
             internal:log("Token was created, raw_token=" .. string.sub(raw_token, 1, 4) .. "..")
             return raw_token
         else
