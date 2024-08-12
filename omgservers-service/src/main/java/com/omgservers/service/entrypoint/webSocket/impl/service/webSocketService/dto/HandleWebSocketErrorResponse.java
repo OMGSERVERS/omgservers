@@ -5,5 +5,5 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RemoveConnectionWebSocketResponse {
+public class HandleWebSocketErrorResponse {
 }

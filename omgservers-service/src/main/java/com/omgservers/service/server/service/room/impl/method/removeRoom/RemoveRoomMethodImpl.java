@@ -2,8 +2,8 @@ package com.omgservers.service.server.service.room.impl.method.removeRoom;
 
 import com.omgservers.service.server.service.room.dto.RemoveRoomRequest;
 import com.omgservers.service.server.service.room.dto.RemoveRoomResponse;
+import com.omgservers.service.server.service.room.impl.component.RoomWebSocketCloseReason;
 import com.omgservers.service.server.service.room.impl.component.RoomsContainer;
-import com.omgservers.service.server.service.room.impl.component.WebsocketCloseReason;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +28,7 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
             return Multi.createFrom().iterable(roomConnections)
                     .onItem().transformToUniAndConcatenate(roomConnection -> {
                         final var webSocketConnection = roomConnection.getWebSocketConnection();
-                        return webSocketConnection.close(WebsocketCloseReason.ROOM_WAS_REMOVED);
+                        return webSocketConnection.close(RoomWebSocketCloseReason.ROOM_WAS_REMOVED);
                     })
                     .collect().asList()
                     .replaceWith(new RemoveRoomResponse(Boolean.TRUE));

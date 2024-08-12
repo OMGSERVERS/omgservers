@@ -1,17 +1,26 @@
 package com.omgservers.service.entrypoint.webSocket.impl.service.webService;
 
-import io.quarkus.security.identity.SecurityIdentity;
-import io.quarkus.websockets.next.WebSocketConnection;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorResponse;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.buffer.Buffer;
 
 public interface WebService {
 
-    Uni<Void> addConnection(SecurityIdentity securityIdentity, WebSocketConnection webSocketConnection);
+    Uni<AddConnectionWebSocketResponse> addConnection(AddConnectionWebSocketRequest request);
 
-    Uni<Void> removeConnection(SecurityIdentity securityIdentity, WebSocketConnection webSocketConnection);
+    Uni<HandleClosedConnectionWebSocketResponse> handleCloseConnection(HandleClosedConnectionWebSocketRequest request);
 
-    Uni<Void> handleTextMessage(SecurityIdentity securityIdentity, WebSocketConnection webSocketConnection, String message);
+    Uni<HandleWebSocketErrorResponse> handleWebSocketError(HandleWebSocketErrorRequest request);
 
-    Uni<Void> handleBinaryMessage(SecurityIdentity securityIdentity, WebSocketConnection webSocketConnection, Buffer message);
+    Uni<HandleTextMessageWebSocketResponse> handleTextMessage(HandleTextMessageWebSocketRequest request);
+
+    Uni<HandleBinaryMessageWebSocketResponse> handleBinaryMessage(HandleBinaryMessageWebSocketRequest request);
 }

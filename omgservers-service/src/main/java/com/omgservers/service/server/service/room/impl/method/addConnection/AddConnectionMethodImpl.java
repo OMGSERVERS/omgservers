@@ -1,9 +1,9 @@
 package com.omgservers.service.server.service.room.impl.method.addConnection;
 
 import com.omgservers.service.server.service.room.dto.AddConnectionRequest;
+import com.omgservers.service.server.service.room.impl.component.RoomWebSocketCloseReason;
 import com.omgservers.service.server.service.room.impl.component.RoomConnection;
 import com.omgservers.service.server.service.room.impl.component.RoomsContainer;
-import com.omgservers.service.server.service.room.impl.component.WebsocketCloseReason;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -25,8 +25,8 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
         final var roomInstance = roomsContainer.getRoom(runtimeId);
 
         if (roomInstance.isEmpty()) {
-            log.info("Room was not found to add connection, runtimeId={}", runtimeId);
-            return webSocketConnection.close(WebsocketCloseReason.ROOM_WAS_NOT_FOUND);
+            log.warn("Room was not found to add connection, runtimeId={}", runtimeId);
+            return webSocketConnection.close(RoomWebSocketCloseReason.ROOM_WAS_NOT_FOUND);
         }
 
         final var usedTokenId = request.getUsedTokenId();
@@ -41,7 +41,7 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
 
         final var previousConnection = roomInstance.get().replaceConnection(roomConnection);
         if (previousConnection.isPresent()) {
-            return webSocketConnection.close(WebsocketCloseReason.NEW_CONNECTION_WAS_OPENED)
+            return webSocketConnection.close(RoomWebSocketCloseReason.NEW_CONNECTION_WAS_OPENED)
                     .invoke(voidItem -> log.info("Previous connection was found and closed, tokenId={}", usedTokenId));
         } else {
             return Uni.createFrom().voidItem();

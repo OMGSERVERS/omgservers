@@ -126,7 +126,6 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
                         "OMGSERVERS_STAGE_ID", testVersion.getStageId().toString(),
                         "OMGSERVERS_STAGE_SECRET", testVersion.getStageSecret()))
                 .withNetworkMode("host");
-
     }
 
     @Data

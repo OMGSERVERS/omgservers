@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RemoveConnectionWebSocketRequest {
+public class HandleWebSocketErrorRequest {
 
     @NotNull
     SecurityIdentity securityIdentity;
 
     @NotNull
     WebSocketConnection webSocketConnection;
+
+    @NotNull
+    Throwable throwable;
 }

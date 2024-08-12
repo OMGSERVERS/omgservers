@@ -2,9 +2,15 @@ package com.omgservers.service.entrypoint.webSocket.impl.service.webService.impl
 
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webService.WebService;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorRequest;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.OnBinaryMessage;
 import io.quarkus.websockets.next.OnClose;
+import io.quarkus.websockets.next.OnError;
 import io.quarkus.websockets.next.OnOpen;
 import io.quarkus.websockets.next.OnTextMessage;
 import io.quarkus.websockets.next.WebSocket;
@@ -26,23 +32,38 @@ public class WebSocketEndpoint {
 
     @OnOpen
     public Uni<Void> onOpen(final WebSocketConnection webSocketConnection) {
-        return webService.addConnection(securityIdentity, webSocketConnection);
+        final var request = new AddConnectionWebSocketRequest(securityIdentity, webSocketConnection);
+        return webService.addConnection(request)
+                .replaceWithVoid();
     }
 
     @OnClose
     public Uni<Void> onClose(final WebSocketConnection webSocketConnection) {
-        return webService.removeConnection(securityIdentity, webSocketConnection);
+        final var request = new HandleClosedConnectionWebSocketRequest(securityIdentity, webSocketConnection);
+        return webService.handleCloseConnection(request)
+                .replaceWithVoid();
+    }
+
+    @OnError
+    public Uni<Void> onError(final WebSocketConnection webSocketConnection, final Throwable throwable) {
+        final var request = new HandleWebSocketErrorRequest(securityIdentity, webSocketConnection, throwable);
+        return webService.handleWebSocketError(request)
+                .replaceWithVoid();
     }
 
     @OnTextMessage
     public Uni<Void> onTextMessage(final WebSocketConnection webSocketConnection,
                                    final String message) {
-        return webService.handleTextMessage(securityIdentity, webSocketConnection, message);
+        final var request = new HandleTextMessageWebSocketRequest(securityIdentity, webSocketConnection, message);
+        return webService.handleTextMessage(request)
+                .replaceWithVoid();
     }
 
     @OnBinaryMessage
     public Uni<Void> onBinaryMessage(final WebSocketConnection webSocketConnection,
                                      final Buffer message) {
-        return webService.handleBinaryMessage(securityIdentity, webSocketConnection, message);
+        final var request = new HandleBinaryMessageWebSocketRequest(securityIdentity, webSocketConnection, message);
+        return webService.handleBinaryMessage(request)
+                .replaceWithVoid();
     }
 }

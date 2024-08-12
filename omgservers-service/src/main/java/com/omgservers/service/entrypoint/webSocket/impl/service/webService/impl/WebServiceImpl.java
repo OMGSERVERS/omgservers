@@ -3,13 +3,16 @@ package com.omgservers.service.entrypoint.webSocket.impl.service.webService.impl
 import com.omgservers.service.entrypoint.webSocket.impl.service.webService.WebService;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.WebSocketService;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketResponse;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
-import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.RemoveConnectionWebSocketRequest;
-import io.quarkus.security.identity.SecurityIdentity;
-import io.quarkus.websockets.next.WebSocketConnection;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorResponse;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,36 +26,28 @@ class WebServiceImpl implements WebService {
     final WebSocketService webSocketService;
 
     @Override
-    public Uni<Void> addConnection(final SecurityIdentity securityIdentity,
-                                   final WebSocketConnection webSocketConnection) {
-        final var request = new AddConnectionWebSocketRequest(securityIdentity, webSocketConnection);
-        return webSocketService.addConnection(request)
-                .replaceWithVoid();
+    public Uni<AddConnectionWebSocketResponse> addConnection(final AddConnectionWebSocketRequest request) {
+        return webSocketService.addConnection(request);
     }
 
     @Override
-    public Uni<Void> removeConnection(final SecurityIdentity securityIdentity,
-                                      final WebSocketConnection webSocketConnection) {
-        final var request = new RemoveConnectionWebSocketRequest(securityIdentity, webSocketConnection);
-        return webSocketService.removeConnection(request)
-                .replaceWithVoid();
+    public Uni<HandleClosedConnectionWebSocketResponse> handleCloseConnection(final HandleClosedConnectionWebSocketRequest request) {
+        return webSocketService.handleClosedConnection(request);
     }
 
     @Override
-    public Uni<Void> handleTextMessage(final SecurityIdentity securityIdentity,
-                                       final WebSocketConnection webSocketConnection,
-                                       final String message) {
-        final var request = new HandleTextMessageWebSocketRequest(securityIdentity, webSocketConnection, message);
-        return webSocketService.handleTextMessage(request)
-                .replaceWithVoid();
+    public Uni<HandleWebSocketErrorResponse> handleWebSocketError(final HandleWebSocketErrorRequest request) {
+        return webSocketService.handleWebSocketError(request);
     }
 
     @Override
-    public Uni<Void> handleBinaryMessage(final SecurityIdentity securityIdentity,
-                                         final WebSocketConnection webSocketConnection,
-                                         final Buffer message) {
-        final var request = new HandleBinaryMessageWebSocketRequest(securityIdentity, webSocketConnection, message);
-        return webSocketService.handleBinaryMessage(request)
-                .replaceWithVoid();
+    public Uni<HandleTextMessageWebSocketResponse> handleTextMessage(final HandleTextMessageWebSocketRequest request) {
+        return webSocketService.handleTextMessage(request);
+    }
+
+    @Override
+    public Uni<HandleBinaryMessageWebSocketResponse> handleBinaryMessage(
+            final HandleBinaryMessageWebSocketRequest request) {
+        return webSocketService.handleBinaryMessage(request);
     }
 }

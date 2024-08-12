@@ -22,7 +22,6 @@ class CreateRoomMethodImpl implements CreateRoomMethod {
 
         final var runtimeId = request.getRuntimeId();
         if (roomsContainer.getRoom(runtimeId).isPresent()) {
-            log.debug("Room was already created, skip operation, runtimeId={}", runtimeId);
             return Uni.createFrom().item(new CreateRoomResponse(Boolean.FALSE));
         } else {
             final var room = new RoomInstance(runtimeId);

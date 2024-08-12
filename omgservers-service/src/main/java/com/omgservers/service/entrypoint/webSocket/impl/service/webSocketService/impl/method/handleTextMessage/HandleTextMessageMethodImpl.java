@@ -1,9 +1,13 @@
 package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.impl.method.handleTextMessage;
 
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketResponse;
 import com.omgservers.service.server.service.room.RoomService;
 import com.omgservers.service.server.service.room.dto.HandleTextMessageRequest;
+import com.omgservers.service.server.service.router.RouterService;
+import com.omgservers.service.server.service.router.dto.TransferServerTextMessageRequest;
+import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -15,7 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
 
+    final RouterService routerService;
     final RoomService roomService;
+
+    final WebSocketConnectionsContainer webSocketConnectionsContainer;
 
     @Override
     public Uni<HandleTextMessageWebSocketResponse> handleTextMessage(final HandleTextMessageWebSocketRequest request) {
@@ -23,8 +30,25 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var message = request.getMessage();
-        final var handleTextMessageRequest = new HandleTextMessageRequest(webSocketConnection, message);
-        return roomService.handleTextMessage(handleTextMessageRequest)
+
+        final var webSocketType = webSocketConnectionsContainer.getType(webSocketConnection);
+        return switch (webSocketType) {
+            case ROUTED -> transferTextMessage(webSocketConnection, message);
+            case SERVER -> handleTextMessage(webSocketConnection, message);
+        };
+    }
+
+    Uni<HandleTextMessageWebSocketResponse> transferTextMessage(final WebSocketConnection webSocketConnection,
+                                                                final String message) {
+        final var request = new TransferServerTextMessageRequest(webSocketConnection, message);
+        return routerService.transferServerTextMessage(request)
+                .replaceWith(new HandleTextMessageWebSocketResponse());
+    }
+
+    Uni<HandleTextMessageWebSocketResponse> handleTextMessage(final WebSocketConnection webSocketConnection,
+                                                              final String message) {
+        final var request = new HandleTextMessageRequest(webSocketConnection, message);
+        return roomService.handleTextMessage(request)
                 .replaceWith(new HandleTextMessageWebSocketResponse());
     }
 }

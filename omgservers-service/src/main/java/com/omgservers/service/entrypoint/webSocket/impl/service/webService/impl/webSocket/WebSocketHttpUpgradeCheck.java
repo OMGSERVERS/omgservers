@@ -18,12 +18,12 @@ public class WebSocketHttpUpgradeCheck implements HttpUpgradeCheck {
     final JWTParser jwtParser;
 
     @Override
-    public boolean appliesTo(String endpointId) {
+    public boolean appliesTo(final String endpointId) {
         return endpointId.equals(WebSocketEndpoint.class.getName());
     }
 
     @Override
-    public Uni<CheckResult> perform(HttpUpgradeContext context) {
+    public Uni<CheckResult> perform(final HttpUpgradeContext context) {
         log.info("SecurityIdentity, {}", context.securityIdentity());
         final var wsToken = context.httpRequest().getParam("ws_token");
         if (Objects.isNull(wsToken)) {

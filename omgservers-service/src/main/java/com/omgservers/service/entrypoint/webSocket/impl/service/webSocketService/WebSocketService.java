@@ -6,8 +6,10 @@ import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketResponse;
-import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.RemoveConnectionWebSocketRequest;
-import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.RemoveConnectionWebSocketResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorResponse;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketRequest;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -15,7 +17,9 @@ public interface WebSocketService {
 
     Uni<AddConnectionWebSocketResponse> addConnection(@Valid AddConnectionWebSocketRequest request);
 
-    Uni<RemoveConnectionWebSocketResponse> removeConnection(@Valid RemoveConnectionWebSocketRequest request);
+    Uni<HandleClosedConnectionWebSocketResponse> handleClosedConnection(@Valid HandleClosedConnectionWebSocketRequest request);
+
+    Uni<HandleWebSocketErrorResponse> handleWebSocketError(@Valid HandleWebSocketErrorRequest request);
 
     Uni<HandleTextMessageWebSocketResponse> handleTextMessage(@Valid HandleTextMessageWebSocketRequest request);
 
