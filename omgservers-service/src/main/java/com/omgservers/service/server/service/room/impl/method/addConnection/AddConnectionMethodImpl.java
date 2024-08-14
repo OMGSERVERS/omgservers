@@ -25,19 +25,20 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
         final var roomInstance = roomsContainer.getRoom(runtimeId);
 
         if (roomInstance.isEmpty()) {
-            log.warn("Room was not found to add connection, runtimeId={}", runtimeId);
+            log.warn("Room was not found to add connection, runtimeId={}, role={}",
+                    runtimeId, request.getRole());
             return webSocketConnection.close(RoomWebSocketCloseReason.ROOM_WAS_NOT_FOUND);
         }
 
         final var usedTokenId = request.getUsedTokenId();
         final var role = request.getRole();
-        final var subject = request.getSubject();
+        final var clientId = request.getClientId();
 
         final var roomConnection = new RoomConnection(webSocketConnection,
                 role,
                 usedTokenId,
                 runtimeId,
-                subject);
+                clientId);
 
         final var previousConnection = roomInstance.get().replaceConnection(roomConnection);
         if (previousConnection.isPresent()) {

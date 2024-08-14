@@ -1,5 +1,6 @@
 package com.omgservers.service.server.service.router.impl.method.routeServerConnection;
 
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
 import com.omgservers.service.server.service.router.component.RouterConnectionsContainer;
 import com.omgservers.service.server.service.router.component.RouterWebSocketClient;
 import com.omgservers.service.server.service.router.dto.RouteServerConnectionRequest;
@@ -21,14 +22,23 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
     @Override
     public Uni<RouteServerConnectionResponse> routeServerConnection(final RouteServerConnectionRequest request) {
         final var serverConnection = request.getServerConnection();
-        final var query = serverConnection.handshakeRequest().query();
         final var serverUri = request.getServerUri();
 
-        log.info("Route server connection, id={}, serverUri={}, query={}",
-                serverConnection.id(), serverConnection, query);
+        log.info("Route server connection, id={}, serverUri={}",
+                serverConnection.id(), serverUri);
 
-        return webSocketConnector.baseUri(serverUri).connect()
-                .invoke(clientConnection -> routerConnectionsContainer.put(serverConnection, clientConnection))
+        final var securityIdentity = request.getSecurityIdentity();
+        final var rawToken = securityIdentity.<String>getAttribute(ServiceSecurityAttributes.RAW_TOKEN.getAttributeName());
+
+        return webSocketConnector
+                .baseUri(serverUri)
+                .addHeader("Authorization", "Bearer " + rawToken)
+                .connect()
+                .invoke(clientConnection -> {
+                    log.info("Connection was routed, id={}, serverUri={}",
+                            serverConnection.id(), serverUri);
+                    routerConnectionsContainer.put(serverConnection, clientConnection);
+                })
                 .replaceWith(new RouteServerConnectionResponse());
     }
 }

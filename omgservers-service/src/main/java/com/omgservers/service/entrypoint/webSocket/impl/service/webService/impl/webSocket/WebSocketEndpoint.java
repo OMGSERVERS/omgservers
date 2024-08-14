@@ -8,6 +8,7 @@ import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorRequest;
 import io.quarkus.security.identity.SecurityIdentity;
+import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.OnBinaryMessage;
 import io.quarkus.websockets.next.OnClose;
 import io.quarkus.websockets.next.OnError;
@@ -32,13 +33,16 @@ public class WebSocketEndpoint {
 
     @OnOpen
     public Uni<Void> onOpen(final WebSocketConnection webSocketConnection) {
+        log.info("Server connection was opened, id={}", webSocketConnection.id());
         final var request = new AddConnectionWebSocketRequest(securityIdentity, webSocketConnection);
         return webService.addConnection(request)
                 .replaceWithVoid();
     }
 
     @OnClose
-    public Uni<Void> onClose(final WebSocketConnection webSocketConnection) {
+    public Uni<Void> onClose(final WebSocketConnection webSocketConnection,
+                             final CloseReason closeReason) {
+        log.info("Server connection was closed, id={}, reason={}", webSocketConnection.id(), closeReason.getMessage());
         final var request = new HandleClosedConnectionWebSocketRequest(securityIdentity, webSocketConnection);
         return webService.handleCloseConnection(request)
                 .replaceWithVoid();
@@ -46,6 +50,8 @@ public class WebSocketEndpoint {
 
     @OnError
     public Uni<Void> onError(final WebSocketConnection webSocketConnection, final Throwable throwable) {
+        log.info("Server connection was failed, id={}, {}:{}",
+                webSocketConnection.id(), throwable.getClass().getSimpleName(), throwable.getMessage());
         final var request = new HandleWebSocketErrorRequest(securityIdentity, webSocketConnection, throwable);
         return webService.handleWebSocketError(request)
                 .replaceWithVoid();

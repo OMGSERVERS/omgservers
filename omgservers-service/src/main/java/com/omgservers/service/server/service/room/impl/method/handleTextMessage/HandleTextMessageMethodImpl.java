@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.server.service.room.dto.HandleTextMessageRequest;
-import com.omgservers.service.server.service.room.dto.HandleTextMessageRequest;
 import com.omgservers.service.server.service.room.impl.component.RoomConnection;
 import com.omgservers.service.server.service.room.impl.component.RoomInstance;
 import com.omgservers.service.server.service.room.impl.component.RoomsContainer;
@@ -37,7 +36,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
             if (connectionOptional.isPresent()) {
                 final var roomConnection = connectionOptional.get();
                 final var role = roomConnection.getRole();
-                final var clientId = roomConnection.getSubject();
+                final var clientId = roomConnection.getClientId();
                 return switch (role) {
                     case WORKER -> transferToClients(roomInstance, message);
                     case PLAYER -> transferToRuntime(roomInstance, clientId, message);

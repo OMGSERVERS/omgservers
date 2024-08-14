@@ -114,7 +114,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> conflictException(final ServerSideConflictException e,
                                                                   final UriInfo uriInfo) {
-        log.warn("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -125,7 +125,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> goneException(final ServerSideGoneException e,
                                                               final UriInfo uriInfo) {
-        log.warn("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -136,7 +136,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> internalException(final ServerSideInternalException e,
                                                                   final UriInfo uriInfo) {
-        log.warn("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -147,7 +147,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> throwable(final Throwable e,
                                                           final UriInfo uriInfo) {
-        log.warn("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 

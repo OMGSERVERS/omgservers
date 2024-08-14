@@ -7,6 +7,7 @@ import com.omgservers.service.server.service.room.RoomService;
 import com.omgservers.service.server.service.room.dto.HandleBinaryMessageRequest;
 import com.omgservers.service.server.service.router.RouterService;
 import com.omgservers.service.server.service.router.dto.TransferServerBinaryMessageRequest;
+import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.buffer.Buffer;
@@ -34,10 +35,15 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
         final var message = request.getMessage();
 
         final var webSocketType = webSocketConnectionsContainer.getType(webSocketConnection);
-        return switch (webSocketType) {
-            case ROUTED -> transferBinaryMessage(webSocketConnection, message);
-            case SERVER -> handleBinaryMessage(webSocketConnection, message);
-        };
+        if (webSocketType.isPresent()) {
+            return switch (webSocketType.get()) {
+                case ROUTED -> transferBinaryMessage(webSocketConnection, message);
+                case SERVER -> handleBinaryMessage(webSocketConnection, message);
+            };
+        } else {
+            return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
+                    .replaceWith(new HandleBinaryMessageWebSocketResponse());
+        }
     }
 
     Uni<HandleBinaryMessageWebSocketResponse> transferBinaryMessage(final WebSocketConnection webSocketConnection,

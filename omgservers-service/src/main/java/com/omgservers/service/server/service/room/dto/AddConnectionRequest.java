@@ -25,5 +25,5 @@ public class AddConnectionRequest {
     UserRoleEnum role;
 
     @NotNull
-    Long subject;
+    Long clientId;
 }

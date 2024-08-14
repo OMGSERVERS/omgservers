@@ -17,11 +17,11 @@ class CloseServerConnectionMethodImpl implements CloseServerConnectionMethod {
 
     @Override
     public Uni<CloseServerConnectionResponse> closeServerConnection(CloseServerConnectionRequest request) {
+        log.debug("Close server connection, request={}", request);
+
         final var clientConnection = request.getClientConnection();
         final var closeReason = request.getCloseReason();
 
-        log.info("Client connection is closed, id={}, reason={}:{}", clientConnection.id(),
-                closeReason.getCode(), closeReason.getMessage());
         final var serverConnection = routerConnectionsContainer.remove(clientConnection);
         return serverConnection.close(closeReason)
                 .replaceWith(new CloseServerConnectionResponse());

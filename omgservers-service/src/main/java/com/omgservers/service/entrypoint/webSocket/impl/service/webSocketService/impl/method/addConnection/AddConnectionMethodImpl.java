@@ -6,6 +6,7 @@ import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketResponse;
 import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
 import com.omgservers.service.server.service.room.RoomService;
 import com.omgservers.service.server.service.room.dto.AddConnectionRequest;
 import com.omgservers.service.server.service.router.RouterService;
@@ -37,14 +38,15 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
         log.debug("Add connection, request={}", request);
 
         final var securityIdentity = request.getSecurityIdentity();
-        final var runtimeId = securityIdentity.<Long>getAttribute("runtimeId");
+        final var runtimeId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName());
 
         return calculateShardOperation.calculateShard(runtimeId.toString())
                 .flatMap(shardModel -> {
                     final var webSocketConnection = request.getWebSocketConnection();
                     if (shardModel.foreign()) {
                         final var serverUri = shardModel.serverUri();
-                        return routeConnection(webSocketConnection, serverUri)
+                        return routeConnection(securityIdentity, webSocketConnection, serverUri)
                                 .invoke(response -> webSocketConnectionsContainer.put(webSocketConnection,
                                         WebSocketConnectionTypeEnum.ROUTED));
                     } else {
@@ -55,9 +57,10 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
                 });
     }
 
-    Uni<AddConnectionWebSocketResponse> routeConnection(final WebSocketConnection webSocketConnection,
+    Uni<AddConnectionWebSocketResponse> routeConnection(final SecurityIdentity securityIdentity,
+                                                        final WebSocketConnection webSocketConnection,
                                                         final URI serverUri) {
-        final var request = new RouteServerConnectionRequest(webSocketConnection, serverUri);
+        final var request = new RouteServerConnectionRequest(securityIdentity, webSocketConnection, serverUri);
         return routerService.routeServerConnection(request)
                 .map(routeServerConnectionResponse -> new AddConnectionWebSocketResponse());
     }
@@ -65,15 +68,18 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
     Uni<AddConnectionWebSocketResponse> addConnection(final SecurityIdentity securityIdentity,
                                                       final WebSocketConnection webSocketConnection,
                                                       final Long runtimeId) {
-        final var subject = securityIdentity.<Long>getAttribute("subject");
-        final var tokenId = securityIdentity.<String>getAttribute("tokenId");
-        final var userRole = securityIdentity.<UserRoleEnum>getAttribute("userRole");
+        final var clientId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributes.CLIENT_ID.getAttributeName());
+        final var tokenId = securityIdentity
+                .<String>getAttribute(ServiceSecurityAttributes.TOKEN_ID.getAttributeName());
+        final var userRole = securityIdentity
+                .<UserRoleEnum>getAttribute(ServiceSecurityAttributes.USER_ROLE.getAttributeName());
 
         final var request = new AddConnectionRequest(webSocketConnection,
                 runtimeId,
                 tokenId,
                 userRole,
-                subject);
+                clientId);
         return roomService.addConnection(request)
                 .replaceWith(new AddConnectionWebSocketResponse());
     }

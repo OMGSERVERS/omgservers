@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
@@ -23,14 +24,9 @@ public class WebSocketConnectionsContainer {
         connections.put(webSocketConnection, type);
     }
 
-    public WebSocketConnectionTypeEnum getType(final WebSocketConnection webSocketConnection) {
+    public Optional<WebSocketConnectionTypeEnum> getType(final WebSocketConnection webSocketConnection) {
         final var webSocketType = connections.get(webSocketConnection);
-        if (Objects.isNull(webSocketType)) {
-            throw new ServerSideInternalException(ExceptionQualifierEnum.INTERNAL_EXCEPTION_OCCURRED,
-                    "type of websocket was not found");
-        }
-
-        return webSocketType;
+        return Optional.ofNullable(webSocketType);
     }
 
     public void remove(final WebSocketConnection webSocketConnection) {

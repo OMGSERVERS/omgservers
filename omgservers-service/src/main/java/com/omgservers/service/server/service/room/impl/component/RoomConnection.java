@@ -13,5 +13,5 @@ public class RoomConnection {
     final UserRoleEnum role;
     final String usedTokenId;
     final Long runtimeId;
-    final Long subject;
+    final Long clientId;
 }

@@ -1,12 +1,14 @@
 package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.impl.method.handleTextMessage;
 
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
+import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketResponse;
 import com.omgservers.service.server.service.room.RoomService;
 import com.omgservers.service.server.service.room.dto.HandleTextMessageRequest;
 import com.omgservers.service.server.service.router.RouterService;
 import com.omgservers.service.server.service.router.dto.TransferServerTextMessageRequest;
+import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,10 +34,15 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
         final var message = request.getMessage();
 
         final var webSocketType = webSocketConnectionsContainer.getType(webSocketConnection);
-        return switch (webSocketType) {
-            case ROUTED -> transferTextMessage(webSocketConnection, message);
-            case SERVER -> handleTextMessage(webSocketConnection, message);
-        };
+        if (webSocketType.isPresent()) {
+            return switch (webSocketType.get()) {
+                case ROUTED -> transferTextMessage(webSocketConnection, message);
+                case SERVER -> handleTextMessage(webSocketConnection, message);
+            };
+        } else {
+            return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
+                    .replaceWith(new HandleTextMessageWebSocketResponse());
+        }
     }
 
     Uni<HandleTextMessageWebSocketResponse> transferTextMessage(final WebSocketConnection webSocketConnection,

@@ -20,7 +20,7 @@ class HandleApiRequestOperationImpl implements HandleApiRequestOperation {
         return Uni.createFrom().item(request)
                 .flatMap(service)
                 .onFailure()
-                .invoke(t -> log.warn("Request failed, request={}, {}:{}",
+                .invoke(t -> log.info("Request failed, request={}, {}:{}",
                         request,
                         t.getClass().getSimpleName(),
                         t.getMessage()));

@@ -1,13 +1,12 @@
-package com.omgservers.service.entrypoint.webSocket.impl.security;
+package com.omgservers.service.server.security;
 
-import com.omgservers.schema.dto.wsToken.WsTokenDto;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.quarkus.security.credential.TokenCredential;
 import io.quarkus.security.identity.IdentityProviderManager;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.identity.request.AuthenticationRequest;
 import io.quarkus.security.identity.request.TokenAuthenticationRequest;
+import io.quarkus.smallrye.jwt.runtime.auth.JsonWebTokenCredential;
 import io.quarkus.vertx.http.runtime.security.ChallengeData;
 import io.quarkus.vertx.http.runtime.security.HttpAuthenticationMechanism;
 import io.quarkus.vertx.http.runtime.security.HttpCredentialTransport;
@@ -24,14 +23,17 @@ import java.util.Set;
 
 @Slf4j
 @ApplicationScoped
-public class WebSocketAuthenticationMechanism implements HttpAuthenticationMechanism {
+public class WsTokenAuthenticationMechanism implements HttpAuthenticationMechanism {
+
+    private final String WS_TOKEN = "ws_token";
 
     @Override
-    public Uni<SecurityIdentity> authenticate(RoutingContext context, IdentityProviderManager identityProviderManager) {
-        final var wsToken = context.request().getParam(WsTokenDto.WS_TOKEN);
+    public Uni<SecurityIdentity> authenticate(final RoutingContext context,
+                                              final IdentityProviderManager identityProviderManager) {
+        final var wsToken = context.request().getParam(WS_TOKEN);
         if (Objects.nonNull(wsToken)) {
-            var tokenCredential = new TokenCredential(wsToken, WsTokenDto.WS_TOKEN);
-            var request = new TokenAuthenticationRequest(tokenCredential);
+            final var jsonWebTokenCredential = new JsonWebTokenCredential(wsToken);
+            final var request = new TokenAuthenticationRequest(jsonWebTokenCredential);
             HttpSecurityUtils.setRoutingContextAttribute(request, context);
             context.put(HttpAuthenticationMechanism.class.getName(), this);
             return identityProviderManager.authenticate(request);
@@ -41,9 +43,9 @@ public class WebSocketAuthenticationMechanism implements HttpAuthenticationMecha
     }
 
     @Override
-    public Uni<ChallengeData> getChallenge(RoutingContext context) {
-        var result = new ChallengeData(HttpResponseStatus.UNAUTHORIZED.code(),
-                HttpHeaderNames.WWW_AUTHENTICATE, WsTokenDto.WS_TOKEN);
+    public Uni<ChallengeData> getChallenge(final RoutingContext context) {
+        final var result = new ChallengeData(HttpResponseStatus.UNAUTHORIZED.code(),
+                HttpHeaderNames.WWW_AUTHENTICATE, WS_TOKEN);
         return Uni.createFrom().item(result);
     }
 
@@ -53,8 +55,8 @@ public class WebSocketAuthenticationMechanism implements HttpAuthenticationMecha
     }
 
     @Override
-    public Uni<HttpCredentialTransport> getCredentialTransport(RoutingContext context) {
+    public Uni<HttpCredentialTransport> getCredentialTransport(final RoutingContext context) {
         return Uni.createFrom()
-                .item(new HttpCredentialTransport(HttpCredentialTransport.Type.AUTHORIZATION, WsTokenDto.WS_TOKEN));
+                .item(new HttpCredentialTransport(HttpCredentialTransport.Type.AUTHORIZATION, WS_TOKEN));
     }
 }

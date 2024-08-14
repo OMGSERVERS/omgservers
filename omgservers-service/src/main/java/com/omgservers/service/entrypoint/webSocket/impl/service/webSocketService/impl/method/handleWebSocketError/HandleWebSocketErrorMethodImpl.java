@@ -8,6 +8,7 @@ import com.omgservers.service.server.service.room.RoomService;
 import com.omgservers.service.server.service.room.dto.RemoveConnectionRequest;
 import com.omgservers.service.server.service.router.RouterService;
 import com.omgservers.service.server.service.router.dto.CloseClientConnectionRequest;
+import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,10 +33,15 @@ class HandleWebSocketErrorMethodImpl implements HandleWebSocketErrorMethod {
         final var webSocketConnection = request.getWebSocketConnection();
 
         final var webSocketType = webSocketConnectionsContainer.getType(webSocketConnection);
-        return switch (webSocketType) {
-            case ROUTED -> closeRoutedConnection(webSocketConnection);
-            case SERVER -> removeRoomConnection(webSocketConnection);
-        };
+        if (webSocketType.isPresent()) {
+            return switch (webSocketType.get()) {
+                case ROUTED -> closeRoutedConnection(webSocketConnection);
+                case SERVER -> removeRoomConnection(webSocketConnection);
+            };
+        } else {
+            return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
+                    .replaceWith(new HandleWebSocketErrorResponse());
+        }
     }
 
     Uni<HandleWebSocketErrorResponse> closeRoutedConnection(final WebSocketConnection serverConnection) {
