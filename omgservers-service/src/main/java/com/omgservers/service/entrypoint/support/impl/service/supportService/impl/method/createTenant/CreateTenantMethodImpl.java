@@ -5,7 +5,7 @@ import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
 import com.omgservers.schema.module.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

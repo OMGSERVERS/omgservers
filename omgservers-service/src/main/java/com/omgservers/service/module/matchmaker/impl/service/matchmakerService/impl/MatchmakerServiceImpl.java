@@ -96,8 +96,8 @@ import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.i
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest.syncMatchmakerRequest.SyncMatchmakerRequestMethod;
 import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest.viewMatchmakerRequests.ViewMatchmakerRequestsMethod;
 import com.omgservers.service.module.matchmaker.impl.service.webService.impl.api.MatchmakerApi;
-import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.server.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

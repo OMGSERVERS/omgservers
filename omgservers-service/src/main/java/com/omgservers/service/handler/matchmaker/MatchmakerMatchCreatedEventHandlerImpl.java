@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
@@ -24,7 +24,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -9,9 +9,9 @@ import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContai
 import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerResponse;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
@@ -21,8 +21,8 @@ import com.omgservers.service.factory.runtime.RuntimePoolServerContainerRefModel
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.server.operation.getDockerClient.GetDockerClientOperation;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

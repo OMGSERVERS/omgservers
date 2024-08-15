@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
@@ -10,7 +10,7 @@ import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMa
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchClientOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
-import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

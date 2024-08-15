@@ -9,7 +9,7 @@ import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.module.client.operation.testInterface.UpsertClientMessageOperationTestInterface;
 import com.omgservers.service.module.client.operation.testInterface.UpsertClientOperationTestInterface;
-import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

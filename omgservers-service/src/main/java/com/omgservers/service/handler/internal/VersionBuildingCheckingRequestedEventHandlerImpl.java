@@ -1,10 +1,10 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
-import com.omgservers.schema.event.body.internal.VersionBuildingFailedEventBodyModel;
-import com.omgservers.schema.event.body.internal.VersionBuildingFinishedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
+import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
+import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
 import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
@@ -14,16 +14,16 @@ import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRe
 import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
+import com.omgservers.service.service.event.dto.SyncEventRequest;
+import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.server.service.event.EventService;
-import com.omgservers.service.server.service.jenkins.JenkinsService;
+import com.omgservers.service.service.event.EventService;
+import com.omgservers.service.service.jenkins.JenkinsService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

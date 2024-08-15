@@ -15,7 +15,7 @@ import com.omgservers.schema.module.tenant.version.dto.VersionDataDto;
 import com.omgservers.service.entrypoint.developer.impl.operation.mapVersionDataToDashboard.MapVersionDataToDashboardOperation;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributes;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

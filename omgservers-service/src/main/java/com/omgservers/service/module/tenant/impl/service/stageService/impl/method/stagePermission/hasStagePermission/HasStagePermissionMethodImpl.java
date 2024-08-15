@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.stageService.impl.meth
 import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
 import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
 import com.omgservers.service.module.tenant.impl.operation.stagePermission.hasStagePermission.HasStagePermissionOperation;
-import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

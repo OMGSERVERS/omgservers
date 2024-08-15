@@ -2,10 +2,10 @@ package com.omgservers.service.module.client.impl.operation.clientRuntimeRef.ups
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.schema.event.body.module.client.ClientRuntimeRefCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.client.ClientRuntimeRefCreatedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
-import com.omgservers.service.server.operation.changeObject.ChangeObjectOperation;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

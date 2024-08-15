@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.internal.VersionBuildingFailedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.module.tenant.GetVersionRequest;
 import com.omgservers.schema.module.tenant.GetVersionResponse;

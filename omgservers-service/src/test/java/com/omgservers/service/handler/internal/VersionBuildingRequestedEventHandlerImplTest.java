@@ -1,10 +1,10 @@
 package com.omgservers.service.handler.internal;
 
 import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
-import com.omgservers.schema.event.body.internal.VersionBuildingRequestedEventBodyModel;
+import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.internal.testInterface.VersionBuildingRequestedEventHandlerImplTestInterface;
-import com.omgservers.service.server.service.jenkins.JenkinsService;
+import com.omgservers.service.service.jenkins.JenkinsService;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;

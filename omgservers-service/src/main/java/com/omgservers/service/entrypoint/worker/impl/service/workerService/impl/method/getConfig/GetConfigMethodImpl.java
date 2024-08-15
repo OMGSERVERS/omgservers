@@ -12,7 +12,7 @@ import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributes;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

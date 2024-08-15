@@ -1,9 +1,9 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.schema.event.body.module.tenant.TenantCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.TenantCreatedEventHandlerImplTestInterface;
-import com.omgservers.service.server.service.testInterface.BootstrapServiceTestInterface;
+import com.omgservers.service.service.testInterface.BootstrapServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

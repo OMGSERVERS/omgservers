@@ -1,11 +1,11 @@
 package com.omgservers.service.module.client.operation;
 
-import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.module.client.operation.testInterface.UpsertClientOperationTestInterface;
-import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

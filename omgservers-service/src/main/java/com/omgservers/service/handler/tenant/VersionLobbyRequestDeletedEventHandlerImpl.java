@@ -2,9 +2,9 @@ package com.omgservers.service.handler.tenant;
 
 import com.omgservers.schema.module.tenant.GetVersionLobbyRequestRequest;
 import com.omgservers.schema.module.tenant.GetVersionLobbyRequestResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.tenant.VersionLobbyRequestDeletedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.VersionLobbyRequestDeletedEventBodyModel;
 import com.omgservers.schema.model.versionLobbyRequest.VersionLobbyRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;

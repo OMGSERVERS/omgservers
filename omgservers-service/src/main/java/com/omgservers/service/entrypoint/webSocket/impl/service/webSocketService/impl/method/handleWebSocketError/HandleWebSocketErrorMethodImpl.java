@@ -4,10 +4,10 @@ import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleWebSocketErrorResponse;
-import com.omgservers.service.server.service.room.RoomService;
-import com.omgservers.service.server.service.room.dto.RemoveConnectionRequest;
-import com.omgservers.service.server.service.router.RouterService;
-import com.omgservers.service.server.service.router.dto.CloseClientConnectionRequest;
+import com.omgservers.service.service.room.RoomService;
+import com.omgservers.service.service.room.dto.RemoveConnectionRequest;
+import com.omgservers.service.service.router.RouterService;
+import com.omgservers.service.service.router.dto.CloseClientConnectionRequest;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;

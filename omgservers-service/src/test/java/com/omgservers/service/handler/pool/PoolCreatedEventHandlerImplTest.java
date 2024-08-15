@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.pool;
 
-import com.omgservers.schema.event.body.module.pool.PoolCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.pool.testInterface.PoolCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

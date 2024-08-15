@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.schema.event.body.module.matchmaker.MatchmakerAssignmentCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerAssignmentCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.matchmaker.testInterfaces.MatchmakerAssignmentCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

@@ -6,7 +6,7 @@ import com.omgservers.schema.module.runtime.InterchangeRequest;
 import com.omgservers.schema.module.runtime.InterchangeResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributes;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

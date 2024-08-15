@@ -10,7 +10,7 @@ import com.omgservers.service.module.tenant.impl.operation.version.selectActiveV
 import com.omgservers.service.module.tenant.impl.operation.versionImageRef.selectActiveVersionImageRefsByTenantId.SelectActiveVersionImageRefsByTenantId;
 import com.omgservers.service.module.tenant.impl.operation.versionLobbyRef.selectActiveVersionLobbyRefsByTenantId.SelectActiveVersionLobbyRefsByTenantId;
 import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRef.selectActiveVersionMatchmakerRefsByTenantId.SelectActiveVersionMatchmakerRefsByTenantId;
-import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

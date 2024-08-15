@@ -2,7 +2,7 @@ package com.omgservers.service.module.pool.impl.operation.poolRequest.selectActi
 
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.service.module.pool.impl.mappers.PoolRequestModelMapper;
-import com.omgservers.service.server.operation.selectList.SelectListOperation;
+import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

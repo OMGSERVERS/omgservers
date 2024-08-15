@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
+import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.internal.testInterface.InactiveRuntimeDetectedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

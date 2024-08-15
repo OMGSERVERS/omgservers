@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.runtime;
 
-import com.omgservers.schema.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.runtime.testInterface.RuntimeAssignmentCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

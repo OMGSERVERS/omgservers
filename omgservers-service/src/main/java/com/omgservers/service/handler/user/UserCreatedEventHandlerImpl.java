@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.user;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.user.UserCreatedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
@@ -13,7 +13,7 @@ import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

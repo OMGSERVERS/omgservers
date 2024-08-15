@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.user;
 
-import com.omgservers.schema.event.body.module.user.UserCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.user.testInterface.UserCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

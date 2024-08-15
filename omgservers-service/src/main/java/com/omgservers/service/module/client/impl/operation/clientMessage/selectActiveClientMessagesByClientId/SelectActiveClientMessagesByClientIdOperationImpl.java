@@ -2,7 +2,7 @@ package com.omgservers.service.module.client.impl.operation.clientMessage.select
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.service.module.client.impl.mapper.ClientMessageModelMapper;
-import com.omgservers.service.server.operation.selectList.SelectListOperation;
+import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.schema.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
 import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionJenkinsRequestCreatedEventHandlerImplTestInterface;

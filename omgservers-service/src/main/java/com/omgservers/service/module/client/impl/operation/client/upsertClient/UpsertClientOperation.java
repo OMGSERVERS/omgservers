@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.impl.operation.client.upsertClient;
 
 import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

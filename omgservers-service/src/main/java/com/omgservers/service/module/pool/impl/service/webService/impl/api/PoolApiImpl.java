@@ -36,7 +36,7 @@ import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerConta
 import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
 import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
-import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

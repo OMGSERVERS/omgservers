@@ -1,7 +1,7 @@
 package com.omgservers.service.handler;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
 import io.smallrye.mutiny.Uni;
 
 public interface EventHandler {

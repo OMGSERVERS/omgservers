@@ -124,7 +124,7 @@ import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenk
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
 import com.omgservers.service.module.tenant.impl.service.webService.WebService;
-import com.omgservers.service.server.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

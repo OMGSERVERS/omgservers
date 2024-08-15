@@ -3,9 +3,9 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 import com.omgservers.schema.module.tenant.DeleteProjectPermissionRequest;
 import com.omgservers.schema.module.tenant.DeleteProjectPermissionResponse;
 import com.omgservers.service.module.tenant.impl.operation.projectPermission.deleteProjectPermission.DeleteProjectPermissionOperation;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

@@ -3,10 +3,10 @@ package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketServic
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
-import com.omgservers.service.server.service.room.RoomService;
-import com.omgservers.service.server.service.room.dto.HandleBinaryMessageRequest;
-import com.omgservers.service.server.service.router.RouterService;
-import com.omgservers.service.server.service.router.dto.TransferServerBinaryMessageRequest;
+import com.omgservers.service.service.room.RoomService;
+import com.omgservers.service.service.room.dto.HandleBinaryMessageRequest;
+import com.omgservers.service.service.router.RouterService;
+import com.omgservers.service.service.router.dto.TransferServerBinaryMessageRequest;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;

@@ -2,11 +2,11 @@ package com.omgservers.service.entrypoint.registry.impl.service.registryService.
 
 import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
 import com.omgservers.schema.entrypoint.registry.handleEvents.HandleEventsRegistryRequest;
-import com.omgservers.schema.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
+import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
+import com.omgservers.service.service.event.dto.SyncEventRequest;
+import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.server.service.event.EventService;
+import com.omgservers.service.service.event.EventService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

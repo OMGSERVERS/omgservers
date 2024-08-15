@@ -30,8 +30,8 @@ import com.omgservers.service.module.root.impl.service.rootService.impl.method.r
 import com.omgservers.service.module.root.impl.service.rootService.impl.method.rootEntityRef.syncRootEntityRef.SyncRootEntityRefMethod;
 import com.omgservers.service.module.root.impl.service.rootService.impl.method.rootEntityRef.viewRootEntityRefs.ViewRootEntityRefsMethod;
 import com.omgservers.service.module.root.impl.service.webService.impl.api.RootApi;
-import com.omgservers.service.server.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.server.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

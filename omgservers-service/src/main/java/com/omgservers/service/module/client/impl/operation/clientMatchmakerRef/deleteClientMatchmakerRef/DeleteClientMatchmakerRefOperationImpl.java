@@ -1,10 +1,10 @@
 package com.omgservers.service.module.client.impl.operation.clientMatchmakerRef.deleteClientMatchmakerRef;
 
-import com.omgservers.schema.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.selectMatchmakerMatch.SelectMatchmakerMatchOperation;
-import com.omgservers.service.server.operation.changeObject.ChangeObjectOperation;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.root.testInterface;
 
-import com.omgservers.schema.event.EventModel;
+import com.omgservers.service.event.EventModel;
 import com.omgservers.service.handler.root.RootDeletedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

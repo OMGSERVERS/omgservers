@@ -3,9 +3,9 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimePoolServerContainerRef.deleteRuntimePoolServerContainerRef.DeleteRuntimePoolServerContainerRefOperation;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

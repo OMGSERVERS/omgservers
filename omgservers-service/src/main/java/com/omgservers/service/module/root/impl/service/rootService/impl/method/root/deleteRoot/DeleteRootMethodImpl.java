@@ -3,9 +3,9 @@ package com.omgservers.service.module.root.impl.service.rootService.impl.method.
 import com.omgservers.schema.module.root.root.DeleteRootRequest;
 import com.omgservers.schema.module.root.root.DeleteRootResponse;
 import com.omgservers.service.module.root.impl.operation.root.deleteRoot.DeleteRootOperation;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.server.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
+import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

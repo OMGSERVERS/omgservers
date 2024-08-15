@@ -6,9 +6,9 @@ import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerCon
 import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
 import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
 import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.pool.PoolServerDeletedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.pool.PoolServerDeletedEventBodyModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.service.handler.EventHandler;

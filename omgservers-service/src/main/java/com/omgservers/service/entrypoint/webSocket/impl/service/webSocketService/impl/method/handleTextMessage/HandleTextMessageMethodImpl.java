@@ -1,13 +1,12 @@
 package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.impl.method.handleTextMessage;
 
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
-import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketResponse;
-import com.omgservers.service.server.service.room.RoomService;
-import com.omgservers.service.server.service.room.dto.HandleTextMessageRequest;
-import com.omgservers.service.server.service.router.RouterService;
-import com.omgservers.service.server.service.router.dto.TransferServerTextMessageRequest;
+import com.omgservers.service.service.room.RoomService;
+import com.omgservers.service.service.room.dto.HandleTextMessageRequest;
+import com.omgservers.service.service.router.RouterService;
+import com.omgservers.service.service.router.dto.TransferServerTextMessageRequest;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;

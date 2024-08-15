@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.tenant.StageDeletedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.StageDeletedEventBodyModel;
 import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.stagePermission.StagePermissionModel;
 import com.omgservers.schema.model.version.VersionProjectionModel;

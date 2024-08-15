@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.countRuntimeAssignments;
 
 import com.omgservers.service.module.runtime.impl.mapper.RuntimeAssignmentModelMapper;
-import com.omgservers.service.server.operation.returnCount.ReturnCountOperation;
+import com.omgservers.service.operation.returnCount.ReturnCountOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,7 +1,6 @@
 package com.omgservers.service.handler.internal.testInterface;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.service.handler.internal.ClientMessageReceivedEventHandlerImpl;
+import com.omgservers.service.event.EventModel;
 import com.omgservers.service.handler.internal.InactiveClientDetectedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

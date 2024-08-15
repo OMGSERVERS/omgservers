@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.runtime;
 
 import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
-import com.omgservers.schema.event.body.module.runtime.RuntimeDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.runtime.testInterface.RuntimeDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;

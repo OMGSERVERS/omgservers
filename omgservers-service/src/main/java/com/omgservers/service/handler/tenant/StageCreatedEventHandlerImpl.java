@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.tenant.StageCreatedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.StageCreatedEventBodyModel;
 import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
 import com.omgservers.schema.model.stagePermission.StagePermissionModel;
@@ -13,7 +13,7 @@ import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.StagePermissionModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.server.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

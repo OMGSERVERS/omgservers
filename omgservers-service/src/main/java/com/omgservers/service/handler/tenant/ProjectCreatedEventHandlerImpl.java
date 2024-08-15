@@ -2,9 +2,9 @@ package com.omgservers.service.handler.tenant;
 
 import com.omgservers.schema.module.tenant.GetProjectRequest;
 import com.omgservers.schema.module.tenant.GetProjectResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.tenant.ProjectCreatedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.ProjectCreatedEventBodyModel;
 import com.omgservers.schema.model.project.ProjectModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;

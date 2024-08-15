@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.projectService.impl.me
 import com.omgservers.schema.module.tenant.ViewProjectPermissionsRequest;
 import com.omgservers.schema.module.tenant.ViewProjectPermissionsResponse;
 import com.omgservers.service.module.tenant.impl.operation.projectPermission.selectActiveProjectPermissionsByProjectId.SelectActiveProjectPermissionsByProjectIdOperation;
-import com.omgservers.service.server.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

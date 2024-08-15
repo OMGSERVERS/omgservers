@@ -5,7 +5,7 @@ import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.operation.testInterface.SelectUserOperationTestInterface;
 import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
-import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.operation.runtimePermission.s
 
 import com.omgservers.schema.model.runtimePermission.RuntimePermissionModel;
 import com.omgservers.service.module.runtime.impl.mapper.RuntimePermissionModelMapper;
-import com.omgservers.service.server.operation.selectList.SelectListOperation;
+import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

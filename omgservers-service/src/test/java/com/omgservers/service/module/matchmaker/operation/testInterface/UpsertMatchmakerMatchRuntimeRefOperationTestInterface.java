@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.operation.testInterface;
 
 import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchRuntimeRef.upsertMatchmakerMatchRuntimeRef.UpsertMatchmakerMatchRuntimeRefOperation;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

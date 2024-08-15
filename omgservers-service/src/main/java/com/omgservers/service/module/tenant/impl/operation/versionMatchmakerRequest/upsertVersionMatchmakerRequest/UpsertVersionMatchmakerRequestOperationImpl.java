@@ -1,11 +1,11 @@
 package com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.upsertVersionMatchmakerRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.event.body.module.tenant.VersionMatchmakerRequestCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.VersionMatchmakerRequestCreatedEventBodyModel;
 import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
-import com.omgservers.service.server.operation.changeObject.ChangeObjectOperation;
-import com.omgservers.service.server.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
+import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

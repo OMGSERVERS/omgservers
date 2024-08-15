@@ -1,12 +1,12 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerAssignmentOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerAssignmentOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
-import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

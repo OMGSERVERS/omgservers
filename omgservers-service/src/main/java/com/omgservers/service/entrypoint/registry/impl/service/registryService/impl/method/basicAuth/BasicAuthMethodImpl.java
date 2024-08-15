@@ -5,13 +5,13 @@ import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryRespo
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.schema.service.registry.IssueTokenRequest;
+import com.omgservers.service.service.registry.dto.IssueTokenRequest;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.server.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
-import com.omgservers.service.server.service.registry.RegistryService;
+import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
+import com.omgservers.service.service.registry.RegistryService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

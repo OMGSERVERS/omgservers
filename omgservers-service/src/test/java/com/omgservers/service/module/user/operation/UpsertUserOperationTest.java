@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.schema.event.EventQualifierEnum;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;

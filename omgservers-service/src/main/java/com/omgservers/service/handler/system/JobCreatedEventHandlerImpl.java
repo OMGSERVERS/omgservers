@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.system;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.system.JobCreatedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.system.JobCreatedEventBodyModel;
 import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.schema.service.system.job.GetJobRequest;
-import com.omgservers.schema.service.system.job.GetJobResponse;
+import com.omgservers.service.service.job.dto.GetJobRequest;
+import com.omgservers.service.service.job.dto.GetJobResponse;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.server.service.job.JobService;
+import com.omgservers.service.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

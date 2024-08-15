@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.lobby;
 
-import com.omgservers.schema.event.body.module.lobby.LobbyCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.lobby.LobbyCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.lobby.testInterface.LobbyCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;

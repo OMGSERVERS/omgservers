@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchC
 
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.service.module.matchmaker.impl.mappers.MatchClientModelMapper;
-import com.omgservers.service.server.operation.selectObject.SelectObjectOperation;
+import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

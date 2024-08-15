@@ -2,9 +2,9 @@ package com.omgservers.service.handler.tenant;
 
 import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefResponse;
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
 import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;

@@ -1,18 +1,18 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.event.EventModel;
-import com.omgservers.schema.event.EventQualifierEnum;
-import com.omgservers.schema.event.body.internal.VersionBuildingFinishedEventBodyModel;
-import com.omgservers.schema.event.body.internal.VersionDeploymentRequestedEventBodyModel;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
+import com.omgservers.service.event.body.internal.VersionDeploymentRequestedEventBodyModel;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.module.tenant.GetVersionRequest;
 import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.service.system.SyncEventRequest;
-import com.omgservers.schema.service.system.SyncEventResponse;
+import com.omgservers.service.service.event.dto.SyncEventRequest;
+import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.server.service.event.EventService;
+import com.omgservers.service.service.event.EventService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
