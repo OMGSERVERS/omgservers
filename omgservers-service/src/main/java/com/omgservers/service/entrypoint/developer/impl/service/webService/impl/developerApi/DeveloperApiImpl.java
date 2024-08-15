@@ -16,8 +16,8 @@ import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperReq
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -77,11 +77,11 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<UploadVersionDeveloperResponse> uploadVersion(final Long tenantId,
-                                                             final Long stageId,
-                                                             final List<FileUpload> files) {
-        final var request = new UploadVersionDeveloperRequest(tenantId, stageId, files);
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::uploadVersion);
+    public Uni<BuildVersionDeveloperResponse> buildVersion(final Long tenantId,
+                                                           final Long stageId,
+                                                           final List<FileUpload> files) {
+        final var request = new BuildVersionDeveloperRequest(tenantId, stageId, files);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::buildVersion);
     }
 
     @Override

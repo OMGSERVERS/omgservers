@@ -1,5 +1,6 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl;
 
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
@@ -16,8 +17,7 @@ import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperReq
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createProject.CreateProjectMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.createToken.CreateTokenMethod;
@@ -27,7 +27,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.getStageDashboard.GetStageDashboardMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.getTenantDashboard.GetTenantDashboardMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.getVersionDashboard.GetVersionDashboardMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.uploadVersion.UploadVersionMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.buildVersion.BuildVersionMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -45,9 +45,9 @@ class DeveloperServiceImpl implements DeveloperService {
     final GetStageDashboardMethod getStageDashboardMethod;
     final CreateVersionMethod createVersionMethod;
     final CreateProjectMethod createProjectMethod;
-    final UploadVersionMethod uploadVersionMethod;
     final DeleteVersionMethod deleteVersionMethod;
     final DeployVersionMethod deployVersionMethod;
+    final BuildVersionMethod buildVersionMethod;
     final CreateTokenMethod createTokenMethod;
 
     @Override
@@ -84,8 +84,8 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<UploadVersionDeveloperResponse> uploadVersion(@Valid final UploadVersionDeveloperRequest request) {
-        return uploadVersionMethod.uploadVersion(request);
+    public Uni<BuildVersionDeveloperResponse> buildVersion(@Valid final BuildVersionDeveloperRequest request) {
+        return buildVersionMethod.buildVersion(request);
     }
 
     @Override

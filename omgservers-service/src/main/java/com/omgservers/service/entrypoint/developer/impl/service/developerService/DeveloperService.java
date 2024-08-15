@@ -1,5 +1,6 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService;
 
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
@@ -16,8 +17,7 @@ import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperReq
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -35,7 +35,7 @@ public interface DeveloperService {
 
     Uni<GetVersionDashboardDeveloperResponse> getVersionDashboard(@Valid GetVersionDashboardDeveloperRequest request);
 
-    Uni<UploadVersionDeveloperResponse> uploadVersion(@Valid UploadVersionDeveloperRequest request);
+    Uni<BuildVersionDeveloperResponse> buildVersion(@Valid BuildVersionDeveloperRequest request);
 
     Uni<DeployVersionDeveloperResponse> deployVersion(@Valid DeployVersionDeveloperRequest request);
 

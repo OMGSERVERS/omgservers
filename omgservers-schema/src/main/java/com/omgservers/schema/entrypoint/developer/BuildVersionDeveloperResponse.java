@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UploadVersionDeveloperResponse {
+public class BuildVersionDeveloperResponse {
 
     Long id;
 }

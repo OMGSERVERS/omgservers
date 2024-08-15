@@ -16,8 +16,8 @@ import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperReq
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -66,8 +66,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<UploadVersionDeveloperResponse> uploadVersion(final UploadVersionDeveloperRequest request) {
-        return developerService.uploadVersion(request);
+    public Uni<BuildVersionDeveloperResponse> buildVersion(final BuildVersionDeveloperRequest request) {
+        return developerService.buildVersion(request);
     }
 
     @Override

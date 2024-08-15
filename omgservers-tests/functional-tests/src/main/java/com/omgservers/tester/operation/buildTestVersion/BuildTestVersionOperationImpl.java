@@ -1,4 +1,4 @@
-package com.omgservers.tester.operation.uploadTestVersion;
+package com.omgservers.tester.operation.buildTestVersion;
 
 import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.tester.component.DeveloperApiTester;
@@ -13,28 +13,28 @@ import java.io.IOException;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class UploadTestVersionOperationImpl implements UploadTestVersionOperation {
+class BuildTestVersionOperationImpl implements BuildTestVersionOperation {
 
     DeveloperApiTester developerApiTester;
 
     @Override
-    public Long uploadTestVersion(final TestVersionDto testVersion,
-                                  final String mainLua) throws IOException {
-        return uploadTestVersion(testVersion,
+    public Long buildTestVersion(final TestVersionDto testVersion,
+                                 final String mainLua) throws IOException {
+        return buildTestVersion(testVersion,
                 mainLua,
                 VersionConfigDto.create());
     }
 
     @Override
-    public Long uploadTestVersion(final TestVersionDto testVersion,
-                                  final String mainLua,
-                                  final VersionConfigDto newVersionConfig) throws IOException {
-        final var uploadVersionDeveloperResponse = developerApiTester.uploadVersion(testVersion.getDeveloperToken(),
+    public Long buildTestVersion(final TestVersionDto testVersion,
+                                 final String mainLua,
+                                 final VersionConfigDto newVersionConfig) throws IOException {
+        final var buildVersionDeveloperResponse = developerApiTester.buildVersion(testVersion.getDeveloperToken(),
                 testVersion.getTenantId(),
                 testVersion.getStageId(),
                 newVersionConfig,
                 mainLua);
 
-        return uploadVersionDeveloperResponse.getId();
+        return buildVersionDeveloperResponse.getId();
     }
 }

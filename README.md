@@ -233,5 +233,5 @@ Usage:
  omgserversctl developer printTenant
  omgserversctl developer createProject
  omgserversctl developer getTenantDashboard
- omgserversctl developer uploadVersion <scripts_path>
+ omgserversctl developer buildVersion <scripts_path>
 ```

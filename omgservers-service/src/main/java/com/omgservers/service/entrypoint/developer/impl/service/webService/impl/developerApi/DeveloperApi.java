@@ -16,7 +16,7 @@ import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperReq
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
@@ -59,10 +59,10 @@ public interface DeveloperApi {
     Uni<GetVersionDashboardDeveloperResponse> getVersionDashboard(@NotNull GetVersionDashboardDeveloperRequest request);
 
     @PUT
-    @Path("upload-version")
-    Uni<UploadVersionDeveloperResponse> uploadVersion(@RestForm("tenantId") Long tenantId,
-                                                      @RestForm("stageId") Long stageId,
-                                                      @RestForm(FileUpload.ALL) List<FileUpload> files);
+    @Path("/build-version")
+    Uni<BuildVersionDeveloperResponse> buildVersion(@RestForm("tenantId") Long tenantId,
+                                                    @RestForm("stageId") Long stageId,
+                                                    @RestForm(FileUpload.ALL) List<FileUpload> files);
 
     @PUT
     @Path("/deploy-version")

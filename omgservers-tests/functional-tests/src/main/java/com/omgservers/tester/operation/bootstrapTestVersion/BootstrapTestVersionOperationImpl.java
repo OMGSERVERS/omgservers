@@ -57,7 +57,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var stageSecret = createProjectDeveloperResponse.getSecret();
 
         final var createVersionDeveloperResponse = developerApiTester
-                .uploadVersion(developerToken, tenantId, stageId, versionConfig, mainLua);
+                .buildVersion(developerToken, tenantId, stageId, versionConfig, mainLua);
         final var versionId = createVersionDeveloperResponse.getId();
 
         var currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);

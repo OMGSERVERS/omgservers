@@ -1,8 +1,8 @@
-package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.uploadVersion;
+package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.buildVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
 import com.omgservers.schema.model.version.VersionConfigDto;
@@ -30,7 +30,7 @@ import java.util.Base64;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class UploadVersionMethodImpl implements UploadVersionMethod {
+class BuildVersionMethodImpl implements BuildVersionMethod {
 
     private static final String CONFIG_JSON = "config.json";
     private static final String VERSION_ZIP = "version.zip";
@@ -45,8 +45,8 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<UploadVersionDeveloperResponse> uploadVersion(final UploadVersionDeveloperRequest request) {
-        log.debug("Upload version, request={}", request);
+    public Uni<BuildVersionDeveloperResponse> buildVersion(final BuildVersionDeveloperRequest request) {
+        log.debug("Build version, request={}", request);
 
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
@@ -58,10 +58,10 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
         return checkVersionManagementPermission(tenantId, stageId, userId)
                 .flatMap(voidItem -> createVersion(tenantId, stageId, versionConfig, base64Archive))
                 .map(VersionModel::getId)
-                .map(UploadVersionDeveloperResponse::new);
+                .map(BuildVersionDeveloperResponse::new);
     }
 
-    VersionConfigDto getVersionConfig(final UploadVersionDeveloperRequest request) {
+    VersionConfigDto getVersionConfig(final BuildVersionDeveloperRequest request) {
         return request.getFiles().stream()
                 .filter(fileUpload -> fileUpload.name().equals(CONFIG_JSON))
                 .map(fileUpload -> {
@@ -80,7 +80,7 @@ class UploadVersionMethodImpl implements UploadVersionMethod {
                         CONFIG_JSON + " was not found, request=" + request));
     }
 
-    String getBase64Archive(final UploadVersionDeveloperRequest request) {
+    String getBase64Archive(final BuildVersionDeveloperRequest request) {
         return request.getFiles().stream()
                 .filter(fileUpload -> fileUpload.name().equals(VERSION_ZIP))
                 .map(fileUpload -> {

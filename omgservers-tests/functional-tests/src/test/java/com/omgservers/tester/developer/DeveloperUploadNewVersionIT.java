@@ -3,7 +3,7 @@ package com.omgservers.tester.developer;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.SupportApiTester;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
-import com.omgservers.tester.operation.uploadTestVersion.UploadTestVersionOperation;
+import com.omgservers.tester.operation.buildTestVersion.BuildTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class DeveloperUploadNewVersionIT extends BaseTestClass {
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
 
     @Inject
-    UploadTestVersionOperation uploadTestVersionOperation;
+    BuildTestVersionOperation buildTestVersionOperation;
 
     @Inject
     SupportApiTester supportApiTester;
@@ -34,7 +34,7 @@ public class DeveloperUploadNewVersionIT extends BaseTestClass {
                         """);
 
         try {
-            uploadTestVersionOperation.uploadTestVersion(testVersion, """                                               
+            buildTestVersionOperation.buildTestVersion(testVersion, """                                               
                     """);
 
             Thread.sleep(32_000);

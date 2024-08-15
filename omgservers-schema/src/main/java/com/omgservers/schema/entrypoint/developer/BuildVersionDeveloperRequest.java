@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UploadVersionDeveloperRequest {
+public class BuildVersionDeveloperRequest {
 
     @NotNull
     Long tenantId;

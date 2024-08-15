@@ -18,7 +18,7 @@ import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperReq
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.UploadVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.dto.StageDashboardDto;
 import com.omgservers.schema.entrypoint.developer.dto.TenantDashboardDto;
 import com.omgservers.schema.entrypoint.developer.dto.VersionDashboardDto;
@@ -149,11 +149,11 @@ public class DeveloperApiTester {
         return response.getVersionDashboard();
     }
 
-    public UploadVersionDeveloperResponse uploadVersion(final String token,
-                                                        final Long tenantId,
-                                                        final Long stageId,
-                                                        final VersionConfigDto versionConfig,
-                                                        final String mainLua) throws IOException {
+    public BuildVersionDeveloperResponse buildVersion(final String token,
+                                                      final Long tenantId,
+                                                      final Long stageId,
+                                                      final VersionConfigDto versionConfig,
+                                                      final String mainLua) throws IOException {
 
         final var archiveBytes = createVersionArchiveOperation.createArchive(Map.of("main.lua", mainLua));
 
@@ -170,10 +170,10 @@ public class DeveloperApiTester {
                         "application/octet-stream")
                 .multiPart("version.zip", "version.zip",
                         archiveBytes, "application/octet-stream")
-                .when().put("/omgservers/v1/entrypoint/developer/request/upload-version");
+                .when().put("/omgservers/v1/entrypoint/developer/request/build-version");
         responseSpecification.then().statusCode(200);
 
-        final var response = responseSpecification.getBody().as(UploadVersionDeveloperResponse.class);
+        final var response = responseSpecification.getBody().as(BuildVersionDeveloperResponse.class);
         return response;
     }
 

@@ -83,9 +83,9 @@ help() {
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting printProject" ]; then
     echo " omgserversctl localtesting printProject"
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting uploadVersion" ]; then
-    echo " omgserversctl localtesting uploadVersion <project_path>"
-    if [ "$1" = "localtesting uploadVersion" ]; then
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting buildVersion" ]; then
+    echo " omgserversctl localtesting buildVersion <project_path>"
+    if [ "$1" = "localtesting buildVersion" ]; then
       echo "   produces:"
       echo "     - LOCALTESTING_VERSION_ID"
     fi
@@ -241,9 +241,9 @@ help() {
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDashboard" ]; then
     echo " omgserversctl developer getTenantDashboard <tenant_id>"
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadVersion" ]; then
-    echo " omgserversctl developer uploadVersion <tenant_id> <stage_id> <project_path>"
-    if [ "$1" = "developer uploadVersion" ]; then
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer buildVersion" ]; then
+    echo " omgserversctl developer buildVersion <tenant_id> <stage_id> <project_path>"
+    if [ "$1" = "developer buildVersion" ]; then
       echo "   produces:"
       echo "     - VERSION_ID"
     fi
@@ -450,13 +450,13 @@ localtesting_printProject() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_DEVELOPER_USER_ID=${LOCALTESTING_DEVELOPER_USER_ID}, LOCALTESTING_DEVELOPER_PASSWORD=${LOCALTESTING_DEVELOPER_PASSWORD}"
 }
 
-localtesting_uploadVersion() {
+localtesting_buildVersion() {
   internal_useEnvironment
 
   PROJECT_PATH=$1
 
   if [ -z "${PROJECT_PATH}" ]; then
-    help "localtesting uploadVersion"
+    help "localtesting buildVersion"
     exit 1
   fi
 
@@ -491,7 +491,7 @@ localtesting_uploadVersion() {
   fi
 
   developer_useCredentials ${LOCALTESTING_DEVELOPER_USER_ID} ${LOCALTESTING_DEVELOPER_PASSWORD}
-  developer_uploadVersion ${LOCALTESTING_TENANT_ID} ${LOCALTESTING_STAGE_ID} ${PROJECT_PATH}
+  developer_buildVersion ${LOCALTESTING_TENANT_ID} ${LOCALTESTING_STAGE_ID} ${PROJECT_PATH}
 
   LOCALTESTING_VERSION_ID=$(environment_printVariable VERSION_ID)
   if [ -z "${LOCALTESTING_VERSION_ID}" ]; then
@@ -1447,7 +1447,7 @@ developer_getTenantDashboard() {
   type open > /dev/null && open ~/.omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json || cat ~/.omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json | jq
 }
 
-developer_uploadVersion() {
+developer_buildVersion() {
   internal_useEnvironment
 
   TENANT_ID=$1
@@ -1455,7 +1455,7 @@ developer_uploadVersion() {
   PROJECT_PATH=$3
 
   if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${PROJECT_PATH}" ]; then
-    help "developer uploadVersion"
+    help "developer buildVersion"
     exit 1
   fi
 
@@ -1489,7 +1489,7 @@ developer_uploadVersion() {
 
   popd >> /dev/null
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/upload-version"
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/build-version"
 
   echo >> ~/.omgserversctl/logs
   echo $ENDPOINT >> ~/.omgserversctl/logs
@@ -1502,9 +1502,9 @@ developer_uploadVersion() {
     -F "stageId=${STAGE_ID}" \
     -F "config.json=@${PROJECT_PATH}/config.json" \
     -F "version.zip=@${ARCHIVE_PATH}" \
-    -o ~/.omgserversctl/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json)
+    -o ~/.omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json)
 
-  cat ~/.omgserversctl/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json >> ~/.omgserversctl/logs
+  cat ~/.omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json >> ~/.omgserversctl/logs
   echo >> ~/.omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1513,14 +1513,14 @@ developer_uploadVersion() {
     exit 1
   fi
 
-  VERSION_ID=$(cat ~/.omgserversctl/temp/developer-upload-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
+  VERSION_ID=$(cat ~/.omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
   if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
     echo "ERROR: VERSION_ID was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ~/.omgserversctl/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was uploaded, VERSION_ID=${VERSION_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was built, VERSION_ID=${VERSION_ID}"
 }
 
 # INTERNAL
@@ -1605,8 +1605,8 @@ if [ "$1" = "localtesting" ]; then
     localtesting_createProject
   elif [ "$2" = "printProject" ]; then
     localtesting_printProject
-  elif [ "$2" = "uploadVersion" ]; then
-    localtesting_uploadVersion $3
+  elif [ "$2" = "buildVersion" ]; then
+    localtesting_buildVersion $3
   else
     help "localtesting"
   fi
@@ -1666,8 +1666,8 @@ elif [ "$1" = "developer" ]; then
     developer_createProject $3
   elif [ "$2" = "getTenantDashboard" ]; then
     developer_getTenantDashboard $3
-  elif [ "$2" = "uploadVersion" ]; then
-    developer_uploadVersion $3 $4 $5
+  elif [ "$2" = "buildVersion" ]; then
+    developer_buildVersion $3 $4 $5
   else
     help "developer"
   fi
