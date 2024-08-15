@@ -44,6 +44,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(userId.toString())
+                .claim(ServiceSecurityAttributes.USER_ID.getAttributeName(), userId.toString())
                 .expiresIn(USER_TOKEN_DURATION)
                 .groups(groups)
                 .sign();

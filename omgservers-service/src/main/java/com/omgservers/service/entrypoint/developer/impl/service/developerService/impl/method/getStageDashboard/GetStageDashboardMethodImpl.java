@@ -12,13 +12,13 @@ import com.omgservers.schema.module.tenant.stage.dto.StageDataDto;
 import com.omgservers.service.entrypoint.developer.impl.operation.mapStageDataToDashboard.MapStageDataToDashboardOperation;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -29,14 +29,15 @@ class GetStageDashboardMethodImpl implements GetStageDashboardMethod {
 
     final MapStageDataToDashboardOperation mapStageDataToDashboardOperation;
 
-    final JsonWebToken jwt;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<GetStageDashboardDeveloperResponse> getStageDashboard(
             final GetStageDashboardDeveloperRequest request) {
         log.debug("Get stage dashboard, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
+
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         return checkGettingDashboardPermission(tenantId, stageId, userId)

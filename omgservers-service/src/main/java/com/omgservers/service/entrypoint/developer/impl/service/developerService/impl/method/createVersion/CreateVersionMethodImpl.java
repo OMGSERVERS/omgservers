@@ -3,23 +3,23 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
-import com.omgservers.schema.module.tenant.SyncVersionRequest;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
 import com.omgservers.schema.model.version.VersionConfigDto;
 import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
+import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
+import com.omgservers.schema.module.tenant.SyncVersionRequest;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.VersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -30,14 +30,14 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
 
     final VersionModelFactory versionModelFactory;
 
+    final SecurityIdentity securityIdentity;
     final ObjectMapper objectMapper;
-    final JsonWebToken jwt;
 
     @Override
     public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
         log.debug("Create version, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();

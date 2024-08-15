@@ -12,13 +12,13 @@ import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -28,13 +28,13 @@ class GetConfigMethodImpl implements GetConfigMethod {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
-    final JsonWebToken jwt;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<GetConfigWorkerResponse> getConfig(final GetConfigWorkerRequest request) {
         log.debug("Get config, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
         final var runtimeId = request.getRuntimeId();
 

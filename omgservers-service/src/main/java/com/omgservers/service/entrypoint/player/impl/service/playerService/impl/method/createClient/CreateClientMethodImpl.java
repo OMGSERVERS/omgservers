@@ -24,13 +24,13 @@ import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.Comparator;
 import java.util.List;
@@ -49,13 +49,13 @@ class CreateClientMethodImpl implements CreateClientMethod {
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
 
-    final JsonWebToken jwt;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
         log.debug("Create client, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();

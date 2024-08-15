@@ -17,14 +17,14 @@ import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
 import com.omgservers.service.server.service.event.EventService;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -38,8 +38,8 @@ class DeployVersionMethodImpl implements DeployVersionMethod {
     final VersionImageRefModelFactory versionImageRefModelFactory;
     final EventModelFactory eventModelFactory;
 
+    final SecurityIdentity securityIdentity;
     final ObjectMapper objectMapper;
-    final JsonWebToken jwt;
 
     @Override
     public Uni<DeployVersionDeveloperResponse> deployVersion(final DeployVersionDeveloperRequest request) {
@@ -51,7 +51,9 @@ class DeployVersionMethodImpl implements DeployVersionMethod {
         return getVersion(tenantId, versionId)
                 .flatMap(version -> {
                     final var stageId = version.getStageId();
-                    final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
+                    final var userId =
+                            securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
+
                     return checkVersionManagementPermission(tenantId, stageId, userId)
                             .flatMap(voidItem -> requestVersionDeployment(tenantId, versionId))
                             .replaceWith(new DeployVersionDeveloperResponse());

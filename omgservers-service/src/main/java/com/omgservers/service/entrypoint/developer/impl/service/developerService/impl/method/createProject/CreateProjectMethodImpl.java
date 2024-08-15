@@ -24,13 +24,13 @@ import com.omgservers.service.factory.tenant.StagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.server.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.server.security.ServiceSecurityAttributes;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.jwt.Claims;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @Slf4j
 @ApplicationScoped
@@ -47,13 +47,13 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
     final ProjectModelFactory projectModelFactory;
     final StageModelFactory stageModelFactory;
 
-    final JsonWebToken jwt;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
         log.debug("Create project, request={}", request);
 
-        final var userId = Long.valueOf(jwt.getClaim(Claims.sub));
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
         final var tenantId = request.getTenantId();
 
         return checkCreateProjectPermission(tenantId, userId)
