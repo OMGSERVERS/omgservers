@@ -28,11 +28,15 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
                 serverConnection.id(), serverUri);
 
         final var securityIdentity = request.getSecurityIdentity();
-        final var rawToken = securityIdentity.<String>getAttribute(ServiceSecurityAttributes.RAW_TOKEN.getAttributeName());
+        final var rawToken = securityIdentity
+                .<String>getAttribute(ServiceSecurityAttributes.RAW_TOKEN.getAttributeName());
+        final var runtimeId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName());
 
         return webSocketConnector
                 .baseUri(serverUri)
                 .addHeader("Authorization", "Bearer " + rawToken)
+                .addHeader("Runtime-Id", runtimeId.toString())
                 .connect()
                 .invoke(clientConnection -> {
                     log.info("Connection was routed, id={}, serverUri={}",
