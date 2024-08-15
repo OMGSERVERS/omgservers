@@ -31,13 +31,13 @@ class BootstrapAdminUserMethodImpl implements BootstrapAdminUserMethod {
     public Uni<Void> bootstrapAdminUser() {
         log.debug("Bootstrap admin user");
 
-        final var userId = getConfigOperation.getServiceConfig().defaults().adminId();
+        final var userId = getConfigOperation.getServiceConfig().defaults().adminUserId();
         return getUser(userId)
                 .invoke(root -> log.info("Admin user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/admin";
-                    final var password = getConfigOperation.getServiceConfig().bootstrap().admin().password();
+                    final var password = getConfigOperation.getServiceConfig().bootstrap().adminUser().password();
                     final var passwordHash = BcryptUtil.bcryptHash(password);
                     final var user = userModelFactory.create(userId, UserRoleEnum.ADMIN, passwordHash, idempotencyKey);
 

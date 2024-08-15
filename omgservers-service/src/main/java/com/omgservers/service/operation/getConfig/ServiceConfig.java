@@ -37,9 +37,9 @@ public interface ServiceConfig {
 
         long poolId();
 
-        long adminId();
+        long adminUserId();
 
-        long supportId();
+        long supportUserId();
 
         long registryUserId();
 
@@ -108,15 +108,17 @@ public interface ServiceConfig {
 
         BootstrapIndexConfig index();
 
-        BootstrapDefaultUserConfig admin();
+        BootstrapDefaultUsersConfig defaultUsers();
 
-        BootstrapDefaultUserConfig support();
+        BootstrapUserPasswordConfig adminUser();
 
-        BootstrapDefaultUserConfig registryUser();
+        BootstrapUserPasswordConfig supportUser();
 
-        BootstrapDefaultUserConfig builderUser();
+        BootstrapUserPasswordConfig registryUser();
 
-        BootstrapDefaultUserConfig serviceUser();
+        BootstrapUserPasswordConfig builderUser();
+
+        BootstrapUserPasswordConfig serviceUser();
 
         BootstrapRootConfig root();
 
@@ -141,9 +143,11 @@ public interface ServiceConfig {
         List<URI> servers();
     }
 
-    interface BootstrapDefaultUserConfig {
+    interface BootstrapDefaultUsersConfig {
         boolean enabled();
+    }
 
+    interface BootstrapUserPasswordConfig {
         String password();
     }
 

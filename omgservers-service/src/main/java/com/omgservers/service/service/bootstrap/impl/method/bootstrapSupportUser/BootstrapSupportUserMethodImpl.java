@@ -31,13 +31,13 @@ class BootstrapSupportUserMethodImpl implements BootstrapSupportUserMethod {
     public Uni<Void> bootstrapSupportUser() {
         log.debug("Bootstrap support user");
 
-        final var userId = getConfigOperation.getServiceConfig().defaults().supportId();
+        final var userId = getConfigOperation.getServiceConfig().defaults().supportUserId();
         return getUser(userId)
                 .invoke(user -> log.info("Support user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/support";
-                    final var password = getConfigOperation.getServiceConfig().bootstrap().support().password();
+                    final var password = getConfigOperation.getServiceConfig().bootstrap().supportUser().password();
                     final var passwordHash = BcryptUtil.bcryptHash(password);
                     final var user = userModelFactory.create(userId,
                             UserRoleEnum.SUPPORT,

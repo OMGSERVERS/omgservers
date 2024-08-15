@@ -81,51 +81,51 @@ public class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> initializeAdminUser() {
-        if (getConfigOperation.getServiceConfig().bootstrap().admin().enabled()) {
+        if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapAdminUser()
                     .invoke(voidItem -> log.info("Admin user was initialized"));
         } else {
-            log.info("Bootstrap of admin user is not enabled, skip operation");
+            log.info("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
     Uni<Void> initializeSupportUser() {
-        if (getConfigOperation.getServiceConfig().bootstrap().support().enabled()) {
+        if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapSupportUser()
                     .invoke(voidItem -> log.info("Support user was initialized"));
         } else {
-            log.info("Bootstrap of support user is not enabled, skip operation");
+            log.info("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
     Uni<Void> initializeRegistryUser() {
-        if (getConfigOperation.getServiceConfig().bootstrap().registryUser().enabled()) {
+        if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapRegistryUser()
                     .invoke(voidItem -> log.info("Registry user was initialized"));
         } else {
-            log.info("Bootstrap of registry user is not enabled, skip operation");
+            log.info("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
     Uni<Void> initializeBuilderUser() {
-        if (getConfigOperation.getServiceConfig().bootstrap().builderUser().enabled()) {
+        if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapBuilderUser()
                     .invoke(voidItem -> log.info("Builder user was initialized"));
         } else {
-            log.info("Bootstrap of builder user is not enabled, skip operation");
+            log.info("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
 
     Uni<Void> initializeServiceUser() {
-        if (getConfigOperation.getServiceConfig().bootstrap().serviceUser().enabled()) {
+        if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapServiceUser()
                     .invoke(voidItem -> log.info("Service user was initialized"));
         } else {
-            log.info("Bootstrap of service user is not enabled, skip operation");
+            log.info("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
