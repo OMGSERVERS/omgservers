@@ -35,10 +35,10 @@ class ChangeObjectOperationImpl implements ChangeObjectOperation {
     public Uni<Boolean> changeObject(final ChangeContext<?> changeContext,
                                      final SqlConnection sqlConnection,
                                      final int shard,
-                                     String sql,
-                                     List<?> parameters,
-                                     Supplier<EventBodyModel> eventBodySupplier,
-                                     Supplier<LogModel> logSupplier) {
+                                     final String sql,
+                                     final List<?> parameters,
+                                     final Supplier<EventBodyModel> eventBodySupplier,
+                                     final Supplier<LogModel> logSupplier) {
         var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
