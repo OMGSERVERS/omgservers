@@ -1,6 +1,12 @@
 package com.omgservers.service.handler.runtime;
 
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.player.PlayerModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
+import com.omgservers.schema.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyModel;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.SyncClientRuntimeRefRequest;
@@ -14,12 +20,6 @@ import com.omgservers.schema.module.user.GetPlayerResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
-import com.omgservers.schema.model.player.PlayerModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
-import com.omgservers.schema.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -106,7 +106,8 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
                                 if (Objects.nonNull(runtimeAssignment.getConfig().getMatchClient())) {
                                     final var groupName = runtimeAssignment.getConfig().getMatchClient().getGroupName();
-                                    final var runtimeCommandBody = new AddMatchClientRuntimeCommandBodyModel(clientId,
+                                    final var runtimeCommandBody = new AddMatchClientRuntimeCommandBodyModel(userId,
+                                            clientId,
                                             groupName,
                                             attributes,
                                             profile);
@@ -115,7 +116,8 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
                                             idempotencyKey);
                                     return syncRuntimeCommand(runtimeCommand);
                                 } else {
-                                    final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(clientId,
+                                    final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId,
+                                            clientId,
                                             attributes,
                                             profile);
                                     final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId,

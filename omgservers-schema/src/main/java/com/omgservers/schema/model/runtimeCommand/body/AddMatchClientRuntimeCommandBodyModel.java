@@ -3,7 +3,6 @@ package com.omgservers.schema.model.runtimeCommand.body;
 import com.omgservers.schema.model.player.PlayerAttributesModel;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandBodyModel;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandQualifierEnum;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class AddMatchClientRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
+
+    @NotNull
+    Long userId;
 
     @NotNull
     Long clientId;
