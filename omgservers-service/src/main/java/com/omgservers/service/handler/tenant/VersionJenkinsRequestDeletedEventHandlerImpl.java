@@ -1,13 +1,20 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.VersionJenkinsRequestDeletedEventBodyModel;
-import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
+import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.DeleteJobRequest;
+import com.omgservers.service.service.job.dto.DeleteJobResponse;
+import com.omgservers.service.service.job.dto.FindJobRequest;
+import com.omgservers.service.service.job.dto.FindJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -20,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 public class VersionJenkinsRequestDeletedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
+
+    final JobService jobService;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -44,7 +53,7 @@ public class VersionJenkinsRequestDeletedEventHandlerImpl implements EventHandle
                             versionId,
                             qualifier);
 
-                    return Uni.createFrom().voidItem();
+                    return findAndDeleteJob(tenantId, id);
                 })
                 .replaceWithVoid();
     }
@@ -53,5 +62,25 @@ public class VersionJenkinsRequestDeletedEventHandlerImpl implements EventHandle
         final var request = new GetVersionJenkinsRequestRequest(tenantId, id);
         return tenantModule.getVersionService().getVersionJenkinsRequest(request)
                 .map(GetVersionJenkinsRequestResponse::getVersionJenkinsRequest);
+    }
+
+    Uni<Void> findAndDeleteJob(final Long tenantId, final Long jenkinsRequestId) {
+        return findJob(tenantId, jenkinsRequestId)
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithNull()
+                .onItem().ifNotNull().transformToUni(job -> deleteJob(job.getId()))
+                .replaceWithVoid();
+    }
+
+    Uni<JobModel> findJob(final Long tenantId, final Long jenkinsRequestId) {
+        final var request = new FindJobRequest(tenantId, jenkinsRequestId);
+        return jobService.findJob(request)
+                .map(FindJobResponse::getJob);
+    }
+
+    Uni<Boolean> deleteJob(final Long id) {
+        final var request = new DeleteJobRequest(id);
+        return jobService.deleteJob(request)
+                .map(DeleteJobResponse::getDeleted);
     }
 }

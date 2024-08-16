@@ -23,9 +23,10 @@ class FindJobMethodImpl implements FindJobMethod {
     public Uni<FindJobResponse> findJob(final FindJobRequest request) {
         log.debug("Find job, request={}", request);
 
+        final var shard_key = request.getShardKey();
         final var entityId = request.getEntityId();
         return pgPool.withTransaction(sqlConnection -> selectJobByEntityIdOperation
-                        .selectJobByEntityId(sqlConnection, entityId))
+                        .selectJobByEntityId(sqlConnection, shard_key, entityId))
                 .map(FindJobResponse::new);
     }
 }

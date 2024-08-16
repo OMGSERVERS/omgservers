@@ -1,8 +1,5 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
 import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
@@ -27,15 +24,18 @@ import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefResponse;
 import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefResponse;
-import com.omgservers.service.service.job.dto.DeleteJobRequest;
-import com.omgservers.service.service.job.dto.DeleteJobResponse;
-import com.omgservers.service.service.job.dto.FindJobRequest;
-import com.omgservers.service.service.job.dto.FindJobResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.DeleteJobRequest;
+import com.omgservers.service.service.job.dto.DeleteJobResponse;
+import com.omgservers.service.service.job.dto.FindJobRequest;
+import com.omgservers.service.service.job.dto.FindJobResponse;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -227,7 +227,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<JobModel> findJob(final Long tenantId) {
-        final var request = new FindJobRequest(tenantId);
+        final var request = new FindJobRequest(tenantId, tenantId);
         return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }

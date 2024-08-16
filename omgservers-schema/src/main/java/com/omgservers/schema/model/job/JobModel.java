@@ -32,6 +32,9 @@ public class JobModel {
     JobQualifierEnum qualifier;
 
     @NotNull
+    Long shardKey;
+
+    @NotNull
     Long entityId;
 
     @NotNull

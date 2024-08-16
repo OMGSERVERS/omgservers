@@ -1,8 +1,5 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.schema.model.project.ProjectModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
@@ -22,16 +19,19 @@ import com.omgservers.schema.module.tenant.ViewProjectsRequest;
 import com.omgservers.schema.module.tenant.ViewProjectsResponse;
 import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
 import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
-import com.omgservers.service.service.job.dto.DeleteJobRequest;
-import com.omgservers.service.service.job.dto.DeleteJobResponse;
-import com.omgservers.service.service.job.dto.FindJobRequest;
-import com.omgservers.service.service.job.dto.FindJobResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.DeleteJobRequest;
+import com.omgservers.service.service.job.dto.DeleteJobResponse;
+import com.omgservers.service.service.job.dto.FindJobRequest;
+import com.omgservers.service.service.job.dto.FindJobResponse;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -74,10 +74,6 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> findAndDeleteRootTenantRef(tenantId))
                             .flatMap(voidItem -> findAndDeleteJob(tenantId));
                 })
-//                .onFailure().recoverWithUni(throwable -> {
-//                    log.error(throwable.getMessage());
-//                    return Uni.createFrom().voidItem();
-//                })
                 .replaceWithVoid();
     }
 
@@ -189,7 +185,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<JobModel> findJob(final Long tenantId) {
-        final var request = new FindJobRequest(tenantId);
+        final var request = new FindJobRequest(tenantId, tenantId);
         return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }

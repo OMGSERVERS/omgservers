@@ -27,7 +27,7 @@ class SelectJobOperationImpl implements SelectJobOperation {
                 sqlConnection,
                 0,
                 """
-                        select id, idempotency_key, created, modified, qualifier, entity_id, deleted
+                        select id, idempotency_key, created, modified, qualifier, shard_key, entity_id, deleted
                         from system.tab_job
                         where id = $1
                         limit 1

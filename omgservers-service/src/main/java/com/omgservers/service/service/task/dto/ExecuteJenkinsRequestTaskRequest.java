@@ -1,4 +1,4 @@
-package com.omgservers.service.service.job.dto;
+package com.omgservers.service.service.task.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FindJobRequest {
+public class ExecuteJenkinsRequestTaskRequest {
 
     @NotNull
-    Long shardKey;
+    Long tenantId;
 
     @NotNull
-    Long entityId;
+    Long jenkinsRequestId;
 }

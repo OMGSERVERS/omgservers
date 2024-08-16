@@ -19,5 +19,10 @@ public enum JobQualifierEnum {
     /**
      * Pool job.
      */
-    POOL
+    POOL,
+
+    /**
+     * Jenkins request job.
+     */
+    JENKINS_REQUEST,
 }

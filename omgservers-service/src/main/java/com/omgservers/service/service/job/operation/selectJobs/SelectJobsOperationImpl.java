@@ -1,8 +1,8 @@
 package com.omgservers.service.service.job.operation.selectJobs;
 
 import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.service.service.job.impl.mapper.JobModelMapper;
 import com.omgservers.service.operation.selectList.SelectListOperation;
+import com.omgservers.service.service.job.impl.mapper.JobModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +26,7 @@ class SelectJobsOperationImpl implements SelectJobsOperation {
                 sqlConnection,
                 0,
                 """
-                        select id, idempotency_key, created, modified, qualifier, entity_id, deleted
+                        select id, idempotency_key, created, modified, qualifier, shard_key, entity_id, deleted
                         from system.tab_job
                         where deleted = false
                         order by id asc

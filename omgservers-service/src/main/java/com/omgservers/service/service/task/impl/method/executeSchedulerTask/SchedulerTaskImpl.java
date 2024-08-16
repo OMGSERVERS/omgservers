@@ -1,13 +1,14 @@
 package com.omgservers.service.service.task.impl.method.executeSchedulerTask;
 
 import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.ViewJobsRequest;
+import com.omgservers.service.service.task.TaskService;
+import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
-import com.omgservers.service.service.job.JobService;
-import com.omgservers.service.service.task.TaskService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,6 +49,10 @@ public class SchedulerTaskImpl {
                     .replaceWithVoid();
             case POOL -> taskService
                     .executePoolTask(new ExecutePoolTaskRequest(job.getEntityId()))
+                    .replaceWithVoid();
+            case JENKINS_REQUEST -> taskService
+                    .executeJenkinsRequestTask(new ExecuteJenkinsRequestTaskRequest(job.getShardKey(),
+                            job.getEntityId()))
                     .replaceWithVoid();
         };
     }

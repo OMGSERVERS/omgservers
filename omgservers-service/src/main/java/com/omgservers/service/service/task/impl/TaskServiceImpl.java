@@ -1,5 +1,8 @@
 package com.omgservers.service.service.task.impl;
 
+import com.omgservers.service.service.task.TaskService;
+import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
@@ -14,14 +17,14 @@ import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
+import com.omgservers.service.service.task.impl.method.executeJenkinsRequestTask.ExecuteJenkinsRequestTaskMethod;
+import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executePoolTask.ExecutePoolTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRelayTask.ExecuteRelayTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRuntimeTask.ExecuteRuntimeTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeSchedulerTask.ExecuteSchedulerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeStageTask.ExecuteStageTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeTenantTask.ExecuteTenantTaskMethod;
-import com.omgservers.service.service.task.TaskService;
-import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -40,6 +43,7 @@ class TaskServiceImpl implements TaskService {
     final ExecuteTenantTaskMethod executeTenantTaskMethod;
     final ExecuteStageTaskMethod executeStageTaskMethod;
     final ExecuteRelayTaskMethod executeRelayTaskMethod;
+    final ExecuteJenkinsRequestTaskMethod executeJenkinsRequestTaskMethod;
     final ExecutePoolTaskMethod executePoolTaskMethod;
 
     @Override
@@ -75,5 +79,10 @@ class TaskServiceImpl implements TaskService {
     @Override
     public Uni<ExecuteRelayTaskResponse> executeRelayTask(@Valid final ExecuteRelayTaskRequest request) {
         return executeRelayTaskMethod.executeRelayTask(request);
+    }
+
+    @Override
+    public Uni<ExecuteJenkinsRequestTaskResponse> executeJenkinsRequestTask(@Valid final ExecuteJenkinsRequestTaskRequest request) {
+        return executeJenkinsRequestTaskMethod.executeJenkinsRequestTask(request);
     }
 }

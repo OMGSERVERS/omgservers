@@ -1,8 +1,5 @@
 package com.omgservers.service.handler.runtime;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyModel;
 import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
@@ -32,10 +29,9 @@ import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
-import com.omgservers.service.service.job.dto.DeleteJobRequest;
-import com.omgservers.service.service.job.dto.DeleteJobResponse;
-import com.omgservers.service.service.job.dto.FindJobRequest;
-import com.omgservers.service.service.job.dto.FindJobResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
@@ -46,6 +42,10 @@ import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getServers.GetServersOperation;
 import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.DeleteJobRequest;
+import com.omgservers.service.service.job.dto.DeleteJobResponse;
+import com.omgservers.service.service.job.dto.FindJobRequest;
+import com.omgservers.service.service.job.dto.FindJobResponse;
 import com.omgservers.service.service.room.RoomService;
 import com.omgservers.service.service.room.dto.RemoveRoomRequest;
 import io.smallrye.mutiny.Multi;
@@ -284,7 +284,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<JobModel> findJob(final Long tenantId) {
-        final var request = new FindJobRequest(tenantId);
+        final var request = new FindJobRequest(tenantId, tenantId);
         return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }

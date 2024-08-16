@@ -1,14 +1,19 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
+import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.SyncJobRequest;
+import com.omgservers.service.service.job.dto.SyncJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,7 +27,10 @@ public class VersionJenkinsRequestCreatedEventHandlerImpl implements EventHandle
 
     final TenantModule tenantModule;
 
+    final JobService jobService;
+
     final EventModelFactory eventModelFactory;
+    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -50,7 +58,10 @@ public class VersionJenkinsRequestCreatedEventHandlerImpl implements EventHandle
                             qualifier,
                             buildNumber);
 
-                    return Uni.createFrom().voidItem();
+                    final var jenkinsRequestId = versionJenkinsRequest.getId();
+
+                    final var idempotencyKey = event.getId().toString();
+                    return syncJenkinsRequestJob(tenantId, jenkinsRequestId, idempotencyKey);
                 })
                 .replaceWithVoid();
     }
@@ -59,5 +70,18 @@ public class VersionJenkinsRequestCreatedEventHandlerImpl implements EventHandle
         final var request = new GetVersionJenkinsRequestRequest(tenantId, id);
         return tenantModule.getVersionService().getVersionJenkinsRequest(request)
                 .map(GetVersionJenkinsRequestResponse::getVersionJenkinsRequest);
+    }
+
+    Uni<Boolean> syncJenkinsRequestJob(final Long tenantId,
+                                       final Long jenkinsRequestId,
+                                       final String idempotencyKey) {
+        final var job = jobModelFactory.create(JobQualifierEnum.JENKINS_REQUEST,
+                tenantId,
+                jenkinsRequestId,
+                idempotencyKey);
+
+        final var request = new SyncJobRequest(job);
+        return jobService.syncJobWithIdempotency(request)
+                .map(SyncJobResponse::getCreated);
     }
 }

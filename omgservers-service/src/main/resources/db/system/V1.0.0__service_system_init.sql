@@ -13,6 +13,7 @@ create table if not exists tab_job (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
+    shard_key bigint not null,
     entity_id bigint not null,
     deleted boolean not null,
     unique(idempotency_key)

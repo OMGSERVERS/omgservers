@@ -18,28 +18,32 @@ public class JobModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public JobModel create(final JobQualifierEnum qualifier,
+                           final Long shardKey,
                            final Long entityId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, qualifier, entityId, idempotencyKey);
+        return create(id, qualifier, shardKey, entityId, idempotencyKey);
     }
 
     public JobModel create(final Long id,
                            final JobQualifierEnum qualifier,
+                           final Long shardKey,
                            final Long entityId) {
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, qualifier, entityId, idempotencyKey);
+        return create(id, qualifier, shardKey, entityId, idempotencyKey);
     }
 
     public JobModel create(final JobQualifierEnum qualifier,
+                           final Long shardKey,
                            final Long entityId,
                            final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, qualifier, entityId, idempotencyKey);
+        return create(id, qualifier, shardKey, entityId, idempotencyKey);
     }
 
     public JobModel create(final Long id,
                            final JobQualifierEnum qualifier,
+                           final Long shardKey,
                            final Long entityId,
                            final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -50,6 +54,7 @@ public class JobModelFactory {
         job.setCreated(now);
         job.setModified(now);
         job.setQualifier(qualifier);
+        job.setShardKey(shardKey);
         job.setEntityId(entityId);
         job.setDeleted(false);
         return job;

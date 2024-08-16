@@ -7,7 +7,6 @@ import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBo
 import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
-import com.omgservers.service.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
@@ -155,7 +154,6 @@ public enum EventQualifierEnum {
     // Internal
     DOCKER_REGISTRY_EVENT_RECEIVED(DockerRegistryEventReceivedEventBodyModel.class, false),
     VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class, false),
-    VERSION_BUILDING_CHECKING_REQUESTED(VersionBuildingCheckingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class, false),
     VERSION_BUILDING_FINISHED(VersionBuildingFinishedEventBodyModel.class, false),
     VERSION_DEPLOYMENT_REQUESTED(VersionDeploymentRequestedEventBodyModel.class, false),

@@ -69,7 +69,7 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<JobModel> findJob(final Long poolId) {
-        final var request = new FindJobRequest(poolId);
+        final var request = new FindJobRequest(poolId, poolId);
         return jobService.findJob(request)
                 .map(FindJobResponse::getJob);
     }

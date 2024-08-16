@@ -1,6 +1,5 @@
 package com.omgservers.service.handler.internal;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
@@ -12,15 +11,10 @@ import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenk
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
-import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionJenkinsRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.service.event.EventService;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.service.jenkins.JenkinsService;
 import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Request;
 import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Response;
@@ -30,24 +24,16 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.Duration;
-import java.time.Instant;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
-    static private final int INITIAL_CHECKING_INTERVAL_IN_SECONDS = 1;
 
     final TenantModule tenantModule;
 
     final JenkinsService jenkinsService;
-    final EventService eventService;
 
     final VersionJenkinsRequestModelFactory versionJenkinsRequestModelFactory;
-
-    final EventModelFactory eventModelFactory;
-    final ObjectMapper objectMapper;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -73,9 +59,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                                 final var idempotencyKey = event.getId().toString();
 
                                 // TODO: detect job qualifier based on version
-                                return buildLuaJitRuntime(projectId, version, idempotencyKey)
-                                        .flatMap(
-                                                created -> requestVersionChecking(tenantId, versionId, idempotencyKey));
+                                return buildLuaJitRuntime(projectId, version, idempotencyKey);
                             });
                 })
                 .replaceWithVoid();
@@ -136,20 +120,5 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
         final var request = new SyncVersionJenkinsRequestRequest(versionJenkinsRequest);
         return tenantModule.getVersionService().syncVersionJenkinsRequestWithIdempotency(request)
                 .map(SyncVersionJenkinsRequestResponse::getCreated);
-    }
-
-    Uni<Boolean> requestVersionChecking(final Long tenantId,
-                                        final Long versionId,
-                                        final String idempotencyKey) {
-        final var eventBody = new VersionBuildingCheckingRequestedEventBodyModel(tenantId,
-                versionId,
-                INITIAL_CHECKING_INTERVAL_IN_SECONDS);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
-        eventModel.setDelayed(Instant.now().plus(Duration.ofSeconds(INITIAL_CHECKING_INTERVAL_IN_SECONDS)));
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
     }
 }

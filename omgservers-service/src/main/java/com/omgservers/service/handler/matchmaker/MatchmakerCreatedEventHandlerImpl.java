@@ -1,8 +1,5 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
@@ -10,8 +7,9 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
 import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
-import com.omgservers.service.service.job.dto.SyncJobRequest;
-import com.omgservers.service.service.job.dto.SyncJobResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -22,6 +20,8 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.SyncJobRequest;
+import com.omgservers.service.service.job.dto.SyncJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -103,7 +103,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncMatchmakerJob(final Long matchmakerId,
                                    final String idempotencyKey) {
-        final var job = jobModelFactory.create(JobQualifierEnum.MATCHMAKER, matchmakerId, idempotencyKey);
+        final var job = jobModelFactory.create(JobQualifierEnum.MATCHMAKER, matchmakerId, matchmakerId, idempotencyKey);
 
         final var syncEventRequest = new SyncJobRequest(job);
         return jobService.syncJobWithIdempotency(syncEventRequest)

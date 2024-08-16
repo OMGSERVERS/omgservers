@@ -1,9 +1,5 @@
 package com.omgservers.service.handler.runtime;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
-import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
@@ -13,10 +9,10 @@ import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequ
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
-import com.omgservers.service.service.job.dto.SyncJobRequest;
-import com.omgservers.service.service.job.dto.SyncJobResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
+import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -36,7 +32,11 @@ import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.event.EventService;
+import com.omgservers.service.service.event.dto.SyncEventRequest;
+import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.SyncJobRequest;
+import com.omgservers.service.service.job.dto.SyncJobResponse;
 import com.omgservers.service.service.room.RoomService;
 import com.omgservers.service.service.room.dto.CreateRoomRequest;
 import com.omgservers.service.service.room.dto.CreateRoomResponse;
@@ -175,7 +175,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntimeJob(final Long runtimeId,
                                 final String idempotencyKey) {
-        final var job = jobModelFactory.create(JobQualifierEnum.RUNTIME, runtimeId, idempotencyKey);
+        final var job = jobModelFactory.create(JobQualifierEnum.RUNTIME, runtimeId, runtimeId, idempotencyKey);
 
         final var syncEventRequest = new SyncJobRequest(job);
         return jobService.syncJobWithIdempotency(syncEventRequest)
