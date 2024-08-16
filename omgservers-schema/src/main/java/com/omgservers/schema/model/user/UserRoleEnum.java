@@ -40,9 +40,9 @@ public enum UserRoleEnum {
     PLAYER(Names.PLAYER),
 
     /**
-     * Role which is used to interact with the service through Worker Api.
+     * Role which is used to interact with the service through Runtime Api.
      */
-    WORKER(Names.WORKER),
+    RUNTIME(Names.RUNTIME),
 
     /**
      * Role which is used to connect to the service WebSocket endpoint.
@@ -72,7 +72,7 @@ public enum UserRoleEnum {
         static public final String SERVICE = "service";
         static public final String DEVELOPER = "developer";
         static public final String PLAYER = "player";
-        static public final String WORKER = "worker";
+        static public final String RUNTIME = "runtime";
         static public final String WEBSOCKET = "websocket";
     }
 }

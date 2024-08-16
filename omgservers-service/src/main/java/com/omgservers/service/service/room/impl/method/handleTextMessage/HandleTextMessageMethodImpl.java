@@ -38,7 +38,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
                 final var role = roomConnection.getRole();
                 final var clientId = roomConnection.getClientId();
                 return switch (role) {
-                    case WORKER -> transferToClients(roomInstance, message);
+                    case RUNTIME -> transferToClients(roomInstance, message);
                     case PLAYER -> transferToRuntime(roomInstance, clientId, message);
                     default -> throw new ServerSideInternalException(ExceptionQualifierEnum.INTERNAL_EXCEPTION_OCCURRED,
                             "Mismatched user role and roomInstance service, clientId=" + clientId);

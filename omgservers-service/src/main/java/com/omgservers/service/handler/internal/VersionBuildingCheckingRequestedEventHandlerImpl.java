@@ -8,8 +8,8 @@ import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBo
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
 import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Request;
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Response;
+import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Request;
+import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Response;
 import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
 import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
@@ -120,7 +120,7 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
                 qualifier,
                 buildNumber);
 
-        return getLuaJitWorkerBuilderV1Request(buildNumber)
+        return getLuaJitRuntimeBuilderV1Request(buildNumber)
                 .flatMap(imageId -> {
                     log.info("Jenkins job was finished, qualifier={}, buildNumber={}, imageId={}",
                             qualifier, buildNumber, imageId);
@@ -142,10 +142,10 @@ public class VersionBuildingCheckingRequestedEventHandlerImpl implements EventHa
                 });
     }
 
-    Uni<String> getLuaJitWorkerBuilderV1Request(final Integer buildNumber) {
-        final var getLuaJitWorkerBuilderV1Request = new GetLuaJitWorkerBuilderV1Request(buildNumber);
-        return jenkinsService.getLuaJitWorkerBuilderV1(getLuaJitWorkerBuilderV1Request)
-                .map(GetLuaJitWorkerBuilderV1Response::getImageId);
+    Uni<String> getLuaJitRuntimeBuilderV1Request(final Integer buildNumber) {
+        final var request = new GetLuaJitRuntimeBuilderV1Request(buildNumber);
+        return jenkinsService.getLuaJitRuntimeBuilderV1(request)
+                .map(GetLuaJitRuntimeBuilderV1Response::getImageId);
     }
 
     Uni<Boolean> syncVersionImageRef(final VersionJenkinsRequestModel versionJenkinsRequest,

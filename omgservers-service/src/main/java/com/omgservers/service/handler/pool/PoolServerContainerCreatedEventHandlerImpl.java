@@ -125,7 +125,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
 
                     final var dockerDaemonUri = poolServerModel.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
-                    final var dockerNetwork = getConfigOperation.getServiceConfig().workers().dockerNetwork();
+                    final var dockerNetwork = getConfigOperation.getServiceConfig().runtimes().dockerNetwork();
 
                     try {
                         // Convert milliseconds -> microseconds

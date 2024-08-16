@@ -1,12 +1,12 @@
 package com.omgservers.service.service.jenkins.impl;
 
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Request;
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Response;
-import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Request;
-import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Request;
+import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Response;
+import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Request;
+import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Response;
 import com.omgservers.service.service.jenkins.JenkinsService;
-import com.omgservers.service.service.jenkins.impl.method.getLuaJitWorkerBuilderV1.GetLuaJitWorkerBuilderV1Method;
-import com.omgservers.service.service.jenkins.impl.method.runLuaJitWorkerBuilderV1.RunLuaJitWorkerBuilderV1Method;
+import com.omgservers.service.service.jenkins.impl.method.getLuaJitRuntimeBuilderV1.GetLuaJitRuntimeBuilderV1Method;
+import com.omgservers.service.service.jenkins.impl.method.runLuaJitRuntimeBuilderV1.RunLuaJitRuntimeBuilderV1Method;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -19,18 +19,18 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class JenkinsServiceImpl implements JenkinsService {
 
-    final RunLuaJitWorkerBuilderV1Method runLuaJitWorkerBuilderV1Method;
-    final GetLuaJitWorkerBuilderV1Method getLuaJitWorkerBuilderV1Method;
+    final RunLuaJitRuntimeBuilderV1Method runLuaJitRuntimeBuilderV1Method;
+    final GetLuaJitRuntimeBuilderV1Method getLuaJitRuntimeBuilderV1Method;
 
     @Override
-    public Uni<RunLuaJitWorkerBuilderV1Response> runLuaJitWorkerBuilderV1(
-            @Valid final RunLuaJitWorkerBuilderV1Request request) {
-        return runLuaJitWorkerBuilderV1Method.runLuaJitWorkerBuilderV1(request);
+    public Uni<RunLuaJitRuntimeBuilderV1Response> runLuaJitRuntimeBuilderV1(
+            @Valid final RunLuaJitRuntimeBuilderV1Request request) {
+        return runLuaJitRuntimeBuilderV1Method.runLuaJitRuntimeBuilderV1(request);
     }
 
     @Override
-    public Uni<GetLuaJitWorkerBuilderV1Response> getLuaJitWorkerBuilderV1(
-            @Valid final GetLuaJitWorkerBuilderV1Request request) {
-        return getLuaJitWorkerBuilderV1Method.getLuaJitWorkerBuilderV1(request);
+    public Uni<GetLuaJitRuntimeBuilderV1Response> getLuaJitRuntimeBuilderV1(
+            @Valid final GetLuaJitRuntimeBuilderV1Request request) {
+        return getLuaJitRuntimeBuilderV1Method.getLuaJitRuntimeBuilderV1(request);
     }
 }

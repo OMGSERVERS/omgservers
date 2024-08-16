@@ -1,12 +1,12 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.schema.module.user.SyncPlayerRequest;
-import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.module.user.SyncPlayerRequest;
+import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.impl.service.userService.testInterface.UserServiceTestInterface;
@@ -41,9 +41,9 @@ public class UserTestDataFactory {
         return user;
     }
 
-    public UserModel createWorkerUser(String password) {
+    public UserModel createRuntimeUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.WORKER, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.RUNTIME, passwordHash);
         final var syncUserRequest = new SyncUserRequest(user);
         userService.syncUser(syncUserRequest);
         return user;

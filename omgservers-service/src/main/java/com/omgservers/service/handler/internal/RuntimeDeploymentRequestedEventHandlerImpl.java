@@ -156,7 +156,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                               final String password,
                               final String idempotencyKey) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(id, UserRoleEnum.WORKER, passwordHash, idempotencyKey);
+        final var user = userModelFactory.create(id, UserRoleEnum.RUNTIME, passwordHash, idempotencyKey);
         final var request = new SyncUserRequest(user);
         return userModule.getUserService().syncUser(request)
                 .map(SyncUserResponse::getCreated)
@@ -188,11 +188,11 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         poolRequestConfig.setServerContainerConfig(new PoolRequestConfigModel.ServerContainerConfig());
         poolRequestConfig.getServerContainerConfig().setImageId(imageId);
         // TODO: get limits from version config
-        final var defaultCpuLimit = getConfigOperation.getServiceConfig().workers().defaultCpuLimit();
+        final var defaultCpuLimit = getConfigOperation.getServiceConfig().runtimes().defaultCpuLimit();
         poolRequestConfig.getServerContainerConfig().setCpuLimitInMilliseconds(defaultCpuLimit);
-        final var defaultMemoryLimit = getConfigOperation.getServiceConfig().workers().defaultMemoryLimit();
+        final var defaultMemoryLimit = getConfigOperation.getServiceConfig().runtimes().defaultMemoryLimit();
         poolRequestConfig.getServerContainerConfig().setMemoryLimitInMegabytes(defaultMemoryLimit);
-        final var serviceUri = getConfigOperation.getServiceConfig().workers().serviceUri();
+        final var serviceUri = getConfigOperation.getServiceConfig().runtimes().serviceUri();
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_URL", serviceUri.toString());
         environment.put("OMGSERVERS_USER_ID", user.getId().toString());

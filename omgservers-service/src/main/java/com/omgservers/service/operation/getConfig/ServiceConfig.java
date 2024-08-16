@@ -24,7 +24,7 @@ public interface ServiceConfig {
 
     DockerConfig docker();
 
-    WorkersConfig workers();
+    RuntimesConfig runtimes();
 
     BuilderConfig builder();
 
@@ -91,7 +91,7 @@ public interface ServiceConfig {
         String certPath();
     }
 
-    interface WorkersConfig {
+    interface RuntimesConfig {
         long inactiveInterval();
 
         String dockerNetwork();

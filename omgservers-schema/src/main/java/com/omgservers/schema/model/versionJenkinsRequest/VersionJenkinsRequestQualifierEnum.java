@@ -3,7 +3,7 @@ package com.omgservers.schema.model.versionJenkinsRequest;
 public enum VersionJenkinsRequestQualifierEnum {
 
     /**
-     * Jenkins job request to build LuaJIT workers (version 1).
+     * Jenkins job request to build LuaJIT runtimes (version 1).
      */
-    LUAJIT_WORKER_BUILDER_V1;
+    LUAJIT_RUNTIME_BUILDER_V1;
 }

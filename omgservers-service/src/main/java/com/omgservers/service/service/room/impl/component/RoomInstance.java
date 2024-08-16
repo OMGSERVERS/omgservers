@@ -58,7 +58,7 @@ public class RoomInstance {
 
         final var role = roomConnection.getRole();
         switch (role) {
-            case WORKER -> runtimeConnection.set(roomConnection);
+            case RUNTIME -> runtimeConnection.set(roomConnection);
             case PLAYER -> {
                 final var clientId = roomConnection.getClientId();
                 connectionByClientId.put(clientId, roomConnection);
@@ -112,7 +112,7 @@ public class RoomInstance {
 
         final var role = removedConnection.getRole();
         switch (role) {
-            case WORKER -> runtimeConnection.set(null);
+            case RUNTIME -> runtimeConnection.set(null);
             case PLAYER -> {
                 final var clientId = removedConnection.getClientId();
                 connectionByClientId.remove(clientId);

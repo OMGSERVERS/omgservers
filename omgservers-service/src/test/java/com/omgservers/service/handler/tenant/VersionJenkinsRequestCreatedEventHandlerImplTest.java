@@ -32,7 +32,7 @@ class VersionJenkinsRequestCreatedEventHandlerImplTest extends Assertions {
         final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
         final var versionJenkinsRequest = testDataFactory.getTenantTestDataFactory()
                 .createVersionJenkinsRequest(version,
-                        VersionJenkinsRequestQualifierEnum.LUAJIT_WORKER_BUILDER_V1, 1);
+                        VersionJenkinsRequestQualifierEnum.LUAJIT_RUNTIME_BUILDER_V1, 1);
 
         final var tenantId = versionJenkinsRequest.getTenantId();
         final var id = versionJenkinsRequest.getId();

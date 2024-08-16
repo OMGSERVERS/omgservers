@@ -1,14 +1,14 @@
 package com.omgservers.service.service.jenkins;
 
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Request;
-import com.omgservers.schema.module.jenkins.GetLuaJitWorkerBuilderV1Response;
-import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Request;
-import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Request;
+import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Response;
+import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Request;
+import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Response;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface JenkinsService {
-    Uni<RunLuaJitWorkerBuilderV1Response> runLuaJitWorkerBuilderV1(@Valid RunLuaJitWorkerBuilderV1Request request);
+    Uni<RunLuaJitRuntimeBuilderV1Response> runLuaJitRuntimeBuilderV1(@Valid RunLuaJitRuntimeBuilderV1Request request);
 
-    Uni<GetLuaJitWorkerBuilderV1Response> getLuaJitWorkerBuilderV1(@Valid GetLuaJitWorkerBuilderV1Request request);
+    Uni<GetLuaJitRuntimeBuilderV1Response> getLuaJitRuntimeBuilderV1(@Valid GetLuaJitRuntimeBuilderV1Request request);
 }

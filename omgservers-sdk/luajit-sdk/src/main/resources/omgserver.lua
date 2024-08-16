@@ -34,9 +34,9 @@ local components = {
     create_service_urls = function(self, service_url)
         return {
             service_url = service_url,
-            create_token_url = service_url .. "/omgservers/v1/entrypoint/worker/request/create-token",
-            get_version_url = service_url .. "/omgservers/v1/entrypoint/worker/request/get-version",
-            interchange_url = service_url .. "/omgservers/v1/entrypoint/worker/request/interchange",
+            create_token_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/create-token",
+            get_version_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/get-version",
+            interchange_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/interchange",
         }
     end,
     create_server_state = function(self)

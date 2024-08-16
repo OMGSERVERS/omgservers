@@ -17,17 +17,17 @@ public interface JenkinsApi {
     Uni<GetQueueItemResponse> getQueueItem(@PathParam("itemNumber") Integer itemNumber);
 
     @POST
-    @Path("/job/luajit-worker-builder-v1/buildWithParameters")
-    Uni<Response> runLuaJitWorkerBuilderV1(@FormParam("groupId") String groupId,
-                                           @FormParam("containerName") String containerName,
-                                           @FormParam("versionId") String versionId,
-                                           @FormParam("base64Archive") String base64Archive);
+    @Path("/job/luajit-runtime-builder-v1/buildWithParameters")
+    Uni<Response> runLuaJitRuntimeBuilderV1(@FormParam("groupId") String groupId,
+                                            @FormParam("containerName") String containerName,
+                                            @FormParam("versionId") String versionId,
+                                            @FormParam("base64Archive") String base64Archive);
 
     @GET
-    @Path("/job/luajit-worker-builder-v1/{buildNumber}/api/json")
-    Uni<GetJobByBuildNumberResponse> getLuaJitWorkerBuilderV1(@PathParam("buildNumber") Integer buildNumber);
+    @Path("/job/luajit-runtime-builder-v1/{buildNumber}/api/json")
+    Uni<GetJobByBuildNumberResponse> getLuaJitRuntimeBuilderV1(@PathParam("buildNumber") Integer buildNumber);
 
     @GET
-    @Path("/job/luajit-worker-builder-v1/{buildNumber}/artifact/image")
-    Uni<String> getLuaJitWorkerBuilderV1ImageArtifact(@PathParam("buildNumber") Integer buildNumber);
+    @Path("/job/luajit-runtime-builder-v1/{buildNumber}/artifact/image")
+    Uni<String> getLuaJitRuntimeBuilderV1ImageArtifact(@PathParam("buildNumber") Integer buildNumber);
 }

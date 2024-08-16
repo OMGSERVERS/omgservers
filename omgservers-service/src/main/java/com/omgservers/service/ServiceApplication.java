@@ -20,7 +20,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
                 type = SecuritySchemeType.HTTP, scheme = "Bearer"),
         @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.PLAYER_SECURITY_SCHEMA,
                 type = SecuritySchemeType.HTTP, scheme = "Bearer"),
-        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.WORKER_SECURITY_SCHEMA,
+        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.RUNTIME_SECURITY_SCHEMA,
                 type = SecuritySchemeType.HTTP, scheme = "Bearer")
 })
 public class ServiceApplication extends Application {

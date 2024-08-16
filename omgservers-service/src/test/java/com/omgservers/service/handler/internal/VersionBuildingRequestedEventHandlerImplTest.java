@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
+import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Response;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.internal.testInterface.VersionBuildingRequestedEventHandlerImplTestInterface;
@@ -33,8 +33,8 @@ class VersionBuildingRequestedEventHandlerImplTest extends Assertions {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        Mockito.when(jenkinsService.runLuaJitWorkerBuilderV1(Mockito.any()))
-                .thenReturn(Uni.createFrom().item(new RunLuaJitWorkerBuilderV1Response(1)));
+        Mockito.when(jenkinsService.runLuaJitRuntimeBuilderV1(Mockito.any()))
+                .thenReturn(Uni.createFrom().item(new RunLuaJitRuntimeBuilderV1Response(1)));
 
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);

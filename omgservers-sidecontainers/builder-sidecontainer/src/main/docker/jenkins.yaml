@@ -94,4 +94,4 @@ tool:
     globalSettingsProvider: "standard"
     settingsProvider: "standard"
 jobs:
-  - file: /var/jobs/luajit-worker-builder-v1.seed-job.groovy
+  - file: /var/jobs/luajit-runtime-builder-v1.seed-job.groovy

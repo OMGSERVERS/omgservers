@@ -54,7 +54,7 @@ public class RuntimeTaskImpl {
     }
 
     Uni<Void> checkRuntimeInactivity(final RuntimeModel runtime) {
-        final var inactiveInterval = getConfigOperation.getServiceConfig().workers().inactiveInterval();
+        final var inactiveInterval = getConfigOperation.getServiceConfig().runtimes().inactiveInterval();
         final var now = Instant.now();
         if (runtime.getLastActivity().plusSeconds(inactiveInterval).isBefore(now)) {
             return syncInactiveRuntimeDetectedEvent(runtime.getId())

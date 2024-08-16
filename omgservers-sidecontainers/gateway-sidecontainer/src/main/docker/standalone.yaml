@@ -157,7 +157,7 @@ static_resources:
                         - "*"
                       routes:
                         - match:
-                            prefix: "/omgservers/v1/entrypoint/worker/request"
+                            prefix: "/omgservers/v1/entrypoint/runtime/request"
                           route:
                             cluster: cluster
                 http_filters:

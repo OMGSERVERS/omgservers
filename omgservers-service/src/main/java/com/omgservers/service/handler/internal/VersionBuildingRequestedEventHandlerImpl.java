@@ -1,29 +1,29 @@
 package com.omgservers.service.handler.internal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
-import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.schema.model.stage.StageModel;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
-import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Request;
-import com.omgservers.schema.module.jenkins.RunLuaJitWorkerBuilderV1Response;
 import com.omgservers.schema.module.tenant.GetStageRequest;
 import com.omgservers.schema.module.tenant.GetStageResponse;
 import com.omgservers.schema.module.tenant.GetVersionRequest;
 import com.omgservers.schema.module.tenant.GetVersionResponse;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.internal.VersionBuildingCheckingRequestedEventBodyModel;
+import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.VersionJenkinsRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.event.EventService;
+import com.omgservers.service.service.event.dto.SyncEventRequest;
+import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.service.jenkins.JenkinsService;
+import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Request;
+import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Response;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -73,7 +73,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                                 final var idempotencyKey = event.getId().toString();
 
                                 // TODO: detect job qualifier based on version
-                                return buildLuaJitWorker(projectId, version, idempotencyKey)
+                                return buildLuaJitRuntime(projectId, version, idempotencyKey)
                                         .flatMap(
                                                 created -> requestVersionChecking(tenantId, versionId, idempotencyKey));
                             });
@@ -93,32 +93,32 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 .map(GetVersionResponse::getVersion);
     }
 
-    Uni<Void> buildLuaJitWorker(final Long projectId,
-                                final VersionModel version,
-                                final String idempotencyKey) {
-        return runLuaJitWorkerBuilderV1(projectId, version)
+    Uni<Void> buildLuaJitRuntime(final Long projectId,
+                                 final VersionModel version,
+                                 final String idempotencyKey) {
+        return runLuaJitRuntimeBuilderV1(projectId, version)
                 .flatMap(buildNumber -> syncVersionJenkinsRequest(version,
-                        VersionJenkinsRequestQualifierEnum.LUAJIT_WORKER_BUILDER_V1,
+                        VersionJenkinsRequestQualifierEnum.LUAJIT_RUNTIME_BUILDER_V1,
                         buildNumber,
                         idempotencyKey))
                 .replaceWithVoid();
     }
 
-    Uni<Integer> runLuaJitWorkerBuilderV1(final Long projectId,
-                                          final VersionModel version) {
+    Uni<Integer> runLuaJitRuntimeBuilderV1(final Long projectId,
+                                           final VersionModel version) {
         final var tenantId = version.getTenantId();
         final var stageId = version.getStageId();
         final var versionId = version.getId();
         final var groupId = String.format("omgservers/%d/%d/%d", tenantId, projectId, stageId);
         final var containerName = "universal";
         final var base64Archive = version.getBase64Archive();
-        final var request = new RunLuaJitWorkerBuilderV1Request(groupId,
+        final var request = new RunLuaJitRuntimeBuilderV1Request(groupId,
                 containerName,
                 versionId.toString(),
                 base64Archive);
 
-        return jenkinsService.runLuaJitWorkerBuilderV1(request)
-                .map(RunLuaJitWorkerBuilderV1Response::getBuildNumber);
+        return jenkinsService.runLuaJitRuntimeBuilderV1(request)
+                .map(RunLuaJitRuntimeBuilderV1Response::getBuildNumber);
     }
 
     Uni<Boolean> syncVersionJenkinsRequest(final VersionModel version,

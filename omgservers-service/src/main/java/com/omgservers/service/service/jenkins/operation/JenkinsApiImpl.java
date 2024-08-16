@@ -20,20 +20,20 @@ public class JenkinsApiImpl implements JenkinsApi {
     }
 
     @Override
-    public Uni<Response> runLuaJitWorkerBuilderV1(String groupId,
-                                                  String containerName,
-                                                  String versionId,
-                                                  String base64Archive) {
+    public Uni<Response> runLuaJitRuntimeBuilderV1(String groupId,
+                                                   String containerName,
+                                                   String versionId,
+                                                   String base64Archive) {
         return null;
     }
 
     @Override
-    public Uni<GetJobByBuildNumberResponse> getLuaJitWorkerBuilderV1(Integer buildNumber) {
+    public Uni<GetJobByBuildNumberResponse> getLuaJitRuntimeBuilderV1(Integer buildNumber) {
         return null;
     }
 
     @Override
-    public Uni<String> getLuaJitWorkerBuilderV1ImageArtifact(Integer buildNumber) {
+    public Uni<String> getLuaJitRuntimeBuilderV1ImageArtifact(Integer buildNumber) {
         return null;
     }
 }
