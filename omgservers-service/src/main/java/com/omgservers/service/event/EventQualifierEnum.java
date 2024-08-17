@@ -76,15 +76,11 @@ import com.omgservers.service.event.body.system.IndexCreatedEventBodyModel;
 import com.omgservers.service.event.body.system.IndexDeletedEventBodyModel;
 import com.omgservers.service.event.body.system.JobCreatedEventBodyModel;
 import com.omgservers.service.event.body.system.JobDeletedEventBodyModel;
-import com.omgservers.service.event.body.system.ServiceAccountCreatedEventBodyModel;
-import com.omgservers.service.event.body.system.ServiceAccountDeletedEventBodyModel;
 
 public enum EventQualifierEnum {
     // System
     INDEX_CREATED(IndexCreatedEventBodyModel.class, true),
     INDEX_DELETED(IndexDeletedEventBodyModel.class, true),
-    SERVICE_ACCOUNT_CREATED(ServiceAccountCreatedEventBodyModel.class, true),
-    SERVICE_ACCOUNT_DELETED(ServiceAccountDeletedEventBodyModel.class, true),
     JOB_CREATED(JobCreatedEventBodyModel.class, false),
     JOB_DELETED(JobDeletedEventBodyModel.class, false),
     // Module
