@@ -76,7 +76,7 @@ local function handle_server_event(self, event)
 end
 
 function init(self)
-	omgserver:init(function(event) handle_server_event(self, event) end)
+	omgserver:init(function(event) handle_server_event(self, event) end, true)
 end
 
 function update(self, dt)

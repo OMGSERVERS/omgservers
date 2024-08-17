@@ -153,6 +153,10 @@ omgplayer = {
 				local response_status = response.status
 				local response_body = response.response
 
+                if omgplayer.settings.debug then
+                    print("[OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
+                end
+
 				local decoded_body
 				if response_body then
 					decoded_body = json.decode(response_body)
@@ -171,6 +175,10 @@ omgplayer = {
 
 				local response_status = response.status
 				local response_body = response.response
+
+                if omgplayer.settings.debug then
+                    print("[OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
+                end
 
 				local decoded_body
 				if response_body then

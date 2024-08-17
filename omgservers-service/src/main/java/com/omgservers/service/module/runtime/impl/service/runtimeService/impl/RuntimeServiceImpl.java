@@ -1,5 +1,6 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.DeleteRuntimeAssignmentRequest;
@@ -46,6 +47,8 @@ import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoo
 import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.GetRuntimeModuleClientOperation;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.RuntimeModuleClient;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
@@ -192,6 +195,23 @@ public class RuntimeServiceImpl implements RuntimeService {
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncClientCommand,
                 syncClientCommandMethod::syncClientCommand);
+    }
+
+    @Override
+    public Uni<SyncClientCommandResponse> syncClientCommandWithIdempotency(SyncClientCommandRequest request) {
+        return syncClientCommand(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getRuntimeCommand(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncClientCommandResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

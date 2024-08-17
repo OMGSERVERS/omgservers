@@ -71,6 +71,8 @@ public interface RuntimeService {
 
     Uni<SyncClientCommandResponse> syncClientCommand(@Valid SyncClientCommandRequest request);
 
+    Uni<SyncClientCommandResponse> syncClientCommandWithIdempotency(@Valid SyncClientCommandRequest request);
+
     Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid DeleteRuntimeCommandRequest request);
 
     Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(@Valid DeleteRuntimeCommandsRequest request);

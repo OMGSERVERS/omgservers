@@ -1,6 +1,5 @@
 package com.omgservers.service.event;
 
-import com.omgservers.service.event.body.internal.ClientMessageReceivedEventBodyModel;
 import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
@@ -158,7 +157,6 @@ public enum EventQualifierEnum {
     VERSION_BUILDING_FINISHED(VersionBuildingFinishedEventBodyModel.class, false),
     VERSION_DEPLOYMENT_REQUESTED(VersionDeploymentRequestedEventBodyModel.class, false),
     RUNTIME_DEPLOYMENT_REQUESTED(RuntimeDeploymentRequestedEventBodyModel.class, false),
-    CLIENT_MESSAGE_RECEIVED(ClientMessageReceivedEventBodyModel.class, false),
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class, false),
     INACTIVE_RUNTIME_DETECTED(InactiveRuntimeDetectedEventBodyModel.class, false),
     LOBBY_ASSIGNMENT_REQUESTED(LobbyAssignmentRequestedEventBodyModel.class, false),
