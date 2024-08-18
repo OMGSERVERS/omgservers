@@ -11,13 +11,12 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PoolRequestConfigModel {
+public class PoolRequestConfigDto {
 
-    static public PoolRequestConfigModel create() {
-        final var config = new PoolRequestConfigModel();
+    static public PoolRequestConfigDto create() {
+        final var config = new PoolRequestConfigDto();
         return config;
     }
-
 
     ServerContainerConfig serverContainerConfig;
 

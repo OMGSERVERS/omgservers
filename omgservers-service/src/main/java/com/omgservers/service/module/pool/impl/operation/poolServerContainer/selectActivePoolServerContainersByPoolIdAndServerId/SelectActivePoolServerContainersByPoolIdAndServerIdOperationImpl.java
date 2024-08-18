@@ -32,7 +32,7 @@ class SelectActivePoolServerContainersByPoolIdAndServerIdOperationImpl
                 shard,
                 """
                         select
-                            id, idempotency_key, pool_id, server_id, created, modified, runtime_id, config, deleted
+                            id, idempotency_key, pool_id, server_id, created, modified, runtime_id, runtime_qualifier, config, deleted
                         from $schema.tab_pool_server_container
                         where pool_id = $1 and server_id = $2 and deleted = false
                         order by id asc

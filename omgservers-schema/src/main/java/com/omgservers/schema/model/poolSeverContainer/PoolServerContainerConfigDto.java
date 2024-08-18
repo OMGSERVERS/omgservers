@@ -10,10 +10,10 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PoolServerContainerConfigModel {
+public class PoolServerContainerConfigDto {
 
-    static public PoolServerContainerConfigModel create() {
-        final var poolServerContainerConfig = new PoolServerContainerConfigModel();
+    static public PoolServerContainerConfigDto create() {
+        final var poolServerContainerConfig = new PoolServerContainerConfigDto();
         return poolServerContainerConfig;
     }
 

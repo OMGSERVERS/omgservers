@@ -1,5 +1,14 @@
 package com.omgservers.service.handler.internal;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
+import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
@@ -15,15 +24,6 @@ import com.omgservers.schema.module.user.SyncUserResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
-import com.omgservers.schema.model.poolRequest.PoolRequestConfigModel;
-import com.omgservers.schema.model.poolRequest.PoolRequestModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
@@ -184,8 +184,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                  final String password,
                                  final String imageId) {
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
-        final var poolRequestConfig = new PoolRequestConfigModel();
-        poolRequestConfig.setServerContainerConfig(new PoolRequestConfigModel.ServerContainerConfig());
+        final var poolRequestConfig = new PoolRequestConfigDto();
+        poolRequestConfig.setServerContainerConfig(new PoolRequestConfigDto.ServerContainerConfig());
         poolRequestConfig.getServerContainerConfig().setImageId(imageId);
         // TODO: get limits from version config
         final var defaultCpuLimit = getConfigOperation.getServiceConfig().runtimes().defaultCpuLimit();
@@ -203,6 +203,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
         final var poolRequest = poolRequestModelFactory.create(defaultPoolId,
                 runtime.getId(),
+                runtime.getQualifier(),
                 poolRequestConfig);
 
         return syncPoolRequest(poolRequest);

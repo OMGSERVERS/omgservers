@@ -1,7 +1,8 @@
 package com.omgservers.service.factory.pool;
 
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigDto;
 import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -20,26 +21,29 @@ public class PoolServerContainerModelFactory {
     public PoolServerContainerModel create(final Long poolId,
                                            final Long serverId,
                                            final Long runtimeId,
-                                           final PoolServerContainerConfigModel config) {
+                                           final RuntimeQualifierEnum runtimeQualifier,
+                                           final PoolServerContainerConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, poolId, serverId, runtimeId, config, idempotencyKey);
+        return create(id, poolId, serverId, runtimeId, runtimeQualifier, config, idempotencyKey);
     }
 
     public PoolServerContainerModel create(final Long poolId,
                                            final Long serverId,
                                            final Long runtimeId,
-                                           final PoolServerContainerConfigModel config,
+                                           final RuntimeQualifierEnum runtimeQualifier,
+                                           final PoolServerContainerConfigDto config,
                                            final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, poolId, serverId, runtimeId, config, idempotencyKey);
+        return create(id, poolId, serverId, runtimeId, runtimeQualifier, config, idempotencyKey);
     }
 
     public PoolServerContainerModel create(final Long id,
                                            final Long poolId,
                                            final Long serverId,
                                            final Long runtimeId,
-                                           final PoolServerContainerConfigModel config,
+                                           final RuntimeQualifierEnum runtimeQualifier,
+                                           final PoolServerContainerConfigDto config,
                                            final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -51,6 +55,7 @@ public class PoolServerContainerModelFactory {
         poolRuntimeServerContainerRef.setCreated(now);
         poolRuntimeServerContainerRef.setModified(now);
         poolRuntimeServerContainerRef.setRuntimeId(runtimeId);
+        poolRuntimeServerContainerRef.setRuntimeQualifier(runtimeQualifier);
         poolRuntimeServerContainerRef.setConfig(config);
         poolRuntimeServerContainerRef.setDeleted(Boolean.FALSE);
 

@@ -111,19 +111,18 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
-    Uni<Void> startPoolServerContainer(final PoolServerModel poolServerModel,
+    Uni<Void> startPoolServerContainer(final PoolServerModel poolServer,
                                        final PoolServerContainerModel poolServerContainer) {
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
                     final var imageId = poolServerContainer.getConfig().getImageId();
-                    final var containerName = "pool_" + poolServerContainer.getPoolId() +
-                            "_container_" + poolServerContainer.getId();
+                    final var containerName = poolServerContainer.getContainerName();
                     final var environment = poolServerContainer.getConfig().getEnvironment().entrySet().stream()
                             .map(entry -> entry.getKey() + "=" + entry.getValue())
                             .toList();
 
-                    final var dockerDaemonUri = poolServerModel.getConfig().getDockerHostConfig().getDockerDaemonUri();
+                    final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
                     final var dockerNetwork = getConfigOperation.getServiceConfig().runtimes().dockerNetwork();
 

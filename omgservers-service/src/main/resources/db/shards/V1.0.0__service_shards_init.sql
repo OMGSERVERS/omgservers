@@ -50,6 +50,7 @@ create table if not exists tab_pool_server_container (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     runtime_id bigint not null,
+    runtime_qualifier text not null,
     config json not null,
     deleted boolean not null
 );
@@ -61,6 +62,7 @@ create table if not exists tab_pool_request (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     runtime_id bigint not null,
+    runtime_qualifier text not null,
     config json not null,
     deleted boolean not null
 );

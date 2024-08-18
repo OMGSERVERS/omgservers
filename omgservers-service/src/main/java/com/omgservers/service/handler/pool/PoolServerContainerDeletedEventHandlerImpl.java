@@ -106,8 +106,7 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
-                    final var containerName = "pool_" + poolServerContainer.getPoolId() +
-                            "_container_" + poolServerContainer.getId();
+                    final var containerName = poolServerContainer.getContainerName();
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
 

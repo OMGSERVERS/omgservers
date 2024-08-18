@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.poolRequest;
 
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,10 @@ public class PoolRequestModel {
     Long runtimeId;
 
     @NotNull
-    PoolRequestConfigModel config;
+    RuntimeQualifierEnum runtimeQualifier;
+
+    @NotNull
+    PoolRequestConfigDto config;
 
     @NotNull
     Boolean deleted;

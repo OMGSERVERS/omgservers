@@ -1,9 +1,9 @@
 package com.omgservers.service.module.pool.impl.operation.poolServerContainer.upsertPoolServerContainer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.service.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -34,8 +34,8 @@ class UpsertPoolServerContainerOperationImpl implements UpsertPoolServerContaine
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_pool_server_container(
-                            id, idempotency_key, pool_id, server_id, created, modified, runtime_id, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            id, idempotency_key, pool_id, server_id, created, modified, runtime_id, runtime_qualifier, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,6 +47,7 @@ class UpsertPoolServerContainerOperationImpl implements UpsertPoolServerContaine
                         poolServerContainer.getCreated().atOffset(ZoneOffset.UTC),
                         poolServerContainer.getModified().atOffset(ZoneOffset.UTC),
                         poolServerContainer.getRuntimeId(),
+                        poolServerContainer.getRuntimeQualifier(),
                         getConfigString(poolServerContainer),
                         poolServerContainer.getDeleted()
                 ),

@@ -4,7 +4,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigDto;
 import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
@@ -106,14 +106,19 @@ public class PoolTaskImpl {
                                          final Long serverId,
                                          final PoolRequestModel poolRequest) {
         final var runtimeId = poolRequest.getRuntimeId();
-        final var config = PoolServerContainerConfigModel.create();
+        final var runtimeQualifier = poolRequest.getRuntimeQualifier();
+        final var config = PoolServerContainerConfigDto.create();
         config.setImageId(poolRequest.getConfig().getServerContainerConfig().getImageId());
         config.setCpuLimitInMilliseconds(poolRequest.getConfig()
                 .getServerContainerConfig().getCpuLimitInMilliseconds());
         config.setMemoryLimitInMegabytes(poolRequest.getConfig()
                 .getServerContainerConfig().getMemoryLimitInMegabytes());
         config.setEnvironment(poolRequest.getConfig().getServerContainerConfig().getEnvironment());
-        final var poolServerContainer = poolServerContainerModelFactory.create(poolId, serverId, runtimeId, config);
+        final var poolServerContainer = poolServerContainerModelFactory.create(poolId,
+                serverId,
+                runtimeId,
+                runtimeQualifier,
+                config);
         final var request = new SyncPoolServerContainerRequest(poolServerContainer);
         return poolModule.getPoolService().syncPoolServerContainer(request)
                 .map(SyncPoolServerContainerResponse::getCreated)

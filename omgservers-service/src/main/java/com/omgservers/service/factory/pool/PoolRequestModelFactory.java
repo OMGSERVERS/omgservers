@@ -1,7 +1,8 @@
 package com.omgservers.service.factory.pool;
 
-import com.omgservers.schema.model.poolRequest.PoolRequestConfigModel;
+import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -19,24 +20,27 @@ public class PoolRequestModelFactory {
 
     public PoolRequestModel create(final Long poolId,
                                    final Long runtimeId,
-                                   final PoolRequestConfigModel config) {
+                                   final RuntimeQualifierEnum runtimeQualifier,
+                                   final PoolRequestConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, poolId, runtimeId, config, idempotencyKey);
+        return create(id, poolId, runtimeId, runtimeQualifier, config, idempotencyKey);
     }
 
     public PoolRequestModel create(final Long poolId,
                                    final Long runtimeId,
-                                   final PoolRequestConfigModel config,
+                                   final RuntimeQualifierEnum runtimeQualifier,
+                                   final PoolRequestConfigDto config,
                                    final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, poolId, runtimeId, config, idempotencyKey);
+        return create(id, poolId, runtimeId, runtimeQualifier, config, idempotencyKey);
     }
 
     public PoolRequestModel create(final Long id,
                                    final Long poolId,
                                    final Long runtimeId,
-                                   final PoolRequestConfigModel config,
+                                   final RuntimeQualifierEnum runtimeQualifier,
+                                   final PoolRequestConfigDto config,
                                    final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -47,6 +51,7 @@ public class PoolRequestModelFactory {
         poolRequest.setCreated(now);
         poolRequest.setModified(now);
         poolRequest.setRuntimeId(runtimeId);
+        poolRequest.setRuntimeQualifier(runtimeQualifier);
         poolRequest.setConfig(config);
         poolRequest.setDeleted(Boolean.FALSE);
 

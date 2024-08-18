@@ -34,8 +34,8 @@ class UpsertPoolRequestOperationImpl implements UpsertPoolRequestOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_pool_request(
-                            id, idempotency_key, pool_id, created, modified, runtime_id, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -46,6 +46,7 @@ class UpsertPoolRequestOperationImpl implements UpsertPoolRequestOperation {
                         poolRequest.getCreated().atOffset(ZoneOffset.UTC),
                         poolRequest.getModified().atOffset(ZoneOffset.UTC),
                         poolRequest.getRuntimeId(),
+                        poolRequest.getRuntimeQualifier(),
                         getConfigString(poolRequest),
                         poolRequest.getDeleted()
                 ),

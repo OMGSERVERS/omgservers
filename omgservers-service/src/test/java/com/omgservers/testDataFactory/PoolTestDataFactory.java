@@ -1,19 +1,19 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.model.pool.PoolModel;
+import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigDto;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerRequest;
-import com.omgservers.schema.model.pool.PoolModel;
-import com.omgservers.schema.model.poolRequest.PoolRequestConfigModel;
-import com.omgservers.schema.model.poolRequest.PoolRequestModel;
-import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
-import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
@@ -67,9 +67,13 @@ public class PoolTestDataFactory {
     public PoolRequestModel createPoolRequest(final PoolModel pool, final RuntimeModel runtime) {
         final var poolId = pool.getId();
         final var runtimeId = runtime.getId();
-        final var config = PoolRequestConfigModel.create();
+        final var runtimeQualifier = runtime.getQualifier();
+        final var config = PoolRequestConfigDto.create();
 
-        final var poolRequest = poolRequestModelFactory.create(poolId, runtimeId, config);
+        final var poolRequest = poolRequestModelFactory.create(poolId,
+                runtimeId,
+                runtimeQualifier,
+                config);
         final var syncPoolRequestRequest = new SyncPoolRequestRequest(poolRequest);
         poolService.syncPoolRequest(syncPoolRequestRequest);
         return poolRequest;
@@ -97,9 +101,10 @@ public class PoolTestDataFactory {
         final var poolId = poolServer.getPoolId();
         final var serverId = poolServer.getId();
         final var runtimeId = runtime.getId();
+        final var runtimeQualifier = runtime.getQualifier();
 
         final var dockerImage = "ubuntu:latest";
-        final var config = PoolServerContainerConfigModel.create();
+        final var config = PoolServerContainerConfigDto.create();
         config.setImageId(dockerImage);
         config.setCpuLimitInMilliseconds(100);
         config.setMemoryLimitInMegabytes(200);
@@ -108,6 +113,7 @@ public class PoolTestDataFactory {
         final var poolServerContainer = poolServerContainerModelFactory.create(poolId,
                 serverId,
                 runtimeId,
+                runtimeQualifier,
                 config);
         final var syncPoolServerContainerRequest = new SyncPoolServerContainerRequest(poolServerContainer);
         poolService.syncPoolServerContainer(syncPoolServerContainerRequest);

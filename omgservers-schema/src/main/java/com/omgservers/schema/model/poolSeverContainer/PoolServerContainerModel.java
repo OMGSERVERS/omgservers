@@ -1,5 +1,7 @@
 package com.omgservers.schema.model.poolSeverContainer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,8 +40,16 @@ public class PoolServerContainerModel {
     Long runtimeId;
 
     @NotNull
-    PoolServerContainerConfigModel config;
+    RuntimeQualifierEnum runtimeQualifier;
+
+    @NotNull
+    PoolServerContainerConfigDto config;
 
     @NotNull
     Boolean deleted;
+
+    @JsonIgnore
+    public String getContainerName() {
+        return runtimeQualifier.toString().toLowerCase() + "_" + id;
+    }
 }

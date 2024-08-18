@@ -1,9 +1,10 @@
 package com.omgservers.service.module.pool.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigDto;
 import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,10 +29,11 @@ public class PoolServerContainerModelMapper {
         poolServerContainer.setCreated(row.getOffsetDateTime("created").toInstant());
         poolServerContainer.setModified(row.getOffsetDateTime("modified").toInstant());
         poolServerContainer.setRuntimeId(row.getLong("runtime_id"));
+        poolServerContainer.setRuntimeQualifier(RuntimeQualifierEnum.valueOf(row.getString("runtime_qualifier")));
         poolServerContainer.setDeleted(row.getBoolean("deleted"));
         try {
             poolServerContainer.setConfig(objectMapper
-                    .readValue(row.getString("config"), PoolServerContainerConfigModel.class));
+                    .readValue(row.getString("config"), PoolServerContainerConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "poo server container config can't be parsed, poolServerContainer=" + poolServerContainer, e);
