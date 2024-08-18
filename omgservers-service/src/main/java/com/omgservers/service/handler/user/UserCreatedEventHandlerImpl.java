@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.user;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.root.RootModule;
@@ -50,9 +50,18 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
                     final var idempotencyKey = event.getId().toString();
                     return switch (user.getRole()) {
-                        case ADMIN -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.ADMIN);
-                        case SUPPORT -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.SUPPORT);
-                        case DEVELOPER -> syncRootUserRef(userId, idempotencyKey, RootEntityRefQualifierEnum.DEVELOPER);
+                        case ADMIN -> syncRootUserRef(userId, idempotencyKey,
+                                RootEntityRefQualifierEnum.ADMIN_USER);
+                        case SUPPORT -> syncRootUserRef(userId, idempotencyKey,
+                                RootEntityRefQualifierEnum.SUPPORT_USER);
+                        case REGISTRY -> syncRootUserRef(userId, idempotencyKey,
+                                RootEntityRefQualifierEnum.REGISTRY_USER);
+                        case BUILDER -> syncRootUserRef(userId, idempotencyKey,
+                                RootEntityRefQualifierEnum.BUILDER_USER);
+                        case SERVICE -> syncRootUserRef(userId, idempotencyKey,
+                                RootEntityRefQualifierEnum.SERVICE_USER);
+                        case DEVELOPER -> syncRootUserRef(userId, idempotencyKey,
+                                RootEntityRefQualifierEnum.DEVELOPER_USER);
                         default -> Uni.createFrom().voidItem();
                     };
                 })

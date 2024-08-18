@@ -9,15 +9,30 @@ public enum RootEntityRefQualifierEnum {
     /**
      * Admin user.
      */
-    ADMIN,
+    ADMIN_USER,
 
     /**
      * Support user.
      */
-    SUPPORT,
+    SUPPORT_USER,
+
+    /**
+     * Registry user.
+     */
+    REGISTRY_USER,
+
+    /**
+     * Builder user.
+     */
+    BUILDER_USER,
+
+    /**
+     * Service user.
+     */
+    SERVICE_USER,
 
     /**
      * Developer user.
      */
-    DEVELOPER
+    DEVELOPER_USER,
 }
