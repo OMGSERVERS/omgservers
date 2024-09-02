@@ -1,15 +1,25 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
-import com.omgservers.schema.module.runtime.DeleteRuntimeResponse;
+import com.omgservers.schema.model.matchmakerCommand.body.DeleteMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
+import com.omgservers.schema.module.lobby.DeleteLobbyResponse;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
+import com.omgservers.service.factory.tenant.VersionLobbyRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.lobby.LobbyModule;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -21,7 +31,13 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
 
+    final MatchmakerModule matchmakerModule;
     final RuntimeModule runtimeModule;
+    final TenantModule tenantModule;
+    final LobbyModule lobbyModule;
+
+    final VersionLobbyRequestModelFactory versionLobbyRequestModelFactory;
+    final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -37,15 +53,30 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
 
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    if (runtime.getDeleted()) {
-                        log.info("Runtime was already deleted, " +
-                                "skip operation, runtimeId={}", runtimeId);
-                        return Uni.createFrom().item(Boolean.TRUE);
-                    } else {
-                        log.warn("Inactive runtime was detected, runtimeId={}", runtimeId);
+                    final var runtimeQualifier = runtime.getQualifier();
+                    log.warn("Inactive runtime was detected, runtimeId={}, qualifier={}",
+                            runtimeId, runtimeQualifier);
 
-                        return deleteRuntime(runtimeId);
-                    }
+                    final var idempotencyKey = event.getId().toString();
+
+                    return switch (runtimeQualifier) {
+                        case LOBBY -> {
+                            final var lobbyConfig = runtime.getConfig().getLobbyConfig();
+                            final var lobbyId = lobbyConfig.getLobbyId();
+
+                            final var tenantId = runtime.getTenantId();
+                            final var versionId = runtime.getVersionId();
+
+                            yield syncVersionLobbyRequest(tenantId, versionId, idempotencyKey)
+                                    .flatMap(created -> deleteLobby(lobbyId));
+                        }
+                        case MATCH -> {
+                            final var matchConfig = runtime.getConfig().getMatchConfig();
+                            final var matchmakerId = matchConfig.getMatchmakerId();
+                            final var matchId = matchConfig.getMatchId();
+                            yield syncDeleteMatchMatchmakerCommand(matchmakerId, matchId, idempotencyKey);
+                        }
+                    };
                 })
                 .replaceWithVoid();
     }
@@ -56,9 +87,32 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Boolean> deleteRuntime(final Long runtimeId) {
-        final var request = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().deleteRuntime(request)
-                .map(DeleteRuntimeResponse::getDeleted);
+    Uni<Boolean> deleteLobby(final Long lobbyId) {
+        final var request = new DeleteLobbyRequest(lobbyId);
+        return lobbyModule.getLobbyService().deleteLobby(request)
+                .map(DeleteLobbyResponse::getDeleted);
+    }
+
+    Uni<Boolean> syncVersionLobbyRequest(final Long tenantId,
+                                         final Long versionId,
+                                         final String idempotencyKey) {
+        final var versionLobbyRequest = versionLobbyRequestModelFactory.create(tenantId,
+                versionId,
+                idempotencyKey);
+        final var request = new SyncVersionLobbyRequestRequest(versionLobbyRequest);
+        return tenantModule.getVersionService().syncVersionLobbyRequestWithIdempotency(request)
+                .map(SyncVersionLobbyRequestResponse::getCreated);
+    }
+
+    Uni<Boolean> syncDeleteMatchMatchmakerCommand(final Long matchmakerId,
+                                                  final Long matchId,
+                                                  final String idempotencyKey) {
+        final var commandBody = new DeleteMatchMatchmakerCommandBodyModel(matchId);
+        final var commandModel = matchmakerCommandModelFactory.create(matchmakerId,
+                commandBody,
+                idempotencyKey);
+        final var request = new SyncMatchmakerCommandRequest(commandModel);
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommandWithIdempotency(request)
+                .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

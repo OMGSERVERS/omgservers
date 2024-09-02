@@ -87,6 +87,9 @@ public interface MatchmakerService {
 
     Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(@Valid SyncMatchmakerCommandRequest request);
 
+    Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommandWithIdempotency(
+            @Valid SyncMatchmakerCommandRequest request);
+
     Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(@Valid DeleteMatchmakerCommandRequest request);
 
     Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(@Valid ViewMatchmakerCommandsRequest request);

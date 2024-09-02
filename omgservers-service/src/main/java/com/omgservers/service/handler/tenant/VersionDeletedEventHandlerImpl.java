@@ -125,7 +125,6 @@ public class VersionDeletedEventHandlerImpl implements EventHandler {
                 .map(DeleteLobbyResponse::getDeleted);
     }
 
-
     Uni<Void> deleteVersionMatchmakerRequests(final Long tenantId, final Long versionId) {
         return viewVersionMatchmakerRequests(tenantId, versionId)
                 .flatMap(versionMatchmakerRequests -> Multi.createFrom().iterable(versionMatchmakerRequests)

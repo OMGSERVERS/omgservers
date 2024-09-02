@@ -145,8 +145,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                                 .withLogConfig(logConfig)
                                 .withNetworkMode(dockerNetwork)
                                 .withCpuQuota(cpuQuotaInMicroseconds)
-                                .withMemory(memoryLimitInBytes)
-                                .withRestartPolicy(RestartPolicy.unlessStoppedRestart());
+                                .withMemory(memoryLimitInBytes);
 
                         final var createContainerResponse = dockerClient.createContainerCmd(imageId)
                                 .withName(containerName)

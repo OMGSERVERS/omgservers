@@ -1,5 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
@@ -60,7 +61,6 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.matchmaker.impl.operation.getMatchmakerModuleClient.GetMatchmakerModuleClientOperation;
@@ -235,6 +235,24 @@ class MatchmakerServiceImpl implements MatchmakerService {
                 getMatchServiceApiClientOperation::getClient,
                 MatchmakerApi::syncMatchmakerCommand,
                 syncMatchmakerCommandMethod::syncMatchmakerCommand);
+    }
+
+    @Override
+    public Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommandWithIdempotency(
+            @Valid final SyncMatchmakerCommandRequest request) {
+        return syncMatchmakerCommand(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}",
+                                    request.getMatchmakerCommand(), t.getMessage());
+                            return Uni.createFrom().item(new SyncMatchmakerCommandResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override
