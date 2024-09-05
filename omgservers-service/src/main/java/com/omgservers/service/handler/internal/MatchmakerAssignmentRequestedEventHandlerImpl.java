@@ -1,5 +1,15 @@
 package com.omgservers.service.handler.internal;
 
+import com.omgservers.schema.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
+import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
+import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.schema.module.client.DeleteClientRequest;
+import com.omgservers.schema.module.client.DeleteClientResponse;
+import com.omgservers.schema.module.client.SyncClientMessageRequest;
+import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsRequest;
@@ -7,13 +17,13 @@ import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
-import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -31,9 +41,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandler {
 
     final MatchmakerModule matchmakerModule;
+    final ClientModule clientModule;
     final TenantModule tenantModule;
 
     final MatchmakerAssignmentModelFactory matchmakerAssignmentModelFactory;
+    final ClientMessageModelFactory clientMessageModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -49,14 +61,24 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
         final var tenantId = body.getTenantId();
         final var versionId = body.getVersionId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return selectVersionMatchmakerRef(tenantId, versionId)
                 .flatMap(versionMatchmakerRef -> {
                     final var matchmakerId = versionMatchmakerRef.getMatchmakerId();
-                    final var idempotencyKey = event.getId().toString();
-
-                    return syncMatchmakerAssignment(matchmakerId, clientId, idempotencyKey);
+                    return syncMatchmakerAssignment(matchmakerId, clientId, idempotencyKey)
+                            .replaceWithVoid();
                 })
-                .replaceWithVoid();
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithUni(t -> {
+                    log.warn("Matchmaker assignment failed, clientId={}, {}:{}",
+                            clientId,
+                            t.getClass().getSimpleName(),
+                            t.getMessage());
+                    return syncDisconnectionMessage(clientId, idempotencyKey)
+                            .flatMap(created -> deleteClient(clientId))
+                            .replaceWithVoid();
+                });
     }
 
     Uni<VersionMatchmakerRefModel> selectVersionMatchmakerRef(final Long tenantId, final Long versionId) {
@@ -100,5 +122,26 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
 
                     return Uni.createFrom().failure(t);
                 });
+    }
+
+    Uni<Boolean> syncDisconnectionMessage(final Long clientId, final String idempotencyKey) {
+        final var messageBody = new DisconnectionReasonMessageBodyModel(DisconnectionReasonEnum.INTERNAL_FAILURE);
+        final var disconnectionMessage = clientMessageModelFactory.create(clientId,
+                MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
+                messageBody,
+                idempotencyKey);
+        return syncClientMessage(disconnectionMessage);
+    }
+
+    Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
+        final var request = new SyncClientMessageRequest(clientMessage);
+        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+                .map(SyncClientMessageResponse::getCreated);
+    }
+
+    Uni<Boolean> deleteClient(final Long clientId) {
+        final var request = new DeleteClientRequest(clientId);
+        return clientModule.getClientService().deleteClient(request)
+                .map(DeleteClientResponse::getDeleted);
     }
 }
