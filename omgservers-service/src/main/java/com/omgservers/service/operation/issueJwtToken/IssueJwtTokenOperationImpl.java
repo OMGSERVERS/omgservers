@@ -20,7 +20,8 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
     // TODO: get from configuration
     private static final Duration SERVICE_TOKEN_DURATION = Duration.ofSeconds(31536000);
     private static final Duration USER_TOKEN_DURATION = Duration.ofSeconds(3600);
-    private static final Duration WS_TOKEN_DURATION = Duration.ofSeconds(6000);
+    private static final Duration RUNTIME_TOKEN_DURATION = Duration.ofSeconds(3600);
+    private static final Duration WS_TOKEN_DURATION = Duration.ofSeconds(3600);
 
     final GetConfigOperation getConfigOperation;
 
@@ -47,6 +48,20 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
                 .claim(ServiceSecurityAttributes.USER_ID.getAttributeName(), userId.toString())
                 .expiresIn(USER_TOKEN_DURATION)
                 .groups(groups)
+                .sign();
+
+        return jwtToken;
+    }
+
+    @Override
+    public String issueRuntimeJwtToken(final Long runtimeId) {
+        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
+        final var jwtToken = Jwt.issuer(issuer)
+                .audience(issuer)
+                .subject(runtimeId.toString())
+                .claim(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName(), runtimeId.toString())
+                .expiresIn(RUNTIME_TOKEN_DURATION)
+                .groups(UserRoleEnum.RUNTIME.getName())
                 .sign();
 
         return jwtToken;

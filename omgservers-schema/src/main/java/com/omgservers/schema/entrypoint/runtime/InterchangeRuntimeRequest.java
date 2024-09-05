@@ -14,9 +14,6 @@ import java.util.List;
 public class InterchangeRuntimeRequest {
 
     @NotNull
-    Long runtimeId;
-
-    @NotNull
     List<OutgoingCommandModel> outgoingCommands;
 
     @NotNull

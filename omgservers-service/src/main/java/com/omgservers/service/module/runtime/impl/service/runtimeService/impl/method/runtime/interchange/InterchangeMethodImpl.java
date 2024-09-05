@@ -1,14 +1,13 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.interchange;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.runtime.InterchangeRequest;
 import com.omgservers.schema.module.runtime.InterchangeResponse;
-import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.ExecuteOutgoingCommandOperation;
@@ -47,7 +46,6 @@ class InterchangeMethodImpl implements InterchangeMethod {
     public Uni<InterchangeResponse> interchange(final InterchangeRequest request) {
         log.debug("Interchange, request={}", request);
 
-        final var fromUserId = request.getFromUserId();
         final var runtimeId = request.getRuntimeId();
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -55,21 +53,14 @@ class InterchangeMethodImpl implements InterchangeMethod {
                         .flatMap(runtime -> {
                             final int shard = shardModel.shard();
 
-                            if (runtime.getUserId().equals(fromUserId)) {
-                                final var consumedCommands = request.getConsumedCommands();
-
-                                if (runtime.getDeleted()) {
-                                    throw new ServerSideNotFoundException(ExceptionQualifierEnum.RUNTIME_NOT_FOUND,
-                                            "runtime was already deleted, runtimeId=" + runtimeId);
-                                }
-
-                                return handleCommands(runtimeId, request.getOutgoingCommands())
-                                        .flatMap(voidItem -> receiveCommands(shard, runtimeId, consumedCommands));
-
-                            } else {
-                                throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_RUNTIME_ID,
-                                        "wrong runtimeId, runtimeId=" + runtimeId);
+                            final var consumedCommands = request.getConsumedCommands();
+                            if (runtime.getDeleted()) {
+                                throw new ServerSideNotFoundException(ExceptionQualifierEnum.RUNTIME_NOT_FOUND,
+                                        "runtime was already deleted, runtimeId=" + runtimeId);
                             }
+
+                            return handleCommands(runtimeId, request.getOutgoingCommands())
+                                    .flatMap(voidItem -> receiveCommands(shard, runtimeId, consumedCommands));
                         })
                 )
                 .map(InterchangeResponse::new);
@@ -81,7 +72,8 @@ class InterchangeMethodImpl implements InterchangeMethod {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Void> handleCommands(final Long runtimeId, final List<OutgoingCommandModel> outgoingCommands) {
+    Uni<Void> handleCommands(final Long runtimeId,
+                             final List<OutgoingCommandModel> outgoingCommands) {
         return Multi.createFrom().iterable(outgoingCommands)
                 .onItem().transformToUniAndConcatenate(outgoingCommand -> executeOutgoingCommandOperation
                         .executeOutgoingCommand(runtimeId, outgoingCommand)

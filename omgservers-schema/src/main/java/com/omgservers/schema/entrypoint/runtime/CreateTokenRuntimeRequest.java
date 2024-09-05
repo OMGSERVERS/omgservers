@@ -16,9 +16,6 @@ public class CreateTokenRuntimeRequest {
     @NotNull
     Long runtimeId;
 
-    @NotNull
-    Long userId;
-
     @NotBlank
     @Size(max = 64)
     @ToString.Exclude

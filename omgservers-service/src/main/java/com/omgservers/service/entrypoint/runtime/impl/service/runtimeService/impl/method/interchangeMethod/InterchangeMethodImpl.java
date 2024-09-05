@@ -26,13 +26,13 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
     @Override
     public Uni<InterchangeRuntimeResponse> interchange(final InterchangeRuntimeRequest request) {
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
+        final var runtimeId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName());
 
-        final var runtimeId = request.getRuntimeId();
         final var outgoingCommands = request.getOutgoingCommands();
         final var consumedCommands = request.getConsumedCommands();
 
-        final var interchangeRequest = new InterchangeRequest(userId, runtimeId, outgoingCommands, consumedCommands);
+        final var interchangeRequest = new InterchangeRequest(runtimeId, outgoingCommands, consumedCommands);
         return runtimeModule.getRuntimeService().interchange(interchangeRequest)
                 .map(InterchangeResponse::getIncomingCommands)
                 .map(InterchangeRuntimeResponse::new);

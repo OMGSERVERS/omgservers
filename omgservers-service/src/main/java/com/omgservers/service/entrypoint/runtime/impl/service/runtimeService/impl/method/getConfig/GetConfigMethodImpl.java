@@ -2,14 +2,12 @@ package com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.im
 
 import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.version.VersionModel;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.tenant.GetVersionRequest;
 import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.security.ServiceSecurityAttributes;
@@ -34,21 +32,15 @@ class GetConfigMethodImpl implements GetConfigMethod {
     public Uni<GetConfigRuntimeResponse> getConfig(final GetConfigRuntimeRequest request) {
         log.debug("Get config, request={}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
-
-        final var runtimeId = request.getRuntimeId();
+        final var runtimeId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName());
 
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    if (runtime.getUserId().equals(userId)) {
-                        final var tenantId = runtime.getTenantId();
-                        final var versionId = runtime.getVersionId();
-                        return getVersion(tenantId, versionId)
-                                .map(VersionModel::getConfig);
-                    } else {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_RUNTIME_ID,
-                                "wrong runtimeId, runtimeId=" + runtimeId);
-                    }
+                    final var tenantId = runtime.getTenantId();
+                    final var versionId = runtime.getVersionId();
+                    return getVersion(tenantId, versionId)
+                            .map(VersionModel::getConfig);
                 })
                 .map(GetConfigRuntimeResponse::new);
     }

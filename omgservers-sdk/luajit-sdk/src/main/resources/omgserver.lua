@@ -35,7 +35,7 @@ local components = {
         return {
             service_url = service_url,
             create_token_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/create-token",
-            get_version_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/get-version",
+            get_config_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/get-config",
             interchange_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/interchange",
         }
     end,
@@ -159,7 +159,6 @@ local server = {
 
         local request_body = {
             runtime_id = runtime_id,
-            user_id = user_id,
             password = password
         }
 
@@ -185,7 +184,6 @@ local server = {
         local runtime_id = self_components.server_environment.runtime_id
 
         local request_body = {
-            runtime_id = runtime_id,
             outgoing_commands = outgoing_commands,
             consumed_commands = consumed_commands
         }

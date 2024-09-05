@@ -1,6 +1,5 @@
 package com.omgservers.schema.module.runtime;
 
-import com.omgservers.schema.module.ShardedRequest;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.module.ShardedRequest;
 import jakarta.validation.constraints.NotNull;
@@ -14,9 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InterchangeRequest implements ShardedRequest {
-
-    @NotNull
-    Long fromUserId;
 
     @NotNull
     Long runtimeId;

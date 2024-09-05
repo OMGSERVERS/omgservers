@@ -2,14 +2,12 @@ package com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.im
 
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
@@ -33,27 +31,25 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     public Uni<CreateTokenRuntimeResponse> createToken(final CreateTokenRuntimeRequest request) {
         log.debug("Create token, request={}", request);
 
-        final var userId = request.getUserId();
+        final var runtimeId = request.getRuntimeId();
         final var password = request.getPassword();
 
-        return createApiToken(userId, password)
-                .flatMap(apiToken -> {
-                    final var runtimeId = request.getRuntimeId();
-                    return getRuntime(runtimeId)
-                            .map(runtime -> {
-                                if (runtime.getUserId().equals(userId)) {
-                                    final var wsToken = issueJwtTokenOperation
-                                            .issueWsJwtToken(userId, runtimeId, UserRoleEnum.RUNTIME);
-                                    return new CreateTokenRuntimeResponse(apiToken, wsToken);
-                                } else {
-                                    throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_RUNTIME_ID,
-                                            "wrong runtimeId, runtimeId=" + runtimeId);
-                                }
+        return getRuntime(runtimeId)
+                .flatMap(runtime -> {
+                    final var userId = runtime.getUserId();
+                    return createUserToken(userId, password)
+                            .map(userToken -> {
+                                final var apiToken = issueJwtTokenOperation
+                                        .issueRuntimeJwtToken(runtimeId);
+                                final var wsToken = issueJwtTokenOperation
+                                        .issueWsJwtToken(userId, runtimeId, UserRoleEnum.RUNTIME);
+
+                                return new CreateTokenRuntimeResponse(apiToken, wsToken);
                             });
                 });
     }
 
-    Uni<String> createApiToken(final Long userId, final String password) {
+    Uni<String> createUserToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
         return userModule.getUserService().createToken(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken);

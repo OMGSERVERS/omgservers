@@ -182,7 +182,6 @@ omgserver = {
 
 		local request_body = {
 			runtime_id = runtime_id,
-			user_id = user_id,
 			password = password
 		}
 
@@ -197,7 +196,6 @@ omgserver = {
 		local runtime_id = self.components.server_environment.runtime_id
 
 		local request_body = {
-			runtime_id = runtime_id
 		}
 
 		local response_handler = self:build_handler(callback)
@@ -265,7 +263,6 @@ omgserver = {
 		local runtime_id = self.components.server_environment.runtime_id
 
 		local request_body = {
-			runtime_id = runtime_id,
 			outgoing_commands = outgoing_commands,
 			consumed_commands = consumed_commands
 		}

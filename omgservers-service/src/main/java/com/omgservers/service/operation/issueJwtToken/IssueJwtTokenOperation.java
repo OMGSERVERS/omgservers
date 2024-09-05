@@ -9,5 +9,7 @@ public interface IssueJwtTokenOperation {
 
     String issueUserJwtToken(Long userId, Set<String> groups);
 
+    String issueRuntimeJwtToken(Long runtimeId);
+
     String issueWsJwtToken(Long subject, Long runtimeId, UserRoleEnum role);
 }
