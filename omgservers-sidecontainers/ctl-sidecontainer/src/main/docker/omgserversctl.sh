@@ -251,7 +251,7 @@ help() {
 }
 
 logs() {
-  cat ~/.omgserversctl/logs
+  cat .omgserversctl/logs
 }
 
 # ENVIRONMENT
@@ -292,9 +292,9 @@ environment_useEnvironment() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_EXTERNAL_URL=${EXTERNAL_URL}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_INTERNAL_URL=${INTERNAL_URL}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_EXTERNAL_URL=${EXTERNAL_URL}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_INTERNAL_URL=${INTERNAL_URL}" >> .omgserversctl/environment
 
   echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=${ENVIRONMENT_NAME}, EXTERNAL_URL=${EXTERNAL_URL}, INTERNAL_URL=${INTERNAL_URL}"
 }
@@ -312,13 +312,13 @@ environment_useLocal() {
 # LOCALTESTING
 
 localtesting_up() {
-  if [ ! -d ~/.omgserversctl/localtesting ]; then
-    mkdir -p ~/.omgserversctl/localtesting
-    curl -o ~/.omgserversctl/localtesting/compose.yaml https://raw.githubusercontent.com/OMGSERVERS/omgservers/main/omgservers-environments/development-environment/src/compose.yaml
-    curl -o ~/.omgserversctl/localtesting/.env https://raw.githubusercontent.com/OMGSERVERS/omgservers/main/omgservers-environments/development-environment/src/.env
+  if [ ! -d .omgserversctl/localtesting ]; then
+    mkdir -p .omgserversctl/localtesting
+    curl -o .omgserversctl/localtesting/compose.yaml https://raw.githubusercontent.com/OMGSERVERS/omgservers/main/omgservers-environments/development-environment/src/compose.yaml
+    curl -o .omgserversctl/localtesting/.env https://raw.githubusercontent.com/OMGSERVERS/omgservers/main/omgservers-environments/development-environment/src/.env
   fi
 
-  docker compose -p omgservers -f ~/.omgserversctl/localtesting/compose.yaml up --remove-orphans -d
+  docker compose -p omgservers -f .omgserversctl/localtesting/compose.yaml up --remove-orphans -d
   docker compose -p omgservers ps
 }
 
@@ -326,7 +326,7 @@ localtesting_down() {
   read -p "Continue (y/n)? : " ANSWER
   if [ "${ANSWER}" == "y" ]; then
     docker compose -p omgservers down -v
-    : > ~/.omgserversctl/environment
+    : > .omgserversctl/environment
   else
     echo "Operation was cancelled"
   fi
@@ -340,7 +340,7 @@ localtesting_reset() {
   read -p 'Continue (y/n)? : ' ANSWER
   if [ "${ANSWER}" == "y" ]; then
     docker compose -p omgservers down -v
-    rm -rf ~/.omgserversctl/localtesting
+    rm -rf .omgserversctl/localtesting
 
     localtesting_up
   else
@@ -416,12 +416,12 @@ localtesting_createProject() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_STAGE_ID=${STAGE_ID}, LOCALTESTING_STAGE_SECRET=${STAGE_SECRET}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) LOCALTESTING_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}, LOCALTESTING_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}"
 
-  echo "export OMGSERVERSCTL_LOCALTESTING_TENANT_ID=${TENANT_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_LOCALTESTING_PROJECT_ID=${PROJECT_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_LOCALTESTING_STAGE_ID=${STAGE_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_LOCALTESTING_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_TENANT_ID=${TENANT_ID}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_PROJECT_ID=${PROJECT_ID}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_STAGE_ID=${STAGE_ID}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_STAGE_SECRET=${STAGE_SECRET}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_USER_ID=${DEVELOPER_USER_ID}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> .omgserversctl/environment
 }
 
 localtesting_printProject() {
@@ -498,7 +498,7 @@ localtesting_buildVersion() {
     echo "LOCALTESTING_VERSION_ID was not found"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_LOCALTESTING_VERSION_ID=$LOCALTESTING_VERSION_ID" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_LOCALTESTING_VERSION_ID=$LOCALTESTING_VERSION_ID" >> .omgserversctl/environment
 }
 
 # ADMIN
@@ -514,8 +514,8 @@ admin_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_ADMIN_USER_ID=${ADMIN_USER_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_ADMIN_USER_ID=${ADMIN_USER_ID}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin credentials were set, ADMIN_USER_ID=${ADMIN_USER_ID}"
 
@@ -558,32 +558,32 @@ admin_createToken() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/admin/request/create-token"
   REQUEST="{\"user_id\": \"${ADMIN_USER_ID}\", \"password\": \"${ADMIN_PASSWORD}\"}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/admin-create-token_${ADMIN_USER_ID}.json)
+    -o .omgserversctl/temp/admin-create-token_${ADMIN_USER_ID}.json)
 
-  cat ~/.omgserversctl/temp/admin-create-token_${ADMIN_USER_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/admin-create-token_${ADMIN_USER_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  ADMIN_TOKEN=$(cat ~/.omgserversctl/temp/admin-create-token_${ADMIN_USER_ID}.json | jq -r .raw_token)
+  ADMIN_TOKEN=$(cat .omgserversctl/temp/admin-create-token_${ADMIN_USER_ID}.json | jq -r .raw_token)
   if [ -z "$ADMIN_TOKEN" -o "$ADMIN_TOKEN" == "null" ]; then
     echo "ERROR: ADMIN_TOKEN was not received"
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
 }
@@ -601,8 +601,8 @@ support_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_SUPPORT_USER_ID=${SUPPORT_USER_ID}" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_SUPPORT_PASSWORD=${SUPPORT_PASSWORD}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_SUPPORT_USER_ID=${SUPPORT_USER_ID}" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_SUPPORT_PASSWORD=${SUPPORT_PASSWORD}" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support credentials were set, SUPPORT_USER_ID=${SUPPORT_USER_ID}"
 
@@ -645,32 +645,32 @@ support_createToken() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-token"
   REQUEST="{\"user_id\": \"${SUPPORT_USER_ID}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-create-token_${SUPPORT_USER_ID}.json)
+    -o .omgserversctl/temp/support-create-token_${SUPPORT_USER_ID}.json)
 
-  cat ~/.omgserversctl/temp/support-create-token_${SUPPORT_USER_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-create-token_${SUPPORT_USER_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  RAW_TOKEN=$(cat ~/.omgserversctl/temp/support-create-token_${SUPPORT_USER_ID}.json | jq -r .raw_token)
+  RAW_TOKEN=$(cat .omgserversctl/temp/support-create-token_${SUPPORT_USER_ID}.json | jq -r .raw_token)
   if [ -z "$RAW_TOKEN" -o "$RAW_TOKEN" == "null" ]; then
     echo "ERROR: RAW_TOKEN was not received"
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_SUPPORT_TOKEN=$RAW_TOKEN" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_SUPPORT_TOKEN=$RAW_TOKEN" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support token was created"
 }
@@ -688,32 +688,32 @@ support_createTenant() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant"
   REQUEST="{}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-create-tenant.json)
+    -o .omgserversctl/temp/support-create-tenant.json)
 
-  cat ~/.omgserversctl/temp/support-create-tenant.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-create-tenant.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  TENANT_ID=$(cat ~/.omgserversctl/temp/support-create-tenant.json | jq -r .id)
+  TENANT_ID=$(cat .omgserversctl/temp/support-create-tenant.json | jq -r .id)
   if [ -z "$TENANT_ID" -o "$TENANT_ID" == "null" ]; then
     echo "ERROR: TENANT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_TENANT_ID=$TENANT_ID" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_TENANT_ID=$TENANT_ID" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT_ID=$TENANT_ID"
 }
@@ -738,32 +738,32 @@ support_deleteTenant() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant"
   REQUEST="{\"tenant_id\": \"${TENANT_ID}\"}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-delete-tenant_${TENANT_ID}.json)
+    -o .omgserversctl/temp/support-delete-tenant_${TENANT_ID}.json)
 
-  cat ~/.omgserversctl/temp/support-delete-tenant_${TENANT_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-delete-tenant_${TENANT_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  DELETED=$(cat ~/.omgserversctl/temp/support-delete-tenant_${TENANT_ID}.json | jq -r .deleted)
+  DELETED=$(cat .omgserversctl/temp/support-delete-tenant_${TENANT_ID}.json | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
     echo "ERROR: DELETED was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> .omgserversctl/environment
 
   if [ "${DELETED}" == "true" ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was deleted, TENANT_ID=${TENANT_ID}"
@@ -792,46 +792,46 @@ support_createProject() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project"
   REQUEST="{\"tenant_id\": ${TENANT_ID}}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-create-project_${TENANT_ID}.json)
+    -o .omgserversctl/temp/support-create-project_${TENANT_ID}.json)
 
-  cat ~/.omgserversctl/temp/support-create-project_${TENANT_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-create-project_${TENANT_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  PROJECT_ID=$(cat ~/.omgserversctl/temp/support-create-project_${TENANT_ID}.json | jq -r .project_id)
+  PROJECT_ID=$(cat .omgserversctl/temp/support-create-project_${TENANT_ID}.json | jq -r .project_id)
   if [ -z "$PROJECT_ID" -o "$PROJECT_ID" == "null" ]; then
     echo "ERROR: PROJECT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> .omgserversctl/environment
 
-  STAGE_ID=$(cat ~/.omgserversctl/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_id)
+  STAGE_ID=$(cat .omgserversctl/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_id)
   if [ -z "${STAGE_ID}" -o "${STAGE_ID}" == "null" ]; then
     echo "ERROR: STAGE_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_ID=${STAGE_ID}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_STAGE_ID=${STAGE_ID}" >> .omgserversctl/environment
 
-  STAGE_SECRET=$(cat ~/.omgserversctl/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_secret)
+  STAGE_SECRET=$(cat .omgserversctl/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_secret)
   if [ -z "${STAGE_SECRET}" -o "${STAGE_SECRET}" == "null" ]; then
     echo "ERROR: STAGE_SECRET was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_SECRET=${STAGE_SECRET}" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_STAGE_SECRET=${STAGE_SECRET}" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=${PROJECT_ID}, STAGE_ID=${STAGE_ID}, STAGE_SECRET=${STAGE_SECRET}"
 }
@@ -857,32 +857,32 @@ support_deleteProject() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project"
   REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"project_id\": ${PROJECT_ID} }"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json)
+    -o .omgserversctl/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json)
 
-  cat ~/.omgserversctl/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  DELETED=$(cat ~/.omgserversctl/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json | jq -r .deleted)
+  DELETED=$(cat .omgserversctl/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
     echo "ERROR: DELETED was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> .omgserversctl/environment
 
   if [ "${DELETED}" == "true" ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was deleted, TENANT_ID=${TENANT_ID}, PROJECT_ID=${PROJECT_ID}"
@@ -904,39 +904,39 @@ support_createDeveloper() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-developer"
   REQUEST="{}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-create-developer_${TENANT_ID}.json)
+    -o .omgserversctl/temp/support-create-developer_${TENANT_ID}.json)
 
-  cat ~/.omgserversctl/temp/support-create-developer_${TENANT_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-create-developer_${TENANT_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  USER_ID=$(cat ~/.omgserversctl/temp/support-create-developer_${TENANT_ID}.json | jq -r .user_id)
+  USER_ID=$(cat .omgserversctl/temp/support-create-developer_${TENANT_ID}.json | jq -r .user_id)
   if [ -z "$USER_ID" -o "$USER_ID" == "null" ]; then
     echo "ERROR: USER_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$USER_ID" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$USER_ID" >> .omgserversctl/environment
 
-  PASSWORD=$(cat ~/.omgserversctl/temp/support-create-developer_${TENANT_ID}.json | jq -r .password)
+  PASSWORD=$(cat .omgserversctl/temp/support-create-developer_${TENANT_ID}.json | jq -r .password)
   if [ -z "$PASSWORD" -o "$PASSWORD" == "null" ]; then
     echo "ERROR: PASSWORD was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$PASSWORD" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$PASSWORD" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, DEVELOPER_USER_ID=${USER_ID}, DEVELOPER_PASSWORD=${PASSWORD}"
 
@@ -970,27 +970,27 @@ support_createTenantPermission() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${TENANT_PERMISSION}\"]}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o .omgserversctl/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
 
-  cat ~/.omgserversctl/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  CREATED_PERMISSION=$(cat ~/.omgserversctl/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
+  CREATED_PERMISSION=$(cat .omgserversctl/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
@@ -1020,27 +1020,27 @@ support_deleteTenantPermission() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${TENANT_PERMISSION}\"]}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o .omgserversctl/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
 
-  cat ~/.omgserversctl/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ~/.omgserversctl/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
+  DELETED_PERMISSION=$(cat .omgserversctl/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
@@ -1072,27 +1072,27 @@ support_createProjectPermission() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"project_id\": ${PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${PROJECT_PERMISSION}\"]}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o .omgserversctl/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
 
-  cat ~/.omgserversctl/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  CREATED_PERMISSION=$(cat ~/.omgserversctl/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
+  CREATED_PERMISSION=$(cat .omgserversctl/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
@@ -1124,27 +1124,27 @@ support_deleteProjectPermission() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"project_id\": ${PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${PROJECT_PERMISSION}\"]}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o .omgserversctl/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
 
-  cat ~/.omgserversctl/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ~/.omgserversctl/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
+  DELETED_PERMISSION=$(cat .omgserversctl/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
@@ -1176,27 +1176,27 @@ support_createStagePermission() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-stage-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${STAGE_PERMISSION}\"]}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o .omgserversctl/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
 
-  cat ~/.omgserversctl/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  CREATED_PERMISSION=$(cat ~/.omgserversctl/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
+  CREATED_PERMISSION=$(cat .omgserversctl/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
@@ -1228,27 +1228,27 @@ support_deleteStagePermission() {
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-stage-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${STAGE_PERMISSION}\"]}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o .omgserversctl/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
 
-  cat ~/.omgserversctl/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ~/.omgserversctl/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
+  DELETED_PERMISSION=$(cat .omgserversctl/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
@@ -1287,31 +1287,31 @@ developer_createToken() {
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-token"
   REQUEST="{\"user_id\": \"${DEVELOPER_USER_ID}\", \"password\": \"${DEVELOPER_PASSWORD}\"}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/developer-create-token_${DEVELOPER_USER_ID}.json)
+    -o .omgserversctl/temp/developer-create-token_${DEVELOPER_USER_ID}.json)
 
-  cat ~/.omgserversctl/temp/developer-create-token_${DEVELOPER_USER_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/developer-create-token_${DEVELOPER_USER_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  RAW_TOKEN=$(cat ~/.omgserversctl/temp/developer-create-token_${DEVELOPER_USER_ID}.json | jq -r .raw_token)
+  RAW_TOKEN=$(cat .omgserversctl/temp/developer-create-token_${DEVELOPER_USER_ID}.json | jq -r .raw_token)
   if [ -z "$RAW_TOKEN" -o "$RAW_TOKEN" == "null" ]; then
     echo "ERROR: RAW_TOKEN was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created"
 }
@@ -1327,8 +1327,8 @@ developer_useCredentials() {
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> ~/.omgserversctl/environment
-  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$DEVELOPER_PASSWORD" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> .omgserversctl/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$DEVELOPER_PASSWORD" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
 
@@ -1358,46 +1358,46 @@ developer_createProject() {
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-project"
   REQUEST="{\"tenant_id\": ${TENANT_ID}}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/developer-create-project_${TENANT_ID}.json)
+    -o .omgserversctl/temp/developer-create-project_${TENANT_ID}.json)
 
-  cat ~/.omgserversctl/temp/developer-create-project_${TENANT_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/developer-create-project_${TENANT_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  PROJECT_ID=$(cat ~/.omgserversctl/temp/developer-create-project_${TENANT_ID}.json | jq -r .project_id)
+  PROJECT_ID=$(cat .omgserversctl/temp/developer-create-project_${TENANT_ID}.json | jq -r .project_id)
   if [ -z "$PROJECT_ID" -o "$PROJECT_ID" == "null" ]; then
     echo "ERROR: PROJECT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> .omgserversctl/environment
 
-  STAGE_ID=$(cat ~/.omgserversctl/temp/developer-create-project_${TENANT_ID}.json | jq -r .stage_id)
+  STAGE_ID=$(cat .omgserversctl/temp/developer-create-project_${TENANT_ID}.json | jq -r .stage_id)
   if [ -z "$STAGE_ID" -o "$STAGE_ID" == "null" ]; then
     echo "ERROR: STAGE_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_ID=$STAGE_ID" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_STAGE_ID=$STAGE_ID" >> .omgserversctl/environment
 
-  STAGE_SECRET=$(cat ~/.omgserversctl/temp/developer-create-project_${TENANT_ID}.json | jq -r .secret)
+  STAGE_SECRET=$(cat .omgserversctl/temp/developer-create-project_${TENANT_ID}.json | jq -r .secret)
   if [ -z "$STAGE_SECRET" -o "$STAGE_SECRET" == "null" ]; then
     echo "ERROR: STAGE_SECRET was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_SECRET=$STAGE_SECRET" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_STAGE_SECRET=$STAGE_SECRET" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=${PROJECT_ID}, STAGE_ID=${STAGE_ID}, STAGE_SECRET=${STAGE_SECRET}"
 }
@@ -1424,27 +1424,27 @@ developer_getTenantDashboard() {
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard"
   REQUEST="{\"tenant_id\": ${TENANT_ID}}"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
-  echo $REQUEST >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
+  echo $REQUEST >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ~/.omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json)
+    -o .omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json)
 
-  cat ~/.omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  type open > /dev/null && open ~/.omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json || cat ~/.omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json | jq
+  type open > /dev/null && open .omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json || cat .omgserversctl/temp/developer-get-tenant-dashboard_${TENANT_ID}.json | jq
 }
 
 developer_buildVersion() {
@@ -1470,7 +1470,7 @@ developer_buildVersion() {
     exit 1
   fi
 
-  ARCHIVE_PATH=$(eval echo ~/.omgserversctl/versions/version_${TENANT_ID}_${STAGE_ID}.zip)
+  ARCHIVE_PATH=$(eval echo .omgserversctl/versions/version_${TENANT_ID}_${STAGE_ID}.zip)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=${ARCHIVE_PATH}"
 
   pushd ${PROJECT_PATH}
@@ -1491,8 +1491,8 @@ developer_buildVersion() {
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/build-version"
 
-  echo >> ~/.omgserversctl/logs
-  echo $ENDPOINT >> ~/.omgserversctl/logs
+  echo >> .omgserversctl/logs
+  echo $ENDPOINT >> .omgserversctl/logs
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
@@ -1502,23 +1502,23 @@ developer_buildVersion() {
     -F "stageId=${STAGE_ID}" \
     -F "config.json=@${PROJECT_PATH}/config.json" \
     -F "version.zip=@${ARCHIVE_PATH}" \
-    -o ~/.omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json)
+    -o .omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json)
 
-  cat ~/.omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json >> ~/.omgserversctl/logs
-  echo >> ~/.omgserversctl/logs
+  cat .omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json >> .omgserversctl/logs
+  echo >> .omgserversctl/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ~/.omgserversctl/logs
+    tail -2 .omgserversctl/logs
     exit 1
   fi
 
-  VERSION_ID=$(cat ~/.omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
+  VERSION_ID=$(cat .omgserversctl/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
   if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
     echo "ERROR: VERSION_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ~/.omgserversctl/environment
+  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> .omgserversctl/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was built, VERSION_ID=${VERSION_ID}"
 }
@@ -1526,29 +1526,29 @@ developer_buildVersion() {
 # INTERNAL
 
 internal_useEnvironment() {
-  source ~/.omgserversctl/environment
+  source .omgserversctl/environment
 
   if [ -z "${OMGSERVERSCTL_ENVIRONMENT_NAME}" ]; then
     echo "$(date) $(echo unknown) ERROR: Environment was not configured"
     exit 1
   else
-    source ~/.omgserversctl/environment
+    source .omgserversctl/environment
   fi
 }
 
 # MAIN
 
-if [ ! -d "~/.omgserversctl/temp" ]; then
-  mkdir -p ~/.omgserversctl/temp
+if [ ! -d ".omgserversctl/temp" ]; then
+  mkdir -p .omgserversctl/temp
 fi
-if [ ! -d "~/.omgserversctl/versions" ]; then
-  mkdir -p ~/.omgserversctl/versions
+if [ ! -d ".omgserversctl/versions" ]; then
+  mkdir -p .omgserversctl/versions
 fi
-if [ ! -f "~/.omgserversctl/environment" ]; then
-  touch ~/.omgserversctl/environment
+if [ ! -f ".omgserversctl/environment" ]; then
+  touch .omgserversctl/environment
 fi
-if [ ! -f "~/.omgserversctl/logs" ]; then
-  touch ~/.omgserversctl/logs
+if [ ! -f ".omgserversctl/logs" ]; then
+  touch .omgserversctl/logs
 fi
 
 if [ -z "$1" ]; then
