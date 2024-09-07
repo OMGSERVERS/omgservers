@@ -685,12 +685,12 @@ return {
 	end,
 	sign_in = function(self, user_id, password)
 		assert(user_id, "Value user_id must be set")
-		assert(user_id, "Value password must be set")
+		assert(password, "Value password must be set")
 
 		omgplayer.flow:sign_in(user_id, password)
 	end,
 	send_message = function(self, message)
-		assert(handler, "Message must not be nil")
+		assert(message, "Message must not be nil")
 
 		omgplayer.server:send_message(message)
 	end,
