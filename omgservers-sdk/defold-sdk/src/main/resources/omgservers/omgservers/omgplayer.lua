@@ -672,18 +672,31 @@ return {
 	constants = omgplayer.constants,
 	-- Methods
 	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler, debug)
+		assert(server_url, "Value server_url must be set")
+		assert(tenant_id, "Value tenant_id must be set")
+		assert(stage_id, "Value stage_id must be set")
+		assert(stage_secret, "Value stage_secret must be set")
+		assert(handler, "Handler must not be nil")
+
 		omgplayer:init(server_url, tenant_id, stage_id, stage_secret, handler, debug)
 	end,
 	sign_up = function(self)
 		omgplayer.flow:sign_up()
 	end,
 	sign_in = function(self, user_id, password)
+		assert(user_id, "Value user_id must be set")
+		assert(user_id, "Value password must be set")
+
 		omgplayer.flow:sign_in(user_id, password)
 	end,
 	send_message = function(self, message)
+		assert(handler, "Message must not be nil")
+
 		omgplayer.server:send_message(message)
 	end,
 	update = function(self, dt)
+		assert(dt, "Value dt must be set")
+
 		omgplayer:update(dt)
 	end,
 }
