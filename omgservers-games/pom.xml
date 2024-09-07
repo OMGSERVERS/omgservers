@@ -6,13 +6,13 @@
 
     <parent>
         <groupId>com.omgservers</groupId>
-        <artifactId>omgservers-tests</artifactId>
+        <artifactId>omgservers</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <packaging>pom</packaging>
 
-    <artifactId>test-containers</artifactId>
+    <artifactId>omgservers-games</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -21,8 +21,14 @@
     </properties>
 
     <modules>
-        <module>defold-test-client</module>
-        <module>defold-test-runtime</module>
+        <module>knights-defold-game</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-container-image-docker</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
