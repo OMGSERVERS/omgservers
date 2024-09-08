@@ -90,6 +90,13 @@ help() {
       echo "     - LOCALTESTING_VERSION_ID"
     fi
   fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting pushVersion" ]; then
+    echo " omgserversctl localtesting pushVersion <image_id> <config_path>"
+    if [ "$1" = "localtesting pushVersion" ]; then
+      echo "   produces:"
+      echo "     - LOCALTESTING_VERSION_ID"
+    fi
+  fi
   # Admin
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin useCredentials" ]; then
     echo " omgserversctl admin useCredentials <user_id> <password>"
@@ -201,6 +208,7 @@ help() {
     if [ "$1" = "support createStagePermission" ]; then
       echo "   stage_permission:"
       echo "     - VERSION_MANAGEMENT"
+      echo "     - GETTING_DASHBOARD"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
@@ -208,6 +216,7 @@ help() {
     if [ "$1" = "support deleteStagePermission" ]; then
       echo "   stage_permission:"
       echo "     - VERSION_MANAGEMENT"
+      echo "     - GETTING_DASHBOARD"
     fi
   fi
   # Developer
@@ -238,8 +247,21 @@ help() {
       echo "     - STAGE_SECRET"
     fi
   fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createVersion" ]; then
+    echo " omgserversctl developer createVersion <tenant_id> <stage_id> <config_path>"
+    if [ "$1" = "developer createVersion" ]; then
+      echo "   produces:"
+      echo "     - VERSION_ID"
+    fi
+  fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDashboard" ]; then
     echo " omgserversctl developer getTenantDashboard <tenant_id>"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDashboard" ]; then
+    echo " omgserversctl developer getStageDashboard <tenant_id> <stage_id>"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getVersionDashboard" ]; then
+    echo " omgserversctl developer getVersionDashboard <tenant_id> <version_id>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer buildVersion" ]; then
     echo " omgserversctl developer buildVersion <tenant_id> <stage_id> <project_path>"
@@ -247,6 +269,9 @@ help() {
       echo "   produces:"
       echo "     - VERSION_ID"
     fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
+    echo " omgserversctl developer deployVersion <tenant_id> <versionId>"
   fi
 }
 
@@ -407,8 +432,11 @@ localtesting_createProject() {
     exit 1
   fi
 
+  support_createTenantPermission ${TENANT_ID} ${DEVELOPER_USER_ID} PROJECT_MANAGEMENT
   support_createTenantPermission ${TENANT_ID} ${DEVELOPER_USER_ID} GETTING_DASHBOARD
+  support_createProjectPermission ${TENANT_ID} ${PROJECT_ID} ${DEVELOPER_USER_ID} STAGE_MANAGEMENT
   support_createStagePermission ${TENANT_ID} ${STAGE_ID} ${DEVELOPER_USER_ID} VERSION_MANAGEMENT
+  support_createStagePermission ${TENANT_ID} ${STAGE_ID} ${DEVELOPER_USER_ID} GETTING_DASHBOARD
 
   developer_useCredentials ${DEVELOPER_USER_ID} ${DEVELOPER_PASSWORD}
 
@@ -500,6 +528,67 @@ localtesting_buildVersion() {
     exit 1
   fi
   echo "export OMGSERVERSCTL_LOCALTESTING_VERSION_ID=$LOCALTESTING_VERSION_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+}
+
+localtesting_pushVersion() {
+  internal_useEnvironment
+
+  IMAGE_ID=$1
+  CONFIG_PATH=$2
+
+  if [ -z "${IMAGE_ID}" -o -z "${CONFIG_PATH}" ]; then
+    help "localtesting pushVersion"
+    exit 1
+  fi
+
+  LOCALTESTING_TENANT_ID=$(environment_printVariable LOCALTESTING_TENANT_ID)
+  if [ -z "${LOCALTESTING_TENANT_ID}" ]; then
+    echo "LOCALTESTING_TENANT_ID was not found"
+    exit 1
+  fi
+
+  LOCALTESTING_PROJECT_ID=$(environment_printVariable LOCALTESTING_PROJECT_ID)
+  if [ -z "${LOCALTESTING_PROJECT_ID}" ]; then
+    echo "LOCALTESTING_PROJECT_ID was not found"
+    exit 1
+  fi
+
+  LOCALTESTING_STAGE_ID=$(environment_printVariable LOCALTESTING_STAGE_ID)
+  if [ -z "${LOCALTESTING_STAGE_ID}" ]; then
+    echo "LOCALTESTING_STAGE_ID was not found"
+    exit 1
+  fi
+
+  LOCALTESTING_DEVELOPER_USER_ID=$(environment_printVariable LOCALTESTING_DEVELOPER_USER_ID)
+  if [ -z "${LOCALTESTING_DEVELOPER_USER_ID}" ]; then
+    echo "LOCALTESTING_DEVELOPER_USER_ID was not found"
+    exit 1
+  fi
+
+  LOCALTESTING_DEVELOPER_PASSWORD=$(environment_printVariable LOCALTESTING_DEVELOPER_PASSWORD)
+  if [ -z "${LOCALTESTING_DEVELOPER_PASSWORD}" ]; then
+    echo "LOCALTESTING_DEVELOPER_PASSWORD was not found"
+    exit 1
+  fi
+
+  developer_useCredentials ${LOCALTESTING_DEVELOPER_USER_ID} ${LOCALTESTING_DEVELOPER_PASSWORD}
+  developer_createVersion ${LOCALTESTING_TENANT_ID} ${LOCALTESTING_STAGE_ID} ${CONFIG_PATH}
+
+  LOCALTESTING_VERSION_ID=$(environment_printVariable VERSION_ID)
+  if [ -z "${LOCALTESTING_VERSION_ID}" ]; then
+    echo "LOCALTESTING_VERSION_ID was not found"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_LOCALTESTING_VERSION_ID=$LOCALTESTING_VERSION_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  TARGET_IMAGE_ID="localhost:5000/omgservers/${LOCALTESTING_TENANT_ID}/${LOCALTESTING_PROJECT_ID}/${LOCALTESTING_STAGE_ID}/universal:${LOCALTESTING_VERSION_ID}"
+
+  docker image tag ${IMAGE_ID} ${TARGET_IMAGE_ID}
+  docker image push ${TARGET_IMAGE_ID}
+
+  sleep 1
+
+  developer_deployVersion ${LOCALTESTING_TENANT_ID} ${LOCALTESTING_VERSION_ID}
 }
 
 # ADMIN
@@ -1403,6 +1492,74 @@ developer_createProject() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=${PROJECT_ID}, STAGE_ID=${STAGE_ID}, STAGE_SECRET=${STAGE_SECRET}"
 }
 
+developer_createVersion() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  STAGE_ID=$2
+  CONFIG_PATH=$3
+
+  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${CONFIG_PATH}" ]; then
+    help "developer createVersion"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=${CONFIG_PATH}"
+
+  if [ ! -f ${CONFIG_PATH} ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Config file was not found, CONFIG_PATH=${CONFIG_PATH}"
+    exit 1
+  fi
+
+  VERSION_CONFIG=$(cat ${CONFIG_PATH} | jq -c -r)
+
+  if [ -z "${VERSION_CONFIG}" -o "${VERSION_CONFIG}" == "null" ]; then
+    echo "ERROR: Version config is empty"
+    exit 1
+  fi
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-version"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"version_config\": ${VERSION_CONFIG}}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT_ID}_${STAGE_ID}.json)
+
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT_ID}_${STAGE_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  VERSION_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
+  if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
+    echo "ERROR: VERSION_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION_ID=${VERSION_ID}"
+}
+
 developer_getTenantDashboard() {
   internal_useEnvironment
 
@@ -1445,7 +1602,101 @@ developer_getTenantDashboard() {
     exit 1
   fi
 
-  type open > /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT_ID}.json | jq
+  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT_ID}.json | jq
+}
+
+developer_getStageDashboard() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  STAGE_ID=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" ]; then
+    help "developer getStageDashboard"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=$STAGE_ID"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-stage-dashboard"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json)
+
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json | jq
+}
+
+developer_getVersionDashboard() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  VERSION_ID=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${VERSION_ID}" ]; then
+    help "developer getVersionDashboard"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION_ID=$VERSION_ID"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-version-dashboard"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"version_id\": ${VERSION_ID}}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json)
+
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json | jq
 }
 
 developer_buildVersion() {
@@ -1524,6 +1775,53 @@ developer_buildVersion() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was built, VERSION_ID=${VERSION_ID}"
 }
 
+developer_deployVersion() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  VERSION_ID=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${VERSION_ID}" ]; then
+    help "developer deployVersion"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION_ID=${VERSION_ID}"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/deploy-version"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"version_id\": ${VERSION_ID}}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT_ID}_${VERSION_ID}.json)
+
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT_ID}_${VERSION_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deploy was requested"
+}
+
 # INTERNAL
 
 internal_useEnvironment() {
@@ -1577,7 +1875,7 @@ if [ "$1" = "environment" ]; then
   if [ "$2" = "printCurrent" ]; then
     environment_printCurrent
   elif [ "$2" = "printVariable" ]; then
-      environment_printVariable $3
+    environment_printVariable $3
   elif [ "$2" = "useEnvironment" ]; then
     environment_useEnvironment $3 $4 $5
   elif [ "$2" = "usePublic" ]; then
@@ -1612,6 +1910,8 @@ if [ "$1" = "localtesting" ]; then
     localtesting_printProject
   elif [ "$2" = "buildVersion" ]; then
     localtesting_buildVersion $3
+  elif [ "$2" = "pushVersion" ]; then
+    localtesting_pushVersion $3 $4
   else
     help "localtesting"
   fi
@@ -1669,10 +1969,18 @@ elif [ "$1" = "developer" ]; then
     developer_createToken
   elif [ "$2" = "createProject" ]; then
     developer_createProject $3
+  elif [ "$2" = "createVersion" ]; then
+    developer_createVersion $3 $4 $5
   elif [ "$2" = "getTenantDashboard" ]; then
     developer_getTenantDashboard $3
+  elif [ "$2" = "getStageDashboard" ]; then
+    developer_getStageDashboard $3 $4
+  elif [ "$2" = "getVersionDashboard" ]; then
+    developer_getVersionDashboard $3 $4
   elif [ "$2" = "buildVersion" ]; then
     developer_buildVersion $3 $4 $5
+  elif [ "$2" = "deployVersion" ]; then
+    developer_deployVersion $3 $4
   else
     help "developer"
   fi
