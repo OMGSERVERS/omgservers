@@ -1,0 +1,16 @@
+{
+  "modes": [
+    {
+      "name": "death-match",
+      "min_players": 1,
+      "max_players": 128,
+      "groups": [
+        {
+          "name": "players",
+          "min_players": 1,
+          "max_players": 128
+        }
+      ]
+    }
+  ]
+}
