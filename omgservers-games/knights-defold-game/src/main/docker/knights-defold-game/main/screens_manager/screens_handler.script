@@ -1,0 +1,73 @@
+local screens_messages = require("main.screens_manager.screens_messages")
+local core_messages = require("main.core_manager.core_messages")
+
+local AUTH_FACTORY = "#auth_factory"
+local LOBBY_FACTORY = "#lobby_factory"
+local ARENA_FACTORY = "#arena_factory"
+
+local CORE_MANAGER = "core_manager#core_handler"
+
+local function remove_current_screen(self)
+	if self.current_screen then
+		for key, go_id in pairs(self.current_screen) do
+			go.delete(go_id)
+		end
+
+		self.current_screen = nil
+	end
+end
+
+local function handle_auth_screen_requested_message(self, message)
+	print("[SCREENS_HANDLER] Create auth screen")
+
+	remove_current_screen(self)
+
+	local collection_ids = collectionfactory.create(AUTH_FACTORY)
+	pprint(collection_ids)
+
+	self.current_screen = collection_ids
+
+	local collection_id = collection_ids["/auth_screen"]
+	local core_message = core_messages:create_screen_created_message(core_messages.constants.AUTH_SCREEN, collection_id)
+	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
+end
+
+local function handle_lobby_screen_requested_message(self, message)
+	print("[SCREENS_HANDLER] Create lobby screen")
+
+	remove_current_screen(self)
+
+	local collection_ids = collectionfactory.create(LOBBY_FACTORY)
+	pprint(collection_ids)
+
+	self.current_screen = collection_ids
+
+	local collection_id = collection_ids["/lobby_screen"]
+	local core_message = core_messages:create_screen_created_message(core_messages.constants.LOBBY_SCREEN, collection_id)
+	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
+end
+
+local function handle_arena_screen_requested_message(self, message)
+	print("[SCREENS_HANDLER] Create arena screen")
+
+	remove_current_screen(self)
+
+	local collection_ids = collectionfactory.create(ARENA_FACTORY)
+	pprint(collection_ids)
+
+	self.current_screen = collection_ids
+
+	local collection_id = collection_ids["/arena_screen"]
+	local core_message = core_messages:create_screen_created_message(core_messages.constants.ARENA_SCREEN, collection_id)
+	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(screens_messages.constants.AUTH_SCREEN_REQUESTED) then
+		handle_auth_screen_requested_message(self)
+	elseif message_id == hash(screens_messages.constants.LOBBY_SCREEN_REQUESTED) then
+		handle_lobby_screen_requested_message(self)
+	elseif message_id == hash(screens_messages.constants.ARENA_SCREEN_REQUESTED) then
+		handle_arena_screen_requested_message(self, message)
+	end
+end

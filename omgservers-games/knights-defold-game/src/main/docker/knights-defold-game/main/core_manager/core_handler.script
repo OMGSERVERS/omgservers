@@ -1,0 +1,103 @@
+local screens_messages = require("main.screens_manager.screens_messages")
+local client_messages = require("main.client_manager.client_messages")
+local core_messages = require("main.core_manager.core_messages")
+local auth_messages = require("main.auth_screen.auth_messages")
+
+local SCREENS_MANAGER = "screens_manager#screens_handler"
+local CLIENT_MANAGER = "client_manager#client_handler"
+
+local function handle_game_started_message(self, message)
+	print("[CORE_HANDLER] Game started at " .. os.date())
+
+	local screens_message = screens_messages:create_auth_screen_requested_message()
+	msg.post(SCREENS_MANAGER, screens_messages.constants.AUTH_SCREEN_REQUESTED, screens_message)
+end
+
+local function handle_screen_created_message(self, message)
+	self.screen_qualifier = message.screen_qualifier
+	self.screen_collection_id = message.collection_id
+
+	local screen_qualifier = message.screen_qualifier
+		
+	if screen_qualifier == core_messages.constants.AUTH_SCREEN then
+		print("[CORE_HANDLER] Auth screen was created at " .. os.date())
+
+		local auth_message = auth_messages:create_set_state_requested_message("Signing up")
+		msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
+
+		local client_message = client_messages:create_signing_up_requested_message()
+		msg.post(CLIENT_MANAGER, client_messages.constants.SIGNING_UP_REQUESTED, client_message)
+		
+	elseif screen_qualifier == core_messages.constants.LOBBY_SCREEN then
+	elseif screen_qualifier == core_messages.constants.ARENA_SCREEN then
+	else
+		print("[CORE_HANDLER] Unknown screen qualifier was received")
+	end
+end
+
+local function handle_signed_up_message(self, message)
+	print("[HANDLER] User signed up at " .. os.date())
+
+	local user_id = message.user_id
+	local password = message.password
+
+	local auth_message = auth_messages:create_set_state_requested_message("Signing in")
+	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
+	
+	local client_message = client_messages:create_signing_in_requested_message(user_id, password)
+	msg.post(CLIENT_MANAGER, client_messages.constants.SIGNING_IN_REQUESTED, client_message)
+end
+
+local function handle_signed_in_message(self, message)
+	print("[HANDLER] User signed in at " .. os.date())
+
+	local auth_message = auth_messages:create_set_state_requested_message("Getting profile")
+	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
+end
+
+local function handle_user_greeted_message(self, message)
+end
+
+local function handle_runtime_assigned_message(self, message)
+end
+
+local function handle_lobby_joined_message(self, message)
+end
+
+local function handle_match_joined_message(self, message)
+end
+
+local function handle_message_received_message(self, message)
+end
+
+local function handle_client_failed_message(self, message)
+end
+
+local function handle_player_pointed_message(self, message)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(core_messages.constants.GAME_STARTED) then
+		handle_game_started_message(self, message)
+	elseif message_id == hash(core_messages.constants.SCREEN_CREATED) then
+		handle_screen_created_message(self, message)
+	elseif message_id == hash(core_messages.constants.SIGNED_UP) then
+		handle_signed_up_message(self, message)
+	elseif message_id == hash(core_messages.constants.SIGNED_IN) then
+		handle_signed_in_message(self, message)
+	elseif message_id == hash(core_messages.constants.USER_GREETED) then
+		handle_user_greeted_message(self, message)
+	elseif message_id == hash(core_messages.constants.RUNTIME_ASSIGNED) then
+		handle_runtime_assigned_message(self, message)
+	elseif message_id == hash(core_messages.constants.LOBBY_JOINED) then
+		handle_lobby_joined_message(self, message)
+	elseif message_id == hash(core_messages.constants.MATCH_JOINED) then
+		handle_match_joined_message(self, message)
+	elseif message_id == hash(core_messages.constants.MESSAGE_RECEIVED) then
+		handle_message_received_message(self, message)
+	elseif message_id == hash(core_messages.constants.CLIENT_FAILED) then
+		handle_client_failed_message(self, message)
+	else
+		print("[CORE_HANDLER] Unknown message id was received")
+	end
+end

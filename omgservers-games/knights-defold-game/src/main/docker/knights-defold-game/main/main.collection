@@ -1,10 +1,18 @@
 name: "main"
-scale_along_z: 0
-embedded_instances {
-  id: "main"
-  data: "components {\n"
-  "  id: \"main\"\n"
-  "  component: \"/main/main.script\"\n"
-  "}\n"
-  ""
+instances {
+  id: "core_manager"
+  prototype: "/main/core_manager/core_manager.go"
 }
+instances {
+  id: "screens_manager"
+  prototype: "/main/screens_manager/screens_manager.go"
+}
+instances {
+  id: "client_manager"
+  prototype: "/main/client_manager/client_manager.go"
+}
+instances {
+  id: "game_entrypoint"
+  prototype: "/main/game_entrypoint/game_entrypoint.go"
+}
+scale_along_z: 0

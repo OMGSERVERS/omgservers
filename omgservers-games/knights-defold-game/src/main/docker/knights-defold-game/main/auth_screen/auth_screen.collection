@@ -1,0 +1,10 @@
+name: "auth"
+scale_along_z: 0
+embedded_instances {
+  id: "auth_screen"
+  data: "components {\n"
+  "  id: \"auth_gui\"\n"
+  "  component: \"/main/auth_screen/auth_gui.gui\"\n"
+  "}\n"
+  ""
+}

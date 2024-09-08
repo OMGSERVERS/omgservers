@@ -5,12 +5,19 @@ main_collection = /main/main.collectionc
 shared_state = 1
 
 [display]
-width = 960
-height = 640
+width = 640
+height = 480
 
 [android]
 input_method = HiddenInputField
 
 [project]
 title = knights-defold-game
+
+[graphics]
+default_texture_min_filter = nearest
+default_texture_mag_filter = nearest
+
+[html5]
+scale_mode = fit
 

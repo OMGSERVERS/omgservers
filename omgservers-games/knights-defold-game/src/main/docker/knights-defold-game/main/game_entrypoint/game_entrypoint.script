@@ -1,0 +1,9 @@
+local core_messages = require("main.core_manager.core_messages")
+
+local CORE_MANAGER = "core_manager#core_handler"
+
+function init(self)
+	print("[MAIN] Game started")
+	local core_message = core_messages:create_game_started_message()
+	msg.post(CORE_MANAGER, core_messages.constants.GAME_STARTED, core_message)
+end
