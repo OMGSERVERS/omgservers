@@ -1,0 +1,90 @@
+local runtime_messages = require("server.runtime_messages.runtime_messages")
+local server_messages = require("server.server_manager.server_messages")
+local omgserver = require("omgservers.omgserver")
+
+local LOBBY_MANAGER = "lobby_manager#lobby_handler"
+local MATCH_MANAGER = "match_manager#match_handler"
+
+local function handle_server_initialized_event(self, event_qualifier, event_body)
+	local runtime_qualifier = event_body.runtime_qualifier
+	local version_config = event_body.version_config
+	
+	print("[SERVER_HANDLER] Server was initialized, qualifier=" .. runtime_qualifier)
+	print("[SERVER_HANDLER] Version config")
+	pprint(version_config)
+
+	self.runtime_qualifier = runtime_qualifier
+	self.version_config = version_config
+
+	local runtime_message = runtime_messages:create_runtime_initialized_message(version_config)
+	
+	if runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
+		msg.post(LOBBY_MANAGER, runtime_messages.constants.RUNTIME_INITIALIZED, runtime_message)
+	elseif runtime_qualifier == omgserver.constants.MATCH_RUNTIME_QUALIFIER then
+		msg.post(MATCH_MANAGER, runtime_messages.constants.RUNTIME_INITIALIZED, runtime_message)
+	else
+		error("[SERVER_HANDLER] Unknown runtime qualifier was received, runtime_qualifier=" .. runtime_qualifier)
+	end
+end
+
+local function handle_command_received_event(self, event_qualifier, event_body)
+	local runtime_qualifier = self.runtime_qualifier
+	
+	local command_qualifier = event_body.command_qualifier
+	local command_body = event_body.command_body
+
+	local runtime_message = runtime_messages:create_command_received_message(command_qualifier, command_body)
+
+	if runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
+		msg.post(LOBBY_MANAGER, runtime_messages.constants.COMMAND_RECEIVED, runtime_message)
+	elseif runtime_qualifier == omgserver.constants.MATCH_RUNTIME_QUALIFIER then
+		msg.post(MATCH_MANAGER, runtime_messages.constants.COMMAND_RECEIVED, runtime_message)
+	else
+		error("[SERVER_HANDLER] Unknown runtime qualifier was received, runtime_qualifier=" .. runtime_qualifier)
+	end
+end
+
+local function handle_message_received_event(self, event_qualifier, event_body)
+	local runtime_qualifier = self.runtime_qualifier
+	
+	local client_id = event_body.client_id
+	local message = event_body.message
+
+	print("[SERVER_HANDLER] Message was received, client_id=" .. client_id .. ", message=" .. message)
+
+	-- TODO handle decoding errors
+	local decoded_message = json.decode(message)
+
+	local runtime_message = runtime_messages:create_message_received_message(client_id, decoded_message)
+
+	if runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
+		msg.post(LOBBY_MANAGER, runtime_messages.constants.MESSAGE_RECEIVED, runtime_message)
+	elseif runtime_qualifier == omgserver.constants.MATCH_RUNTIME_QUALIFIER then
+		msg.post(MATCH_MANAGER, runtime_messages.constants.MESSAGE_RECEIVED, runtime_message)
+	else
+		error("[SERVER_HANDLER] Unknown runtime qualifier was received, runtime_qualifier=" .. runtime_qualifier)
+	end
+end
+
+local function handle_server_event_received_message(self, message)
+	local event_qualifier = message.event_qualifier
+	local event_body = message.event_body
+
+	if event_qualifier == omgserver.constants.SERVER_INITIALIZED_EVENT_QUALIFIER then
+		handle_server_initialized_event(self, event_qualifier, event_body)
+	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED_EVENT_QUALIFIER then
+		handle_command_received_event(self, event_qualifier, event_body)
+	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
+		handle_message_received_event(self, event_qualifier, event_body)
+	else
+		error("[SERVER_HANDLER] Received unsupported event, qualifier=" .. event_qualifier)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(server_messages.constants.SERVER_EVENT_RECEIVED) then
+		handle_server_event_received_message(self, message)
+	else
+		error("[SERVER_HANDLER] Unknown message id was received")
+	end
+end

@@ -1,0 +1,36 @@
+local runtime_messages = require("server.runtime_messages.runtime_messages")
+local omgserver = require("omgservers.omgserver")
+
+local GAME_MODE = "test"
+
+local function handle_runtime_initialized_message(self, message)
+	local version_config = message.version_config
+	self.version_config = version_config
+end
+
+local function handle_command_received_message(self, message)
+	local command_qualifier = message.command_qualifier
+	local command_body = message.command_body
+
+	if command_qualifier == omgserver.constants.ADD_CLIENT_SERVICE_COMMAND_QUALIFIER then
+		local client_id = command_body.client_id
+		omgserver.service_commands:request_matchmaking(client_id, GAME_MODE)
+	end
+end
+
+local function handle_message_received_message(self, message)
+	local client_id = message.client_id
+	local message = message.message
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(runtime_messages.constants.RUNTIME_INITIALIZED) then
+		handle_runtime_initialized_message(self, message)
+	elseif message_id == hash(runtime_messages.constants.COMMAND_RECEIVED) then
+		handle_command_received_message(self, message)
+	elseif message_id == hash(runtime_messages.constants.MESSAGE_RECEIVED) then
+		handle_message_received_message(self, message)
+	else
+		error("[LOBBY_HANDLER] Unknown message id was received")
+	end
+end

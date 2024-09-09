@@ -4,6 +4,7 @@ local CORE_MANAGER = "core_manager#core_handler"
 
 function init(self)
 	print("[MAIN] Game started")
+	pprint(sys.get_engine_info())
 	local core_message = core_messages:create_game_started_message()
 	msg.post(CORE_MANAGER, core_messages.constants.GAME_STARTED, core_message)
 end

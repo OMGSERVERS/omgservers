@@ -31,7 +31,7 @@ local function handle_screen_created_message(self, message)
 	elseif screen_qualifier == core_messages.constants.LOBBY_SCREEN then
 	elseif screen_qualifier == core_messages.constants.ARENA_SCREEN then
 	else
-		print("[CORE_HANDLER] Unknown screen qualifier was received")
+		error("[CORE_HANDLER] Unknown screen qualifier was received")
 	end
 end
 
@@ -98,6 +98,6 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash(core_messages.constants.CLIENT_FAILED) then
 		handle_client_failed_message(self, message)
 	else
-		print("[CORE_HANDLER] Unknown message id was received")
+		error("[CORE_HANDLER] Unknown message id was received")
 	end
 end

@@ -1,10 +1,9 @@
 local client_messages = require("main.client_manager.client_messages")
-local client_settings = require("main.client_manager.client_settings")
 local omgplayer = require("omgservers.omgplayer")
 
 local CLIENT_HANDLER = "#client_handler"
 
-local function handle_event(self, event)
+local function handle_client_event(self, event)
 	print("[CLIENT_MANAGER] Client event was received, event=" .. json.encode(event))
 
 	local event_qualifier = event.qualifier
@@ -15,8 +14,9 @@ local function handle_event(self, event)
 end
 
 function init(self)
-	if client_settings.localtesting then
+	if sys.get_engine_info().is_debug then
 		local localtesting = require("main.localtesting")
+		print("[CLIENT_MANAGER] Using localtesting configuration, " .. json.encode(localtesting))
 
 		local service_url = "http://localhost:8080"
 		local tenant_id = localtesting.tenant_id
@@ -24,9 +24,9 @@ function init(self)
 		local stage_secret = localtesting.stage_secret
 		local debug = true
 
-		omgplayer:init(service_url, tenant_id, stage_id, stage_secret, function(event) handle_event(self, event) end, debug)
+		omgplayer:init(service_url, tenant_id, stage_id, stage_secret, function(event) handle_client_event(self, event) end, debug)
 	else
-		print("[CLIENT_MANAGER] Only localtesting is supported")
+		error("[CLIENT_MANAGER] Only localtesting is supported")
 	end
 end
 

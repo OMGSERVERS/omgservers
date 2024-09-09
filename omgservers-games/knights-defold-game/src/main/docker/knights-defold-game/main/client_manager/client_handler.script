@@ -62,6 +62,6 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash(client_messages.constants.RECONNECTING_REQUESTED) then
 		handle_reconnecting_message(self, message)
 	else
-		print("[CORE_HANDLER] Unknown message id was received")
+		error("[CORE_HANDLER] Unknown message id was received")
 	end
 end

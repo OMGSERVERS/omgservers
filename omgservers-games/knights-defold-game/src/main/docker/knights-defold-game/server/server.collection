@@ -1,10 +1,14 @@
 name: "main"
-scale_along_z: 0
-embedded_instances {
-  id: "server"
-  data: "components {\n"
-  "  id: \"server\"\n"
-  "  component: \"/server/server.script\"\n"
-  "}\n"
-  ""
+instances {
+  id: "server_manager"
+  prototype: "/server/server_manager/server_manager.go"
 }
+instances {
+  id: "lobby_manager"
+  prototype: "/server/lobby_manager/lobby_manager.go"
+}
+instances {
+  id: "match_manager"
+  prototype: "/server/match_manager/match_manager.go"
+}
+scale_along_z: 0

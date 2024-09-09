@@ -69,5 +69,7 @@ function on_message(self, message_id, message, sender)
 		handle_lobby_screen_requested_message(self)
 	elseif message_id == hash(screens_messages.constants.ARENA_SCREEN_REQUESTED) then
 		handle_arena_screen_requested_message(self, message)
+	else
+		error("[SCREENS_HANDLER] Unknown message id was received")
 	end
 end
