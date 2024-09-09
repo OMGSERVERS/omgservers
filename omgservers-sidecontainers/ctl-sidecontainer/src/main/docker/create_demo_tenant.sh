@@ -44,8 +44,9 @@ if [ -z "${DEVELOPER_PASSWORD}" ]; then
   exit 1
 fi
 
-./omgserversctl.sh support createTenantPermission ${TENANT_ID} ${DEVELOPER_USER_ID} GET_DASHBOARD
+./omgserversctl.sh support createTenantPermission ${TENANT_ID} ${DEVELOPER_USER_ID} GETTING_DASHBOARD
 ./omgserversctl.sh support createStagePermission ${TENANT_ID} ${STAGE_ID} ${DEVELOPER_USER_ID} VERSION_MANAGEMENT
+./omgserversctl.sh support createStagePermission ${TENANT_ID} ${STAGE_ID} ${DEVELOPER_USER_ID} GETTING_DASHBOARD
 
 ./omgserversctl.sh developer useCredentials ${DEVELOPER_USER_ID} ${DEVELOPER_PASSWORD}
 
