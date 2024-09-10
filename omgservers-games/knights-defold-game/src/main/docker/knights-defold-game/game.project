@@ -13,6 +13,7 @@ input_method = HiddenInputField
 
 [project]
 title = knights-defold-game
+dependencies#0 = https://github.com/defold/extension-websocket/archive/refs/tags/4.0.0.zip
 
 [graphics]
 default_texture_min_filter = nearest
