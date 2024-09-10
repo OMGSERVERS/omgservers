@@ -1,5 +1,5 @@
-local client_messages = require("main.client_manager.client_messages")
-local core_messages = require("main.core_manager.core_messages")
+local client_messages = require("game.client_manager.client_messages")
+local core_messages = require("game.core_manager.core_messages")
 local omgplayer = require("omgservers.omgplayer")
 
 local CORE_MANAGER = "core_manager#core_handler"

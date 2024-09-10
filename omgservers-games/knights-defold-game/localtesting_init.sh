@@ -77,7 +77,7 @@ echo DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}
 
 echo "Store project localtesting config"
 
-LOCALTESTING_CONFIG="./src/main/docker/knights-defold-game/main/localtesting.lua"
+LOCALTESTING_CONFIG="./src/main/docker/knights-defold-game/game/localtesting.lua"
 cat > ${LOCALTESTING_CONFIG} << EOF
 return {
   tenant_id = "${TENANT_ID}",

@@ -1,5 +1,5 @@
-local screens_messages = require("main.screens_manager.screens_messages")
-local core_messages = require("main.core_manager.core_messages")
+local screens_messages = require("game.screens_manager.screens_messages")
+local core_messages = require("game.core_manager.core_messages")
 
 local AUTH_FACTORY = "#auth_factory"
 local LOBBY_FACTORY = "#lobby_factory"

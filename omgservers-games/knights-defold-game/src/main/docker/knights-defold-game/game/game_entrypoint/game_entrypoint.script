@@ -1,4 +1,4 @@
-local core_messages = require("main.core_manager.core_messages")
+local core_messages = require("game.core_manager.core_messages")
 
 local CORE_MANAGER = "core_manager#core_handler"
 

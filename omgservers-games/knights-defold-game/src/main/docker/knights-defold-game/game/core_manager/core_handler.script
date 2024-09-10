@@ -1,9 +1,9 @@
-local screens_messages = require("main.screens_manager.screens_messages")
-local player_messages = require("common.player_messages.player_messages")
+local screens_messages = require("game.screens_manager.screens_messages")
 local server_messages = require("common.server_messages.server_messages")
-local client_messages = require("main.client_manager.client_messages")
-local core_messages = require("main.core_manager.core_messages")
-local auth_messages = require("main.auth_screen.auth_messages")
+local client_messages = require("game.client_manager.client_messages")
+local game_messages = require("common.game_messages.game_messages")
+local core_messages = require("game.core_manager.core_messages")
+local auth_messages = require("game.auth_screen.auth_messages")
 
 local SCREENS_MANAGER = "screens_manager#screens_handler"
 local CLIENT_MANAGER = "client_manager#client_handler"
@@ -64,8 +64,8 @@ local function handle_user_greeted_message(self, message)
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
 
 	-- Request profile
-	local player_message = player_messages:create_request_profile_message()
-	local client_message = client_messages:create_sending_requested_message(player_message)
+	local game_message = game_messages:create_request_profile_message()
+	local client_message = client_messages:create_sending_requested_message(game_message)
 	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 end
 

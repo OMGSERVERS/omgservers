@@ -1,7 +1,7 @@
-script: "/main/auth_screen/auth_gui.gui_script"
+script: "/game/auth_screen/auth_gui.gui_script"
 fonts {
   name: "default"
-  font: "/main/game_font/font.font"
+  font: "/game/game_font/font.font"
 }
 nodes {
   position {

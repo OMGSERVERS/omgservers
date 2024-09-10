@@ -1,0 +1,18 @@
+name: "main"
+instances {
+  id: "core_manager"
+  prototype: "/game/core_manager/core_manager.go"
+}
+instances {
+  id: "screens_manager"
+  prototype: "/game/screens_manager/screens_manager.go"
+}
+instances {
+  id: "client_manager"
+  prototype: "/game/client_manager/client_manager.go"
+}
+instances {
+  id: "game_entrypoint"
+  prototype: "/game/game_entrypoint/game_entrypoint.go"
+}
+scale_along_z: 0

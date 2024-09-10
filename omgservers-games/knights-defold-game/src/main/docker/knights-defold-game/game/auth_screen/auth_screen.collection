@@ -4,7 +4,7 @@ embedded_instances {
   id: "auth_screen"
   data: "components {\n"
   "  id: \"auth_gui\"\n"
-  "  component: \"/main/auth_screen/auth_gui.gui\"\n"
+  "  component: \"/game/auth_screen/auth_gui.gui\"\n"
   "}\n"
   ""
 }

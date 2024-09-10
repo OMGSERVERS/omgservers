@@ -1,4 +1,4 @@
-local client_messages = require("main.client_manager.client_messages")
+local client_messages = require("game.client_manager.client_messages")
 local omgplayer = require("omgservers.omgplayer")
 
 local CLIENT_HANDLER = "#client_handler"
@@ -15,7 +15,7 @@ end
 
 function init(self)
 	if sys.get_engine_info().is_debug then
-		local localtesting = require("main.localtesting")
+		local localtesting = require("game.localtesting")
 		print("[CLIENT_MANAGER] Using localtesting configuration, " .. json.encode(localtesting))
 
 		local service_url = "http://localhost:8080"

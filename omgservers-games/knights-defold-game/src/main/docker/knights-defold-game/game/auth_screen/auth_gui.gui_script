@@ -1,4 +1,4 @@
-local auth_messages = require("main.auth_screen.auth_messages")
+local auth_messages = require("game.auth_screen.auth_messages")
 
 local function set_state_text(text)
 	local state_node = gui.get_node("state")
