@@ -37,10 +37,6 @@ if [ -z "${VERSION_ID}" -o "${VERSION_ID}" == "null" ]; then
   exit 1
 fi
 
-echo "Build docker image"
-
-mvn clean install
-
 echo "Push docker image"
 
 IMAGE_ID="omgservers/knights-defold-game:1.0.0-SNAPSHOT"
