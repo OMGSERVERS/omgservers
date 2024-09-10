@@ -10,7 +10,7 @@ local function handle_server_event(self, event)
 	local event_body = event.body
 
 	local server_message = server_messages:create_server_event_received_message(event_qualifier, event_body)
-	msg.post(SERVER_HANDLER, server_messages.constants.CLIENT_EVENT_RECEIVED, server_message)
+	msg.post(SERVER_HANDLER, server_messages.constants.SERVER_EVENT_RECEIVED, server_message)
 end
 
 function init(self)

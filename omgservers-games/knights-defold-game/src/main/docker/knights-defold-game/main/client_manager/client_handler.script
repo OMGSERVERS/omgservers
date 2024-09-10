@@ -21,10 +21,30 @@ local function handle_client_event_received_message(self, message)
 		msg.post(CORE_MANAGER, core_messages.constants.SIGNED_IN, core_message)
 		
 	elseif event_qualifier == omgplayer.constants.GREETED_EVENT_QUALIFIER then
+		local version_id = event_body.version_id
+		local version_created = event_body.version_created
+		local core_message = core_messages:create_user_greeted_message(version_id, version_created)
+		msg.post(CORE_MANAGER, core_messages.constants.USER_GREETED, core_message)
+		
 	elseif event_qualifier == omgplayer.constants.ASSSIGNED_EVENT_QUALIFIER then
+		local runtime_qualifier = event_body.runtime_qualifier
+		local runtime_id = event_body.runtime_id
+		local core_message = core_messages:create_runtime_assigned_message(runtime_qualifier, runtime_id)
+		msg.post(CORE_MANAGER, core_messages.constants.RUNTIME_ASSIGNED, core_message)
+		
 	elseif event_qualifier == omgplayer.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
+		local received_message = event_body.message
+		local core_message = core_messages:create_message_received_message(received_message)
+		msg.post(CORE_MANAGER, core_messages.constants.MESSAGE_RECEIVED, core_message)
+		
 	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED_EVENT_QUALIFIER then
+		local core_message = core_messages:create_connection_upgraded_message()
+		msg.post(CORE_MANAGER, core_messages.constants.CONNECTION_UPGRADED, core_message)
+		
 	elseif event_qualifier == omgplayer.constants.FAILED_EVENT_QUALIFIER then
+		local reason = event_body.reason
+		local core_message = core_messages:create_client_failed_message(reason)
+		msg.post(CORE_MANAGER, core_messages.constants.CLIENT_FAILED, core_message)
 	end
 end
 
@@ -43,7 +63,7 @@ local function handle_signing_in_message(self, message)
 end
 
 local function handle_sending_message(self, message)
-	omgplayer:send_message(self, message)
+	omgplayer:send_message(message)
 end
 
 local function handle_reconnecting_message(self, message)

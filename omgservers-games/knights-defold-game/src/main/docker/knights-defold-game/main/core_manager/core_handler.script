@@ -1,4 +1,6 @@
 local screens_messages = require("main.screens_manager.screens_messages")
+local player_messages = require("common.player_messages.player_messages")
+local server_messages = require("common.server_messages.server_messages")
 local client_messages = require("main.client_manager.client_messages")
 local core_messages = require("main.core_manager.core_messages")
 local auth_messages = require("main.auth_screen.auth_messages")
@@ -36,7 +38,7 @@ local function handle_screen_created_message(self, message)
 end
 
 local function handle_signed_up_message(self, message)
-	print("[HANDLER] User signed up at " .. os.date())
+	print("[CORE_HANDLER] User signed up at " .. os.date())
 
 	local user_id = message.user_id
 	local password = message.password
@@ -49,31 +51,39 @@ local function handle_signed_up_message(self, message)
 end
 
 local function handle_signed_in_message(self, message)
-	print("[HANDLER] User signed in at " .. os.date())
-
-	local auth_message = auth_messages:create_set_state_requested_message("Getting profile")
-	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
+	print("[CORE_HANDLER] User signed in at " .. os.date())
+	
+	local client_id = message.client_id
+	self.client_id = client_id
 end
 
 local function handle_user_greeted_message(self, message)
+	print("[CORE_HANDLER] User greeted at " .. os.date())
+	
+	local auth_message = auth_messages:create_set_state_requested_message("Getting profile")
+	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
+
+	-- Request profile
+	local player_message = player_messages:create_request_profile_message()
+	local client_message = client_messages:create_sending_requested_message(player_message)
+	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 end
 
 local function handle_runtime_assigned_message(self, message)
 end
 
-local function handle_lobby_joined_message(self, message)
-end
-
-local function handle_match_joined_message(self, message)
-end
-
 local function handle_message_received_message(self, message)
+	local message_qualifier = message.qualifier
+
+	if message_qualifier == server_messages.constants.SET_PROFILE then
+	elseif message_qualifier == server_messages.constants.SET_STATE then
+	elseif message_qualifier == server_messages.constants.APPLY_EVENTS then
+	else
+		error("[CORE_HANDLER] Unknown message qualifier was received")
+	end
 end
 
 local function handle_client_failed_message(self, message)
-end
-
-local function handle_player_pointed_message(self, message)
 end
 
 function on_message(self, message_id, message, sender)
@@ -89,10 +99,6 @@ function on_message(self, message_id, message, sender)
 		handle_user_greeted_message(self, message)
 	elseif message_id == hash(core_messages.constants.RUNTIME_ASSIGNED) then
 		handle_runtime_assigned_message(self, message)
-	elseif message_id == hash(core_messages.constants.LOBBY_JOINED) then
-		handle_lobby_joined_message(self, message)
-	elseif message_id == hash(core_messages.constants.MATCH_JOINED) then
-		handle_match_joined_message(self, message)
 	elseif message_id == hash(core_messages.constants.MESSAGE_RECEIVED) then
 		handle_message_received_message(self, message)
 	elseif message_id == hash(core_messages.constants.CLIENT_FAILED) then

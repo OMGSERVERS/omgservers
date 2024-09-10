@@ -7,9 +7,8 @@ core_messages = {
 		SIGNED_IN = "signed_in",
 		USER_GREETED = "user_greeted",
 		RUNTIME_ASSIGNED = "runtime_assigned",
-		LOBBY_JOINED = "lobby_joined",
-		MATCH_JOINED = "match_joined",
 		MESSAGE_RECEIVED = "message_received",
+		CONNECTION_UPGRADED = "connection_upgraded",
 		CLIENT_FAILED = "client_failed",
 		-- Screen qualifiers
 		AUTH_SCREEN = "auth_screen",
@@ -38,23 +37,16 @@ core_messages = {
 			client_id = client_id,
 		}
 	end,
-	create_user_greeted_message = function(self)
+	create_user_greeted_message = function(self, version_id, version_created)
 		return {
+			version_id = version_id,
+			version_created = version_created,
 		}
 	end,
-	create_runtime_assigned_message = function(self, runtime_qualifier)
+	create_runtime_assigned_message = function(self, runtime_qualifier, runtime_id)
 		return {
 			runtime_qualifier = runtime_qualifier,
-		}
-	end,
-	create_lobby_joined_message = function(self)
-		return {
-		}
-	end,
-	create_match_joined_message = function(self, dangling_players, spawned_players)
-		return {
-			dangling_players = dangling_players,
-			spawned_players = spawned_players,
+			runtime_id = runtime_id,
 		}
 	end,
 	create_message_received_message = function(self, message)
@@ -62,8 +54,13 @@ core_messages = {
 			message = message,
 		}
 	end,
-	create_client_failed_message = function(self)
+	create_connection_upgraded_message = function(self)
 		return {
+		}
+	end,
+	create_client_failed_message = function(self, reason)
+		return {
+			reason = reason
 		}
 	end,
 }
