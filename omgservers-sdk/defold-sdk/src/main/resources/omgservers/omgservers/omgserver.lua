@@ -41,6 +41,7 @@ omgserver = {
 	},
 	settings = {
 		debug = false,
+		trace = false,
 		iterate_interval = 1,
 	},
 	components = {
@@ -130,7 +131,7 @@ omgserver = {
 			local response_body = response.response
 
 			if response_status < 300 then
-				if self.settings.debug then
+				if self.settings.trace then
 					print("[OMGSERVER] Response, status=" .. response_status .. ", body=" .. response_body)
 				end
 
@@ -165,7 +166,7 @@ omgserver = {
 
 		local method = "PUT"
 
-		if self.settings.debug then
+		if self.settings.trace then
 			print("[OMGSERVER] Request, " .. method .. " " .. url .. ", body=" .. encoded_body)
 		end
 
@@ -273,6 +274,12 @@ omgserver = {
 	end,
 	iterate = function(self, api_token)
 		local outgoing_commands = self.components.server_state:pull_outgoing_commands()
+		if #outgoing_commands > 0 then
+            if self.settings.debug then
+                print("[OMGSERVER] Outgoing commands, outgoing_commands=" .. json.encode(outgoing_commands))
+            end
+        end
+
 		local consumed_commands = self.components.server_state:pull_consumed_commands()
 
 		self:interchange(api_token, outgoing_commands, consumed_commands, function(interchange_status, interchange_response)

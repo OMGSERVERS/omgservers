@@ -1,10 +1,14 @@
 local runtime_messages = require("server.runtime_messages.runtime_messages")
+local profiles_container = require("server.lobby_manager.profiles_container")
+local profile_wrapper = require("server.profile_wrapper.profile_wrapper")
+local server_messages = require("common.server_messages.server_messages")
+local global_counter = require("server.lobby_manager.global_counter")
+local game_messages = require("common.game_messages.game_messages")
 local omgserver = require("omgservers.omgserver")
 
-local DEFAULT_GAME_MODE = "GAME_MODE"
+local DEFAULT_GAME_MODE = "death-match"
 
-local function handle_runtime_initialized_message(self, message)
-	local version_config = message.version_config
+local function runtime_initialized(self, version_config)
 	self.version_config = version_config
 end
 
@@ -12,25 +16,82 @@ local function handle_command_received_message(self, message)
 	local command_qualifier = message.command_qualifier
 	local command_body = message.command_body
 
+	-- Add client
 	if command_qualifier == omgserver.constants.ADD_CLIENT_SERVICE_COMMAND_QUALIFIER then
 		local client_id = command_body.client_id
-		omgserver.service_commands:request_matchmaking(client_id, DEFAULT_GAME_MODE)
+		local profile = command_body.profile
+
+		if profile.version then
+			local wrapped_profile = profile_wrapper:wrap(profile)
+			profiles_container:set_profile(client_id, wrapped_profile)
+		else
+			local new_player_id = global_counter:get_next_id()
+			local player_nickname = "Player" .. new_player_id
+			local wrapped_profile = profile_wrapper:create(player_nickname)
+			profiles_container:set_profile(client_id, wrapped_profile)
+
+			omgserver.service_commands:set_profile(client_id, wrapped_profile.profile)
+		end
+		
+
+	-- Delete client
+	elseif command_qualifier == omgserver.constants.DELETE_CLIENT_SERVICE_COMMAND_QUALIFIER then
+		local client_id = command_body.client_id
+		profiles_container:delete_profile(client_id)
+		
+	-- Handle message
+	elseif command_qualifier == omgserver.constants.HANDLE_MESSAGE_SERVICE_COMMAND_QUALIFIER then
+		local client_id = command_body.client_id
+		local command_message = command_body.message
+
+		local message_qualifier = command_message.qualifier
+
+		-- Request profile
+		if message_qualifier == game_messages.constants.REQUEST_PROFILE then
+			local wrapped_profile = profiles_container:get_profile(client_id)
+			if wrapped_profile then
+				local server_message = server_messages:create_set_profile_message(wrapped_profile.profile)
+				omgserver.service_commands:respond_client(client_id, server_message)
+			else
+				if lobby_handler_settings.warn then
+					print("[LOBBY_HANDLER] Profile was not found while handling request_profile message, client_id=" .. client_id)
+				end
+			end
+
+		-- Request matchmaking
+		elseif message_qualifier == game_messages.constants.REQUEST_MATCHMAKING then
+			local new_nickname = message.nickname
+
+			local wrapped_profile = profiles_container:get_profile(client_id)
+			local current_nickname = wrapped_profile.profile.data.nickname
+
+			if new_nickname and current_nickname ~= new_nickname then
+				wrapped_profile:change_nickname(new_nickname)
+
+				omgserver.service_commands:set_profile(client_id, wrapped_profile.profile)
+				local set_profile_message = server_messages:create_set_profile_message(wrapped_profile.profile)
+				omgserver.service_commands:respond_client(client_id, set_profile_message)
+			end
+
+			omgserver.service_commands:request_matchmaking(client_id, DEFAULT_GAME_MODE)
+		else
+			print("[LOBBY_HANDLER] Unknown message qualifier was received")
+		end
 	end
 end
 
 local function handle_message_received_message(self, message)
 	local client_id = message.client_id
-	local message = message.message
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(runtime_messages.constants.RUNTIME_INITIALIZED) then
-		handle_runtime_initialized_message(self, message)
+		local version_config = message.version_config
+		runtime_initialized(self, version_config)
+		
 	elseif message_id == hash(runtime_messages.constants.COMMAND_RECEIVED) then
 		handle_command_received_message(self, message)
 	elseif message_id == hash(runtime_messages.constants.MESSAGE_RECEIVED) then
 		handle_message_received_message(self, message)
-	else
-		error("[LOBBY_HANDLER] Unknown message id was received")
 	end
 end

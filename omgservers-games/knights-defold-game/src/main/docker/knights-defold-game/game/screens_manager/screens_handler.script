@@ -3,7 +3,7 @@ local core_messages = require("game.core_manager.core_messages")
 
 local AUTH_FACTORY = "#auth_factory"
 local LOBBY_FACTORY = "#lobby_factory"
-local ARENA_FACTORY = "#arena_factory"
+local MATCH_FACTORY = "#match_factory"
 
 local CORE_MANAGER = "core_manager#core_handler"
 
@@ -47,18 +47,18 @@ local function handle_lobby_screen_requested_message(self, message)
 	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
 end
 
-local function handle_arena_screen_requested_message(self, message)
-	print("[SCREENS_HANDLER] Create arena screen")
+local function handle_match_screen_requested_message(self, message)
+	print("[SCREENS_HANDLER] Create match screen")
 
 	remove_current_screen(self)
 
-	local collection_ids = collectionfactory.create(ARENA_FACTORY)
+	local collection_ids = collectionfactory.create(MATCH_FACTORY)
 	pprint(collection_ids)
 
 	self.current_screen = collection_ids
 
-	local collection_id = collection_ids["/arena_screen"]
-	local core_message = core_messages:create_screen_created_message(core_messages.constants.ARENA_SCREEN, collection_id)
+	local collection_id = collection_ids["/match_screen"]
+	local core_message = core_messages:create_screen_created_message(core_messages.constants.MATCH_SCREEN, collection_id)
 	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
 end
 
@@ -67,9 +67,7 @@ function on_message(self, message_id, message, sender)
 		handle_auth_screen_requested_message(self)
 	elseif message_id == hash(screens_messages.constants.LOBBY_SCREEN_REQUESTED) then
 		handle_lobby_screen_requested_message(self)
-	elseif message_id == hash(screens_messages.constants.ARENA_SCREEN_REQUESTED) then
-		handle_arena_screen_requested_message(self, message)
-	else
-		error("[SCREENS_HANDLER] Unknown message id was received")
+	elseif message_id == hash(screens_messages.constants.MATCH_SCREEN_REQUESTED) then
+		handle_match_screen_requested_message(self, message)
 	end
 end

@@ -15,8 +15,8 @@ embedded_components {
   ""
 }
 embedded_components {
-  id: "arena_factory"
+  id: "match_factory"
   type: "collectionfactory"
-  data: "prototype: \"/game/arena_screen/arena_screen.collection\"\n"
+  data: "prototype: \"/game/match_screen/match_screen.collection\"\n"
   ""
 }

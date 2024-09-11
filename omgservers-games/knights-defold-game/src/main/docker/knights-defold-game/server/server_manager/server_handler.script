@@ -76,15 +76,11 @@ local function handle_server_event_received_message(self, message)
 		handle_command_received_event(self, event_qualifier, event_body)
 	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
 		handle_message_received_event(self, event_qualifier, event_body)
-	else
-		error("[SERVER_HANDLER] Received unsupported event, qualifier=" .. event_qualifier)
 	end
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(server_messages.constants.SERVER_EVENT_RECEIVED) then
-		handle_server_event_received_message(self, message)
-	else
-		error("[SERVER_HANDLER] Unknown message id was received")
+		handle_server_event_received_message(self, message)	
 	end
 end

@@ -1,0 +1,22 @@
+local lobby_messages = require("game.lobby_screen.lobby_messages")
+
+local function set_state_text(text)
+	local state_node = gui.get_node("state")
+	gui.set_text(state_node, text)
+end
+
+local function handle_set_state_requested_message(self, message)
+	self.state_text = message.state_text
+	set_state_text(self.state_text)
+end
+
+function update(self, dt)
+	local dots = math.fmod(math.floor(socket.gettime() * 3), 4)
+	set_state_text(self.state_text .. string.rep(".", dots))
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(lobby_messages.constants.SET_STATE_REQUESTED) then
+		handle_set_state_requested_message(self, message)
+	end
+end

@@ -13,7 +13,7 @@ core_messages = {
 		-- Screen qualifiers
 		AUTH_SCREEN = "auth_screen",
 		LOBBY_SCREEN = "lobby_screen",
-		ARENA_SCREEN = "arena_screen",
+		MATCH_SCREEN = "match_screen",
 	},
 	-- Methods
 	create_game_started_message = function(self)
@@ -50,9 +50,7 @@ core_messages = {
 		}
 	end,
 	create_message_received_message = function(self, message)
-		return {
-			message = message,
-		}
+		return message
 	end,
 	create_connection_upgraded_message = function(self)
 		return {

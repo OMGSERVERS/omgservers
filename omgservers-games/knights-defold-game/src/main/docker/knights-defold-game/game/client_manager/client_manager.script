@@ -22,7 +22,7 @@ function init(self)
 		local tenant_id = localtesting.tenant_id
 		local stage_id = localtesting.stage_id
 		local stage_secret = localtesting.stage_secret
-		local debug = true
+		local debug = false
 
 		omgplayer:init(service_url, tenant_id, stage_id, stage_secret, function(event) handle_client_event(self, event) end, debug)
 	else
