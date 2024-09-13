@@ -14,7 +14,7 @@ server_messages = {
 	end,
 	create_set_state_message = function(self, dangling_players, spawned_players)
 		return {
-			qualifier = server_messages.constants.SET_PROFILE,
+			qualifier = server_messages.constants.SET_STATE,
 			dangling_players = dangling_players,
 			spawned_players = spawned_players,
 		}

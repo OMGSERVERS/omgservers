@@ -56,7 +56,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
                                 final String outgoingMessage) {
         try {
             final var outgoingWebSocketMessage = objectMapper
-                    .readValue(outgoingMessage, OutgoingWebSocketMessage.class);
+                    .readValue(outgoingMessage, OutgoingTextMessageDto.class);
             final var clients = outgoingWebSocketMessage.getClients();
             final var message = outgoingWebSocketMessage.getMessage();
 
@@ -69,7 +69,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
                     .collect().asList()
                     .replaceWithVoid();
         } catch (IOException e) {
-            log.warn("Outgoing websocket outgoingMessage is wrong, {}", e.getMessage());
+            log.warn("Outgoing websocket message is wrong, {}", e.getMessage());
         }
 
         return Uni.createFrom().voidItem();
@@ -78,7 +78,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
     Uni<Void> transferToRuntime(final RoomInstance room,
                                 final Long clientId,
                                 final String incomingMessage) {
-        final var incomingWebSocketMessage = new IncomingWebSocketMessage(clientId, incomingMessage);
+        final var incomingWebSocketMessage = new IncomingTextMessageDto(clientId, incomingMessage);
         final var runtimeConnection = room.getRuntimeConnection();
         if (runtimeConnection.isPresent()) {
             final var webSocketConnection = runtimeConnection.get().getWebSocketConnection();

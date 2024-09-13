@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IncomingWebSocketMessage {
+public class OutgoingTextMessageDto {
 
-    Long clientId;
+    List<Long> clients;
     String message;
 }

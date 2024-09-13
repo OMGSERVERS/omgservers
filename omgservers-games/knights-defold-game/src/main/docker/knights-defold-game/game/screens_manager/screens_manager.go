@@ -1,6 +1,6 @@
 components {
-  id: "screens_handler"
-  component: "/game/screens_manager/screens_handler.script"
+  id: "screens_manager"
+  component: "/game/screens_manager/screens_manager.script"
 }
 embedded_components {
   id: "auth_factory"

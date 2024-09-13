@@ -1,9 +1,9 @@
-local runtime_messages = require("server.runtime_messages.runtime_messages")
-local profiles_container = require("server.lobby_manager.profiles_container")
-local profile_wrapper = require("server.profile_wrapper.profile_wrapper")
-local server_messages = require("common.server_messages.server_messages")
+local profiles_container = require("server.runtime_utils.profiles_container")
+local runtime_messages = require("server.runtime_utils.runtime_messages")
+local profile_wrapper = require("server.runtime_utils.profile_wrapper")
 local global_counter = require("server.lobby_manager.global_counter")
-local game_messages = require("common.game_messages.game_messages")
+local server_messages = require("common.server_messages")
+local game_messages = require("common.game_messages")
 local omgserver = require("omgservers.omgserver")
 
 local DEFAULT_GAME_MODE = "death-match"
@@ -23,12 +23,12 @@ local function handle_command_received_message(self, message)
 
 		if profile.version then
 			local wrapped_profile = profile_wrapper:wrap(profile)
-			profiles_container:set_profile(client_id, wrapped_profile)
+			profiles_container:add_profile(client_id, wrapped_profile)
 		else
 			local new_player_id = global_counter:get_next_id()
 			local player_nickname = "Player" .. new_player_id
 			local wrapped_profile = profile_wrapper:create(player_nickname)
-			profiles_container:set_profile(client_id, wrapped_profile)
+			profiles_container:add_profile(client_id, wrapped_profile)
 
 			omgserver.service_commands:set_profile(client_id, wrapped_profile.profile)
 		end
@@ -53,9 +53,7 @@ local function handle_command_received_message(self, message)
 				local server_message = server_messages:create_set_profile_message(wrapped_profile.profile)
 				omgserver.service_commands:respond_client(client_id, server_message)
 			else
-				if lobby_handler_settings.warn then
-					print("[LOBBY_HANDLER] Profile was not found while handling request_profile message, client_id=" .. client_id)
-				end
+				print("[LOBBY_HANDLER] Profile was not found while handling request_profile message, client_id=" .. client_id)
 			end
 
 		-- Request matchmaking
@@ -75,7 +73,7 @@ local function handle_command_received_message(self, message)
 
 			omgserver.service_commands:request_matchmaking(client_id, DEFAULT_GAME_MODE)
 		else
-			print("[LOBBY_HANDLER] Unknown message qualifier was received")
+			print("[LOBBY_HANDLER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
 		end
 	end
 end

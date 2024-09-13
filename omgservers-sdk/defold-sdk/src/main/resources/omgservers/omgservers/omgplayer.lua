@@ -461,7 +461,7 @@ omgplayer = {
 					omgplayer.trigger:trigger_failed_event("ws connection failed, message=" .. data.message)
 					
 				elseif data.event == websocket.EVENT_MESSAGE then
-					omgplayer.trigger:trigger_message_received_event(data.message)
+					omgplayer.trigger:trigger_message_received_event(json.decode(data.message))
 				end
 			end)
 
@@ -474,8 +474,7 @@ omgplayer = {
 
 			-- Send using connection if it exists
 			if server_components.connection then
-				local encoded_message = json.encode(message)
-				websocket.send(server_components.connection.ws_connection, encoded_message, {
+				websocket.send(server_components.connection.ws_connection, json.encode(message), {
 					type = websocket.DATA_TYPE_TEXT
 				})
 			else

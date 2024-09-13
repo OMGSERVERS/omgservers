@@ -5,7 +5,7 @@ local AUTH_FACTORY = "#auth_factory"
 local LOBBY_FACTORY = "#lobby_factory"
 local MATCH_FACTORY = "#match_factory"
 
-local CORE_MANAGER = "core_manager#core_handler"
+local CORE_MANAGER = "core_manager#core_manager"
 
 local function remove_current_screen(self)
 	if self.current_screen then
@@ -17,8 +17,8 @@ local function remove_current_screen(self)
 	end
 end
 
-local function handle_auth_screen_requested_message(self, message)
-	print("[SCREENS_HANDLER] Create auth screen")
+local function auth_screen_requested(self, message)
+	print("[SCREENS_MANAGER] Create auth screen")
 
 	remove_current_screen(self)
 
@@ -32,8 +32,8 @@ local function handle_auth_screen_requested_message(self, message)
 	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
 end
 
-local function handle_lobby_screen_requested_message(self, message)
-	print("[SCREENS_HANDLER] Create lobby screen")
+local function lobby_screen_requested(self, message)
+	print("[SCREENS_MANAGER] Create lobby screen")
 
 	remove_current_screen(self)
 
@@ -47,8 +47,8 @@ local function handle_lobby_screen_requested_message(self, message)
 	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
 end
 
-local function handle_match_screen_requested_message(self, message)
-	print("[SCREENS_HANDLER] Create match screen")
+local function match_screen_requested(self, message)
+	print("[SCREENS_MANAGER] Create match screen")
 
 	remove_current_screen(self)
 
@@ -64,10 +64,10 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(screens_messages.constants.AUTH_SCREEN_REQUESTED) then
-		handle_auth_screen_requested_message(self)
+		auth_screen_requested(self)
 	elseif message_id == hash(screens_messages.constants.LOBBY_SCREEN_REQUESTED) then
-		handle_lobby_screen_requested_message(self)
+		lobby_screen_requested(self)
 	elseif message_id == hash(screens_messages.constants.MATCH_SCREEN_REQUESTED) then
-		handle_match_screen_requested_message(self, message)
+		match_screen_requested(self)
 	end
 end

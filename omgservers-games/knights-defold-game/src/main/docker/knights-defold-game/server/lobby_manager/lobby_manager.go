@@ -1,4 +1,4 @@
 components {
-  id: "lobby_handler"
-  component: "/server/lobby_manager/lobby_handler.script"
+  id: "lobby_manager"
+  component: "/server/lobby_manager/lobby_manager.script"
 }

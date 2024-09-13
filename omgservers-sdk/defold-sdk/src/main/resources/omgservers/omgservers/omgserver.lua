@@ -237,7 +237,7 @@ omgserver = {
 					qualifier = omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER,
 					body = {
 						client_id = client_id,
-						message = original_message,
+						message = json.decode(original_message),
 					},
 				})
 			end
@@ -252,7 +252,11 @@ omgserver = {
 			clients = clients,
 			message = message,
 		})
-		
+
+		if self.settings.debug then
+			print("[OMGSERVER] Outgoing message, encoded_message=" .. encoded_message)
+		end
+
 		websocket.send(omgserver.components.connection.ws_connection, encoded_message, {
 			type = websocket.DATA_TYPE_TEXT
 		})
@@ -260,8 +264,6 @@ omgserver = {
 	interchange = function(self, api_token, outgoing_commands, consumed_commands, callback)
 		assert(self.components.server_environment, "Server environment must be set")
 		assert(self.components.service_urls, "Service urls must be set")
-
-		local runtime_id = self.components.server_environment.runtime_id
 
 		local request_body = {
 			outgoing_commands = outgoing_commands,

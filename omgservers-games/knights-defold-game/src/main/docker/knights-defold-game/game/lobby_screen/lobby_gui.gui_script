@@ -5,8 +5,8 @@ local function set_state_text(text)
 	gui.set_text(state_node, text)
 end
 
-local function handle_set_state_requested_message(self, message)
-	self.state_text = message.state_text
+local function set_state_requested(self, state_text)
+	self.state_text = state_text
 	set_state_text(self.state_text)
 end
 
@@ -17,6 +17,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(lobby_messages.constants.SET_STATE_REQUESTED) then
-		handle_set_state_requested_message(self, message)
+		local state_text = message.state_text
+		set_state_requested(self, state_text)
 	end
 end

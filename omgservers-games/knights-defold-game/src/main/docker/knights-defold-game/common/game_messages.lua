@@ -3,6 +3,7 @@ game_messages = {
 	constants = {
 		REQUEST_PROFILE = "request_profile",
 		REQUEST_MATCHMAKING = "request_matchmaking",
+		REQUEST_STATE = "request_state",
 		REQUEST_SPAWN = "request_spawn",
 		MOVE_PLAYER = "move_player",
 	},
@@ -15,6 +16,11 @@ game_messages = {
 	create_request_matchmaking_message = function(self)
 		return {
 			qualifier = game_messages.constants.REQUEST_MATCHMAKING,
+		}
+	end,
+	create_request_state_message = function(self)
+		return {
+			qualifier = game_messages.constants.REQUEST_STATE,
 		}
 	end,
 	create_request_spawn_message = function(self)

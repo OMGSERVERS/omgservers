@@ -1,6 +1,6 @@
 local core_messages = require("game.core_manager.core_messages")
 
-local CORE_MANAGER = "core_manager#core_handler"
+local CORE_MANAGER = "core_manager#core_manager"
 
 function init(self)
 	print("[MAIN] Game started")

@@ -1,16 +1,16 @@
 local screens_messages = require("game.screens_manager.screens_messages")
-local server_messages = require("common.server_messages.server_messages")
 local client_messages = require("game.client_manager.client_messages")
-local game_messages = require("common.game_messages.game_messages")
 local lobby_messages = require("game.lobby_screen.lobby_messages")
 local core_messages = require("game.core_manager.core_messages")
 local auth_messages = require("game.auth_screen.auth_messages")
+local server_messages = require("common.server_messages")
+local game_messages = require("common.game_messages")
 local omgplayer = require("omgservers.omgplayer")
 
-local SCREENS_MANAGER = "screens_manager#screens_handler"
-local CLIENT_MANAGER = "client_manager#client_handler"
+local SCREENS_MANAGER = "screens_manager#screens_manager"
+local CLIENT_MANAGER = "client_manager#client_manager"
 
-local GAME_STARTED = "game_started"
+local IN_AUTH = "in_auth"
 local GETTING_PROFILE = "getting_profile"
 local IN_LOBBY = "in_lobby"
 local GETTING_STATE = "getting_state"
@@ -18,8 +18,8 @@ local IN_MATCH = "in_match"
 local GAME_FAILED = "game_failed"
 
 local function game_started(self)
-	print("[CORE_HANDLER] Game started at " .. os.date())
-	self.game_state = GAME_STARTED
+	print("[CORE_MANAGER] Game started at " .. os.date())
+	self.game_state = IN_AUTH
 
 	-- Show auth screen
 	local screens_message = screens_messages:create_auth_screen_requested_message()
@@ -27,7 +27,7 @@ local function game_started(self)
 end
 
 local function auth_screen_created(self, collection_id)
-	print("[CORE_HANDLER] Auth screen was created at " .. os.date())
+	print("[CORE_MANAGER] Auth screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
 
@@ -40,7 +40,7 @@ local function auth_screen_created(self, collection_id)
 end
 
 local function signed_up(self, user_id, password)
-	print("[CORE_HANDLER] User signed up at " .. os.date())
+	print("[CORE_MANAGER] User signed up at " .. os.date())
 
 	local auth_message = auth_messages:create_set_state_requested_message("Signing in")
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
@@ -51,16 +51,16 @@ local function signed_up(self, user_id, password)
 end
 
 local function signed_in(self, client_id)
-	print("[CORE_HANDLER] User signed in at " .. os.date())
+	print("[CORE_MANAGER] User signed in at " .. os.date())
 	self.client_id = client_id
 end
 
 local function lobby_assigned(self, runtime_qualifier, runtime_id)
-	print("[CORE_HANDLER] Lobby was assigned at " .. os.date())
+	print("[CORE_MANAGER] Lobby was assigned at " .. os.date())
 end
 
 local function greeted(self, version_id, version_created)
-	print("[CORE_HANDLER] User greeted at " .. os.date() .. ", version_id=" .. version_id .. ", version_created=" .. version_created)
+	print("[CORE_MANAGER] User greeted at " .. os.date() .. ", version_id=" .. version_id .. ", version_created=" .. version_created)
 
 	local auth_message = auth_messages:create_set_state_requested_message("Getting profile")
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
@@ -83,7 +83,7 @@ local function set_profile(self, profile)
 end
 
 local function lobby_screen_created(self, collection_id)
-	print("[CORE_HANDLER] Lobby screen was created at " .. os.date())
+	print("[CORE_MANAGER] Lobby screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
 	self.game_state = IN_LOBBY
@@ -98,11 +98,16 @@ local function lobby_screen_created(self, collection_id)
 end
 
 local function match_assigned(self, runtime_qualifier, runtime_id)
-	print("[CORE_HANDLER] Match was assigned at " .. os.date())
-	self.game_state = GETTING_STATE
+	print("[CORE_MANAGER] Match was assigned at " .. os.date())
 end
 
 local function connection_upgraded(self)
+	self.game_state = GETTING_STATE
+	
+	-- Request match state
+	local game_message = game_messages:create_request_state_message()
+	local client_message = client_messages:create_sending_requested_message(game_message)
+	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 end
 
 local function set_state(self, dangling_players, spawned_players)
@@ -114,7 +119,7 @@ local function set_state(self, dangling_players, spawned_players)
 end
 
 local function match_screen_created(self, collection_id)
-	print("[CORE_HANDLER] Match screen was created at " .. os.date())
+	print("[CORE_MANAGER] Match screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
 	self.game_state = IN_MATCH
@@ -124,7 +129,7 @@ local function apply_events(self, events)
 end
 
 local function client_failed(self, reason)
-	print("[CORE_HANDLER] Client failed at " .. os.date() .. ", reason=" ..reason)
+	print("[CORE_MANAGER] Client failed at " .. os.date() .. ", reason=" ..reason)
 	self.game_state = GAME_FAILED
 end
 
@@ -143,7 +148,7 @@ function on_message(self, message_id, message, sender)
 		elseif screen_qualifier == core_messages.constants.MATCH_SCREEN then
 			match_screen_created(self, collection_id)
 		else
-			error("[CORE_HANDLER] Unknown screen qualifier was received")
+			error("[CORE_MANAGER] Unknown screen qualifier was received, screen_qualifier=" .. tostring(screen_qualifier))
 		end
 
 	elseif message_id == hash(core_messages.constants.SIGNED_UP) then
@@ -168,7 +173,7 @@ function on_message(self, message_id, message, sender)
 		elseif runtime_qualifier == omgplayer.constants.MATCH_RUNTIME_QUALIFIER then
 			match_assigned(self, runtime_qualifier, runtime_id)
 		else
-			error("[CORE_HANDLER] Unknown runtime qualifier was received, runtime_qualifier=" .. runtime_qualifier)
+			error("[CORE_MANAGER] Unknown runtime qualifier was received, runtime_qualifier=" .. tostring(runtime_qualifier))
 		end
 		
 	elseif message_id == hash(core_messages.constants.MESSAGE_RECEIVED) then
@@ -186,7 +191,7 @@ function on_message(self, message_id, message, sender)
 			local events = message.events
 			apply_events(self, events)
 		else
-			error("[CORE_HANDLER] Unknown message qualifier was received, message_qualifier=" .. message_qualifier)
+			error("[CORE_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
 		end
 		
 	elseif message_id == hash(core_messages.constants.CONNECTION_UPGRADED) then
