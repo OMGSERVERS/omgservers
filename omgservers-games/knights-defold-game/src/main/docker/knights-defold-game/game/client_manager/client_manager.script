@@ -42,8 +42,8 @@ local function assigned(self, runtime_qualifier, runtime_id)
 	msg.post(CORE_MANAGER, core_messages.constants.RUNTIME_ASSIGNED, core_message)
 end
 
-local function message_received(self, received_message)
-	local core_message = core_messages:create_message_received_message(received_message)
+local function message_received(self, decoded_message)
+	local core_message = core_messages:create_message_received_message(decoded_message)
 	msg.post(CORE_MANAGER, core_messages.constants.MESSAGE_RECEIVED, core_message)
 end
 
@@ -59,8 +59,8 @@ local function failed(self, reason)
 	msg.post(CORE_MANAGER, core_messages.constants.CLIENT_FAILED, core_message)
 end
 
-local function sending_requested(self, message)
-	omgplayer:send_message(message)
+local function sending_requested(self, text_message)
+	omgplayer:send_message(text_message)
 end
 
 local function reconnecting_requested(self, message)
@@ -97,8 +97,8 @@ local function handle_client_event(self, event)
 		assigned(self, runtime_qualifier, runtime_id)
 
 	elseif event_qualifier == omgplayer.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
-		local received_message = event_body.message
-		message_received(self, received_message)
+		local decoded_message = json.decode(event_body.message)
+		message_received(self, decoded_message)
 
 	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED_EVENT_QUALIFIER then
 		connection_upgraded(self)
@@ -141,7 +141,8 @@ function on_message(self, message_id, message, sender)
 		signing_in_requested(self, user_id, password)
 
 	elseif message_id == hash(client_messages.constants.SENDING_REQUESTED) then
-		sending_requested(self, message)
+		local text_message = message.text_message
+		sending_requested(self, text_message)
 
 	elseif message_id == hash(client_messages.constants.RECONNECTING_REQUESTED) then
 		reconnecting_requested(self)

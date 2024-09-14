@@ -1,5 +1,5 @@
 return {
-  tenant_id = "303468910672347136",
-  stage_id = "303468917735555072",
-  stage_secret = "YzyIDdT5fFFlWQoMXApYYLUsAHhRYsI7",
+  tenant_id = "304290092355158016",
+  stage_id = "304290100525662208",
+  stage_secret = "L5CT2bpRQ7o3lK6RfI73HJU5Gsh4HVul",
 }

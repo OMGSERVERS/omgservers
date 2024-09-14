@@ -42,7 +42,7 @@ local function handle_command_received_message(self, message)
 	-- Handle message
 	elseif command_qualifier == omgserver.constants.HANDLE_MESSAGE_SERVICE_COMMAND_QUALIFIER then
 		local client_id = command_body.client_id
-		local command_message = command_body.message
+		local command_message = json.decode(command_body.message)
 
 		local message_qualifier = command_message.qualifier
 
@@ -51,7 +51,7 @@ local function handle_command_received_message(self, message)
 			local wrapped_profile = profiles_container:get_profile(client_id)
 			if wrapped_profile then
 				local server_message = server_messages:create_set_profile_message(wrapped_profile.profile)
-				omgserver.service_commands:respond_client(client_id, server_message)
+				omgserver.service_commands:respond_client(client_id, json.encode(server_message))
 			else
 				print("[LOBBY_HANDLER] Profile was not found while handling request_profile message, client_id=" .. client_id)
 			end
@@ -68,7 +68,7 @@ local function handle_command_received_message(self, message)
 
 				omgserver.service_commands:set_profile(client_id, wrapped_profile.profile)
 				local set_profile_message = server_messages:create_set_profile_message(wrapped_profile.profile)
-				omgserver.service_commands:respond_client(client_id, set_profile_message)
+				omgserver.service_commands:respond_client(client_id, json.encode(set_profile_message))
 			end
 
 			omgserver.service_commands:request_matchmaking(client_id, DEFAULT_GAME_MODE)

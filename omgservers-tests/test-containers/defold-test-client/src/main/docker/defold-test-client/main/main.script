@@ -43,18 +43,18 @@ local function handle_event(self, event)
 		
 	elseif event_qualifier == omgplayer.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
 		local message = event_body.message
-		print("[GAMECLIENT] Message was received, message=" .. json.encode(message))
+		print("[GAMECLIENT] Message was received, message=" .. message)
 
-		omgplayer:send_message({
+		omgplayer:send_message(json.encode({
 			text = "confirm_message",
-		})
+		}))
 
 	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED_EVENT_QUALIFIER then
 		print("[GAMECLIENT] Connection was upgraded")
 
-		omgplayer:send_message({
+		omgplayer:send_message(json.encode({
 			text = "hello_message",
-		})
+		}))
 		
 	elseif event_qualifier == omgplayer.constants.FAILED_EVENT_QUALIFIER then
 		local reason = event_body.reason

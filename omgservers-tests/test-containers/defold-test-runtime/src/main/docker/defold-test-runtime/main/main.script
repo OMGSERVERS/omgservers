@@ -15,7 +15,7 @@ local function handle_command(self, command_qualifier, command_body)
 	if self.runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
 		if command_qualifier == omgserver.constants.ADD_CLIENT_SERVICE_COMMAND_QUALIFIER then
 			local client_id = command_body.client_id
-			-- does matchmaking match without extra words
+			-- Request matchmaking
 			omgserver.service_commands:request_matchmaking(client_id, GAME_MODE)
 		end
 		
@@ -43,13 +43,16 @@ local function handle_message(self, client_id, message)
 	print("[GAMESERVER] Message was received, client_id=" .. client_id .. ", message=" .. message)
 
 	local decoded_message = json.decode(message)
-	-- resend to supervisor by using service commands
-	omgserver.service_commands:respond_client(self.supervisor_id, {
+	
+	-- Resend to supervisor by using service commands
+	omgserver.service_commands:respond_client(self.supervisor_id, json.encode({
 		text = decoded_message.text,
-	})
+	}))
 
 	if decoded_message.text == "hello_message" then
-		omgserver.connections:respond_text_message(client_id, "server_message")
+		omgserver.connections:respond_text_message(client_id, json.encode({
+			text = "server_message",
+		}))
 	end
 end
 

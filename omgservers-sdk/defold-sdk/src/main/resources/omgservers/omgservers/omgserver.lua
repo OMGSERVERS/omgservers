@@ -231,13 +231,13 @@ omgserver = {
 			elseif data.event == websocket.EVENT_MESSAGE then
 				local decoded_message = json.decode(data.message)
 				local client_id = decoded_message.client_id
-				local original_message = decoded_message.message
+				local text_message = decoded_message.message
 				
 				self.components.server_state:add_server_event({
 					qualifier = omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER,
 					body = {
 						client_id = client_id,
-						message = json.decode(original_message),
+						message = text_message,
 					},
 				})
 			end
@@ -247,6 +247,7 @@ omgserver = {
 	end,
 	ws_send = function(self, clients, message)
 		assert(omgserver.components.connection, "Connection was not created")
+		assert(type(message) == "string", "Message has to be string")
 
 		local encoded_message = json.encode({
 			clients = clients,
@@ -277,10 +278,10 @@ omgserver = {
 	iterate = function(self, api_token)
 		local outgoing_commands = self.components.server_state:pull_outgoing_commands()
 		if #outgoing_commands > 0 then
-            if self.settings.debug then
-                print("[OMGSERVER] Outgoing commands, outgoing_commands=" .. json.encode(outgoing_commands))
-            end
-        end
+			if self.settings.debug then
+				print("[OMGSERVER] Outgoing commands, outgoing_commands=" .. json.encode(outgoing_commands))
+			end
+		end
 
 		local consumed_commands = self.components.server_state:pull_consumed_commands()
 
@@ -421,6 +422,7 @@ return {
 			})
 		end,
 		respond_client = function(service_commands, client_id, message)
+			assert(type(message) == "string", "Message has to be string")
 			omgserver.components.server_state:add_outgoing_command({
 				qualifier = omgserver.constants.RESPOND_CLIENT_RUNTIME_COMMAND_QUALIFIER,
 				body = {
@@ -430,6 +432,7 @@ return {
 			})
 		end,
 		multicast_message = function(service_commands, clients, message)
+			assert(type(message) == "string", "Message has to be string")
 			omgserver.components.server_state:add_outgoing_command({
 				qualifier = omgserver.constants.MULTICAST_MESSAGE_RUNTIME_COMMAND_QUALIFIER,
 				body = {
@@ -439,6 +442,7 @@ return {
 			})
 		end,
 		broadcast_message = function(service_commands, message)
+			assert(type(message) == "string", "Message has to be string")
 			omgserver.components.server_state:add_outgoing_command({
 				qualifier = omgserver.constants.BROADCAST_MESSAGE_RUNTIME_COMMAND_QUALIFIER,
 				body = {

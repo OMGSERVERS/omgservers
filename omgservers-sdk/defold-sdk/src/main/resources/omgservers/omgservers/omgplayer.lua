@@ -461,7 +461,7 @@ omgplayer = {
 					omgplayer.trigger:trigger_failed_event("ws connection failed, message=" .. data.message)
 					
 				elseif data.event == websocket.EVENT_MESSAGE then
-					omgplayer.trigger:trigger_message_received_event(json.decode(data.message))
+					omgplayer.trigger:trigger_message_received_event(data.message)
 				end
 			end)
 
@@ -469,12 +469,13 @@ omgplayer = {
 		end,
 		send_message = function(server, message)
 			assert(server.components.server_client, "Component server_client must be created")
+			assert(type(message) == "string", "Message has to be string")
 
 			local server_components = server.components
 
 			-- Send using connection if it exists
 			if server_components.connection then
-				websocket.send(server_components.connection.ws_connection, json.encode(message), {
+				websocket.send(server_components.connection.ws_connection, message, {
 					type = websocket.DATA_TYPE_TEXT
 				})
 			else

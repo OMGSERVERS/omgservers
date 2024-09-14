@@ -24,8 +24,10 @@ client_messages = {
 			password = password,
 		}
 	end,
-	create_sending_requested_message = function(self, message)
-		return message
+	create_sending_requested_message = function(self, text_message)
+		return {
+			text_message = text_message,
+		}
 	end,
 	create_reconnecting_requested_message = function(self)
 		return {

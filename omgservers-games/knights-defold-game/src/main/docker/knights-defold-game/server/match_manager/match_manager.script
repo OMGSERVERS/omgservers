@@ -60,7 +60,7 @@ local function request_state(self, client_id)
 				local dangling_players = state.dangling_players
 				local spawned_players = state.spawned_players
 				local server_message = server_messages:create_set_state_message(dangling_players, spawned_players)
-				omgserver.connections:respond_text_message(client_id, server_message)
+				omgserver.connections:respond_text_message(client_id, json.encode(server_message))
 			end
 		else
 			print("[MATCH_MANAGER] Player profile was not found to create a new player, client_id=" .. client_id)

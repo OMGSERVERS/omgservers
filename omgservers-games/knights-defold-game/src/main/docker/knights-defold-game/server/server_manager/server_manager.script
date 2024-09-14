@@ -37,12 +37,12 @@ local function command_received(self, command_qualifier, command_body)
 	end
 end
 
-local function message_received(self, client_id, message)
+local function message_received(self, client_id, decoded_message)
 	local runtime_qualifier = self.runtime_qualifier
 
-	print("[SERVER_MANAGER] Message was received, client_id=" .. client_id .. ", message=" .. json.encode(message))
+	print("[SERVER_MANAGER] Message was received, client_id=" .. client_id .. ", message=" .. json.encode(decoded_message))
 
-	local runtime_message = runtime_messages:create_message_received_message(client_id, message)
+	local runtime_message = runtime_messages:create_message_received_message(client_id, decoded_message)
 
 	if runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
 		msg.post(LOBBY_MANAGER, runtime_messages.constants.MESSAGE_RECEIVED, runtime_message)
@@ -62,7 +62,7 @@ local function handle_server_event(self, event)
 	if event_qualifier == omgserver.constants.SERVER_INITIALIZED_EVENT_QUALIFIER then
 		local runtime_qualifier = event_body.runtime_qualifier
 		local version_config = event_body.version_config
-		server_initialized(runtime_qualifier, version_config)
+		server_initialized(self, runtime_qualifier, version_config)
 		
 	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED_EVENT_QUALIFIER then
 		local command_qualifier = event_body.command_qualifier
@@ -71,8 +71,8 @@ local function handle_server_event(self, event)
 		
 	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
 		local client_id = event_body.client_id
-		local message = event_body.message
-		message_received(self, client_id, message)
+		local decoded_message = json.decode(event_body.message)
+		message_received(self, client_id, decoded_message)
 		
 	end
 end

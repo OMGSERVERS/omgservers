@@ -67,7 +67,7 @@ local function greeted(self, version_id, version_created)
 
 	-- Request profile
 	local game_message = game_messages:create_request_profile_message()
-	local client_message = client_messages:create_sending_requested_message(game_message)
+	local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
 	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 
 	self.game_state = GETTING_PROFILE
@@ -93,7 +93,7 @@ local function lobby_screen_created(self, collection_id)
 
 	-- Request matchmaking
 	local game_message = game_messages:create_request_matchmaking_message()
-	local client_message = client_messages:create_sending_requested_message(game_message)
+	local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
 	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 end
 
@@ -106,7 +106,7 @@ local function connection_upgraded(self)
 	
 	-- Request match state
 	local game_message = game_messages:create_request_state_message()
-	local client_message = client_messages:create_sending_requested_message(game_message)
+	local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
 	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 end
 

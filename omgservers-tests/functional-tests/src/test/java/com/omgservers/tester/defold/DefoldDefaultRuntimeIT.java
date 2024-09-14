@@ -104,13 +104,13 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
                 final var serverMessage1 = playerApiTester.waitMessage(supervisorClient,
                         MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                         Collections.singletonList(matchAssignment.getId()));
-                assertEquals("{text=hello_message}",
+                assertEquals("{\"text\":\"hello_message\"}",
                         ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
 
                 final var serverMessage2 = playerApiTester.waitMessage(supervisorClient,
                         MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                         Collections.singletonList(serverMessage1.getId()));
-                assertEquals("{text=confirm_message}",
+                assertEquals("{\"text\":\"confirm_message\"}",
                         ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
             }
 
@@ -133,13 +133,5 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
     @AllArgsConstructor
     class UserData {
         String testId;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    class TesterNotification {
-        Long clientId;
-        String text;
     }
 }
