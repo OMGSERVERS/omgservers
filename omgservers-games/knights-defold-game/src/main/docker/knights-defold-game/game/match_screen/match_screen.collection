@@ -1,2 +1,33 @@
 name: "arena"
+instances {
+  id: "camera"
+  prototype: "/orthographic/camera.go"
+  position {
+    x: 256.0
+    y: 384.0
+  }
+}
+instances {
+  id: "spawner"
+  prototype: "/game/match_screen/spawner/spawner.go"
+}
+collection_instances {
+  id: "background"
+  collection: "/game/match_screen/background/background.collection"
+  position {
+    z: -1024.0
+  }
+}
+collection_instances {
+  id: "pointer"
+  collection: "/game/match_screen/pointer_entity/pointer_entity.collection"
+}
 scale_along_z: 0
+embedded_instances {
+  id: "match_screen"
+  data: "components {\n"
+  "  id: \"match_screen\"\n"
+  "  component: \"/game/match_screen/match_screen.script\"\n"
+  "}\n"
+  ""
+}

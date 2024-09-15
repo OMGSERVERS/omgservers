@@ -28,11 +28,19 @@ players_container = {
 			return false
 		end
 	end,
-	get_active_players = function(self)
+	get_client_ids = function(self)
+		local self_players = self.players
+		local client_ids = {}
+		for _, player in pairs(self_players) do
+			client_ids[#client_ids + 1] = player.client_id
+		end
+		return client_ids
+	end,
+	get_spawned_players = function(self)
 		local self_players = self.players
 		local active_players = {}
 		for client_id, player in pairs(self_players) do
-			-- was spawned
+			-- Was spawned
 			if player.position then
 				active_players[client_id] = player
 			end
@@ -43,21 +51,46 @@ players_container = {
 		local self_players = self.players
 		local alive_players = {}
 		for client_id, player in pairs(self_players) do
-			-- was spawned and still alive
+			-- Was spawned and still alive
 			if player.position and not player.was_killed then
 				alive_players[client_id] = player
 			end
 		end
 		return alive_players
 	end,
-	get_client_ids = function(self)
-		local self_players = self.players
-		local client_ids = {}
-		for _, player in pairs(self_players) do
-			client_ids[#client_ids + 1] = player.client_id
+	get_simulation_depth = function(self, simulation_step)
+		local max_depth = 0
+		local alive_players = self:get_alive_players()
+		for _, alive_player in pairs(alive_players) do
+			local player_movement = alive_player.movement
+			if player_movement then
+				local simulation_depth = player_movement:get_simulation_depth(simulation_step)
+				if simulation_depth > max_depth then
+					max_depth = simulation_depth
+				end
+			end
 		end
-		return client_ids
+
+		return max_depth
 	end,
+	finish_movements = function(self)
+		local self_players = self.players
+		for client_id, player in pairs(self_players) do
+			local player_movement = player.movement
+			if player_movement then
+				local position = player_movement.to_position
+
+				local match_event = match_events:create_player_moved_event(client_id, position.x, position.y)
+				events_container:add_event(match_event)
+
+				player:finish_movement()
+			end
+		end
+	end,
+
+
+
+	
 	get_newly_created = function(self)
 		local self_players = self.players
 		local newly_created = {}
@@ -88,21 +121,6 @@ players_container = {
 		end
 		return players_movements
 	end,
-	get_simulation_depth = function(self, simulation_step)
-		local max_depth = 0
-		local alive_players = self:get_alive_players()
-		for _, alive_player in pairs(alive_players) do
-			local player_movement = alive_player.movement
-			if player_movement then
-				local simulation_depth = player_movement:get_simulation_depth(simulation_step)
-				if simulation_depth > max_depth then
-					max_depth = simulation_depth
-				end
-			end
-		end
-
-		return max_depth
-	end,
 	get_state = function(self)
 		local self_players = self.players
 		local dangling_players = {}
@@ -128,21 +146,7 @@ players_container = {
 			spawned_players = spawned_players,
 		}
 	end,
-	finish_movements = function(self)
-		local self_players = self.players
-		for client_id, player in pairs(self_players) do
-			local in_attack = player.in_attack
-			local player_movement = player.movement
-			if player_movement then
-				local position = player_movement.to_position
-
-				local match_event = match_events:create_player_moved_event(client_id, in_attack, position.x, position.y)
-				events_container:add_event(match_event)
-				
-				player:finish_movement()
-			end
-		end
-	end,
+	
 	reset_players = function(self)
 		local self_players = self.players
 		for _, player in pairs(self_players) do

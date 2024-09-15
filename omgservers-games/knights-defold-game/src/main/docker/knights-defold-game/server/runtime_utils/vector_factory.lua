@@ -8,9 +8,9 @@ vector_factory = {
 			clone = function(vector_instance)
 				return vector_factory:create(vector_instance.x, vector_instance.y)
 			end,
-			set = function(vector_instance, new_x, new_y)
-				vector_instance.x = new_x
-				vector_instance.y = new_y
+			set = function(vector_instance, x, y)
+				vector_instance.x = x
+				vector_instance.y = y
 			end,
 			add = function(vector_instance, v)
 				return vector_factory:create(vector_instance.x + v.x, vector_instance.y + v.y)

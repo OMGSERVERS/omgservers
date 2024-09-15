@@ -21,7 +21,7 @@ movement_factory = {
 				end
 			end,
 			get_simulation_depth = function(movement_instance, simulation_step)
-				return math.ceil(movement_instance.movement_instance / simulation_step)
+				return math.ceil(movement_instance.movement_length / simulation_step)
 			end
 		}
 	end,

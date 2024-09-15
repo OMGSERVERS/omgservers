@@ -1,4 +1,5 @@
 local screens_messages = require("game.screens_manager.screens_messages")
+local match_messages = require("game.match_screen.match_messages")
 local core_messages = require("game.core_manager.core_messages")
 
 local AUTH_FACTORY = "#auth_factory"
@@ -8,12 +9,12 @@ local MATCH_FACTORY = "#match_factory"
 local CORE_MANAGER = "core_manager#core_manager"
 
 local function remove_current_screen(self)
-	if self.current_screen then
-		for key, go_id in pairs(self.current_screen) do
+	if self.current_screen_ids then
+		for key, go_id in pairs(self.current_screen_ids) do
 			go.delete(go_id)
 		end
 
-		self.current_screen = nil
+		self.current_screen_ids = nil
 	end
 end
 
@@ -25,7 +26,7 @@ local function auth_screen_requested(self, message)
 	local collection_ids = collectionfactory.create(AUTH_FACTORY)
 	pprint(collection_ids)
 
-	self.current_screen = collection_ids
+	self.current_screen_ids = collection_ids
 
 	local collection_id = collection_ids["/auth_screen"]
 	local core_message = core_messages:create_screen_created_message(core_messages.constants.AUTH_SCREEN, collection_id)
@@ -40,14 +41,14 @@ local function lobby_screen_requested(self, message)
 	local collection_ids = collectionfactory.create(LOBBY_FACTORY)
 	pprint(collection_ids)
 
-	self.current_screen = collection_ids
+	self.current_screen_ids = collection_ids
 
 	local collection_id = collection_ids["/lobby_screen"]
 	local core_message = core_messages:create_screen_created_message(core_messages.constants.LOBBY_SCREEN, collection_id)
 	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
 end
 
-local function match_screen_requested(self, message)
+local function match_screen_requested(self, dangling_players, spawned_players)
 	print("[SCREENS_MANAGER] Create match screen")
 
 	remove_current_screen(self)
@@ -55,9 +56,13 @@ local function match_screen_requested(self, message)
 	local collection_ids = collectionfactory.create(MATCH_FACTORY)
 	pprint(collection_ids)
 
-	self.current_screen = collection_ids
-
+	self.current_screen_ids = collection_ids
+	
 	local collection_id = collection_ids["/match_screen"]
+
+	local match_message = match_messages:create_set_state_message(dangling_players, spawned_players)
+	msg.post(collection_id, match_messages.constants.SET_STATE, match_message)
+	
 	local core_message = core_messages:create_screen_created_message(core_messages.constants.MATCH_SCREEN, collection_id)
 	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
 end
@@ -65,9 +70,13 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash(screens_messages.constants.AUTH_SCREEN_REQUESTED) then
 		auth_screen_requested(self)
+		
 	elseif message_id == hash(screens_messages.constants.LOBBY_SCREEN_REQUESTED) then
 		lobby_screen_requested(self)
+		
 	elseif message_id == hash(screens_messages.constants.MATCH_SCREEN_REQUESTED) then
-		match_screen_requested(self)
+		local dangling_players = message.dangling_players
+		local spawned_players = message.spawned_players
+		match_screen_requested(self, dangling_players, spawned_players)
 	end
 end

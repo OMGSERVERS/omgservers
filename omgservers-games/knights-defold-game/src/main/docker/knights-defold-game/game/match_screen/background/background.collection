@@ -1,0 +1,10 @@
+name: "background"
+scale_along_z: 0
+embedded_instances {
+  id: "background"
+  data: "components {\n"
+  "  id: \"tilemap\"\n"
+  "  component: \"/game/match_screen/background/tilemap.tilemap\"\n"
+  "}\n"
+  ""
+}

@@ -1,3 +1,4 @@
+local simulation_service = require("server.match_manager.simulation_service")
 local profiles_container = require("server.runtime_utils.profiles_container")
 local players_container = require("server.match_manager.players_container")
 local events_container = require("server.match_manager.events_container")
@@ -19,7 +20,7 @@ local SIMULATION_STATE = "simulation"
 local function runtime_initialized(self, version_config)
 	self.version_config = version_config
 	self.spawn_requests = {}
-	self.state = WAITING_STATE
+	self.match_state = WAITING_STATE
 end
 
 local function add_match_client(self, client_id, profile)
@@ -45,6 +46,7 @@ local function request_state(self, client_id)
 	print("[MATCH_MANAGER] State was requested, client_id=" .. client_id)
 	
 	local player_instance = players_container:get_player(client_id)
+	-- State requesting is allowed only for non created players
 	if not player_instance then
 		local wrapped_profile = profiles_container:get_profile(client_id)
 		if wrapped_profile then
@@ -55,8 +57,14 @@ local function request_state(self, client_id)
 				events_container:add_event(match_event)
 				print("[MATCH_MANAGER] Player was created, client_id=" .. client_id)
 
-				-- Send match state for only newly created players
-				local state = players_container:get_state()
+				-- Just use or create and cash current state
+				local state = self.simulated_state
+				if not state then
+					self.simulated_state = players_container:get_state()
+					state = self.simulated_state
+				end
+
+				-- Send match state
 				local dangling_players = state.dangling_players
 				local spawned_players = state.spawned_players
 				local server_message = server_messages:create_set_state_message(dangling_players, spawned_players)
@@ -106,13 +114,15 @@ end
 local function simulation_state(self)
 	print("[MATCH_MANAGER] Changed to the SIMULATION")
 
+	simulation_service:simulate()
+	
 	-- Handle spawn requests
 	local self_spawn_requests = self.spawn_requests
 	for client_id, _ in pairs(self_spawn_requests) do
 		local player_instance = players_container:get_player(client_id)
 		if player_instance then
-			local spawn_x = math.random(match_settings.MATCH_BORDER, match_settings.MATCH_WIDTH - match_settings.MATCH_BORDER * 2)
-			local spawn_y = math.random(match_settings.MATCH_BORDER, match_settings.MATCH_HEIGHT - match_settings.MATCH_BORDER * 2)
+			local spawn_x = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_WIDTH - match_settings.constants.MATCH_BORDER * 2)
+			local spawn_y = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_HEIGHT - match_settings.constants.MATCH_BORDER * 2)
 			local spawn_position = vector_factory:create(spawn_x, spawn_y)
 			local in_attack = math.random() < 0.5
 			player_instance:spawn_player(spawn_position, in_attack)
@@ -127,46 +137,45 @@ local function simulation_state(self)
 	end
 	self.spawn_requests = {}
 
--- 	-- Handle newly created players
--- 	local newly_created = players_container:get_newly_created()
--- 	if #newly_created > 0 then
--- 		local state = players_container:get_state()
--- 		local dangling_players = state.dangling_players
--- 		local spawned_players = state.spawned_players
--- 
--- 		local server_message = server_messages:create_set_state_message(dangling_players, spawned_players)
--- 		omgserver.connections:multicast_text_message(newly_created, server_message)
--- 	end
+	local all_events = events_container:pull_events()
+	local client_ids = players_container:get_client_ids()
+	if #all_events > 0 and #client_ids > 0 then
+		local server_message = server_messages:create_apply_events_message(all_events)
+		omgserver.connections:multicast_text_message(client_ids, json.encode(server_message))
+	end
+	
+	-- Store current state to multicast over new players
+	self.simulated_state = players_container:get_state()
 end
 
 function init(self)
-	self.state = NIL_STATE
+	self.match_state = NIL_STATE
 	self.timer = 0
 end
 
 function update(self, dt)
-	if self.state == NIL_STATE then
+	if self.match_state == NIL_STATE then
 		-- Match manger was not initialized
 	else
 		self.timer = self.timer + dt
 
-		if self.state == WAITING_STATE then
+		if self.match_state == WAITING_STATE then
 			if self.timer > match_settings.constants.WAITING_DURATION then
-				self.state = QUEUEING_STATE
+				self.match_state = QUEUEING_STATE
 				queueing_state(self)
 				
 				self.timer = self.timer - match_settings.constants.WAITING_DURATION
 			end
 
-		elseif self.state == QUEUEING_STATE then
+		elseif self.match_state == QUEUEING_STATE then
 			if self.timer > match_settings.constants.QUEUEING_DURATION then
-				self.state = SIMULATION_STATE
+				self.match_state = SIMULATION_STATE
 				simulation_state(self)
 				self.timer = self.timer - match_settings.constants.QUEUEING_DURATION
 			end
 
-		elseif self.state == SIMULATION_STATE then
-			self.state = WAITING_STATE
+		elseif self.match_state == SIMULATION_STATE then
+			self.match_state = WAITING_STATE
 			waiting_state(self)
 			self.timer = 0
 		end

@@ -1,0 +1,220 @@
+local pointer_messages = require("game.match_screen.pointer_entity.pointer_messages")
+local player_messages = require("game.match_screen.player_entity.player_messages")
+local client_messages = require("game.client_manager.client_messages")
+local match_messages = require("game.match_screen.match_messages")
+local core_state = require("game.core_manager.core_state")
+local game_messages = require("common.game_messages")
+local match_events = require("common.match_events")
+local camera = require("orthographic.camera")
+
+local CLIENT_MANAGER = "/client_manager#client_manager"
+local PLAYER_SPAWNER = "spawner#player"
+local POINTER = "pointer/container"
+local CAMERA_SCRIPT = "camera#script"
+
+local function create_client(self, client_id, nickname)
+	self.clients[client_id] = {
+		nickname = nickname
+	}
+
+	print("[MATCH_SCREEN] Client was created, client_id=" .. client_id .. ", nickname=" .. nickname)
+
+	if client_id == core_state.state.client_id then
+		-- Send initial spawn request
+		local game_message = game_messages:create_request_spawn_message()
+		local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
+		msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+	end
+end
+
+local function spawn_player(self, client_id, in_attack, x, y)
+	local client = self.clients[client_id]
+	if client then
+		local z = -y
+		local position = vmath.vector3(x, y, z)
+		local collection_ids = collectionfactory.create(PLAYER_SPAWNER, position)
+		pprint(collection_ids)
+
+		print("[MATCH_SCREEN] Player was spawned, client_id=" .. client_id .. ", x=" .. x .. ", y=" .. y .. ", z=" .. z)
+
+		local player_id = collection_ids[hash("/player")]
+		self.players[client_id] = player_id
+
+		local controllable = client_id == core_state.state.client_id
+		local nickname = client.nickname
+		local player_message = player_messages:create_set_state_message(controllable, nickname, in_attack)
+		msg.post(player_id, player_messages.constants.SET_STATE, player_message)
+
+		if controllable then
+			print("[MATCH_SCREEN] Set camera, target=" .. player_id)
+			camera.follow(nil, player_id, {
+				lerp = 1,
+			})
+
+			local pointer_message = pointer_messages:create_enable_pointer_message(x, y)
+			msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
+		end
+	else
+		print("[MATCH_SCREEN] Client was not found to spawn player, client_id=" .. client_id)
+	end
+end
+
+local function kill_player(self, client_id)
+	local player_id = self.players[client_id]
+	if player_id then
+		local player_message = player_messages:create_go_death_message()
+		msg.post(player_id, player_messages.constants.GO_DEATH, player_message)
+		
+		self.players[client_id] = nil
+	else
+		print("[MATCH_SCREEN] Player was not found to kill, client_id=" .. client_id)
+	end
+end
+
+local function delete_player(self, client_id)
+	self.clients[client_id] = nil
+	print("[MATCH_SCREEN] Client was deleted, client_id=" .. client_id)
+
+	local player_id = self.players[client_id]
+	if player_id then
+		-- kill if player stil exists
+		kill_player(self, client_id)
+		
+	end
+end
+
+local function move_player(self, client_id, x, y)
+	local player_id = self.players[client_id]
+	if player_id then
+		local player_message = player_messages:create_move_to_message(x, y)
+		msg.post(player_id, player_messages.constants.MOVE_TO, player_message)
+	else
+		print("[MATCH_SCREEN] Player was not found to move, client_id=" .. client_id)
+	end
+end
+
+local function set_state(self, dangling_players, spawned_players)
+	print("[MATCH_SCREEN] Set match state, dangling_players=" .. json.encode(dangling_players) .. ", spawned_players=" .. json.encode(spawned_players))
+
+	for client_id, player in pairs(dangling_players) do
+		local nickname = player.nickname
+		create_client(self, client_id, nickname)
+	end
+	
+	for client_id, player in pairs(spawned_players) do
+		local nickname = player.nickname
+		local in_attack = player.in_attack
+		local x = player.x
+		local y = player.y
+		create_client(self, client_id, nickname)
+		spawn_player(self, client_id, in_attack, x, y)
+	end
+end
+
+local function apply_events(self, events)
+	print("[MATCH_SCREEN] Apply events")
+	pprint(events)
+
+	for _, event in ipairs(events) do
+		local event_qualifier = event.qualifier
+
+		if event_qualifier == match_events.constants.PLAYER_CREATED then
+			local client_id = event.client_id
+			local nickname = event.nickname
+			create_client(self, client_id, nickname)
+
+		elseif event_qualifier == match_events.constants.PLAYER_SPAWNED then
+			local client_id = event.client_id
+			local in_attack = event.in_attack
+			local x = event.x
+			local y = event.y
+			spawn_player(self, client_id, in_attack, x, y)
+
+		elseif event_qualifier == match_events.constants.PLAYER_DELETED then
+			local client_id = event.client_id
+			delete_player(self, client_id)
+
+		elseif event_qualifier == match_events.constants.PLAYER_MOVED then
+			local client_id = event.client_id
+			local x = event.x
+			local y = event.y
+			move_player(self, client_id, x, y)
+
+		elseif event_qualifier == match_events.constants.PLAYER_KILLED then
+			local killed_client_id = event.killed_client_id
+			local by_client_id = event.by_client_id
+
+			-- play_attack(self, by_client_id)
+			-- kill_player(self, killed_client_id)
+			-- timer.delay(0.5, false, function()
+			-- 	play_attack(self, by_client_id)
+			-- end)
+			-- timer.delay(0.5, false, function()
+			-- 	kill_player(self, killed_client_id)
+			-- end)
+		end
+	end
+end
+
+local function pointed(self, x, y)
+	local client_id = core_state.state.client_id
+	local player_id = self.players[client_id]
+	if player_id then
+		local bounded_x = math.max(32, math.min(512 - 32, x))
+		local bounded_y = math.max(32, math.min(512 - 32, y))
+		
+		local pointer_message = pointer_messages:create_enable_pointer_message(bounded_x, bounded_y)
+		msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
+
+		print("[MATCH_SCREEN] Move player, x=" .. bounded_x .. ", y=" .. bounded_y)
+		local game_message = game_messages:create_move_player_message(bounded_x, bounded_y)
+		local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
+		msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+	else
+		print("[MATCH_SCREEN] Player was not found to point, client_id=" .. client_id)
+	end
+end
+
+function init(self)
+	self.players = {}
+	self.clients = {}
+
+	go.set(CAMERA_SCRIPT, "near_z", -1024)
+	go.set(CAMERA_SCRIPT, "far_z", 1024)
+	go.set(CAMERA_SCRIPT, "projection", camera.PROJECTOR.FIXED_ZOOM)
+	go.set(CAMERA_SCRIPT, "zoom", 3)
+
+	go.set(CAMERA_SCRIPT, "bounds_left", 0)
+	go.set(CAMERA_SCRIPT, "bounds_right", 512)
+	go.set(CAMERA_SCRIPT, "bounds_top", 512)
+	go.set(CAMERA_SCRIPT, "bounds_bottom", 0)
+
+	msg.post(".", "acquire_input_focus")
+	
+	print("[MATCH_SCREEN] Initialized")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(match_messages.constants.SET_STATE) then
+		local dangling_players = message.dangling_players
+		local spawned_players = message.spawned_players
+		set_state(self, dangling_players, spawned_players)
+
+	elseif message_id == hash(match_messages.constants.APPLY_EVENTS) then
+		local events = message.events
+		apply_events(self, events)
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == hash("point") then
+		if action.pressed then
+			--
+		elseif action.released then
+			local world_position = camera.screen_to_world(nil, vmath.vector3(action.x, action.y, 0))
+			local x = world_position.x
+			local y = world_position.y
+			pointed(self, x, y)
+		end
+	end
+end

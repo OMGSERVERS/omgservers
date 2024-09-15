@@ -31,11 +31,10 @@ game_messages = {
 			by_client_id = by_client_id,
 		}
 	end,
-	create_player_moved_event = function(self, client_id, in_attack, x, y)
+	create_player_moved_event = function(self, client_id, x, y)
 		return {
 			qualifier = game_messages.constants.PLAYER_MOVED,
 			client_id = client_id,
-			in_attack = in_attack,
 			x = x,
 			y = y,
 		}

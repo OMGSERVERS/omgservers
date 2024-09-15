@@ -1,8 +1,10 @@
 local screens_messages = require("game.screens_manager.screens_messages")
 local client_messages = require("game.client_manager.client_messages")
+local match_messages = require("game.match_screen.match_messages")
 local lobby_messages = require("game.lobby_screen.lobby_messages")
 local core_messages = require("game.core_manager.core_messages")
 local auth_messages = require("game.auth_screen.auth_messages")
+local core_state = require("game.core_manager.core_state")
 local server_messages = require("common.server_messages")
 local game_messages = require("common.game_messages")
 local omgplayer = require("omgservers.omgplayer")
@@ -10,16 +12,9 @@ local omgplayer = require("omgservers.omgplayer")
 local SCREENS_MANAGER = "screens_manager#screens_manager"
 local CLIENT_MANAGER = "client_manager#client_manager"
 
-local IN_AUTH = "in_auth"
-local GETTING_PROFILE = "getting_profile"
-local IN_LOBBY = "in_lobby"
-local GETTING_STATE = "getting_state"
-local IN_MATCH = "in_match"
-local GAME_FAILED = "game_failed"
-
 local function game_started(self)
 	print("[CORE_MANAGER] Game started at " .. os.date())
-	self.game_state = IN_AUTH
+	core_state:change_game_state(core_state.constants.IN_AUTH)
 
 	-- Show auth screen
 	local screens_message = screens_messages:create_auth_screen_requested_message()
@@ -52,7 +47,7 @@ end
 
 local function signed_in(self, client_id)
 	print("[CORE_MANAGER] User signed in at " .. os.date())
-	self.client_id = client_id
+	core_state:set_client_id(client_id)
 end
 
 local function lobby_assigned(self, runtime_qualifier, runtime_id)
@@ -70,12 +65,13 @@ local function greeted(self, version_id, version_created)
 	local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
 	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 
-	self.game_state = GETTING_PROFILE
+	core_state:change_game_state(core_state.constants.GETTING_PROFILE)
 end
 
 local function set_profile(self, profile)
-	self.player_profile = profile
-	if self.game_state == GETTING_PROFILE then
+	core_state:set_profile(profile)
+
+	if core_state.state.game_state == core_state.constants.GETTING_PROFILE then
 		-- Show lobby screen
 		local screens_message = screens_messages:create_lobby_screen_requested_message()
 		msg.post(SCREENS_MANAGER, screens_messages.constants.LOBBY_SCREEN_REQUESTED, screens_message)
@@ -86,7 +82,7 @@ local function lobby_screen_created(self, collection_id)
 	print("[CORE_MANAGER] Lobby screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
-	self.game_state = IN_LOBBY
+	core_state:change_game_state(core_state.constants.IN_LOBBY)
 
 	local auth_message = lobby_messages:create_set_state_requested_message("Matchmaking")
 	msg.post(self.screen_collection_id, lobby_messages.constants.SET_STATE_REQUESTED, auth_message)
@@ -102,7 +98,7 @@ local function match_assigned(self, runtime_qualifier, runtime_id)
 end
 
 local function connection_upgraded(self)
-	self.game_state = GETTING_STATE
+	core_state:change_game_state(core_state.constants.GETTING_STATE)
 	
 	-- Request match state
 	local game_message = game_messages:create_request_state_message()
@@ -111,9 +107,9 @@ local function connection_upgraded(self)
 end
 
 local function set_state(self, dangling_players, spawned_players)
-	if self.game_state == GETTING_STATE then
+	if core_state.state.game_state == core_state.constants.GETTING_STATE then
 		-- Show match screen
-		local screens_message = screens_messages:create_lobby_screen_requested_message()
+		local screens_message = screens_messages:create_match_screen_requested_message(dangling_players, spawned_players)
 		msg.post(SCREENS_MANAGER, screens_messages.constants.MATCH_SCREEN_REQUESTED, screens_message)
 	end
 end
@@ -122,15 +118,17 @@ local function match_screen_created(self, collection_id)
 	print("[CORE_MANAGER] Match screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
-	self.game_state = IN_MATCH
+	core_state:change_game_state(core_state.constants.IN_MATCH)
 end
 
 local function apply_events(self, events)
+	local match_message = match_messages:create_apply_events_message(events)
+	msg.post(self.screen_collection_id, match_messages.constants.APPLY_EVENTS, match_message)
 end
 
 local function client_failed(self, reason)
 	print("[CORE_MANAGER] Client failed at " .. os.date() .. ", reason=" ..reason)
-	self.game_state = GAME_FAILED
+	core_state:change_game_state(core_state.constants.GAME_FAILED)
 end
 
 function on_message(self, message_id, message, sender)
