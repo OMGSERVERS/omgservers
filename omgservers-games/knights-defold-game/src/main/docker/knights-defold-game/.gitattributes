@@ -40,3 +40,5 @@
 *.render_script linguist-language=Lua
 *.script linguist-language=Lua
 *.gui_script linguist-language=Lua
+
+game/localtesting.lua

@@ -144,14 +144,18 @@ local function apply_events(self, events)
 			local killed_client_id = event.killed_client_id
 			local by_client_id = event.by_client_id
 
-			-- play_attack(self, by_client_id)
-			-- kill_player(self, killed_client_id)
-			-- timer.delay(0.5, false, function()
-			-- 	play_attack(self, by_client_id)
-			-- end)
-			-- timer.delay(0.5, false, function()
-			-- 	kill_player(self, killed_client_id)
-			-- end)
+			timer.delay(0.5, false, function()
+				if killed_client_id == core_state.state.client_id then
+					camera.unfollow(nil)
+					
+					-- Send spawn request
+					local game_message = game_messages:create_request_spawn_message()
+					local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
+					msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+				end
+
+				kill_player(self, killed_client_id)
+			end)
 		end
 	end
 end
