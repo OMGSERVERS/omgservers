@@ -1,11 +1,10 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.syncClientCommand;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.runtime.SyncClientCommandRequest;
 import com.omgservers.schema.module.runtime.SyncClientCommandResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.impl.operation.runtime.hasRuntime.HasRuntimeOperation;
-import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.updateRuntimeAssignmentLastActivity.UpdateRuntimeAssignmentLastActivityOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncClientCommandMethodImpl implements SyncClientCommandMethod {
 
-    final UpdateRuntimeAssignmentLastActivityOperation updateRuntimeAssignmentLastActivityOperation;
     final UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
@@ -36,7 +34,6 @@ class SyncClientCommandMethodImpl implements SyncClientCommandMethod {
         final var shardKey = request.getRequestShardKey();
         final var runtimeCommand = request.getRuntimeCommand();
         final var runtimeId = runtimeCommand.getRuntimeId();
-        final var clientId = request.getClientId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
@@ -47,19 +44,12 @@ class SyncClientCommandMethodImpl implements SyncClientCommandMethod {
                                             .hasRuntime(sqlConnection, shard, runtimeId)
                                             .flatMap(has -> {
                                                 if (has) {
-                                                    return updateRuntimeAssignmentLastActivityOperation
-                                                            .updateRuntimeAssignmentLastActivity(
+                                                    return upsertRuntimeCommandOperation
+                                                            .upsertRuntimeCommand(
                                                                     changeContext,
                                                                     sqlConnection,
                                                                     shard,
-                                                                    runtimeId,
-                                                                    clientId)
-                                                            .flatMap(updated -> upsertRuntimeCommandOperation
-                                                                    .upsertRuntimeCommand(
-                                                                            changeContext,
-                                                                            sqlConnection,
-                                                                            shard,
-                                                                            runtimeCommand));
+                                                                    runtimeCommand);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,

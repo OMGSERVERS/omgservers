@@ -14,6 +14,8 @@ import com.omgservers.schema.module.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsResponse;
 import com.omgservers.schema.module.runtime.SyncClientCommandRequest;
 import com.omgservers.schema.module.runtime.SyncClientCommandResponse;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityRequest;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.MessageModelFactory;
@@ -118,26 +120,40 @@ class InterchangeMethodImpl implements InterchangeMethod {
                 .map(SyncClientCommandResponse::getCreated);
     }
 
+    Uni<Boolean> updateRuntimeAssignmentLastActivity(final Long runtimeId, final Long clientId) {
+        final var request = new UpdateRuntimeAssignmentLastActivityRequest(runtimeId, clientId);
+        return runtimeModule.getRuntimeService().updateRuntimeAssignmentLastActivity(request)
+                .map(UpdateRuntimeAssignmentLastActivityResponse::getUpdated);
+    }
+
     Uni<Void> handleMessages(final Long clientId, final List<MessageModel> messages) {
-        if (messages.isEmpty()) {
-            return Uni.createFrom().voidItem();
-        } else {
-            // Runtime has to be assigned to client to handle client's outgoing messages
-            return selectClientRuntimeRef(clientId)
-                    .flatMap(clientRuntimeRef -> Multi.createFrom().iterable(messages)
-                            .onItem().transformToUniAndConcatenate(message -> {
-                                if (message.getBody() instanceof final ClientOutgoingMessageBodyModel messageBody) {
-                                    return syncHandleMessageRuntimeCommand(clientRuntimeRef,
-                                            messageBody.getData());
-                                } else {
-                                    throw new ServerSideBadRequestException(
-                                            ExceptionQualifierEnum.WRONG_CLIENT_MESSAGE_BODY_TYPE,
-                                            "body type mismatch, " + message.getBody().getClass().getSimpleName());
+        // Runtime has to be assigned to client to handle client's outgoing messages
+        return selectClientRuntimeRef(clientId)
+                .onFailure(ServerSideNotFoundException.class).recoverWithNull()
+                .onItem().ifNotNull().transformToUni(clientRuntimeRef -> {
+                    final var runtimeId = clientRuntimeRef.getRuntimeId();
+                    return updateRuntimeAssignmentLastActivity(runtimeId, clientId)
+                            .flatMap(updated -> {
+                                if (messages.isEmpty()) {
+                                    return Uni.createFrom().voidItem();
+                                } else{
+                                    return Multi.createFrom().iterable(messages)
+                                            .onItem().transformToUniAndConcatenate(message -> {
+                                                if (message.getBody() instanceof final ClientOutgoingMessageBodyModel messageBody) {
+                                                    return syncHandleMessageRuntimeCommand(clientRuntimeRef,
+                                                            messageBody.getData());
+                                                } else {
+                                                    throw new ServerSideBadRequestException(
+                                                            ExceptionQualifierEnum.WRONG_CLIENT_MESSAGE_BODY_TYPE,
+                                                            "body type mismatch, " +
+                                                                    message.getBody().getClass().getSimpleName());
+                                                }
+                                            })
+                                            .collect().asList();
                                 }
-                            })
-                            .collect().asList())
-                    .replaceWithVoid();
-        }
+                            });
+                })
+                .replaceWithVoid();
     }
 
     Uni<List<MessageModel>> receiveMessages(final int shard,

@@ -32,6 +32,8 @@ import com.omgservers.schema.module.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityRequest;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
@@ -144,6 +146,12 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(final SyncRuntimeAssignmentRequest request) {
         return runtimeService.syncRuntimeAssignment(request);
+    }
+
+    @Override
+    public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
+            final UpdateRuntimeAssignmentLastActivityRequest request) {
+        return runtimeService.updateRuntimeAssignmentLastActivity(request);
     }
 
     @Override

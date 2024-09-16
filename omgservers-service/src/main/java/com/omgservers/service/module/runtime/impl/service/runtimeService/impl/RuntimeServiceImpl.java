@@ -33,6 +33,8 @@ import com.omgservers.schema.module.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityRequest;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
@@ -61,6 +63,7 @@ import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.me
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.findRuntimeAssignment.FindRuntimeAssignmentMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.getRuntimeAssignment.GetRuntimeAssignmentMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.syncRuntimeAssignment.SyncRuntimeAssignmentMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.updateRuntimeAssignmentLastActivity.UpdateRuntimeAssignmentLastActivityMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.viewRuntimeAssignments.ViewRuntimeAssignmentsMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.deleteRuntimeCommand.DeleteRuntimeCommandMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.deleteRuntimeCommands.DeleteRuntimeCommandsMethod;
@@ -92,6 +95,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     final FindRuntimePoolServerContainerRefMethod findRuntimePoolServerContainerRefMethod;
     final SyncRuntimePoolServerContainerRefMethod syncRuntimePoolServerContainerRefMethod;
     final GetRuntimePoolServerContainerRefMethod getRuntimePoolServerContainerRefMethod;
+    final UpdateRuntimeAssignmentLastActivityMethod updateRuntimeAssignmentLastActivity;
     final DeleteRuntimePermissionMethod deleteRuntimePermissionMethod;
     final DeleteRuntimeAssignmentMethod deleteRuntimeAssignmentMethod;
     final CountRuntimeAssignmentsMethod countRuntimeAssignmentsMethod;
@@ -270,6 +274,15 @@ public class RuntimeServiceImpl implements RuntimeService {
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntimeAssignment,
                 syncRuntimeAssignmentMethod::syncRuntimeAssignment);
+    }
+
+    @Override
+    public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
+            @Valid final UpdateRuntimeAssignmentLastActivityRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getRuntimeModuleClientOperation::getClient,
+                RuntimeModuleClient::updateRuntimeAssignmentLastActivity,
+                updateRuntimeAssignmentLastActivity::updateRuntimeAssignmentLastActivity);
     }
 
     @Override

@@ -32,6 +32,8 @@ import com.omgservers.schema.module.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityRequest;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
@@ -82,6 +84,9 @@ public interface WebService {
     Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(CountRuntimeAssignmentsRequest request);
 
     Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(SyncRuntimeAssignmentRequest request);
+
+    Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
+            UpdateRuntimeAssignmentLastActivityRequest request);
 
     Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(DeleteRuntimeAssignmentRequest request);
 

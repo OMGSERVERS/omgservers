@@ -1,5 +1,6 @@
 package com.omgservers.service.module.runtime.impl.service.webService.impl.api;
 
+import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.DeleteRuntimeAssignmentRequest;
@@ -32,6 +33,8 @@ import com.omgservers.schema.module.runtime.SyncRuntimePermissionRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimePermissionResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityRequest;
+import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
@@ -46,7 +49,6 @@ import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoo
 import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.runtime.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -148,6 +150,12 @@ public class RuntimeApiImpl implements RuntimeApi {
     @Override
     public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(final SyncRuntimeAssignmentRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeAssignment);
+    }
+
+    @Override
+    public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
+            final UpdateRuntimeAssignmentLastActivityRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::updateRuntimeAssignmentLastActivity);
     }
 
     @Override
