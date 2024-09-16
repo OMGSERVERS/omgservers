@@ -69,6 +69,7 @@ local function greeted(self, version_id, version_created)
 end
 
 local function set_profile(self, profile)
+	print("[CORE_MANAGER] Profile was received at " .. os.date())
 	core_state:set_profile(profile)
 
 	if core_state.state.game_state == core_state.constants.GETTING_PROFILE then
@@ -98,6 +99,8 @@ local function match_assigned(self, runtime_qualifier, runtime_id)
 end
 
 local function connection_upgraded(self)
+	print("[CORE_MANAGER] Connection was upgraded at " .. os.date())
+	
 	core_state:change_game_state(core_state.constants.GETTING_STATE)
 	
 	-- Request match state
@@ -107,6 +110,8 @@ local function connection_upgraded(self)
 end
 
 local function set_state(self, dangling_players, spawned_players)
+	print("[CORE_MANAGER] State was received at " .. os.date())
+	
 	if core_state.state.game_state == core_state.constants.GETTING_STATE then
 		-- Show match screen
 		local screens_message = screens_messages:create_match_screen_requested_message(dangling_players, spawned_players)
