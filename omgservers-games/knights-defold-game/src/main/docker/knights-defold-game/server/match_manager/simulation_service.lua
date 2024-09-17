@@ -11,7 +11,7 @@ simulation_service = {
 		local simulation_step = match_settings.constants.SIMULATION_STEP
 		local simulation_depth = players_container:get_simulation_depth(simulation_step)
 
-		print("[SIMULATION_SERVICE] Simulation started, simulation_depth=" .. simulation_depth)
+		print(socket.gettime() .. " [SIMULATION_SERVICE] Simulation started, simulation_depth=" .. simulation_depth)
 
 		-- simulate movements by steps
 		for step_index = match_settings.constants.SIMULATION_OFFSET, simulation_depth do
@@ -81,7 +81,7 @@ simulation_service = {
 
 					if winner_1_type_1 or winner_1_type_2 or winner_1_type_3 then
 						-- Player 1 is winner
-						print("[SIMULATION_SERVICE] Player1 kills player2, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
+						print(socket.gettime() .. " [SIMULATION_SERVICE] Player1 kills player2, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
 						killers[client_1] = true
 						-- hit player_2 by player_1
 						player_2:kill_player()
@@ -91,7 +91,7 @@ simulation_service = {
 						
 					elseif winner_2_type_1 or winner_2_type_2 or winner_2_type_3 then
 						-- Player 2 is winner
-						print("[SIMULATION_SERVICE] Player2 kills player1, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
+						print(socket.gettime() .. " [SIMULATION_SERVICE] Player2 kills player1, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
 						killers[client_2] = true
 						-- hit player_1 by player_2
 						player_1:kill_player()
@@ -100,7 +100,7 @@ simulation_service = {
 
 					elseif mutual_kill_type_1 then
 						-- Mutual kill
-						print("[SIMULATION_SERVICE] Mutual kill, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
+						print(socket.gettime() .. " [SIMULATION_SERVICE] Mutual kill, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
 						killers[client_1] = true
 						killers[client_2] = true
 						player_1:kill_player()

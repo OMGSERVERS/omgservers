@@ -3,8 +3,8 @@ local omgserver = require("omgservers.omgserver")
 local GAME_MODE = "test"
 
 local function handle_initialization(self, runtime_qualifier, version_config)
-	print("[GAMESERVER] Server was initialized, qualifier=" .. runtime_qualifier)
-	print("[GAMESERVER] Version config")
+	print(socket.gettime() .. " [GAMESERVER] Server was initialized, qualifier=" .. runtime_qualifier)
+	print(socket.gettime() .. " [GAMESERVER] Version config")
 	pprint(version_config)
 
 	self.runtime_qualifier = runtime_qualifier
@@ -27,12 +27,12 @@ local function handle_command(self, command_qualifier, command_body)
 				-- makes other clients to use websockets
 				omgserver.service_commands:upgrade_connection(client_id)
 
-				print("[GAMESERVER] Client upgrade was requested, client_id=" .. client_id)
+				print(socket.gettime() .. " [GAMESERVER] Client upgrade was requested, client_id=" .. client_id)
 			else
 				-- supervisor always connects first
 				self.supervisor_id = client_id
 
-				print("[GAMESERVER] Supervisor connected, client_id=" .. client_id)
+				print(socket.gettime() .. " [GAMESERVER] Supervisor connected, client_id=" .. client_id)
 			end
 		end
 		
@@ -40,7 +40,7 @@ local function handle_command(self, command_qualifier, command_body)
 end
 
 local function handle_message(self, client_id, message)
-	print("[GAMESERVER] Message was received, client_id=" .. client_id .. ", message=" .. message)
+	print(socket.gettime() .. " [GAMESERVER] Message was received, client_id=" .. client_id .. ", message=" .. message)
 
 	local decoded_message = json.decode(message)
 	
@@ -57,7 +57,7 @@ local function handle_message(self, client_id, message)
 end
 
 local function handle_server_event(self, event)
-	print("[GAMESERVER] Event was received, event=" .. json.encode(event))
+	print(socket.gettime() .. " [GAMESERVER] Event was received, event=" .. json.encode(event))
 	
 	local event_qualifier = event.qualifier
 	local event_body = event.body
@@ -74,7 +74,7 @@ local function handle_server_event(self, event)
 		local message = event_body.message
 		handle_message(self, client_id, message)
 	else
-		print("[GAMESERVER] Received unsupported event, qualifier=" .. event_qualifier)
+		print(socket.gettime() .. " [GAMESERVER] Received unsupported event, qualifier=" .. event_qualifier)
 	end
 end
 

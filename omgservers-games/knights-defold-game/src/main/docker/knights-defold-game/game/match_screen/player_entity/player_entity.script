@@ -86,7 +86,7 @@ local function set_state(self, controllable, nickname, in_attack)
 	self.nickname = nickname
 	self.in_attack = in_attack
 
-	print("[PLAYER_ENTITY] Set player state, controllable=" .. tostring(controllable) .. ", nickname=" .. nickname .. ", in_attack=" .. tostring(in_attack))
+	print(socket.gettime() .. " [PLAYER_ENTITY] Set player state, controllable=" .. tostring(controllable) .. ", nickname=" .. nickname .. ", in_attack=" .. tostring(in_attack))
 
 	reset_pose(self, false, in_attack)
 	play_breathing(self)
@@ -119,6 +119,7 @@ local function go_death(self)
 		go.delete(true)
 	end)
 end
+
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(player_messages.constants.SET_STATE) then

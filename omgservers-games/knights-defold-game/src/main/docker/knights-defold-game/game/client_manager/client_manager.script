@@ -5,39 +5,39 @@ local omgplayer = require("omgservers.omgplayer")
 local CORE_MANAGER = "core_manager#core_manager"
 
 local function initialized(self)
-	print("[CLIENT_MANAGER] Client was initialized")
+	print(socket.gettime() .. " [CLIENT_MANAGER] Client was initialized")
 end
 
 local function signing_up_requested(self)
-	print("[CLIENT_MANAGER] Signing up was requested")
+	print(socket.gettime() .. " [CLIENT_MANAGER] Signing up was requested")
 	omgplayer:sign_up()
 end
 
 local function signed_up(self, user_id, password)
-	print("[CLIENT_MANAGER] Signed up, user_id=" .. user_id)
+	print(socket.gettime() .. " [CLIENT_MANAGER] Signed up, user_id=" .. user_id)
 	local core_message = core_messages:create_signed_up_message(user_id, password)
 	msg.post(CORE_MANAGER, core_messages.constants.SIGNED_UP, core_message)
 end
 
 local function signing_in_requested(self, user_id, password)
-	print("[CLIENT_MANAGER] Signing in was requested, user_id=" .. user_id)
+	print(socket.gettime() .. " [CLIENT_MANAGER] Signing in was requested, user_id=" .. user_id)
 	omgplayer:sign_in(user_id, password)
 end
 
 local function signed_in(self, client_id)
-	print("[CLIENT_MANAGER] Signed in, client_id=" .. client_id)
+	print(socket.gettime() .. " [CLIENT_MANAGER] Signed in, client_id=" .. client_id)
 	local core_message = core_messages:create_signed_in_message(client_id)
 	msg.post(CORE_MANAGER, core_messages.constants.SIGNED_IN, core_message)
 end
 
 local function greeted(self, version_id, version_created)
-	print("[CLIENT_MANAGER] Greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
+	print(socket.gettime() .. " [CLIENT_MANAGER] Greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
 	local core_message = core_messages:create_user_greeted_message(version_id, version_created)
 	msg.post(CORE_MANAGER, core_messages.constants.USER_GREETED, core_message)
 end
 
 local function assigned(self, runtime_qualifier, runtime_id)
-	print("[CLIENT_MANAGER] Assigned, runtime_qualifier=" .. runtime_qualifier .. ", runtime_id=" .. runtime_id)
+	print(socket.gettime() .. " [CLIENT_MANAGER] Assigned, runtime_qualifier=" .. runtime_qualifier .. ", runtime_id=" .. runtime_id)
 	local core_message = core_messages:create_runtime_assigned_message(runtime_qualifier, runtime_id)
 	msg.post(CORE_MANAGER, core_messages.constants.RUNTIME_ASSIGNED, core_message)
 end
@@ -48,13 +48,13 @@ local function message_received(self, decoded_message)
 end
 
 local function connection_upgraded(self)
-	print("[CLIENT_MANAGER] Connection was upgraded")
+	print(socket.gettime() .. " [CLIENT_MANAGER] Connection was upgraded")
 	local core_message = core_messages:create_connection_upgraded_message()
 	msg.post(CORE_MANAGER, core_messages.constants.CONNECTION_UPGRADED, core_message)
 end
 
 local function failed(self, reason)
-	print("[CLIENT_MANAGER] Client failed, reason=" .. reason)
+	print(socket.gettime() .. " [CLIENT_MANAGER] Client failed, reason=" .. reason)
 	local core_message = core_messages:create_client_failed_message(reason)
 	msg.post(CORE_MANAGER, core_messages.constants.CLIENT_FAILED, core_message)
 end
@@ -64,12 +64,12 @@ local function sending_requested(self, text_message)
 end
 
 local function reconnecting_requested(self, message)
-	print("[CLIENT_MANAGER] Reconnectining was requested")
+	print(socket.gettime() .. " [CLIENT_MANAGER] Reconnectining was requested")
 end
 
 
 local function handle_client_event(self, event)
-	print("[CLIENT_MANAGER] Client event was received, event=" .. json.encode(event))
+	print(socket.gettime() .. " [CLIENT_MANAGER] Client event was received, event=" .. json.encode(event))
 
 	local event_qualifier = event.qualifier
 	local event_body = event.body
@@ -113,7 +113,7 @@ end
 function init(self)
 	if sys.get_engine_info().is_debug then
 		local localtesting = require("game.localtesting")
-		print("[CLIENT_MANAGER] Using localtesting configuration, " .. json.encode(localtesting))
+		print(socket.gettime() .. " [CLIENT_MANAGER] Using localtesting configuration, " .. json.encode(localtesting))
 
 		local service_url = "http://localhost:8080"
 		local tenant_id = localtesting.tenant_id

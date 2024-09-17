@@ -18,15 +18,15 @@ core_state = {
 	change_game_state = function(self, next_state)
 		local current_state = self.state.game_state
 		self.state.game_state = next_state
-		print("[CORE_STATE] Changed state, " .. tostring(current_state) .. "->" .. tostring(next_state))
+		print(socket.gettime() .. " [CORE_STATE] Changed state, " .. tostring(current_state) .. "->" .. tostring(next_state))
 	end,
 	set_client_id = function(self, client_id)
 		self.state.client_id = client_id
-		print("[CORE_STATE] Client was set, client_id=" .. client_id)
+		print(socket.gettime() .. " [CORE_STATE] Client was set, client_id=" .. client_id)
 	end,
 	set_profile = function(self, profile)
 		self.state.profile = profile
-		print("[CORE_STATE] Profile was set")
+		print(socket.gettime() .. " [CORE_STATE] Profile was set")
 	end,
 }
 

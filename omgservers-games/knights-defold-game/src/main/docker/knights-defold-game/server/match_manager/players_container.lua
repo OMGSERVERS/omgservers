@@ -7,11 +7,11 @@ players_container = {
 	-- Methods
 	add_player = function(self, client_id, player)
 		if self.players[client_id] then
-			print("[PLAYER_CONTAINER] Player was already added, skip operations, client_id=" .. client_id)
+			print(socket.gettime() .. " [PLAYER_CONTAINER] Player was already added, skip operations, client_id=" .. client_id)
 			return false
 		else
 			self.players[client_id] = player
-			print("[PLAYER_CONTAINER] Player was added, client_id=" .. client_id)
+			print(socket.gettime() .. " [PLAYER_CONTAINER] Player was added, client_id=" .. client_id)
 			return true
 		end
 	end,
@@ -21,10 +21,10 @@ players_container = {
 	delete_player = function(self, client_id)
 		if self.players[client_id] then
 			self.players[client_id] = nil
-			print("[PLAYER_CONTAINER] Player was deleted, client_id=" .. client_id)
+			print(socket.gettime() .. " [PLAYER_CONTAINER] Player was deleted, client_id=" .. client_id)
 			return true
 		else
-			print("[PLAYER_CONTAINER] Player was not found to delete, client_id=" .. client_id)
+			print(socket.gettime() .. " [PLAYER_CONTAINER] Player was not found to delete, client_id=" .. client_id)
 			return false
 		end
 	end,

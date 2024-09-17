@@ -120,7 +120,7 @@ omgserver = {
 	},
 	-- Methods
 	terminate_server = function(self, code, reason)
-		print("[OMGSERVER] Terminated, code=" .. code .. ", reason=" .. reason)
+		print(socket.gettime() .. " [OMGSERVER] Terminated, code=" .. code .. ", reason=" .. reason)
 		os.exit(code)
 	end,
 	build_handler = function(self, callback)
@@ -132,7 +132,7 @@ omgserver = {
 
 			if response_status < 300 then
 				if self.settings.trace then
-					print("[OMGSERVER] Response, status=" .. response_status .. ", body=" .. response_body)
+					print(socket.gettime() .. " [OMGSERVER] Response, status=" .. response_status .. ", body=" .. response_body)
 				end
 
 				local decoded_body
@@ -167,7 +167,7 @@ omgserver = {
 		local method = "PUT"
 
 		if self.settings.trace then
-			print("[OMGSERVER] Request, " .. method .. " " .. url .. ", body=" .. encoded_body)
+			print(socket.gettime() .. " [OMGSERVER] Request, " .. method .. " " .. url .. ", body=" .. encoded_body)
 		end
 
 		self.components.server_state.waiting_for_response = true
@@ -216,13 +216,13 @@ omgserver = {
 			protocol = "omgservers"
 		}
 
-		print("[OMGSERVER] Connect websocket, url=" .. connection_url)
+		print(socket.gettime() .. " [OMGSERVER] Connect websocket, url=" .. connection_url)
 
 		local ws_connection = websocket.connect(connection_url, params, function(_, _, data)
 			if data.event == websocket.EVENT_DISCONNECTED then
 				self:terminate_server(self.constants.WS_EXIT_CODE, "ws connection disconnected, message=" .. data.message)
 			elseif data.event == websocket.EVENT_CONNECTED then
-				print("[OMGSERVER] Websocket connected")
+				print(socket.gettime() .. " [OMGSERVER] Websocket connected")
 				if callback then
 					callback()
 				end
@@ -255,7 +255,7 @@ omgserver = {
 		})
 
 		if self.settings.debug then
-			print("[OMGSERVER] Outgoing message, encoded_message=" .. encoded_message)
+			print(socket.gettime() .. " [OMGSERVER] Outgoing message, encoded_message=" .. encoded_message)
 		end
 
 		websocket.send(omgserver.components.connection.ws_connection, encoded_message, {
@@ -279,7 +279,7 @@ omgserver = {
 		local outgoing_commands = self.components.server_state:pull_outgoing_commands()
 		if #outgoing_commands > 0 then
 			if self.settings.debug then
-				print("[OMGSERVER] Outgoing commands, outgoing_commands=" .. json.encode(outgoing_commands))
+				print(socket.gettime() .. " [OMGSERVER] Outgoing commands, outgoing_commands=" .. json.encode(outgoing_commands))
 			end
 		end
 
@@ -293,7 +293,7 @@ omgserver = {
 				local command_qualifier = incoming_command.qualifier
 				local command_body = incoming_command.body
 				if self.settings.debug then
-					print("[OMGSERVER] Handle command, id=" .. string.format("%.0f", command_id) .. ", qualifier=" .. command_qualifier .. ", body=" .. json.encode(command_body))
+					print(socket.gettime() .. " [OMGSERVER] Handle command, id=" .. string.format("%.0f", command_id) .. ", qualifier=" .. command_qualifier .. ", body=" .. json.encode(command_body))
 				end
 				self.components.server_state:add_consumed_command(incoming_command)
 
@@ -334,7 +334,7 @@ omgserver = {
 	init = function(self, handler, debug, interval)
 		self.settings.debug = debug or false
 		self.settings.iterate_interval = interval or 1
-		print("[OMGSERVER] Setting, debug=" .. tostring(self.settings.debug) .. ", interval=" .. self.settings.iterate_interval)
+		print(socket.gettime() .. " [OMGSERVER] Setting, debug=" .. tostring(self.settings.debug) .. ", interval=" .. self.settings.iterate_interval)
 
 		self.components:set_event_handler(handler)
 
@@ -363,11 +363,11 @@ omgserver = {
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=runtime_qualifier")
 		end
 
-		print("[OMGSERVER] Environment, service_url=" .. service_url)
-		print("[OMGSERVER] Environment, user_id=" .. user_id)
-		print("[OMGSERVER] Environment, password=" .. string.sub(password, 1, 4) .. "..")
-		print("[OMGSERVER] Environment, runtime_id=" .. runtime_id)
-		print("[OMGSERVER] Environment, runtime_qualifier=" .. runtime_qualifier)
+		print(socket.gettime() .. " [OMGSERVER] Environment, service_url=" .. service_url)
+		print(socket.gettime() .. " [OMGSERVER] Environment, user_id=" .. user_id)
+		print(socket.gettime() .. " [OMGSERVER] Environment, password=" .. string.sub(password, 1, 4) .. "..")
+		print(socket.gettime() .. " [OMGSERVER] Environment, runtime_id=" .. runtime_id)
+		print(socket.gettime() .. " [OMGSERVER] Environment, runtime_qualifier=" .. runtime_qualifier)
 
 		self.components:set_server_environment(service_url, user_id, password, runtime_id, runtime_qualifier)
 		self.components:set_service_urls(service_url)

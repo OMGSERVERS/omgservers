@@ -3,7 +3,7 @@ local core_messages = require("game.core_manager.core_messages")
 local CORE_MANAGER = "core_manager#core_manager"
 
 function init(self)
-	print("[GAME_ENTRYPOINT] Game started")
+	print(socket.gettime() .. " [GAME_ENTRYPOINT] Game started")
 	pprint(sys.get_engine_info())
 	local core_message = core_messages:create_game_started_message()
 	msg.post(CORE_MANAGER, core_messages.constants.GAME_STARTED, core_message)

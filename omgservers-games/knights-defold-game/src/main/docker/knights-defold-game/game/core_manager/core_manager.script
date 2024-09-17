@@ -13,7 +13,7 @@ local SCREENS_MANAGER = "screens_manager#screens_manager"
 local CLIENT_MANAGER = "client_manager#client_manager"
 
 local function game_started(self)
-	print("[CORE_MANAGER] Game started at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Game started at " .. os.date())
 	core_state:change_game_state(core_state.constants.IN_AUTH)
 
 	-- Show auth screen
@@ -22,7 +22,7 @@ local function game_started(self)
 end
 
 local function auth_screen_created(self, collection_id)
-	print("[CORE_MANAGER] Auth screen was created at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Auth screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
 
@@ -35,7 +35,7 @@ local function auth_screen_created(self, collection_id)
 end
 
 local function signed_up(self, user_id, password)
-	print("[CORE_MANAGER] User signed up at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] User signed up at " .. os.date())
 
 	local auth_message = auth_messages:create_set_state_requested_message("Signing in")
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
@@ -46,16 +46,16 @@ local function signed_up(self, user_id, password)
 end
 
 local function signed_in(self, client_id)
-	print("[CORE_MANAGER] User signed in at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] User signed in at " .. os.date())
 	core_state:set_client_id(client_id)
 end
 
 local function lobby_assigned(self, runtime_qualifier, runtime_id)
-	print("[CORE_MANAGER] Lobby was assigned at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Lobby was assigned at " .. os.date())
 end
 
 local function greeted(self, version_id, version_created)
-	print("[CORE_MANAGER] User greeted at " .. os.date() .. ", version_id=" .. version_id .. ", version_created=" .. version_created)
+	print(socket.gettime() .. " [CORE_MANAGER] User greeted at " .. os.date() .. ", version_id=" .. version_id .. ", version_created=" .. version_created)
 
 	local auth_message = auth_messages:create_set_state_requested_message("Getting profile")
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
@@ -69,7 +69,7 @@ local function greeted(self, version_id, version_created)
 end
 
 local function set_profile(self, profile)
-	print("[CORE_MANAGER] Profile was received at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Profile was received at " .. os.date())
 	core_state:set_profile(profile)
 
 	if core_state.state.game_state == core_state.constants.GETTING_PROFILE then
@@ -80,7 +80,7 @@ local function set_profile(self, profile)
 end
 
 local function lobby_screen_created(self, collection_id)
-	print("[CORE_MANAGER] Lobby screen was created at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Lobby screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
 	core_state:change_game_state(core_state.constants.IN_LOBBY)
@@ -95,11 +95,11 @@ local function lobby_screen_created(self, collection_id)
 end
 
 local function match_assigned(self, runtime_qualifier, runtime_id)
-	print("[CORE_MANAGER] Match was assigned at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Match was assigned at " .. os.date())
 end
 
 local function connection_upgraded(self)
-	print("[CORE_MANAGER] Connection was upgraded at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Connection was upgraded at " .. os.date())
 	
 	core_state:change_game_state(core_state.constants.GETTING_STATE)
 	
@@ -110,7 +110,7 @@ local function connection_upgraded(self)
 end
 
 local function set_state(self, dangling_players, spawned_players)
-	print("[CORE_MANAGER] State was received at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] State was received at " .. os.date())
 	
 	if core_state.state.game_state == core_state.constants.GETTING_STATE then
 		-- Show match screen
@@ -120,7 +120,7 @@ local function set_state(self, dangling_players, spawned_players)
 end
 
 local function match_screen_created(self, collection_id)
-	print("[CORE_MANAGER] Match screen was created at " .. os.date())
+	print(socket.gettime() .. " [CORE_MANAGER] Match screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id
 	core_state:change_game_state(core_state.constants.IN_MATCH)
@@ -131,8 +131,13 @@ local function apply_events(self, events)
 	msg.post(self.screen_collection_id, match_messages.constants.APPLY_EVENTS, match_message)
 end
 
+local function request_move(self)
+	local match_message = match_messages:create_request_move_message()
+	msg.post(self.screen_collection_id, match_messages.constants.REQUEST_MOVE, match_message)
+end
+
 local function client_failed(self, reason)
-	print("[CORE_MANAGER] Client failed at " .. os.date() .. ", reason=" ..reason)
+	print(socket.gettime() .. " [CORE_MANAGER] Client failed at " .. os.date() .. ", reason=" ..reason)
 	core_state:change_game_state(core_state.constants.GAME_FAILED)
 end
 
@@ -193,6 +198,10 @@ function on_message(self, message_id, message, sender)
 		elseif message_qualifier == server_messages.constants.APPLY_EVENTS then
 			local events = message.events
 			apply_events(self, events)
+
+		elseif message_qualifier == server_messages.constants.REQUEST_MOVE then
+			request_move(self)
+			
 		else
 			error("[CORE_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
 		end

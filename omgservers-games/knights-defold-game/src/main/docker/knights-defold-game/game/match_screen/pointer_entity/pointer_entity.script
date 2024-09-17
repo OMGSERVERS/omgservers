@@ -16,20 +16,23 @@ local function place_pointer(self, x, y)
 end
 
 function init(self)
-	msg.post(".", "disable")
+	msg.post(ICON_SPRITE, "disable")
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(pointer_messages.constants.ENABLE_POINTER) then
-		msg.post(".", "enable")
+		msg.post(ICON_SPRITE, "enable")
 
 		local x = message.x
 		local y = message.y
 		sprite.play_flipbook(ICON_SPRITE, hash("pointer_1"))
 		place_pointer(self, x, y)
 
+		print(socket.gettime() .. " [POINTER_ENTITY] Pointer was enabled, x=" .. x .. ", y=" .. y)
+
 	elseif message_id == hash(pointer_messages.constants.DISABLE_POINTER) then
-		msg.post(".", "disable")
+		print(socket.gettime() .. " [POINTER_ENTITY] Pointer was disabled")
+		msg.post(ICON_SPRITE, "disable")
 		
 	elseif message_id == hash(pointer_messages.constants.SWITCH_POINTER) then
 		local x = message.x

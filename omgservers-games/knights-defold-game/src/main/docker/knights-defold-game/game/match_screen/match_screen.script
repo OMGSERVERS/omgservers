@@ -17,7 +17,7 @@ local function create_client(self, client_id, nickname)
 		nickname = nickname
 	}
 
-	print("[MATCH_SCREEN] Client was created, client_id=" .. client_id .. ", nickname=" .. nickname)
+	print(socket.gettime() .. " [MATCH_SCREEN] Client was created, client_id=" .. client_id .. ", nickname=" .. nickname)
 
 	if client_id == core_state.state.client_id then
 		-- Send initial spawn request
@@ -35,7 +35,7 @@ local function spawn_player(self, client_id, in_attack, x, y)
 		local collection_ids = collectionfactory.create(PLAYER_SPAWNER, position)
 		pprint(collection_ids)
 
-		print("[MATCH_SCREEN] Player was spawned, client_id=" .. client_id .. ", x=" .. x .. ", y=" .. y .. ", z=" .. z)
+		print(socket.gettime() .. " [MATCH_SCREEN] Player was spawned, client_id=" .. client_id .. ", x=" .. x .. ", y=" .. y .. ", z=" .. z)
 
 		local player_id = collection_ids[hash("/player")]
 		self.players[client_id] = player_id
@@ -46,7 +46,7 @@ local function spawn_player(self, client_id, in_attack, x, y)
 		msg.post(player_id, player_messages.constants.SET_STATE, player_message)
 
 		if controllable then
-			print("[MATCH_SCREEN] Set camera, target=" .. player_id)
+			print(socket.gettime() .. " [MATCH_SCREEN] Set camera, target=" .. player_id)
 			camera.follow(nil, player_id, {
 				lerp = 1,
 			})
@@ -55,25 +55,34 @@ local function spawn_player(self, client_id, in_attack, x, y)
 			msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
 		end
 	else
-		print("[MATCH_SCREEN] Client was not found to spawn player, client_id=" .. client_id)
+		print(socket.gettime() .. " [MATCH_SCREEN] Client was not found to spawn player, client_id=" .. client_id)
 	end
 end
 
 local function kill_player(self, client_id)
 	local player_id = self.players[client_id]
 	if player_id then
+		
+		-- If it's controllable player -> disable pointer before killing
+		if client_id == core_state.state.client_id then
+			local pointer_message = pointer_messages:create_disable_pointer_message()
+			msg.post(POINTER, pointer_messages.constants.DISABLE_POINTER, pointer_message)
+		end
+		
 		local player_message = player_messages:create_go_death_message()
 		msg.post(player_id, player_messages.constants.GO_DEATH, player_message)
 		
 		self.players[client_id] = nil
+
+		print(socket.gettime() .. " [MATCH_SCREEN] Player was killed, client_id=" .. client_id)
 	else
-		print("[MATCH_SCREEN] Player was not found to kill, client_id=" .. client_id)
+		print(socket.gettime() .. " [MATCH_SCREEN] Player was not found to kill, client_id=" .. client_id)
 	end
 end
 
 local function delete_player(self, client_id)
 	self.clients[client_id] = nil
-	print("[MATCH_SCREEN] Client was deleted, client_id=" .. client_id)
+	print(socket.gettime() .. " [MATCH_SCREEN] Client was deleted, client_id=" .. client_id)
 
 	local player_id = self.players[client_id]
 	if player_id then
@@ -88,13 +97,19 @@ local function move_player(self, client_id, x, y)
 	if player_id then
 		local player_message = player_messages:create_move_to_message(x, y)
 		msg.post(player_id, player_messages.constants.MOVE_TO, player_message)
+
+		-- If it's controllable player -> reset pointer position to the default
+		if client_id == core_state.state.client_id then
+			local pointer_message = pointer_messages:create_enable_pointer_message(x, y)
+			msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
+		end
 	else
-		print("[MATCH_SCREEN] Player was not found to move, client_id=" .. client_id)
+		print(socket.gettime() .. " [MATCH_SCREEN] Player was not found to move, client_id=" .. client_id)
 	end
 end
 
 local function set_state(self, dangling_players, spawned_players)
-	print("[MATCH_SCREEN] Set match state, dangling_players=" .. json.encode(dangling_players) .. ", spawned_players=" .. json.encode(spawned_players))
+	print(socket.gettime() .. " [MATCH_SCREEN] Set match state, dangling_players=" .. json.encode(dangling_players) .. ", spawned_players=" .. json.encode(spawned_players))
 
 	for client_id, player in pairs(dangling_players) do
 		local nickname = player.nickname
@@ -112,7 +127,7 @@ local function set_state(self, dangling_players, spawned_players)
 end
 
 local function apply_events(self, events)
-	print("[MATCH_SCREEN] Apply events")
+	print(socket.gettime() .. " [MATCH_SCREEN] Apply events")
 	pprint(events)
 
 	for _, event in ipairs(events) do
@@ -160,6 +175,19 @@ local function apply_events(self, events)
 	end
 end
 
+local function request_move(self)
+	if self.point then
+		print(socket.gettime() .. " [MATCH_SCREEN] Move plyaer, x=" .. self.point.x .. ", y=" .. self.point.y)
+
+		-- Move player
+		local game_message = game_messages:create_move_player_message(self.point.x, self.point.y)
+		local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
+		msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+
+		self.point = nil
+	end
+end
+
 local function pointed(self, x, y)
 	local client_id = core_state.state.client_id
 	local player_id = self.players[client_id]
@@ -170,12 +198,13 @@ local function pointed(self, x, y)
 		local pointer_message = pointer_messages:create_enable_pointer_message(bounded_x, bounded_y)
 		msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
 
-		print("[MATCH_SCREEN] Move player, x=" .. bounded_x .. ", y=" .. bounded_y)
-		local game_message = game_messages:create_move_player_message(bounded_x, bounded_y)
-		local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
-		msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+		self.point = {
+			x = bounded_x,
+			y = bounded_y,
+		}
+		print(socket.gettime() .. " [MATCH_SCREEN] Point was set, x=" .. bounded_x .. ", y=" .. bounded_y)
 	else
-		print("[MATCH_SCREEN] Player was not found to point, client_id=" .. client_id)
+		print(socket.gettime() .. " [MATCH_SCREEN] Player was not found to point, client_id=" .. client_id)
 	end
 end
 
@@ -195,7 +224,7 @@ function init(self)
 
 	msg.post(".", "acquire_input_focus")
 	
-	print("[MATCH_SCREEN] Initialized")
+	print(socket.gettime() .. " [MATCH_SCREEN] Initialized")
 end
 
 function on_message(self, message_id, message, sender)
@@ -207,6 +236,10 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash(match_messages.constants.APPLY_EVENTS) then
 		local events = message.events
 		apply_events(self, events)
+
+	elseif message_id == hash(match_messages.constants.REQUEST_MOVE) then 
+		request_move(self)
+		
 	end
 end
 

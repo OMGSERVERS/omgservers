@@ -22,8 +22,10 @@ player_factory = {
 				player_instance.movement = movement_factory:create(player_instance.client_id, player_instance.position, target_position)
 			end,
 			finish_movement = function(player_instance)
-				player_instance.in_attack = not player_instance.in_attack
 				if player_instance.movement then
+					-- Change in attack state only if movement was done
+					player_instance.in_attack = not player_instance.in_attack
+					
 					local final_position = player_instance.movement.to_position
 					player_instance.position = final_position:clone()
 				end

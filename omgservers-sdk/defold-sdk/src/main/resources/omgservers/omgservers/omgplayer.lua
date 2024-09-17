@@ -55,7 +55,7 @@ omgplayer = {
 		-- Methods
 		add_client_event = function(trigger, event)
 			if omgplayer.settings.debug then
-				print("[OMGPLAYER] Triggered, event=" .. json.encode(event))
+				print(socket.gettime() .. " [OMGPLAYER] Triggered, event=" .. json.encode(event))
 			end
 			trigger.components.client_events:add_event(event)
 		end,
@@ -154,7 +154,7 @@ omgplayer = {
 				local response_body = response.response
 
                 if omgplayer.settings.debug then
-                    print("[OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
+                    print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
                 end
 
 				local decoded_body
@@ -177,7 +177,7 @@ omgplayer = {
 				local response_body = response.response
 
                 if omgplayer.settings.debug then
-                    print("[OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
+                    print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
                 end
 
 				local decoded_body
@@ -218,7 +218,7 @@ omgplayer = {
 			local method = "PUT"
 
 			if omgplayer.settings.debug then
-				print("[OMGPLAYER] Request, " .. method .. " " .. url .. ", body=" .. endoded_body)
+				print(socket.gettime() .. " [OMGPLAYER] Request, " .. method .. " " .. url .. ", body=" .. endoded_body)
 			end
 
 			http_client.components.client_state.waiting_for_response = true
@@ -304,11 +304,11 @@ omgplayer = {
 		-- Methods
 		use_url = function(server, url)
 			server.components:set_server_urls(url)
-			print("[OMGPLAYER] Url was changed, new_url=" .. url)
+			print(socket.gettime() .. " [OMGPLAYER] Url was changed, new_url=" .. url)
 		end,
 		use_project = function(server, tenant_id, stage_id, stage_secret)
 			server.components:set_server_project(tenant_id, stage_id, stage_secret)
-			print("[OMGPLAYER] Server project was set, tenant_id=" .. tenant_id .. ", stage_id=" .. stage_id .. ", stage_secret=" .. string.sub(stage_secret, 1, 4) .. "..")
+			print(socket.gettime() .. " [OMGPLAYER] Server project was set, tenant_id=" .. tenant_id .. ", stage_id=" .. stage_id .. ", stage_secret=" .. string.sub(stage_secret, 1, 4) .. "..")
 		end,
 		create_user = function(server, callback)
 			assert(server.components.server_urls, "Component server_urls must be set")
@@ -321,7 +321,7 @@ omgplayer = {
 
 				server.components:set_user_credentials(user_id, password);
 
-				print("[OMGPLAYER] User was created, user_id=" .. user_id .. ", password=" .. string.sub(password, 1, 4) .. "..")
+				print(socket.gettime() .. " [OMGPLAYER] User was created, user_id=" .. user_id .. ", password=" .. string.sub(password, 1, 4) .. "..")
 				if callback then
 					callback(user_id, password)
 				end
@@ -339,7 +339,7 @@ omgplayer = {
 		use_user = function(server, user_id, password)
 			server.components:set_user_credentials(user_id, password);
 
-			print("[OMGPLAYER] Credentials were set, user_id=" .. user_id .. ", password=" .. string.sub(password, 1, 4) .. "..")
+			print(socket.gettime() .. " [OMGPLAYER] Credentials were set, user_id=" .. user_id .. ", password=" .. string.sub(password, 1, 4) .. "..")
 		end,
 		create_token = function(server, callback)
 			assert(server.components.server_urls, "Component server_urls must be set")
@@ -355,7 +355,7 @@ omgplayer = {
 			local response_handler = function(response_status, decoded_body)
 				local raw_token = decoded_body.raw_token
 				server.components:set_api_token(raw_token)
-				print("[OMGPLAYER] Api token was received, token=" .. string.sub(raw_token, 1, 4) .. "..")
+				print(socket.gettime() .. " [OMGPLAYER] Api token was received, token=" .. string.sub(raw_token, 1, 4) .. "..")
 				if callback then
 					callback(raw_token)
 				end
@@ -390,7 +390,7 @@ omgplayer = {
 			local response_handler = function(response_status, response_body)
 				local client_id = response_body.client_id
 				server.components:set_server_client(client_id)
-				print("[OMGPLAYER] Server client was created, client_id=" .. client_id)
+				print(socket.gettime() .. " [OMGPLAYER] Server client was created, client_id=" .. client_id)
 				if callback then
 					callback(client_id)
 				end
@@ -445,14 +445,14 @@ omgplayer = {
 				protocol = "omgservers"
 			}
 
-			print("[OMGSERVER] Connect websocket, url=" .. connection_url)
+			print(socket.gettime() .. " [OMGSERVER] Connect websocket, url=" .. connection_url)
 
 			local ws_connection = websocket.connect(connection_url, params, function(_, _, data)
 				if data.event == websocket.EVENT_DISCONNECTED then
-					print("[OMGSERVER] Websocket disconnected")
+					print(socket.gettime() .. " [OMGSERVER] Websocket disconnected")
 
 				elseif data.event == websocket.EVENT_CONNECTED then
-					print("[OMGSERVER] Websocket connected")
+					print(socket.gettime() .. " [OMGSERVER] Websocket connected")
 					if callback then
 						callback()
 					end
@@ -548,7 +548,7 @@ omgplayer = {
 
 			local message_qualifier = incoming_message.qualifier
 			if omgplayer.settings.debug then
-				print("[OMGPLAYER] Incoming messages, incoming_message=" .. json.encode(incoming_message))
+				print(socket.gettime() .. " [OMGPLAYER] Incoming messages, incoming_message=" .. json.encode(incoming_message))
 			end
 
 			-- SERVER_WELCOME_MESSAGE is a first server message
@@ -598,7 +598,7 @@ omgplayer = {
 					omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
 
 				else
-					print("[OMGPLAYER] Unknown runtime qualifier was received, runtime_qualifier=" .. runtime_qualifier)
+					print(socket.gettime() .. " [OMGPLAYER] Unknown runtime qualifier was received, runtime_qualifier=" .. runtime_qualifier)
 				end
 
 			elseif message_qualifier == omgplayer_constants.SERVER_OUTGOING_MESSAGE then
@@ -651,7 +651,7 @@ omgplayer = {
 	-- Methods
 	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler, debug)
 		self.settings.debug = debug or false
-		print("[OMGPLAYER] Setting, debug=" .. tostring(self.settings.debug))
+		print(socket.gettime() .. " [OMGPLAYER] Setting, debug=" .. tostring(self.settings.debug))
 		
 		self.server:use_url(server_url)
 		self.server:use_project(tenant_id, stage_id, stage_secret)

@@ -53,7 +53,7 @@ local function handle_command_received_message(self, message)
 				local server_message = server_messages:create_set_profile_message(wrapped_profile.profile)
 				omgserver.service_commands:respond_client(client_id, json.encode(server_message))
 			else
-				print("[LOBBY_HANDLER] Profile was not found while handling request_profile message, client_id=" .. client_id)
+				print(socket.gettime() .. " [LOBBY_HANDLER] Profile was not found while handling request_profile message, client_id=" .. client_id)
 			end
 
 		-- Request matchmaking
@@ -73,7 +73,7 @@ local function handle_command_received_message(self, message)
 
 			omgserver.service_commands:request_matchmaking(client_id, DEFAULT_GAME_MODE)
 		else
-			print("[LOBBY_HANDLER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
+			print(socket.gettime() .. " [LOBBY_HANDLER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
 		end
 	end
 end

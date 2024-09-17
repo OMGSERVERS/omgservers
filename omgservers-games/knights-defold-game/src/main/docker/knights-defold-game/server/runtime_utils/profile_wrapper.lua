@@ -4,9 +4,9 @@ profile_wrapper = {
 	migrate = function(self, profile)
 		local profile_version = profile.version
 		if profile_version == 1 then
-			print("[PROFILE_WRAPPER] Profile is up-to-date, nickname=" .. profile.data.nickname)
+			print(socket.gettime() .. " [PROFILE_WRAPPER] Profile is up-to-date, nickname=" .. profile.data.nickname)
 		else
-			print("[PROFILE_WRAPPER] Migration for version is not supported, nickname=" .. profile.data.nickname .. ", version=" .. profile_version)
+			print(socket.gettime() .. " [PROFILE_WRAPPER] Migration for version is not supported, nickname=" .. profile.data.nickname .. ", version=" .. profile_version)
 		end
 	end,
 	wrap = function(self, profile)
@@ -18,7 +18,7 @@ profile_wrapper = {
 			change_nickname = function(wrapper, new_nickname)
 				local old_nickname = profile.data.nickname
 				profile.data.nickname = string.sub(new_nickname, 1, 16)
-				print("[PROFILE_WRAPPER] Nickname was changed, old_nickname=" .. old_nickname .. ", new_nickname=" .. profile.data.nickname)
+				print(socket.gettime() .. " [PROFILE_WRAPPER] Nickname was changed, old_nickname=" .. old_nickname .. ", new_nickname=" .. profile.data.nickname)
 			end
 		}
 	end,
@@ -30,7 +30,7 @@ profile_wrapper = {
 				points = 0,
 			}
 		}
-		print("[PROFILE_WRAPPER] Profile was created, nickname=" .. nickname)
+		print(socket.gettime() .. " [PROFILE_WRAPPER] Profile was created, nickname=" .. nickname)
 
 		return self:wrap(new_profile)
 	end,

@@ -37,13 +37,17 @@ local function delete_client(self, client_id)
 			local match_event = match_events:create_player_deleted_event(client_id)
 			events_container:add_event(match_event)
 
-			print("[MATCH_MANAGER] Player was deleted, client_id=" .. client_id)
+			print(socket.gettime() .. " [MATCH_MANAGER] Player was deleted, client_id=" .. client_id)
 		end
 	end
 end
 
 local function request_state(self, client_id)
-	print("[MATCH_MANAGER] State was requested, client_id=" .. client_id)
+	print(socket.gettime() .. " [MATCH_MANAGER] State was requested, client_id=" .. client_id)
+
+	if not self.simulated_state then
+		self.simulated_state = players_container:get_state()
+	end
 	
 	local player_instance = players_container:get_player(client_id)
 	-- State requesting is allowed only for non created players
@@ -55,14 +59,9 @@ local function request_state(self, client_id)
 			if players_container:add_player(client_id, new_player) then
 				local match_event = match_events:create_player_created_event(client_id, nickname)
 				events_container:add_event(match_event)
-				print("[MATCH_MANAGER] Player was created, client_id=" .. client_id)
+				print(socket.gettime() .. " [MATCH_MANAGER] Player was created, client_id=" .. client_id)
 
-				-- Just use or create and cash current state
 				local state = self.simulated_state
-				if not state then
-					self.simulated_state = players_container:get_state()
-					state = self.simulated_state
-				end
 
 				-- Send match state
 				local dangling_players = state.dangling_players
@@ -71,48 +70,58 @@ local function request_state(self, client_id)
 				omgserver.connections:respond_text_message(client_id, json.encode(server_message))
 			end
 		else
-			print("[MATCH_MANAGER] Player profile was not found to create a new player, client_id=" .. client_id)
+			print(socket.gettime() .. " [MATCH_MANAGER] Player profile was not found to create a new player, client_id=" .. client_id)
 		end
 	else
-		print("[MATCH_MANAGER] Player was already created to get match state, client_id=" .. client_id)
+		print(socket.gettime() .. " [MATCH_MANAGER] Player was already created to get match state, client_id=" .. client_id)
 	end
 end
 
 local function request_spawn(self, client_id)
 	self.spawn_requests[client_id] = true
-	print("[MATCH_MANAGER] Spawn request was set, client_id=" .. client_id)
+	print(socket.gettime() .. " [MATCH_MANAGER] Spawn request was set, client_id=" .. client_id)
 end
 
 local function move_player(self, client_id, x, y)
-	local player_instance = players_container:get_player(client_id)
-	if player_instance then
-		-- Was spawned and still alive
-		if player_instance.position and not player_instance.was_killed then
+	if self.match_state == QUEUEING_STATE then
+		local player_instance = players_container:get_player(client_id)
+		if player_instance then
+			-- Was spawned and still alive
+			if player_instance.position and not player_instance.was_killed then
 
-			local target_position = vector_factory:create(x, y)
-			player_instance:set_movement(target_position)
+				local target_position = vector_factory:create(x, y)
+				player_instance:set_movement(target_position)
 
-			print("[MATCH_MANAGER] Movement was created, client_id=" .. client_id .. ", x=" .. math.floor(x) .. ", y=" .. math.floor(y) .. ", in_attack=" .. tostring(player_instance.in_attack))
+				print(socket.gettime() .. " [MATCH_MANAGER] Movement was created, client_id=" .. client_id .. ", x=" .. math.floor(x) .. ", y=" .. math.floor(y) .. ", in_attack=" .. tostring(player_instance.in_attack))
+			else
+				print(socket.gettime() .. " [MATCH_MANAGER] Player was not spawn or was already killed to move, client_id=" .. client_id)
+			end
 		else
-			print("[MATCH_MANAGER] Player was not spawn or was already killed to move, client_id=" .. client_id)
+			print(socket.gettime() .. " [MATCH_MANAGER] Player was not found to move, client_id=" .. client_id)
 		end
 	else
-		print("[MATCH_MANAGER] Player was not found to move, client_id=" .. client_id)
+		print(socket.gettime() .. " [MATCH_MANAGER] Match is not in QUEUEING state to handle movement message, client_id=" .. client_id)
 	end
 end
 
 local function waiting_state(self)
-	print("[MATCH_MANAGER] Changed to the WAITING")
+	print(socket.gettime() .. " [MATCH_MANAGER] Changed to the WAITING")
 	
 end
 
 local function queueing_state(self)
-	print("[MATCH_MANAGER] Changed to the QUEUEING")
-	
+	print(socket.gettime() .. " [MATCH_MANAGER] Changed to the QUEUEING")
+
+	-- Request players move
+	local client_ids = players_container:get_client_ids()
+	if #client_ids > 0 then
+		local server_message = server_messages:create_request_move_message()
+		omgserver.connections:multicast_text_message(client_ids, json.encode(server_message))
+	end
 end
 
 local function simulation_state(self)
-	print("[MATCH_MANAGER] Changed to the SIMULATION")
+	print(socket.gettime() .. " [MATCH_MANAGER] Changed to the SIMULATION")
 
 	simulation_service:simulate()
 	
@@ -130,9 +139,9 @@ local function simulation_state(self)
 			local match_event = match_events:create_player_spawned_event(client_id, in_attack, spawn_position.x, spawn_position.y)
 			events_container:add_event(match_event)
 
-			print("[MATCH_MANAGER] Player was spawned, client_id=" .. client_id .. ", x=" .. spawn_position.x .. ", y=" .. spawn_position.y .. ", in_attack=" .. tostring(in_attack))
+			print(socket.gettime() .. " [MATCH_MANAGER] Player was spawned, client_id=" .. client_id .. ", x=" .. spawn_position.x .. ", y=" .. spawn_position.y .. ", in_attack=" .. tostring(in_attack))
 		else
-			print("[MATCH_MANAGER] Player was not found to spawn, client_id=" .. client_id)
+			print(socket.gettime() .. " [MATCH_MANAGER] Player was not found to spawn, client_id=" .. client_id)
 		end
 	end
 	self.spawn_requests = {}
@@ -216,7 +225,7 @@ function on_message(self, message_id, message, sender)
 			local y = game_message.y
 			move_player(self, client_id, x, y)
 		else
-			print("[MATCH_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
+			print(socket.gettime() .. " [MATCH_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
 		end
 	end
 end

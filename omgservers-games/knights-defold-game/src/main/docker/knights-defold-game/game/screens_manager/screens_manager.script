@@ -19,7 +19,7 @@ local function remove_current_screen(self)
 end
 
 local function auth_screen_requested(self, message)
-	print("[SCREENS_MANAGER] Create auth screen")
+	print(socket.gettime() .. " [SCREENS_MANAGER] Create auth screen")
 
 	remove_current_screen(self)
 
@@ -34,7 +34,7 @@ local function auth_screen_requested(self, message)
 end
 
 local function lobby_screen_requested(self, message)
-	print("[SCREENS_MANAGER] Create lobby screen")
+	print(socket.gettime() .. " [SCREENS_MANAGER] Create lobby screen")
 
 	remove_current_screen(self)
 
@@ -49,7 +49,7 @@ local function lobby_screen_requested(self, message)
 end
 
 local function match_screen_requested(self, dangling_players, spawned_players)
-	print("[SCREENS_MANAGER] Create match screen")
+	print(socket.gettime() .. " [SCREENS_MANAGER] Create match screen")
 
 	remove_current_screen(self)
 

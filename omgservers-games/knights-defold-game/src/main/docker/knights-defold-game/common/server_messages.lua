@@ -3,6 +3,7 @@ server_messages = {
 	constants = {
 		SET_PROFILE = "set_profile",
 		SET_STATE = "set_state",
+		REQUEST_MOVE = "request_move",
 		APPLY_EVENTS = "apply_events",
 	},
 	-- Methods
@@ -17,6 +18,11 @@ server_messages = {
 			qualifier = server_messages.constants.SET_STATE,
 			dangling_players = dangling_players,
 			spawned_players = spawned_players,
+		}
+	end,
+	create_request_move_message = function(self)
+		return {
+			qualifier = server_messages.constants.REQUEST_MOVE,
 		}
 	end,
 	create_apply_events_message = function(self, events)
