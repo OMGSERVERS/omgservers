@@ -14,8 +14,9 @@ screens_messages = {
 		return {
 		}
 	end,
-	create_match_screen_requested_message = function(self, dangling_players, spawned_players)
+	create_match_screen_requested_message = function(self, settings, dangling_players, spawned_players)
 		return {
+			settings = settings,
 			dangling_players = dangling_players,
 			spawned_players = spawned_players,
 		}

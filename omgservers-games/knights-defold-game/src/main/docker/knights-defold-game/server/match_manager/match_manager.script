@@ -63,10 +63,13 @@ local function request_state(self, client_id)
 
 				local state = self.simulated_state
 
-				-- Send match state
+				-- Send match settings and state
+				local settings = {
+					waiting_duration = match_settings.constants.WAITING_DURATION,
+				}
 				local dangling_players = state.dangling_players
 				local spawned_players = state.spawned_players
-				local server_message = server_messages:create_set_state_message(dangling_players, spawned_players)
+				local server_message = server_messages:create_set_state_message(settings, dangling_players, spawned_players)
 				omgserver.connections:respond_text_message(client_id, json.encode(server_message))
 			end
 		else
@@ -148,7 +151,7 @@ local function simulation_state(self)
 
 	local all_events = events_container:pull_events()
 	local client_ids = players_container:get_client_ids()
-	if #all_events > 0 and #client_ids > 0 then
+	if #client_ids > 0 then
 		local server_message = server_messages:create_apply_events_message(all_events)
 		omgserver.connections:multicast_text_message(client_ids, json.encode(server_message))
 	end

@@ -109,12 +109,12 @@ local function connection_upgraded(self)
 	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
 end
 
-local function set_state(self, dangling_players, spawned_players)
+local function set_state(self, settings, dangling_players, spawned_players)
 	print(socket.gettime() .. " [CORE_MANAGER] State was received at " .. os.date())
 	
 	if core_state.state.game_state == core_state.constants.GETTING_STATE then
 		-- Show match screen
-		local screens_message = screens_messages:create_match_screen_requested_message(dangling_players, spawned_players)
+		local screens_message = screens_messages:create_match_screen_requested_message(settings, dangling_players, spawned_players)
 		msg.post(SCREENS_MANAGER, screens_messages.constants.MATCH_SCREEN_REQUESTED, screens_message)
 	end
 end
@@ -191,9 +191,10 @@ function on_message(self, message_id, message, sender)
 			set_profile(self, profile)
 
 		elseif message_qualifier == server_messages.constants.SET_STATE then
+			local settings = message.settings
 			local dangling_players = message.dangling_players
 			local spawned_players = message.spawned_players
-			set_state(self, dangling_players, spawned_players)
+			set_state(self, settings, dangling_players, spawned_players)
 
 		elseif message_qualifier == server_messages.constants.APPLY_EVENTS then
 			local events = message.events

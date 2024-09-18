@@ -1,3 +1,4 @@
+local counter_messages = require("game.match_screen.counter_gui.counter_messages")
 local pointer_messages = require("game.match_screen.pointer_entity.pointer_messages")
 local player_messages = require("game.match_screen.player_entity.player_messages")
 local client_messages = require("game.client_manager.client_messages")
@@ -11,6 +12,7 @@ local CLIENT_MANAGER = "/client_manager#client_manager"
 local PLAYER_SPAWNER = "spawner#player"
 local POINTER = "pointer/container"
 local CAMERA_SCRIPT = "camera#script"
+local COUNTER_GUI = "counter_gui"
 
 local function create_client(self, client_id, nickname)
 	self.clients[client_id] = {
@@ -108,9 +110,11 @@ local function move_player(self, client_id, x, y)
 	end
 end
 
-local function set_state(self, dangling_players, spawned_players)
-	print(socket.gettime() .. " [MATCH_SCREEN] Set match state, dangling_players=" .. json.encode(dangling_players) .. ", spawned_players=" .. json.encode(spawned_players))
+local function set_state(self, settings, dangling_players, spawned_players)
+	print(socket.gettime() .. " [MATCH_SCREEN] Set match state, settings=" .. json.encode(settings) .. ", dangling_players=" .. json.encode(dangling_players) .. ", spawned_players=" .. json.encode(spawned_players))
 
+	self.settings = settings
+	
 	for client_id, player in pairs(dangling_players) do
 		local nickname = player.nickname
 		create_client(self, client_id, nickname)
@@ -129,6 +133,11 @@ end
 local function apply_events(self, events)
 	print(socket.gettime() .. " [MATCH_SCREEN] Apply events")
 	pprint(events)
+	
+	-- Reset counter
+	local counter_value = self.settings.waiting_duration
+	local counter_message = counter_messages:create_reset_counter_message(counter_value)
+	msg.post(COUNTER_GUI, counter_messages.constants.RESET_COUNTER, counter_message)
 
 	for _, event in ipairs(events) do
 		local event_qualifier = event.qualifier
@@ -176,9 +185,13 @@ local function apply_events(self, events)
 end
 
 local function request_move(self)
+	-- Hide counter
+	local counter_message = counter_messages:create_hide_counter_message()
+	msg.post(COUNTER_GUI, counter_messages.constants.HIDE_COUNTER, counter_message)
+	
 	if self.point then
 		print(socket.gettime() .. " [MATCH_SCREEN] Move plyaer, x=" .. self.point.x .. ", y=" .. self.point.y)
-
+		
 		-- Move player
 		local game_message = game_messages:create_move_player_message(self.point.x, self.point.y)
 		local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
@@ -229,9 +242,10 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(match_messages.constants.SET_STATE) then
+		local settings = message.settings
 		local dangling_players = message.dangling_players
 		local spawned_players = message.spawned_players
-		set_state(self, dangling_players, spawned_players)
+		set_state(self, settings, dangling_players, spawned_players)
 
 	elseif message_id == hash(match_messages.constants.APPLY_EVENTS) then
 		local events = message.events

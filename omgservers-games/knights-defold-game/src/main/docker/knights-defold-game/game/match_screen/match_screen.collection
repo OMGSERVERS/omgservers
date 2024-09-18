@@ -11,6 +11,10 @@ instances {
   id: "spawner"
   prototype: "/game/match_screen/spawner/spawner.go"
 }
+instances {
+  id: "counter_gui"
+  prototype: "/game/match_screen/counter_gui/counter_gui.go"
+}
 collection_instances {
   id: "background"
   collection: "/game/match_screen/background/background.collection"

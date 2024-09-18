@@ -48,7 +48,7 @@ local function lobby_screen_requested(self, message)
 	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
 end
 
-local function match_screen_requested(self, dangling_players, spawned_players)
+local function match_screen_requested(self, settings, dangling_players, spawned_players)
 	print(socket.gettime() .. " [SCREENS_MANAGER] Create match screen")
 
 	remove_current_screen(self)
@@ -60,7 +60,7 @@ local function match_screen_requested(self, dangling_players, spawned_players)
 	
 	local collection_id = collection_ids["/match_screen"]
 
-	local match_message = match_messages:create_set_state_message(dangling_players, spawned_players)
+	local match_message = match_messages:create_set_state_message(settings, dangling_players, spawned_players)
 	msg.post(collection_id, match_messages.constants.SET_STATE, match_message)
 	
 	local core_message = core_messages:create_screen_created_message(core_messages.constants.MATCH_SCREEN, collection_id)
@@ -75,8 +75,9 @@ function on_message(self, message_id, message, sender)
 		lobby_screen_requested(self)
 		
 	elseif message_id == hash(screens_messages.constants.MATCH_SCREEN_REQUESTED) then
+		local settings = message.settings
 		local dangling_players = message.dangling_players
 		local spawned_players = message.spawned_players
-		match_screen_requested(self, dangling_players, spawned_players)
+		match_screen_requested(self, settings, dangling_players, spawned_players)
 	end
 end
