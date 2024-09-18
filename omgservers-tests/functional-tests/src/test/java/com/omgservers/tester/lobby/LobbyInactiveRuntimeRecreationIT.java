@@ -73,7 +73,14 @@ public class LobbyInactiveRuntimeRecreationIT extends BaseTestClass {
             playerApiTester.sendMessage(testClient1, new TestMessage("trigger_exit"));
 
             log.info("Waiting for runtime inactivity detection");
-            Thread.sleep(45_000);
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
 
             final var disconnectionMessage1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
