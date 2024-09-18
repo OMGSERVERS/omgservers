@@ -8,35 +8,35 @@ omgserver = {
 		API_EXIT_CODE = 4,
 		WS_EXIT_CODE = 5,
 		-- Server environment variables
-		URL_ENVIRONMENT_VARIABLE = "OMGSERVERS_URL",
-		USER_ID_ENVIRONMENT_VARIABLE = "OMGSERVERS_USER_ID",
-		PASSWORD_ENVIRONMENT_VARIABLE = "OMGSERVERS_PASSWORD",
-		RUNTIME_ID_ENVIRONMENT_VARIABLE = "OMGSERVERS_RUNTIME_ID",
-		RUNTIME_QUALIFIER_ENVIRONMENT_VARIABLE = "OMGSERVERS_RUNTIME_QUALIFIER",
+		SERVICE_URL = "OMGSERVERS_URL",
+		RUNTIME_USER_ID = "OMGSERVERS_USER_ID",
+		USER_PASSWORD = "OMGSERVERS_PASSWORD",
+		RUNTIME_ID = "OMGSERVERS_RUNTIME_ID",
+		RUNTIME_QUALIFIER = "OMGSERVERS_RUNTIME_QUALIFIER",
 		-- Server event qualifiers
-		SERVER_INITIALIZED_EVENT_QUALIFIER = "SERVER_INITIALIZED",
-		COMMAND_RECEIVED_EVENT_QUALIFIER = "COMMAND_RECEIVED",
-		MESSAGE_RECEIVED_EVENT_QUALIFIER = "MESSAGE_RECEIVED",
+		SERVER_INITIALIZED = "SERVER_INITIALIZED",
+		COMMAND_RECEIVED = "COMMAND_RECEIVED",
+		MESSAGE_RECEIVED = "MESSAGE_RECEIVED",
 		-- Runtime qualifiers
-		LOBBY_RUNTIME_QUALIFIER = "LOBBY",
-		MATCH_RUNTIME_QUALIFIER = "MATCH",
+		LOBBY = "LOBBY",
+		MATCH = "MATCH",
 		-- Service command qualifiers
-		INIT_RUNTIME_SERVICE_COMMAND_QUALIFIER = "INIT_RUNTIME",
-		ADD_CLIENT_SERVICE_COMMAND_QUALIFIER = "ADD_CLIENT",
-		ADD_MATCH_CLIENT_SERVICE_COMMAND_QUALIFIER = "ADD_MATCH_CLIENT",
-		DELETE_CLIENT_SERVICE_COMMAND_QUALIFIER = "DELETE_CLIENT",
-		HANDLE_MESSAGE_SERVICE_COMMAND_QUALIFIER = "HANDLE_MESSAGE",
+		INIT_RUNTIME = "INIT_RUNTIME",
+		ADD_CLIENT = "ADD_CLIENT",
+		ADD_MATCH_CLIENT = "ADD_MATCH_CLIENT",
+		DELETE_CLIENT = "DELETE_CLIENT",
+		HANDLE_MESSAGE = "HANDLE_MESSAGE",
 		-- Runtime command qualifiers
-		RESPOND_CLIENT_RUNTIME_COMMAND_QUALIFIER = "RESPOND_CLIENT",
-		SET_ATTRIBUTES_RUNTIME_COMMAND_QUALIFIER = "SET_ATTRIBUTES",
-		SET_PROFILE_RUNTIME_COMMAND_QUALIFIER = "SET_PROFILE",
-		MULTICAST_MESSAGE_RUNTIME_COMMAND_QUALIFIER = "MULTICAST_MESSAGE",
-		BROADCAST_MESSAGE_RUNTIME_COMMAND_QUALIFIER = "BROADCAST_MESSAGE",
-		KICK_CLIENT_RUNTIME_COMMAND_QUALIFIER = "KICK_CLIENT",
-		REQUEST_MATCHMAKING_RUNTIME_COMMAND_QUALIFIER = "REQUEST_MATCHMAKING",
-		STOP_MATCHMAKING_RUNTIME_COMMAND_QUALIFIER = "STOP_MATCHMAKING",
-		UPGRADE_CONNECTION_RUNTIME_COMMAND_QUALIFIER = "UPGRADE_CONNECTION",
-		-- Misilanious
+		RESPOND_CLIENT = "RESPOND_CLIENT",
+		SET_ATTRIBUTES = "SET_ATTRIBUTES",
+		SET_PROFILE = "SET_PROFILE",
+		MULTICAST_MESSAGE = "MULTICAST_MESSAGE",
+		BROADCAST_MESSAGE = "BROADCAST_MESSAGE",
+		KICK_CLIENT = "KICK_CLIENT",
+		REQUEST_MATCHMAKING = "REQUEST_MATCHMAKING",
+		STOP_MATCHMAKING = "STOP_MATCHMAKING",
+		UPGRADE_CONNECTION = "UPGRADE_CONNECTION",
+		-- Miscellaneous
 		UPGRADE_CONNECTION_WEBSOCKET_PROTOCOL = "WEBSOCKET",
 	},
 	settings = {
@@ -234,7 +234,7 @@ omgserver = {
 				local text_message = decoded_message.message
 				
 				self.components.server_state:add_server_event({
-					qualifier = omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER,
+					qualifier = omgserver.constants.MESSAGE_RECEIVED,
 					body = {
 						client_id = client_id,
 						message = text_message,
@@ -298,7 +298,7 @@ omgserver = {
 				self.components.server_state:add_consumed_command(incoming_command)
 
 				self.components.server_state:add_server_event({
-					qualifier = omgserver.constants.COMMAND_RECEIVED_EVENT_QUALIFIER,
+					qualifier = omgserver.constants.COMMAND_RECEIVED,
 					body = {
 						command_qualifier = command_qualifier,
 						command_body = command_body
@@ -338,27 +338,27 @@ omgserver = {
 
 		self.components:set_event_handler(handler)
 
-		local service_url = os.getenv(omgserver.constants.URL_ENVIRONMENT_VARIABLE)
+		local service_url = os.getenv(omgserver.constants.SERVICE_URL)
 		if not service_url then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=service_url")
 		end
 
-		local user_id = os.getenv(omgserver.constants.USER_ID_ENVIRONMENT_VARIABLE)
+		local user_id = os.getenv(omgserver.constants.RUNTIME_USER_ID)
 		if not user_id then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=user_id")
 		end
 
-		local password = os.getenv(omgserver.constants.PASSWORD_ENVIRONMENT_VARIABLE)
+		local password = os.getenv(omgserver.constants.USER_PASSWORD)
 		if not password then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=password")
 		end
 
-		local runtime_id = os.getenv(omgserver.constants.RUNTIME_ID_ENVIRONMENT_VARIABLE)
+		local runtime_id = os.getenv(omgserver.constants.RUNTIME_ID)
 		if not runtime_id then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=runtime_id")
 		end
 
-		local runtime_qualifier = os.getenv(omgserver.constants.RUNTIME_QUALIFIER_ENVIRONMENT_VARIABLE)
+		local runtime_qualifier = os.getenv(omgserver.constants.RUNTIME_QUALIFIER)
 		if not runtime_qualifier then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=runtime_qualifier")
 		end
@@ -383,7 +383,7 @@ omgserver = {
 
 				self:ws_connect(function()
 					self.components.server_state:add_server_event({
-						qualifier = omgserver.constants.SERVER_INITIALIZED_EVENT_QUALIFIER,
+						qualifier = omgserver.constants.SERVER_INITIALIZED,
 						body = {
 							runtime_qualifier = runtime_qualifier,
 							version_config = version_config
@@ -403,7 +403,7 @@ return {
 		-- Methods
 		set_attributes = function(service_commands, client_id, attributes)
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.SET_ATTRIBUTES_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.SET_ATTRIBUTES,
 				body = {
 					client_id = client_id,
 					attributes = {
@@ -414,7 +414,7 @@ return {
 		end,
 		set_profile = function(service_commands, client_id, profile)
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.SET_PROFILE_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.SET_PROFILE,
 				body = {
 					client_id = client_id,
 					profile = profile,
@@ -424,7 +424,7 @@ return {
 		respond_client = function(service_commands, client_id, message)
 			assert(type(message) == "string", "Message has to be string")
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.RESPOND_CLIENT_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.RESPOND_CLIENT,
 				body = {
 					client_id = client_id,
 					message = message,
@@ -434,7 +434,7 @@ return {
 		multicast_message = function(service_commands, clients, message)
 			assert(type(message) == "string", "Message has to be string")
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.MULTICAST_MESSAGE_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.MULTICAST_MESSAGE,
 				body = {
 					clients = clients,
 					message = message,
@@ -444,7 +444,7 @@ return {
 		broadcast_message = function(service_commands, message)
 			assert(type(message) == "string", "Message has to be string")
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.BROADCAST_MESSAGE_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.BROADCAST_MESSAGE,
 				body = {
 					message = message,
 				},
@@ -452,7 +452,7 @@ return {
 		end,
 		kick_client = function(service_commands, client_id)
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.KICK_CLIENT_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.KICK_CLIENT,
 				body = {
 					client_id = client_id,
 				},
@@ -460,7 +460,7 @@ return {
 		end,
 		request_matchmaking = function(service_commands, client_id, mode)
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.REQUEST_MATCHMAKING_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.REQUEST_MATCHMAKING,
 				body = {
 					client_id = client_id,
 					mode = mode,
@@ -469,7 +469,7 @@ return {
 		end,
 		stop_matchmaking = function(service_commands, reason)
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.STOP_MATCHMAKING_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.STOP_MATCHMAKING,
 				body = {
 					reason = reason,
 				},
@@ -477,7 +477,7 @@ return {
 		end,
 		upgrade_connection = function(service_commands, client_id)
 			omgserver.components.server_state:add_outgoing_command({
-				qualifier = omgserver.constants.UPGRADE_CONNECTION_RUNTIME_COMMAND_QUALIFIER,
+				qualifier = omgserver.constants.UPGRADE_CONNECTION,
 				body = {
 					client_id = client_id,
 					protocol = omgserver.constants.UPGRADE_CONNECTION_WEBSOCKET_PROTOCOL,

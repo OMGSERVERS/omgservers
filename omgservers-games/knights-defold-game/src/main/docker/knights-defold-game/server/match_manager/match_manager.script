@@ -202,12 +202,12 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash(runtime_messages.constants.COMMAND_RECEIVED) then
 		local command_qualifier = message.command_qualifier
 		local command_body = message.command_body
-		if command_qualifier == omgserver.constants.ADD_MATCH_CLIENT_SERVICE_COMMAND_QUALIFIER then
+		if command_qualifier == omgserver.constants.ADD_MATCH_CLIENT then
 			local client_id = command_body.client_id
 			local profile = command_body.profile
 			add_match_client(self, client_id, profile)
 			
-		elseif command_qualifier == omgserver.constants.DELETE_CLIENT_SERVICE_COMMAND_QUALIFIER then
+		elseif command_qualifier == omgserver.constants.DELETE_CLIENT then
 			local client_id = command_body.client_id
 			delete_client(self, client_id)
 		end

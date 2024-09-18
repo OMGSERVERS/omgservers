@@ -74,36 +74,36 @@ local function handle_client_event(self, event)
 	local event_qualifier = event.qualifier
 	local event_body = event.body
 
-	if event_qualifier == omgplayer.constants.INITIALIZED_EVENT_QUALIFIER then
+	if event_qualifier == omgplayer.constants.INITIALIZED then
 		initialized(self)
 
-	elseif event_qualifier == omgplayer.constants.SIGNED_UP_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.SIGNED_UP then
 		local user_id = event_body.user_id 
 		local password = event_body.password
 		signed_up(self, user_id, password)
 
-	elseif event_qualifier == omgplayer.constants.SIGNED_IN_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.SIGNED_IN then
 		local client_id = event_body.client_id
 		signed_in(self, client_id)
 
-	elseif event_qualifier == omgplayer.constants.GREETED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.GREETED then
 		local version_id = event_body.version_id
 		local version_created = event_body.version_created
 		greeted(self, version_id, version_created)
 
-	elseif event_qualifier == omgplayer.constants.ASSSIGNED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.ASSIGNED then
 		local runtime_qualifier = event_body.runtime_qualifier
 		local runtime_id = event_body.runtime_id
 		assigned(self, runtime_qualifier, runtime_id)
 
-	elseif event_qualifier == omgplayer.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.MESSAGE_RECEIVED then
 		local decoded_message = json.decode(event_body.message)
 		message_received(self, decoded_message)
 
-	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED then
 		connection_upgraded(self)
 
-	elseif event_qualifier == omgplayer.constants.FAILED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.PLAYER_FAILED then
 		local reason = event_body.reason
 		failed(self, reason)
 

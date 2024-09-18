@@ -17,7 +17,7 @@ local function handle_command_received_message(self, message)
 	local command_body = message.command_body
 
 	-- Add client
-	if command_qualifier == omgserver.constants.ADD_CLIENT_SERVICE_COMMAND_QUALIFIER then
+	if command_qualifier == omgserver.constants.ADD_CLIENT then
 		local client_id = command_body.client_id
 		local profile = command_body.profile
 
@@ -35,12 +35,12 @@ local function handle_command_received_message(self, message)
 		
 
 	-- Delete client
-	elseif command_qualifier == omgserver.constants.DELETE_CLIENT_SERVICE_COMMAND_QUALIFIER then
+	elseif command_qualifier == omgserver.constants.DELETE_CLIENT then
 		local client_id = command_body.client_id
 		profiles_container:delete_profile(client_id)
 		
 	-- Handle message
-	elseif command_qualifier == omgserver.constants.HANDLE_MESSAGE_SERVICE_COMMAND_QUALIFIER then
+	elseif command_qualifier == omgserver.constants.HANDLE_MESSAGE then
 		local client_id = command_body.client_id
 		local command_message = json.decode(command_body.message)
 

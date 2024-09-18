@@ -11,10 +11,10 @@ local function handle_event(self, event)
 	local event_qualifier = event.qualifier
 	local event_body = event.body
 
-	if event_qualifier == omgplayer.constants.INITIALIZED_EVENT_QUALIFIER then
+	if event_qualifier == omgplayer.constants.INITIALIZED then
 		omgplayer:sign_up()
 
-	elseif event_qualifier == omgplayer.constants.SIGNED_UP_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.SIGNED_UP then
 		local user_id = event_body.user_id
 		local password = event_body.password
 		print(socket.gettime() .. " [GAMECLIENT] User was created, user_id=" .. user_id)
@@ -24,24 +24,24 @@ local function handle_event(self, event)
 		self.user_id = user_id
 		self.password = password
 		
-	elseif event_qualifier == omgplayer.constants.SIGNED_IN_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.SIGNED_IN then
 		local client_id = event_body.client_id
 		print(socket.gettime() .. " [GAMECLIENT] Client was created, client_id=" .. client_id)
 
 		self.client_id = client_id
 		
-	elseif event_qualifier == omgplayer.constants.GREETED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.GREETED then
 		local version_id = event_body.version_id
 		local version_created = event_body.version_created
 		print(socket.gettime() .. " [GAMECLIENT] Client was greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
 		
-	elseif event_qualifier == omgplayer.constants.ASSSIGNED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.ASSIGNED then
 		local runtime_qualifier = event_body.runtime_qualifier
 		local runtime_id = event_body.runtime_id
 
 		print(socket.gettime() .. " [GAMECLIENT] Client was assigned, runtime_qualifier=" .. runtime_qualifier .. ", runtime_id=" .. runtime_id)
 		
-	elseif event_qualifier == omgplayer.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.MESSAGE_RECEIVED then
 		local message = event_body.message
 		print(socket.gettime() .. " [GAMECLIENT] Message was received, message=" .. message)
 
@@ -49,14 +49,14 @@ local function handle_event(self, event)
 			text = "confirm_message",
 		}))
 
-	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED then
 		print(socket.gettime() .. " [GAMECLIENT] Connection was upgraded")
 
 		omgplayer:send_message(json.encode({
 			text = "hello_message",
 		}))
 		
-	elseif event_qualifier == omgplayer.constants.FAILED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgplayer.constants.PLAYER_FAILED then
 		local reason = event_body.reason
 		print(socket.gettime() .. " [GAMECLIENT] Client failed, reason=" .. reason)
 	end

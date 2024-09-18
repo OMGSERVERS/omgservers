@@ -176,9 +176,9 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash(core_messages.constants.RUNTIME_ASSIGNED) then
 		local runtime_qualifier = message.runtime_qualifier
 		local runtime_id = message.runtime_id
-		if runtime_qualifier == omgplayer.constants.LOBBY_RUNTIME_QUALIFIER then
+		if runtime_qualifier == omgplayer.constants.LOBBY then
 			lobby_assigned(self, runtime_qualifier, runtime_id)
-		elseif runtime_qualifier == omgplayer.constants.MATCH_RUNTIME_QUALIFIER then
+		elseif runtime_qualifier == omgplayer.constants.MATCH then
 			match_assigned(self, runtime_qualifier, runtime_id)
 		else
 			error("[CORE_MANAGER] Unknown runtime qualifier was received, runtime_qualifier=" .. tostring(runtime_qualifier))

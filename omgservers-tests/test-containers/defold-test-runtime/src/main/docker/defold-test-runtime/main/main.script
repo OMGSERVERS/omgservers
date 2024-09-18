@@ -12,15 +12,15 @@ local function handle_initialization(self, runtime_qualifier, version_config)
 end
 
 local function handle_command(self, command_qualifier, command_body)
-	if self.runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
-		if command_qualifier == omgserver.constants.ADD_CLIENT_SERVICE_COMMAND_QUALIFIER then
+	if self.runtime_qualifier == omgserver.constants.LOBBY then
+		if command_qualifier == omgserver.constants.ADD_CLIENT then
 			local client_id = command_body.client_id
 			-- Request matchmaking
 			omgserver.service_commands:request_matchmaking(client_id, GAME_MODE)
 		end
 		
-	elseif self.runtime_qualifier == omgserver.constants.MATCH_RUNTIME_QUALIFIER then
-		if command_qualifier == omgserver.constants.ADD_MATCH_CLIENT_SERVICE_COMMAND_QUALIFIER then
+	elseif self.runtime_qualifier == omgserver.constants.MATCH then
+		if command_qualifier == omgserver.constants.ADD_MATCH_CLIENT then
 			local client_id = command_body.client_id
 			
 			if self.supervisor_id then
@@ -61,15 +61,15 @@ local function handle_server_event(self, event)
 	
 	local event_qualifier = event.qualifier
 	local event_body = event.body
-	if event_qualifier == omgserver.constants.SERVER_INITIALIZED_EVENT_QUALIFIER then
+	if event_qualifier == omgserver.constants.SERVER_INITIALIZED then
 		local runtime_qualifier = event_body.runtime_qualifier
 		local version_config = event_body.version_config
 		handle_initialization(self, runtime_qualifier, version_config)
-	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED then
 		local command_qualifier = event_body.command_qualifier
 		local command_body = event_body.command_body
 		handle_command(self, command_qualifier, command_body)
-	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED then
 		local client_id = event_body.client_id
 		local message = event_body.message
 		handle_message(self, client_id, message)

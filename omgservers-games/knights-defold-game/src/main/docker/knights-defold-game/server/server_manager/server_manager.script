@@ -14,9 +14,9 @@ local function server_initialized(self, runtime_qualifier, version_config)
 
 	local runtime_message = runtime_messages:create_runtime_initialized_message(version_config)
 
-	if runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
+	if runtime_qualifier == omgserver.constants.LOBBY then
 		msg.post(LOBBY_MANAGER, runtime_messages.constants.RUNTIME_INITIALIZED, runtime_message)
-	elseif runtime_qualifier == omgserver.constants.MATCH_RUNTIME_QUALIFIER then
+	elseif runtime_qualifier == omgserver.constants.MATCH then
 		msg.post(MATCH_MANAGER, runtime_messages.constants.RUNTIME_INITIALIZED, runtime_message)
 	else
 		error("[SERVER_MANAGER] Unknown runtime qualifier was received, runtime_qualifier=" .. tostring(runtime_qualifier))
@@ -28,9 +28,9 @@ local function command_received(self, command_qualifier, command_body)
 
 	local runtime_message = runtime_messages:create_command_received_message(command_qualifier, command_body)
 
-	if runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
+	if runtime_qualifier == omgserver.constants.LOBBY then
 		msg.post(LOBBY_MANAGER, runtime_messages.constants.COMMAND_RECEIVED, runtime_message)
-	elseif runtime_qualifier == omgserver.constants.MATCH_RUNTIME_QUALIFIER then
+	elseif runtime_qualifier == omgserver.constants.MATCH then
 		msg.post(MATCH_MANAGER, runtime_messages.constants.COMMAND_RECEIVED, runtime_message)
 	else
 		error("[SERVER_MANAGER] Unknown runtime qualifier was received, runtime_qualifier=" .. tostring(runtime_qualifier))
@@ -44,9 +44,9 @@ local function message_received(self, client_id, decoded_message)
 
 	local runtime_message = runtime_messages:create_message_received_message(client_id, decoded_message)
 
-	if runtime_qualifier == omgserver.constants.LOBBY_RUNTIME_QUALIFIER then
+	if runtime_qualifier == omgserver.constants.LOBBY then
 		msg.post(LOBBY_MANAGER, runtime_messages.constants.MESSAGE_RECEIVED, runtime_message)
-	elseif runtime_qualifier == omgserver.constants.MATCH_RUNTIME_QUALIFIER then
+	elseif runtime_qualifier == omgserver.constants.MATCH then
 		msg.post(MATCH_MANAGER, runtime_messages.constants.MESSAGE_RECEIVED, runtime_message)
 	else
 		error("[SERVER_MANAGER] Unknown runtime qualifier was received, runtime_qualifier=" .. tostring(runtime_qualifier))
@@ -59,17 +59,17 @@ local function handle_server_event(self, event)
 	local event_qualifier = event.qualifier
 	local event_body = event.body
 
-	if event_qualifier == omgserver.constants.SERVER_INITIALIZED_EVENT_QUALIFIER then
+	if event_qualifier == omgserver.constants.SERVER_INITIALIZED then
 		local runtime_qualifier = event_body.runtime_qualifier
 		local version_config = event_body.version_config
 		server_initialized(self, runtime_qualifier, version_config)
 		
-	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED then
 		local command_qualifier = event_body.command_qualifier
 		local command_body = event_body.command_body
 		command_received(self, command_qualifier, command_body)
 		
-	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER then
+	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED then
 		local client_id = event_body.client_id
 		local decoded_message = json.decode(event_body.message)
 		message_received(self, client_id, decoded_message)

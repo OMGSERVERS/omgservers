@@ -2,8 +2,8 @@ local omgplayer
 omgplayer = {
 	constants = {
 		-- Runtime qualifiers
-		LOBBY_RUNTIME_QUALIFIER = "LOBBY",
-		MATCH_RUNTIME_QUALIFIER = "MATCH",
+		LOBBY = "LOBBY",
+		MATCH = "MATCH",
 		-- Message qualifiers
 		SERVER_WELCOME_MESSAGE = "SERVER_WELCOME_MESSAGE",
 		RUNTIME_ASSIGNMENT_MESSAGE = "RUNTIME_ASSIGNMENT_MESSAGE",
@@ -12,19 +12,19 @@ omgplayer = {
 		DISCONNECTION_REASON_MESSAGE = "DISCONNECTION_REASON_MESSAGE",
 		SERVER_OUTGOING_MESSAGE = "SERVER_OUTGOING_MESSAGE",
 		-- Player events
-		INITIALIZED_EVENT_QUALIFIER = "INITIALIZED",
-		SIGNED_UP_EVENT_QUALIFIER = "SIGNED_UP",
-		SIGNED_IN_EVENT_QUALIFIER = "SIGNED_IN",
-		GREETED_EVENT_QUALIFIER = "GREETED",
-		ASSSIGNED_EVENT_QUALIFIER = "ASSIGNED",
-		MESSAGE_RECEIVED_EVENT_QUALIFIER = "MESSAGE_RECEIVED",
-		CONNECTION_UPGRADED_EVENT_QUALIFIER = "CONNECTION_UPGRADED",
-		FAILED_EVENT_QUALIFIER = "FAILED",
-		-- Disonnection reasons
-		CLIENT_INACTIVITY_DISCONNECTION_REASON = "CLIENT_INACTIVITY",
-		INTERNAL_FAILURE_DISCONNECTION_REASON = "INTERNAL_FAILURE",
-		-- Misilanious
-		CONNECTION_UPGRADE_WEBSOCKET_PROTOCOL = "WEBSOCKET",
+		INITIALIZED = "INITIALIZED",
+		SIGNED_UP = "SIGNED_UP",
+		SIGNED_IN = "SIGNED_IN",
+		GREETED = "GREETED",
+		ASSIGNED = "ASSIGNED",
+		MESSAGE_RECEIVED = "MESSAGE_RECEIVED",
+		CONNECTION_UPGRADED = "CONNECTION_UPGRADED",
+		PLAYER_FAILED = "PLAYER_FAILED",
+		-- Disconnection reasons
+		CLIENT_INACTIVITY = "CLIENT_INACTIVITY",
+		INTERNAL_FAILURE = "INTERNAL_FAILURE",
+		-- Miscellaneous
+		WEBSOCKET_PROTOCOL = "WEBSOCKET",
 	},
 	settings = {
 		debug = false,
@@ -67,7 +67,7 @@ omgplayer = {
 		end,
 		trigger_initialized_event = function(trigger)
 			local event = {
-				qualifier = omgplayer.constants.INITIALIZED_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.INITIALIZED,
 				body = {
 				},
 			}
@@ -75,7 +75,7 @@ omgplayer = {
 		end,
 		trigger_signed_up_event = function(trigger, user_id, password)
 			local event = {
-				qualifier = omgplayer.constants.SIGNED_UP_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.SIGNED_UP,
 				body = {
 					user_id = user_id,
 					password = password,
@@ -85,7 +85,7 @@ omgplayer = {
 		end,
 		trigger_signed_in_event = function(trigger, client_id)
 			local event = {
-				qualifier = omgplayer.constants.SIGNED_IN_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.SIGNED_IN,
 				body = {
 					client_id = client_id,
 				},
@@ -94,7 +94,7 @@ omgplayer = {
 		end,
 		trigger_greeted_event = function(trigger, version_id, version_created)
 			local event = {
-				qualifier = omgplayer.constants.GREETED_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.GREETED,
 				body = {
 					version_id = version_id,
 					version_created = version_created,
@@ -104,7 +104,7 @@ omgplayer = {
 		end,
 		trigger_assigned_event = function(trigger, runtime_qualifier, runtime_id)
 			local event = {
-				qualifier = omgplayer.constants.ASSSIGNED_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.ASSIGNED,
 				body = {
 					runtime_qualifier = runtime_qualifier,
 					runtime_id = runtime_id,
@@ -114,7 +114,7 @@ omgplayer = {
 		end,
 		trigger_message_received_event = function(trigger, message_body)
 			local event = {
-				qualifier = omgplayer.constants.MESSAGE_RECEIVED_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.MESSAGE_RECEIVED,
 				body = {
 					message = message_body,
 				}
@@ -123,14 +123,14 @@ omgplayer = {
 		end,
 		trigger_connection_upgraded_event = function(trigger)
 			local event = {
-				qualifier = omgplayer.constants.CONNECTION_UPGRADED_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.CONNECTION_UPGRADED,
 				body = {},
 			}
 			trigger:add_client_event(event)
 		end,
 		trigger_failed_event = function(trigger, reason)
 			local event = {
-				qualifier = omgplayer.constants.FAILED_EVENT_QUALIFIER,
+				qualifier = omgplayer.constants.PLAYER_FAILED,
 				body = {
 					reason = reason,
 				},
@@ -578,7 +578,7 @@ omgplayer = {
 			elseif message_qualifier == omgplayer_constants.RUNTIME_ASSIGNMENT_MESSAGE then
 				local runtime_id = incoming_message.body.runtime_id
 				local runtime_qualifier = incoming_message.body.runtime_qualifier
-				if runtime_qualifier == omgplayer_constants.LOBBY_RUNTIME_QUALIFIER then
+				if runtime_qualifier == omgplayer_constants.LOBBY then
 					if not flow_components.client_assignments then
 						flow_components:set_client_assignments(runtime_id, nil, nil)
 					end
@@ -593,7 +593,7 @@ omgplayer = {
 
 					omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
 
-				elseif runtime_qualifier == omgplayer_constants.MATCH_RUNTIME_QUALIFIER then
+				elseif runtime_qualifier == omgplayer_constants.MATCH then
 					flow_components.client_assignments:set_match(runtime_id)
 					omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
 
@@ -607,7 +607,7 @@ omgplayer = {
 
 			elseif message_qualifier == omgplayer_constants.CONNECTION_UPGRADE_MESSAGE then
 				local upgrade_protocol = incoming_message.body.protocol
-				if upgrade_protocol == omgplayer.constants.CONNECTION_UPGRADE_WEBSOCKET_PROTOCOL then
+				if upgrade_protocol == omgplayer.constants.WEBSOCKET_PROTOCOL then
 					local web_socket_config = incoming_message.body.web_socket_config
 					local ws_token = web_socket_config.ws_token
 
