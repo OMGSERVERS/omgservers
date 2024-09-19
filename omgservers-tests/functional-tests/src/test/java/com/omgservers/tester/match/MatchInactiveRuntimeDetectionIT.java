@@ -8,6 +8,7 @@ import com.omgservers.schema.model.version.VersionModeDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
+import com.omgservers.tester.lobby.LobbyInactiveRuntimeRecreationIT;
 import com.omgservers.tester.operation.bootstrapTestClient.BootstrapTestClientOperation;
 import com.omgservers.tester.operation.bootstrapTestVersion.BootstrapTestVersionOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -99,7 +100,14 @@ public class MatchInactiveRuntimeDetectionIT extends BaseTestClass {
             playerApiTester.sendMessage(testClient1, new TestMessage("trigger_exit"));
 
             log.info("Waiting for runtime inactivity detection");
-            Thread.sleep(45_000);
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
+            Thread.sleep(10_000);
+            playerApiTester.sendMessage(testClient1, new TestMessage("prevent_client_inactivity"));
 
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
