@@ -9,4 +9,4 @@ Thumbs.db
 .cproject
 builtins
 omgservers
-main/localtesting.lua
+game/localtesting.lua

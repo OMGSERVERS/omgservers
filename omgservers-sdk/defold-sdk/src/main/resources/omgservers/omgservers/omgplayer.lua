@@ -153,9 +153,9 @@ omgplayer = {
 				local response_status = response.status
 				local response_body = response.response
 
-                if omgplayer.settings.debug then
-                    print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
-                end
+				if omgplayer.settings.debug then
+					print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
+				end
 
 				local decoded_body
 				if response_body then
@@ -176,9 +176,9 @@ omgplayer = {
 				local response_status = response.status
 				local response_body = response.response
 
-                if omgplayer.settings.debug then
-                    print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
-                end
+				if omgplayer.settings.debug then
+					print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
+				end
 
 				local decoded_body
 				if response_body then
@@ -456,10 +456,10 @@ omgplayer = {
 					if callback then
 						callback()
 					end
-					
+
 				elseif data.event == websocket.EVENT_ERROR then
 					omgplayer.trigger:trigger_failed_event("ws connection failed, message=" .. data.message)
-					
+
 				elseif data.event == websocket.EVENT_MESSAGE then
 					omgplayer.trigger:trigger_message_received_event(data.message)
 				end
@@ -500,30 +500,35 @@ omgplayer = {
 				timer = 0,
 				interval = 1,
 			},
+			player_state = {
+                greeted = false,
+                lobby_id = nil,
+                matchmaker_id = nil,
+                match_id = nil,
+                -- Methods
+                set_greeted = function(player_state, greeted)
+                    player_state.greeted = greeted
+                end,
+                set_lobby_id = function(player_state, assigned_lobby_id)
+                    player_state.lobby_id = assigned_lobby_id
+                    player_state.match_id = nil
+                end,
+                set_matchmaker_id = function(player_state, assigned_matchmaker_id)
+                    player_state.matchmaker_id = assigned_matchmaker_id
+                end,
+                set_match_id = function(player_state, assigned_match_id)
+                    player_state.lobby_id = nil
+                    player_state.match_id = assigned_match_id
+                end,
+                get_runtime_id = function(player_state)
+                    return player_state.lobby_id or player_state.match_id
+                end,
+            },
 			-- Methods
 			set_server_version = function(components, version_id, version_created)
 				components.server_version = {
 					version_id = version_id,
 					version_created = version_created,
-				}
-			end,
-			set_client_assignments = function(components, lobby_id, matchmaker_id, match_id)
-				components.client_assignments = {
-					lobby_id = lobby_id,
-					matchmaker_id = matchmaker_id,
-					match_id = match_id,
-					-- Methods
-					set_lobby = function(client_assignments, assigned_lobby_id)
-						client_assignments.lobby_id = assigned_lobby_id
-						client_assignments.match_id = nil
-					end,
-					set_match = function(client_assignments, assigned_match_id)
-						client_assignments.lobby_id = nil
-						client_assignments.match_id = assigned_match_id
-					end,
-					get_runtime_id = function(client_assignments)
-						return client_assignments.lobby_id or client_assignments.match_id
-					end,
 				}
 			end,
 		},
@@ -553,7 +558,7 @@ omgplayer = {
 
 			-- SERVER_WELCOME_MESSAGE is a first server message
 			-- Server produces MATCHMAKER_ASSIGNMENT_MESSAGE and RUNTIME_ASSIGNMENT_MESSAGE concurrently
-			-- This handler triggers player_was_greeted event only after MATCHMAKER_ASSIGNMENT_MESSAGE and RUNTIME_ASSIGNMENT_MESSAGE were received
+			-- So we trigger greeted event only when MATCHMAKER_ASSIGNMENT_MESSAGE and RUNTIME_ASSIGNMENT_MESSAGE were received
 
 			if message_qualifier == omgplayer_constants.SERVER_WELCOME_MESSAGE then
 				local version_id = incoming_message.body.version_id
@@ -562,39 +567,31 @@ omgplayer = {
 
 			elseif message_qualifier == omgplayer_constants.MATCHMAKER_ASSIGNMENT_MESSAGE then
 				local matchmaker_id = incoming_message.body.matchmaker_id
+				flow_components.player_state:set_matchmaker_id(matchmaker_id)
 
-				if not flow_components.client_assignments then
-					flow_components:set_client_assignments(nil, matchmaker_id, nil)
+				if not flow_components.player_state.greeted and flow_components.player_state.lobby_id then
+					flow_components.player_state:set_greeted(true)
+					omgplayer.trigger:trigger_greeted_event(flow_components.server_version.version_id, flow_components.server_version.version_created)
 				end
-
-				if not flow_components.client_assignments.matchmaker_id then
-					if flow_components.client_assignments.lobby_id then
-						omgplayer.trigger:trigger_greeted_event(flow_components.server_version.version_id, flow_components.server_version.version_created)
-					end
-				end
-
-				flow_components.client_assignments.matchmaker_id = matchmaker_id
 
 			elseif message_qualifier == omgplayer_constants.RUNTIME_ASSIGNMENT_MESSAGE then
 				local runtime_id = incoming_message.body.runtime_id
 				local runtime_qualifier = incoming_message.body.runtime_qualifier
-				if runtime_qualifier == omgplayer_constants.LOBBY then
-					if not flow_components.client_assignments then
-						flow_components:set_client_assignments(runtime_id, nil, nil)
-					end
 
-					if not flow_components.client_assignments.lobby_id and not flow_components.client_assignments.match_id then
-						if flow_components.client_assignments.matchmaker_id then
+				if runtime_qualifier == omgplayer_constants.LOBBY then
+					flow_components.player_state:set_lobby_id(runtime_id)
+
+					if flow_components.player_state.greeted then
+						omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
+					else
+						if flow_components.player_state.matchmaker_id then
+							flow_components.player_state:set_greeted(true)
 							omgplayer.trigger:trigger_greeted_event(flow_components.server_version.version_id, flow_components.server_version.version_created)
 						end
 					end
 
-					flow_components.client_assignments:set_lobby(runtime_id)
-
-					omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
-
 				elseif runtime_qualifier == omgplayer_constants.MATCH then
-					flow_components.client_assignments:set_match(runtime_id)
+					flow_components.player_state:set_match_id(runtime_id)
 					omgplayer.trigger:trigger_assigned_event(runtime_qualifier, runtime_id)
 
 				else
@@ -611,7 +608,7 @@ omgplayer = {
 					local web_socket_config = incoming_message.body.web_socket_config
 					local ws_token = web_socket_config.ws_token
 
-					local runtime_id = flow_components.client_assignments:get_runtime_id()
+					local runtime_id = flow_components.player_state:get_runtime_id()
 					omgplayer.server:ws_connect(runtime_id, ws_token, function()
 						omgplayer.trigger:trigger_connection_upgraded_event()
 					end)
@@ -652,7 +649,7 @@ omgplayer = {
 	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler, debug)
 		self.settings.debug = debug or false
 		print(socket.gettime() .. " [OMGPLAYER] Setting, debug=" .. tostring(self.settings.debug))
-		
+
 		self.server:use_url(server_url)
 		self.server:use_project(tenant_id, stage_id, stage_secret)
 		self.components:set_event_handler(handler)

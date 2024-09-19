@@ -51,7 +51,7 @@ local function signed_in(self, client_id)
 end
 
 local function lobby_assigned(self, runtime_qualifier, runtime_id)
-	print(socket.gettime() .. " [CORE_MANAGER] Lobby was assigned at " .. os.date())
+	-- This event is not triggered
 end
 
 local function greeted(self, version_id, version_created)
