@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.support;
 
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateStagePermissionsSupportResponse {
 
-    List<StagePermissionEnum> createdPermissions;
+    List<TenantStagePermissionEnum> createdPermissions;
 }

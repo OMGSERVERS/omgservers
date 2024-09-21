@@ -8,13 +8,13 @@ import com.omgservers.service.event.body.module.client.ClientCreatedEventBodyMod
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyModel;
-import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
 import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
@@ -60,7 +60,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
         return getClient(clientId)
                 .flatMap(client -> {
                     final var tenantId = client.getTenantId();
-                    final var versionId = client.getVersionId();
+                    final var versionId = client.getDeploymentId();
 
                     return getVersion(tenantId, versionId)
                             .flatMap(version -> {
@@ -82,18 +82,18 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<VersionModel> getVersion(final Long tenantId, final Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Boolean> syncWelcomeMessage(final ClientModel client,
-                                    final VersionModel version,
+                                    final TenantVersionModel version,
                                     final String idempotencyKey) {
         final var clientId = client.getId();
         final var tenantId = client.getTenantId();
-        final var versionId = client.getVersionId();
+        final var versionId = client.getDeploymentId();
         final var created = version.getCreated();
         final var messageBody = new ServerWelcomeMessageBodyModel(tenantId, versionId, created);
         final var clientMessage = clientMessageModelFactory.create(clientId,
@@ -110,7 +110,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                                         final String idempotencyKey) {
         final var clientId = client.getId();
         final var tenantId = client.getTenantId();
-        final var versionId = client.getVersionId();
+        final var versionId = client.getDeploymentId();
         final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId, tenantId, versionId);
         final var eventModel = eventModelFactory.create(eventBody,
                 idempotencyKey + "/" + eventBody.getQualifier());
@@ -124,7 +124,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                                              final String idempotencyKey) {
         final var clientId = client.getId();
         final var tenantId = client.getTenantId();
-        final var versionId = client.getVersionId();
+        final var versionId = client.getDeploymentId();
         final var eventBody = new MatchmakerAssignmentRequestedEventBodyModel(clientId, tenantId, versionId);
         final var eventModel = eventModelFactory.create(eventBody,
                 idempotencyKey + "/" + eventBody.getQualifier());

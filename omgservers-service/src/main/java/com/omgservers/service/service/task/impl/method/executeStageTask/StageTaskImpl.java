@@ -1,18 +1,18 @@
 package com.omgservers.service.service.task.impl.method.executeStageTask;
 
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.version.VersionProjectionModel;
-import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
+import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionResponse;
-import com.omgservers.schema.module.tenant.GetStageRequest;
-import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
@@ -37,13 +37,13 @@ public class StageTaskImpl {
                         .replaceWith(Boolean.TRUE));
     }
 
-    Uni<StageModel> getStage(final Long tenantId, final Long id) {
-        final var request = new GetStageRequest(tenantId, id);
-        return tenantModule.getStageService().getStage(request)
-                .map(GetStageResponse::getStage);
+    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+        final var request = new GetTenantStageRequest(tenantId, id);
+        return tenantModule.getTenantService().getStage(request)
+                .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<Void> handleStage(final StageModel stage) {
+    Uni<Void> handleStage(final TenantStageModel stage) {
         final var tenantId = stage.getTenantId();
         final var stageId = stage.getId();
 
@@ -61,13 +61,13 @@ public class StageTaskImpl {
                 });
     }
 
-    Uni<List<VersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
-        final var request = new ViewVersionsRequest(tenantId, stageId);
-        return tenantModule.getVersionService().viewVersions(request)
-                .map(ViewVersionsResponse::getVersionProjections);
+    Uni<List<TenantVersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
+        final var request = new ViewTenantVersionsRequest(tenantId, stageId);
+        return tenantModule.getTenantService().viewTenantVersions(request)
+                .map(ViewTenantVersionsResponse::getTenantVersionProjections);
     }
 
-    Uni<Boolean> handlePreviousVersion(final VersionProjectionModel versionProjection) {
+    Uni<Boolean> handlePreviousVersion(final TenantVersionProjectionModel versionProjection) {
         final var tenantId = versionProjection.getTenantId();
         final var versionId = versionProjection.getId();
 
@@ -83,7 +83,7 @@ public class StageTaskImpl {
                 });
     }
 
-    Uni<Boolean> handlePreviousVersionRuntimes(final VersionProjectionModel versionProjection) {
+    Uni<Boolean> handlePreviousVersionRuntimes(final TenantVersionProjectionModel versionProjection) {
         final var tenantId = versionProjection.getTenantId();
         final var versionId = versionProjection.getId();
         return viewVersionLobbyRefs(tenantId, versionId)
@@ -100,10 +100,10 @@ public class StageTaskImpl {
                         }));
     }
 
-    Uni<List<VersionLobbyRefModel>> viewVersionLobbyRefs(final Long tenantId, final Long versionId) {
-        final var request = new ViewVersionLobbyRefsRequest(tenantId, versionId);
-        return tenantModule.getVersionService().viewVersionLobbyRefs(request)
-                .map(ViewVersionLobbyRefsResponse::getVersionLobbyRefs);
+    Uni<List<TenantLobbyRefModel>> viewVersionLobbyRefs(final Long tenantId, final Long versionId) {
+        final var request = new ViewTenantLobbyRefsRequest(tenantId, versionId);
+        return tenantModule.getTenantService().viewVersionLobbyRefs(request)
+                .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<Integer> countRuntimeAssignments(Long runtimeId) {
@@ -113,8 +113,8 @@ public class StageTaskImpl {
     }
 
     Uni<Boolean> deleteVersion(final Long tenantId, final Long id) {
-        final var request = new DeleteVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().deleteVersion(request)
-                .map(DeleteVersionResponse::getDeleted);
+        final var request = new DeleteTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteVersion(request)
+                .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

@@ -1,252 +1,327 @@
 package com.omgservers.service.module.tenant.impl.service.webService;
 
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.DeleteProjectRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectResponse;
-import com.omgservers.schema.module.tenant.DeleteStagePermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteStagePermissionResponse;
-import com.omgservers.schema.module.tenant.DeleteStageRequest;
-import com.omgservers.schema.module.tenant.DeleteStageResponse;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.DeleteTenantRequest;
-import com.omgservers.schema.module.tenant.DeleteTenantResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionResponse;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.GetProjectRequest;
-import com.omgservers.schema.module.tenant.GetProjectResponse;
-import com.omgservers.schema.module.tenant.GetStageRequest;
-import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
-import com.omgservers.schema.module.tenant.GetVersionConfigResponse;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.HasProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.HasProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
-import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.SelectStageVersionRequest;
-import com.omgservers.schema.module.tenant.SelectStageVersionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectRequest;
-import com.omgservers.schema.module.tenant.SyncProjectResponse;
-import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
-import com.omgservers.schema.module.tenant.SyncStagePermissionResponse;
-import com.omgservers.schema.module.tenant.SyncStageRequest;
-import com.omgservers.schema.module.tenant.SyncStageResponse;
-import com.omgservers.schema.module.tenant.SyncTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncTenantRequest;
-import com.omgservers.schema.module.tenant.SyncTenantResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.SyncVersionRequest;
-import com.omgservers.schema.module.tenant.SyncVersionResponse;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsResponse;
-import com.omgservers.schema.module.tenant.ViewProjectsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectsResponse;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
-import com.omgservers.schema.module.tenant.ViewStagesRequest;
-import com.omgservers.schema.module.tenant.ViewStagesResponse;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionsResponse;
-import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
-import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
+import com.omgservers.schema.module.tenant.tenant.DeleteTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.DeleteTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
-import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
-import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsRequest;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesRequest;
+import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
+
+    /*
+    Tenant
+     */
 
     Uni<GetTenantResponse> getTenant(GetTenantRequest request);
 
     Uni<GetTenantDataResponse> getTenantData(GetTenantDataRequest request);
 
-    Uni<HasTenantPermissionResponse> hasTenantPermission(HasTenantPermissionRequest request);
-
     Uni<SyncTenantResponse> syncTenant(SyncTenantRequest request);
 
     Uni<DeleteTenantResponse> deleteTenant(DeleteTenantRequest request);
 
+    /*
+    TenantPermission
+     */
+
     Uni<ViewTenantPermissionsResponse> viewTenantPermissions(ViewTenantPermissionsRequest request);
+
+    Uni<VerifyTenantPermissionExistsResponse> verifyTenantPermissionExists(VerifyTenantPermissionExistsRequest request);
 
     Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionRequest request);
 
     Uni<DeleteTenantPermissionResponse> deleteTenantPermission(DeleteTenantPermissionRequest request);
 
-    Uni<GetProjectResponse> getProject(GetProjectRequest request);
+    /*
+    TenantProject
+     */
 
-    Uni<SyncProjectResponse> syncProject(SyncProjectRequest request);
+    Uni<GetTenantProjectResponse> getTenantProject(GetTenantProjectRequest request);
 
-    Uni<ViewProjectsResponse> viewProjects(ViewProjectsRequest request);
+    Uni<SyncTenantProjectResponse> syncTenantProject(SyncTenantProjectRequest request);
 
-    Uni<DeleteProjectResponse> deleteProject(DeleteProjectRequest request);
+    Uni<ViewTenantProjectsResponse> viewTenantProjects(ViewTenantProjectsRequest request);
 
-    Uni<ViewProjectPermissionsResponse> viewProjectPermissions(ViewProjectPermissionsRequest request);
+    Uni<DeleteTenantProjectResponse> deleteTenantProject(DeleteTenantProjectRequest request);
 
-    Uni<HasProjectPermissionResponse> hasProjectPermission(HasProjectPermissionRequest request);
+    /*
+    TenantProjectPermission
+     */
 
-    Uni<SyncProjectPermissionResponse> syncProjectPermission(SyncProjectPermissionRequest request);
+    Uni<ViewTenantProjectPermissionsResponse> viewTenantProjectPermissions(ViewTenantProjectPermissionsRequest request);
 
-    Uni<DeleteProjectPermissionResponse> deleteProjectPermission(DeleteProjectPermissionRequest request);
+    Uni<VerifyTenantProjectPermissionExistsResponse> verifyTenantProjectPermissionExists(
+            VerifyTenantProjectPermissionExistsRequest request);
 
-    Uni<GetStageResponse> getStage(GetStageRequest request);
+    Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(SyncTenantProjectPermissionRequest request);
 
-    Uni<GetStageDataResponse> getStageData(GetStageDataRequest request);
+    Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
+            DeleteTenantProjectPermissionRequest request);
 
-    Uni<SyncStageResponse> syncStage(SyncStageRequest request);
+    /*
+    TenantStage
+     */
 
-    Uni<ViewStagesResponse> viewStages(ViewStagesRequest request);
+    Uni<GetTenantStageResponse> getTenantStage(GetTenantStageRequest request);
 
-    Uni<DeleteStageResponse> deleteStage(DeleteStageRequest request);
+    Uni<GetTenantStageDataResponse> getTenantStageData(GetTenantStageDataRequest request);
 
-    Uni<ViewStagePermissionsResponse> viewStagePermissions(ViewStagePermissionsRequest request);
+    Uni<SyncTenantStageResponse> syncTenantStage(SyncTenantStageRequest request);
 
-    Uni<HasStagePermissionResponse> hasStagePermission(HasStagePermissionRequest request);
+    Uni<ViewTenantStagesResponse> viewTenantStages(ViewTenantStagesRequest request);
 
-    Uni<SyncStagePermissionResponse> syncStagePermission(SyncStagePermissionRequest request);
+    Uni<DeleteTenantStageResponse> deleteTenantStage(DeleteTenantStageRequest request);
 
-    Uni<DeleteStagePermissionResponse> deleteStagePermission(DeleteStagePermissionRequest request);
+    /*
+    TenantStagePermission
+     */
 
-    Uni<GetVersionResponse> getVersion(GetVersionRequest request);
+    Uni<ViewTenantStagePermissionsResponse> viewTenantStagePermissions(ViewTenantStagePermissionsRequest request);
 
-    Uni<GetVersionDataResponse> getVersionData(GetVersionDataRequest request);
+    Uni<VerifyTenantStagePermissionExistsResponse> verifyTenantStagePermissionExists(
+            VerifyTenantStagePermissionExistsRequest request);
 
-    Uni<SyncVersionResponse> syncVersion(SyncVersionRequest request);
+    Uni<SyncTenantStagePermissionResponse> syncTenantStagePermission(SyncTenantStagePermissionRequest request);
 
-    Uni<ViewVersionsResponse> viewVersions(ViewVersionsRequest request);
+    Uni<DeleteTenantStagePermissionResponse> deleteTenantStagePermission(DeleteTenantStagePermissionRequest request);
 
-    Uni<SelectStageVersionResponse> selectStageVersion(SelectStageVersionRequest request);
+    /*
+    TenantVersion
+     */
 
-    Uni<DeleteVersionResponse> deleteVersion(DeleteVersionRequest request);
+    Uni<GetTenantVersionResponse> getTenantVersion(GetTenantVersionRequest request);
 
-    Uni<GetVersionConfigResponse> getVersionConfig(GetVersionConfigRequest request);
+    Uni<GetTenantVersionConfigResponse> getTenantVersionConfig(GetTenantVersionConfigRequest request);
 
-    Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(GetVersionJenkinsRequestRequest request);
+    Uni<GetTenantVersionDataResponse> getTenantVersionData(GetTenantVersionDataRequest request);
 
-    Uni<ViewVersionJenkinsRequestsResponse> viewVersionJenkinsRequests(ViewVersionJenkinsRequestsRequest request);
+    Uni<SyncTenantVersionResponse> syncTenantVersion(SyncTenantVersionRequest request);
 
-    Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(SyncVersionJenkinsRequestRequest request);
+    Uni<ViewTenantVersionsResponse> viewTenantVersions(ViewTenantVersionsRequest request);
 
-    Uni<DeleteVersionJenkinsRequestResponse> deleteVersionJenkinsRequest(DeleteVersionJenkinsRequestRequest request);
+    Uni<DeleteTenantVersionResponse> deleteTenantVersion(DeleteTenantVersionRequest request);
 
-    Uni<GetVersionImageRefResponse> getVersionImageRef(GetVersionImageRefRequest request);
+    /*
+    TenantJenkinsRequest
+     */
 
-    Uni<FindVersionImageRefResponse> findVersionImageRef(FindVersionImageRefRequest request);
+    Uni<GetTenantJenkinsRequestResponse> getTenantJenkinsRequest(GetTenantJenkinsRequestRequest request);
 
-    Uni<ViewVersionImageRefsResponse> viewVersionImageRefs(ViewVersionImageRefsRequest request);
+    Uni<ViewTenantJenkinsRequestsResponse> viewTenantJenkinsRequests(ViewTenantJenkinsRequestsRequest request);
 
-    Uni<SyncVersionImageRefResponse> syncVersionImageRef(SyncVersionImageRefRequest request);
+    Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequest(SyncTenantJenkinsRequestRequest request);
 
-    Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(DeleteVersionImageRefRequest request);
+    Uni<DeleteTenantJenkinsRequestResponse> deleteTenantJenkinsRequest(DeleteTenantJenkinsRequestRequest request);
 
-    Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(GetVersionLobbyRequestRequest request);
+    /*
+    TenantImageRef
+     */
 
-    Uni<FindVersionLobbyRequestResponse> findVersionLobbyRequest(FindVersionLobbyRequestRequest request);
+    Uni<GetTenantImageRefResponse> getTenantImageRef(GetTenantImageRefRequest request);
 
-    Uni<ViewVersionLobbyRequestsResponse> viewVersionLobbyRequests(ViewVersionLobbyRequestsRequest request);
+    Uni<FindTenantImageRefResponse> findTenantImageRef(FindTenantImageRefRequest request);
 
-    Uni<SyncVersionLobbyRequestResponse> syncVersionLobbyRequest(SyncVersionLobbyRequestRequest request);
+    Uni<ViewTenantImageRefsResponse> viewTenantImageRefs(ViewTenantImageRefsRequest request);
 
-    Uni<DeleteVersionLobbyRequestResponse> deleteVersionLobbyRequest(DeleteVersionLobbyRequestRequest request);
+    Uni<SyncTenantImageRefResponse> syncTenantImageRef(SyncTenantImageRefRequest request);
 
-    Uni<GetVersionLobbyRefResponse> getVersionLobbyRef(GetVersionLobbyRefRequest request);
+    Uni<DeleteTenantImageRefResponse> deleteTenantImageRef(DeleteTenantImageRefRequest request);
 
-    Uni<FindVersionLobbyRefResponse> findVersionLobbyRef(FindVersionLobbyRefRequest request);
+    /*
+    TenantDeployment
+     */
 
-    Uni<ViewVersionLobbyRefsResponse> viewVersionLobbyRefs(ViewVersionLobbyRefsRequest request);
+    Uni<GetTenantDeploymentResponse> getTenantDeployment(GetTenantDeploymentRequest request);
 
-    Uni<SyncVersionLobbyRefResponse> syncVersionLobbyRef(SyncVersionLobbyRefRequest request);
+    Uni<SelectTenantDeploymentResponse> selectTenantDeployment(SelectTenantDeploymentRequest request);
 
-    Uni<DeleteVersionLobbyRefResponse> deleteVersionLobbyRef(DeleteVersionLobbyRefRequest request);
+    Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(ViewTenantDeploymentsRequest request);
 
-    Uni<GetVersionMatchmakerRequestResponse> getVersionMatchmakerRequest(GetVersionMatchmakerRequestRequest request);
+    Uni<SyncTenantDeploymentResponse> syncTenantDeployment(SyncTenantDeploymentRequest request);
 
-    Uni<FindVersionMatchmakerRequestResponse> findVersionMatchmakerRequest(FindVersionMatchmakerRequestRequest request);
+    Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(DeleteTenantDeploymentRequest request);
 
-    Uni<ViewVersionMatchmakerRequestsResponse> viewVersionMatchmakerRequests(
-            ViewVersionMatchmakerRequestsRequest request);
+    /*
+    TenantLobbyRequest
+     */
 
-    Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequest(SyncVersionMatchmakerRequestRequest request);
+    Uni<GetTenantLobbyRequestResponse> getTenantLobbyRequest(GetTenantLobbyRequestRequest request);
 
-    Uni<DeleteVersionMatchmakerRequestResponse> deleteVersionMatchmakerRequest(
-            DeleteVersionMatchmakerRequestRequest request);
+    Uni<FindTenantLobbyRequestResponse> findTenantLobbyRequest(FindTenantLobbyRequestRequest request);
 
-    Uni<GetVersionMatchmakerRefResponse> getVersionMatchmakerRef(GetVersionMatchmakerRefRequest request);
+    Uni<ViewTenantLobbyRequestsResponse> viewTenantLobbyRequests(ViewTenantLobbyRequestsRequest request);
 
-    Uni<FindVersionMatchmakerRefResponse> findVersionMatchmakerRef(FindVersionMatchmakerRefRequest request);
+    Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequest(SyncTenantLobbyRequestRequest request);
 
-    Uni<ViewVersionMatchmakerRefsResponse> viewVersionMatchmakerRefs(ViewVersionMatchmakerRefsRequest request);
+    Uni<DeleteTenantLobbyRequestResponse> deleteTenantLobbyRequest(DeleteTenantLobbyRequestRequest request);
 
-    Uni<SyncVersionMatchmakerRefResponse> syncVersionMatchmakerRef(SyncVersionMatchmakerRefRequest request);
+    /*
+    TenantLobbyRef
+     */
 
-    Uni<DeleteVersionMatchmakerRefResponse> deleteVersionMatchmakerRef(DeleteVersionMatchmakerRefRequest request);
+    Uni<GetTenantLobbyRefResponse> getTenantLobbyRef(GetTenantLobbyRefRequest request);
+
+    Uni<FindTenantLobbyRefResponse> findTenantLobbyRef(FindTenantLobbyRefRequest request);
+
+    Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(ViewTenantLobbyRefsRequest request);
+
+    Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(SyncTenantLobbyRefRequest request);
+
+    Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(DeleteTenantLobbyRefRequest request);
+
+    /*
+    TenantMatchmakerRequest
+     */
+
+    Uni<GetTenantMatchmakerRequestResponse> getTenantMatchmakerRequest(GetTenantMatchmakerRequestRequest request);
+
+    Uni<FindTenantMatchmakerRequestResponse> findTenantMatchmakerRequest(FindTenantMatchmakerRequestRequest request);
+
+    Uni<ViewTenantMatchmakerRequestsResponse> viewTenantMatchmakerRequests(
+            ViewTenantMatchmakerRequestsRequest request);
+
+    Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequest(SyncTenantMatchmakerRequestRequest request);
+
+    Uni<DeleteTenantMatchmakerRequestResponse> deleteTenantMatchmakerRequest(
+            DeleteTenantMatchmakerRequestRequest request);
+
+    /*
+    TenantMatchmakerRef
+     */
+
+    Uni<GetTenantMatchmakerRefResponse> getTenantMatchmakerRef(GetTenantMatchmakerRefRequest request);
+
+    Uni<FindTenantMatchmakerRefResponse> findTenantMatchmakerRef(FindTenantMatchmakerRefRequest request);
+
+    Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(ViewTenantMatchmakerRefsRequest request);
+
+    Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(SyncTenantMatchmakerRefRequest request);
+
+    Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(DeleteTenantMatchmakerRefRequest request);
 }

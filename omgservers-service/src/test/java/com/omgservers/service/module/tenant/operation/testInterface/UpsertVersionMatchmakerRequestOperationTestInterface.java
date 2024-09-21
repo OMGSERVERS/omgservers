@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
-import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRequest.upsertVersionMatchmakerRequest.UpsertVersionMatchmakerRequestOperation;
+import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantMatchmakerRequest.UpsertTenantMatchmakerRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,16 +17,16 @@ import java.time.Duration;
 public class UpsertVersionMatchmakerRequestOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertVersionMatchmakerRequestOperation upsertVersionMatchmakerRequestOperation;
+    final UpsertTenantMatchmakerRequestOperation upsertTenantMatchmakerRequestOperation;
 
     final PgPool pgPool;
 
     public ChangeContext<Boolean> upsertVersionMatchmakerRequest(final int shard,
-                                                                 final VersionMatchmakerRequestModel versionMatchmakerRequest) {
+                                                                 final TenantMatchmakerRequestModel versionMatchmakerRequest) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertVersionMatchmakerRequestOperation
-                                    .upsertVersionMatchmakerRequest(changeContext,
+                    return pgPool.withTransaction(sqlConnection -> upsertTenantMatchmakerRequestOperation
+                                    .execute(changeContext,
                                             sqlConnection,
                                             shard,
                                             versionMatchmakerRequest))

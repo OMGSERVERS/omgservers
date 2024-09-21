@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.service.module.tenant.impl.operation.stage.deleteStage.DeleteStageOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantStage.DeleteTenantStageOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,7 +16,7 @@ import java.time.Duration;
 public class DeleteStageOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final DeleteStageOperation deleteStageOperation;
+    final DeleteTenantStageOperation deleteTenantStageOperation;
 
     final PgPool pgPool;
 
@@ -25,8 +25,8 @@ public class DeleteStageOperationTestInterface {
                                               final Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> deleteStageOperation
-                                    .deleteStage(changeContext, sqlConnection, shard, tenantId, id))
+                    return pgPool.withTransaction(sqlConnection -> deleteTenantStageOperation
+                                    .execute(changeContext, sqlConnection, shard, tenantId, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

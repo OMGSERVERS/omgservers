@@ -10,7 +10,7 @@ import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;
@@ -29,7 +29,7 @@ public class RuntimeTestDataFactory {
     final RuntimeModelFactory runtimeModelFactory;
 
     public RuntimeModel createLobbyRuntime(final TenantModel tenant,
-                                           final VersionModel version,
+                                           final TenantVersionModel version,
                                            final LobbyModel lobby) {
         final var tenantId = tenant.getId();
         final var versionId = version.getId();
@@ -49,7 +49,7 @@ public class RuntimeTestDataFactory {
     }
 
     public RuntimeModel createMatchRuntime(final TenantModel tenant,
-                                           final VersionModel version,
+                                           final TenantVersionModel version,
                                            final MatchmakerMatchModel match) {
         final var tenantId = tenant.getId();
         final var versionId = version.getId();

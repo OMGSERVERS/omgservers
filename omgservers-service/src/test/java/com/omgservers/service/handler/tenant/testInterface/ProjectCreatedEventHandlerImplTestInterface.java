@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant.testInterface;
 
 import com.omgservers.service.event.EventModel;
-import com.omgservers.service.handler.tenant.ProjectCreatedEventHandlerImpl;
+import com.omgservers.service.handler.tenant.TenantProjectCreatedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.time.Duration;
 public class ProjectCreatedEventHandlerImplTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final ProjectCreatedEventHandlerImpl projectCreatedEventHandler;
+    final TenantProjectCreatedEventHandlerImpl projectCreatedEventHandler;
 
     public void handle(final EventModel event) {
         projectCreatedEventHandler.handle(event)

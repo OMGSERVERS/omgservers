@@ -5,17 +5,17 @@ import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
 import com.omgservers.service.event.body.internal.VersionDeploymentRequestedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
 import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.security.ServiceSecurityAttributes;
 import com.omgservers.service.service.event.EventService;
@@ -35,7 +35,7 @@ class DeployVersionMethodImpl implements DeployVersionMethod {
 
     final EventService eventService;
 
-    final VersionImageRefModelFactory versionImageRefModelFactory;
+    final TenantImageRefModelFactory tenantImageRefModelFactory;
     final EventModelFactory eventModelFactory;
 
     final SecurityIdentity securityIdentity;
@@ -50,7 +50,7 @@ class DeployVersionMethodImpl implements DeployVersionMethod {
 
         return getVersion(tenantId, versionId)
                 .flatMap(version -> {
-                    final var stageId = version.getStageId();
+                    final var stageId = version.getProjectId();
                     final var userId =
                             securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
@@ -60,22 +60,22 @@ class DeployVersionMethodImpl implements DeployVersionMethod {
                 });
     }
 
-    Uni<VersionModel> getVersion(final Long tenantId, final Long versionId) {
-        final var request = new GetVersionRequest(tenantId, versionId);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long versionId) {
+        final var request = new GetTenantVersionRequest(tenantId, versionId);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
                                                final Long stageId,
                                                final Long userId) {
-        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
-        final var hasStagePermissionServiceRequest = new HasStagePermissionRequest(tenantId,
+        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
+        final var hasStagePermissionServiceRequest = new VerifyTenantStagePermissionExistsRequest(tenantId,
                 stageId,
                 userId,
                 permission);
-        return tenantModule.getStageService().hasStagePermission(hasStagePermissionServiceRequest)
-                .map(HasStagePermissionResponse::getResult)
+        return tenantModule.getTenantService().verifyTenantStagePermissionExists(hasStagePermissionServiceRequest)
+                .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,

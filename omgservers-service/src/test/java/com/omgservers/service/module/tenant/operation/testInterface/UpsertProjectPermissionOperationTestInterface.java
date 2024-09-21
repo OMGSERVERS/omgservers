@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.service.module.tenant.impl.operation.projectPermission.upsertProjectPermission.UpsertProjectPermissionOperation;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantProjectPermission.UpsertTenantProjectPermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,16 +17,16 @@ import java.time.Duration;
 public class UpsertProjectPermissionOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertProjectPermissionOperation upsertProjectPermissionOperation;
+    final UpsertTenantProjectPermissionOperation upsertTenantProjectPermissionOperation;
 
     final PgPool pgPool;
 
     public ChangeContext<Boolean> upsertProjectPermission(final int shard,
-                                                          final ProjectPermissionModel projectPermission) {
+                                                          final TenantProjectPermissionModel projectPermission) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertProjectPermissionOperation
-                                    .upsertProjectPermission(changeContext, sqlConnection, shard, projectPermission))
+                    return pgPool.withTransaction(sqlConnection -> upsertTenantProjectPermissionOperation
+                                    .execute(changeContext, sqlConnection, shard, projectPermission))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

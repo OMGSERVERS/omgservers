@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
 import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.schema.model.project.ProjectModel;
+import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
@@ -9,16 +9,16 @@ import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefReques
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefResponse;
-import com.omgservers.schema.module.tenant.DeleteProjectRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectResponse;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.ViewProjectsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectsResponse;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsRequest;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
@@ -141,16 +141,16 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<ProjectModel>> viewProjects(final Long tenantId) {
-        final var request = new ViewProjectsRequest(tenantId);
-        return tenantModule.getProjectService().viewProjects(request)
-                .map(ViewProjectsResponse::getProjects);
+    Uni<List<TenantProjectModel>> viewProjects(final Long tenantId) {
+        final var request = new ViewTenantProjectsRequest(tenantId);
+        return tenantModule.getTenantService().viewProjects(request)
+                .map(ViewTenantProjectsResponse::getTenantProjects);
     }
 
     Uni<Boolean> deleteProject(final Long tenantId, final Long id) {
-        final var request = new DeleteProjectRequest(tenantId, id);
-        return tenantModule.getProjectService().deleteProject(request)
-                .map(DeleteProjectResponse::getDeleted);
+        final var request = new DeleteTenantProjectRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteProject(request)
+                .map(DeleteTenantProjectResponse::getDeleted);
     }
 
     Uni<Void> findAndDeleteRootTenantRef(final Long tenantId) {

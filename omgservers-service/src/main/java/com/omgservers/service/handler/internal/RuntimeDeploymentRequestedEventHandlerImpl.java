@@ -6,17 +6,17 @@ import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
@@ -79,8 +79,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                             runtimeId, runtime.getQualifier());
 
                     final var tenantId = runtime.getTenantId();
-                    final var versionId = runtime.getVersionId();
-                    return getVersion(tenantId, versionId)
+                    final var versionId = runtime.getDeploymentId();
+                    return getTenantVersion(tenantId, versionId)
                             .flatMap(version -> viewVersionImageRef(tenantId, versionId)
                                     .map(imageRefs -> selectImageRef(runtime, imageRefs))
                                     .flatMap(imageRef -> {
@@ -102,27 +102,27 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<VersionModel> getVersion(final Long tenantId, final Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 
-    Uni<List<VersionImageRefModel>> viewVersionImageRef(final Long tenantId, final Long versionId) {
-        final var request = new ViewVersionImageRefsRequest(tenantId, versionId);
-        return tenantModule.getVersionService().viewVersionImageRefs(request)
-                .map(ViewVersionImageRefsResponse::getVersionImageRefs);
+    Uni<List<TenantImageRefModel>> viewVersionImageRef(final Long tenantId, final Long versionId) {
+        final var request = new ViewTenantImageRefsRequest(tenantId, versionId);
+        return tenantModule.getTenantService().viewTenantImageRefs(request)
+                .map(ViewTenantImageRefsResponse::getTenantImageRefs);
     }
 
-    VersionImageRefModel selectImageRef(final RuntimeModel runtime,
-                                        final List<VersionImageRefModel> imageRefs) {
+    TenantImageRefModel selectImageRef(final RuntimeModel runtime,
+                                       final List<TenantImageRefModel> imageRefs) {
         final var universalImageRefOptional = getImageByQualifier(imageRefs,
-                VersionImageRefQualifierEnum.UNIVERSAL);
+                TenantImageRefQualifierEnum.UNIVERSAL);
         return universalImageRefOptional
                 .orElseGet(() -> switch (runtime.getQualifier()) {
                     case LOBBY -> {
                         final var lobbyImageRefOptional = getImageByQualifier(imageRefs,
-                                VersionImageRefQualifierEnum.LOBBY);
+                                TenantImageRefQualifierEnum.LOBBY);
                         if (lobbyImageRefOptional.isPresent()) {
                             yield lobbyImageRefOptional.get();
                         } else {
@@ -133,7 +133,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                     }
                     case MATCH -> {
                         final var matchImageRefOptional = getImageByQualifier(imageRefs,
-                                VersionImageRefQualifierEnum.MATCH);
+                                TenantImageRefQualifierEnum.MATCH);
                         if (matchImageRefOptional.isPresent()) {
                             yield matchImageRefOptional.get();
                         } else {
@@ -145,8 +145,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 });
     }
 
-    Optional<VersionImageRefModel> getImageByQualifier(final List<VersionImageRefModel> imageRefs,
-                                                       final VersionImageRefQualifierEnum qualifier) {
+    Optional<TenantImageRefModel> getImageByQualifier(final List<TenantImageRefModel> imageRefs,
+                                                      final TenantImageRefQualifierEnum qualifier) {
         return imageRefs.stream()
                 .filter(imageRef -> imageRef.getQualifier().equals(qualifier))
                 .findFirst();

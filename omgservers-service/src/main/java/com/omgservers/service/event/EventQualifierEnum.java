@@ -48,26 +48,28 @@ import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyM
 import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.ProjectCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.ProjectDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.StageCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.StageDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionImageRefCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionImageRefDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionJenkinsRequestCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionJenkinsRequestDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionLobbyRefCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionLobbyRefDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionLobbyRequestCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionLobbyRequestDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionMatchmakerRefCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionMatchmakerRefDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionMatchmakerRequestCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.VersionMatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantDeploymentCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantDeploymentDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantImageRefCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantImageRefDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantLobbyRefCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantLobbyRefDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantLobbyRequestCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantLobbyRequestDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRefCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRefDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRequestCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantProjectCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantProjectDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantStageCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantVersionCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.user.PlayerCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.user.PlayerDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
@@ -96,24 +98,26 @@ public enum EventQualifierEnum {
     POOL_SERVER_CONTAINER_DELETED(PoolServerContainerDeletedEventBodyModel.class, true),
     TENANT_CREATED(TenantCreatedEventBodyModel.class, true),
     TENANT_DELETED(TenantDeletedEventBodyModel.class, true),
-    PROJECT_CREATED(ProjectCreatedEventBodyModel.class, true),
-    PROJECT_DELETED(ProjectDeletedEventBodyModel.class, true),
-    STAGE_CREATED(StageCreatedEventBodyModel.class, true),
-    STAGE_DELETED(StageDeletedEventBodyModel.class, true),
-    VERSION_JENKINS_REQUEST_CREATED(VersionJenkinsRequestCreatedEventBodyModel.class, true),
-    VERSION_JENKINS_REQUEST_DELETED(VersionJenkinsRequestDeletedEventBodyModel.class, true),
-    VERSION_IMAGE_REF_CREATED(VersionImageRefCreatedEventBodyModel.class, true),
-    VERSION_IMAGE_REF_DELETED(VersionImageRefDeletedEventBodyModel.class, true),
-    VERSION_LOBBY_REQUEST_CREATED(VersionLobbyRequestCreatedEventBodyModel.class, true),
-    VERSION_LOBBY_REQUEST_DELETED(VersionLobbyRequestDeletedEventBodyModel.class, true),
-    VERSION_LOBBY_REF_CREATED(VersionLobbyRefCreatedEventBodyModel.class, false),
-    VERSION_LOBBY_REF_DELETED(VersionLobbyRefDeletedEventBodyModel.class, false),
-    VERSION_MATCHMAKER_REQUEST_CREATED(VersionMatchmakerRequestCreatedEventBodyModel.class, true),
-    VERSION_MATCHMAKER_REQUEST_DELETED(VersionMatchmakerRequestDeletedEventBodyModel.class, true),
-    VERSION_MATCHMAKER_REF_CREATED(VersionMatchmakerRefCreatedEventBodyModel.class, false),
-    VERSION_MATCHMAKER_REF_DELETED(VersionMatchmakerRefDeletedEventBodyModel.class, false),
-    VERSION_CREATED(VersionCreatedEventBodyModel.class, true),
-    VERSION_DELETED(VersionDeletedEventBodyModel.class, true),
+    TENANT_PROJECT_CREATED(TenantProjectCreatedEventBodyModel.class, true),
+    TENANT_PROJECT_DELETED(TenantProjectDeletedEventBodyModel.class, true),
+    TENANT_VERSION_CREATED(TenantVersionCreatedEventBodyModel.class, true),
+    TENANT_VERSION_DELETED(TenantVersionDeletedEventBodyModel.class, true),
+    TENANT_STAGE_CREATED(TenantStageCreatedEventBodyModel.class, true),
+    TENANT_STAGE_DELETED(TenantStageDeletedEventBodyModel.class, true),
+    TENANT_DEPLOYMENT_CREATED(TenantDeploymentCreatedEventBodyModel.class, true),
+    TENANT_DEPLOYMENT_DELETED(TenantDeploymentDeletedEventBodyModel.class, true),
+    TENANT_JENKINS_REQUEST_CREATED(TenantJenkinsRequestCreatedEventBodyModel.class, true),
+    TENANT_JENKINS_REQUEST_DELETED(TenantJenkinsRequestDeletedEventBodyModel.class, true),
+    TENANT_IMAGE_REF_CREATED(TenantImageRefCreatedEventBodyModel.class, true),
+    TENANT_IMAGE_REF_DELETED(TenantImageRefDeletedEventBodyModel.class, true),
+    TENANT_LOBBY_REQUEST_CREATED(TenantLobbyRequestCreatedEventBodyModel.class, true),
+    TENANT_LOBBY_REQUEST_DELETED(TenantLobbyRequestDeletedEventBodyModel.class, true),
+    TENANT_LOBBY_REF_CREATED(TenantLobbyRefCreatedEventBodyModel.class, false),
+    TENANT_LOBBY_REF_DELETED(TenantLobbyRefDeletedEventBodyModel.class, false),
+    TENANT_MATCHMAKER_REQUEST_CREATED(TenantMatchmakerRequestCreatedEventBodyModel.class, true),
+    TENANT_MATCHMAKER_REQUEST_DELETED(TenantMatchmakerRequestDeletedEventBodyModel.class, true),
+    TENANT_MATCHMAKER_REF_CREATED(TenantMatchmakerRefCreatedEventBodyModel.class, false),
+    TENANT_MATCHMAKER_REF_DELETED(TenantMatchmakerRefDeletedEventBodyModel.class, false),
     USER_CREATED(UserCreatedEventBodyModel.class, true),
     USER_DELETED(UserDeletedEventBodyModel.class, true),
     PLAYER_CREATED(PlayerCreatedEventBodyModel.class, true),

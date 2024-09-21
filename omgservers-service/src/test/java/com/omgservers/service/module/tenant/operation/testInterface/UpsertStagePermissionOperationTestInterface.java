@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.stagePermission.StagePermissionModel;
-import com.omgservers.service.module.tenant.impl.operation.stagePermission.upsertStagePermission.UpsertStagePermissionOperation;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantStagePermission.UpsertTenantStagePermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,16 +17,16 @@ import java.time.Duration;
 public class UpsertStagePermissionOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertStagePermissionOperation upsertStagePermissionOperation;
+    final UpsertTenantStagePermissionOperation upsertTenantStagePermissionOperation;
 
     final PgPool pgPool;
 
     public ChangeContext<Boolean> upsertStagePermission(final int shard,
-                                                        final StagePermissionModel stagePermission) {
+                                                        final TenantStagePermissionModel stagePermission) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertStagePermissionOperation
-                                    .upsertStagePermission(changeContext, sqlConnection, shard, stagePermission))
+                    return pgPool.withTransaction(sqlConnection -> upsertTenantStagePermissionOperation
+                                    .execute(changeContext, sqlConnection, shard, stagePermission))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

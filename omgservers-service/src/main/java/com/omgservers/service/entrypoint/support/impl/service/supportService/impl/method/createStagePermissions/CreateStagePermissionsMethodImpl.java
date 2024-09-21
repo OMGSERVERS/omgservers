@@ -2,19 +2,19 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateStagePermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateStagePermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.GetStageRequest;
-import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
-import com.omgservers.schema.module.tenant.SyncStagePermissionResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.service.factory.tenant.StagePermissionModelFactory;
+import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Multi;
@@ -32,7 +32,7 @@ class CreateStagePermissionsMethodImpl implements CreateStagePermissionsMethod {
     final TenantModule tenantModule;
     final UserModule userModule;
 
-    final StagePermissionModelFactory stagePermissionModelFactory;
+    final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
 
     @Override
     public Uni<CreateStagePermissionsSupportResponse> createStagePermissions(
@@ -69,16 +69,16 @@ class CreateStagePermissionsMethodImpl implements CreateStagePermissionsMethod {
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<StageModel> getStage(final Long tenantId, final Long id) {
-        final var request = new GetStageRequest(tenantId, id);
-        return tenantModule.getStageService().getStage(request)
-                .map(GetStageResponse::getStage);
+    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+        final var request = new GetTenantStageRequest(tenantId, id);
+        return tenantModule.getTenantService().getStage(request)
+                .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<Boolean> createStagePermission(final Long tenantId,
                                        final Long stageId,
                                        final Long userId,
-                                       final StagePermissionEnum permission) {
+                                       final TenantStagePermissionEnum permission) {
         return syncStagePermission(tenantId,
                 stageId,
                 userId,
@@ -100,12 +100,12 @@ class CreateStagePermissionsMethodImpl implements CreateStagePermissionsMethod {
     Uni<Boolean> syncStagePermission(final Long tenantId,
                                      final Long stageId,
                                      final Long userId,
-                                     final StagePermissionEnum permission) {
-        final var stagePermission = stagePermissionModelFactory
+                                     final TenantStagePermissionEnum permission) {
+        final var stagePermission = tenantStagePermissionModelFactory
                 .create(tenantId, stageId, userId, permission);
 
-        final var request = new SyncStagePermissionRequest(stagePermission);
-        return tenantModule.getStageService().syncStagePermission(request)
-                .map(SyncStagePermissionResponse::getCreated);
+        final var request = new SyncTenantStagePermissionRequest(stagePermission);
+        return tenantModule.getTenantService().syncTenantStagePermission(request)
+                .map(SyncTenantStagePermissionResponse::getCreated);
     }
 }

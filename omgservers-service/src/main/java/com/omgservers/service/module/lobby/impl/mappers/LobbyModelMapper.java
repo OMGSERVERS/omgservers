@@ -12,15 +12,15 @@ import lombok.extern.slf4j.Slf4j;
 public class LobbyModelMapper {
 
     public LobbyModel fromRow(final Row row) {
-        final var lobbyModel = new LobbyModel();
-        lobbyModel.setId(row.getLong("id"));
-        lobbyModel.setIdempotencyKey(row.getString("idempotency_key"));
-        lobbyModel.setCreated(row.getOffsetDateTime("created").toInstant());
-        lobbyModel.setModified(row.getOffsetDateTime("modified").toInstant());
-        lobbyModel.setTenantId(row.getLong("tenant_id"));
-        lobbyModel.setVersionId(row.getLong("version_id"));
-        lobbyModel.setRuntimeId(row.getLong("runtime_id"));
-        lobbyModel.setDeleted(row.getBoolean("deleted"));
-        return lobbyModel;
+        final var lobby = new LobbyModel();
+        lobby.setId(row.getLong("id"));
+        lobby.setIdempotencyKey(row.getString("idempotency_key"));
+        lobby.setCreated(row.getOffsetDateTime("created").toInstant());
+        lobby.setModified(row.getOffsetDateTime("modified").toInstant());
+        lobby.setTenantId(row.getLong("tenant_id"));
+        lobby.setDeploymentId(row.getLong("deployment_id"));
+        lobby.setRuntimeId(row.getLong("runtime_id"));
+        lobby.setDeleted(row.getBoolean("deleted"));
+        return lobby;
     }
 }

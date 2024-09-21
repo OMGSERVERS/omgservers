@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.service.module.tenant.impl.operation.stage.selectStage.SelectStageOperation;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantStage.SelectTenantStageOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,16 +15,16 @@ import java.time.Duration;
 public class SelectStageOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final SelectStageOperation selectStageOperation;
+    final SelectTenantStageOperation selectTenantStageOperation;
 
     final PgPool pgPool;
 
-    public StageModel selectStage(final int shard,
-                                  final Long tenantId,
-                                  final Long id,
-                                  final Boolean deleted) {
-        return pgPool.withTransaction(sqlConnection -> selectStageOperation
-                        .selectStage(sqlConnection, shard, tenantId, id))
+    public TenantStageModel selectStage(final int shard,
+                                        final Long tenantId,
+                                        final Long id,
+                                        final Boolean deleted) {
+        return pgPool.withTransaction(sqlConnection -> selectTenantStageOperation
+                        .execute(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

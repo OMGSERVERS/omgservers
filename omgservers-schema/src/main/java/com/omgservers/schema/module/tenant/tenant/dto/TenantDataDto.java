@@ -1,9 +1,9 @@
 package com.omgservers.schema.module.tenant.tenant.dto;
 
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.stagePermission.StagePermissionModel;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import jakarta.validation.constraints.NotNull;
@@ -25,14 +25,14 @@ public class TenantDataDto {
     List<TenantPermissionModel> tenantPermissions;
 
     @NotNull
-    List<ProjectModel> projects;
+    List<TenantProjectModel> projects;
 
     @NotNull
-    List<ProjectPermissionModel> projectPermissions;
+    List<TenantProjectPermissionModel> projectPermissions;
 
     @NotNull
-    List<StageModel> stages;
+    List<TenantStageModel> stages;
 
     @NotNull
-    List<StagePermissionModel> stagePermissions;
+    List<TenantStagePermissionModel> stagePermissions;
 }

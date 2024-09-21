@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.service.module.tenant.impl.operation.version.deleteVersion.DeleteVersionOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantVersion.DeleteTenantVersionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,7 +16,7 @@ import java.time.Duration;
 public class DeleteVersionOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final DeleteVersionOperation deleteVersionOperation;
+    final DeleteTenantVersionOperation deleteTenantVersionOperation;
 
     final PgPool pgPool;
 
@@ -25,8 +25,8 @@ public class DeleteVersionOperationTestInterface {
                                                 final Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> deleteVersionOperation
-                                    .deleteVersion(changeContext, sqlConnection, shard, tenantId, id))
+                    return pgPool.withTransaction(sqlConnection -> deleteTenantVersionOperation
+                                    .execute(changeContext, sqlConnection, shard, tenantId, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

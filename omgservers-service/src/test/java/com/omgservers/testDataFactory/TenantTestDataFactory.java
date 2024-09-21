@@ -1,40 +1,40 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.schema.module.tenant.SyncProjectRequest;
-import com.omgservers.schema.module.tenant.SyncStageRequest;
-import com.omgservers.schema.module.tenant.SyncTenantRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.version.VersionConfigDto;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefModel;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
-import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
-import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestQualifierEnum;
-import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
-import com.omgservers.schema.model.versionLobbyRequest.VersionLobbyRequestModel;
-import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
-import com.omgservers.schema.model.versionMatchmakerRequest.VersionMatchmakerRequestModel;
-import com.omgservers.service.factory.tenant.ProjectModelFactory;
-import com.omgservers.service.factory.tenant.StageModelFactory;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
+import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
+import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
+import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
+import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
+import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
+import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
+import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
+import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
-import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
-import com.omgservers.service.factory.tenant.VersionJenkinsRequestModelFactory;
-import com.omgservers.service.factory.tenant.VersionLobbyRefModelFactory;
-import com.omgservers.service.factory.tenant.VersionLobbyRequestModelFactory;
-import com.omgservers.service.factory.tenant.VersionMatchmakerRefModelFactory;
-import com.omgservers.service.factory.tenant.VersionMatchmakerRequestModelFactory;
-import com.omgservers.service.factory.tenant.VersionModelFactory;
+import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantJenkinsRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.service.projectService.testInterface.ProjectServiceTestInterface;
 import com.omgservers.service.module.tenant.impl.service.stageService.testInterface.StageServiceTestInterface;
 import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
@@ -56,16 +56,16 @@ public class TenantTestDataFactory {
     final StageServiceTestInterface stageService;
     final VersionServiceTestInterface versionService;
 
-    final VersionMatchmakerRequestModelFactory versionMatchmakerRequestModelFactory;
-    final VersionJenkinsRequestModelFactory versionJenkinsRequestModelFactory;
-    final VersionMatchmakerRefModelFactory versionMatchmakerRefModelFactory;
-    final VersionLobbyRequestModelFactory versionLobbyRequestModelFactory;
-    final VersionImageRefModelFactory versionImageRefModelFactory;
-    final VersionLobbyRefModelFactory versionLobbyRefModelFactory;
-    final VersionModelFactory versionModelFactory;
-    final ProjectModelFactory projectModelFactory;
+    final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
+    final TenantJenkinsRequestModelFactory tenantJenkinsRequestModelFactory;
+    final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
+    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
+    final TenantImageRefModelFactory tenantImageRefModelFactory;
+    final TenantLobbyRefModelFactory tenantLobbyRefModelFactory;
+    final TenantVersionModelFactory tenantVersionModelFactory;
+    final TenantProjectModelFactory tenantProjectModelFactory;
     final TenantModelFactory tenantModelFactory;
-    final StageModelFactory stageModelFactory;
+    final TenantStageModelFactory tenantStageModelFactory;
 
     public TenantModel createTenant() {
         final var tenant = tenantModelFactory.create();
@@ -74,98 +74,98 @@ public class TenantTestDataFactory {
         return tenant;
     }
 
-    public ProjectModel createProject(final TenantModel tenant) {
-        final var project = projectModelFactory.create(tenant.getId());
-        final var syncProjectRequest = new SyncProjectRequest(project);
+    public TenantProjectModel createProject(final TenantModel tenant) {
+        final var project = tenantProjectModelFactory.create(tenant.getId());
+        final var syncProjectRequest = new SyncTenantProjectRequest(project);
         projectService.syncProject(syncProjectRequest);
         return project;
     }
 
-    public StageModel createStage(final ProjectModel project) {
+    public TenantStageModel createStage(final TenantProjectModel project) {
         final var tenantId = project.getTenantId();
         final var stageId = project.getId();
-        final var stage = stageModelFactory.create(tenantId, stageId);
-        final var syncStageRequest = new SyncStageRequest(stage);
+        final var stage = tenantStageModelFactory.create(tenantId, stageId);
+        final var syncStageRequest = new SyncTenantStageRequest(stage);
         stageService.syncStage(syncStageRequest);
         return stage;
     }
 
-    public VersionModel createVersion(final StageModel stage) {
+    public TenantVersionModel createVersion(final TenantStageModel stage) {
         final var tenantId = stage.getTenantId();
         final var stageId = stage.getId();
-        final var versionConfig = VersionConfigDto.create();
+        final var versionConfig = TenantVersionConfigDto.create();
         final var base64Archive = Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8));
-        final var version = versionModelFactory.create(tenantId,
+        final var version = tenantVersionModelFactory.create(tenantId,
                 stageId,
                 versionConfig,
                 base64Archive);
-        final var syncVersionRequest = new SyncVersionRequest(version);
+        final var syncVersionRequest = new SyncTenantVersionRequest(version);
         versionService.syncVersion(syncVersionRequest);
         return version;
     }
 
-    public VersionJenkinsRequestModel createVersionJenkinsRequest(final VersionModel version,
-                                                                  final VersionJenkinsRequestQualifierEnum qualifier,
-                                                                  final Integer buildNumber) {
+    public TenantJenkinsRequestModel createVersionJenkinsRequest(final TenantVersionModel version,
+                                                                 final TenantJenkinsRequestQualifierEnum qualifier,
+                                                                 final Integer buildNumber) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
-        final var versionJenkinsRequest = versionJenkinsRequestModelFactory.create(tenantId,
+        final var versionJenkinsRequest = tenantJenkinsRequestModelFactory.create(tenantId,
                 versionId,
                 qualifier,
                 buildNumber);
-        final var syncVersionJenkinsRequestRequest = new SyncVersionJenkinsRequestRequest(versionJenkinsRequest);
+        final var syncVersionJenkinsRequestRequest = new SyncTenantJenkinsRequestRequest(versionJenkinsRequest);
         versionService.syncVersionJenkinsRequest(syncVersionJenkinsRequestRequest);
         return versionJenkinsRequest;
     }
 
-    public VersionImageRefModel createVersionImageRef(final VersionModel version) {
+    public TenantImageRefModel createVersionImageRef(final TenantVersionModel version) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
-        final var versionImageRef = versionImageRefModelFactory.create(tenantId,
+        final var versionImageRef = tenantImageRefModelFactory.create(tenantId,
                 versionId,
-                VersionImageRefQualifierEnum.UNIVERSAL,
+                TenantImageRefQualifierEnum.UNIVERSAL,
                 "universal:latest");
-        final var syncVersionImageRefRequest = new SyncVersionImageRefRequest(versionImageRef);
+        final var syncVersionImageRefRequest = new SyncTenantImageRefRequest(versionImageRef);
         versionService.syncVersionImageRef(syncVersionImageRefRequest);
         return versionImageRef;
     }
 
-    public VersionLobbyRequestModel createVersionLobbyRequest(final VersionModel version) {
+    public TenantLobbyRequestModel createVersionLobbyRequest(final TenantVersionModel version) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
-        final var versionLobbyRequest = versionLobbyRequestModelFactory.create(tenantId, versionId);
-        final var syncVersionLobbyRequestRequest = new SyncVersionLobbyRequestRequest(versionLobbyRequest);
+        final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId, versionId);
+        final var syncVersionLobbyRequestRequest = new SyncTenantLobbyRequestRequest(versionLobbyRequest);
         versionService.syncVersionLobbyRequest(syncVersionLobbyRequestRequest);
         return versionLobbyRequest;
     }
 
-    public VersionLobbyRefModel createVersionLobbyRef(final VersionModel version, final LobbyModel lobby) {
+    public TenantLobbyRefModel createVersionLobbyRef(final TenantVersionModel version, final LobbyModel lobby) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
         final var lobbyId = lobby.getId();
-        final var versionLobbyRef = versionLobbyRefModelFactory.create(tenantId, versionId, lobbyId);
-        final var syncVersionLobbyRefRequest = new SyncVersionLobbyRefRequest(versionLobbyRef);
+        final var versionLobbyRef = tenantLobbyRefModelFactory.create(tenantId, versionId, lobbyId);
+        final var syncVersionLobbyRefRequest = new SyncTenantLobbyRefRequest(versionLobbyRef);
         versionService.syncVersionLobbyRef(syncVersionLobbyRefRequest);
         return versionLobbyRef;
     }
 
-    public VersionMatchmakerRequestModel createVersionMatchmakerRequestModel(final VersionModel version) {
+    public TenantMatchmakerRequestModel createVersionMatchmakerRequestModel(final TenantVersionModel version) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
-        final var versionMatchmakerRequest = versionMatchmakerRequestModelFactory.create(tenantId, versionId);
+        final var versionMatchmakerRequest = tenantMatchmakerRequestModelFactory.create(tenantId, versionId);
         final var syncVersionMatchmakerRequestRequest =
-                new SyncVersionMatchmakerRequestRequest(versionMatchmakerRequest);
+                new SyncTenantMatchmakerRequestRequest(versionMatchmakerRequest);
         versionService.syncVersionMatchmakerRequest(syncVersionMatchmakerRequestRequest);
         return versionMatchmakerRequest;
     }
 
-    public VersionMatchmakerRefModel createVersionMatchmakerRef(final VersionModel version,
-                                                                final MatchmakerModel matchmaker) {
+    public TenantMatchmakerRefModel createVersionMatchmakerRef(final TenantVersionModel version,
+                                                               final MatchmakerModel matchmaker) {
         final var tenantId = version.getTenantId();
         final var versionId = version.getId();
         final var matchmakerId = matchmaker.getId();
-        final var versionMatchmakerRef = versionMatchmakerRefModelFactory.create(tenantId, versionId, matchmakerId);
-        final var syncVersionMatchmakerRefRequest = new SyncVersionMatchmakerRefRequest(versionMatchmakerRef);
+        final var versionMatchmakerRef = tenantMatchmakerRefModelFactory.create(tenantId, versionId, matchmakerId);
+        final var syncVersionMatchmakerRefRequest = new SyncTenantMatchmakerRefRequest(versionMatchmakerRef);
         versionService.syncVersionMatchmakerRef(syncVersionMatchmakerRefRequest);
         return versionMatchmakerRef;
     }

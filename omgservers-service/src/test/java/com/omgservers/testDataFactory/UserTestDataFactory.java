@@ -1,7 +1,7 @@
 package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.player.PlayerModel;
-import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -51,7 +51,7 @@ public class UserTestDataFactory {
 
     public PlayerModel createUserPlayer(final UserModel user,
                                         final TenantModel tenant,
-                                        final StageModel stage) {
+                                        final TenantStageModel stage) {
         final var userId = user.getId();
         final var tenantId = tenant.getId();
         final var stageId = stage.getId();

@@ -21,7 +21,7 @@ class UpsertTenantOperationTest extends Assertions {
     TenantModelFactory tenantModelFactory;
 
     @Test
-    void whenUpsertTenant_thenInserted() {
+    void whenExecute_thenInserted() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         final var changeContext = upsertTenantOperation.upsertTenant(shard, tenant);
@@ -29,7 +29,7 @@ class UpsertTenantOperationTest extends Assertions {
     }
 
     @Test
-    void givenTenant_whenUpsertTenant_thenUpdated() {
+    void givenTenant_whenExecute_thenUpdated() {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
@@ -39,7 +39,7 @@ class UpsertTenantOperationTest extends Assertions {
     }
 
     @Test
-    void givenTenant_whenUpsertTenant_thenIdempotencyViolation() {
+    void givenTenant_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var tenant1 = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant1);

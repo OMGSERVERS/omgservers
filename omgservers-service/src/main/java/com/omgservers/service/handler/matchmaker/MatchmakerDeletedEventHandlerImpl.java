@@ -5,7 +5,7 @@ import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRequest;
@@ -20,10 +20,10 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
@@ -193,7 +193,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Void> findAndDeleteVersionMatchmakerRef(final MatchmakerModel matchmaker) {
         final var tenantId = matchmaker.getTenantId();
-        final var versionId = matchmaker.getVersionId();
+        final var versionId = matchmaker.getDeploymentId();
         final var matchmakerId = matchmaker.getId();
         return findVersionMatchmakerRef(tenantId, versionId, matchmakerId)
                 .onFailure(ServerSideNotFoundException.class)
@@ -202,20 +202,20 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<VersionMatchmakerRefModel> findVersionMatchmakerRef(final Long tenantId,
-                                                            final Long versionId,
-                                                            final Long matchmakerId) {
-        final var request = new FindVersionMatchmakerRefRequest(tenantId, versionId, matchmakerId);
-        return tenantModule.getVersionService().findVersionMatchmakerRef(request)
-                .map(FindVersionMatchmakerRefResponse::getVersionMatchmakerRef);
+    Uni<TenantMatchmakerRefModel> findVersionMatchmakerRef(final Long tenantId,
+                                                           final Long versionId,
+                                                           final Long matchmakerId) {
+        final var request = new FindTenantMatchmakerRefRequest(tenantId, versionId, matchmakerId);
+        return tenantModule.getTenantService().findVersionMatchmakerRef(request)
+                .map(FindTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 
-    Uni<Boolean> deleteVersionMatchmakerRef(final VersionMatchmakerRefModel versionMatchmakerRef) {
+    Uni<Boolean> deleteVersionMatchmakerRef(final TenantMatchmakerRefModel versionMatchmakerRef) {
         final var tenantId = versionMatchmakerRef.getTenantId();
         final var id = versionMatchmakerRef.getId();
-        final var request = new DeleteVersionMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getVersionService().deleteVersionMatchmakerRef(request)
-                .map(DeleteVersionMatchmakerRefResponse::getDeleted);
+        final var request = new DeleteTenantMatchmakerRefRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteVersionMatchmakerRef(request)
+                .map(DeleteTenantMatchmakerRefResponse::getDeleted);
     }
 
     Uni<Void> findAndDeleteJob(final Long tenantId) {

@@ -2,18 +2,18 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.GetProjectRequest;
-import com.omgservers.schema.module.tenant.GetProjectResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -80,22 +80,22 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<ProjectModel> getProject(final Long tenantId, final Long id) {
-        final var request = new GetProjectRequest(tenantId, id);
-        return tenantModule.getProjectService().getProject(request)
-                .map(GetProjectResponse::getProject);
+    Uni<TenantProjectModel> getProject(final Long tenantId, final Long id) {
+        final var request = new GetTenantProjectRequest(tenantId, id);
+        return tenantModule.getTenantService().getProject(request)
+                .map(GetTenantProjectResponse::getTenantProject);
     }
 
-    Uni<List<ProjectPermissionModel>> viewProjectPermissions(final Long tenantId,
-                                                             final Long projectId) {
-        final var request = new ViewProjectPermissionsRequest(tenantId, projectId);
-        return tenantModule.getProjectService().viewProjectPermissions(request)
-                .map(ViewProjectPermissionsResponse::getProjectPermissions);
+    Uni<List<TenantProjectPermissionModel>> viewProjectPermissions(final Long tenantId,
+                                                                   final Long projectId) {
+        final var request = new ViewTenantProjectPermissionsRequest(tenantId, projectId);
+        return tenantModule.getTenantService().viewProjectPermissions(request)
+                .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }
 
     Uni<Boolean> deleteProjectPermission(final Long tenantId, final Long id) {
-        final var request = new DeleteProjectPermissionRequest(tenantId, id);
-        return tenantModule.getProjectService().deleteProjectPermission(request)
-                .map(DeleteProjectPermissionResponse::getDeleted);
+        final var request = new DeleteTenantProjectPermissionRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteProjectPermission(request)
+                .map(DeleteTenantProjectPermissionResponse::getDeleted);
     }
 }

@@ -42,7 +42,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                         matchmaker.getCreated().atOffset(ZoneOffset.UTC),
                         matchmaker.getModified().atOffset(ZoneOffset.UTC),
                         matchmaker.getTenantId(),
-                        matchmaker.getVersionId(),
+                        matchmaker.getDeploymentId(),
                         matchmaker.getDeleted()
                 ),
                 () -> new MatchmakerCreatedEventBodyModel(matchmaker.getId()),

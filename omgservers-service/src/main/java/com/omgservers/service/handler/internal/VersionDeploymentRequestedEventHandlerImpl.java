@@ -1,17 +1,17 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.VersionDeploymentRequestedEventBodyModel;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.service.factory.tenant.VersionLobbyRequestModelFactory;
-import com.omgservers.service.factory.tenant.VersionMatchmakerRequestModelFactory;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -27,8 +27,8 @@ public class VersionDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     final TenantModule tenantModule;
 
-    final VersionMatchmakerRequestModelFactory versionMatchmakerRequestModelFactory;
-    final VersionLobbyRequestModelFactory versionLobbyRequestModelFactory;
+    final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
+    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -56,27 +56,27 @@ public class VersionDeploymentRequestedEventHandlerImpl implements EventHandler 
                 .replaceWithVoid();
     }
 
-    Uni<VersionModel> getVersion(final Long tenantId, final Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Boolean> syncVersionLobbyRequest(final Long tenantId,
                                          final Long versionId,
                                          final String idempotencyKey) {
-        final var versionLobbyRequest = versionLobbyRequestModelFactory.create(tenantId, versionId, idempotencyKey);
-        final var request = new SyncVersionLobbyRequestRequest(versionLobbyRequest);
-        return tenantModule.getVersionService().syncVersionLobbyRequestWithIdempotency(request)
-                .map(SyncVersionLobbyRequestResponse::getCreated);
+        final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId, versionId, idempotencyKey);
+        final var request = new SyncTenantLobbyRequestRequest(versionLobbyRequest);
+        return tenantModule.getTenantService().syncVersionLobbyRequestWithIdempotency(request)
+                .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 
     Uni<Boolean> syncVersionMatchmakerRequest(final Long tenantId,
                                               final Long versionId,
                                               final String idempotencyKey) {
-        final var versionMatchmaker = versionMatchmakerRequestModelFactory.create(tenantId, versionId, idempotencyKey);
-        final var request = new SyncVersionMatchmakerRequestRequest(versionMatchmaker);
-        return tenantModule.getVersionService().syncVersionMatchmakerRequestWithIdempotency(request)
-                .map(SyncVersionMatchmakerRequestResponse::getCreated);
+        final var versionMatchmaker = tenantMatchmakerRequestModelFactory.create(tenantId, versionId, idempotencyKey);
+        final var request = new SyncTenantMatchmakerRequestRequest(versionMatchmaker);
+        return tenantModule.getTenantService().syncVersionMatchmakerRequestWithIdempotency(request)
+                .map(SyncTenantMatchmakerRequestResponse::getCreated);
     }
 }

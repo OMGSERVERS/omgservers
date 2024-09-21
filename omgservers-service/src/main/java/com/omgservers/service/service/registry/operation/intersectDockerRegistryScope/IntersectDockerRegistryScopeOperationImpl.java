@@ -1,11 +1,11 @@
 package com.omgservers.service.service.registry.operation.intersectDockerRegistryScope;
 
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.stagePermission.StagePermissionModel;
-import com.omgservers.schema.module.tenant.GetStageRequest;
-import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
 import com.omgservers.service.service.registry.dto.DockerRegistryAccessDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryActionEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceScopeDto;
@@ -87,16 +87,16 @@ class IntersectDockerRegistryScopeOperationImpl implements IntersectDockerRegist
                 });
     }
 
-    Uni<StageModel> getStage(final Long tenantId, final Long id) {
-        final var request = new GetStageRequest(tenantId, id);
-        return tenantModule.getStageService().getStage(request)
-                .map(GetStageResponse::getStage);
+    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+        final var request = new GetTenantStageRequest(tenantId, id);
+        return tenantModule.getTenantService().getStage(request)
+                .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<List<StagePermissionModel>> viewStagePermissions(final Long tenantId,
-                                                         final Long stageId) {
-        final var request = new ViewStagePermissionsRequest(tenantId, stageId);
-        return tenantModule.getStageService().viewStagePermissions(request)
-                .map(ViewStagePermissionsResponse::getStagePermissions);
+    Uni<List<TenantStagePermissionModel>> viewStagePermissions(final Long tenantId,
+                                                               final Long stageId) {
+        final var request = new ViewTenantStagePermissionsRequest(tenantId, stageId);
+        return tenantModule.getTenantService().viewStagePermissions(request)
+                .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }
 }

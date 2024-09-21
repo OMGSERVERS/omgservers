@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
-import com.omgservers.service.module.tenant.impl.operation.projectPermission.hasProjectPermission.HasProjectPermissionOperation;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.service.module.tenant.impl.operation.tenantProjectPermission.VerifyTenantProjectPermissionExistsOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.time.Duration;
 public class HasProjectPermissionOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final HasProjectPermissionOperation hasProjectPermissionOperation;
+    final VerifyTenantProjectPermissionExistsOperation verifyTenantProjectPermissionExistsOperation;
 
     final PgPool pgPool;
 
@@ -23,9 +23,9 @@ public class HasProjectPermissionOperationTestInterface {
                                        Long tenantId,
                                        Long projectId,
                                        Long userId,
-                                       ProjectPermissionEnum permission) {
-        return pgPool.withTransaction(sqlConnection -> hasProjectPermissionOperation
-                        .hasProjectPermission(sqlConnection, shard, tenantId, projectId, userId, permission))
+                                       TenantProjectPermissionEnum permission) {
+        return pgPool.withTransaction(sqlConnection -> verifyTenantProjectPermissionExistsOperation
+                        .execute(sqlConnection, shard, tenantId, projectId, userId, permission))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

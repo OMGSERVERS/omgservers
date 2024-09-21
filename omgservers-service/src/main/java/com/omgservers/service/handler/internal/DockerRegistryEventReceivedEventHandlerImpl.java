@@ -5,12 +5,12 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
 import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.buildDockerImageId.BuildDockerImageIdOperation;
@@ -37,7 +37,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
     final BuildDockerImageIdOperation buildDockerImageIdOperation;
     final GetConfigOperation getConfigOperation;
 
-    final VersionImageRefModelFactory versionImageRefModelFactory;
+    final TenantImageRefModelFactory tenantImageRefModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -93,20 +93,20 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
                                      final DockerRegistryContainerQualifierEnum qualifier,
                                      final String idempotencyKey) {
         final var versionImageRefQualifier = switch (qualifier) {
-            case LOBBY -> VersionImageRefQualifierEnum.LOBBY;
-            case MATCH -> VersionImageRefQualifierEnum.MATCH;
-            case UNIVERSAL -> VersionImageRefQualifierEnum.UNIVERSAL;
+            case LOBBY -> TenantImageRefQualifierEnum.LOBBY;
+            case MATCH -> TenantImageRefQualifierEnum.MATCH;
+            case UNIVERSAL -> TenantImageRefQualifierEnum.UNIVERSAL;
         };
 
-        final var versionImageRef = versionImageRefModelFactory.create(tenantId,
+        final var versionImageRef = tenantImageRefModelFactory.create(tenantId,
                 versionId,
                 versionImageRefQualifier,
                 imageId,
                 idempotencyKey);
 
-        final var request = new SyncVersionImageRefRequest(versionImageRef);
-        return tenantModule.getVersionService().syncVersionImageRefWithIdempotency(request)
-                .map(SyncVersionImageRefResponse::getCreated);
+        final var request = new SyncTenantImageRefRequest(versionImageRef);
+        return tenantModule.getTenantService().syncVersionImageRefWithIdempotency(request)
+                .map(SyncTenantImageRefResponse::getCreated);
     }
 
     String getRegistryHost(final DockerRegistryEventDto event) {

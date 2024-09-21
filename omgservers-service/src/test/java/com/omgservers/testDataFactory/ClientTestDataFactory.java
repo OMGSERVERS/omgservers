@@ -10,7 +10,7 @@ import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.client.ClientRuntimeRefModelFactory;
@@ -32,7 +32,7 @@ public class ClientTestDataFactory {
 
     public ClientModel createClient(final PlayerModel player,
                                     final TenantModel tenant,
-                                    final VersionModel version) {
+                                    final TenantVersionModel version) {
         final var userId = player.getUserId();
         final var playerId = player.getId();
         final var tenantId = tenant.getId();

@@ -32,7 +32,7 @@ public class RuntimeModel {
     Long tenantId;
 
     @NotNull
-    Long versionId;
+    Long deploymentId;
 
     @NotNull
     RuntimeQualifierEnum qualifier;

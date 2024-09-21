@@ -40,7 +40,7 @@ class UpsertLobbyOperationImpl implements UpsertLobbyOperation {
                         lobby.getCreated().atOffset(ZoneOffset.UTC),
                         lobby.getModified().atOffset(ZoneOffset.UTC),
                         lobby.getTenantId(),
-                        lobby.getVersionId(),
+                        lobby.getDeploymentId(),
                         lobby.getRuntimeId(),
                         lobby.getDeleted()
                 ),

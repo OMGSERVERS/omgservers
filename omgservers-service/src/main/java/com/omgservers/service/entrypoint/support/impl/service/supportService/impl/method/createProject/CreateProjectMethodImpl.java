@@ -2,12 +2,12 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateProjectSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateProjectSupportResponse;
-import com.omgservers.schema.module.tenant.SyncProjectRequest;
-import com.omgservers.schema.module.tenant.SyncStageRequest;
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.service.factory.tenant.ProjectModelFactory;
-import com.omgservers.service.factory.tenant.StageModelFactory;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
+import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +21,12 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
     final TenantModule tenantModule;
 
-    final ProjectModelFactory projectModelFactory;
-    final StageModelFactory stageModelFactory;
+    final TenantProjectModelFactory tenantProjectModelFactory;
+    final TenantStageModelFactory tenantStageModelFactory;
 
     @Override
     public Uni<CreateProjectSupportResponse> createProject(final CreateProjectSupportRequest request) {
-        log.debug("Create project, request={}", request);
+        log.debug("Create tenant project, request={}", request);
 
         final var tenantId = request.getTenantId();
         return createProject(tenantId)
@@ -41,18 +41,18 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 });
     }
 
-    Uni<ProjectModel> createProject(final Long tenantId) {
-        final var project = projectModelFactory.create(tenantId);
-        final var syncProjectInternalRequest = new SyncProjectRequest(project);
-        return tenantModule.getProjectService().syncProject(syncProjectInternalRequest)
+    Uni<TenantProjectModel> createProject(final Long tenantId) {
+        final var project = tenantProjectModelFactory.create(tenantId);
+        final var syncProjectInternalRequest = new SyncTenantProjectRequest(project);
+        return tenantModule.getTenantService().syncProject(syncProjectInternalRequest)
                 .replaceWith(project);
     }
 
-    Uni<StageModel> createStage(final Long tenantId,
-                                final Long projectId) {
-        final var stage = stageModelFactory.create(tenantId, projectId);
-        final var syncStageInternalRequest = new SyncStageRequest(stage);
-        return tenantModule.getStageService().syncStage(syncStageInternalRequest)
+    Uni<TenantStageModel> createStage(final Long tenantId,
+                                      final Long projectId) {
+        final var stage = tenantStageModelFactory.create(tenantId, projectId);
+        final var syncStageInternalRequest = new SyncTenantStageRequest(stage);
+        return tenantModule.getTenantService().syncTenantStage(syncStageInternalRequest)
                 .replaceWith(stage);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.service.module.tenant.impl.operation.stagePermission.hasStagePermission.HasStagePermissionOperation;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.service.module.tenant.impl.operation.tenantStagePermission.VerifyTenantStagePermissionExistsOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.time.Duration;
 public class HasStagePermissionOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final HasStagePermissionOperation hasStagePermissionOperation;
+    final VerifyTenantStagePermissionExistsOperation verifyTenantStagePermissionExistsOperation;
 
     final PgPool pgPool;
 
@@ -23,9 +23,9 @@ public class HasStagePermissionOperationTestInterface {
                                        Long tenantId,
                                        Long stageId,
                                        Long userId,
-                                       StagePermissionEnum permission) {
-        return pgPool.withTransaction(sqlConnection -> hasStagePermissionOperation
-                        .hasStagePermission(sqlConnection, shard, tenantId, stageId, userId, permission))
+                                       TenantStagePermissionEnum permission) {
+        return pgPool.withTransaction(sqlConnection -> verifyTenantStagePermissionExistsOperation
+                        .execute(sqlConnection, shard, tenantId, stageId, userId, permission))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

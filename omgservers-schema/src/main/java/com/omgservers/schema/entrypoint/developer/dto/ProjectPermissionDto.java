@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.developer.dto;
 
-import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,5 @@ public class ProjectPermissionDto {
 
     Long userId;
 
-    ProjectPermissionEnum permission;
+    TenantProjectPermissionEnum permission;
 }

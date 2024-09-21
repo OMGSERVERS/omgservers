@@ -12,14 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchmakerModelMapper {
 
     public MatchmakerModel fromRow(final Row row) {
-        final var matchmakerModel = new MatchmakerModel();
-        matchmakerModel.setId(row.getLong("id"));
-        matchmakerModel.setIdempotencyKey(row.getString("idempotency_key"));
-        matchmakerModel.setCreated(row.getOffsetDateTime("created").toInstant());
-        matchmakerModel.setModified(row.getOffsetDateTime("modified").toInstant());
-        matchmakerModel.setTenantId(row.getLong("tenant_id"));
-        matchmakerModel.setVersionId(row.getLong("version_id"));
-        matchmakerModel.setDeleted(row.getBoolean("deleted"));
-        return matchmakerModel;
+        final var matchmaker = new MatchmakerModel();
+        matchmaker.setId(row.getLong("id"));
+        matchmaker.setIdempotencyKey(row.getString("idempotency_key"));
+        matchmaker.setCreated(row.getOffsetDateTime("created").toInstant());
+        matchmaker.setModified(row.getOffsetDateTime("modified").toInstant());
+        matchmaker.setTenantId(row.getLong("tenant_id"));
+        matchmaker.setDeploymentId(row.getLong("deployment_id"));
+        matchmaker.setDeleted(row.getBoolean("deleted"));
+        return matchmaker;
     }
 }

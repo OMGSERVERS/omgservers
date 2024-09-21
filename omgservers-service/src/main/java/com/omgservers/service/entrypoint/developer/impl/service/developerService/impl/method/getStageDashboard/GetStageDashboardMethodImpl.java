@@ -3,12 +3,12 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
-import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
-import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
-import com.omgservers.schema.module.tenant.stage.dto.StageDataDto;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataResponse;
+import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
 import com.omgservers.service.entrypoint.developer.impl.operation.mapStageDataToDashboard.MapStageDataToDashboardOperation;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -48,10 +48,10 @@ class GetStageDashboardMethodImpl implements GetStageDashboardMethod {
 
     Uni<Void> checkGettingDashboardPermission(final Long tenantId, final Long stageId, final Long userId) {
         // TODO: move to new operation
-        final var permission = StagePermissionEnum.GETTING_DASHBOARD;
-        final var request = new HasStagePermissionRequest(tenantId, stageId, userId, permission);
-        return tenantModule.getStageService().hasStagePermission(request)
-                .map(HasStagePermissionResponse::getResult)
+        final var permission = TenantStagePermissionEnum.GETTING_DASHBOARD;
+        final var request = new VerifyTenantStagePermissionExistsRequest(tenantId, stageId, userId, permission);
+        return tenantModule.getTenantService().verifyTenantStagePermissionExists(request)
+                .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
@@ -63,9 +63,9 @@ class GetStageDashboardMethodImpl implements GetStageDashboardMethod {
                 .replaceWithVoid();
     }
 
-    Uni<StageDataDto> getStageData(final Long tenantId, final Long stageId) {
-        final var request = new GetStageDataRequest(tenantId, stageId);
-        return tenantModule.getStageService().getStageData(request)
-                .map(GetStageDataResponse::getStageData);
+    Uni<TenantStageDataDto> getStageData(final Long tenantId, final Long stageId) {
+        final var request = new GetTenantStageDataRequest(tenantId, stageId);
+        return tenantModule.getTenantService().getStageData(request)
+                .map(GetTenantStageDataResponse::getTenantStageData);
     }
 }

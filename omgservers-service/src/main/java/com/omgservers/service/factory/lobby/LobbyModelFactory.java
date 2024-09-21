@@ -17,29 +17,29 @@ public class LobbyModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public LobbyModel create(final Long tenantId,
-                             final Long versionId) {
+                             final Long deploymentId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, versionId, idempotencyKey);
+        return create(id, tenantId, deploymentId, idempotencyKey);
     }
 
     public LobbyModel create(final Long id,
                              final Long tenantId,
-                             final Long versionId) {
+                             final Long deploymentId) {
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, versionId, idempotencyKey);
+        return create(id, tenantId, deploymentId, idempotencyKey);
     }
 
     public LobbyModel create(final Long tenantId,
-                             final Long versionId,
+                             final Long deploymentId,
                              final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, versionId, idempotencyKey);
+        return create(id, tenantId, deploymentId, idempotencyKey);
     }
 
     public LobbyModel create(final Long id,
                              final Long tenantId,
-                             final Long versionId,
+                             final Long deploymentId,
                              final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
         final var runtimeId = generateIdOperation.generateId();
@@ -50,7 +50,7 @@ public class LobbyModelFactory {
         lobby.setCreated(now);
         lobby.setModified(now);
         lobby.setTenantId(tenantId);
-        lobby.setVersionId(versionId);
+        lobby.setDeploymentId(deploymentId);
         lobby.setRuntimeId(runtimeId);
         lobby.setDeleted(Boolean.FALSE);
         return lobby;

@@ -5,15 +5,15 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
-import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
+import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.schema.module.client.DeleteClientRequest;
 import com.omgservers.schema.module.client.DeleteClientResponse;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
@@ -81,7 +81,7 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
                 });
     }
 
-    Uni<VersionMatchmakerRefModel> selectVersionMatchmakerRef(final Long tenantId, final Long versionId) {
+    Uni<TenantMatchmakerRefModel> selectVersionMatchmakerRef(final Long tenantId, final Long versionId) {
         return viewVersionMatchmakerRefs(tenantId, versionId)
                 .map(refs -> {
                     if (refs.isEmpty()) {
@@ -96,10 +96,10 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
                 });
     }
 
-    Uni<List<VersionMatchmakerRefModel>> viewVersionMatchmakerRefs(final Long tenantId, final Long versionId) {
-        final var request = new ViewVersionMatchmakerRefsRequest(tenantId, versionId);
-        return tenantModule.getVersionService().viewVersionMatchmakerRefs(request)
-                .map(ViewVersionMatchmakerRefsResponse::getVersionMatchmakerRefs);
+    Uni<List<TenantMatchmakerRefModel>> viewVersionMatchmakerRefs(final Long tenantId, final Long versionId) {
+        final var request = new ViewTenantMatchmakerRefsRequest(tenantId, versionId);
+        return tenantModule.getTenantService().viewVersionMatchmakerRefs(request)
+                .map(ViewTenantMatchmakerRefsResponse::getTenantMatchmakerRefs);
     }
 
     Uni<Boolean> syncMatchmakerAssignment(final Long matchmakerId,

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.service.module.tenant.impl.operation.version.selectVersion.SelectVersionOperation;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantVersion.SelectTenantVersionOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,16 +15,16 @@ import java.time.Duration;
 public class SelectVersionOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final SelectVersionOperation selectVersionOperation;
+    final SelectTenantVersionOperation selectTenantVersionOperation;
 
     final PgPool pgPool;
 
-    public VersionModel selectVersion(final int shard,
-                                      final Long tenantId,
-                                      final Long id,
-                                      final Boolean deleted) {
-        return pgPool.withTransaction(sqlConnection -> selectVersionOperation
-                        .selectVersion(sqlConnection, shard, tenantId, id))
+    public TenantVersionModel selectVersion(final int shard,
+                                            final Long tenantId,
+                                            final Long id,
+                                            final Boolean deleted) {
+        return pgPool.withTransaction(sqlConnection -> selectTenantVersionOperation
+                        .execute(sqlConnection, shard, tenantId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

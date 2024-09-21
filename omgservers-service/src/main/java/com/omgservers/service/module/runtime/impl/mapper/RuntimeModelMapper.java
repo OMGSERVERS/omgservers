@@ -1,10 +1,10 @@
 package com.omgservers.service.module.runtime.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +27,7 @@ public class RuntimeModelMapper {
         runtime.setCreated(row.getOffsetDateTime("created").toInstant());
         runtime.setModified(row.getOffsetDateTime("modified").toInstant());
         runtime.setTenantId(row.getLong("tenant_id"));
-        runtime.setVersionId(row.getLong("version_id"));
+        runtime.setDeploymentId(row.getLong("deployment_id"));
         runtime.setQualifier(RuntimeQualifierEnum.valueOf(row.getString("qualifier")));
         runtime.setDeleted(row.getBoolean("deleted"));
         runtime.setUserId(row.getLong("user_id"));

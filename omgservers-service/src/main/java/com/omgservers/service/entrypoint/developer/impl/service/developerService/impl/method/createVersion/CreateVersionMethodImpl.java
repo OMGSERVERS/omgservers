@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.version.VersionConfigDto;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
-import com.omgservers.schema.module.tenant.SyncVersionRequest;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.service.factory.tenant.VersionModelFactory;
+import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.security.ServiceSecurityAttributes;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -28,7 +28,7 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
 
     final TenantModule tenantModule;
 
-    final VersionModelFactory versionModelFactory;
+    final TenantVersionModelFactory tenantVersionModelFactory;
 
     final SecurityIdentity securityIdentity;
     final ObjectMapper objectMapper;
@@ -45,20 +45,20 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
 
         return checkVersionManagementPermission(tenantId, stageId, userId)
                 .flatMap(voidItem -> createVersion(tenantId, stageId, versionConfig))
-                .map(VersionModel::getId)
+                .map(TenantVersionModel::getId)
                 .map(CreateVersionDeveloperResponse::new);
     }
 
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
                                                final Long stageId,
                                                final Long userId) {
-        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
-        final var hasStagePermissionServiceRequest = new HasStagePermissionRequest(tenantId,
+        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
+        final var hasStagePermissionServiceRequest = new VerifyTenantStagePermissionExistsRequest(tenantId,
                 stageId,
                 userId,
                 permission);
-        return tenantModule.getStageService().hasStagePermission(hasStagePermissionServiceRequest)
-                .map(HasStagePermissionResponse::getResult)
+        return tenantModule.getTenantService().verifyTenantStagePermissionExists(hasStagePermissionServiceRequest)
+                .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
@@ -70,13 +70,13 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                 .replaceWithVoid();
     }
 
-    Uni<VersionModel> createVersion(final Long tenantId,
-                                    final Long stageId,
-                                    final VersionConfigDto versionConfig) {
+    Uni<TenantVersionModel> createVersion(final Long tenantId,
+                                          final Long stageId,
+                                          final TenantVersionConfigDto versionConfig) {
         // TODO: fix empty archive field
-        final var version = versionModelFactory.create(tenantId, stageId, versionConfig, "");
-        final var request = new SyncVersionRequest(version);
-        return tenantModule.getVersionService().syncVersion(request)
+        final var version = tenantVersionModelFactory.create(tenantId, stageId, versionConfig, "");
+        final var request = new SyncTenantVersionRequest(version);
+        return tenantModule.getTenantService().syncTenantVersion(request)
                 .replaceWith(version);
     }
 }

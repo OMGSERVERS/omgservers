@@ -8,13 +8,13 @@ import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
-import com.omgservers.service.factory.tenant.VersionLobbyRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -36,7 +36,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final LobbyModule lobbyModule;
 
-    final VersionLobbyRequestModelFactory versionLobbyRequestModelFactory;
+    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
     @Override
@@ -65,7 +65,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                             final var lobbyId = lobbyConfig.getLobbyId();
 
                             final var tenantId = runtime.getTenantId();
-                            final var versionId = runtime.getVersionId();
+                            final var versionId = runtime.getDeploymentId();
 
                             yield syncVersionLobbyRequest(tenantId, versionId, idempotencyKey)
                                     .flatMap(created -> deleteLobby(lobbyId));
@@ -96,12 +96,12 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncVersionLobbyRequest(final Long tenantId,
                                          final Long versionId,
                                          final String idempotencyKey) {
-        final var versionLobbyRequest = versionLobbyRequestModelFactory.create(tenantId,
+        final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
                 versionId,
                 idempotencyKey);
-        final var request = new SyncVersionLobbyRequestRequest(versionLobbyRequest);
-        return tenantModule.getVersionService().syncVersionLobbyRequestWithIdempotency(request)
-                .map(SyncVersionLobbyRequestResponse::getCreated);
+        final var request = new SyncTenantLobbyRequestRequest(versionLobbyRequest);
+        return tenantModule.getTenantService().syncVersionLobbyRequestWithIdempotency(request)
+                .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 
     Uni<Boolean> syncDeleteMatchMatchmakerCommand(final Long matchmakerId,

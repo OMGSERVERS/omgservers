@@ -32,7 +32,7 @@ public class LobbyModel {
     Long tenantId;
 
     @NotNull
-    Long versionId;
+    Long deploymentId;
 
     @NotNull
     Long runtimeId;

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation;
 
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.factory.tenant.ProjectModelFactory;
+import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.operation.testInterface.DeleteProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.operation.testInterface.UpsertProjectOperationTestInterface;
@@ -32,7 +32,7 @@ class DeleteTenantPermissionOperationTest extends Assertions {
     TenantModelFactory tenantModelFactory;
 
     @Inject
-    ProjectModelFactory projectModelFactory;
+    TenantProjectModelFactory tenantProjectModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
@@ -45,13 +45,13 @@ class DeleteTenantPermissionOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = projectModelFactory.create(tenant.getId());
+        final var project = tenantProjectModelFactory.create(tenant.getId());
         final var id = project.getId();
         upsertProjectOperation.upsertProject(shard, project);
 
         final var changeContext = deleteProjectOperation.deleteProject(shard, tenant.getId(), id);
         assertTrue(changeContext.getResult());
-        assertTrue(changeContext.contains(EventQualifierEnum.PROJECT_DELETED));
+        assertTrue(changeContext.contains(EventQualifierEnum.TENANT_PROJECT_DELETED));
     }
 
     @Test
@@ -62,6 +62,6 @@ class DeleteTenantPermissionOperationTest extends Assertions {
 
         final var changeContext = deleteProjectOperation.deleteProject(shard, tenantId, id);
         assertFalse(changeContext.getResult());
-        assertFalse(changeContext.contains(EventQualifierEnum.PROJECT_DELETED));
+        assertFalse(changeContext.contains(EventQualifierEnum.TENANT_PROJECT_DELETED));
     }
 }

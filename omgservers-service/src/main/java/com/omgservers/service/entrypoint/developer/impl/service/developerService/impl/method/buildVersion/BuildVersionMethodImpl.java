@@ -1,19 +1,19 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.buildVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.version.VersionConfigDto;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
-import com.omgservers.schema.module.tenant.SyncVersionRequest;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.entrypoint.developer.impl.operation.encodeFiles.EncodeFilesOperation;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.service.factory.tenant.VersionModelFactory;
+import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.security.ServiceSecurityAttributes;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -39,7 +39,7 @@ class BuildVersionMethodImpl implements BuildVersionMethod {
 
     final EncodeFilesOperation encodeFilesOperation;
 
-    final VersionModelFactory versionModelFactory;
+    final TenantVersionModelFactory tenantVersionModelFactory;
 
     final SecurityIdentity securityIdentity;
     final ObjectMapper objectMapper;
@@ -57,17 +57,17 @@ class BuildVersionMethodImpl implements BuildVersionMethod {
 
         return checkVersionManagementPermission(tenantId, stageId, userId)
                 .flatMap(voidItem -> createVersion(tenantId, stageId, versionConfig, base64Archive))
-                .map(VersionModel::getId)
+                .map(TenantVersionModel::getId)
                 .map(BuildVersionDeveloperResponse::new);
     }
 
-    VersionConfigDto getVersionConfig(final BuildVersionDeveloperRequest request) {
+    TenantVersionConfigDto getVersionConfig(final BuildVersionDeveloperRequest request) {
         return request.getFiles().stream()
                 .filter(fileUpload -> fileUpload.name().equals(CONFIG_JSON))
                 .map(fileUpload -> {
                     try {
                         final var fileContent = Files.readString(fileUpload.filePath());
-                        final var configModel = objectMapper.readValue(fileContent, VersionConfigDto.class);
+                        final var configModel = objectMapper.readValue(fileContent, TenantVersionConfigDto.class);
                         return configModel;
                     } catch (IOException e) {
                         throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_CONFIG_JSON,
@@ -102,13 +102,13 @@ class BuildVersionMethodImpl implements BuildVersionMethod {
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
                                                final Long stageId,
                                                final Long userId) {
-        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
-        final var hasStagePermissionServiceRequest = new HasStagePermissionRequest(tenantId,
+        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
+        final var hasStagePermissionServiceRequest = new VerifyTenantStagePermissionExistsRequest(tenantId,
                 stageId,
                 userId,
                 permission);
-        return tenantModule.getStageService().hasStagePermission(hasStagePermissionServiceRequest)
-                .map(HasStagePermissionResponse::getResult)
+        return tenantModule.getTenantService().verifyTenantStagePermissionExists(hasStagePermissionServiceRequest)
+                .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
@@ -120,13 +120,13 @@ class BuildVersionMethodImpl implements BuildVersionMethod {
                 .replaceWithVoid();
     }
 
-    Uni<VersionModel> createVersion(final Long tenantId,
-                                    final Long stageId,
-                                    final VersionConfigDto versionConfig,
-                                    final String base64Archive) {
-        final var version = versionModelFactory.create(tenantId, stageId, versionConfig, base64Archive);
-        final var request = new SyncVersionRequest(version);
-        return tenantModule.getVersionService().syncVersion(request)
+    Uni<TenantVersionModel> createVersion(final Long tenantId,
+                                          final Long stageId,
+                                          final TenantVersionConfigDto versionConfig,
+                                          final String base64Archive) {
+        final var version = tenantVersionModelFactory.create(tenantId, stageId, versionConfig, base64Archive);
+        final var request = new SyncTenantVersionRequest(version);
+        return tenantModule.getTenantService().syncTenantVersion(request)
                 .replaceWith(version);
     }
 }

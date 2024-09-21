@@ -32,7 +32,7 @@ public class MatchmakerModel {
     Long tenantId;
 
     @NotNull
-    Long versionId;
+    Long deploymentId;
 
     @NotNull
     Boolean deleted;

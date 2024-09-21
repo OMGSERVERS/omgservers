@@ -109,7 +109,7 @@ create table if not exists tab_client (
     user_id bigint not null,
     player_id bigint not null,
     tenant_id bigint not null,
-    version_id bigint not null,
+    deployment_id bigint not null,
     deleted boolean not null
 );
 
@@ -219,7 +219,7 @@ create table if not exists tab_tenant_version (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
-    stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
+    project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     config json not null,
@@ -227,7 +227,7 @@ create table if not exists tab_tenant_version (
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_jenkins_request (
+create table if not exists tab_tenant_jenkins_request (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -239,7 +239,7 @@ create table if not exists tab_tenant_version_jenkins_request (
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_image_ref (
+create table if not exists tab_tenant_image_ref (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -251,44 +251,55 @@ create table if not exists tab_tenant_version_image_ref (
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_lobby_request (
+create table if not exists tab_tenant_deployment (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_tenant_lobby_request (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    deployment_id bigint not null references tab_tenant_deployment(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     lobby_id bigint not null,
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_lobby_ref (
+create table if not exists tab_tenant_lobby_ref (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
-    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    deployment_id bigint not null references tab_tenant_deployment(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     lobby_id bigint not null,
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_matchmaker_request (
+create table if not exists tab_tenant_matchmaker_request (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
-    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    deployment_id bigint not null references tab_tenant_deployment(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     matchmaker_id bigint not null,
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_version_matchmaker_ref (
+create table if not exists tab_tenant_matchmaker_ref (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
-    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    deployment_id bigint not null references tab_tenant_deployment(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     matchmaker_id bigint not null,
@@ -307,19 +318,22 @@ create index if not exists idx_tenant_stage_permission_tenant_id on tab_tenant_s
 create index if not exists idx_tenant_stage_permission_stage_id on tab_tenant_stage_permission(stage_id);
 create unique index idx_tenant_stage_permission_uniqueness on tab_tenant_stage_permission(stage_id, user_id, permission) where deleted = false;
 create index if not exists idx_tenant_version_tenant_id on tab_tenant_version(tenant_id);
-create index if not exists idx_tenant_version_stage_id on tab_tenant_version(stage_id);
-create index if not exists idx_tenant_version_jenkins_request_tenant_id on tab_tenant_version_jenkins_request(tenant_id);
-create index if not exists idx_tenant_version_jenkins_request_version_id on tab_tenant_version_jenkins_request(version_id);
-create index if not exists idx_tenant_version_image_ref_tenant_id on tab_tenant_version_image_ref(tenant_id);
-create index if not exists idx_tenant_version_image_ref_version_id on tab_tenant_version_image_ref(version_id);
-create index if not exists idx_tenant_version_lobby_request_tenant_id on tab_tenant_version_lobby_request(tenant_id);
-create index if not exists idx_tenant_version_lobby_request_version_id on tab_tenant_version_lobby_request(version_id);
-create index if not exists idx_tenant_version_lobby_ref_tenant_id on tab_tenant_version_lobby_ref(tenant_id);
-create index if not exists idx_tenant_version_lobby_ref_version_id on tab_tenant_version_lobby_ref(version_id);
-create index if not exists idx_tenant_version_matchmaker_request_tenant_id on tab_tenant_version_matchmaker_request(tenant_id);
-create index if not exists idx_tenant_version_matchmaker_request_version_id on tab_tenant_version_matchmaker_request(version_id);
-create index if not exists idx_tenant_version_matchmaker_ref_tenant_id on tab_tenant_version_matchmaker_ref(tenant_id);
-create index if not exists idx_tenant_version_matchmaker_ref_version_id on tab_tenant_version_matchmaker_ref(version_id);
+create index if not exists idx_tenant_version_project_id on tab_tenant_version(project_id);
+create index if not exists idx_tenant_jenkins_request_tenant_id on tab_tenant_jenkins_request(tenant_id);
+create index if not exists idx_tenant_jenkins_request_version_id on tab_tenant_jenkins_request(version_id);
+create index if not exists idx_tenant_image_ref_tenant_id on tab_tenant_image_ref(tenant_id);
+create index if not exists idx_tenant_image_ref_version_id on tab_tenant_image_ref(version_id);
+create index if not exists idx_tenant_deployment_tenant_id on tab_tenant_deployment(tenant_id);
+create index if not exists idx_tenant_deployment_stage_id on tab_tenant_deployment(stage_id);
+create index if not exists idx_tenant_deployment_version_id on tab_tenant_deployment(version_id);
+create index if not exists idx_tenant_lobby_request_tenant_id on tab_tenant_lobby_request(tenant_id);
+create index if not exists idx_tenant_lobby_request_deployment_id on tab_tenant_lobby_request(deployment_id);
+create index if not exists idx_tenant_lobby_ref_tenant_id on tab_tenant_lobby_ref(tenant_id);
+create index if not exists idx_tenant_lobby_ref_deployment_id on tab_tenant_lobby_ref(deployment_id);
+create index if not exists idx_tenant_matchmaker_request_tenant_id on tab_tenant_matchmaker_request(tenant_id);
+create index if not exists idx_tenant_matchmaker_request_deployment_id on tab_tenant_matchmaker_request(deployment_id);
+create index if not exists idx_tenant_matchmaker_ref_tenant_id on tab_tenant_matchmaker_ref(tenant_id);
+create index if not exists idx_tenant_matchmaker_ref_deployment_id on tab_tenant_matchmaker_ref(deployment_id);
 
 -- lobby module
 
@@ -329,7 +343,7 @@ create table if not exists tab_lobby (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
-    version_id bigint not null,
+    deployment_id bigint not null,
     runtime_id bigint not null,
     deleted boolean not null
 );
@@ -354,7 +368,7 @@ create table if not exists tab_matchmaker (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
-    version_id bigint not null,
+    deployment_id bigint not null,
     deleted boolean not null
 );
 
@@ -446,7 +460,7 @@ create table if not exists tab_runtime (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     tenant_id bigint not null,
-    version_id bigint not null,
+    deployment_id bigint not null,
     qualifier text not null,
     user_id bigint not null,
     last_activity timestamp with time zone not null,

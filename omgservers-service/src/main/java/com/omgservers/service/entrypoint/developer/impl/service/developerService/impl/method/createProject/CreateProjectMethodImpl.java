@@ -3,24 +3,24 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
-import com.omgservers.schema.model.projectPermission.ProjectPermissionModel;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.stagePermission.StagePermissionModel;
+import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncProjectRequest;
-import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
-import com.omgservers.schema.module.tenant.SyncStageRequest;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.service.factory.tenant.ProjectModelFactory;
-import com.omgservers.service.factory.tenant.ProjectPermissionModelFactory;
-import com.omgservers.service.factory.tenant.StageModelFactory;
-import com.omgservers.service.factory.tenant.StagePermissionModelFactory;
+import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
+import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
+import com.omgservers.service.factory.tenant.TenantStageModelFactory;
+import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
@@ -42,16 +42,16 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
     final GenerateIdOperation generateIdOperation;
 
-    final ProjectPermissionModelFactory projectPermissionModelFactory;
-    final StagePermissionModelFactory stagePermissionModelFactory;
-    final ProjectModelFactory projectModelFactory;
-    final StageModelFactory stageModelFactory;
+    final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
+    final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
+    final TenantProjectModelFactory tenantProjectModelFactory;
+    final TenantStageModelFactory tenantStageModelFactory;
 
     final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
-        log.debug("Create project, request={}", request);
+        log.debug("Create tenant project, request={}", request);
 
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
         final var tenantId = request.getTenantId();
@@ -69,9 +69,10 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
     Uni<Void> checkCreateProjectPermission(final Long tenantId, final Long userId) {
         final var permission = TenantPermissionEnum.PROJECT_MANAGEMENT;
-        final var hasTenantPermissionServiceRequest = new HasTenantPermissionRequest(tenantId, userId, permission);
-        return tenantModule.getTenantService().hasTenantPermission(hasTenantPermissionServiceRequest)
-                .map(HasTenantPermissionResponse::getResult)
+        final var hasTenantPermissionServiceRequest =
+                new VerifyTenantPermissionExistsRequest(tenantId, userId, permission);
+        return tenantModule.getTenantService().verifyTenantPermissionExists(hasTenantPermissionServiceRequest)
+                .map(VerifyTenantPermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
@@ -82,50 +83,52 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 .replaceWithVoid();
     }
 
-    Uni<ProjectModel> syncProject(final Long tenantId, final Long userId) {
-        final var project = projectModelFactory.create(tenantId);
-        final var syncProjectInternalRequest = new SyncProjectRequest(project);
-        return tenantModule.getProjectService().syncProject(syncProjectInternalRequest)
+    Uni<TenantProjectModel> syncProject(final Long tenantId, final Long userId) {
+        final var project = tenantProjectModelFactory.create(tenantId);
+        final var syncProjectInternalRequest = new SyncTenantProjectRequest(project);
+        return tenantModule.getTenantService().syncTenantProject(syncProjectInternalRequest)
                 .flatMap(response -> syncProjectPermission(tenantId, project.getId(), userId))
                 .replaceWith(project);
     }
 
-    Uni<ProjectPermissionModel> syncProjectPermission(final Long tenantId, final Long projectId, final Long userId) {
-        final var permission = ProjectPermissionEnum.STAGE_MANAGEMENT;
-        final var projectPermission = projectPermissionModelFactory.create(tenantId, projectId, userId, permission);
-        final var request = new SyncProjectPermissionRequest(projectPermission);
-        return tenantModule.getProjectService().syncProjectPermission(request)
+    Uni<TenantProjectPermissionModel> syncProjectPermission(final Long tenantId, final Long projectId,
+                                                            final Long userId) {
+        final var permission = TenantProjectPermissionEnum.STAGE_MANAGEMENT;
+        final var projectPermission =
+                tenantProjectPermissionModelFactory.create(tenantId, projectId, userId, permission);
+        final var request = new SyncTenantProjectPermissionRequest(projectPermission);
+        return tenantModule.getTenantService().syncTenantProjectPermission(request)
                 .replaceWith(projectPermission);
     }
 
-    Uni<StageModel> syncStage(final Long tenantId,
-                              final Long projectId,
-                              final Long userId) {
-        final var stage = stageModelFactory.create(tenantId, projectId);
-        final var syncStageInternalRequest = new SyncStageRequest(stage);
-        return tenantModule.getStageService().syncStage(syncStageInternalRequest)
+    Uni<TenantStageModel> syncStage(final Long tenantId,
+                                    final Long projectId,
+                                    final Long userId) {
+        final var stage = tenantStageModelFactory.create(tenantId, projectId);
+        final var syncStageInternalRequest = new SyncTenantStageRequest(stage);
+        return tenantModule.getTenantService().syncTenantStage(syncStageInternalRequest)
                 .flatMap(response -> syncStageVersionManagementPermission(tenantId, stage.getId(), userId))
                 .flatMap(response -> syncStageGettingDashboardPermission(tenantId, stage.getId(), userId))
                 .replaceWith(stage);
     }
 
-    Uni<StagePermissionModel> syncStageVersionManagementPermission(final Long tenantId,
-                                                                   final Long stageId,
-                                                                   final Long userId) {
-        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
-        final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, userId, permission);
-        final var request = new SyncStagePermissionRequest(stagePermission);
-        return tenantModule.getStageService().syncStagePermission(request)
+    Uni<TenantStagePermissionModel> syncStageVersionManagementPermission(final Long tenantId,
+                                                                         final Long stageId,
+                                                                         final Long userId) {
+        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
+        final var stagePermission = tenantStagePermissionModelFactory.create(tenantId, stageId, userId, permission);
+        final var request = new SyncTenantStagePermissionRequest(stagePermission);
+        return tenantModule.getTenantService().syncTenantStagePermission(request)
                 .replaceWith(stagePermission);
     }
 
-    Uni<StagePermissionModel> syncStageGettingDashboardPermission(final Long tenantId,
-                                                                  final Long stageId,
-                                                                  final Long userId) {
-        final var permission = StagePermissionEnum.GETTING_DASHBOARD;
-        final var stagePermission = stagePermissionModelFactory.create(tenantId, stageId, userId, permission);
-        final var request = new SyncStagePermissionRequest(stagePermission);
-        return tenantModule.getStageService().syncStagePermission(request)
+    Uni<TenantStagePermissionModel> syncStageGettingDashboardPermission(final Long tenantId,
+                                                                        final Long stageId,
+                                                                        final Long userId) {
+        final var permission = TenantStagePermissionEnum.GETTING_DASHBOARD;
+        final var stagePermission = tenantStagePermissionModelFactory.create(tenantId, stageId, userId, permission);
+        final var request = new SyncTenantStagePermissionRequest(stagePermission);
+        return tenantModule.getTenantService().syncTenantStagePermission(request)
                 .replaceWith(stagePermission);
     }
 }

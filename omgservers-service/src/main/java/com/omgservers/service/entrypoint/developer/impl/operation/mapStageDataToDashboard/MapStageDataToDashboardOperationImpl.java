@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.operation.mapStageDataToDashboard;
 
 import com.omgservers.schema.entrypoint.developer.dto.StageDashboardDto;
-import com.omgservers.schema.module.tenant.stage.dto.StageDataDto;
+import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.StageMapper;
 import com.omgservers.service.entrypoint.developer.impl.mappers.VersionProjectionMapper;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +17,7 @@ class MapStageDataToDashboardOperationImpl implements MapStageDataToDashboardOpe
     final StageMapper stageMapper;
 
     @Override
-    public StageDashboardDto mapStageDataToDashboard(final StageDataDto stageData) {
+    public StageDashboardDto mapStageDataToDashboard(final TenantStageDataDto stageData) {
         final var stageDashboardDto = new StageDashboardDto();
 
         // Dashboard stage

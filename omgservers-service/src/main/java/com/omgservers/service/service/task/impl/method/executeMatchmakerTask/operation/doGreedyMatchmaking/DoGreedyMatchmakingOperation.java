@@ -3,13 +3,13 @@ package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.op
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.version.VersionModeDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
 
 import java.util.List;
 
 public interface DoGreedyMatchmakingOperation {
     DoGreedyMatchmakingResult doGreedyMatchmaking(Long matchmakerId,
-                                                  VersionModeDto config,
+                                                  TenantVersionModeDto config,
                                                   List<MatchmakerRequestModel> requests,
                                                   List<MatchmakerMatchModel> matches,
                                                   List<MatchmakerMatchClientModel> clients);

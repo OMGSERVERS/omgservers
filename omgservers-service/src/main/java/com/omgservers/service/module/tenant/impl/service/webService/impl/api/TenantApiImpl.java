@@ -1,128 +1,136 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl.api;
 
 import com.omgservers.schema.model.internalRole.InternalRoleEnum;
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.DeleteProjectRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectResponse;
-import com.omgservers.schema.module.tenant.DeleteStagePermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteStagePermissionResponse;
-import com.omgservers.schema.module.tenant.DeleteStageRequest;
-import com.omgservers.schema.module.tenant.DeleteStageResponse;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.DeleteTenantRequest;
-import com.omgservers.schema.module.tenant.DeleteTenantResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionResponse;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.GetProjectRequest;
-import com.omgservers.schema.module.tenant.GetProjectResponse;
-import com.omgservers.schema.module.tenant.GetStageRequest;
-import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
-import com.omgservers.schema.module.tenant.GetVersionConfigResponse;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.HasProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.HasProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
-import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.SelectStageVersionRequest;
-import com.omgservers.schema.module.tenant.SelectStageVersionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectRequest;
-import com.omgservers.schema.module.tenant.SyncProjectResponse;
-import com.omgservers.schema.module.tenant.SyncStagePermissionRequest;
-import com.omgservers.schema.module.tenant.SyncStagePermissionResponse;
-import com.omgservers.schema.module.tenant.SyncStageRequest;
-import com.omgservers.schema.module.tenant.SyncStageResponse;
-import com.omgservers.schema.module.tenant.SyncTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncTenantRequest;
-import com.omgservers.schema.module.tenant.SyncTenantResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.SyncVersionRequest;
-import com.omgservers.schema.module.tenant.SyncVersionResponse;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsResponse;
-import com.omgservers.schema.module.tenant.ViewProjectsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectsResponse;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
-import com.omgservers.schema.module.tenant.ViewStagesRequest;
-import com.omgservers.schema.module.tenant.ViewStagesResponse;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionsResponse;
-import com.omgservers.schema.module.tenant.stage.GetStageDataRequest;
-import com.omgservers.schema.module.tenant.stage.GetStageDataResponse;
+import com.omgservers.schema.module.tenant.tenant.DeleteTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.DeleteTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
-import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
-import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsRequest;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesRequest;
+import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.module.tenant.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -140,6 +148,10 @@ class TenantApiImpl implements TenantApi {
     final WebService webService;
 
     final HandleApiRequestOperation handleApiRequestOperation;
+
+    /*
+    Tenant
+     */
 
     @Override
     public Uni<GetTenantResponse> getTenant(final GetTenantRequest request) {
@@ -161,14 +173,19 @@ class TenantApiImpl implements TenantApi {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenant);
     }
 
+    /*
+    TenantPermission
+     */
+
     @Override
     public Uni<ViewTenantPermissionsResponse> viewTenantPermissions(final ViewTenantPermissionsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantPermissions);
     }
 
     @Override
-    public Uni<HasTenantPermissionResponse> hasTenantPermission(final HasTenantPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::hasTenantPermission);
+    public Uni<VerifyTenantPermissionExistsResponse> verifyTenantPermissionExists(
+            final VerifyTenantPermissionExistsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::verifyTenantPermissionExists);
     }
 
     @Override
@@ -181,284 +198,361 @@ class TenantApiImpl implements TenantApi {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantPermission);
     }
 
+    /*
+    TenantProject
+     */
+
     @Override
-    public Uni<GetProjectResponse> getProject(final GetProjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getProject);
+    public Uni<GetTenantProjectResponse> getTenantProject(final GetTenantProjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantProject);
     }
 
     @Override
-    public Uni<SyncProjectResponse> syncProject(final SyncProjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncProject);
+    public Uni<SyncTenantProjectResponse> syncTenantProject(final SyncTenantProjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantProject);
     }
 
     @Override
-    public Uni<ViewProjectsResponse> viewProjects(ViewProjectsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewProjects);
+    public Uni<ViewTenantProjectsResponse> viewTenantProjects(ViewTenantProjectsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantProjects);
     }
 
     @Override
-    public Uni<DeleteProjectResponse> deleteProject(final DeleteProjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteProject);
+    public Uni<DeleteTenantProjectResponse> deleteTenantProject(final DeleteTenantProjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantProject);
+    }
+
+    /*
+    TenantProjectPermission
+     */
+
+    @Override
+    public Uni<ViewTenantProjectPermissionsResponse> viewTenantProjectPermissions(
+            final ViewTenantProjectPermissionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantProjectPermissions);
     }
 
     @Override
-    public Uni<ViewProjectPermissionsResponse> viewProjectPermissions(final ViewProjectPermissionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewProjectPermissions);
+    public Uni<VerifyTenantProjectPermissionExistsResponse> verifyTenantProjectPermissionExists(
+            final VerifyTenantProjectPermissionExistsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request,
+                webService::verifyTenantProjectPermissionExists);
     }
 
     @Override
-    public Uni<HasProjectPermissionResponse> hasProjectPermission(final HasProjectPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::hasProjectPermission);
+    public Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(
+            final SyncTenantProjectPermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantProjectPermission);
     }
 
     @Override
-    public Uni<SyncProjectPermissionResponse> syncProjectPermission(final SyncProjectPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncProjectPermission);
+    public Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
+            final DeleteTenantProjectPermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantProjectPermission);
+    }
+
+    /*
+    TenantStage
+     */
+
+    @Override
+    public Uni<GetTenantStageResponse> getTenantStage(final GetTenantStageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantStage);
     }
 
     @Override
-    public Uni<DeleteProjectPermissionResponse> deleteProjectPermission(final DeleteProjectPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteProjectPermission);
+    public Uni<GetTenantStageDataResponse> getTenantStageData(final GetTenantStageDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantStageData);
     }
 
     @Override
-    public Uni<GetStageResponse> getStage(final GetStageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getStage);
+    public Uni<SyncTenantStageResponse> syncTenantStage(final SyncTenantStageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantStage);
     }
 
     @Override
-    public Uni<GetStageDataResponse> getStageData(final GetStageDataRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getStageData);
+    public Uni<ViewTenantStagesResponse> viewTenantStages(ViewTenantStagesRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantStages);
     }
 
     @Override
-    public Uni<SyncStageResponse> syncStage(final SyncStageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncStage);
+    public Uni<DeleteTenantStageResponse> deleteTenantStage(final DeleteTenantStageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantStage);
+    }
+
+    /*
+    TenantStagePermission
+     */
+
+    @Override
+    public Uni<ViewTenantStagePermissionsResponse> viewTenantStagePermissions(
+            final ViewTenantStagePermissionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantStagePermissions);
     }
 
     @Override
-    public Uni<ViewStagesResponse> viewStages(ViewStagesRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewStages);
+    public Uni<VerifyTenantStagePermissionExistsResponse> verifyTenantStagePermissionExists(
+            final VerifyTenantStagePermissionExistsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::verifyTenantStagePermissionExists);
     }
 
     @Override
-    public Uni<DeleteStageResponse> deleteStage(final DeleteStageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteStage);
+    public Uni<SyncTenantStagePermissionResponse> syncTenantStagePermission(
+            final SyncTenantStagePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantStagePermission);
     }
 
     @Override
-    public Uni<ViewStagePermissionsResponse> viewStagePermissions(final ViewStagePermissionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewStagePermissions);
+    public Uni<DeleteTenantStagePermissionResponse> deleteTenantStagePermission(
+            final DeleteTenantStagePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantStagePermission);
+    }
+
+    /*
+    TenantVersion
+     */
+
+    @Override
+    public Uni<GetTenantVersionResponse> getTenantVersion(final GetTenantVersionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantVersion);
     }
 
     @Override
-    public Uni<HasStagePermissionResponse> hasStagePermission(final HasStagePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::hasStagePermission);
+    public Uni<GetTenantVersionConfigResponse> getTenantVersionConfig(final GetTenantVersionConfigRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantVersionConfig);
     }
 
     @Override
-    public Uni<SyncStagePermissionResponse> syncStagePermission(final SyncStagePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncStagePermission);
+    public Uni<GetTenantVersionDataResponse> getTenantVersionData(final GetTenantVersionDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantVersionData);
     }
 
     @Override
-    public Uni<DeleteStagePermissionResponse> deleteStagePermission(final DeleteStagePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteStagePermission);
+    public Uni<SyncTenantVersionResponse> syncTenantVersion(final SyncTenantVersionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantVersion);
     }
 
     @Override
-    public Uni<SelectStageVersionResponse> selectStageVersion(final SelectStageVersionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::selectStageVersion);
+    public Uni<ViewTenantVersionsResponse> viewTenantVersions(final ViewTenantVersionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantVersions);
     }
 
     @Override
-    public Uni<GetVersionResponse> getVersion(final GetVersionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersion);
+    public Uni<DeleteTenantVersionResponse> deleteTenantVersion(final DeleteTenantVersionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantVersion);
+    }
+
+    /*
+    TenantJenkinsRequest
+     */
+
+    @Override
+    public Uni<GetTenantJenkinsRequestResponse> getTenantJenkinsRequest(
+            final GetTenantJenkinsRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantJenkinsRequest);
     }
 
     @Override
-    public Uni<GetVersionDataResponse> getVersionData(final GetVersionDataRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionData);
+    public Uni<ViewTenantJenkinsRequestsResponse> viewTenantJenkinsRequests(
+            final ViewTenantJenkinsRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantJenkinsRequests);
     }
 
     @Override
-    public Uni<SyncVersionResponse> syncVersion(final SyncVersionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersion);
+    public Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequest(
+            final SyncTenantJenkinsRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantJenkinsRequest);
     }
 
     @Override
-    public Uni<ViewVersionsResponse> viewVersions(final ViewVersionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersions);
+    public Uni<DeleteTenantJenkinsRequestResponse> deleteTenantJenkinsRequest(
+            final DeleteTenantJenkinsRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantJenkinsRequest);
+    }
+
+    /*
+    TenantImageRef
+     */
+
+    @Override
+    public Uni<GetTenantImageRefResponse> getTenantImageRef(final GetTenantImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantImageRef);
     }
 
     @Override
-    public Uni<DeleteVersionResponse> deleteVersion(final DeleteVersionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersion);
+    public Uni<FindTenantImageRefResponse> findTenantImageRef(final FindTenantImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantImageRef);
     }
 
     @Override
-    public Uni<GetVersionConfigResponse> getVersionConfig(final GetVersionConfigRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionConfig);
+    public Uni<ViewTenantImageRefsResponse> viewTenantImageRefs(final ViewTenantImageRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantImageRefs);
     }
 
     @Override
-    public Uni<GetVersionJenkinsRequestResponse> getVersionJenkinsRequest(
-            final GetVersionJenkinsRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionJenkinsRequest);
+    public Uni<SyncTenantImageRefResponse> syncTenantImageRef(final SyncTenantImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantImageRef);
     }
 
     @Override
-    public Uni<ViewVersionJenkinsRequestsResponse> viewVersionJenkinsRequests(
-            final ViewVersionJenkinsRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionJenkinsRequests);
+    public Uni<DeleteTenantImageRefResponse> deleteTenantImageRef(final DeleteTenantImageRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantImageRef);
+    }
+
+    /*
+    TenantDeployment
+     */
+
+    @Override
+    public Uni<GetTenantDeploymentResponse> getTenantDeployment(final GetTenantDeploymentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDeployment);
     }
 
     @Override
-    public Uni<SyncVersionJenkinsRequestResponse> syncVersionJenkinsRequest(
-            final SyncVersionJenkinsRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionJenkinsRequest);
+    public Uni<SelectTenantDeploymentResponse> selectTenantDeployment(final SelectTenantDeploymentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::selectTenantDeployment);
     }
 
     @Override
-    public Uni<DeleteVersionJenkinsRequestResponse> deleteVersionJenkinsRequest(
-            final DeleteVersionJenkinsRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionJenkinsRequest);
+    public Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(final ViewTenantDeploymentsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantDeployments);
     }
 
     @Override
-    public Uni<GetVersionImageRefResponse> getVersionImageRef(final GetVersionImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionImageRef);
+    public Uni<SyncTenantDeploymentResponse> syncTenantDeployment(final SyncTenantDeploymentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantDeployment);
     }
 
     @Override
-    public Uni<FindVersionImageRefResponse> findVersionImageRef(final FindVersionImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionImageRef);
+    public Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(final DeleteTenantDeploymentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantDeployment);
+    }
+
+    /*
+    TenantLobbyRequest
+     */
+
+    @Override
+    public Uni<GetTenantLobbyRequestResponse> getTenantLobbyRequest(final GetTenantLobbyRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantLobbyRequest);
     }
 
     @Override
-    public Uni<ViewVersionImageRefsResponse> viewVersionImageRefs(final ViewVersionImageRefsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionImageRefs);
+    public Uni<FindTenantLobbyRequestResponse> findTenantLobbyRequest(final FindTenantLobbyRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantLobbyRequest);
     }
 
     @Override
-    public Uni<SyncVersionImageRefResponse> syncVersionImageRef(final SyncVersionImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionImageRef);
+    public Uni<ViewTenantLobbyRequestsResponse> viewTenantLobbyRequests(
+            final ViewTenantLobbyRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantLobbyRequests);
     }
 
     @Override
-    public Uni<DeleteVersionImageRefResponse> deleteVersionImageRef(final DeleteVersionImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionImageRef);
+    public Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequest(
+            final SyncTenantLobbyRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantLobbyRequest);
     }
 
     @Override
-    public Uni<GetVersionLobbyRequestResponse> getVersionLobbyRequest(final GetVersionLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionLobbyRequest);
+    public Uni<DeleteTenantLobbyRequestResponse> deleteTenantLobbyRequest(
+            final DeleteTenantLobbyRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantLobbyRequest);
+    }
+
+    /*
+    TenantLobbyRef
+     */
+
+    @Override
+    public Uni<GetTenantLobbyRefResponse> getTenantLobbyRef(final GetTenantLobbyRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantLobbyRef);
     }
 
     @Override
-    public Uni<FindVersionLobbyRequestResponse> findVersionLobbyRequest(final FindVersionLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionLobbyRequest);
+    public Uni<FindTenantLobbyRefResponse> findTenantLobbyRef(final FindTenantLobbyRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantLobbyRef);
     }
 
     @Override
-    public Uni<ViewVersionLobbyRequestsResponse> viewVersionJenkinsRequests(
-            final ViewVersionLobbyRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionLobbyRequests);
+    public Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(final ViewTenantLobbyRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantLobbyRefs);
     }
 
     @Override
-    public Uni<SyncVersionLobbyRequestResponse> syncVersionJenkinsRequest(
-            final SyncVersionLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionLobbyRequest);
+    public Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(final SyncTenantLobbyRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantLobbyRef);
     }
 
     @Override
-    public Uni<DeleteVersionLobbyRequestResponse> deleteVersionJenkinsRequest(
-            final DeleteVersionLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionLobbyRequest);
+    public Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(final DeleteTenantLobbyRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantLobbyRef);
+    }
+
+    /*
+    TenantMatchmakerRequest
+     */
+
+    @Override
+    public Uni<GetTenantMatchmakerRequestResponse> getTenantMatchmakerRequest(
+            final GetTenantMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantMatchmakerRequest);
     }
 
     @Override
-    public Uni<GetVersionLobbyRefResponse> getVersionImageRef(final GetVersionLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionLobbyRef);
+    public Uni<FindTenantMatchmakerRequestResponse> findTenantMatchmakerRequest(
+            final FindTenantMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantMatchmakerRequest);
     }
 
     @Override
-    public Uni<FindVersionLobbyRefResponse> findVersionImageRef(final FindVersionLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionLobbyRef);
+    public Uni<ViewTenantMatchmakerRequestsResponse> viewTenantMatchmakerRequests(
+            final ViewTenantMatchmakerRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantMatchmakerRequests);
     }
 
     @Override
-    public Uni<ViewVersionLobbyRefsResponse> viewVersionImageRefs(final ViewVersionLobbyRefsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionLobbyRefs);
+    public Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequest(
+            final SyncTenantMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantMatchmakerRequest);
     }
 
     @Override
-    public Uni<SyncVersionLobbyRefResponse> syncVersionImageRef(final SyncVersionLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionLobbyRef);
+    public Uni<DeleteTenantMatchmakerRequestResponse> deleteTenantMatchmakerRequest(
+            final DeleteTenantMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantMatchmakerRequest);
+    }
+
+    /*
+    TenantMatchmakerRef
+     */
+
+    @Override
+    public Uni<GetTenantMatchmakerRefResponse> getTenantMatchmakerRef(GetTenantMatchmakerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantMatchmakerRef);
     }
 
     @Override
-    public Uni<DeleteVersionLobbyRefResponse> deleteVersionImageRef(final DeleteVersionLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionLobbyRef);
+    public Uni<FindTenantMatchmakerRefResponse> findTenantMatchmakerRef(
+            final FindTenantMatchmakerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantMatchmakerRef);
     }
 
     @Override
-    public Uni<GetVersionMatchmakerRefResponse> getVersionMatchmakerRef(GetVersionMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionMatchmakerRef);
+    public Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(
+            final ViewTenantMatchmakerRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantMatchmakerRefs);
     }
 
     @Override
-    public Uni<GetVersionMatchmakerRequestResponse> getVersionMatchmakerRequest(
-            final GetVersionMatchmakerRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getVersionMatchmakerRequest);
+    public Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(
+            final SyncTenantMatchmakerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantMatchmakerRef);
     }
 
     @Override
-    public Uni<FindVersionMatchmakerRequestResponse> findVersionMatchmakerRequest(
-            final FindVersionMatchmakerRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionMatchmakerRequest);
-    }
-
-    @Override
-    public Uni<ViewVersionMatchmakerRequestsResponse> viewVersionMatchmakerRequests(
-            final ViewVersionMatchmakerRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionMatchmakerRequests);
-    }
-
-    @Override
-    public Uni<SyncVersionMatchmakerRequestResponse> syncVersionMatchmakerRequest(
-            final SyncVersionMatchmakerRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionMatchmakerRequest);
-    }
-
-    @Override
-    public Uni<DeleteVersionMatchmakerRequestResponse> deleteVersionMatchmakerRequest(
-            final DeleteVersionMatchmakerRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionMatchmakerRequest);
-    }
-
-    @Override
-    public Uni<FindVersionMatchmakerRefResponse> findVersionMatchmakerRef(
-            final FindVersionMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findVersionMatchmakerRef);
-    }
-
-    @Override
-    public Uni<ViewVersionMatchmakerRefsResponse> viewVersionMatchmakerRefs(
-            final ViewVersionMatchmakerRefsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewVersionMatchmakerRefs);
-    }
-
-    @Override
-    public Uni<SyncVersionMatchmakerRefResponse> syncVersionMatchmakerRef(
-            final SyncVersionMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncVersionMatchmakerRef);
-    }
-
-    @Override
-    public Uni<DeleteVersionMatchmakerRefResponse> deleteVersionMatchmakerRef(
-            final DeleteVersionMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteVersionMatchmakerRef);
+    public Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(
+            final DeleteTenantMatchmakerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantMatchmakerRef);
     }
 }

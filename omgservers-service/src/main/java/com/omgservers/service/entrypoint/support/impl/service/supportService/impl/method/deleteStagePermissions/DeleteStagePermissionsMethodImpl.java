@@ -2,18 +2,18 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.DeleteStagePermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteStagePermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.DeleteStagePermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteStagePermissionResponse;
-import com.omgservers.schema.module.tenant.GetStageRequest;
-import com.omgservers.schema.module.tenant.GetStageResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewStagePermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.stagePermission.StagePermissionModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -80,22 +80,22 @@ class DeleteStagePermissionsMethodImpl implements DeleteStagePermissionsMethod {
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<StageModel> getStage(final Long tenantId, final Long id) {
-        final var request = new GetStageRequest(tenantId, id);
-        return tenantModule.getStageService().getStage(request)
-                .map(GetStageResponse::getStage);
+    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+        final var request = new GetTenantStageRequest(tenantId, id);
+        return tenantModule.getTenantService().getStage(request)
+                .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<List<StagePermissionModel>> viewStagePermissions(final Long tenantId,
-                                                         final Long stageId) {
-        final var request = new ViewStagePermissionsRequest(tenantId, stageId);
-        return tenantModule.getStageService().viewStagePermissions(request)
-                .map(ViewStagePermissionsResponse::getStagePermissions);
+    Uni<List<TenantStagePermissionModel>> viewStagePermissions(final Long tenantId,
+                                                               final Long stageId) {
+        final var request = new ViewTenantStagePermissionsRequest(tenantId, stageId);
+        return tenantModule.getTenantService().viewStagePermissions(request)
+                .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }
 
     Uni<Boolean> deleteStagePermission(final Long tenantId, final Long id) {
-        final var request = new DeleteStagePermissionRequest(tenantId, id);
-        return tenantModule.getStageService().deleteStagePermission(request)
-                .map(DeleteStagePermissionResponse::getDeleted);
+        final var request = new DeleteTenantStagePermissionRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteStagePermission(request)
+                .map(DeleteTenantStagePermissionResponse::getDeleted);
     }
 }

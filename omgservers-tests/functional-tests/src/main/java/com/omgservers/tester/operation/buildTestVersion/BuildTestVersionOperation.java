@@ -1,6 +1,6 @@
 package com.omgservers.tester.operation.buildTestVersion;
 
-import com.omgservers.schema.model.version.VersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.tester.dto.TestVersionDto;
 
 import java.io.IOException;
@@ -12,5 +12,5 @@ public interface BuildTestVersionOperation {
 
     Long buildTestVersion(TestVersionDto testVersion,
                           String mainLua,
-                          VersionConfigDto newVersionConfig) throws IOException;
+                          TenantVersionConfigDto newVersionConfig) throws IOException;
 }

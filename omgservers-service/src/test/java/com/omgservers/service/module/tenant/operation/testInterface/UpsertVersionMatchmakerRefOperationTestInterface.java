@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.versionMatchmakerRef.VersionMatchmakerRefModel;
-import com.omgservers.service.module.tenant.impl.operation.versionMatchmakerRef.upsertVersionMatchmakerRef.UpsertVersionMatchmakerRefOperation;
+import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantMatchmakerRef.UpsertTenantMatchmakerRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,19 +17,19 @@ import java.time.Duration;
 public class UpsertVersionMatchmakerRefOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertVersionMatchmakerRefOperation upsertVersionMatchmakerRefOperation;
+    final UpsertTenantMatchmakerRefOperation upsertTenantMatchmakerRefOperation;
 
     final PgPool pgPool;
 
     public ChangeContext<Boolean> upsertVersionMatchmakerRef(final int shard,
-                                                             final VersionMatchmakerRefModel versionMatchmakerRefModel) {
+                                                             final TenantMatchmakerRefModel tenantMatchmakerRefModel) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertVersionMatchmakerRefOperation
-                                    .upsertVersionMatchmakerRef(changeContext,
+                    return pgPool.withTransaction(sqlConnection -> upsertTenantMatchmakerRefOperation
+                                    .execute(changeContext,
                                             sqlConnection,
                                             shard,
-                                            versionMatchmakerRefModel))
+                                            tenantMatchmakerRefModel))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

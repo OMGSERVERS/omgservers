@@ -6,7 +6,7 @@ import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.module.client.DeleteClientRequest;
 import com.omgservers.schema.module.client.DeleteClientResponse;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
@@ -17,10 +17,10 @@ import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.lobby.LobbyDeletedEventBodyModel;
@@ -125,7 +125,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Void> findAndDeleteVersionLobbyRef(LobbyModel lobby) {
         final var tenantId = lobby.getTenantId();
-        final var versionId = lobby.getVersionId();
+        final var versionId = lobby.getDeploymentId();
         final var lobbyId = lobby.getId();
         return findVersionLobbyRef(tenantId, versionId, lobbyId)
                 .onFailure(ServerSideNotFoundException.class)
@@ -134,20 +134,20 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<VersionLobbyRefModel> findVersionLobbyRef(final Long tenantId,
-                                                  final Long versionId,
-                                                  final Long lobbyId) {
-        final var request = new FindVersionLobbyRefRequest(tenantId, versionId, lobbyId);
-        return tenantModule.getVersionService().findVersionLobbyRef(request)
-                .map(FindVersionLobbyRefResponse::getVersionLobbyRef);
+    Uni<TenantLobbyRefModel> findVersionLobbyRef(final Long tenantId,
+                                                 final Long versionId,
+                                                 final Long lobbyId) {
+        final var request = new FindTenantLobbyRefRequest(tenantId, versionId, lobbyId);
+        return tenantModule.getTenantService().findVersionLobbyRef(request)
+                .map(FindTenantLobbyRefResponse::getTenantLobbyRef);
     }
 
-    Uni<Boolean> deleteVersionLobbyRef(VersionLobbyRefModel versionLobbyRef) {
+    Uni<Boolean> deleteVersionLobbyRef(TenantLobbyRefModel versionLobbyRef) {
         final var tenantId = versionLobbyRef.getTenantId();
         final var id = versionLobbyRef.getId();
-        final var request = new DeleteVersionLobbyRefRequest(tenantId, id);
-        return tenantModule.getVersionService().deleteVersionLobbyRef(request)
-                .map(DeleteVersionLobbyRefResponse::getDeleted);
+        final var request = new DeleteTenantLobbyRefRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteVersionLobbyRef(request)
+                .map(DeleteTenantLobbyRefResponse::getDeleted);
     }
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {

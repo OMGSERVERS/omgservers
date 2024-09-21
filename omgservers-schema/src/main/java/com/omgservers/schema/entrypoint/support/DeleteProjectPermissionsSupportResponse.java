@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.support;
 
-import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class DeleteProjectPermissionsSupportResponse {
 
-    List<ProjectPermissionEnum> deletedPermissions;
+    List<TenantProjectPermissionEnum> deletedPermissions;
 }

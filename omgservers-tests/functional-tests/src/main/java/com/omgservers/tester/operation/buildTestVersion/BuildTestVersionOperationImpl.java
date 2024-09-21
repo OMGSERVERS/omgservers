@@ -1,6 +1,6 @@
 package com.omgservers.tester.operation.buildTestVersion;
 
-import com.omgservers.schema.model.version.VersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.dto.TestVersionDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,13 +22,13 @@ class BuildTestVersionOperationImpl implements BuildTestVersionOperation {
                                  final String mainLua) throws IOException {
         return buildTestVersion(testVersion,
                 mainLua,
-                VersionConfigDto.create());
+                TenantVersionConfigDto.create());
     }
 
     @Override
     public Long buildTestVersion(final TestVersionDto testVersion,
                                  final String mainLua,
-                                 final VersionConfigDto newVersionConfig) throws IOException {
+                                 final TenantVersionConfigDto newVersionConfig) throws IOException {
         final var buildVersionDeveloperResponse = developerApiTester.buildVersion(testVersion.getDeveloperToken(),
                 testVersion.getTenantId(),
                 testVersion.getStageId(),

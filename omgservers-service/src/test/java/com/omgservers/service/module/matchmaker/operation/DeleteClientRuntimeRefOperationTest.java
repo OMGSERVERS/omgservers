@@ -2,8 +2,8 @@ package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
-import com.omgservers.schema.model.version.VersionGroupDto;
-import com.omgservers.schema.model.version.VersionModeDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerMatchOperationTestInterface;
@@ -47,9 +47,9 @@ class DeleteClientRuntimeRefOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var modeConfig = VersionModeDto.create(modeName(), 4, 8, new ArrayList<>() {{
-            add(VersionGroupDto.create("red", 1, 4));
-            add(VersionGroupDto.create("blue", 1, 4));
+        final var modeConfig = TenantVersionModeDto.create(modeName(), 4, 8, new ArrayList<>() {{
+            add(TenantVersionGroupDto.create("red", 1, 4));
+            add(TenantVersionGroupDto.create("blue", 1, 4));
         }});
         final var matchConfig = new MatchmakerMatchConfigModel(modeConfig);
         final var match = matchmakerMatchModelFactory.create(matchmaker.getId(), matchConfig);

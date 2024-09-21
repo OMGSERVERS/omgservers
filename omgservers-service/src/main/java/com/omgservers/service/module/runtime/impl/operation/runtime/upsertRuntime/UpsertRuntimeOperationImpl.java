@@ -49,7 +49,7 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         runtime.getCreated().atOffset(ZoneOffset.UTC),
                         runtime.getModified().atOffset(ZoneOffset.UTC),
                         runtime.getTenantId(),
-                        runtime.getVersionId(),
+                        runtime.getDeploymentId(),
                         runtime.getQualifier(),
                         runtime.getUserId(),
                         runtime.getLastActivity().atOffset(ZoneOffset.UTC),

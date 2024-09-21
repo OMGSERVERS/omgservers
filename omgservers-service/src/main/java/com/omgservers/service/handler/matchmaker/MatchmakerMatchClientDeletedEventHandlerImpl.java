@@ -78,7 +78,7 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
                                             }
 
                                             final var tenantId = client.getTenantId();
-                                            final var versionId = client.getVersionId();
+                                            final var versionId = client.getDeploymentId();
                                             final var idempotencyKey = event.getId().toString();
 
                                             return syncClientRandomLobbyAssignmentRequestedEvent(clientId,

@@ -3,15 +3,15 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
-import com.omgservers.schema.module.tenant.version.GetVersionDataRequest;
-import com.omgservers.schema.module.tenant.version.GetVersionDataResponse;
-import com.omgservers.schema.module.tenant.version.dto.VersionDataDto;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
 import com.omgservers.service.entrypoint.developer.impl.operation.mapVersionDataToDashboard.MapVersionDataToDashboardOperation;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -45,7 +45,7 @@ class GetVersionDashboardMethodImpl implements GetVersionDashboardMethod {
         final var versionId = request.getVersionId();
         return getVersion(tenantId, versionId)
                 .flatMap(version -> {
-                    final var stageId = version.getStageId();
+                    final var stageId = version.getProjectId();
                     return checkGettingDashboardPermission(tenantId, stageId, userId)
                             .flatMap(voidItem -> getVersionData(tenantId, versionId))
                             .map(mapVersionDataToDashboardOperation::mapVersionDataToDashboard)
@@ -53,18 +53,18 @@ class GetVersionDashboardMethodImpl implements GetVersionDashboardMethod {
                 });
     }
 
-    Uni<VersionModel> getVersion(final Long tenantId, final Long versionId) {
-        final var request = new GetVersionRequest(tenantId, versionId);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long versionId) {
+        final var request = new GetTenantVersionRequest(tenantId, versionId);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Void> checkGettingDashboardPermission(final Long tenantId, final Long stageId, final Long userId) {
         // TODO: move to new operation
-        final var permission = StagePermissionEnum.GETTING_DASHBOARD;
-        final var request = new HasStagePermissionRequest(tenantId, stageId, userId, permission);
-        return tenantModule.getStageService().hasStagePermission(request)
-                .map(HasStagePermissionResponse::getResult)
+        final var permission = TenantStagePermissionEnum.GETTING_DASHBOARD;
+        final var request = new VerifyTenantStagePermissionExistsRequest(tenantId, stageId, userId, permission);
+        return tenantModule.getTenantService().verifyTenantStagePermissionExists(request)
+                .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
@@ -76,9 +76,9 @@ class GetVersionDashboardMethodImpl implements GetVersionDashboardMethod {
                 .replaceWithVoid();
     }
 
-    Uni<VersionDataDto> getVersionData(final Long tenantId, final Long versionId) {
-        final var request = new GetVersionDataRequest(tenantId, versionId);
-        return tenantModule.getVersionService().getVersionData(request)
-                .map(GetVersionDataResponse::getVersionData);
+    Uni<TenantVersionDataDto> getVersionData(final Long tenantId, final Long versionId) {
+        final var request = new GetTenantVersionDataRequest(tenantId, versionId);
+        return tenantModule.getTenantService().getVersionData(request)
+                .map(GetTenantVersionDataResponse::getTenantVersionData);
     }
 }

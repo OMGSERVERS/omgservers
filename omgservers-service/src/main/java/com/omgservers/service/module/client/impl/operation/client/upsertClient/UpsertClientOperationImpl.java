@@ -46,7 +46,7 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
                         client.getUserId(),
                         client.getPlayerId(),
                         client.getTenantId(),
-                        client.getVersionId(),
+                        client.getDeploymentId(),
                         client.getDeleted()
                 ),
                 () -> new ClientCreatedEventBodyModel(client.getId()),

@@ -3,11 +3,11 @@ package com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.im
 import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeResponse;
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.version.VersionModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.security.ServiceSecurityAttributes;
@@ -38,9 +38,9 @@ class GetConfigMethodImpl implements GetConfigMethod {
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     final var tenantId = runtime.getTenantId();
-                    final var versionId = runtime.getVersionId();
+                    final var versionId = runtime.getDeploymentId();
                     return getVersion(tenantId, versionId)
-                            .map(VersionModel::getConfig);
+                            .map(TenantVersionModel::getConfig);
                 })
                 .map(GetConfigRuntimeResponse::new);
     }
@@ -51,9 +51,9 @@ class GetConfigMethodImpl implements GetConfigMethod {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<VersionModel> getVersion(Long tenantId, Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 }

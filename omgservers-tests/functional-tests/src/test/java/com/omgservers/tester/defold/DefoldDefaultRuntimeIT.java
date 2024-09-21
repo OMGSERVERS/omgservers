@@ -2,9 +2,9 @@ package com.omgservers.tester.defold;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.schema.model.version.VersionConfigDto;
-import com.omgservers.schema.model.version.VersionGroupDto;
-import com.omgservers.schema.model.version.VersionModeDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.PlayerApiTester;
@@ -58,10 +58,10 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
 
     @Test
     void defoldDefaultRuntimeIT() throws Exception {
-        final var versionConfig = VersionConfigDto.create();
+        final var versionConfig = TenantVersionConfigDto.create();
         versionConfig.setModes(new ArrayList<>() {{
-            add(VersionModeDto.create("test", 1, 16, new ArrayList<>() {{
-                add(new VersionGroupDto("players", 1, 16));
+            add(TenantVersionModeDto.create("test", 1, 16, new ArrayList<>() {{
+                add(new TenantVersionGroupDto("players", 1, 16));
             }}));
         }});
         versionConfig.setUserData(new UserData("deploy-version"));

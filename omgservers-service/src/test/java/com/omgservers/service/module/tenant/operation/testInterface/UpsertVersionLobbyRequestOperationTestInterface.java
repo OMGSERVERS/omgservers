@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.versionLobbyRequest.VersionLobbyRequestModel;
-import com.omgservers.service.module.tenant.impl.operation.versionLobbyRequest.upsertVersionLobbyRequest.UpsertVersionLobbyRequestOperation;
+import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantLobbyRequest.UpsertTenantLobbyRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,16 +17,16 @@ import java.time.Duration;
 public class UpsertVersionLobbyRequestOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertVersionLobbyRequestOperation upsertVersionLobbyRequestOperation;
+    final UpsertTenantLobbyRequestOperation upsertTenantLobbyRequestOperation;
 
     final PgPool pgPool;
 
     public ChangeContext<Boolean> upsertVersionLobbyRequest(final int shard,
-                                                            final VersionLobbyRequestModel versionLobbyRequest) {
+                                                            final TenantLobbyRequestModel versionLobbyRequest) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertVersionLobbyRequestOperation
-                                    .upsertVersionLobbyRequest(changeContext,
+                    return pgPool.withTransaction(sqlConnection -> upsertTenantLobbyRequestOperation
+                                    .execute(changeContext,
                                             sqlConnection,
                                             shard,
                                             versionLobbyRequest))

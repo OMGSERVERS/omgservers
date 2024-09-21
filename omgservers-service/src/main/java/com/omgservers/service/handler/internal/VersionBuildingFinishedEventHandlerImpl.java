@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
@@ -62,10 +62,10 @@ public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<VersionModel> getVersion(final Long tenantId, final Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Boolean> requestVersionDeployment(final Long tenantId,
@@ -89,16 +89,16 @@ public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<List<VersionJenkinsRequestModel>> viewVersionJenkinsRequests(final Long tenantId,
-                                                                     final Long versionId) {
-        final var request = new ViewVersionJenkinsRequestsRequest(tenantId, versionId);
-        return tenantModule.getVersionService().viewVersionJenkinsRequests(request)
-                .map(ViewVersionJenkinsRequestsResponse::getVersionJenkinsRequests);
+    Uni<List<TenantJenkinsRequestModel>> viewVersionJenkinsRequests(final Long tenantId,
+                                                                    final Long versionId) {
+        final var request = new ViewTenantJenkinsRequestsRequest(tenantId, versionId);
+        return tenantModule.getTenantService().viewVersionJenkinsRequests(request)
+                .map(ViewTenantJenkinsRequestsResponse::getVersionJenkinsRequests);
     }
 
     Uni<Boolean> deleteVersionJenkinsRequest(final Long tenantId, final Long id) {
-        final var request = new DeleteVersionJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getVersionService().deleteVersionJenkinsRequest(request)
-                .map(DeleteVersionJenkinsRequestResponse::getDeleted);
+        final var request = new DeleteTenantJenkinsRequestRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteVersionJenkinsRequest(request)
+                .map(DeleteTenantJenkinsRequestResponse::getDeleted);
     }
 }

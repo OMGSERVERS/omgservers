@@ -5,8 +5,8 @@ import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
@@ -15,7 +15,7 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
-import com.omgservers.service.factory.tenant.VersionMatchmakerRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -38,7 +38,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final JobService jobService;
 
-    final VersionMatchmakerRefModelFactory versionMatchmakerRefModelFactory;
+    final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
     final EventModelFactory eventModelFactory;
     final JobModelFactory jobModelFactory;
 
@@ -59,7 +59,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                     log.info("Matchmaker was created, id={}, version={}/{}",
                             matchmaker.getId(),
                             matchmaker.getTenantId(),
-                            matchmaker.getVersionId());
+                            matchmaker.getDeploymentId());
 
                     final var idempotencyKey = event.getId().toString();
 
@@ -77,15 +77,15 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncVersionMatchmakerRef(final MatchmakerModel matchmaker, final String idempotencyKey) {
         final var tenantId = matchmaker.getTenantId();
-        final var versionId = matchmaker.getVersionId();
+        final var versionId = matchmaker.getDeploymentId();
         final var matchmakerId = matchmaker.getId();
-        final var versionMatchmakerRef = versionMatchmakerRefModelFactory.create(tenantId,
+        final var versionMatchmakerRef = tenantMatchmakerRefModelFactory.create(tenantId,
                 versionId,
                 matchmakerId,
                 idempotencyKey);
-        final var request = new SyncVersionMatchmakerRefRequest(versionMatchmakerRef);
-        return tenantModule.getVersionService().syncVersionMatchmakerRef(request)
-                .map(SyncVersionMatchmakerRefResponse::getCreated)
+        final var request = new SyncTenantMatchmakerRefRequest(versionMatchmakerRef);
+        return tenantModule.getTenantService().syncVersionMatchmakerRef(request)
+                .map(SyncTenantMatchmakerRefResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithItem(Boolean.FALSE)
                 .onFailure(ServerSideConflictException.class)

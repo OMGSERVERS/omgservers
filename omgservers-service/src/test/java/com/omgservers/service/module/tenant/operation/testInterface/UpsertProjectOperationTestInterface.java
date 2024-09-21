@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.service.module.tenant.impl.operation.project.upsertProject.UpsertProjectOperation;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.service.module.tenant.impl.operation.tenantProject.UpsertTenantProjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,16 +17,16 @@ import java.time.Duration;
 public class UpsertProjectOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertProjectOperation upsertProjectOperation;
+    final UpsertTenantProjectOperation upsertTenantProjectOperation;
 
     final PgPool pgPool;
 
     public ChangeContext<Boolean> upsertProject(final int shard,
-                                                final ProjectModel project) {
+                                                final TenantProjectModel project) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertProjectOperation
-                                    .upsertProject(changeContext, sqlConnection, shard, project))
+                    return pgPool.withTransaction(sqlConnection -> upsertTenantProjectOperation
+                                    .execute(changeContext, sqlConnection, shard, project))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

@@ -1,6 +1,6 @@
 package com.omgservers.tester.defold;
 
-import com.omgservers.schema.model.version.VersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.DeveloperApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -40,7 +40,7 @@ public class DefoldDeployVersionIT extends BaseTestClass {
 
     @Test
     void defoldDeployVersionIT() throws Exception {
-        final var versionConfig = VersionConfigDto.create();
+        final var versionConfig = TenantVersionConfigDto.create();
         versionConfig.setUserData(new UserData("deploy-version"));
         final var testVersion = createTestVersionOperation.createTestVersion(versionConfig);
 

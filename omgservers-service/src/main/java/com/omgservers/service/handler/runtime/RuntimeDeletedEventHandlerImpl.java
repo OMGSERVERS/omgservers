@@ -95,7 +95,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             runtime.getId(),
                             runtime.getQualifier(),
                             runtime.getTenantId(),
-                            runtime.getVersionId());
+                            runtime.getDeploymentId());
 
                     // TODO: cleanup container user
                     return deleteRoom(runtimeId)

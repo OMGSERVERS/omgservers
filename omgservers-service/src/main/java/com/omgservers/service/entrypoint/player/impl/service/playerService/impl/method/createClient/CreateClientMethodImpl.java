@@ -5,14 +5,12 @@ import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.player.PlayerModel;
-import com.omgservers.schema.model.stage.StageModel;
-import com.omgservers.schema.model.version.VersionProjectionModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
 import com.omgservers.schema.module.client.SyncClientRequest;
 import com.omgservers.schema.module.client.SyncClientResponse;
-import com.omgservers.schema.module.tenant.ValidateStageSecretRequest;
-import com.omgservers.schema.module.tenant.ValidateStageSecretResponse;
-import com.omgservers.schema.module.tenant.ViewVersionsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
@@ -73,12 +71,12 @@ class CreateClientMethodImpl implements CreateClientMethod {
                 .map(CreateClientPlayerResponse::new);
     }
 
-    Uni<StageModel> validateStageSecret(final Long tenantId,
-                                        final Long stageId,
-                                        final String secret) {
-        final var validateStageSecretHelpRequest = new ValidateStageSecretRequest(tenantId, stageId, secret);
-        return tenantModule.getStageService().validateStageSecret(validateStageSecretHelpRequest)
-                .map(ValidateStageSecretResponse::getStage);
+    Uni<TenantStageModel> validateStageSecret(final Long tenantId,
+                                              final Long stageId,
+                                              final String secret) {
+        final var validateStageSecretHelpRequest = new ValidateTenantStageSecretRequest(tenantId, stageId, secret);
+        return tenantModule.getTenantService().validateStageSecret(validateStageSecretHelpRequest)
+                .map(ValidateTenantStageSecretResponse::getTenantStage);
     }
 
     Uni<PlayerModel> findOrCreatePlayer(final Long userId,
@@ -120,7 +118,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                 });
     }
 
-    Uni<VersionProjectionModel> selectStageVersionProjection(final Long tenantId, final Long stageId) {
+    Uni<TenantVersionProjectionModel> selectStageVersionProjection(final Long tenantId, final Long stageId) {
         return viewVersionProjections(tenantId, stageId)
                 .map(versions -> {
                     if (versions.isEmpty()) {
@@ -129,16 +127,16 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                 String.format("version was not selected, tenantId=%d, stageId=%d", tenantId, stageId));
                     } else {
                         return versions.stream()
-                                .max(Comparator.comparing(VersionProjectionModel::getId))
+                                .max(Comparator.comparing(TenantVersionProjectionModel::getId))
                                 .get();
                     }
                 });
     }
 
-    Uni<List<VersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
-        final var request = new ViewVersionsRequest(tenantId, stageId);
-        return tenantModule.getVersionService().viewVersions(request)
-                .map(ViewVersionsResponse::getVersionProjections);
+    Uni<List<TenantVersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
+        final var request = new ViewTenantVersionsRequest(tenantId, stageId);
+        return tenantModule.getTenantService().viewTenantVersions(request)
+                .map(ViewTenantVersionsResponse::getTenantVersionProjections);
     }
 
     Uni<Boolean> syncClient(ClientModel client) {

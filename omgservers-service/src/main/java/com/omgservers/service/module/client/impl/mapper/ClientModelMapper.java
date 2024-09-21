@@ -23,7 +23,7 @@ public class ClientModelMapper {
         client.setUserId(row.getLong("user_id"));
         client.setPlayerId(row.getLong("player_id"));
         client.setTenantId(row.getLong("tenant_id"));
-        client.setVersionId(row.getLong("version_id"));
+        client.setDeploymentId(row.getLong("deployment_id"));
         client.setDeleted(row.getBoolean("deleted"));
         return client;
     }

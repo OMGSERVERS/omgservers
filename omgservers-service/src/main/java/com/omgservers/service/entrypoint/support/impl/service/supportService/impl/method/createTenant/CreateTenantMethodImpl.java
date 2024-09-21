@@ -2,7 +2,7 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
-import com.omgservers.schema.module.tenant.SyncTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;

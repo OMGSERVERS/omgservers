@@ -28,7 +28,7 @@ class SelectTenantOperationTest extends Assertions {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenTenant_whenSelectTenant_thenSelected() {
+    void givenTenant_whenExecute_thenSelected() {
         final var shard = 0;
         final var tenant1 = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant1);
@@ -38,7 +38,7 @@ class SelectTenantOperationTest extends Assertions {
     }
 
     @Test
-    void givenUnknownId_whenSelectTenant_thenException() {
+    void givenUnknownId_whenExecute_thenException() {
         final var shard = 0;
 
         assertThrows(ServerSideNotFoundException.class, () -> selectTenantOperation

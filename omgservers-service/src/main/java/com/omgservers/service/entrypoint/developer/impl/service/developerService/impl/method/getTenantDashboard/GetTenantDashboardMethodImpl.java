@@ -4,8 +4,8 @@ import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperReq
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
-import com.omgservers.schema.module.tenant.HasTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.HasTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
@@ -48,9 +48,9 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
     Uni<Void> checkGetDashboardPermission(final Long tenantId, final Long userId) {
         // TODO: move to new operation
         final var permission = TenantPermissionEnum.GETTING_DASHBOARD;
-        final var hasTenantPermissionServiceRequest = new HasTenantPermissionRequest(tenantId, userId, permission);
-        return tenantModule.getTenantService().hasTenantPermission(hasTenantPermissionServiceRequest)
-                .map(HasTenantPermissionResponse::getResult)
+        final var hasTenantPermissionServiceRequest = new VerifyTenantPermissionExistsRequest(tenantId, userId, permission);
+        return tenantModule.getTenantService().verifyTenantPermissionExists(hasTenantPermissionServiceRequest)
+                .map(VerifyTenantPermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,

@@ -3,16 +3,16 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
-import com.omgservers.schema.model.version.VersionModel;
-import com.omgservers.schema.module.tenant.DeleteVersionRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.HasStagePermissionRequest;
-import com.omgservers.schema.module.tenant.HasStagePermissionResponse;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.service.factory.tenant.VersionModelFactory;
+import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.security.ServiceSecurityAttributes;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -29,7 +29,7 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
     final TenantModule tenantModule;
 
-    final VersionModelFactory versionModelFactory;
+    final TenantVersionModelFactory tenantVersionModelFactory;
 
     final SecurityIdentity securityIdentity;
 
@@ -42,9 +42,9 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
         final var tenantId = request.getTenantId();
         final var versionId = request.getId();
 
-        return getVersion(tenantId, versionId)
+        return getTenantVersion(tenantId, versionId)
                 .flatMap(version -> {
-                    final var stageId = version.getStageId();
+                    final var stageId = version.getProjectId();
 
                     return checkVersionManagementPermission(tenantId, stageId, userId)
                             .flatMap(voidItem -> deleteVersion(tenantId, versionId))
@@ -52,20 +52,20 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
                 });
     }
 
-    Uni<VersionModel> getVersion(Long tenantId, Long id) {
-        final var request = new GetVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersion(request)
-                .map(GetVersionResponse::getVersion);
+    Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
                                                final Long stageId,
                                                final Long userId) {
-        final var permission = StagePermissionEnum.VERSION_MANAGEMENT;
+        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
         final var hasStagePermissionServiceRequest =
-                new HasStagePermissionRequest(tenantId, stageId, userId, permission);
-        return tenantModule.getStageService().hasStagePermission(hasStagePermissionServiceRequest)
-                .map(HasStagePermissionResponse::getResult)
+                new VerifyTenantStagePermissionExistsRequest(tenantId, stageId, userId, permission);
+        return tenantModule.getTenantService().verifyTenantStagePermissionExists(hasStagePermissionServiceRequest)
+                .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(result -> {
                     if (!result) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
@@ -79,8 +79,8 @@ class DeleteVersionMethodImpl implements DeleteVersionMethod {
 
     Uni<Boolean> deleteVersion(final Long tenantId,
                                final Long id) {
-        final var request = new DeleteVersionRequest(tenantId, id);
-        return tenantModule.getVersionService().deleteVersion(request)
-                .map(DeleteVersionResponse::getDeleted);
+        final var request = new DeleteTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().deleteVersion(request)
+                .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

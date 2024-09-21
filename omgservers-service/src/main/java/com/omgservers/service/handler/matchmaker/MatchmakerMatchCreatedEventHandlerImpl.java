@@ -64,7 +64,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
                         .flatMap(match -> {
                             log.info("Match was created, match={}/{}", matchmakerId, matchId);
 
-                            final var versionId = matchmaker.getVersionId();
+                            final var versionId = matchmaker.getDeploymentId();
                             return syncRuntime(matchmaker, match, versionId, event.getIdempotencyKey());
                         })
                 )

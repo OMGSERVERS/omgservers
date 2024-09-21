@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.operation.testInterface;
 
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
-import com.omgservers.service.module.tenant.impl.operation.tenantPermission.upsertTenantPermission.UpsertTenantPermissionOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantPermission.UpsertTenantPermissionOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,7 +26,7 @@ public class UpsertTenantPermissionOperationTestInterface {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertTenantPermissionOperation
-                                    .upsertTenantPermission(changeContext, sqlConnection, shard, tenantPermission))
+                                    .execute(changeContext, sqlConnection, shard, tenantPermission))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

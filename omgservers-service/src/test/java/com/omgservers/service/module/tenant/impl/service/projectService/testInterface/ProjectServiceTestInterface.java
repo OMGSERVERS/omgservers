@@ -1,21 +1,21 @@
 package com.omgservers.service.module.tenant.impl.service.projectService.testInterface;
 
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.DeleteProjectRequest;
-import com.omgservers.schema.module.tenant.DeleteProjectResponse;
-import com.omgservers.schema.module.tenant.GetProjectRequest;
-import com.omgservers.schema.module.tenant.GetProjectResponse;
-import com.omgservers.schema.module.tenant.HasProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.HasProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.SyncProjectRequest;
-import com.omgservers.schema.module.tenant.SyncProjectResponse;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectPermissionsResponse;
-import com.omgservers.schema.module.tenant.ViewProjectsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsRequest;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
 import com.omgservers.service.module.tenant.impl.service.projectService.ProjectService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -31,42 +31,42 @@ public class ProjectServiceTestInterface {
 
     final ProjectService projectService;
 
-    public GetProjectResponse getProject(GetProjectRequest request) {
+    public GetTenantProjectResponse getProject(GetTenantProjectRequest request) {
         return projectService.getProject(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncProjectResponse syncProject(SyncProjectRequest request) {
+    public SyncTenantProjectResponse syncProject(SyncTenantProjectRequest request) {
         return projectService.syncProject(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewProjectsResponse viewProjects(ViewProjectsRequest request) {
+    public ViewTenantProjectsResponse viewProjects(ViewTenantProjectsRequest request) {
         return projectService.viewProjects(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteProjectResponse deleteProject(DeleteProjectRequest request) {
+    public DeleteTenantProjectResponse deleteProject(DeleteTenantProjectRequest request) {
         return projectService.deleteProject(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewProjectPermissionsResponse viewProjectPermissions(ViewProjectPermissionsRequest request) {
+    public ViewTenantProjectPermissionsResponse viewProjectPermissions(ViewTenantProjectPermissionsRequest request) {
         return projectService.viewProjectPermissions(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public HasProjectPermissionResponse hasProjectPermission(HasProjectPermissionRequest request) {
+    public VerifyTenantProjectPermissionExistsResponse hasProjectPermission(VerifyTenantProjectPermissionExistsRequest request) {
         return projectService.hasProjectPermission(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncProjectPermissionResponse syncProjectPermission(SyncProjectPermissionRequest request) {
+    public SyncTenantProjectPermissionResponse syncProjectPermission(SyncTenantProjectPermissionRequest request) {
         return projectService.syncProjectPermission(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteProjectPermissionResponse deleteProjectPermission(DeleteProjectPermissionRequest request) {
+    public DeleteTenantProjectPermissionResponse deleteProjectPermission(DeleteTenantProjectPermissionRequest request) {
         return projectService.deleteProjectPermission(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }

@@ -1,18 +1,18 @@
 package com.omgservers.service.service.task.impl.method.executeJenkinsRequestTask;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
-import com.omgservers.schema.model.versionJenkinsRequest.VersionJenkinsRequestModel;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
+import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
 import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.tenant.VersionImageRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.event.EventService;
@@ -37,7 +37,7 @@ public class JenkinsRequestTaskImpl {
     final JenkinsService jenkinsService;
     final EventService eventService;
 
-    final VersionImageRefModelFactory versionImageRefModelFactory;
+    final TenantImageRefModelFactory tenantImageRefModelFactory;
     final EventModelFactory eventModelFactory;
 
     public Uni<Boolean> executeTask(final Long tenantId, final Long jenkinsRequestId) {
@@ -46,13 +46,13 @@ public class JenkinsRequestTaskImpl {
                         .replaceWith(Boolean.TRUE));
     }
 
-    Uni<VersionJenkinsRequestModel> getVersionJenkinsRequest(final Long tenantId, final Long id) {
-        final var request = new GetVersionJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getVersionService().getVersionJenkinsRequest(request)
-                .map(GetVersionJenkinsRequestResponse::getVersionJenkinsRequest);
+    Uni<TenantJenkinsRequestModel> getVersionJenkinsRequest(final Long tenantId, final Long id) {
+        final var request = new GetTenantJenkinsRequestRequest(tenantId, id);
+        return tenantModule.getTenantService().getVersionJenkinsRequest(request)
+                .map(GetTenantJenkinsRequestResponse::getTenantJenkinsRequest);
     }
 
-    Uni<Void> handleJenkinsRequest(final VersionJenkinsRequestModel versionJenkinsRequest) {
+    Uni<Void> handleJenkinsRequest(final TenantJenkinsRequestModel versionJenkinsRequest) {
         return checkVersionJenkinsRequest(versionJenkinsRequest)
                 .flatMap(result -> switch (result) {
                     case IN_PROGRESS -> {
@@ -67,7 +67,7 @@ public class JenkinsRequestTaskImpl {
                 });
     }
 
-    Uni<JenkinsRequestResultEnum> checkVersionJenkinsRequest(final VersionJenkinsRequestModel versionJenkinsRequest) {
+    Uni<JenkinsRequestResultEnum> checkVersionJenkinsRequest(final TenantJenkinsRequestModel versionJenkinsRequest) {
         final var tenantId = versionJenkinsRequest.getTenantId();
         final var versionId = versionJenkinsRequest.getVersionId();
         final var qualifier = versionJenkinsRequest.getQualifier();
@@ -106,25 +106,25 @@ public class JenkinsRequestTaskImpl {
                 .map(GetLuaJitRuntimeBuilderV1Response::getImageId);
     }
 
-    Uni<Boolean> syncVersionImageRef(final VersionJenkinsRequestModel versionJenkinsRequest,
+    Uni<Boolean> syncVersionImageRef(final TenantJenkinsRequestModel versionJenkinsRequest,
                                      final String imageId,
                                      final String idempotencyKey) {
 
         final var tenantId = versionJenkinsRequest.getTenantId();
         final var versionId = versionJenkinsRequest.getVersionId();
 
-        final var versionImageRef = versionImageRefModelFactory.create(tenantId,
+        final var versionImageRef = tenantImageRefModelFactory.create(tenantId,
                 versionId,
-                VersionImageRefQualifierEnum.UNIVERSAL,
+                TenantImageRefQualifierEnum.UNIVERSAL,
                 imageId,
                 idempotencyKey);
 
-        final var request = new SyncVersionImageRefRequest(versionImageRef);
-        return tenantModule.getVersionService().syncVersionImageRefWithIdempotency(request)
-                .map(SyncVersionImageRefResponse::getCreated);
+        final var request = new SyncTenantImageRefRequest(versionImageRef);
+        return tenantModule.getTenantService().syncVersionImageRefWithIdempotency(request)
+                .map(SyncTenantImageRefResponse::getCreated);
     }
 
-    Uni<Boolean> syncVersionBuildingFinished(final VersionJenkinsRequestModel versionJenkinsRequest) {
+    Uni<Boolean> syncVersionBuildingFinished(final TenantJenkinsRequestModel versionJenkinsRequest) {
         final var tenantId = versionJenkinsRequest.getTenantId();
         final var versionId = versionJenkinsRequest.getVersionId();
         final var idempotencyKey = versionJenkinsRequest.getId().toString();
@@ -138,7 +138,7 @@ public class JenkinsRequestTaskImpl {
     }
 
 
-    Uni<Boolean> syncVersionBuildingFailed(final VersionJenkinsRequestModel versionJenkinsRequest) {
+    Uni<Boolean> syncVersionBuildingFailed(final TenantJenkinsRequestModel versionJenkinsRequest) {
         final var tenantId = versionJenkinsRequest.getTenantId();
         final var versionId = versionJenkinsRequest.getVersionId();
         final var idempotencyKey = versionJenkinsRequest.getId().toString();

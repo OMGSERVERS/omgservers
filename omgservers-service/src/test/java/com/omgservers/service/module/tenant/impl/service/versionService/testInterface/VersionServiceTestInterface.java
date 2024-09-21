@@ -1,75 +1,75 @@
 package com.omgservers.service.module.tenant.impl.service.versionService.testInterface;
 
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.DeleteVersionRequest;
-import com.omgservers.schema.module.tenant.DeleteVersionResponse;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.FindVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.FindVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.GetVersionConfigRequest;
-import com.omgservers.schema.module.tenant.GetVersionConfigResponse;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.GetVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.GetVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.GetVersionRequest;
-import com.omgservers.schema.module.tenant.GetVersionResponse;
-import com.omgservers.schema.module.tenant.SelectStageVersionRequest;
-import com.omgservers.schema.module.tenant.SelectStageVersionResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.SyncVersionMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.SyncVersionRequest;
-import com.omgservers.schema.module.tenant.SyncVersionResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRequestsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRefsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionMatchmakerRequestsResponse;
-import com.omgservers.schema.module.tenant.ViewVersionsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionsResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.DeleteVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.FindVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.GetVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.SyncVersionImageRefResponse;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsRequest;
-import com.omgservers.schema.module.tenant.versionImageRef.ViewVersionImageRefsResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.DeleteVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.GetVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.SyncVersionJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.versionJenkinsRequest.ViewVersionJenkinsRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
+import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
 import com.omgservers.service.module.tenant.impl.service.versionService.VersionService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -85,211 +85,211 @@ public class VersionServiceTestInterface {
 
     final VersionService versionService;
 
-    public GetVersionResponse getVersion(final GetVersionRequest request) {
+    public GetTenantVersionResponse getVersion(final GetTenantVersionRequest request) {
         return versionService.getVersion(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionResponse syncVersion(final SyncVersionRequest request) {
+    public SyncTenantVersionResponse syncVersion(final SyncTenantVersionRequest request) {
         return versionService.syncVersion(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewVersionsResponse viewVersions(final ViewVersionsRequest request) {
+    public ViewTenantVersionsResponse viewVersions(final ViewTenantVersionsRequest request) {
         return versionService.viewVersions(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteVersionResponse deleteVersion(final DeleteVersionRequest request) {
+    public DeleteTenantVersionResponse deleteVersion(final DeleteTenantVersionRequest request) {
         return versionService.deleteVersion(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetVersionConfigResponse getVersionConfig(final GetVersionConfigRequest request) {
+    public GetTenantVersionConfigResponse getVersionConfig(final GetTenantVersionConfigRequest request) {
         return versionService.getVersionConfig(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetVersionJenkinsRequestResponse getVersionJenkinsRequest(final GetVersionJenkinsRequestRequest request) {
+    public GetTenantJenkinsRequestResponse getVersionJenkinsRequest(final GetTenantJenkinsRequestRequest request) {
         return versionService.getVersionJenkinsRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewVersionJenkinsRequestsResponse viewVersionJenkinsRequests(
-            final ViewVersionJenkinsRequestsRequest request) {
+    public ViewTenantJenkinsRequestsResponse viewVersionJenkinsRequests(
+            final ViewTenantJenkinsRequestsRequest request) {
         return versionService.viewVersionJenkinsRequests(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionJenkinsRequestResponse syncVersionJenkinsRequest(final SyncVersionJenkinsRequestRequest request) {
+    public SyncTenantJenkinsRequestResponse syncVersionJenkinsRequest(final SyncTenantJenkinsRequestRequest request) {
         return versionService.syncVersionJenkinsRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionJenkinsRequestResponse syncVersionJenkinsRequestWithIdempotency(
-            final SyncVersionJenkinsRequestRequest request) {
+    public SyncTenantJenkinsRequestResponse syncVersionJenkinsRequestWithIdempotency(
+            final SyncTenantJenkinsRequestRequest request) {
         return versionService.syncVersionJenkinsRequestWithIdempotency(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteVersionJenkinsRequestResponse deleteVersionJenkinsRequest(
-            final DeleteVersionJenkinsRequestRequest request) {
+    public DeleteTenantJenkinsRequestResponse deleteVersionJenkinsRequest(
+            final DeleteTenantJenkinsRequestRequest request) {
         return versionService.deleteVersionJenkinsRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetVersionImageRefResponse getVersionImageRef(final GetVersionImageRefRequest request) {
+    public GetTenantImageRefResponse getVersionImageRef(final GetTenantImageRefRequest request) {
         return versionService.getVersionImageRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindVersionImageRefResponse findVersionImageRef(final FindVersionImageRefRequest request) {
+    public FindTenantImageRefResponse findVersionImageRef(final FindTenantImageRefRequest request) {
         return versionService.findVersionImageRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewVersionImageRefsResponse viewVersionImageRefs(final ViewVersionImageRefsRequest request) {
+    public ViewTenantImageRefsResponse viewVersionImageRefs(final ViewTenantImageRefsRequest request) {
         return versionService.viewVersionImageRefs(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionImageRefResponse syncVersionImageRef(final SyncVersionImageRefRequest request) {
+    public SyncTenantImageRefResponse syncVersionImageRef(final SyncTenantImageRefRequest request) {
         return versionService.syncVersionImageRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionImageRefResponse syncVersionImageRefWithIdempotency(final SyncVersionImageRefRequest request) {
+    public SyncTenantImageRefResponse syncVersionImageRefWithIdempotency(final SyncTenantImageRefRequest request) {
         return versionService.syncVersionImageRefWithIdempotency(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteVersionImageRefResponse deleteVersionImageRef(final DeleteVersionImageRefRequest request) {
+    public DeleteTenantImageRefResponse deleteVersionImageRef(final DeleteTenantImageRefRequest request) {
         return versionService.deleteVersionImageRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SelectStageVersionResponse selectStageVersion(
-            final SelectStageVersionRequest request) {
+    public SelectTenantDeploymentResponse selectStageVersion(
+            final SelectTenantDeploymentRequest request) {
         return versionService.selectStageVersion(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetVersionLobbyRequestResponse getVersionLobbyRequest(
-            final GetVersionLobbyRequestRequest request) {
+    public GetTenantLobbyRequestResponse getVersionLobbyRequest(
+            final GetTenantLobbyRequestRequest request) {
         return versionService.getVersionLobbyRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindVersionLobbyRequestResponse findVersionLobbyRequest(
-            final FindVersionLobbyRequestRequest request) {
+    public FindTenantLobbyRequestResponse findVersionLobbyRequest(
+            final FindTenantLobbyRequestRequest request) {
         return versionService.findVersionLobbyRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewVersionLobbyRequestsResponse viewVersionLobbyRequests(
-            final ViewVersionLobbyRequestsRequest request) {
+    public ViewTenantLobbyRequestsResponse viewVersionLobbyRequests(
+            final ViewTenantLobbyRequestsRequest request) {
         return versionService.viewVersionLobbyRequests(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionLobbyRequestResponse syncVersionLobbyRequest(
-            final SyncVersionLobbyRequestRequest request) {
+    public SyncTenantLobbyRequestResponse syncVersionLobbyRequest(
+            final SyncTenantLobbyRequestRequest request) {
         return versionService.syncVersionLobbyRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteVersionLobbyRequestResponse deleteVersionLobbyRequest(
-            final DeleteVersionLobbyRequestRequest request) {
+    public DeleteTenantLobbyRequestResponse deleteVersionLobbyRequest(
+            final DeleteTenantLobbyRequestRequest request) {
         return versionService.deleteVersionLobbyRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetVersionLobbyRefResponse getVersionLobbyRef(
-            final GetVersionLobbyRefRequest request) {
+    public GetTenantLobbyRefResponse getVersionLobbyRef(
+            final GetTenantLobbyRefRequest request) {
         return versionService.getVersionLobbyRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindVersionLobbyRefResponse findVersionLobbyRef(
-            final FindVersionLobbyRefRequest request) {
+    public FindTenantLobbyRefResponse findVersionLobbyRef(
+            final FindTenantLobbyRefRequest request) {
         return versionService.findVersionLobbyRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewVersionLobbyRefsResponse viewVersionLobbyRefs(
-            final ViewVersionLobbyRefsRequest request) {
+    public ViewTenantLobbyRefsResponse viewVersionLobbyRefs(
+            final ViewTenantLobbyRefsRequest request) {
         return versionService.viewVersionLobbyRefs(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionLobbyRefResponse syncVersionLobbyRef(
-            final SyncVersionLobbyRefRequest request) {
+    public SyncTenantLobbyRefResponse syncVersionLobbyRef(
+            final SyncTenantLobbyRefRequest request) {
         return versionService.syncVersionLobbyRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteVersionLobbyRefResponse deleteVersionLobbyRef(
-            final DeleteVersionLobbyRefRequest request) {
+    public DeleteTenantLobbyRefResponse deleteVersionLobbyRef(
+            final DeleteTenantLobbyRefRequest request) {
         return versionService.deleteVersionLobbyRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetVersionMatchmakerRequestResponse getVersionMatchmakerRequest(
-            final GetVersionMatchmakerRequestRequest request) {
+    public GetTenantMatchmakerRequestResponse getVersionMatchmakerRequest(
+            final GetTenantMatchmakerRequestRequest request) {
         return versionService.getVersionMatchmakerRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindVersionMatchmakerRequestResponse findVersionMatchmakerRequest(
-            final FindVersionMatchmakerRequestRequest request) {
+    public FindTenantMatchmakerRequestResponse findVersionMatchmakerRequest(
+            final FindTenantMatchmakerRequestRequest request) {
         return versionService.findVersionMatchmakerRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewVersionMatchmakerRequestsResponse viewVersionMatchmakerRequests(
-            final ViewVersionMatchmakerRequestsRequest request) {
+    public ViewTenantMatchmakerRequestsResponse viewVersionMatchmakerRequests(
+            final ViewTenantMatchmakerRequestsRequest request) {
         return versionService.viewVersionMatchmakerRequests(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionMatchmakerRequestResponse syncVersionMatchmakerRequest(
-            final SyncVersionMatchmakerRequestRequest request) {
+    public SyncTenantMatchmakerRequestResponse syncVersionMatchmakerRequest(
+            final SyncTenantMatchmakerRequestRequest request) {
         return versionService.syncVersionMatchmakerRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteVersionMatchmakerRequestResponse deleteVersionMatchmakerRequest(
-            final DeleteVersionMatchmakerRequestRequest request) {
+    public DeleteTenantMatchmakerRequestResponse deleteVersionMatchmakerRequest(
+            final DeleteTenantMatchmakerRequestRequest request) {
         return versionService.deleteVersionMatchmakerRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetVersionMatchmakerRefResponse getVersionMatchmakerRef(
-            final GetVersionMatchmakerRefRequest request) {
+    public GetTenantMatchmakerRefResponse getVersionMatchmakerRef(
+            final GetTenantMatchmakerRefRequest request) {
         return versionService.getVersionMatchmakerRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindVersionMatchmakerRefResponse findVersionMatchmakerRef(
-            final FindVersionMatchmakerRefRequest request) {
+    public FindTenantMatchmakerRefResponse findVersionMatchmakerRef(
+            final FindTenantMatchmakerRefRequest request) {
         return versionService.findVersionMatchmakerRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewVersionMatchmakerRefsResponse viewVersionMatchmakerRefs(
-            final ViewVersionMatchmakerRefsRequest request) {
+    public ViewTenantMatchmakerRefsResponse viewVersionMatchmakerRefs(
+            final ViewTenantMatchmakerRefsRequest request) {
         return versionService.viewVersionMatchmakerRefs(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncVersionMatchmakerRefResponse syncVersionMatchmakerRef(
-            final SyncVersionMatchmakerRefRequest request) {
+    public SyncTenantMatchmakerRefResponse syncVersionMatchmakerRef(
+            final SyncTenantMatchmakerRefRequest request) {
         return versionService.syncVersionMatchmakerRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteVersionMatchmakerRefResponse deleteVersionMatchmakerRef(
-            final DeleteVersionMatchmakerRefRequest request) {
+    public DeleteTenantMatchmakerRefResponse deleteVersionMatchmakerRef(
+            final DeleteTenantMatchmakerRefRequest request) {
         return versionService.deleteVersionMatchmakerRef(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }

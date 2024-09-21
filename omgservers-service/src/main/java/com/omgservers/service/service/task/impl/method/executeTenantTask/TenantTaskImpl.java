@@ -1,14 +1,14 @@
 package com.omgservers.service.service.task.impl.method.executeTenantTask;
 
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.stage.StageModel;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.ViewProjectsRequest;
-import com.omgservers.schema.module.tenant.ViewProjectsResponse;
-import com.omgservers.schema.module.tenant.ViewStagesRequest;
-import com.omgservers.schema.module.tenant.ViewStagesResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsRequest;
+import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
+import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesRequest;
+import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesResponse;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -53,13 +53,13 @@ public class TenantTaskImpl {
                 );
     }
 
-    Uni<List<ProjectModel>> viewProjects(final Long tenantId) {
-        final var request = new ViewProjectsRequest(tenantId);
-        return tenantModule.getProjectService().viewProjects(request)
-                .map(ViewProjectsResponse::getProjects);
+    Uni<List<TenantProjectModel>> viewProjects(final Long tenantId) {
+        final var request = new ViewTenantProjectsRequest(tenantId);
+        return tenantModule.getTenantService().viewProjects(request)
+                .map(ViewTenantProjectsResponse::getTenantProjects);
     }
 
-    Uni<Void> handleProject(final ProjectModel project) {
+    Uni<Void> handleProject(final TenantProjectModel project) {
         final var tenantId = project.getTenantId();
         final var projectId = project.getId();
         return viewStages(tenantId, projectId)
@@ -70,13 +70,13 @@ public class TenantTaskImpl {
                 );
     }
 
-    Uni<List<StageModel>> viewStages(final Long tenantId, final Long projectId) {
-        final var request = new ViewStagesRequest(tenantId, projectId);
-        return tenantModule.getStageService().viewStages(request)
-                .map(ViewStagesResponse::getStages);
+    Uni<List<TenantStageModel>> viewStages(final Long tenantId, final Long projectId) {
+        final var request = new ViewTenantStagesRequest(tenantId, projectId);
+        return tenantModule.getTenantService().viewStages(request)
+                .map(ViewTenantStagesResponse::getTenantStages);
     }
 
-    Uni<Void> handleStage(final StageModel stage) {
+    Uni<Void> handleStage(final TenantStageModel stage) {
         final var tenantId = stage.getTenantId();
         final var stageId = stage.getId();
         final var request = new ExecuteStageTaskRequest(tenantId, stageId);

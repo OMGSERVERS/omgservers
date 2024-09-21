@@ -6,7 +6,7 @@ import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
-import com.omgservers.schema.model.versionLobbyRef.VersionLobbyRefModel;
+import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.module.client.DeleteClientRequest;
 import com.omgservers.schema.module.client.DeleteClientResponse;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
@@ -15,8 +15,8 @@ import com.omgservers.schema.module.lobby.GetLobbyRequest;
 import com.omgservers.schema.module.lobby.GetLobbyResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentResponse;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsRequest;
-import com.omgservers.schema.module.tenant.ViewVersionLobbyRefsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
@@ -90,7 +90,7 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                 });
     }
 
-    Uni<VersionLobbyRefModel> selectVersionLobbyRef(final Long tenantId, final Long versionId) {
+    Uni<TenantLobbyRefModel> selectVersionLobbyRef(final Long tenantId, final Long versionId) {
         return viewVersionLobbyRefs(tenantId, versionId)
                 .map(refs -> {
                     if (refs.isEmpty()) {
@@ -104,10 +104,10 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                 });
     }
 
-    Uni<List<VersionLobbyRefModel>> viewVersionLobbyRefs(final Long tenantId, final Long versionId) {
-        final var request = new ViewVersionLobbyRefsRequest(tenantId, versionId);
-        return tenantModule.getVersionService().viewVersionLobbyRefs(request)
-                .map(ViewVersionLobbyRefsResponse::getVersionLobbyRefs);
+    Uni<List<TenantLobbyRefModel>> viewVersionLobbyRefs(final Long tenantId, final Long versionId) {
+        final var request = new ViewTenantLobbyRefsRequest(tenantId, versionId);
+        return tenantModule.getTenantService().viewVersionLobbyRefs(request)
+                .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<LobbyModel> getLobby(final Long lobbyId) {

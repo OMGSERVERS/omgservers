@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
 import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
-import com.omgservers.service.factory.tenant.VersionLobbyRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -25,7 +25,7 @@ public class LobbyRuntimeRefDeletedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final LobbyModule lobbyModule;
 
-    final VersionLobbyRefModelFactory versionLobbyRefModelFactory;
+    final TenantLobbyRefModelFactory tenantLobbyRefModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {

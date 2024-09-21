@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.developer.dto;
 
-import com.omgservers.schema.model.versionImageRef.VersionImageRefQualifierEnum;
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class VersionImageRefDto {
 
     Instant created;
 
-    VersionImageRefQualifierEnum qualifier;
+    TenantImageRefQualifierEnum qualifier;
 
     String imageId;
 }

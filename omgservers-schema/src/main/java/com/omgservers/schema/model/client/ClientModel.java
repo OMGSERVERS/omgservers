@@ -38,7 +38,7 @@ public class ClientModel {
     Long tenantId;
 
     @NotNull
-    Long versionId;
+    Long deploymentId;
 
     @NotNull
     Boolean deleted;

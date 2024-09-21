@@ -2,12 +2,12 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.DeleteTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsRequest;
-import com.omgservers.schema.module.tenant.ViewTenantPermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.model.tenant.TenantModel;

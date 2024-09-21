@@ -4,8 +4,8 @@ import com.omgservers.schema.module.lobby.GetLobbyRequest;
 import com.omgservers.schema.module.lobby.GetLobbyResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefRequest;
-import com.omgservers.schema.module.tenant.SyncVersionLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.lobby.LobbyCreatedEventBodyModel;
@@ -16,7 +16,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
-import com.omgservers.service.factory.tenant.VersionLobbyRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -39,7 +39,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
     final GenerateIdOperation generateIdOperation;
 
-    final VersionLobbyRefModelFactory versionLobbyRefModelFactory;
+    final TenantLobbyRefModelFactory tenantLobbyRefModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
 
     @Override
@@ -75,7 +75,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncRuntime(final LobbyModel lobby, final String idempotencyKey) {
         final var lobbyId = lobby.getId();
         final var tenantId = lobby.getTenantId();
-        final var versionId = lobby.getVersionId();
+        final var versionId = lobby.getDeploymentId();
         final var runtimeId = lobby.getRuntimeId();
 
         final var runtimeConfig = RuntimeConfigDto.create();
@@ -109,15 +109,15 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncVersionLobbyRef(final LobbyModel lobby,
                                      final String idempotencyKey) {
         final var tenantId = lobby.getTenantId();
-        final var versionId = lobby.getVersionId();
+        final var versionId = lobby.getDeploymentId();
         final var lobbyId = lobby.getId();
-        final var versionLobbyRef = versionLobbyRefModelFactory.create(tenantId,
+        final var versionLobbyRef = tenantLobbyRefModelFactory.create(tenantId,
                 versionId,
                 lobbyId,
                 idempotencyKey);
-        final var request = new SyncVersionLobbyRefRequest(versionLobbyRef);
-        return tenantModule.getVersionService().syncVersionLobbyRef(request)
-                .map(SyncVersionLobbyRefResponse::getCreated)
+        final var request = new SyncTenantLobbyRefRequest(versionLobbyRef);
+        return tenantModule.getTenantService().syncVersionLobbyRef(request)
+                .map(SyncTenantLobbyRefResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {

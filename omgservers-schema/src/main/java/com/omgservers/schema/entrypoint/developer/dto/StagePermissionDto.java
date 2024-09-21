@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.developer.dto;
 
-import com.omgservers.schema.model.stagePermission.StagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +18,5 @@ public class StagePermissionDto {
 
     Long userId;
 
-    StagePermissionEnum permission;
+    TenantStagePermissionEnum permission;
 }

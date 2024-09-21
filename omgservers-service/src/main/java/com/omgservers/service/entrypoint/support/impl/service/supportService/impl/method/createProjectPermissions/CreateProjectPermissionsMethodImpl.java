@@ -2,19 +2,19 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateProjectPermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.GetProjectRequest;
-import com.omgservers.schema.module.tenant.GetProjectResponse;
-import com.omgservers.schema.module.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.SyncProjectPermissionResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.project.ProjectModel;
-import com.omgservers.schema.model.projectPermission.ProjectPermissionEnum;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.service.factory.tenant.ProjectPermissionModelFactory;
+import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import io.smallrye.mutiny.Multi;
@@ -32,7 +32,7 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
     final TenantModule tenantModule;
     final UserModule userModule;
 
-    final ProjectPermissionModelFactory projectPermissionModelFactory;
+    final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
 
     @Override
     public Uni<CreateProjectPermissionsSupportResponse> createProjectPermissions(
@@ -69,16 +69,16 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<ProjectModel> getProject(final Long tenantId, final Long id) {
-        final var request = new GetProjectRequest(tenantId, id);
-        return tenantModule.getProjectService().getProject(request)
-                .map(GetProjectResponse::getProject);
+    Uni<TenantProjectModel> getProject(final Long tenantId, final Long id) {
+        final var request = new GetTenantProjectRequest(tenantId, id);
+        return tenantModule.getTenantService().getProject(request)
+                .map(GetTenantProjectResponse::getTenantProject);
     }
 
     Uni<Boolean> createProjectPermission(final Long tenantId,
                                          final Long projectId,
                                          final Long userId,
-                                         final ProjectPermissionEnum permission) {
+                                         final TenantProjectPermissionEnum permission) {
         return syncProjectPermission(tenantId,
                 projectId,
                 userId,
@@ -100,12 +100,12 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
     Uni<Boolean> syncProjectPermission(final Long tenantId,
                                        final Long projectId,
                                        final Long userId,
-                                       final ProjectPermissionEnum permission) {
-        final var projectPermission = projectPermissionModelFactory
+                                       final TenantProjectPermissionEnum permission) {
+        final var projectPermission = tenantProjectPermissionModelFactory
                 .create(tenantId, projectId, userId, permission);
 
-        final var request = new SyncProjectPermissionRequest(projectPermission);
-        return tenantModule.getProjectService().syncProjectPermission(request)
-                .map(SyncProjectPermissionResponse::getCreated);
+        final var request = new SyncTenantProjectPermissionRequest(projectPermission);
+        return tenantModule.getTenantService().syncProjectPermission(request)
+                .map(SyncTenantProjectPermissionResponse::getCreated);
     }
 }
