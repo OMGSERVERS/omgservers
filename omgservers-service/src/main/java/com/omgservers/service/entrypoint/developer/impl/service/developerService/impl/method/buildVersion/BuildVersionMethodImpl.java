@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.entrypoint.developer.impl.operation.encodeFiles.EncodeFilesOperation;
 import com.omgservers.service.exception.ServerSideBadRequestException;
@@ -51,12 +51,12 @@ class BuildVersionMethodImpl implements BuildVersionMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var stageId = request.getStageId();
+        final var projectId = request.getProjectId();
         final var versionConfig = getVersionConfig(request);
         final var base64Archive = getBase64Archive(request);
 
-        return checkVersionManagementPermission(tenantId, stageId, userId)
-                .flatMap(voidItem -> createVersion(tenantId, stageId, versionConfig, base64Archive))
+        return checkVersionManagementPermission(tenantId, projectId, userId)
+                .flatMap(voidItem -> createVersion(tenantId, projectId, versionConfig, base64Archive))
                 .map(TenantVersionModel::getId)
                 .map(BuildVersionDeveloperResponse::new);
     }
@@ -100,31 +100,34 @@ class BuildVersionMethodImpl implements BuildVersionMethod {
     }
 
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
-                                               final Long stageId,
+                                               final Long projectId,
                                                final Long userId) {
-        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
-        final var hasStagePermissionServiceRequest = new VerifyTenantStagePermissionExistsRequest(tenantId,
-                stageId,
+        final var permission = TenantProjectPermissionEnum.VERSION_MANAGEMENT;
+        final var request = new VerifyTenantProjectPermissionExistsRequest(tenantId,
+                projectId,
                 userId,
                 permission);
-        return tenantModule.getTenantService().verifyTenantStagePermissionExists(hasStagePermissionServiceRequest)
-                .map(VerifyTenantStagePermissionExistsResponse::getExists)
-                .invoke(result -> {
-                    if (!result) {
+        return tenantModule.getTenantService().verifyTenantProjectPermissionExists(request)
+                .map(VerifyTenantProjectPermissionExistsResponse::getExists)
+                .invoke(exists -> {
+                    if (!exists) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
                                 String.format("permission was not found, " +
-                                                "tenantId=%d, stageId=%d, userId=%d, permission=%s",
-                                        tenantId, stageId, userId, permission));
+                                                "tenantId=%d, projectId=%d, userId=%d, permission=%s",
+                                        tenantId, projectId, userId, permission));
                     }
                 })
                 .replaceWithVoid();
     }
 
     Uni<TenantVersionModel> createVersion(final Long tenantId,
-                                          final Long stageId,
+                                          final Long projectId,
                                           final TenantVersionConfigDto versionConfig,
                                           final String base64Archive) {
-        final var version = tenantVersionModelFactory.create(tenantId, stageId, versionConfig, base64Archive);
+        final var version = tenantVersionModelFactory.create(tenantId,
+                projectId,
+                versionConfig,
+                base64Archive);
         final var request = new SyncTenantVersionRequest(version);
         return tenantModule.getTenantService().syncTenantVersion(request)
                 .replaceWith(version);

@@ -45,39 +45,39 @@ public class TenantJenkinsRequestCreatedEventHandlerImpl implements EventHandler
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionJenkinsRequest(tenantId, id)
-                .flatMap(versionJenkinsRequest -> {
-                    final var versionId = versionJenkinsRequest.getVersionId();
-                    final var qualifier = versionJenkinsRequest.getQualifier();
-                    final var buildNumber = versionJenkinsRequest.getBuildNumber();
-                    log.info("Version jenkins request was created, " +
+        return getTenantJenkinsRequest(tenantId, id)
+                .flatMap(tenantJenkinsRequest -> {
+                    final var versionId = tenantJenkinsRequest.getVersionId();
+                    final var qualifier = tenantJenkinsRequest.getQualifier();
+                    final var buildNumber = tenantJenkinsRequest.getBuildNumber();
+                    log.info("Tenant jenkins request was created, " +
                                     "id={}, version={}/{}, qualifier={}, buildNumber={}",
-                            versionJenkinsRequest.getId(),
+                            tenantJenkinsRequest.getId(),
                             tenantId,
                             versionId,
                             qualifier,
                             buildNumber);
 
-                    final var jenkinsRequestId = versionJenkinsRequest.getId();
+                    final var tenantJenkinsRequestId = tenantJenkinsRequest.getId();
 
                     final var idempotencyKey = event.getId().toString();
-                    return syncJenkinsRequestJob(tenantId, jenkinsRequestId, idempotencyKey);
+                    return syncJob(tenantId, tenantJenkinsRequestId, idempotencyKey);
                 })
                 .replaceWithVoid();
     }
 
-    Uni<TenantJenkinsRequestModel> getVersionJenkinsRequest(final Long tenantId, final Long id) {
+    Uni<TenantJenkinsRequestModel> getTenantJenkinsRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getVersionJenkinsRequest(request)
+        return tenantModule.getTenantService().getTenantJenkinsRequest(request)
                 .map(GetTenantJenkinsRequestResponse::getTenantJenkinsRequest);
     }
 
-    Uni<Boolean> syncJenkinsRequestJob(final Long tenantId,
-                                       final Long jenkinsRequestId,
-                                       final String idempotencyKey) {
+    Uni<Boolean> syncJob(final Long tenantId,
+                         final Long tenantJenkinsRequestId,
+                         final String idempotencyKey) {
         final var job = jobModelFactory.create(JobQualifierEnum.JENKINS_REQUEST,
                 tenantId,
-                jenkinsRequestId,
+                tenantJenkinsRequestId,
                 idempotencyKey);
 
         final var request = new SyncJobRequest(job);

@@ -26,7 +26,7 @@ class FindTenantLobbyRequestMethodImpl implements FindTenantLobbyRequestMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getDeploymentId();
+                    final var versionId = request.getTenantDeploymentId();
                     final var lobbyId = request.getLobbyId();
                     return pgPool.withTransaction(sqlConnection -> selectTenantLobbyRequestByLobbyIdOperation
                             .execute(sqlConnection,

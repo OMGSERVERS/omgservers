@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRe
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionLobbyRefDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.tenant.impl.service.versionService.testInterface.VersionServiceTestInterface;
+import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -20,7 +20,7 @@ class TenantLobbyRefDeletedEventHandlerImplTest extends Assertions {
     VersionLobbyRefDeletedEventHandlerImplTestInterface versionLobbyRefDeletedEventHandler;
 
     @Inject
-    VersionServiceTestInterface versionService;
+    TenantServiceTestInterface tenantService;
 
     @Inject
     EventModelFactory eventModelFactory;
@@ -33,7 +33,7 @@ class TenantLobbyRefDeletedEventHandlerImplTest extends Assertions {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
         final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
         final var versionLobbyRequest = testDataFactory.getTenantTestDataFactory()
                 .createVersionLobbyRequest(version);
         final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(versionLobbyRequest);
@@ -43,8 +43,8 @@ class TenantLobbyRefDeletedEventHandlerImplTest extends Assertions {
         final var tenantId = versionLobbyRef.getTenantId();
         final var id = versionLobbyRef.getId();
 
-        final var deleteVersionLobbyRefRequest = new DeleteTenantLobbyRefRequest(tenantId, id);
-        versionService.deleteVersionLobbyRef(deleteVersionLobbyRefRequest);
+        final var deleteTenantLobbyRefRequest = new DeleteTenantLobbyRefRequest(tenantId, id);
+        tenantService.deleteTenantLobbyRef(deleteTenantLobbyRefRequest);
 
         final var eventBody = new TenantLobbyRefDeletedEventBodyModel(tenantId, id);
         final var eventModel = eventModelFactory.create(eventBody);

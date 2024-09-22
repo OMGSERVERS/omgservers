@@ -17,10 +17,9 @@ class DockerRegistryRepositoryDtoTest {
         final var repositoryModel = new DockerRegistryRepositoryDto("omgservers",
                 245515657456648192L,
                 231077687903387648L,
-                231939082811342849L,
                 DockerRegistryContainerQualifierEnum.UNIVERSAL);
         final var repositoryString = repositoryModel.toString();
-        assertEquals("omgservers/245515657456648192/231077687903387648/231939082811342849/universal",
+        assertEquals("omgservers/245515657456648192/231077687903387648/universal",
                 repositoryString);
     }
 }

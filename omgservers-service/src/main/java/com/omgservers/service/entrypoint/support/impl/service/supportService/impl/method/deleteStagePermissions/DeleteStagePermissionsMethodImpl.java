@@ -46,8 +46,8 @@ class DeleteStagePermissionsMethodImpl implements DeleteStagePermissionsMethod {
 
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getStage(tenantId, stageId))
-                        .flatMap(stage -> viewStagePermissions(tenantId, stageId)
+                        .flatMap(tenant -> getTenantStage(tenantId, stageId))
+                        .flatMap(stage -> viewTenantStagePermissions(tenantId, stageId)
                                 .flatMap(stagePermissions -> {
                                     final var requestPermissionToDelete = request.getPermissionsToDelete();
 
@@ -59,7 +59,7 @@ class DeleteStagePermissionsMethodImpl implements DeleteStagePermissionsMethod {
 
                                     return Multi.createFrom().iterable(userPermissionsToDelete)
                                             .onItem().transformToUniAndConcatenate(permission ->
-                                                    deleteStagePermission(tenantId, permission.getId())
+                                                    deleteTenantStagePermission(tenantId, permission.getId())
                                                             .map(deleted -> Tuple2.of(permission.getPermission(),
                                                                     deleted)))
                                             .collect().asList();
@@ -80,22 +80,22 @@ class DeleteStagePermissionsMethodImpl implements DeleteStagePermissionsMethod {
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getStage(request)
+        return tenantModule.getTenantService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<List<TenantStagePermissionModel>> viewStagePermissions(final Long tenantId,
-                                                               final Long stageId) {
+    Uni<List<TenantStagePermissionModel>> viewTenantStagePermissions(final Long tenantId,
+                                                                     final Long stageId) {
         final var request = new ViewTenantStagePermissionsRequest(tenantId, stageId);
-        return tenantModule.getTenantService().viewStagePermissions(request)
+        return tenantModule.getTenantService().viewTenantStagePermissions(request)
                 .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }
 
-    Uni<Boolean> deleteStagePermission(final Long tenantId, final Long id) {
+    Uni<Boolean> deleteTenantStagePermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantStagePermissionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteStagePermission(request)
+        return tenantModule.getTenantService().deleteTenantStagePermission(request)
                 .map(DeleteTenantStagePermissionResponse::getDeleted);
     }
 }

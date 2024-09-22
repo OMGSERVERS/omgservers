@@ -1,7 +1,6 @@
 package com.omgservers.schema.model.message.body;
 
 import com.omgservers.schema.model.message.MessageBodyModel;
-import com.omgservers.schema.model.message.MessageBodyModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,8 +19,8 @@ public class ServerWelcomeMessageBodyModel extends MessageBodyModel {
     Long tenantId;
 
     @NotNull
-    Long versionId;
+    Long tenantVersionId;
 
     @NotNull
-    Instant versionCreated;
+    Instant tenantVersionCreated;
 }

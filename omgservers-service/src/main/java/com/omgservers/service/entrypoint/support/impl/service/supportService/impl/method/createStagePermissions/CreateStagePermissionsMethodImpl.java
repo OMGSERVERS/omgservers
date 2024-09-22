@@ -44,7 +44,7 @@ class CreateStagePermissionsMethodImpl implements CreateStagePermissionsMethod {
         final var stageId = request.getStageId();
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(project -> getStage(tenantId, stageId))
+                        .flatMap(project -> getTenantStage(tenantId, stageId))
                         .flatMap(stage -> {
                             final var permissionsToCreate = request.getPermissionsToCreate();
                             return Multi.createFrom().iterable(permissionsToCreate)
@@ -69,9 +69,9 @@ class CreateStagePermissionsMethodImpl implements CreateStagePermissionsMethod {
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getStage(request)
+        return tenantModule.getTenantService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 

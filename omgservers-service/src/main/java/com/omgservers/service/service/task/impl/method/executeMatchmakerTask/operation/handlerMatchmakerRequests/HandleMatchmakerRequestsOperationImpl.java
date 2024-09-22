@@ -37,7 +37,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
         final var tenantId = matchmaker.getTenantId();
         final var versionId = matchmaker.getDeploymentId();
         // TODO cache version config and reuse each of iteration
-        return getVersionConfig(tenantId, versionId)
+        return getTenantVersionConfig(tenantId, versionId)
                 .invoke(versionConfig -> executeMatchmaker(matchmakerId,
                         currentState,
                         changeOfState,
@@ -45,9 +45,9 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                 .replaceWithVoid();
     }
 
-    Uni<TenantVersionConfigDto> getVersionConfig(final Long tenantId, final Long versionId) {
+    Uni<TenantVersionConfigDto> getTenantVersionConfig(final Long tenantId, final Long versionId) {
         final var request = new GetTenantVersionConfigRequest(tenantId, versionId);
-        return tenantModule.getTenantService().getVersionConfig(request)
+        return tenantModule.getTenantService().getTenantVersionConfig(request)
                 .map(GetTenantVersionConfigResponse::getTenantVersionConfig);
     }
 

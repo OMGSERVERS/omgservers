@@ -65,9 +65,9 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                             final var lobbyId = lobbyConfig.getLobbyId();
 
                             final var tenantId = runtime.getTenantId();
-                            final var versionId = runtime.getDeploymentId();
+                            final var deploymentId = runtime.getDeploymentId();
 
-                            yield syncVersionLobbyRequest(tenantId, versionId, idempotencyKey)
+                            yield syncTenantLobbyRequest(tenantId, deploymentId, idempotencyKey)
                                     .flatMap(created -> deleteLobby(lobbyId));
                         }
                         case MATCH -> {
@@ -93,14 +93,14 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 .map(DeleteLobbyResponse::getDeleted);
     }
 
-    Uni<Boolean> syncVersionLobbyRequest(final Long tenantId,
-                                         final Long versionId,
-                                         final String idempotencyKey) {
-        final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
-                versionId,
+    Uni<Boolean> syncTenantLobbyRequest(final Long tenantId,
+                                        final Long deploymentId,
+                                        final String idempotencyKey) {
+        final var tenantLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
+                deploymentId,
                 idempotencyKey);
-        final var request = new SyncTenantLobbyRequestRequest(versionLobbyRequest);
-        return tenantModule.getTenantService().syncVersionLobbyRequestWithIdempotency(request)
+        final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
+        return tenantModule.getTenantService().syncTenantLobbyRequestWithIdempotency(request)
                 .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 

@@ -1,11 +1,6 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
 import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.module.client.GetClientRequest;
@@ -14,15 +9,17 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.service.event.EventService;
+import com.omgservers.service.service.event.dto.SyncEventRequest;
+import com.omgservers.service.service.event.dto.SyncEventResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -78,12 +75,12 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
                                             }
 
                                             final var tenantId = client.getTenantId();
-                                            final var versionId = client.getDeploymentId();
+                                            final var deploymentId = client.getDeploymentId();
                                             final var idempotencyKey = event.getId().toString();
 
                                             return syncClientRandomLobbyAssignmentRequestedEvent(clientId,
                                                     tenantId,
-                                                    versionId,
+                                                    deploymentId,
                                                     idempotencyKey);
                                         });
                             });
@@ -111,27 +108,16 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
 
     Uni<Boolean> syncClientRandomLobbyAssignmentRequestedEvent(final Long clientId,
                                                                final Long tenantId,
-                                                               final Long versionId,
+                                                               final Long deploymentId,
                                                                final String idempotencyKey) {
         final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId,
                 tenantId,
-                versionId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
+                deploymentId);
+        final var eventIdempotencyKey = idempotencyKey + "/" + eventBody.getQualifier();
+        final var eventModel = eventModelFactory.create(eventBody, eventIdempotencyKey);
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEvent(syncEventRequest)
-                .map(SyncEventResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", eventModel, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return eventService.syncEventWithIdempotency(syncEventRequest)
+                .map(SyncEventResponse::getCreated);
     }
 }

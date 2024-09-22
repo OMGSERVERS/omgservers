@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
 import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
 import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantImageRefCreatedEventBodyModel;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -34,13 +34,13 @@ public class TenantImageRefCreatedEventHandlerImpl implements EventHandler {
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionImageRef(tenantId, id)
-                .flatMap(versionImageRef -> {
-                    final var versionId = versionImageRef.getVersionId();
-                    final var qualifier = versionImageRef.getQualifier();
-                    final var imageId = versionImageRef.getImageId();
-                    log.info("Version image ref was created, id={}, version={}/{}, qualifier={}, imageId={}",
-                            versionImageRef.getId(),
+        return getTenantImageRef(tenantId, id)
+                .flatMap(tenantImageRef -> {
+                    final var versionId = tenantImageRef.getVersionId();
+                    final var qualifier = tenantImageRef.getQualifier();
+                    final var imageId = tenantImageRef.getImageId();
+                    log.info("Tenant image ref was created, id={}, version={}/{}, qualifier={}, imageId={}",
+                            tenantImageRef.getId(),
                             tenantId,
                             versionId,
                             qualifier,
@@ -51,9 +51,9 @@ public class TenantImageRefCreatedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<TenantImageRefModel> getVersionImageRef(final Long tenantId, final Long id) {
+    Uni<TenantImageRefModel> getTenantImageRef(final Long tenantId, final Long id) {
         final var request = new GetTenantImageRefRequest(tenantId, id);
-        return tenantModule.getTenantService().getVersionImageRef(request)
+        return tenantModule.getTenantService().getTenantImageRef(request)
                 .map(GetTenantImageRefResponse::getTenantImageRef);
     }
 }

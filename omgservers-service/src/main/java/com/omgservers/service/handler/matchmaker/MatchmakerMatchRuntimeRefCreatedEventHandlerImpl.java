@@ -1,5 +1,7 @@
 package com.omgservers.service.handler.matchmaker;
 
+import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
@@ -7,11 +9,6 @@ import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
-import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
-import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -70,18 +67,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
         final var commandBody = new PrepareMatchMatchmakerCommandBodyModel(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody, idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
-                .map(SyncMatchmakerCommandResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", commandModel, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommandWithIdempotency(request)
+                .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

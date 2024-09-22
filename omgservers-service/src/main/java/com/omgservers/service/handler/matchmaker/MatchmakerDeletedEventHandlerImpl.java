@@ -74,7 +74,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                     return deleteMatchmakerCommands(matchmakerId)
                             .flatMap(voidItem -> deleteRequests(matchmakerId))
                             .flatMap(voidItem -> deleteMatches(matchmakerId))
-                            .flatMap(voidItem -> findAndDeleteVersionMatchmakerRef(matchmaker))
+                            .flatMap(voidItem -> findAndDeleteTenantMatchmakerRef(matchmaker))
                             .flatMap(voidItem -> findAndDeleteJob(matchmakerId));
                 })
                 .replaceWithVoid();
@@ -191,30 +191,30 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                 .map(DeleteMatchmakerMatchResponse::getDeleted);
     }
 
-    Uni<Void> findAndDeleteVersionMatchmakerRef(final MatchmakerModel matchmaker) {
+    Uni<Void> findAndDeleteTenantMatchmakerRef(final MatchmakerModel matchmaker) {
         final var tenantId = matchmaker.getTenantId();
-        final var versionId = matchmaker.getDeploymentId();
+        final var deploymentId = matchmaker.getDeploymentId();
         final var matchmakerId = matchmaker.getId();
-        return findVersionMatchmakerRef(tenantId, versionId, matchmakerId)
+        return findTenantMatchmakerRef(tenantId, deploymentId, matchmakerId)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(this::deleteVersionMatchmakerRef)
+                .onItem().ifNotNull().transformToUni(this::deleteTenantMatchmakerRef)
                 .replaceWithVoid();
     }
 
-    Uni<TenantMatchmakerRefModel> findVersionMatchmakerRef(final Long tenantId,
-                                                           final Long versionId,
-                                                           final Long matchmakerId) {
-        final var request = new FindTenantMatchmakerRefRequest(tenantId, versionId, matchmakerId);
-        return tenantModule.getTenantService().findVersionMatchmakerRef(request)
+    Uni<TenantMatchmakerRefModel> findTenantMatchmakerRef(final Long tenantId,
+                                                          final Long deploymentId,
+                                                          final Long matchmakerId) {
+        final var request = new FindTenantMatchmakerRefRequest(tenantId, deploymentId, matchmakerId);
+        return tenantModule.getTenantService().findTenantMatchmakerRef(request)
                 .map(FindTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 
-    Uni<Boolean> deleteVersionMatchmakerRef(final TenantMatchmakerRefModel versionMatchmakerRef) {
-        final var tenantId = versionMatchmakerRef.getTenantId();
-        final var id = versionMatchmakerRef.getId();
+    Uni<Boolean> deleteTenantMatchmakerRef(final TenantMatchmakerRefModel tenantMatchmakerRef) {
+        final var tenantId = tenantMatchmakerRef.getTenantId();
+        final var id = tenantMatchmakerRef.getId();
         final var request = new DeleteTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteVersionMatchmakerRef(request)
+        return tenantModule.getTenantService().deleteTenantMatchmakerRef(request)
                 .map(DeleteTenantMatchmakerRefResponse::getDeleted);
     }
 

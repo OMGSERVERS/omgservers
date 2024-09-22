@@ -28,7 +28,7 @@ class LobbyAssignmentRequestedEventHandlerImplTest extends Assertions {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
         final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
         final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(version);
         final var versionLobbyRef = testDataFactory.getTenantTestDataFactory().createVersionLobbyRef(version, lobby);
         final var lobbyRuntime = testDataFactory.getRuntimeTestDataFactory()

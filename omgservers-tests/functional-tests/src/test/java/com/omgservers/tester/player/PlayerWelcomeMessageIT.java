@@ -52,7 +52,7 @@ public class PlayerWelcomeMessageIT extends BaseTestClass {
             assertNotNull(welcomeMessage);
             final var messageBody = ((ServerWelcomeMessageBodyModel) welcomeMessage.getBody());
             assertNotNull(messageBody.getTenantId());
-            assertNotNull(messageBody.getVersionId());
+            assertNotNull(messageBody.getTenantVersionId());
 
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());

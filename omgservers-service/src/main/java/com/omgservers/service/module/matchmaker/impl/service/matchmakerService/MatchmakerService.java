@@ -66,6 +66,8 @@ import jakarta.validation.Valid;
 public interface MatchmakerService {
     Uni<SyncMatchmakerResponse> syncMatchmaker(@Valid SyncMatchmakerRequest request);
 
+    Uni<SyncMatchmakerResponse> syncMatchmakerWithIdempotency(@Valid SyncMatchmakerRequest request);
+
     Uni<GetMatchmakerResponse> getMatchmaker(@Valid GetMatchmakerRequest request);
 
     Uni<DeleteMatchmakerResponse> deleteMatchmaker(@Valid DeleteMatchmakerRequest request);

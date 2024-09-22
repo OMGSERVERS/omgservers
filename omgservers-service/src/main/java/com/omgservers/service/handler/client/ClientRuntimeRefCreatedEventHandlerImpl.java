@@ -1,10 +1,10 @@
 package com.omgservers.service.handler.client;
 
-import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.schema.module.client.GetClientRequest;
-import com.omgservers.schema.module.client.GetClientResponse;
+import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.module.client.GetClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.GetClientRuntimeRefResponse;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
@@ -20,13 +20,6 @@ import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientRuntimeRefCreatedEventBodyModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -64,29 +57,20 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
         final var clientId = body.getClientId();
         final var id = body.getId();
 
-        return getClient(clientId)
-                .flatMap(client -> getClientRuntimeRef(clientId, id)
-                        .flatMap(clientRuntimeRef -> {
-                            final var runtimeId = clientRuntimeRef.getRuntimeId();
+        final var idempotencyKey = event.getId().toString();
 
-                            log.info("Client runtime ref was created, clientRuntimeRef={}/{}, runtimeId={}",
-                                    clientId, id, runtimeId);
+        return getClientRuntimeRef(clientId, id)
+                .flatMap(clientRuntimeRef -> {
+                    final var runtimeId = clientRuntimeRef.getRuntimeId();
 
-                            return getRuntime(runtimeId)
-                                    .flatMap(runtime -> {
-                                        final var idempotencyKey = event.getId().toString();
-                                        return syncRuntimeAssignmentMessage(runtime, clientId, idempotencyKey)
-                                                .flatMap(created -> handlePreviousClientRuntimeRefs(
-                                                        clientRuntimeRef));
-                                    });
-                        }))
+                    log.info("Client runtime ref was created, clientRuntimeRef={}/{}, runtimeId={}",
+                            clientId, id, runtimeId);
+
+                    return getRuntime(runtimeId)
+                            .flatMap(runtime -> syncRuntimeAssignmentMessage(runtime, clientId, idempotencyKey)
+                                    .flatMap(created -> handlePreviousClientRuntimeRefs(clientRuntimeRef)));
+                })
                 .replaceWithVoid();
-    }
-
-    Uni<ClientModel> getClient(final Long clientId) {
-        final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
-                .map(GetClientResponse::getClient);
     }
 
     Uni<ClientRuntimeRefModel> getClientRuntimeRef(final Long clientId, final Long id) {
@@ -111,24 +95,9 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
                 MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                 messageBody,
                 idempotencyKey);
-        return syncClientMessage(clientMessage);
-    }
-
-    Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessage(request)
-                .map(SyncClientMessageResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", clientMessage, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+                .map(SyncClientMessageResponse::getCreated);
     }
 
     Uni<Void> handlePreviousClientRuntimeRefs(final ClientRuntimeRefModel currentClientRuntimeRef) {

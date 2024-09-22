@@ -860,6 +860,23 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    public Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRefWithIdempotency(SyncTenantLobbyRefRequest request) {
+        return syncTenantLobbyRef(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getTenantLobbyRef(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncTenantLobbyRefResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(@Valid final DeleteTenantLobbyRefRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
@@ -972,6 +989,24 @@ public class TenantServiceImpl implements TenantService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantMatchmakerRef,
                 syncTenantMatchmakerRefMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRefWithIdempotency(
+            SyncTenantMatchmakerRefRequest request) {
+        return syncTenantMatchmakerRef(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getTenantMatchmakerRef(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncTenantMatchmakerRefResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

@@ -57,6 +57,8 @@ public interface RuntimeService {
 
     Uni<SyncRuntimeResponse> syncRuntime(@Valid SyncRuntimeRequest request);
 
+    Uni<SyncRuntimeResponse> syncRuntimeWithIdempotency(@Valid SyncRuntimeRequest request);
+
     Uni<DeleteRuntimeResponse> deleteRuntime(@Valid DeleteRuntimeRequest request);
 
     Uni<SyncRuntimePermissionResponse> syncRuntimePermission(@Valid SyncRuntimePermissionRequest request);

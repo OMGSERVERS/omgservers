@@ -19,7 +19,7 @@ public class BuildVersionDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long stageId;
+    Long projectId;
 
     @NotEmpty
     @ToString.Exclude

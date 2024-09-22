@@ -43,12 +43,12 @@ public class TenantJenkinsRequestDeletedEventHandlerImpl implements EventHandler
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionJenkinsRequest(tenantId, id)
-                .flatMap(versionJenkinsRequest -> {
-                    final var versionId = versionJenkinsRequest.getVersionId();
-                    final var qualifier = versionJenkinsRequest.getQualifier();
-                    log.info("Version jenkins request was deleted, id={}, version={}/{}, qualifier={}",
-                            versionJenkinsRequest.getId(),
+        return getTenantJenkinsRequest(tenantId, id)
+                .flatMap(tenantJenkinsRequest -> {
+                    final var versionId = tenantJenkinsRequest.getVersionId();
+                    final var qualifier = tenantJenkinsRequest.getQualifier();
+                    log.info("Tenant jenkins request was deleted, id={}, version={}/{}, qualifier={}",
+                            tenantJenkinsRequest.getId(),
                             tenantId,
                             versionId,
                             qualifier);
@@ -58,9 +58,9 @@ public class TenantJenkinsRequestDeletedEventHandlerImpl implements EventHandler
                 .replaceWithVoid();
     }
 
-    Uni<TenantJenkinsRequestModel> getVersionJenkinsRequest(final Long tenantId, final Long id) {
+    Uni<TenantJenkinsRequestModel> getTenantJenkinsRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getVersionJenkinsRequest(request)
+        return tenantModule.getTenantService().getTenantJenkinsRequest(request)
                 .map(GetTenantJenkinsRequestResponse::getTenantJenkinsRequest);
     }
 

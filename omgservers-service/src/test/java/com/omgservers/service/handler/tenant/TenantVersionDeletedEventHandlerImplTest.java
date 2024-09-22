@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequ
 import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.tenant.impl.service.versionService.testInterface.VersionServiceTestInterface;
+import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -20,7 +20,7 @@ class TenantVersionDeletedEventHandlerImplTest extends Assertions {
     VersionDeletedEventHandlerImplTestInterface versionDeletedEventHandler;
 
     @Inject
-    VersionServiceTestInterface versionService;
+    TenantServiceTestInterface tenantService;
 
     @Inject
     EventModelFactory eventModelFactory;
@@ -32,14 +32,13 @@ class TenantVersionDeletedEventHandlerImplTest extends Assertions {
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
 
         final var tenantId = version.getTenantId();
         final var id = version.getId();
 
-        final var deleteVersionRequest = new DeleteTenantVersionRequest(tenantId, id);
-        versionService.deleteVersion(deleteVersionRequest);
+        final var deleteTenantVersionRequest = new DeleteTenantVersionRequest(tenantId, id);
+        tenantService.deleteTenantVersion(deleteTenantVersionRequest);
 
         final var eventBody = new TenantVersionDeletedEventBodyModel(tenantId, id);
         final var eventModel = eventModelFactory.create(eventBody);

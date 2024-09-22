@@ -2,10 +2,10 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateProjectSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateProjectSupportResponse;
-import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -29,7 +29,7 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
         log.debug("Create tenant project, request={}", request);
 
         final var tenantId = request.getTenantId();
-        return createProject(tenantId)
+        return createTenantProject(tenantId)
                 .flatMap(project -> {
                     final var projectId = project.getId();
                     return createStage(tenantId, projectId)
@@ -41,10 +41,10 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 });
     }
 
-    Uni<TenantProjectModel> createProject(final Long tenantId) {
+    Uni<TenantProjectModel> createTenantProject(final Long tenantId) {
         final var project = tenantProjectModelFactory.create(tenantId);
         final var syncProjectInternalRequest = new SyncTenantProjectRequest(project);
-        return tenantModule.getTenantService().syncProject(syncProjectInternalRequest)
+        return tenantModule.getTenantService().syncTenantProject(syncProjectInternalRequest)
                 .replaceWith(project);
     }
 

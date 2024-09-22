@@ -1,9 +1,5 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
@@ -15,8 +11,9 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
@@ -64,8 +61,8 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
                         .flatMap(match -> {
                             log.info("Match was created, match={}/{}", matchmakerId, matchId);
 
-                            final var versionId = matchmaker.getDeploymentId();
-                            return syncRuntime(matchmaker, match, versionId, event.getIdempotencyKey());
+                            final var deploymentId = matchmaker.getDeploymentId();
+                            return syncRuntime(matchmaker, match, deploymentId, event.getIdempotencyKey());
                         })
                 )
                 .replaceWithVoid();
@@ -85,7 +82,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntime(final MatchmakerModel matchmaker,
                              final MatchmakerMatchModel matchmakerMatch,
-                             final Long versionId,
+                             final Long deploymentId,
                              final String idempotencyKey) {
         final var tenantId = matchmaker.getTenantId();
         final var matchmakerId = matchmaker.getId();
@@ -96,7 +93,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
         final var runtime = runtimeModelFactory.create(
                 runtimeId,
                 tenantId,
-                versionId,
+                deploymentId,
                 RuntimeQualifierEnum.MATCH,
                 generateIdOperation.generateId(),
                 runtimeConfig,
@@ -106,18 +103,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntime(final RuntimeModel runtime) {
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getRuntimeService().syncRuntime(syncRuntimeRequest)
-                .map(SyncRuntimeResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", runtime, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return runtimeModule.getRuntimeService().syncRuntimeWithIdempotency(syncRuntimeRequest)
+                .map(SyncRuntimeResponse::getCreated);
     }
 }

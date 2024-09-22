@@ -45,7 +45,7 @@ public class TenantTaskImpl {
 
     Uni<Void> handleTenant(final TenantModel tenant) {
         final var tenantId = tenant.getId();
-        return viewProjects(tenantId)
+        return viewTenantProjects(tenantId)
                 .flatMap(projects -> Multi.createFrom().iterable(projects)
                         .onItem().transformToUniAndConcatenate(this::handleProject)
                         .collect().asList()
@@ -53,16 +53,16 @@ public class TenantTaskImpl {
                 );
     }
 
-    Uni<List<TenantProjectModel>> viewProjects(final Long tenantId) {
+    Uni<List<TenantProjectModel>> viewTenantProjects(final Long tenantId) {
         final var request = new ViewTenantProjectsRequest(tenantId);
-        return tenantModule.getTenantService().viewProjects(request)
+        return tenantModule.getTenantService().viewTenantProjects(request)
                 .map(ViewTenantProjectsResponse::getTenantProjects);
     }
 
     Uni<Void> handleProject(final TenantProjectModel project) {
         final var tenantId = project.getTenantId();
         final var projectId = project.getId();
-        return viewStages(tenantId, projectId)
+        return viewTenantStages(tenantId, projectId)
                 .flatMap(stages -> Multi.createFrom().iterable(stages)
                         .onItem().transformToUniAndConcatenate(this::handleStage)
                         .collect().asList()
@@ -70,9 +70,9 @@ public class TenantTaskImpl {
                 );
     }
 
-    Uni<List<TenantStageModel>> viewStages(final Long tenantId, final Long projectId) {
+    Uni<List<TenantStageModel>> viewTenantStages(final Long tenantId, final Long projectId) {
         final var request = new ViewTenantStagesRequest(tenantId, projectId);
-        return tenantModule.getTenantService().viewStages(request)
+        return tenantModule.getTenantService().viewTenantStages(request)
                 .map(ViewTenantStagesResponse::getTenantStages);
     }
 

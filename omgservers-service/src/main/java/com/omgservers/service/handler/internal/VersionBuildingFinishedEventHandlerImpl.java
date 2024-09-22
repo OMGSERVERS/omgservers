@@ -1,23 +1,20 @@
 package com.omgservers.service.handler.internal;
 
-import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
-import com.omgservers.service.event.body.internal.VersionDeploymentRequestedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.event.EventService;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,16 +45,15 @@ public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
 
         final var body = (VersionBuildingFinishedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
-        final var versionId = body.getVersionId();
+        final var tenantVersionId = body.getTenantVersionId();
 
-        return getVersion(tenantId, versionId)
+        return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(version -> {
-                    log.info("Version building was finished, version={}/{}", tenantId, versionId);
+                    log.info("Version building was finished, tenantVersion={}/{}", tenantId, tenantVersionId);
 
                     final var idempotencyKey = version.getIdempotencyKey();
 
-                    return deleteVersionJenkinsRequests(tenantId, versionId)
-                            .flatMap(voidItem -> requestVersionDeployment(tenantId, versionId, idempotencyKey));
+                    return deleteTenantJenkinsRequests(tenantId, tenantVersionId);
                 })
                 .replaceWithVoid();
     }
@@ -68,37 +64,25 @@ public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
-    Uni<Boolean> requestVersionDeployment(final Long tenantId,
-                                          final Long versionId,
-                                          final String idempotencyKey) {
-        final var eventBody = new VersionDeploymentRequestedEventBodyModel(tenantId, versionId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
-    }
-
-    Uni<Void> deleteVersionJenkinsRequests(final Long tenantId, final Long versionId) {
-        return viewVersionJenkinsRequests(tenantId, versionId)
-                .flatMap(versionJenkinsRequests -> Multi.createFrom().iterable(versionJenkinsRequests)
-                        .onItem().transformToUniAndConcatenate(versionJenkinsRequest ->
-                                deleteVersionJenkinsRequest(tenantId, versionJenkinsRequest.getId()))
+    Uni<Void> deleteTenantJenkinsRequests(final Long tenantId, final Long tenantVersionId) {
+        return viewTenantJenkinsRequests(tenantId, tenantVersionId)
+                .flatMap(tenantJenkinsRequests -> Multi.createFrom().iterable(tenantJenkinsRequests)
+                        .onItem().transformToUniAndConcatenate(tenantJenkinsRequest ->
+                                deleteTenantJenkinsRequest(tenantId, tenantJenkinsRequest.getId()))
                         .collect().asList())
                 .replaceWithVoid();
     }
 
-    Uni<List<TenantJenkinsRequestModel>> viewVersionJenkinsRequests(final Long tenantId,
-                                                                    final Long versionId) {
-        final var request = new ViewTenantJenkinsRequestsRequest(tenantId, versionId);
-        return tenantModule.getTenantService().viewVersionJenkinsRequests(request)
-                .map(ViewTenantJenkinsRequestsResponse::getVersionJenkinsRequests);
+    Uni<List<TenantJenkinsRequestModel>> viewTenantJenkinsRequests(final Long tenantId,
+                                                                   final Long tenantVersionId) {
+        final var request = new ViewTenantJenkinsRequestsRequest(tenantId, tenantVersionId);
+        return tenantModule.getTenantService().viewTenantJenkinsRequests(request)
+                .map(ViewTenantJenkinsRequestsResponse::getTenantJenkinsRequests);
     }
 
-    Uni<Boolean> deleteVersionJenkinsRequest(final Long tenantId, final Long id) {
+    Uni<Boolean> deleteTenantJenkinsRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteVersionJenkinsRequest(request)
+        return tenantModule.getTenantService().deleteTenantJenkinsRequest(request)
                 .map(DeleteTenantJenkinsRequestResponse::getDeleted);
     }
 }

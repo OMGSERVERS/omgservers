@@ -56,18 +56,18 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
         final var tenantId = request.getTenantId();
 
-        return checkCreateProjectPermission(tenantId, userId)
-                .flatMap(voidItem -> syncProject(tenantId, userId)
-                        .flatMap(project -> syncStage(tenantId, project.getId(), userId)
-                                .map(stage -> {
-                                    final var projectId = project.getId();
-                                    final var stageId = stage.getId();
-                                    final var secret = stage.getSecret();
+        return checkProjectManagementPermission(tenantId, userId)
+                .flatMap(voidItem -> createTenantProject(tenantId, userId)
+                        .flatMap(tenantProject -> syncTenantStage(tenantId, tenantProject.getId(), userId)
+                                .map(tenantStage -> {
+                                    final var projectId = tenantProject.getId();
+                                    final var stageId = tenantStage.getId();
+                                    final var secret = tenantStage.getSecret();
                                     return new CreateProjectDeveloperResponse(projectId, stageId, secret);
                                 })));
     }
 
-    Uni<Void> checkCreateProjectPermission(final Long tenantId, final Long userId) {
+    Uni<Void> checkProjectManagementPermission(final Long tenantId, final Long userId) {
         final var permission = TenantPermissionEnum.PROJECT_MANAGEMENT;
         final var hasTenantPermissionServiceRequest =
                 new VerifyTenantPermissionExistsRequest(tenantId, userId, permission);
@@ -83,16 +83,16 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 .replaceWithVoid();
     }
 
-    Uni<TenantProjectModel> syncProject(final Long tenantId, final Long userId) {
-        final var project = tenantProjectModelFactory.create(tenantId);
-        final var syncProjectInternalRequest = new SyncTenantProjectRequest(project);
-        return tenantModule.getTenantService().syncTenantProject(syncProjectInternalRequest)
-                .flatMap(response -> syncProjectPermission(tenantId, project.getId(), userId))
-                .replaceWith(project);
+    Uni<TenantProjectModel> createTenantProject(final Long tenantId, final Long userId) {
+        final var tenantProject = tenantProjectModelFactory.create(tenantId);
+        final var request = new SyncTenantProjectRequest(tenantProject);
+        return tenantModule.getTenantService().syncTenantProject(request)
+                .flatMap(response -> syncTenantProjectPermission(tenantId, tenantProject.getId(), userId))
+                .replaceWith(tenantProject);
     }
 
-    Uni<TenantProjectPermissionModel> syncProjectPermission(final Long tenantId, final Long projectId,
-                                                            final Long userId) {
+    Uni<TenantProjectPermissionModel> syncTenantProjectPermission(final Long tenantId, final Long projectId,
+                                                                  final Long userId) {
         final var permission = TenantProjectPermissionEnum.STAGE_MANAGEMENT;
         final var projectPermission =
                 tenantProjectPermissionModelFactory.create(tenantId, projectId, userId, permission);
@@ -101,34 +101,40 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 .replaceWith(projectPermission);
     }
 
-    Uni<TenantStageModel> syncStage(final Long tenantId,
-                                    final Long projectId,
-                                    final Long userId) {
-        final var stage = tenantStageModelFactory.create(tenantId, projectId);
-        final var syncStageInternalRequest = new SyncTenantStageRequest(stage);
-        return tenantModule.getTenantService().syncTenantStage(syncStageInternalRequest)
-                .flatMap(response -> syncStageVersionManagementPermission(tenantId, stage.getId(), userId))
-                .flatMap(response -> syncStageGettingDashboardPermission(tenantId, stage.getId(), userId))
-                .replaceWith(stage);
+    Uni<TenantStageModel> syncTenantStage(final Long tenantId,
+                                          final Long tenantProjectId,
+                                          final Long userId) {
+        final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
+        final var request = new SyncTenantStageRequest(tenantStage);
+        return tenantModule.getTenantService().syncTenantStage(request)
+                .flatMap(response -> syncProjectVersionManagementPermission(tenantId, tenantProjectId, userId))
+                .flatMap(response -> syncStageGettingDashboardPermission(tenantId, tenantStage.getId(), userId))
+                .replaceWith(tenantStage);
     }
 
-    Uni<TenantStagePermissionModel> syncStageVersionManagementPermission(final Long tenantId,
-                                                                         final Long stageId,
-                                                                         final Long userId) {
-        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
-        final var stagePermission = tenantStagePermissionModelFactory.create(tenantId, stageId, userId, permission);
-        final var request = new SyncTenantStagePermissionRequest(stagePermission);
-        return tenantModule.getTenantService().syncTenantStagePermission(request)
-                .replaceWith(stagePermission);
+    Uni<TenantProjectPermissionModel> syncProjectVersionManagementPermission(final Long tenantId,
+                                                                             final Long projectId,
+                                                                             final Long userId) {
+        final var permission = TenantProjectPermissionEnum.VERSION_MANAGEMENT;
+        final var tenantProjectPermission = tenantProjectPermissionModelFactory.create(tenantId,
+                projectId,
+                userId,
+                permission);
+        final var request = new SyncTenantProjectPermissionRequest(tenantProjectPermission);
+        return tenantModule.getTenantService().syncTenantProjectPermission(request)
+                .replaceWith(tenantProjectPermission);
     }
 
     Uni<TenantStagePermissionModel> syncStageGettingDashboardPermission(final Long tenantId,
-                                                                        final Long stageId,
+                                                                        final Long tenantStageId,
                                                                         final Long userId) {
         final var permission = TenantStagePermissionEnum.GETTING_DASHBOARD;
-        final var stagePermission = tenantStagePermissionModelFactory.create(tenantId, stageId, userId, permission);
-        final var request = new SyncTenantStagePermissionRequest(stagePermission);
+        final var tenantProjectPermission = tenantStagePermissionModelFactory.create(tenantId,
+                tenantStageId,
+                userId,
+                permission);
+        final var request = new SyncTenantStagePermissionRequest(tenantProjectPermission);
         return tenantModule.getTenantService().syncTenantStagePermission(request)
-                .replaceWith(stagePermission);
+                .replaceWith(tenantProjectPermission);
     }
 }

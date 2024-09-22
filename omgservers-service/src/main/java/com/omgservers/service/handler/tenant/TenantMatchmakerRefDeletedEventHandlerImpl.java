@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRefDeletedEventBodyModel;
-import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -36,14 +36,14 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionMatchmakerRef(tenantId, id)
-                .flatMap(versionMatchmakerRef -> {
-                    final var versionId = versionMatchmakerRef.getDeploymentId();
-                    final var matchmakerId = versionMatchmakerRef.getMatchmakerId();
-                    log.info("Version matchmaker ref was deleted, id={}, version={}/{}, matchmakerId={}",
-                            versionMatchmakerRef.getId(),
+        return getTenantMatchmakerRef(tenantId, id)
+                .flatMap(tenantMatchmakerRef -> {
+                    final var tenantDeploymentId = tenantMatchmakerRef.getDeploymentId();
+                    final var matchmakerId = tenantMatchmakerRef.getMatchmakerId();
+                    log.info("Tenant matchmaker ref was deleted, id={}, tenantDeploymentId={}/{}, matchmakerId={}",
+                            tenantMatchmakerRef.getId(),
                             tenantId,
-                            versionId,
+                            tenantDeploymentId,
                             matchmakerId);
 
                     return Uni.createFrom().voidItem();
@@ -51,9 +51,9 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
                 .replaceWithVoid();
     }
 
-    Uni<TenantMatchmakerRefModel> getVersionMatchmakerRef(final Long tenantId, final Long id) {
+    Uni<TenantMatchmakerRefModel> getTenantMatchmakerRef(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getTenantService().getVersionMatchmakerRef(request)
+        return tenantModule.getTenantService().getTenantMatchmakerRef(request)
                 .map(GetTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 }

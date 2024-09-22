@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageRequest;
 import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.StageDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.tenant.impl.service.stageService.testInterface.StageServiceTestInterface;
+import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -20,7 +20,7 @@ class TenantStageDeletedEventHandlerImplTest extends Assertions {
     StageDeletedEventHandlerImplTestInterface stageDeletedEventHandler;
 
     @Inject
-    StageServiceTestInterface stageService;
+    TenantServiceTestInterface tenantService;
 
     @Inject
     EventModelFactory eventModelFactory;
@@ -37,8 +37,8 @@ class TenantStageDeletedEventHandlerImplTest extends Assertions {
         final var tenantId = stage.getTenantId();
         final var id = stage.getId();
 
-        final var deleteStageRequest = new DeleteTenantStageRequest(tenantId, id);
-        stageService.deleteStage(deleteStageRequest);
+        final var deleteTenantStageRequest = new DeleteTenantStageRequest(tenantId, id);
+        tenantService.deleteTenantStage(deleteTenantStageRequest);
 
         final var eventBody = new TenantStageDeletedEventBodyModel(tenantId, id);
         final var eventModel = eventModelFactory.create(eventBody);

@@ -9,7 +9,6 @@ import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEven
 import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
-import com.omgservers.service.event.body.internal.VersionDeploymentRequestedEventBodyModel;
 import com.omgservers.service.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.client.ClientDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.client.ClientMatchmakerRefCreatedEventBodyModel;
@@ -155,7 +154,6 @@ public enum EventQualifierEnum {
     VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class, false),
     VERSION_BUILDING_FINISHED(VersionBuildingFinishedEventBodyModel.class, false),
-    VERSION_DEPLOYMENT_REQUESTED(VersionDeploymentRequestedEventBodyModel.class, false),
     RUNTIME_DEPLOYMENT_REQUESTED(RuntimeDeploymentRequestedEventBodyModel.class, false),
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class, false),
     INACTIVE_RUNTIME_DETECTED(InactiveRuntimeDetectedEventBodyModel.class, false),

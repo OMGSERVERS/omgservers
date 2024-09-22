@@ -22,7 +22,7 @@ public class VerifyTenantStagePermissionExistsRequest implements ShardedRequest 
     Long userId;
 
     @NotNull
-    TenantStagePermissionEnum tenantStagePermissionQualifier;
+    TenantStagePermissionEnum permission;
 
     @Override
     public String getRequestShardKey() {

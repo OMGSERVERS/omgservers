@@ -39,7 +39,7 @@ class GetConfigMethodImpl implements GetConfigMethod {
                 .flatMap(runtime -> {
                     final var tenantId = runtime.getTenantId();
                     final var versionId = runtime.getDeploymentId();
-                    return getVersion(tenantId, versionId)
+                    return getTenantVersion(tenantId, versionId)
                             .map(TenantVersionModel::getConfig);
                 })
                 .map(GetConfigRuntimeResponse::new);

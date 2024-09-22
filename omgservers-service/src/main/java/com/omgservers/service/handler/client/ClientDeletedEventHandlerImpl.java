@@ -3,6 +3,9 @@ package com.omgservers.service.handler.client;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.ViewClientMatchmakerRefsRequest;
@@ -18,11 +21,7 @@ import com.omgservers.schema.module.runtime.FindRuntimeAssignmentResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientDeletedEventBodyModel;
-import com.omgservers.schema.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -63,11 +62,11 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
         final var body = (ClientDeletedEventBodyModel) event.getBody();
         final var clientId = body.getId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return getClient(clientId)
                 .flatMap(client -> {
-                    log.info("Client was deleted, clientId={}", clientId);
-
-                    final var idempotencyKey = event.getId().toString();
+                    log.info("Client was deleted, id={}", clientId);
 
                     // Remain client messages because users can come back to get disconnection reason
                     return handleClientMatchmakerRefs(clientId, idempotencyKey)
@@ -89,9 +88,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                             final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
                             // TODO: findAndDeleteMatchmakerAssignment
 
-                            return syncDeleteClientMatchmakerCommand(matchmakerId,
-                                    clientId,
-                                    idempotencyKey + "/" + matchmakerId);
+                            return syncDeleteClientMatchmakerCommand(matchmakerId, clientId, idempotencyKey);
                         })
                         .collect().asList()
                         .replaceWithVoid());
@@ -107,27 +104,17 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                                                    final Long clientId,
                                                    final String idempotencyKey) {
         final var commandBody = new DeleteClientMatchmakerCommandBodyModel(clientId);
+        final var commandIdempotencyKey = idempotencyKey + "/" + matchmakerId;
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId,
                 commandBody,
-                idempotencyKey);
+                commandIdempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+        return matchmakerModule.getMatchmakerService().syncMatchmakerCommandWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.PARENT_NOT_FOUND)) {
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                })
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", commandModel, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }
                     }

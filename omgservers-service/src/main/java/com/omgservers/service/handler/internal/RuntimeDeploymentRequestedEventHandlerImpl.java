@@ -4,17 +4,17 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
 import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
 import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
@@ -79,19 +79,21 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                             runtimeId, runtime.getQualifier());
 
                     final var tenantId = runtime.getTenantId();
-                    final var versionId = runtime.getDeploymentId();
-                    return getTenantVersion(tenantId, versionId)
-                            .flatMap(version -> viewVersionImageRef(tenantId, versionId)
-                                    .map(imageRefs -> selectImageRef(runtime, imageRefs))
-                                    .flatMap(imageRef -> {
-                                        final var userId = runtime.getUserId();
-                                        final var password = generateSecureStringOperation.generateSecureString();
-                                        final var idempotencyKey = event.getId().toString();
-                                        final var imageId = imageRef.getImageId();
-                                        return createUser(userId, password, idempotencyKey)
-                                                .flatMap(user -> syncPoolRequest(runtime, user, password, imageId));
-                                    })
-                            );
+                    final var deploymentId = runtime.getDeploymentId();
+                    return getTenantDeployment(tenantId, deploymentId)
+                            .flatMap(tenantDeployment -> {
+                                final var versionId = tenantDeployment.getVersionId();
+                                return viewTenantImageRef(tenantId, versionId)
+                                        .map(tenantImageRefs -> selectTenantImageRef(runtime, tenantImageRefs))
+                                        .flatMap(tenantImageRef -> {
+                                            final var userId = runtime.getUserId();
+                                            final var password = generateSecureStringOperation.generateSecureString();
+                                            final var idempotencyKey = event.getId().toString();
+                                            final var imageId = tenantImageRef.getImageId();
+                                            return createUser(userId, password, idempotencyKey)
+                                                    .flatMap(user -> syncPoolRequest(runtime, user, password, imageId));
+                                        });
+                            });
                 })
                 .replaceWithVoid();
     }
@@ -102,26 +104,26 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long id) {
-        final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
-                .map(GetTenantVersionResponse::getTenantVersion);
+    Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
+        final var request = new GetTenantDeploymentRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantDeployment(request)
+                .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
-    Uni<List<TenantImageRefModel>> viewVersionImageRef(final Long tenantId, final Long versionId) {
+    Uni<List<TenantImageRefModel>> viewTenantImageRef(final Long tenantId, final Long versionId) {
         final var request = new ViewTenantImageRefsRequest(tenantId, versionId);
         return tenantModule.getTenantService().viewTenantImageRefs(request)
                 .map(ViewTenantImageRefsResponse::getTenantImageRefs);
     }
 
-    TenantImageRefModel selectImageRef(final RuntimeModel runtime,
-                                       final List<TenantImageRefModel> imageRefs) {
-        final var universalImageRefOptional = getImageByQualifier(imageRefs,
+    TenantImageRefModel selectTenantImageRef(final RuntimeModel runtime,
+                                             final List<TenantImageRefModel> tenantImageRefs) {
+        final var universalImageRefOptional = getImageByQualifier(tenantImageRefs,
                 TenantImageRefQualifierEnum.UNIVERSAL);
         return universalImageRefOptional
                 .orElseGet(() -> switch (runtime.getQualifier()) {
                     case LOBBY -> {
-                        final var lobbyImageRefOptional = getImageByQualifier(imageRefs,
+                        final var lobbyImageRefOptional = getImageByQualifier(tenantImageRefs,
                                 TenantImageRefQualifierEnum.LOBBY);
                         if (lobbyImageRefOptional.isPresent()) {
                             yield lobbyImageRefOptional.get();
@@ -132,7 +134,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                         }
                     }
                     case MATCH -> {
-                        final var matchImageRefOptional = getImageByQualifier(imageRefs,
+                        final var matchImageRefOptional = getImageByQualifier(tenantImageRefs,
                                 TenantImageRefQualifierEnum.MATCH);
                         if (matchImageRefOptional.isPresent()) {
                             yield matchImageRefOptional.get();
@@ -145,9 +147,9 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 });
     }
 
-    Optional<TenantImageRefModel> getImageByQualifier(final List<TenantImageRefModel> imageRefs,
+    Optional<TenantImageRefModel> getImageByQualifier(final List<TenantImageRefModel> tenantImageRefs,
                                                       final TenantImageRefQualifierEnum qualifier) {
-        return imageRefs.stream()
+        return tenantImageRefs.stream()
                 .filter(imageRef -> imageRef.getQualifier().equals(qualifier))
                 .findFirst();
     }

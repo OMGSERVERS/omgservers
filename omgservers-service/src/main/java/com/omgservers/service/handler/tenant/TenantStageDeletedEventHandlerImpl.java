@@ -1,21 +1,21 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
-import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
 import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -47,25 +47,25 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
         final var body = (TenantStageDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
-        final var stageId = body.getId();
+        final var id = body.getId();
 
-        return getStage(tenantId, stageId)
-                .flatMap(stage -> {
-                    log.info("Stage was deleted, {}/{}", tenantId, stageId);
+        return getTenantStage(tenantId, id)
+                .flatMap(tenantStage -> {
+                    log.info("Tenant stage was deleted, tenantStage={}/{}", tenantId, id);
 
-                    return deleteStagePermissions(tenantId, stageId)
-                            .flatMap(voidItem -> deleteVersions(tenantId, stageId));
+                    return deleteTenantStagePermissions(tenantId, id)
+                            .flatMap(voidItem -> deleteTenantVersions(tenantId, id));
                 })
                 .replaceWithVoid();
     }
 
-    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getStage(request)
+        return tenantModule.getTenantService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<Void> deleteStagePermissions(final Long tenantId, final Long stageId) {
+    Uni<Void> deleteTenantStagePermissions(final Long tenantId, final Long stageId) {
         return viewStagePermissions(tenantId, stageId)
                 .flatMap(stagePermissions -> Multi.createFrom().iterable(stagePermissions)
                         .onItem().transformToUniAndConcatenate(stagePermission ->
@@ -91,30 +91,30 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<TenantStagePermissionModel>> viewStagePermissions(final Long tenantId, final Long stageId) {
         final var request = new ViewTenantStagePermissionsRequest(tenantId, stageId);
-        return tenantModule.getTenantService().viewStagePermissions(request)
+        return tenantModule.getTenantService().viewTenantStagePermissions(request)
                 .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }
 
     Uni<Boolean> deleteStagePermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantStagePermissionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteStagePermission(request)
+        return tenantModule.getTenantService().deleteTenantStagePermission(request)
                 .map(DeleteTenantStagePermissionResponse::getDeleted);
     }
 
-    Uni<Void> deleteVersions(final Long tenantId, final Long stageId) {
-        return viewVersionProjections(tenantId, stageId)
-                .flatMap(versionProjections -> Multi.createFrom().iterable(versionProjections)
-                        .onItem().transformToUniAndConcatenate(versionProjection ->
-                                deleteVersion(tenantId, versionProjection.getId())
+    Uni<Void> deleteTenantVersions(final Long tenantId, final Long tenantStageId) {
+        return viewTenantVersionProjections(tenantId, tenantStageId)
+                .flatMap(tenantVersionProjections -> Multi.createFrom().iterable(tenantVersionProjections)
+                        .onItem().transformToUniAndConcatenate(tenantVersionProjection ->
+                                deleteTenantVersion(tenantId, tenantVersionProjection.getId())
                                         .onFailure()
                                         .recoverWithItem(t -> {
-                                            log.warn("Delete version failed, " +
-                                                            "stage={}/{}, " +
-                                                            "versionId={}" +
+                                            log.warn("Delete tenant version failed, " +
+                                                            "tenantStage={}/{}, " +
+                                                            "tenantVersionId={}" +
                                                             "{}:{}",
                                                     tenantId,
-                                                    stageId,
-                                                    versionProjection.getId(),
+                                                    tenantStageId,
+                                                    tenantVersionProjection.getId(),
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
                                             return null;
@@ -125,15 +125,16 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<TenantVersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
-        final var request = new ViewTenantVersionsRequest(tenantId, stageId);
+    Uni<List<TenantVersionProjectionModel>> viewTenantVersionProjections(final Long tenantId,
+                                                                         final Long tenantStageId) {
+        final var request = new ViewTenantVersionsRequest(tenantId, tenantStageId);
         return tenantModule.getTenantService().viewTenantVersions(request)
                 .map(ViewTenantVersionsResponse::getTenantVersionProjections);
     }
 
-    Uni<Boolean> deleteVersion(final Long tenantId, final Long id) {
+    Uni<Boolean> deleteTenantVersion(final Long tenantId, final Long id) {
         final var request = new DeleteTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteVersion(request)
+        return tenantModule.getTenantService().deleteTenantVersion(request)
                 .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

@@ -22,6 +22,8 @@ public interface LobbyService {
 
     Uni<SyncLobbyResponse> syncLobby(@Valid SyncLobbyRequest request);
 
+    Uni<SyncLobbyResponse> syncLobbyWithIdempotency(@Valid SyncLobbyRequest request);
+
     Uni<DeleteLobbyResponse> deleteLobby(@Valid DeleteLobbyRequest request);
 
     Uni<GetLobbyRuntimeRefResponse> getLobbyRuntimeRef(@Valid GetLobbyRuntimeRefRequest request);

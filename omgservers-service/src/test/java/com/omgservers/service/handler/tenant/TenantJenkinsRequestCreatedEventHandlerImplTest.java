@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
-import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestCreatedEventBodyModel;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
+import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionJenkinsRequestCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
@@ -28,8 +28,7 @@ class TenantJenkinsRequestCreatedEventHandlerImplTest extends Assertions {
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
         final var versionJenkinsRequest = testDataFactory.getTenantTestDataFactory()
                 .createVersionJenkinsRequest(version,
                         TenantJenkinsRequestQualifierEnum.LUAJIT_RUNTIME_BUILDER_V1, 1);

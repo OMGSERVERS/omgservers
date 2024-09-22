@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRequestDeletedEventBodyModel;
-import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -36,14 +36,14 @@ public class TenantLobbyRequestDeletedEventHandlerImpl implements EventHandler {
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionLobbyRequest(tenantId, id)
-                .flatMap(versionLobbyRequest -> {
-                    final var versionId = versionLobbyRequest.getDeploymentId();
-                    final var lobbyId = versionLobbyRequest.getLobbyId();
-                    log.info("Version lobby request was deleted, id={}, version={}/{}, lobbyId={}",
-                            versionLobbyRequest.getId(),
+        return getTenantLobbyRequest(tenantId, id)
+                .flatMap(tenantLobbyRequest -> {
+                    final var deploymentId = tenantLobbyRequest.getDeploymentId();
+                    final var lobbyId = tenantLobbyRequest.getLobbyId();
+                    log.info("Tenant lobby request was deleted, id={}, deploymentId={}/{}, lobbyId={}",
+                            tenantLobbyRequest.getId(),
                             tenantId,
-                            versionId,
+                            deploymentId,
                             lobbyId);
 
                     return Uni.createFrom().voidItem();
@@ -51,9 +51,9 @@ public class TenantLobbyRequestDeletedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<TenantLobbyRequestModel> getVersionLobbyRequest(final Long tenantId, final Long id) {
+    Uni<TenantLobbyRequestModel> getTenantLobbyRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantLobbyRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getVersionLobbyRequest(request)
+        return tenantModule.getTenantService().getTenantLobbyRequest(request)
                 .map(GetTenantLobbyRequestResponse::getTenantLobbyRequest);
     }
 }

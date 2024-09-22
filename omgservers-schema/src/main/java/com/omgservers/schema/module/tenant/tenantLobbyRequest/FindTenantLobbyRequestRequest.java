@@ -15,7 +15,7 @@ public class FindTenantLobbyRequestRequest implements ShardedRequest {
     Long tenantId;
 
     @NotNull
-    Long deploymentId;
+    Long tenantDeploymentId;
 
     @NotNull
     Long lobbyId;

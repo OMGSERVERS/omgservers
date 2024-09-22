@@ -273,15 +273,15 @@ public interface TenantService {
     TenantDeployment
      */
 
-    Uni<GetTenantDeploymentResponse> getTenantDeployment(GetTenantDeploymentRequest request);
+    Uni<GetTenantDeploymentResponse> getTenantDeployment(@Valid GetTenantDeploymentRequest request);
 
-    Uni<SelectTenantDeploymentResponse> selectTenantDeployment(SelectTenantDeploymentRequest request);
+    Uni<SelectTenantDeploymentResponse> selectTenantDeployment(@Valid SelectTenantDeploymentRequest request);
 
-    Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(ViewTenantDeploymentsRequest request);
+    Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(@Valid ViewTenantDeploymentsRequest request);
 
-    Uni<SyncTenantDeploymentResponse> syncTenantDeployment(SyncTenantDeploymentRequest request);
+    Uni<SyncTenantDeploymentResponse> syncTenantDeployment(@Valid SyncTenantDeploymentRequest request);
 
-    Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(DeleteTenantDeploymentRequest request);
+    Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(@Valid DeleteTenantDeploymentRequest request);
 
     /*
     TenantLobbyRequest
@@ -311,6 +311,8 @@ public interface TenantService {
     Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(@Valid ViewTenantLobbyRefsRequest request);
 
     Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(@Valid SyncTenantLobbyRefRequest request);
+
+    Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRefWithIdempotency(@Valid SyncTenantLobbyRefRequest request);
 
     Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(@Valid DeleteTenantLobbyRefRequest request);
 
@@ -347,6 +349,8 @@ public interface TenantService {
     Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(@Valid ViewTenantMatchmakerRefsRequest request);
 
     Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(@Valid SyncTenantMatchmakerRefRequest request);
+
+    Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRefWithIdempotency(@Valid SyncTenantMatchmakerRefRequest request);
 
     Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(
             @Valid DeleteTenantMatchmakerRefRequest request);

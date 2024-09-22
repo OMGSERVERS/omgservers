@@ -21,7 +21,7 @@ public class MatchmakerAssignmentRequestedEventBodyModel extends EventBodyModel 
     Long tenantId;
 
     @NotNull
-    Long versionId;
+    Long deploymentId;
 
     @Override
     public EventQualifierEnum getQualifier() {

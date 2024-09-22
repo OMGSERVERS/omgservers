@@ -1,6 +1,5 @@
 package com.omgservers.schema.module.tenant.tenantDeployment;
 
-import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.module.ShardedRequest;
 import jakarta.validation.constraints.NotNull;

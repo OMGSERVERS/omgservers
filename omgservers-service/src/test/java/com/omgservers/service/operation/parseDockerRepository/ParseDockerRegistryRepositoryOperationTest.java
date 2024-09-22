@@ -1,8 +1,7 @@
 package com.omgservers.service.operation.parseDockerRepository;
 
-import com.omgservers.service.operation.parseDockerRepository.ParseDockerRepositoryOperation;
-import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -19,43 +18,40 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
     @Test
     void givenUniversal_whenParseDockerRegistryRepository_thenParsed() {
         final var repositoryString =
-                "omgservers/245515657456648192/231077687903387648/231939082811342849/universal";
+                "omgservers/245515657456648192/231077687903387648/universal";
         final var repositoryModel = parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString);
         assertEquals("omgservers", repositoryModel.getNamespace());
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
         assertEquals(231077687903387648L, repositoryModel.getProjectId());
-        assertEquals(231939082811342849L, repositoryModel.getStageId());
         assertEquals(DockerRegistryContainerQualifierEnum.UNIVERSAL, repositoryModel.getContainer());
     }
 
     @Test
     void givenLobby_whenParseDockerRegistryRepository_thenParsed() {
         final var repositoryString =
-                "omgservers/245515657456648192/231077687903387648/231939082811342849/lobby";
+                "omgservers/245515657456648192/231077687903387648/lobby";
         final var repositoryModel = parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString);
         assertEquals("omgservers", repositoryModel.getNamespace());
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
         assertEquals(231077687903387648L, repositoryModel.getProjectId());
-        assertEquals(231939082811342849L, repositoryModel.getStageId());
         assertEquals(DockerRegistryContainerQualifierEnum.LOBBY, repositoryModel.getContainer());
     }
 
     @Test
     void givenMatch_whenParseDockerRegistryRepository_thenParsed() {
         final var repositoryString =
-                "omgservers/245515657456648192/231077687903387648/231939082811342849/match";
+                "omgservers/245515657456648192/231077687903387648/match";
         final var repositoryModel = parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString);
         assertEquals("omgservers", repositoryModel.getNamespace());
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
         assertEquals(231077687903387648L, repositoryModel.getProjectId());
-        assertEquals(231939082811342849L, repositoryModel.getStageId());
         assertEquals(DockerRegistryContainerQualifierEnum.MATCH, repositoryModel.getContainer());
     }
 
     @Test
     void givenUnknownQualifier_whenParseDockerRegistryRepository_thenException() {
         final var repositoryString =
-                "omgservers/245515657456648192/231077687903387648/231939082811342849/unknown";
+                "omgservers/245515657456648192/231077687903387648/unknown";
         assertThrows(ServerSideBadRequestException.class,
                 () -> parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString));
     }
@@ -63,7 +59,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
     @Test
     void givenMorePartsThatExpected_whenParseDockerRegistryRepository_thenException() {
         final var repositoryString =
-                "omgservers/245515657456648192/231077687903387648/231939082811342849/231939082811342849/unknown";
+                "omgservers/245515657456648192/231077687903387648/231939082811342849/unknown";
         assertThrows(ServerSideBadRequestException.class,
                 () -> parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString));
     }
@@ -71,7 +67,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
     @Test
     void givenLessPartsThatExpected_whenParseDockerRegistryRepository_thenException() {
         final var repositoryString =
-                "omgservers/231939082811342849/231939082811342849/unknown";
+                "omgservers/231939082811342849/unknown";
         assertThrows(ServerSideBadRequestException.class,
                 () -> parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString));
     }
@@ -79,7 +75,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
     @Test
     void givenWrongTenantId_whenParseDockerRegistryRepository_thenException() {
         final var repositoryString =
-                "omgservers/aaaaaaaaaaaaaaaaaa/231077687903387648/231939082811342849/universal";
+                "omgservers/aaaaaaaaaaaaaaaaaa/231077687903387648/universal";
         assertThrows(ServerSideBadRequestException.class,
                 () -> parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString));
     }
@@ -87,15 +83,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
     @Test
     void givenWrongProjectId_whenParseDockerRegistryRepository_thenException() {
         final var repositoryString =
-                "omgservers/245515657456648192/bbbbbbbbbbbbbbbb/231939082811342849/universal";
-        assertThrows(ServerSideBadRequestException.class,
-                () -> parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString));
-    }
-
-    @Test
-    void givenWrongStageId_whenParseDockerRegistryRepository_thenException() {
-        final var repositoryString =
-                "omgservers/245515657456648192/231077687903387648/cccccccccccccccccc/universal";
+                "omgservers/245515657456648192/bbbbbbbbbbbbbbbb/universal";
         assertThrows(ServerSideBadRequestException.class,
                 () -> parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString));
     }

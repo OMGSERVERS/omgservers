@@ -59,13 +59,13 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
         final var body = (MatchmakerAssignmentRequestedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
         final var tenantId = body.getTenantId();
-        final var versionId = body.getVersionId();
+        final var deploymentId = body.getDeploymentId();
 
         final var idempotencyKey = event.getId().toString();
 
-        return selectVersionMatchmakerRef(tenantId, versionId)
-                .flatMap(versionMatchmakerRef -> {
-                    final var matchmakerId = versionMatchmakerRef.getMatchmakerId();
+        return selectTenantMatchmakerRef(tenantId, deploymentId)
+                .flatMap(tenantMatchmakerRef -> {
+                    final var matchmakerId = tenantMatchmakerRef.getMatchmakerId();
                     return syncMatchmakerAssignment(matchmakerId, clientId, idempotencyKey)
                             .replaceWithVoid();
                 })
@@ -81,13 +81,15 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
                 });
     }
 
-    Uni<TenantMatchmakerRefModel> selectVersionMatchmakerRef(final Long tenantId, final Long versionId) {
-        return viewVersionMatchmakerRefs(tenantId, versionId)
+    Uni<TenantMatchmakerRefModel> selectTenantMatchmakerRef(final Long tenantId, final Long deploymentId) {
+        return viewTenantMatchmakerRefs(tenantId, deploymentId)
                 .map(refs -> {
                     if (refs.isEmpty()) {
                         throw new ServerSideNotFoundException(
                                 ExceptionQualifierEnum.MATCHMAKER_NOT_FOUND,
-                                String.format("matchmaker was not selected, version=%d/%d", tenantId, versionId));
+                                String.format("matchmaker was not selected, tenantDeployment=%d/%d",
+                                        tenantId,
+                                        deploymentId));
                     } else {
                         final var randomRefIndex = ThreadLocalRandom.current().nextInt(refs.size()) % refs.size();
                         final var randomMatchmakerRef = refs.get(randomRefIndex);
@@ -96,9 +98,9 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
                 });
     }
 
-    Uni<List<TenantMatchmakerRefModel>> viewVersionMatchmakerRefs(final Long tenantId, final Long versionId) {
-        final var request = new ViewTenantMatchmakerRefsRequest(tenantId, versionId);
-        return tenantModule.getTenantService().viewVersionMatchmakerRefs(request)
+    Uni<List<TenantMatchmakerRefModel>> viewTenantMatchmakerRefs(final Long tenantId, final Long deploymentId) {
+        final var request = new ViewTenantMatchmakerRefsRequest(tenantId, deploymentId);
+        return tenantModule.getTenantService().viewTenantMatchmakerRefs(request)
                 .map(ViewTenantMatchmakerRefsResponse::getTenantMatchmakerRefs);
     }
 

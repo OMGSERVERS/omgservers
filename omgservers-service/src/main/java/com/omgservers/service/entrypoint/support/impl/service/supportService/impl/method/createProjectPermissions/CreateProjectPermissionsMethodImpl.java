@@ -44,7 +44,7 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
         final var projectId = request.getProjectId();
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getProject(tenantId, projectId))
+                        .flatMap(tenant -> getTenantProject(tenantId, projectId))
                         .flatMap(project -> {
                             final var permissionsToCreate = request.getPermissionsToCreate();
                             return Multi.createFrom().iterable(permissionsToCreate)
@@ -69,9 +69,9 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
                 .map(GetTenantResponse::getTenant);
     }
 
-    Uni<TenantProjectModel> getProject(final Long tenantId, final Long id) {
+    Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getTenantService().getProject(request)
+        return tenantModule.getTenantService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
@@ -79,7 +79,7 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
                                          final Long projectId,
                                          final Long userId,
                                          final TenantProjectPermissionEnum permission) {
-        return syncProjectPermission(tenantId,
+        return syncTenantProjectPermission(tenantId,
                 projectId,
                 userId,
                 permission)
@@ -97,15 +97,15 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
                 });
     }
 
-    Uni<Boolean> syncProjectPermission(final Long tenantId,
-                                       final Long projectId,
-                                       final Long userId,
-                                       final TenantProjectPermissionEnum permission) {
+    Uni<Boolean> syncTenantProjectPermission(final Long tenantId,
+                                             final Long projectId,
+                                             final Long userId,
+                                             final TenantProjectPermissionEnum permission) {
         final var projectPermission = tenantProjectPermissionModelFactory
                 .create(tenantId, projectId, userId, permission);
 
         final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-        return tenantModule.getTenantService().syncProjectPermission(request)
+        return tenantModule.getTenantService().syncTenantProjectPermission(request)
                 .map(SyncTenantProjectPermissionResponse::getCreated);
     }
 }

@@ -153,6 +153,23 @@ class MatchmakerServiceImpl implements MatchmakerService {
     }
 
     @Override
+    public Uni<SyncMatchmakerResponse> syncMatchmakerWithIdempotency(SyncMatchmakerRequest request) {
+        return syncMatchmaker(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}",
+                                    request.getMatchmaker(), t.getMessage());
+                            return Uni.createFrom().item(new SyncMatchmakerResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<SyncMatchmakerAssignmentResponse> syncMatchmakerAssignment(
             @Valid final SyncMatchmakerAssignmentRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,

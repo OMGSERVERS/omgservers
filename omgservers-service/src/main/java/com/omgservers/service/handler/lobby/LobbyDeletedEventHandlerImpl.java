@@ -64,14 +64,15 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
         final var body = (LobbyDeletedEventBodyModel) event.getBody();
         final var lobbyId = body.getId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return getLobby(lobbyId)
                 .flatMap(lobby -> {
                     log.info("Lobby was deleted, id={}", lobbyId);
 
                     final var runtimeId = lobby.getRuntimeId();
-                    final var idempotencyKey = event.getId().toString();
                     return deleteLobbyClients(runtimeId, idempotencyKey)
-                            .flatMap(voidItem -> findAndDeleteVersionLobbyRef(lobby))
+                            .flatMap(voidItem -> findAndDeleteTenantLobbyRef(lobby))
                             .flatMap(voidItem -> deleteRuntime(lobby.getRuntimeId()));
                 })
                 .replaceWithVoid();
@@ -123,30 +124,30 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
                 .map(DeleteClientResponse::getDeleted);
     }
 
-    Uni<Void> findAndDeleteVersionLobbyRef(LobbyModel lobby) {
+    Uni<Void> findAndDeleteTenantLobbyRef(LobbyModel lobby) {
         final var tenantId = lobby.getTenantId();
-        final var versionId = lobby.getDeploymentId();
+        final var deploymentId = lobby.getDeploymentId();
         final var lobbyId = lobby.getId();
-        return findVersionLobbyRef(tenantId, versionId, lobbyId)
+        return findTenantLobbyRef(tenantId, deploymentId, lobbyId)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(this::deleteVersionLobbyRef)
+                .onItem().ifNotNull().transformToUni(this::deleteTenantLobbyRef)
                 .replaceWithVoid();
     }
 
-    Uni<TenantLobbyRefModel> findVersionLobbyRef(final Long tenantId,
-                                                 final Long versionId,
-                                                 final Long lobbyId) {
-        final var request = new FindTenantLobbyRefRequest(tenantId, versionId, lobbyId);
-        return tenantModule.getTenantService().findVersionLobbyRef(request)
+    Uni<TenantLobbyRefModel> findTenantLobbyRef(final Long tenantId,
+                                                final Long deploymentId,
+                                                final Long lobbyId) {
+        final var request = new FindTenantLobbyRefRequest(tenantId, deploymentId, lobbyId);
+        return tenantModule.getTenantService().findTenantLobbyRef(request)
                 .map(FindTenantLobbyRefResponse::getTenantLobbyRef);
     }
 
-    Uni<Boolean> deleteVersionLobbyRef(TenantLobbyRefModel versionLobbyRef) {
-        final var tenantId = versionLobbyRef.getTenantId();
-        final var id = versionLobbyRef.getId();
+    Uni<Boolean> deleteTenantLobbyRef(final TenantLobbyRefModel tenantLobbyRef) {
+        final var tenantId = tenantLobbyRef.getTenantId();
+        final var id = tenantLobbyRef.getId();
         final var request = new DeleteTenantLobbyRefRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteVersionLobbyRef(request)
+        return tenantModule.getTenantService().deleteTenantLobbyRef(request)
                 .map(DeleteTenantLobbyRefResponse::getDeleted);
     }
 

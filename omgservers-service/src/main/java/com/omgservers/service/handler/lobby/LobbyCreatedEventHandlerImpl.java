@@ -1,5 +1,8 @@
 package com.omgservers.service.handler.lobby;
 
+import com.omgservers.schema.model.lobby.LobbyModel;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.module.lobby.GetLobbyRequest;
 import com.omgservers.schema.module.lobby.GetLobbyResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
@@ -9,12 +12,6 @@ import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResp
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.lobby.LobbyCreatedEventBodyModel;
-import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.model.runtime.RuntimeConfigDto;
-import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -54,14 +51,14 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
         final var body = (LobbyCreatedEventBodyModel) event.getBody();
         final var lobbyId = body.getId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return getLobby(lobbyId)
                 .flatMap(lobby -> {
                     log.info("Lobby was created, id={}", lobbyId);
 
-                    final var idempotencyKey = event.getId().toString();
-
                     return syncRuntime(lobby, idempotencyKey)
-                            .flatMap(created -> syncVersionLobbyRef(lobby, idempotencyKey));
+                            .flatMap(created -> syncTenantLobbyRef(lobby, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -75,7 +72,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncRuntime(final LobbyModel lobby, final String idempotencyKey) {
         final var lobbyId = lobby.getId();
         final var tenantId = lobby.getTenantId();
-        final var versionId = lobby.getDeploymentId();
+        final var deploymentId = lobby.getDeploymentId();
         final var runtimeId = lobby.getRuntimeId();
 
         final var runtimeConfig = RuntimeConfigDto.create();
@@ -84,50 +81,28 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 .build());
         final var runtime = runtimeModelFactory.create(runtimeId,
                 tenantId,
-                versionId,
+                deploymentId,
                 RuntimeQualifierEnum.LOBBY,
                 generateIdOperation.generateId(),
                 runtimeConfig,
                 idempotencyKey);
 
         final var request = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getRuntimeService().syncRuntime(request)
-                .map(SyncRuntimeResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", runtime, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return runtimeModule.getRuntimeService().syncRuntimeWithIdempotency(request)
+                .map(SyncRuntimeResponse::getCreated);
     }
 
-    Uni<Boolean> syncVersionLobbyRef(final LobbyModel lobby,
-                                     final String idempotencyKey) {
+    Uni<Boolean> syncTenantLobbyRef(final LobbyModel lobby,
+                                    final String idempotencyKey) {
         final var tenantId = lobby.getTenantId();
-        final var versionId = lobby.getDeploymentId();
         final var lobbyId = lobby.getId();
-        final var versionLobbyRef = tenantLobbyRefModelFactory.create(tenantId,
-                versionId,
+        final var deploymentId = lobby.getDeploymentId();
+        final var tenantLobbyRef = tenantLobbyRefModelFactory.create(tenantId,
+                deploymentId,
                 lobbyId,
                 idempotencyKey);
-        final var request = new SyncTenantLobbyRefRequest(versionLobbyRef);
-        return tenantModule.getTenantService().syncVersionLobbyRef(request)
-                .map(SyncTenantLobbyRefResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", versionLobbyRef, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        final var request = new SyncTenantLobbyRefRequest(tenantLobbyRef);
+        return tenantModule.getTenantService().syncTenantLobbyRefWithIdempotency(request)
+                .map(SyncTenantLobbyRefResponse::getCreated);
     }
 }

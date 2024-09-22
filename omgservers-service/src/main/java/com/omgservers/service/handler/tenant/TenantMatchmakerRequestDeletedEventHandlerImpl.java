@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRequestDeletedEventBodyModel;
-import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -36,21 +36,21 @@ public class TenantMatchmakerRequestDeletedEventHandlerImpl implements EventHand
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionMatchmakerRequest(tenantId, id)
-                .flatMap(versionMatchmakerRequest -> {
-                    final var matchmakerId = versionMatchmakerRequest.getMatchmakerId();
+        return getTenantMatchmakerRequest(tenantId, id)
+                .flatMap(tenantMatchmakerRequest -> {
+                    final var matchmakerId = tenantMatchmakerRequest.getMatchmakerId();
 
-                    log.info("Version matchmaker request was deleted, id={}, versionId={}, matchmakerId={}",
-                            versionMatchmakerRequest.getId(), tenantId, matchmakerId);
+                    log.info("Tenant matchmaker request was deleted, id={}/{}, matchmakerId={}",
+                            tenantId, id, matchmakerId);
 
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();
     }
 
-    Uni<TenantMatchmakerRequestModel> getVersionMatchmakerRequest(final Long tenantId, final Long id) {
+    Uni<TenantMatchmakerRequestModel> getTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getVersionMatchmakerRequest(request)
+        return tenantModule.getTenantService().getTenantMatchmakerRequest(request)
                 .map(GetTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
     }
 }

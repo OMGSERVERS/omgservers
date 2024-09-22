@@ -1,5 +1,6 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestRequest;
@@ -7,10 +8,6 @@ import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatc
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRequestCreatedEventBodyModel;
-import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -44,49 +41,38 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
-        return getVersionMatchmakerRequest(tenantId, id)
-                .flatMap(versionMatchmakerRequest -> {
-                    final var versionId = versionMatchmakerRequest.getDeploymentId();
-                    final var matchmakerId = versionMatchmakerRequest.getMatchmakerId();
-                    log.info("Version matchmaker request was created, id={}, version={}/{}, matchmakerId={}",
-                            versionMatchmakerRequest.getId(),
+        return getTenantMatchmakerRequest(tenantId, id)
+                .flatMap(tenantMatchmakerRequest -> {
+                    final var tenantDeploymentId = tenantMatchmakerRequest.getDeploymentId();
+                    final var matchmakerId = tenantMatchmakerRequest.getMatchmakerId();
+                    log.info("Tenant matchmaker request was created, id={}, tenantDeploymentId={}/{}, matchmakerId={}",
+                            tenantMatchmakerRequest.getId(),
                             tenantId,
-                            versionId,
+                            tenantDeploymentId,
                             matchmakerId);
 
-                    return syncMatchmaker(versionMatchmakerRequest, event.getIdempotencyKey());
+                    return syncMatchmaker(tenantMatchmakerRequest, event.getIdempotencyKey());
                 })
                 .replaceWithVoid();
     }
 
-    Uni<TenantMatchmakerRequestModel> getVersionMatchmakerRequest(final Long tenantId, final Long id) {
+    Uni<TenantMatchmakerRequestModel> getTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getVersionMatchmakerRequest(request)
+        return tenantModule.getTenantService().getTenantMatchmakerRequest(request)
                 .map(GetTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
     }
 
-    Uni<Boolean> syncMatchmaker(final TenantMatchmakerRequestModel versionMatchmakerRequest,
+    Uni<Boolean> syncMatchmaker(final TenantMatchmakerRequestModel tenantMatchmakerRequest,
                                 final String idempotencyKey) {
-        final var tenantId = versionMatchmakerRequest.getTenantId();
-        final var versionId = versionMatchmakerRequest.getDeploymentId();
-        final var matchmakerId = versionMatchmakerRequest.getMatchmakerId();
+        final var tenantId = tenantMatchmakerRequest.getTenantId();
+        final var deploymentId = tenantMatchmakerRequest.getDeploymentId();
+        final var matchmakerId = tenantMatchmakerRequest.getMatchmakerId();
         final var matchmaker = matchmakerModelFactory.create(matchmakerId,
                 tenantId,
-                versionId,
+                deploymentId,
                 idempotencyKey);
         final var request = new SyncMatchmakerRequest(matchmaker);
-        return matchmakerModule.getMatchmakerService().syncMatchmaker(request)
-                .map(SyncMatchmakerResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", matchmaker, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+        return matchmakerModule.getMatchmakerService().syncMatchmakerWithIdempotency(request)
+                .map(SyncMatchmakerResponse::getCreated);
     }
 }

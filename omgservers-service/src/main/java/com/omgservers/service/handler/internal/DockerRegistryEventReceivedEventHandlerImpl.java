@@ -1,14 +1,13 @@
 package com.omgservers.service.handler.internal;
 
 import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
 import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
-import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -16,6 +15,7 @@ import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.buildDockerImageId.BuildDockerImageIdOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.operation.parseDockerRepository.ParseDockerRepositoryOperation;
+import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -76,7 +76,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
             final var imageId = registryHost + "/" +
                     buildDockerImageIdOperation.buildDockerImageId(dockerRepository, versionId);
 
-            return syncVersionImageRef(tenantId,
+            return syncTenantImageRef(tenantId,
                     versionId,
                     imageId,
                     dockerRepository.getContainer(),
@@ -87,25 +87,25 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         }
     }
 
-    Uni<Boolean> syncVersionImageRef(final Long tenantId,
-                                     final Long versionId,
-                                     final String imageId,
-                                     final DockerRegistryContainerQualifierEnum qualifier,
-                                     final String idempotencyKey) {
-        final var versionImageRefQualifier = switch (qualifier) {
+    Uni<Boolean> syncTenantImageRef(final Long tenantId,
+                                    final Long versionId,
+                                    final String imageId,
+                                    final DockerRegistryContainerQualifierEnum qualifier,
+                                    final String idempotencyKey) {
+        final var tenantImageRefQualifier = switch (qualifier) {
             case LOBBY -> TenantImageRefQualifierEnum.LOBBY;
             case MATCH -> TenantImageRefQualifierEnum.MATCH;
             case UNIVERSAL -> TenantImageRefQualifierEnum.UNIVERSAL;
         };
 
-        final var versionImageRef = tenantImageRefModelFactory.create(tenantId,
+        final var tenantImageRef = tenantImageRefModelFactory.create(tenantId,
                 versionId,
-                versionImageRefQualifier,
+                tenantImageRefQualifier,
                 imageId,
                 idempotencyKey);
 
-        final var request = new SyncTenantImageRefRequest(versionImageRef);
-        return tenantModule.getTenantService().syncVersionImageRefWithIdempotency(request)
+        final var request = new SyncTenantImageRefRequest(tenantImageRef);
+        return tenantModule.getTenantService().syncTenantImageRefWithIdempotency(request)
                 .map(SyncTenantImageRefResponse::getCreated);
     }
 

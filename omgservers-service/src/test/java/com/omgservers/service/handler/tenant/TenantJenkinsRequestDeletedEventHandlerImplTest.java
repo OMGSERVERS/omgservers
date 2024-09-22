@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.tenant;
 
+import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
 import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestDeletedEventBodyModel;
-import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.handler.tenant.testInterface.VersionJenkinsRequestDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.tenant.impl.service.versionService.testInterface.VersionServiceTestInterface;
+import com.omgservers.service.handler.tenant.testInterface.TenantJenkinsRequestDeletedEventHandlerImplTestInterface;
+import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -18,10 +18,10 @@ import org.junit.jupiter.api.Test;
 class TenantJenkinsRequestDeletedEventHandlerImplTest extends Assertions {
 
     @Inject
-    VersionJenkinsRequestDeletedEventHandlerImplTestInterface versionJenkinsRequestDeletedEventHandlerImplTestInterface;
+    TenantJenkinsRequestDeletedEventHandlerImplTestInterface tenantJenkinsRequestDeletedEventHandlerImplTestInterface;
 
     @Inject
-    VersionServiceTestInterface versionServiceTestInterface;
+    TenantServiceTestInterface tenantService;
 
     @Inject
     EventModelFactory eventModelFactory;
@@ -33,8 +33,7 @@ class TenantJenkinsRequestDeletedEventHandlerImplTest extends Assertions {
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
         final var versionJenkinsRequest = testDataFactory.getTenantTestDataFactory()
                 .createVersionJenkinsRequest(version,
                         TenantJenkinsRequestQualifierEnum.LUAJIT_RUNTIME_BUILDER_V1, 1);
@@ -42,14 +41,14 @@ class TenantJenkinsRequestDeletedEventHandlerImplTest extends Assertions {
         final var tenantId = versionJenkinsRequest.getTenantId();
         final var id = versionJenkinsRequest.getId();
 
-        final var deleteVersionJenkinsRequestRequest = new DeleteTenantJenkinsRequestRequest(tenantId, id);
-        versionServiceTestInterface.deleteVersionJenkinsRequest(deleteVersionJenkinsRequestRequest);
+        final var deleteTenantJenkinsRequestRequest = new DeleteTenantJenkinsRequestRequest(tenantId, id);
+        tenantService.deleteTenantJenkinsRequest(deleteTenantJenkinsRequestRequest);
 
         final var eventBody = new TenantJenkinsRequestDeletedEventBodyModel(tenantId, id);
         final var eventModel = eventModelFactory.create(eventBody);
 
-        versionJenkinsRequestDeletedEventHandlerImplTestInterface.handle(eventModel);
+        tenantJenkinsRequestDeletedEventHandlerImplTestInterface.handle(eventModel);
         log.info("Retry");
-        versionJenkinsRequestDeletedEventHandlerImplTestInterface.handle(eventModel);
+        tenantJenkinsRequestDeletedEventHandlerImplTestInterface.handle(eventModel);
     }
 }

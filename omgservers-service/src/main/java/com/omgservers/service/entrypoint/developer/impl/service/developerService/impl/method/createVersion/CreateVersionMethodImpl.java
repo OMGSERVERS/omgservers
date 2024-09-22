@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
@@ -40,11 +40,11 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var stageId = request.getStageId();
+        final var tenantProjectId = request.getTenantProjectId();
         final var versionConfig = request.getVersionConfig();
 
-        return checkVersionManagementPermission(tenantId, stageId, userId)
-                .flatMap(voidItem -> createVersion(tenantId, stageId, versionConfig))
+        return checkVersionManagementPermission(tenantId, tenantProjectId, userId)
+                .flatMap(voidItem -> createTenantVersion(tenantId, tenantProjectId, versionConfig))
                 .map(TenantVersionModel::getId)
                 .map(CreateVersionDeveloperResponse::new);
     }
@@ -52,15 +52,15 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
     Uni<Void> checkVersionManagementPermission(final Long tenantId,
                                                final Long stageId,
                                                final Long userId) {
-        final var permission = TenantStagePermissionEnum.VERSION_MANAGEMENT;
-        final var hasStagePermissionServiceRequest = new VerifyTenantStagePermissionExistsRequest(tenantId,
+        final var permission = TenantProjectPermissionEnum.VERSION_MANAGEMENT;
+        final var request = new VerifyTenantProjectPermissionExistsRequest(tenantId,
                 stageId,
                 userId,
                 permission);
-        return tenantModule.getTenantService().verifyTenantStagePermissionExists(hasStagePermissionServiceRequest)
-                .map(VerifyTenantStagePermissionExistsResponse::getExists)
-                .invoke(result -> {
-                    if (!result) {
+        return tenantModule.getTenantService().verifyTenantProjectPermissionExists(request)
+                .map(VerifyTenantProjectPermissionExistsResponse::getExists)
+                .invoke(exists -> {
+                    if (!exists) {
                         throw new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,
                                 String.format("permission was not found, " +
                                                 "tenantId=%d, stageId=%d, userId=%d, permission=%s",
@@ -70,13 +70,13 @@ class CreateVersionMethodImpl implements CreateVersionMethod {
                 .replaceWithVoid();
     }
 
-    Uni<TenantVersionModel> createVersion(final Long tenantId,
-                                          final Long stageId,
-                                          final TenantVersionConfigDto versionConfig) {
+    Uni<TenantVersionModel> createTenantVersion(final Long tenantId,
+                                                final Long tenantProjectId,
+                                                final TenantVersionConfigDto versionConfig) {
         // TODO: fix empty archive field
-        final var version = tenantVersionModelFactory.create(tenantId, stageId, versionConfig, "");
-        final var request = new SyncTenantVersionRequest(version);
+        final var tenantVersion = tenantVersionModelFactory.create(tenantId, tenantProjectId, versionConfig, "");
+        final var request = new SyncTenantVersionRequest(tenantVersion);
         return tenantModule.getTenantService().syncTenantVersion(request)
-                .replaceWith(version);
+                .replaceWith(tenantVersion);
     }
 }

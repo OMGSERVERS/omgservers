@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ViewTenantJenkinsRequestsResponse {
 
-    List<TenantJenkinsRequestModel> versionJenkinsRequests;
+    List<TenantJenkinsRequestModel> tenantJenkinsRequests;
 }

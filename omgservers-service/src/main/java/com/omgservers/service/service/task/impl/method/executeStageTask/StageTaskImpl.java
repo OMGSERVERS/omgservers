@@ -32,14 +32,14 @@ public class StageTaskImpl {
     final TenantModule tenantModule;
 
     public Uni<Boolean> executeTask(final Long tenantId, final Long stageId) {
-        return getStage(tenantId, stageId)
+        return getTenantStage(tenantId, stageId)
                 .flatMap(stage -> handleStage(stage)
                         .replaceWith(Boolean.TRUE));
     }
 
-    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
+    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getStage(request)
+        return tenantModule.getTenantService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
@@ -76,7 +76,7 @@ public class StageTaskImpl {
                     if (isEmpty) {
                         log.info("Previous versionProjection without clients was found, version={}/{}", tenantId,
                                 versionId);
-                        return deleteVersion(tenantId, versionId);
+                        return deleteTenantVersion(tenantId, versionId);
                     } else {
                         return Uni.createFrom().item(Boolean.FALSE);
                     }
@@ -86,7 +86,7 @@ public class StageTaskImpl {
     Uni<Boolean> handlePreviousVersionRuntimes(final TenantVersionProjectionModel versionProjection) {
         final var tenantId = versionProjection.getTenantId();
         final var versionId = versionProjection.getId();
-        return viewVersionLobbyRefs(tenantId, versionId)
+        return viewTenantLobbyRefs(tenantId, versionId)
                 .flatMap(versionRuntimes -> Multi.createFrom().iterable(versionRuntimes)
                         .onItem().transformToUniAndConcatenate(versionRuntime -> {
                             final var runtimeId = versionRuntime.getLobbyId();
@@ -100,9 +100,9 @@ public class StageTaskImpl {
                         }));
     }
 
-    Uni<List<TenantLobbyRefModel>> viewVersionLobbyRefs(final Long tenantId, final Long versionId) {
+    Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long versionId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, versionId);
-        return tenantModule.getTenantService().viewVersionLobbyRefs(request)
+        return tenantModule.getTenantService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
@@ -112,9 +112,9 @@ public class StageTaskImpl {
                 .map(CountRuntimeAssignmentsResponse::getCount);
     }
 
-    Uni<Boolean> deleteVersion(final Long tenantId, final Long id) {
+    Uni<Boolean> deleteTenantVersion(final Long tenantId, final Long id) {
         final var request = new DeleteTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteVersion(request)
+        return tenantModule.getTenantService().deleteTenantVersion(request)
                 .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

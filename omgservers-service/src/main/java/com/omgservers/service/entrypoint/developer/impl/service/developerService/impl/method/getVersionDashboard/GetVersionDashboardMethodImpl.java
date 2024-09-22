@@ -5,12 +5,12 @@ import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRe
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
 import com.omgservers.service.entrypoint.developer.impl.operation.mapVersionDataToDashboard.MapVersionDataToDashboardOperation;
 import com.omgservers.service.exception.ServerSideForbiddenException;
@@ -43,11 +43,11 @@ class GetVersionDashboardMethodImpl implements GetVersionDashboardMethod {
 
         final var tenantId = request.getTenantId();
         final var versionId = request.getVersionId();
-        return getVersion(tenantId, versionId)
+        return getTenantVersion(tenantId, versionId)
                 .flatMap(version -> {
                     final var stageId = version.getProjectId();
                     return checkGettingDashboardPermission(tenantId, stageId, userId)
-                            .flatMap(voidItem -> getVersionData(tenantId, versionId))
+                            .flatMap(voidItem -> getTenantVersionData(tenantId, versionId))
                             .map(mapVersionDataToDashboardOperation::mapVersionDataToDashboard)
                             .map(GetVersionDashboardDeveloperResponse::new);
                 });
@@ -76,9 +76,9 @@ class GetVersionDashboardMethodImpl implements GetVersionDashboardMethod {
                 .replaceWithVoid();
     }
 
-    Uni<TenantVersionDataDto> getVersionData(final Long tenantId, final Long versionId) {
+    Uni<TenantVersionDataDto> getTenantVersionData(final Long tenantId, final Long versionId) {
         final var request = new GetTenantVersionDataRequest(tenantId, versionId);
-        return tenantModule.getTenantService().getVersionData(request)
+        return tenantModule.getTenantService().getTenantVersionData(request)
                 .map(GetTenantVersionDataResponse::getTenantVersionData);
     }
 }

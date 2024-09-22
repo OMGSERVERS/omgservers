@@ -41,7 +41,7 @@ class GetStageDashboardMethodImpl implements GetStageDashboardMethod {
         final var tenantId = request.getTenantId();
         final var stageId = request.getStageId();
         return checkGettingDashboardPermission(tenantId, stageId, userId)
-                .flatMap(voidItem -> getStageData(tenantId, stageId))
+                .flatMap(voidItem -> getTenantStageData(tenantId, stageId))
                 .map(mapStageDataToDashboardOperation::mapStageDataToDashboard)
                 .map(GetStageDashboardDeveloperResponse::new);
     }
@@ -63,9 +63,9 @@ class GetStageDashboardMethodImpl implements GetStageDashboardMethod {
                 .replaceWithVoid();
     }
 
-    Uni<TenantStageDataDto> getStageData(final Long tenantId, final Long stageId) {
+    Uni<TenantStageDataDto> getTenantStageData(final Long tenantId, final Long stageId) {
         final var request = new GetTenantStageDataRequest(tenantId, stageId);
-        return tenantModule.getTenantService().getStageData(request)
+        return tenantModule.getTenantService().getTenantStageData(request)
                 .map(GetTenantStageDataResponse::getTenantStageData);
     }
 }

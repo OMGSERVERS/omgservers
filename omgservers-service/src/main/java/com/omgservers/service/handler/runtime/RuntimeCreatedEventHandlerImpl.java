@@ -84,13 +84,14 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var runtimeId = body.getId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Runtime was created, id={}, type={}",
+                    log.info("Runtime was created, id={}, qualifier={}",
                             runtime.getId(),
                             runtime.getQualifier());
 
-                    final var idempotencyKey = event.getId().toString();
                     return syncRuntimeRef(runtime, idempotencyKey)
                             .flatMap(created -> createRoom(runtimeId))
                             .flatMap(created -> requestRuntimeDeployment(runtimeId, idempotencyKey))

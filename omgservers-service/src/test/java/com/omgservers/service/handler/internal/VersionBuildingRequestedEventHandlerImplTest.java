@@ -38,8 +38,7 @@ class VersionBuildingRequestedEventHandlerImplTest extends Assertions {
 
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
 
         final var eventBody = new VersionBuildingRequestedEventBodyModel(tenant.getId(), version.getId());
         final var eventModel = eventModelFactory.create(eventBody);

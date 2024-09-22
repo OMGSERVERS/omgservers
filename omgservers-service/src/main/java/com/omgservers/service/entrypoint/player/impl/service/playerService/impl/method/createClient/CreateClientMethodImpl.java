@@ -9,11 +9,14 @@ import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
 import com.omgservers.schema.module.client.SyncClientRequest;
 import com.omgservers.schema.module.client.SyncClientResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
@@ -74,9 +77,16 @@ class CreateClientMethodImpl implements CreateClientMethod {
     Uni<TenantStageModel> validateStageSecret(final Long tenantId,
                                               final Long stageId,
                                               final String secret) {
-        final var validateStageSecretHelpRequest = new ValidateTenantStageSecretRequest(tenantId, stageId, secret);
-        return tenantModule.getTenantService().validateStageSecret(validateStageSecretHelpRequest)
-                .map(ValidateTenantStageSecretResponse::getTenantStage);
+        final var request = new GetTenantStageRequest(tenantId, stageId);
+        return tenantModule.getTenantService().getTenantStage(request)
+                .map(GetTenantStageResponse::getTenantStage)
+                .invoke(tenantStage -> {
+                    final var stageSecret = tenantStage.getSecret();
+                    if (!stageSecret.equals(secret)) {
+                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_STAGE_SECRET,
+                                "stage secret is wrong");
+                    }
+                });
     }
 
     Uni<PlayerModel> findOrCreatePlayer(final Long userId,

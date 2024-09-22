@@ -64,13 +64,13 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
         final var body = (LobbyAssignmentRequestedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
         final var tenantId = body.getTenantId();
-        final var versionId = body.getVersionId();
+        final var deploymentId = body.getDeploymentId();
 
         final var idempotencyKey = event.getId().toString();
 
-        return selectVersionLobbyRef(tenantId, versionId)
-                .flatMap(versionLobbyRef -> {
-                    final var lobbyId = versionLobbyRef.getLobbyId();
+        return selectTenantLobbyRef(tenantId, deploymentId)
+                .flatMap(tenantLobbyRef -> {
+                    final var lobbyId = tenantLobbyRef.getLobbyId();
                     return getLobby(lobbyId)
                             .flatMap(lobby -> {
                                 final var runtimeId = lobby.getRuntimeId();
@@ -90,12 +90,12 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                 });
     }
 
-    Uni<TenantLobbyRefModel> selectVersionLobbyRef(final Long tenantId, final Long versionId) {
-        return viewVersionLobbyRefs(tenantId, versionId)
+    Uni<TenantLobbyRefModel> selectTenantLobbyRef(final Long tenantId, final Long deploymentId) {
+        return viewTenantLobbyRefs(tenantId, deploymentId)
                 .map(refs -> {
                     if (refs.isEmpty()) {
                         throw new ServerSideNotFoundException(ExceptionQualifierEnum.LOBBY_NOT_FOUND,
-                                String.format("lobby was not selected, version=%d/%d", tenantId, versionId));
+                                String.format("lobby was not selected, tenantDeployment=%d/%d", tenantId, deploymentId));
                     } else {
                         final var randomRefIndex = ThreadLocalRandom.current().nextInt(refs.size()) % refs.size();
                         final var randomLobbyRef = refs.get(randomRefIndex);
@@ -104,9 +104,9 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                 });
     }
 
-    Uni<List<TenantLobbyRefModel>> viewVersionLobbyRefs(final Long tenantId, final Long versionId) {
-        final var request = new ViewTenantLobbyRefsRequest(tenantId, versionId);
-        return tenantModule.getTenantService().viewVersionLobbyRefs(request)
+    Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long deploymentId) {
+        final var request = new ViewTenantLobbyRefsRequest(tenantId, deploymentId);
+        return tenantModule.getTenantService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 

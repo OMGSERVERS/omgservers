@@ -15,7 +15,7 @@ public class CreateVersionDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long stageId;
+    Long tenantProjectId;
 
     @NotNull
     TenantVersionConfigDto versionConfig;

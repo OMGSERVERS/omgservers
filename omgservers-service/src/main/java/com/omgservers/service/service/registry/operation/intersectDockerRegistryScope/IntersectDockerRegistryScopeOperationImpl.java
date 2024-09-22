@@ -1,17 +1,17 @@
 package com.omgservers.service.service.registry.operation.intersectDockerRegistryScope;
 
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
+import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.registry.dto.DockerRegistryAccessDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryActionEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceScopeDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceTypeEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryScopeDto;
-import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -59,44 +59,38 @@ class IntersectDockerRegistryScopeOperationImpl implements IntersectDockerRegist
 
         final var tenantId = resourceScope.getResourceName().getRepository().getTenantId();
         final var projectId = resourceScope.getResourceName().getRepository().getProjectId();
-        final var stageId = resourceScope.getResourceName().getRepository().getStageId();
 
-        return getStage(tenantId, stageId)
-                .flatMap(stage -> {
-                    if (!stage.getProjectId().equals(projectId)) {
-                        return Uni.createFrom().item(dockerRegistryAccess);
-                    }
+        return getTenantProject(tenantId, projectId)
+                .flatMap(tenantProject -> viewTenantProjectPermissions(tenantId, projectId)
+                        .map(tenantProjectPermissions -> {
+                            final var userPermissions = tenantProjectPermissions
+                                    .stream()
+                                    .filter(permission -> permission.getUserId().equals(userId))
+                                    .toList();
 
-                    return viewStagePermissions(tenantId, stageId)
-                            .map(stagePermissions -> {
-                                final var userPermissions = stagePermissions.stream()
-                                        .filter(permission -> permission.getUserId().equals(userId))
-                                        .toList();
-
-                                for (final var userPermission : userPermissions) {
-                                    switch (userPermission.getPermission()) {
-                                        case VERSION_MANAGEMENT -> {
-                                            dockerRegistryAccess.getActions().add(DockerRegistryActionEnum.PULL);
-                                            dockerRegistryAccess.getActions().add(DockerRegistryActionEnum.PUSH);
-                                        }
+                            for (final var userPermission : userPermissions) {
+                                switch (userPermission.getPermission()) {
+                                    case VERSION_MANAGEMENT -> {
+                                        dockerRegistryAccess.getActions().add(DockerRegistryActionEnum.PULL);
+                                        dockerRegistryAccess.getActions().add(DockerRegistryActionEnum.PUSH);
                                     }
                                 }
+                            }
 
-                                return dockerRegistryAccess;
-                            });
-                });
+                            return dockerRegistryAccess;
+                        }));
     }
 
-    Uni<TenantStageModel> getStage(final Long tenantId, final Long id) {
-        final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getStage(request)
-                .map(GetTenantStageResponse::getTenantStage);
+    Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
+        final var request = new GetTenantProjectRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantProject(request)
+                .map(GetTenantProjectResponse::getTenantProject);
     }
 
-    Uni<List<TenantStagePermissionModel>> viewStagePermissions(final Long tenantId,
-                                                               final Long stageId) {
-        final var request = new ViewTenantStagePermissionsRequest(tenantId, stageId);
-        return tenantModule.getTenantService().viewStagePermissions(request)
-                .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
+    Uni<List<TenantProjectPermissionModel>> viewTenantProjectPermissions(final Long tenantId,
+                                                                         final Long tenantProjectId) {
+        final var request = new ViewTenantProjectPermissionsRequest(tenantId, tenantProjectId);
+        return tenantModule.getTenantService().viewTenantProjectPermissions(request)
+                .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }
 }

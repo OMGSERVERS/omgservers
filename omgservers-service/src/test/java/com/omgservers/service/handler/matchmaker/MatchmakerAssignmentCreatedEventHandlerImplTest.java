@@ -28,7 +28,7 @@ class MatchmakerAssignmentCreatedEventHandlerImplTest extends Assertions {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
         final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
         final var matchmaker = testDataFactory.getMatchmakerTestDataFactory().createMatchmaker(tenant, version);
         final var user = testDataFactory.getUserTestDataFactory().createPlayerUser("password");
         final var player = testDataFactory.getUserTestDataFactory().createUserPlayer(user, tenant, stage);

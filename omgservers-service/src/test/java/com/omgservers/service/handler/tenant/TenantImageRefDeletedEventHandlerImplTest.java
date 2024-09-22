@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRe
 import com.omgservers.service.event.body.module.tenant.TenantImageRefDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionImageRefDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.tenant.impl.service.versionService.testInterface.VersionServiceTestInterface;
+import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -20,7 +20,7 @@ class TenantImageRefDeletedEventHandlerImplTest extends Assertions {
     VersionImageRefDeletedEventHandlerImplTestInterface versionImageRefDeletedEventHandlerImplTestInterface;
 
     @Inject
-    VersionServiceTestInterface versionService;
+    TenantServiceTestInterface tenantService;
 
     @Inject
     EventModelFactory eventModelFactory;
@@ -32,15 +32,14 @@ class TenantImageRefDeletedEventHandlerImplTest extends Assertions {
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
         final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(stage);
+        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
         final var versionImageRef = testDataFactory.getTenantTestDataFactory().createVersionImageRef(version);
 
         final var tenantId = versionImageRef.getTenantId();
         final var id = versionImageRef.getId();
 
-        final var deleteVersionImageRefRequest = new DeleteTenantImageRefRequest(tenantId, id);
-        versionService.deleteVersionImageRef(deleteVersionImageRefRequest);
+        final var deleteTenantImageRefRequest = new DeleteTenantImageRefRequest(tenantId, id);
+        tenantService.deleteTenantImageRef(deleteTenantImageRefRequest);
 
         final var eventBody = new TenantImageRefDeletedEventBodyModel(tenantId, id);
         final var eventModel = eventModelFactory.create(eventBody);

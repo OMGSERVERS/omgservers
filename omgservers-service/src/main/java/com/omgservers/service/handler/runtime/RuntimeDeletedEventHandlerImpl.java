@@ -91,7 +91,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                     log.info("Runtime was deleted, " +
                                     "id={}, " +
                                     "type={}, " +
-                                    "version={}/{}",
+                                    "deploymentId={}/{}",
                             runtime.getId(),
                             runtime.getQualifier(),
                             runtime.getTenantId(),

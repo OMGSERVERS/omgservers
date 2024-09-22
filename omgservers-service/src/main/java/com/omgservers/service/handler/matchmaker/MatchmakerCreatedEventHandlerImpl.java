@@ -1,6 +1,5 @@
 package com.omgservers.service.handler.matchmaker;
 
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
@@ -10,8 +9,6 @@ import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchma
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
@@ -56,14 +53,14 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
-                    log.info("Matchmaker was created, id={}, version={}/{}",
+                    log.info("Matchmaker was created, id={}, deploymentId={}/{}",
                             matchmaker.getId(),
                             matchmaker.getTenantId(),
                             matchmaker.getDeploymentId());
 
                     final var idempotencyKey = event.getId().toString();
 
-                    return syncVersionMatchmakerRef(matchmaker, idempotencyKey)
+                    return syncTenantMatchmakerRef(matchmaker, idempotencyKey)
                             .flatMap(created -> syncMatchmakerJob(matchmakerId, idempotencyKey));
                 })
                 .replaceWithVoid();
@@ -75,30 +72,19 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
-    Uni<Boolean> syncVersionMatchmakerRef(final MatchmakerModel matchmaker, final String idempotencyKey) {
+    Uni<Boolean> syncTenantMatchmakerRef(final MatchmakerModel matchmaker, final String idempotencyKey) {
         final var tenantId = matchmaker.getTenantId();
-        final var versionId = matchmaker.getDeploymentId();
+        final var deploymentId = matchmaker.getDeploymentId();
         final var matchmakerId = matchmaker.getId();
-        final var versionMatchmakerRef = tenantMatchmakerRefModelFactory.create(tenantId,
-                versionId,
+        final var tenantMatchmakerRef = tenantMatchmakerRefModelFactory.create(tenantId,
+                deploymentId,
                 matchmakerId,
                 idempotencyKey);
-        final var request = new SyncTenantMatchmakerRefRequest(versionMatchmakerRef);
-        return tenantModule.getTenantService().syncVersionMatchmakerRef(request)
+        final var request = new SyncTenantMatchmakerRefRequest(tenantMatchmakerRef);
+        return tenantModule.getTenantService().syncTenantMatchmakerRefWithIdempotency(request)
                 .map(SyncTenantMatchmakerRefResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(Boolean.FALSE)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", versionMatchmakerRef, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
+                .recoverWithItem(Boolean.FALSE);
     }
 
     Uni<Boolean> syncMatchmakerJob(final Long matchmakerId,
