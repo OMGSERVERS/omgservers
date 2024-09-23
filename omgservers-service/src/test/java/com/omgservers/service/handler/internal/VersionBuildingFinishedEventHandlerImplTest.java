@@ -26,10 +26,11 @@ class VersionBuildingFinishedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
+        final var tenantProject = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var tenantVersion = testDataFactory.getTenantTestDataFactory()
+                .createTenantVersion(tenantProject);
 
-        final var eventBody = new VersionBuildingFinishedEventBodyModel(tenant.getId(), version.getId());
+        final var eventBody = new VersionBuildingFinishedEventBodyModel(tenant.getId(), tenantVersion.getId());
         final var eventModel = eventModelFactory.create(eventBody);
 
         versionBuildingFinishedEventHandlerImplTestInterface.handle(eventModel);

@@ -28,7 +28,7 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, created, modified, tenant_id, version_id, deleted
+                        select id, idempotency_key, created, modified, tenant_id, deployment_id, deleted
                         from $schema.tab_matchmaker
                         where id = $1
                         limit 1

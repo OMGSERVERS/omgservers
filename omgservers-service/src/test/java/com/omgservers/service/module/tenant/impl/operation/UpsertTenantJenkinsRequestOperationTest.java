@@ -5,6 +5,7 @@ import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
@@ -12,9 +13,10 @@ import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertStageOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantDeploymentOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionLobbyRequestOperationTestInterface;
-import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantVersionOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -39,7 +41,10 @@ class UpsertTenantJenkinsRequestOperationTest extends Assertions {
     UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
-    UpsertVersionOperationTestInterface upsertVersionOperation;
+    UpsertTenantVersionOperationTestInterface upsertVersionOperation;
+
+    @Inject
+    UpsertTenantDeploymentOperationTestInterface upsertTenantDeploymentOperation;
 
     @Inject
     UpsertVersionLobbyRequestOperationTestInterface upsertVersionLobbyRequestOperation;
@@ -57,6 +62,9 @@ class UpsertTenantJenkinsRequestOperationTest extends Assertions {
     TenantVersionModelFactory tenantVersionModelFactory;
 
     @Inject
+    TenantDeploymentModelFactory tenantDeploymentModelFactory;
+
+    @Inject
     TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
 
     @Inject
@@ -72,13 +80,17 @@ class UpsertTenantJenkinsRequestOperationTest extends Assertions {
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+                project.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, version);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                stage.getId(),
+                version.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
 
         final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenant.getId(),
-                version.getId());
+                tenantDeployment.getId());
         final var changeContext = upsertVersionLobbyRequestOperation.upsertVersionLobbyRequest(shard,
                 versionLobbyRequest);
         assertTrue(changeContext.getResult());
@@ -95,11 +107,16 @@ class UpsertTenantJenkinsRequestOperationTest extends Assertions {
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+                project.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
-        final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenant.getId(), version.getId());
+        upsertVersionOperation.upsertTenantVersion(shard, version);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                stage.getId(),
+                version.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
+        final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenant.getId(),
+                tenantDeployment.getId());
         upsertVersionLobbyRequestOperation.upsertVersionLobbyRequest(shard, versionLobbyRequest);
 
         final var changeContext = upsertVersionLobbyRequestOperation.upsertVersionLobbyRequest(shard,
@@ -126,14 +143,20 @@ class UpsertTenantJenkinsRequestOperationTest extends Assertions {
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+                project.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
-        final var versionLobbyRequest1 = tenantLobbyRequestModelFactory.create(tenant.getId(), version.getId());
+        upsertVersionOperation.upsertTenantVersion(shard, version);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                stage.getId(),
+                version.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
+        final var versionLobbyRequest1 = tenantLobbyRequestModelFactory.create(tenant.getId(),
+                tenantDeployment.getId());
         upsertVersionLobbyRequestOperation.upsertVersionLobbyRequest(shard, versionLobbyRequest1);
 
-        final var versionLobbyRequest2 = tenantLobbyRequestModelFactory.create(tenant.getId(), version.getId(),
+        final var versionLobbyRequest2 = tenantLobbyRequestModelFactory.create(tenant.getId(),
+                tenantDeployment.getId(),
                 versionLobbyRequest1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->

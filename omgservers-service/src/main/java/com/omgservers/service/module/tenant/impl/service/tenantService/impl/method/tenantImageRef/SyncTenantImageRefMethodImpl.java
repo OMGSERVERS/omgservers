@@ -1,11 +1,11 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImageRef;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
 import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.tenant.impl.operation.tenantVersion.VerifyTenantVersionExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantImageRef.UpsertTenantImageRefOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantVersion.VerifyTenantVersionExistsOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -43,8 +43,8 @@ class SyncTenantImageRefMethodImpl implements SyncTenantImageRefMethod {
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantVersionExistsOperation
                                             .execute(sqlConnection, shard, tenantId, versionId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantImageRefOperation
                                                             .execute(changeContext,
                                                                     sqlConnection,

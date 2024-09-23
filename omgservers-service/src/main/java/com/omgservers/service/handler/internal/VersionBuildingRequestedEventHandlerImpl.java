@@ -1,12 +1,12 @@
 package com.omgservers.service.handler.internal;
 
+import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
@@ -52,23 +52,17 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, versionId)
                 .flatMap(tenantVersion -> {
-                    final var tenantStageId = tenantVersion.getProjectId();
-                    return getTenantStage(tenantId, tenantStageId)
-                            .flatMap(stage -> {
-                                final var tenantProjectId = stage.getProjectId();
-                                log.info("Version building was requested, tenantVersion={}/{}", tenantId, versionId);
-
-                                // TODO: detect job qualifier based on tenantVersion
-                                return buildLuaJitRuntime(tenantProjectId, tenantVersion, idempotencyKey);
-                            });
+                    final var tenantProjectId = tenantVersion.getProjectId();
+                    log.info("Version building was requested, tenantVersion={}/{}", tenantId, versionId);
+                    return buildLuaJitRuntime(tenantProjectId, tenantVersion, idempotencyKey);
                 })
                 .replaceWithVoid();
     }
 
-    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
-        final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantStage(request)
-                .map(GetTenantStageResponse::getTenantStage);
+    Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
+        final var request = new GetTenantProjectRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantProject(request)
+                .map(GetTenantProjectResponse::getTenantProject);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {

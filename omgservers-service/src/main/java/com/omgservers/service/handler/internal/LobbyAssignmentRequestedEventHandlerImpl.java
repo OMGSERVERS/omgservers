@@ -74,7 +74,7 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                     return getLobby(lobbyId)
                             .flatMap(lobby -> {
                                 final var runtimeId = lobby.getRuntimeId();
-                                return syncRuntimeAssignment(runtimeId, clientId, event.getIdempotencyKey())
+                                return syncRuntimeAssignment(runtimeId, clientId, idempotencyKey)
                                         .replaceWithVoid();
                             });
                 })

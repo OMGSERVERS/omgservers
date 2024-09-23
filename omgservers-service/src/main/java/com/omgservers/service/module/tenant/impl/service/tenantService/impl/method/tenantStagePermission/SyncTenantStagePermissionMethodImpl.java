@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantStagePermission;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.tenantStage.VerifyTenantStageExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantStagePermission.UpsertTenantStagePermissionOperation;
@@ -42,8 +42,8 @@ class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMe
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                                     verifyTenantStageExistsOperation.execute(sqlConnection, shard, tenantId, stageId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantStagePermissionOperation.execute(
                                                             changeContext,
                                                             sqlConnection,

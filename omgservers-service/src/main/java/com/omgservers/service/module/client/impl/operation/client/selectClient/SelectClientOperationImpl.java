@@ -29,7 +29,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
                 shard,
                 """
                         select
-                            id, idempotency_key, created, modified, user_id, player_id, tenant_id, version_id, deleted
+                            id, idempotency_key, created, modified, user_id, player_id, tenant_id, deployment_id, deleted
                         from $schema.tab_client
                         where id = $1
                         limit 1

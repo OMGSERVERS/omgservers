@@ -1,19 +1,18 @@
 package com.omgservers.service.module.tenant.impl.operation;
 
-import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.DeleteVersionOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertStageOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantOperationTestInterface;
-import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantVersionOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +23,7 @@ import java.util.Base64;
 
 @Slf4j
 @QuarkusTest
-class DeleteTenantDeploymentOperationTest extends Assertions {
+class DeleteTenantVersionOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject
@@ -40,7 +39,7 @@ class DeleteTenantDeploymentOperationTest extends Assertions {
     UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
-    UpsertVersionOperationTestInterface upsertVersionOperation;
+    UpsertTenantVersionOperationTestInterface upsertVersionOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -57,9 +56,6 @@ class DeleteTenantDeploymentOperationTest extends Assertions {
     @Inject
     GenerateIdOperation generateIdOperation;
 
-    @Inject
-    PgPool pgPool;
-
     @Test
     void givenVersion_whenExecute_thenDeleted() {
         final var shard = 0;
@@ -69,10 +65,11 @@ class DeleteTenantDeploymentOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
-        final var version = tenantVersionModelFactory.create(tenant.getId(), stage.getId(), TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+        final var version =
+                tenantVersionModelFactory.create(tenant.getId(), project.getId(), TenantVersionConfigDto.create(),
+                        Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
         final var id = version.getId();
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, version);
 
         final var changeContext = deleteVersionOperation.deleteVersion(shard, tenant.getId(), id);
         assertTrue(changeContext.getResult());

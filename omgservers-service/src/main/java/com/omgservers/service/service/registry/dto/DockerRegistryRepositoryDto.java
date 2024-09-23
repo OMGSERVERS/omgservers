@@ -16,6 +16,6 @@ public class DockerRegistryRepositoryDto {
 
     @Override
     public String toString() {
-        return String.format("%s/%d/%d/%d/%s", namespace, tenantId, projectId, container.getQualifier());
+        return String.format("%s/%d/%d/%s", namespace, tenantId, projectId, container.getQualifier());
     }
 }

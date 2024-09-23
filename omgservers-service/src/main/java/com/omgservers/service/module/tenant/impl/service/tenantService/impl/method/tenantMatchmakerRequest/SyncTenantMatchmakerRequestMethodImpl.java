@@ -1,11 +1,12 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRequest;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.tenant.impl.operation.tenantVersion.VerifyTenantVersionExistsOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.VerifyTenantDeploymentExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantMatchmakerRequest.UpsertTenantMatchmakerRequestOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantVersion.VerifyTenantVersionExistsOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -21,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 class SyncTenantMatchmakerRequestMethodImpl implements SyncTenantMatchmakerRequestMethod {
 
     final UpsertTenantMatchmakerRequestOperation upsertTenantMatchmakerRequestOperation;
+    final VerifyTenantDeploymentExistsOperation verifyTenantDeploymentExistsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final VerifyTenantVersionExistsOperation verifyTenantVersionExistsOperation;
 
     final PgPool pgPool;
 
@@ -35,17 +36,17 @@ class SyncTenantMatchmakerRequestMethodImpl implements SyncTenantMatchmakerReque
         final var shardKey = request.getRequestShardKey();
         final var versionMatchmakerRequest = request.getTenantMatchmakerRequest();
         final var tenantId = versionMatchmakerRequest.getTenantId();
-        final var versionId = versionMatchmakerRequest.getDeploymentId();
+        final var deploymentId = versionMatchmakerRequest.getDeploymentId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> verifyTenantVersionExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, versionId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                    (changeContext, sqlConnection) -> verifyTenantDeploymentExistsOperation
+                                            .execute(sqlConnection, shard, tenantId, deploymentId)
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantMatchmakerRequestOperation
                                                             .execute(
                                                                     changeContext,
@@ -55,7 +56,7 @@ class SyncTenantMatchmakerRequestMethodImpl implements SyncTenantMatchmakerReque
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "version does not exist or was deleted, id=" + versionId);
+                                                            "version does not exist or was deleted, id=" + deploymentId);
                                                 }
                                             })
                             )

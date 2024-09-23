@@ -74,7 +74,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                 permission,
                 idempotencyKey + "/" + builderUserId + "/" + permission);
         final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-        return tenantModule.getTenantService().syncTenantProjectPermission(request)
+        return tenantModule.getTenantService().syncTenantProjectPermissionWithIdempotency(request)
                 .replaceWith(projectPermission);
     }
 
@@ -89,7 +89,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                 permission,
                 idempotencyKey + "/" + serviceUserId + "/" + permission);
         final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-        return tenantModule.getTenantService().syncTenantProjectPermission(request)
+        return tenantModule.getTenantService().syncTenantProjectPermissionWithIdempotency(request)
                 .replaceWith(projectPermission);
     }
 }

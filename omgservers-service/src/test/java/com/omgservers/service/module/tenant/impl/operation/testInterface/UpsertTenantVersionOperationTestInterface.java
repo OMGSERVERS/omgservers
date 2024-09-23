@@ -14,19 +14,19 @@ import java.time.Duration;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class UpsertVersionOperationTestInterface {
+public class UpsertTenantVersionOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
     final UpsertTenantVersionOperation upsertTenantVersionOperation;
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> upsertVersion(final int shard,
-                                               final TenantVersionModel version) {
+    public ChangeContext<Boolean> upsertTenantVersion(final int shard,
+                                                      final TenantVersionModel tenantVersion) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertTenantVersionOperation
-                                    .execute(changeContext, sqlConnection, shard, version))
+                                    .execute(changeContext, sqlConnection, shard, tenantVersion))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

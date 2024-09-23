@@ -26,11 +26,11 @@ class VersionBuildingFailedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
+        final var tenantProject = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var tenantStage = testDataFactory.getTenantTestDataFactory().createStage(tenantProject);
+        final var tenantVersion = testDataFactory.getTenantTestDataFactory().createTenantVersion(tenantProject);
 
-        final var eventBody = new VersionBuildingFailedEventBodyModel(tenant.getId(), version.getId());
+        final var eventBody = new VersionBuildingFailedEventBodyModel(tenant.getId(), tenantVersion.getId());
         final var eventModel = eventModelFactory.create(eventBody);
 
         versionBuildingFailedEventHandlerImplTestInterface.handle(eventModel);

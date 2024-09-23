@@ -28,13 +28,13 @@ class ViewTenantLobbyRefsMethodImpl implements ViewTenantLobbyRefsMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getDeploymentId();
+                    final var tenantDeploymentId = request.getDeploymentId();
                     return pgPool.withTransaction(
                             sqlConnection -> selectActiveTenantLobbyRefsByTenantDeploymentIdOperation
                                     .execute(sqlConnection,
                                             shard.shard(),
                                             tenantId,
-                                            versionId
+                                            tenantDeploymentId
                                     )
                     );
                 })

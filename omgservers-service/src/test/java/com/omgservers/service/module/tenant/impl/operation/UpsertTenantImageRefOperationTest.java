@@ -5,6 +5,7 @@ import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
@@ -12,9 +13,10 @@ import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertStageOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantDeploymentOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionLobbyRefOperationTestInterface;
-import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantVersionOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -39,7 +41,10 @@ class UpsertTenantImageRefOperationTest extends Assertions {
     UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
-    UpsertVersionOperationTestInterface upsertVersionOperation;
+    UpsertTenantVersionOperationTestInterface upsertVersionOperation;
+
+    @Inject
+    UpsertTenantDeploymentOperationTestInterface upsertTenantDeploymentOperation;
 
     @Inject
     UpsertVersionLobbyRefOperationTestInterface upsertVersionLobbyRefOperation;
@@ -57,6 +62,9 @@ class UpsertTenantImageRefOperationTest extends Assertions {
     TenantVersionModelFactory tenantVersionModelFactory;
 
     @Inject
+    TenantDeploymentModelFactory tenantDeploymentModelFactory;
+
+    @Inject
     TenantLobbyRefModelFactory tenantLobbyRefModelFactory;
 
     @Inject
@@ -72,13 +80,17 @@ class UpsertTenantImageRefOperationTest extends Assertions {
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+                project.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, version);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                stage.getId(),
+                version.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
 
         final var versionLobbyRef = tenantLobbyRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                tenantDeployment.getId(),
                 lobbyId());
         final var changeContext = upsertVersionLobbyRefOperation.upsertVersionLobbyRef(shard,
                 versionLobbyRef);
@@ -96,12 +108,16 @@ class UpsertTenantImageRefOperationTest extends Assertions {
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+                project.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, version);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                stage.getId(),
+                version.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
         final var versionLobbyRef = tenantLobbyRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                tenantDeployment.getId(),
                 lobbyId());
         upsertVersionLobbyRefOperation.upsertVersionLobbyRef(shard, versionLobbyRef);
 
@@ -129,17 +145,21 @@ class UpsertTenantImageRefOperationTest extends Assertions {
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+                project.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, version);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                stage.getId(),
+                version.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
         final var versionLobbyRef1 = tenantLobbyRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                tenantDeployment.getId(),
                 lobbyId());
         upsertVersionLobbyRefOperation.upsertVersionLobbyRef(shard, versionLobbyRef1);
 
         final var versionLobbyRef2 = tenantLobbyRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                project.getId(),
                 lobbyId(),
                 versionLobbyRef1.getIdempotencyKey());
 

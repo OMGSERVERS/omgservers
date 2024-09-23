@@ -31,8 +31,8 @@ class TenantVersionDeletedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
+        final var project = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
 
         final var tenantId = version.getTenantId();
         final var id = version.getId();

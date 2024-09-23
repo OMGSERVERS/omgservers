@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantStage;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.tenantProject.VerifyTenantProjectExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantStage.UpsertTenantStageOperation;
@@ -43,8 +43,8 @@ class SyncTenantStageMethodImpl implements SyncTenantStageMethod {
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantProjectExistsOperation
                                             .execute(sqlConnection, shard, tenantId, projectId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantStageOperation.execute(changeContext,
                                                             sqlConnection,
                                                             shard,

@@ -427,6 +427,24 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    public Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermissionWithIdempotency(
+            SyncTenantProjectPermissionRequest request) {
+        return syncTenantProjectPermission(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.warn("Idempotency was violated, object={}, {}", request.getTenantProjectPermission(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncTenantProjectPermissionResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
             @Valid final DeleteTenantProjectPermissionRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,

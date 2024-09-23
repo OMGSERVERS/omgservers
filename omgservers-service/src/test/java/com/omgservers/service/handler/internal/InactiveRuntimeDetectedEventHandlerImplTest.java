@@ -26,11 +26,17 @@ class InactiveRuntimeDetectedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
-        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(version);
-        final var lobbyRuntime = testDataFactory.getRuntimeTestDataFactory()
-                .createLobbyRuntime(tenant, version, lobby);
+        final var tenantProject = testDataFactory.getTenantTestDataFactory()
+                .createTenantProject(tenant);
+        final var tenantStage = testDataFactory.getTenantTestDataFactory().createStage(tenantProject);
+        final var tenantVersion = testDataFactory.getTenantTestDataFactory()
+                .createTenantVersion(tenantProject);
+        final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
+                .createTenantDeployment(tenantStage, tenantVersion);
+        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(tenantDeployment);
+        final var lobbyRuntime = testDataFactory.getRuntimeTestDataFactory().createLobbyRuntime(tenant,
+                tenantDeployment,
+                lobby);
 
         final var runtimeId = lobbyRuntime.getId();
 

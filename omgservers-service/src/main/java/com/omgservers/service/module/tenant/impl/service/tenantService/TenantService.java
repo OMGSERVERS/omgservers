@@ -185,6 +185,9 @@ public interface TenantService {
     Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(
             @Valid SyncTenantProjectPermissionRequest request);
 
+    Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermissionWithIdempotency(
+            @Valid SyncTenantProjectPermissionRequest request);
+
     Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
             @Valid DeleteTenantProjectPermissionRequest request);
 

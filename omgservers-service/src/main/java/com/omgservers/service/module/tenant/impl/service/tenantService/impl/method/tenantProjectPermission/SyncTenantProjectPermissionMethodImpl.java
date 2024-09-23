@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantProjectPermission;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.tenantProject.VerifyTenantProjectExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantProjectPermission.UpsertTenantProjectPermissionOperation;
@@ -43,8 +43,8 @@ class SyncTenantProjectPermissionMethodImpl implements SyncTenantProjectPermissi
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantProjectExistsOperation
                                             .execute(sqlConnection, shard, tenantId, projectId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantProjectPermissionOperation.execute(
                                                             changeContext,
                                                             sqlConnection,

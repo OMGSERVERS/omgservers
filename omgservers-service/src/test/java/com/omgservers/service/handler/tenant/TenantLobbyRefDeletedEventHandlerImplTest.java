@@ -31,14 +31,16 @@ class TenantLobbyRefDeletedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
+        final var project = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
         final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
+        final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
+        final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
+                .createTenantDeployment(stage, version);
         final var versionLobbyRequest = testDataFactory.getTenantTestDataFactory()
-                .createVersionLobbyRequest(version);
+                .createTenantLobbyRequest(tenantDeployment);
         final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(versionLobbyRequest);
         final var versionLobbyRef = testDataFactory.getTenantTestDataFactory()
-                .createVersionLobbyRef(version, lobby);
+                .createTenantLobbyRef(tenantDeployment, lobby);
 
         final var tenantId = versionLobbyRef.getTenantId();
         final var id = versionLobbyRef.getId();

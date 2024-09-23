@@ -1,10 +1,10 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantLobbyRequest;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.tenant.impl.operation.tenantVersion.VerifyTenantVersionExistsOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.VerifyTenantDeploymentExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantLobbyRequest.UpsertTenantLobbyRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -20,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncTenantLobbyRequestMethodImpl implements SyncTenantLobbyRequestMethod {
 
+    final VerifyTenantDeploymentExistsOperation verifyTenantDeploymentExistsOperation;
     final UpsertTenantLobbyRequestOperation upsertTenantLobbyRequestOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final VerifyTenantVersionExistsOperation verifyTenantVersionExistsOperation;
 
     final PgPool pgPool;
 
@@ -34,17 +34,17 @@ class SyncTenantLobbyRequestMethodImpl implements SyncTenantLobbyRequestMethod {
         final var shardKey = request.getRequestShardKey();
         final var versionLobbyRequest = request.getTenantLobbyRequest();
         final var tenantId = versionLobbyRequest.getTenantId();
-        final var versionId = versionLobbyRequest.getDeploymentId();
+        final var deploymentId = versionLobbyRequest.getDeploymentId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> verifyTenantVersionExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, versionId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                    (changeContext, sqlConnection) -> verifyTenantDeploymentExistsOperation
+                                            .execute(sqlConnection, shard, tenantId, deploymentId)
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantLobbyRequestOperation
                                                             .execute(changeContext,
                                                                     sqlConnection,
@@ -53,7 +53,8 @@ class SyncTenantLobbyRequestMethodImpl implements SyncTenantLobbyRequestMethod {
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "version does not exist or was deleted, id=" + versionId);
+                                                            "tenant deployment does not exist or was deleted, id=" +
+                                                                    deploymentId);
                                                 }
                                             })
 

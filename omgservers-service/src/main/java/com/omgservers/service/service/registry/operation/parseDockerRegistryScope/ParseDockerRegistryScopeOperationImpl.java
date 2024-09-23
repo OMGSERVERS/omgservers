@@ -61,8 +61,8 @@ class ParseDockerRegistryScopeOperationImpl implements ParseDockerRegistryScopeO
 
             final var resourceName = new DockerRegistryResourceNameDto();
             final var resourceNameParts = resourceNameString.split("/");
-            if (resourceNameParts.length == 6) {
-                // hostname:5000/omgservers/245515657456648192/231077687903387648/231939082811342849/universal
+            if (resourceNameParts.length == 5) {
+                // hostname:5000/omgservers/245515657456648192/231077687903387648/universal
                 final var hostnameDelimiterIndex = resourceNameString.indexOf("/");
                 if (hostnameDelimiterIndex == -1) {
                     log.debug("Resource scope is ignored, hostname delimiter wasn't found, " +
@@ -76,7 +76,7 @@ class ParseDockerRegistryScopeOperationImpl implements ParseDockerRegistryScopeO
                 final var repository =
                         parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString);
                 resourceName.setRepository(repository);
-            } else if (resourceNameParts.length == 5) {
+            } else if (resourceNameParts.length == 4) {
                 final var repository = parseDockerRepositoryOperation
                         .parseDockerRegistryRepository(resourceNameString);
                 resourceName.setRepository(repository);

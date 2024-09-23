@@ -31,12 +31,17 @@ class MatchmakerMatchDeletedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
-        final var matchmaker = testDataFactory.getMatchmakerTestDataFactory().createMatchmaker(tenant, version);
-        final var matchmakerMatch = testDataFactory.getMatchmakerTestDataFactory().createMatchmakerMatch(matchmaker);
+        final var project = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
+        final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
+        final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
+                .createTenantDeployment(stage, version);
+        final var matchmaker = testDataFactory.getMatchmakerTestDataFactory().createMatchmaker(tenant,
+                tenantDeployment);
+        final var matchmakerMatch = testDataFactory.getMatchmakerTestDataFactory()
+                .createMatchmakerMatch(matchmaker);
         final var matchRuntime = testDataFactory.getRuntimeTestDataFactory()
-                .createMatchRuntime(tenant, version, matchmakerMatch);
+                .createMatchRuntime(tenant, tenantDeployment, matchmakerMatch);
 
         final var matchmakerId = matchmakerMatch.getMatchmakerId();
         final var id = matchmakerMatch.getId();

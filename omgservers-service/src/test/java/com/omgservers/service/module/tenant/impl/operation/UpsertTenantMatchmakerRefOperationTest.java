@@ -1,20 +1,22 @@
 package com.omgservers.service.module.tenant.impl.operation;
 
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
+import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.factory.tenant.TenantModelFactory;
-import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertStageOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantDeploymentOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantVersionOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionMatchmakerRefOperationTestInterface;
-import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -39,7 +41,10 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
     UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
-    UpsertVersionOperationTestInterface upsertVersionOperation;
+    UpsertTenantVersionOperationTestInterface upsertVersionOperation;
+
+    @Inject
+    UpsertTenantDeploymentOperationTestInterface upsertTenantDeploymentOperation;
 
     @Inject
     UpsertVersionMatchmakerRefOperationTestInterface upsertVersionMatchmakerRefOperation;
@@ -57,6 +62,9 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
     TenantVersionModelFactory tenantVersionModelFactory;
 
     @Inject
+    TenantDeploymentModelFactory tenantDeploymentModelFactory;
+
+    @Inject
     TenantMatchmakerRefModelFactory TenantMatchmakerRefModelFactory;
 
     @Inject
@@ -67,18 +75,22 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = tenantProjectModelFactory.create(tenant.getId());
-        upsertProjectOperation.upsertProject(shard, project);
-        final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
-        upsertStageOperation.upsertStage(shard, stage);
-        final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+        final var tenantProject = tenantProjectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, tenantProject);
+        final var tenantStage = tenantStageModelFactory.create(tenant.getId(), tenantProject.getId());
+        upsertStageOperation.upsertStage(shard, tenantStage);
+        final var tenantVersion = tenantVersionModelFactory.create(tenant.getId(),
+                tenantProject.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, tenantVersion);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                tenantStage.getId(),
+                tenantVersion.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
 
         final var VersionMatchmakerRef = TenantMatchmakerRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                tenantDeployment.getId(),
                 matchmakerId());
         final var changeContext = upsertVersionMatchmakerRefOperation.upsertVersionMatchmakerRef(shard,
                 VersionMatchmakerRef);
@@ -91,17 +103,21 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = tenantProjectModelFactory.create(tenant.getId());
-        upsertProjectOperation.upsertProject(shard, project);
-        final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
-        upsertStageOperation.upsertStage(shard, stage);
-        final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+        final var tenantProject = tenantProjectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, tenantProject);
+        final var tenantStage = tenantStageModelFactory.create(tenant.getId(), tenantProject.getId());
+        upsertStageOperation.upsertStage(shard, tenantStage);
+        final var tenantVersion = tenantVersionModelFactory.create(tenant.getId(),
+                tenantProject.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, tenantVersion);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                tenantStage.getId(),
+                tenantVersion.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
         final var VersionMatchmakerRef = TenantMatchmakerRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                tenantDeployment.getId(),
                 matchmakerId());
         upsertVersionMatchmakerRefOperation.upsertVersionMatchmakerRef(shard, VersionMatchmakerRef);
 
@@ -127,22 +143,26 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
         final var shard = 0;
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
-        final var project = tenantProjectModelFactory.create(tenant.getId());
-        upsertProjectOperation.upsertProject(shard, project);
-        final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
-        upsertStageOperation.upsertStage(shard, stage);
-        final var version = tenantVersionModelFactory.create(tenant.getId(),
-                stage.getId(),
+        final var tenantProject = tenantProjectModelFactory.create(tenant.getId());
+        upsertProjectOperation.upsertProject(shard, tenantProject);
+        final var tenantStage = tenantStageModelFactory.create(tenant.getId(), tenantProject.getId());
+        upsertStageOperation.upsertStage(shard, tenantStage);
+        final var tenantVersion = tenantVersionModelFactory.create(tenant.getId(),
+                tenantProject.getId(),
                 TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version);
+        upsertVersionOperation.upsertTenantVersion(shard, tenantVersion);
+        final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
+                tenantStage.getId(),
+                tenantVersion.getId());
+        upsertTenantDeploymentOperation.upsertTenantDeployment(shard, tenantDeployment);
         final var VersionMatchmakerRef1 = TenantMatchmakerRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                tenantDeployment.getId(),
                 matchmakerId());
         upsertVersionMatchmakerRefOperation.upsertVersionMatchmakerRef(shard, VersionMatchmakerRef1);
 
         final var VersionMatchmakerRef2 = TenantMatchmakerRefModelFactory.create(tenant.getId(),
-                version.getId(),
+                tenantDeployment.getId(),
                 matchmakerId(),
                 VersionMatchmakerRef1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->

@@ -22,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
 
     final UpsertTenantPermissionOperation upsertTenantPermissionOperation;
+    final VerifyTenantExistsOperation verifyTenantExistsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final VerifyTenantExistsOperation verifyTenantExistsOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
@@ -40,8 +40,8 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                                 (changeContext, sqlConnection) -> verifyTenantExistsOperation
                                         .execute(sqlConnection, shardModel.shard(), tenantId)
-                                        .flatMap(has -> {
-                                            if (has) {
+                                        .flatMap(exists -> {
+                                            if (exists) {
                                                 return upsertTenantPermissionOperation.execute(
                                                         changeContext,
                                                         sqlConnection,

@@ -28,7 +28,7 @@ class SelectLobbyOperationImpl implements SelectLobbyOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, created, modified, tenant_id, version_id, runtime_id, deleted
+                        select id, idempotency_key, created, modified, tenant_id, deployment_id, runtime_id, deleted
                         from $schema.tab_lobby
                         where id = $1
                         limit 1

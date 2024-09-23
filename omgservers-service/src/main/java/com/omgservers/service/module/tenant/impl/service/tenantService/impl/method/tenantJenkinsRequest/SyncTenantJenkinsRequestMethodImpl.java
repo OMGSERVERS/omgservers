@@ -21,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 class SyncTenantJenkinsRequestMethodImpl implements SyncTenantJenkinsRequestMethod {
 
     final UpsertTenantJenkinsRequestOperation upsertTenantJenkinsRequestOperation;
+    final VerifyTenantVersionExistsOperation verifyTenantVersionExistsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final VerifyTenantVersionExistsOperation verifyTenantVersionExistsOperation;
 
     final PgPool pgPool;
 

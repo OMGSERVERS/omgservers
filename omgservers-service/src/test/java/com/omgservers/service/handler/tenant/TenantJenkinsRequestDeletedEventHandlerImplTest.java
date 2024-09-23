@@ -32,10 +32,10 @@ class TenantJenkinsRequestDeletedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
+        final var project = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
         final var versionJenkinsRequest = testDataFactory.getTenantTestDataFactory()
-                .createVersionJenkinsRequest(version,
+                .createTenantJenkinsRequest(version,
                         TenantJenkinsRequestQualifierEnum.LUAJIT_RUNTIME_BUILDER_V1, 1);
 
         final var tenantId = versionJenkinsRequest.getTenantId();

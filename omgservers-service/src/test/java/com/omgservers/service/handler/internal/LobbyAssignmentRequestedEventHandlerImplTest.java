@@ -26,24 +26,31 @@ class LobbyAssignmentRequestedEventHandlerImplTest extends Assertions {
     @Test
     void givenHandler_whenRetry_thenFinished() {
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
-        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(version);
-        final var versionLobbyRef = testDataFactory.getTenantTestDataFactory().createVersionLobbyRef(version, lobby);
+        final var tenantProject = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var tenantStage = testDataFactory.getTenantTestDataFactory().createStage(tenantProject);
+        final var tenantVersion = testDataFactory.getTenantTestDataFactory().createTenantVersion(tenantProject);
+        final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
+                .createTenantDeployment(tenantStage, tenantVersion);
+        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(tenantDeployment);
+        final var tenantLobbyRef = testDataFactory.getTenantTestDataFactory()
+                .createTenantLobbyRef(tenantDeployment, lobby);
         final var lobbyRuntime = testDataFactory.getRuntimeTestDataFactory()
-                .createLobbyRuntime(tenant, version, lobby);
+                .createLobbyRuntime(tenant, tenantDeployment, lobby);
         final var lobbyRuntimeRef = testDataFactory.getLobbyTestDataFactory()
                 .createLobbyRuntimeRef(lobby, lobbyRuntime);
         final var user = testDataFactory.getUserTestDataFactory().createPlayerUser("password");
-        final var player = testDataFactory.getUserTestDataFactory().createUserPlayer(user, tenant, stage);
-        final var client = testDataFactory.getClientTestDataFactory().createClient(player, tenant, version);
+        final var player = testDataFactory.getUserTestDataFactory().createUserPlayer(user,
+                tenant,
+                tenantStage);
+        final var client = testDataFactory.getClientTestDataFactory().createClient(player,
+                tenant,
+                tenantDeployment);
 
         final var clientId = client.getId();
         final var tenantId = tenant.getId();
-        final var versionId = version.getId();
+        final var tenantDeploymentId = tenantDeployment.getId();
 
-        final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId, tenantId, versionId);
+        final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId, tenantId, tenantDeploymentId);
         final var eventModel = eventModelFactory.create(eventBody);
 
         lobbyAssignmentRequestedEventHandler.handle(eventModel);

@@ -1,10 +1,10 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.tenant.impl.operation.tenantVersion.VerifyTenantVersionExistsOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.VerifyTenantDeploymentExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantMatchmakerRef.UpsertTenantMatchmakerRefOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
@@ -20,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncTenantMatchmakerRefMethodImpl implements SyncTenantMatchmakerRefMethod {
 
+    final VerifyTenantDeploymentExistsOperation verifyTenantDeploymentExistsOperation;
     final UpsertTenantMatchmakerRefOperation upsertTenantMatchmakerRefOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final VerifyTenantVersionExistsOperation verifyTenantVersionExistsOperation;
 
     final PgPool pgPool;
 
@@ -35,17 +35,17 @@ class SyncTenantMatchmakerRefMethodImpl implements SyncTenantMatchmakerRefMethod
         final var shardKey = request.getRequestShardKey();
         final var versionMatchmakerRef = request.getTenantMatchmakerRef();
         final var tenantId = versionMatchmakerRef.getTenantId();
-        final var versionId = versionMatchmakerRef.getDeploymentId();
+        final var deploymentId = versionMatchmakerRef.getDeploymentId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> verifyTenantVersionExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, versionId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                    (changeContext, sqlConnection) -> verifyTenantDeploymentExistsOperation
+                                            .execute(sqlConnection, shard, tenantId, deploymentId)
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantMatchmakerRefOperation
                                                             .execute(
                                                                     changeContext,
@@ -55,7 +55,8 @@ class SyncTenantMatchmakerRefMethodImpl implements SyncTenantMatchmakerRefMethod
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "version does not exist or was deleted, id=" + versionId);
+                                                            "tenant deployment does not exist or was deleted, id=" +
+                                                                    deploymentId);
                                                 }
                                             })
                             )

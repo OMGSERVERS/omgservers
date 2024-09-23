@@ -27,13 +27,16 @@ class RuntimeDeploymentRequestedEventHandlerImplTest extends Assertions {
     void givenHandler_whenRetry_thenFinished() {
         final var defaultPool = testDataFactory.getPoolTestDataFactory().createDefaultPool();
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
-        final var versionImageRef = testDataFactory.getTenantTestDataFactory().createVersionImageRef(version);
-        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(version);
+        final var tenantProject = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var tenantStage = testDataFactory.getTenantTestDataFactory().createStage(tenantProject);
+        final var tenantVersion = testDataFactory.getTenantTestDataFactory().createTenantVersion(tenantProject);
+        final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
+                .createTenantDeployment(tenantStage, tenantVersion);
+        final var tenantImageRef = testDataFactory.getTenantTestDataFactory()
+                .createTenantImageRef(tenantVersion);
+        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(tenantDeployment);
         final var lobbyRuntime = testDataFactory.getRuntimeTestDataFactory()
-                .createLobbyRuntime(tenant, version, lobby);
+                .createLobbyRuntime(tenant, tenantDeployment, lobby);
 
         final var runtimeId = lobbyRuntime.getId();
 

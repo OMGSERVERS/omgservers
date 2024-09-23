@@ -1,6 +1,7 @@
 package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.model.lobby.LobbyModel;
@@ -29,10 +30,10 @@ public class RuntimeTestDataFactory {
     final RuntimeModelFactory runtimeModelFactory;
 
     public RuntimeModel createLobbyRuntime(final TenantModel tenant,
-                                           final TenantVersionModel version,
+                                           final TenantDeploymentModel tenantDeployment,
                                            final LobbyModel lobby) {
         final var tenantId = tenant.getId();
-        final var versionId = version.getId();
+        final var tenantDeploymentId = tenantDeployment.getId();
 
         final var runtimeId = lobby.getRuntimeId();
 
@@ -40,7 +41,7 @@ public class RuntimeTestDataFactory {
         config.setLobbyConfig(new RuntimeConfigDto.LobbyConfigDto(lobby.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 tenantId,
-                versionId,
+                tenantDeploymentId,
                 RuntimeQualifierEnum.LOBBY,
                 config);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
@@ -49,10 +50,10 @@ public class RuntimeTestDataFactory {
     }
 
     public RuntimeModel createMatchRuntime(final TenantModel tenant,
-                                           final TenantVersionModel version,
+                                           final TenantDeploymentModel tenantDeployment,
                                            final MatchmakerMatchModel match) {
         final var tenantId = tenant.getId();
-        final var versionId = version.getId();
+        final var tenantDeploymentId = tenantDeployment.getId();
 
         final var runtimeId = match.getRuntimeId();
 
@@ -60,7 +61,7 @@ public class RuntimeTestDataFactory {
         config.setMatchConfig(new RuntimeConfigDto.MatchConfigDto(match.getMatchmakerId(), match.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 tenantId,
-                versionId,
+                tenantDeploymentId,
                 RuntimeQualifierEnum.MATCH,
                 config);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);

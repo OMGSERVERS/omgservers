@@ -10,7 +10,7 @@ import com.omgservers.service.module.tenant.impl.operation.testInterface.SelectV
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertStageOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantOperationTestInterface;
-import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantVersionOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -40,7 +40,7 @@ class SelectTenantDeploymentOperationTest extends Assertions {
     UpsertStageOperationTestInterface upsertStageOperation;
 
     @Inject
-    UpsertVersionOperationTestInterface upsertVersionOperation;
+    UpsertTenantVersionOperationTestInterface upsertVersionOperation;
 
     @Inject
     TenantModelFactory tenantModelFactory;
@@ -69,9 +69,9 @@ class SelectTenantDeploymentOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
-        final var version1 = tenantVersionModelFactory.create(tenant.getId(), stage.getId(), TenantVersionConfigDto.create(),
+        final var version1 = tenantVersionModelFactory.create(tenant.getId(), project.getId(), TenantVersionConfigDto.create(),
                 Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
-        upsertVersionOperation.upsertVersion(shard, version1);
+        upsertVersionOperation.upsertTenantVersion(shard, version1);
 
         final var version2 = selectVersionOperation.selectVersion(shard, tenant.getId(), version1.getId(), false);
         assertEquals(version1, version2);

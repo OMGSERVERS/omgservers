@@ -30,13 +30,10 @@ class TenantImageRefDeletedEventHandlerImplTest extends Assertions {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createProject(tenant);
-        final var version = testDataFactory.getTenantTestDataFactory().createVersion(project);
-        final var versionImageRef = testDataFactory.getTenantTestDataFactory().createVersionImageRef(version);
+        final var testData = testDataFactory.createTestData();
 
-        final var tenantId = versionImageRef.getTenantId();
-        final var id = versionImageRef.getId();
+        final var tenantId = testData.getTenantImageRef().getTenantId();
+        final var id = testData.getTenantImageRef().getId();
 
         final var deleteTenantImageRefRequest = new DeleteTenantImageRefRequest(tenantId, id);
         tenantService.deleteTenantImageRef(deleteTenantImageRefRequest);
