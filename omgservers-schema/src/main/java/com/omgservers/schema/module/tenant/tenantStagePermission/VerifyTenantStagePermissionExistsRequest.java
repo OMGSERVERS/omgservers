@@ -1,6 +1,6 @@
 package com.omgservers.schema.module.tenant.tenantStagePermission;
 
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.module.ShardedRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class VerifyTenantStagePermissionExistsRequest implements ShardedRequest 
     Long userId;
 
     @NotNull
-    TenantStagePermissionEnum permission;
+    TenantStagePermissionQualifierEnum permission;
 
     @Override
     public String getRequestShardKey() {

@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.handleInternalRequest;
 
-import com.omgservers.schema.module.ShardedRequest;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.ShardedRequest;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -41,6 +41,9 @@ class HandleInternalRequestOperationImpl implements HandleInternalRequestOperati
                         log.trace("Handle request, request={}", request);
                         return handle.apply(request);
                     }
-                });
+                })
+                .onFailure()
+                .invoke(t -> log.warn("Internal request failed, request={}, {}:{}",
+                        request, t.getClass().getSimpleName(), t.getMessage()));
     }
 }

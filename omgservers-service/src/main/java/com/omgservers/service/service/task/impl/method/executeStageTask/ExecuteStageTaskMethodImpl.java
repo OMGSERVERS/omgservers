@@ -25,7 +25,7 @@ public class ExecuteStageTaskMethodImpl implements ExecuteStageTaskMethod {
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, stageId={}:{}, {}:{}",
-                            tenantId, stageId, t.getClass().getSimpleName(), t.getMessage());
+                            tenantId, stageId, t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .map(ExecuteStageTaskResponse::new);

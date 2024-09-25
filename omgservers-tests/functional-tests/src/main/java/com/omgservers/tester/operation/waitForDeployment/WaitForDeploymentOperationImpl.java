@@ -29,28 +29,33 @@ class WaitForDeploymentOperationImpl implements WaitForDeploymentOperation {
     public void waitForDeployment(final TestVersionDto testVersion) throws IOException {
         final var developerToken = testVersion.getDeveloperToken();
         final var tenantId = testVersion.getTenantId();
-        final var versionId = testVersion.getVersionId();
+        final var tenantDeploymentId = testVersion.getTenantDeploymentId();
 
-        var currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);
+        var currentVersionDashboard = developerApiTester
+                .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
         var attempt = 1;
         var maxAttempts = 12;
-        while ((currentVersionDashboard.getVersion().getLobbyRefs().isEmpty() ||
-                currentVersionDashboard.getVersion().getMatchmakerRefs().isEmpty()) &&
+        while ((currentVersionDashboard.getTenantLobbyRefs().isEmpty() ||
+                currentVersionDashboard.getTenantMatchmakerRefs().isEmpty()) &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for deployment, attempt={}", attempt);
                 Thread.sleep((long) attempt * 2 * 1000);
-                currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);
+                currentVersionDashboard = developerApiTester.getTenantDeploymentDashboard(developerToken,
+                        tenantId,
+                        tenantDeploymentId);
                 attempt++;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
+        final var tenantVersionId = testVersion.getTenantVersionId();
         if (attempt < maxAttempts) {
-            log.info("Version was deployed, version={}", versionId);
+            log.info("Version was deployed, tenantVersionId={}, tenantDeploymentId={}",
+                    tenantVersionId, tenantDeploymentId);
         } else {
-            throw new IllegalStateException("Version was not deployed, versionId=" + versionId);
+            throw new IllegalStateException("Version was not deployed, tenantVersionId=" + tenantVersionId);
         }
     }
 }

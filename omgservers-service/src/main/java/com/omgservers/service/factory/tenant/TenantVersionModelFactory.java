@@ -19,14 +19,14 @@ public class TenantVersionModelFactory {
 
     public TenantVersionModel create(
             final Long tenantId,
-            final Long projectId,
+            final Long tenantProjectId,
             final TenantVersionConfigDto versionConfig,
             final String base64Archive) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id,
                 tenantId,
-                projectId,
+                tenantProjectId,
                 versionConfig,
                 base64Archive,
                 idempotencyKey);
@@ -34,14 +34,14 @@ public class TenantVersionModelFactory {
 
     public TenantVersionModel create(
             final Long tenantId,
-            final Long projectId,
+            final Long tenantProjectId,
             final TenantVersionConfigDto versionConfig,
             final String base64Archive,
             final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id,
                 tenantId,
-                projectId,
+                tenantProjectId,
                 versionConfig,
                 base64Archive,
                 idempotencyKey);
@@ -49,22 +49,22 @@ public class TenantVersionModelFactory {
 
     public TenantVersionModel create(final Long id,
                                      final Long tenantId,
-                                     final Long projectId,
+                                     final Long tenantProjectId,
                                      final TenantVersionConfigDto versionConfig,
                                      final String base64Archive,
                                      final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-        final var version = new TenantVersionModel();
-        version.setId(id);
-        version.setTenantId(tenantId);
-        version.setProjectId(projectId);
-        version.setCreated(now);
-        version.setModified(now);
-        version.setIdempotencyKey(idempotencyKey);
-        version.setConfig(versionConfig);
-        version.setBase64Archive(base64Archive);
-        version.setDeleted(false);
-        return version;
+        final var tenantVersion = new TenantVersionModel();
+        tenantVersion.setId(id);
+        tenantVersion.setTenantId(tenantId);
+        tenantVersion.setProjectId(tenantProjectId);
+        tenantVersion.setCreated(now);
+        tenantVersion.setModified(now);
+        tenantVersion.setIdempotencyKey(idempotencyKey);
+        tenantVersion.setConfig(versionConfig);
+        tenantVersion.setBase64Archive(base64Archive);
+        tenantVersion.setDeleted(false);
+        return tenantVersion;
     }
 }

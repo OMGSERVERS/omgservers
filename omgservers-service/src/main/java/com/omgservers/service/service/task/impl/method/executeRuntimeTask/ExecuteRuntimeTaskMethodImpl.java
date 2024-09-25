@@ -24,7 +24,7 @@ public class ExecuteRuntimeTaskMethodImpl implements ExecuteRuntimeTaskMethod {
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, runtimeId={}, {}:{}",
-                            runtimeId, t.getClass().getSimpleName(), t.getMessage());
+                            runtimeId, t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .map(ExecuteRuntimeTaskResponse::new);

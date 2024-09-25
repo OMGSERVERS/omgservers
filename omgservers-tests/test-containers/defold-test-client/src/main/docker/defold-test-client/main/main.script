@@ -2,8 +2,8 @@ local omgplayer = require("omgservers.omgplayer")
 
 local service_url = os.getenv("OMGSERVERS_URL") or "http://localhost:8080"
 local tenant_id = os.getenv("OMGSERVERS_TENANT_ID")
-local stage_id = os.getenv("OMGSERVERS_STAGE_ID")
-local stage_secret = os.getenv("OMGSERVERS_STAGE_SECRET")
+local tenant_stage_id = os.getenv("OMGSERVERS_TENANT_STAGE_ID")
+local tenant_stage_secret = os.getenv("OMGSERVERS_TENANT_STAGE_SECRET")
 
 local function handle_event(self, event)
 	print(socket.gettime() .. " [GAMECLIENT] Event was received, event=" .. json.encode(event))
@@ -31,9 +31,9 @@ local function handle_event(self, event)
 		self.client_id = client_id
 		
 	elseif event_qualifier == omgplayer.constants.GREETED then
-		local version_id = event_body.version_id
-		local version_created = event_body.version_created
-		print(socket.gettime() .. " [GAMECLIENT] Client was greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
+		local tenant_version_id = event_body.tenant_version_id
+		local tenant_version_created = event_body.tenant_version_created
+		print(socket.gettime() .. " [GAMECLIENT] Client was greeted, tenant_version_id=" .. tenant_version_id .. ", tenant_version_created=" .. tenant_version_created)
 		
 	elseif event_qualifier == omgplayer.constants.ASSIGNED then
 		local runtime_qualifier = event_body.runtime_qualifier
@@ -63,7 +63,7 @@ local function handle_event(self, event)
 end
 
 function init(self)
-	omgplayer:init(service_url, tenant_id, stage_id, stage_secret, function(event) handle_event(self, event) end, true)
+	omgplayer:init(service_url, tenant_id, tenant_stage_id, tenant_stage_secret, function(event) handle_event(self, event) end, true)
 end
 
 function update(self, dt)

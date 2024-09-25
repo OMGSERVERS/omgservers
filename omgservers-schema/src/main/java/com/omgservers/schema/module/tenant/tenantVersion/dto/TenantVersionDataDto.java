@@ -1,8 +1,7 @@
 package com.omgservers.schema.module.tenant.tenantVersion.dto;
 
 import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
-import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
-import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
+import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,11 +19,8 @@ public class TenantVersionDataDto {
     TenantVersionModel tenantVersion;
 
     @NotNull
+    List<TenantJenkinsRequestModel> tenantJenkinsRequests;
+
+    @NotNull
     List<TenantImageRefModel> tenantImageRefs;
-
-    @NotNull
-    List<TenantLobbyRefModel> tenantLobbyRefs;
-
-    @NotNull
-    List<TenantMatchmakerRefModel> tenantMatchmakerRefs;
 }

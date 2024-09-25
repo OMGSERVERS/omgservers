@@ -10,6 +10,8 @@ import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
@@ -86,6 +88,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermission
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
@@ -165,6 +169,8 @@ public interface TenantService {
      */
 
     Uni<GetTenantProjectResponse> getTenantProject(@Valid GetTenantProjectRequest request);
+
+    Uni<GetTenantProjectDataResponse> getTenantProjectData(@Valid GetTenantProjectDataRequest request);
 
     Uni<SyncTenantProjectResponse> syncTenantProject(@Valid SyncTenantProjectRequest request);
 
@@ -278,6 +284,8 @@ public interface TenantService {
 
     Uni<GetTenantDeploymentResponse> getTenantDeployment(@Valid GetTenantDeploymentRequest request);
 
+    Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(@Valid GetTenantDeploymentDataRequest request);
+
     Uni<SelectTenantDeploymentResponse> selectTenantDeployment(@Valid SelectTenantDeploymentRequest request);
 
     Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(@Valid ViewTenantDeploymentsRequest request);
@@ -353,7 +361,8 @@ public interface TenantService {
 
     Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(@Valid SyncTenantMatchmakerRefRequest request);
 
-    Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRefWithIdempotency(@Valid SyncTenantMatchmakerRefRequest request);
+    Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRefWithIdempotency(
+            @Valid SyncTenantMatchmakerRefRequest request);
 
     Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(
             @Valid DeleteTenantMatchmakerRefRequest request);

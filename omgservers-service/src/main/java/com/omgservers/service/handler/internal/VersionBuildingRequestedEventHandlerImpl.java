@@ -87,7 +87,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
         final var tenantId = tenantVersion.getTenantId();
         final var tenantStageId = tenantVersion.getProjectId();
         final var tenantVersionId = tenantVersion.getId();
-        final var groupId = String.format("omgservers/%d/%d/%d", tenantId, projectId, tenantStageId);
+        final var groupId = String.format("omgservers/%d/%d", tenantId, projectId);
         final var containerName = "universal";
         final var base64Archive = tenantVersion.getBase64Archive();
         final var request = new RunLuaJitRuntimeBuilderV1Request(groupId,

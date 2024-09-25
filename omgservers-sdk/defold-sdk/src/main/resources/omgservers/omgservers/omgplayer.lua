@@ -92,12 +92,12 @@ omgplayer = {
 			}
 			trigger:add_client_event(event)
 		end,
-		trigger_greeted_event = function(trigger, version_id, version_created)
+		trigger_greeted_event = function(trigger, tenant_version_id, tenant_version_created)
 			local event = {
 				qualifier = omgplayer.constants.GREETED,
 				body = {
-					version_id = version_id,
-					version_created = version_created,
+					tenant_version_id = tenant_version_id,
+					tenant_version_created = tenant_version_created,
 				},
 			}
 			trigger:add_client_event(event)
@@ -240,11 +240,11 @@ omgplayer = {
 					connection = server_url .. "/omgservers/v1/entrypoint/websocket/connection",
 				}
 			end,
-			set_server_project = function(components, tenant_id, stage_id, stage_secret)
+			set_server_project = function(components, tenant_id, tenant_stage_id, tenant_stage_secret)
 				components.server_project = {
 					tenant_id = tenant_id,
-					stage_id = stage_id,
-					stage_secret = stage_secret,
+					tenant_stage_id = tenant_stage_id,
+					tenant_stage_secret = tenant_stage_secret,
 				}
 			end,
 			set_user_credentials = function(components, user_id, password)
@@ -306,9 +306,9 @@ omgplayer = {
 			server.components:set_server_urls(url)
 			print(socket.gettime() .. " [OMGPLAYER] Url was changed, new_url=" .. url)
 		end,
-		use_project = function(server, tenant_id, stage_id, stage_secret)
-			server.components:set_server_project(tenant_id, stage_id, stage_secret)
-			print(socket.gettime() .. " [OMGPLAYER] Server project was set, tenant_id=" .. tenant_id .. ", stage_id=" .. stage_id .. ", stage_secret=" .. string.sub(stage_secret, 1, 4) .. "..")
+		use_project = function(server, tenant_id, tenant_stage_id, tenant_stage_secret)
+			server.components:set_server_project(tenant_id, tenant_stage_id, tenant_stage_secret)
+			print(socket.gettime() .. " [OMGPLAYER] Server project was set, tenant_id=" .. tenant_id .. ", tenant_stage_id=" .. tenant_stage_id .. ", tenant_stage_secret=" .. string.sub(tenant_stage_secret, 1, 4) .. "..")
 		end,
 		create_user = function(server, callback)
 			assert(server.components.server_urls, "Component server_urls must be set")
@@ -378,14 +378,14 @@ omgplayer = {
 			local server_components = server.components
 
 			local tenant_id = server_components.server_project.tenant_id
-			local stage_id = server_components.server_project.stage_id
-			local stage_secret = server_components.server_project.stage_secret
+			local tenant_stage_id = server_components.server_project.tenant_stage_id
+			local tenant_stage_secret = server_components.server_project.tenant_stage_secret
 
 			local request_url = server_components.server_urls.create_client
 			local request_body = {
 				tenant_id = tenant_id,
-				stage_id = stage_id,
-				stage_secret = stage_secret
+				tenant_stage_id = tenant_stage_id,
+				tenant_stage_secret = tenant_stage_secret
 			}
 			local response_handler = function(response_status, response_body)
 				local client_id = response_body.client_id
@@ -525,10 +525,10 @@ omgplayer = {
                 end,
             },
 			-- Methods
-			set_server_version = function(components, version_id, version_created)
+			set_server_version = function(components, tenant_version_id, tenant_version_created)
 				components.server_version = {
-					version_id = version_id,
-					version_created = version_created,
+					tenant_version_id = tenant_version_id,
+					tenant_version_created = tenant_version_created,
 				}
 			end,
 		},
@@ -561,9 +561,9 @@ omgplayer = {
 			-- So we trigger greeted event only when MATCHMAKER_ASSIGNMENT_MESSAGE and RUNTIME_ASSIGNMENT_MESSAGE were received
 
 			if message_qualifier == omgplayer_constants.SERVER_WELCOME_MESSAGE then
-				local version_id = incoming_message.body.version_id
-				local version_created = incoming_message.body.version_created
-				flow_components:set_server_version(version_id, version_created)
+				local tenant_version_id = incoming_message.body.tenant_version_id
+				local tenant_version_created = incoming_message.body.tenant_version_created
+				flow_components:set_server_version(tenant_version_id, tenant_version_created)
 
 			elseif message_qualifier == omgplayer_constants.MATCHMAKER_ASSIGNMENT_MESSAGE then
 				local matchmaker_id = incoming_message.body.matchmaker_id
@@ -571,7 +571,7 @@ omgplayer = {
 
 				if not flow_components.player_state.greeted and flow_components.player_state.lobby_id then
 					flow_components.player_state:set_greeted(true)
-					omgplayer.trigger:trigger_greeted_event(flow_components.server_version.version_id, flow_components.server_version.version_created)
+					omgplayer.trigger:trigger_greeted_event(flow_components.server_version.tenant_version_id, flow_components.server_version.tenant_version_created)
 				end
 
 			elseif message_qualifier == omgplayer_constants.RUNTIME_ASSIGNMENT_MESSAGE then
@@ -586,7 +586,7 @@ omgplayer = {
 					else
 						if flow_components.player_state.matchmaker_id then
 							flow_components.player_state:set_greeted(true)
-							omgplayer.trigger:trigger_greeted_event(flow_components.server_version.version_id, flow_components.server_version.version_created)
+							omgplayer.trigger:trigger_greeted_event(flow_components.server_version.tenant_version_id, flow_components.server_version.tenant_version_created)
 						end
 					end
 
@@ -646,12 +646,12 @@ omgplayer = {
 		end,
 	},
 	-- Methods
-	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler, debug)
+	init = function(self, server_url, tenant_id, tenant_stage_id, tenant_stage_secret, handler, debug)
 		self.settings.debug = debug or false
 		print(socket.gettime() .. " [OMGPLAYER] Setting, debug=" .. tostring(self.settings.debug))
 
 		self.server:use_url(server_url)
-		self.server:use_project(tenant_id, stage_id, stage_secret)
+		self.server:use_project(tenant_id, tenant_stage_id, tenant_stage_secret)
 		self.components:set_event_handler(handler)
 		self.trigger:trigger_initialized_event()
 	end,
@@ -668,14 +668,14 @@ omgplayer = {
 return {
 	constants = omgplayer.constants,
 	-- Methods
-	init = function(self, server_url, tenant_id, stage_id, stage_secret, handler, debug)
+	init = function(self, server_url, tenant_id, tenant_stage_id, tenant_stage_secret, handler, debug)
 		assert(server_url, "Value server_url must be set")
 		assert(tenant_id, "Value tenant_id must be set")
-		assert(stage_id, "Value stage_id must be set")
-		assert(stage_secret, "Value stage_secret must be set")
+		assert(tenant_stage_id, "Value tenant_stage_id must be set")
+		assert(tenant_stage_secret, "Value tenant_stage_secret must be set")
 		assert(handler, "Handler must not be nil")
 
-		omgplayer:init(server_url, tenant_id, stage_id, stage_secret, handler, debug)
+		omgplayer:init(server_url, tenant_id, tenant_stage_id, tenant_stage_secret, handler, debug)
 	end,
 	sign_up = function(self)
 		omgplayer.flow:sign_up()

@@ -9,7 +9,7 @@ import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermission
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -66,7 +66,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
 
     Uni<Boolean> createTenantPermission(final Long tenantId,
                                         final Long userId,
-                                        final TenantPermissionEnum permission) {
+                                        final TenantPermissionQualifierEnum permission) {
         return syncTenantPermission(tenantId,
                 userId,
                 permission)
@@ -85,7 +85,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
 
     Uni<Boolean> syncTenantPermission(final Long tenantId,
                                       final Long userId,
-                                      final TenantPermissionEnum permission) {
+                                      final TenantPermissionQualifierEnum permission) {
         final var tenantPermission = tenantPermissionModelFactory
                 .create(tenantId, userId, permission);
 

@@ -3,12 +3,9 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
-import com.omgservers.service.module.tenant.impl.operation.tenantProject.SelectActiveTenantProjectsByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.tenantProjectPermission.SelectActiveTenantProjectPermissionsByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.tenantStage.SelectActiveTenantStagesByTenantIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.tenantStagePermission.SelectActiveTenantStagePermissionsByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenant.SelectTenantOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantPermission.SelectActiveTenantPermissionsByTenantIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantProject.SelectActiveTenantProjectsByTenantIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -22,12 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetTenantDataMethodImpl implements GetTenantDataMethod {
 
-    final SelectActiveTenantProjectPermissionsByTenantIdOperation
-            selectActiveTenantProjectPermissionsByTenantIdOperation;
     final SelectActiveTenantPermissionsByTenantIdOperation selectActiveTenantPermissionsByTenantIdOperation;
-    final SelectActiveTenantStagePermissionsByTenantIdOperation selectActiveTenantStagePermissionsByTenantIdOperation;
     final SelectActiveTenantProjectsByTenantIdOperation selectActiveTenantProjectsByTenantIdOperation;
-    final SelectActiveTenantStagesByTenantIdOperation selectActiveTenantStagesByTenantIdOperation;
     final SelectTenantOperation selectTenantOperation;
     final CheckShardOperation checkShardOperation;
 
@@ -56,9 +49,6 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
         return selectTenant(sqlConnection, shard, tenantId, tenantData)
                 .flatMap(voidItem -> fillTenantPermissions(sqlConnection, shard, tenantId, tenantData))
                 .flatMap(voidItem -> fillProjects(sqlConnection, shard, tenantId, tenantData))
-                .flatMap(voidItem -> fillProjectPermissions(sqlConnection, shard, tenantId, tenantData))
-                .flatMap(voidItem -> fillStages(sqlConnection, shard, tenantId, tenantData))
-                .flatMap(voidItem -> fillStagePermissions(sqlConnection, shard, tenantId, tenantData))
                 .replaceWith(tenantData);
     }
 
@@ -91,40 +81,7 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
         return selectActiveTenantProjectsByTenantIdOperation.execute(sqlConnection,
                         shard,
                         tenantId)
-                .invoke(tenantData::setProjects)
-                .replaceWithVoid();
-    }
-
-    Uni<Void> fillProjectPermissions(final SqlConnection sqlConnection,
-                                     final int shard,
-                                     final Long tenantId,
-                                     final TenantDataDto tenantData) {
-        return selectActiveTenantProjectPermissionsByTenantIdOperation.execute(sqlConnection,
-                        shard,
-                        tenantId)
-                .invoke(tenantData::setProjectPermissions)
-                .replaceWithVoid();
-    }
-
-    Uni<Void> fillStages(final SqlConnection sqlConnection,
-                         final int shard,
-                         final Long tenantId,
-                         final TenantDataDto tenantData) {
-        return selectActiveTenantStagesByTenantIdOperation.execute(sqlConnection,
-                        shard,
-                        tenantId)
-                .invoke(tenantData::setStages)
-                .replaceWithVoid();
-    }
-
-    Uni<Void> fillStagePermissions(final SqlConnection sqlConnection,
-                                   final int shard,
-                                   final Long tenantId,
-                                   final TenantDataDto tenantData) {
-        return selectActiveTenantStagePermissionsByTenantIdOperation.execute(sqlConnection,
-                        shard,
-                        tenantId)
-                .invoke(tenantData::setStagePermissions)
+                .invoke(tenantData::setTenantProjects)
                 .replaceWithVoid();
     }
 }

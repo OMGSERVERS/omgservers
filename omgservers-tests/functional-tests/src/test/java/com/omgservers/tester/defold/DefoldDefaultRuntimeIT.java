@@ -78,8 +78,11 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
 
             Thread.sleep(1000);
 
-            developerApiTester.deployVersion(testVersion.getDeveloperToken(), testVersion.getTenantId(),
-                    testVersion.getVersionId());
+            final var tenantDeploymentId = developerApiTester.deployTenantVersion(testVersion.getDeveloperToken(),
+                    testVersion.getTenantId(),
+                    testVersion.getTenantStageId(),
+                    testVersion.getTenantVersionId()).getTenantDeploymentId();
+            testVersion.setTenantDeploymentId(tenantDeploymentId);
 
             waitForDeploymentOperation.waitForDeployment(testVersion);
 
@@ -121,10 +124,10 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
 
     private GenericContainer startDefoldTestClient(final TestVersionDto testVersion) {
         return new GenericContainer("omgservers/defold-test-client:1.0.0-SNAPSHOT")
-                .withEnv(Map.of("OMGSERVERS_URL", "http://localhost:8080",
+                .withEnv(Map.of("OMGSERVERS_URL", "http://host.docker.internal:8080",
                         "OMGSERVERS_TENANT_ID", testVersion.getTenantId().toString(),
-                        "OMGSERVERS_STAGE_ID", testVersion.getStageId().toString(),
-                        "OMGSERVERS_STAGE_SECRET", testVersion.getStageSecret()))
+                        "OMGSERVERS_TENANT_STAGE_ID", testVersion.getTenantStageId().toString(),
+                        "OMGSERVERS_TENANT_STAGE_SECRET", testVersion.getTenantStageSecret()))
                 .withNetworkMode("host");
     }
 

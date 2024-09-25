@@ -15,7 +15,7 @@ public class GetTenantDeploymentRequest implements ShardedRequest {
     Long tenantId;
 
     @NotNull
-    Long id;
+    Long tenantDeploymentId;
 
     @Override
     public String getRequestShardKey() {

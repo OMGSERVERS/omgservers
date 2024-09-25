@@ -11,7 +11,7 @@ import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStage
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
@@ -78,7 +78,7 @@ class CreateStagePermissionsMethodImpl implements CreateStagePermissionsMethod {
     Uni<Boolean> createStagePermission(final Long tenantId,
                                        final Long stageId,
                                        final Long userId,
-                                       final TenantStagePermissionEnum permission) {
+                                       final TenantStagePermissionQualifierEnum permission) {
         return syncStagePermission(tenantId,
                 stageId,
                 userId,
@@ -100,7 +100,7 @@ class CreateStagePermissionsMethodImpl implements CreateStagePermissionsMethod {
     Uni<Boolean> syncStagePermission(final Long tenantId,
                                      final Long stageId,
                                      final Long userId,
-                                     final TenantStagePermissionEnum permission) {
+                                     final TenantStagePermissionQualifierEnum permission) {
         final var stagePermission = tenantStagePermissionModelFactory
                 .create(tenantId, stageId, userId, permission);
 

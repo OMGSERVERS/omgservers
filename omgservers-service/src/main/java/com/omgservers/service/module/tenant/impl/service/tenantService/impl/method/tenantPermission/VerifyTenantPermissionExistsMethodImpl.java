@@ -28,7 +28,7 @@ class VerifyTenantPermissionExistsMethodImpl implements VerifyTenantPermissionEx
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     final var userId = request.getUserId();
-                    final var permission = request.getTenantPermissionQualifier();
+                    final var permission = request.getQualifier();
                     return pgPool.withTransaction(sqlConnection -> verifyTenantPermissionExistsOperation
                             .execute(sqlConnection, shard.shard(), tenantId, userId, permission));
                 })

@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.support;
 
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,5 +24,5 @@ public class CreateStagePermissionsSupportRequest {
     Long userId;
 
     @NotEmpty
-    Set<TenantStagePermissionEnum> permissionsToCreate;
+    Set<TenantStagePermissionQualifierEnum> permissionsToCreate;
 }

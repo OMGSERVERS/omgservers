@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.testInterface;
 
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.service.module.tenant.impl.operation.tenantStagePermission.VerifyTenantStagePermissionExistsOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ public class VerifyStagePermissionExistsOperationTestInterface {
                            final Long tenantId,
                            final Long stageId,
                            final Long userId,
-                           final TenantStagePermissionEnum permission) {
+                           final TenantStagePermissionQualifierEnum permission) {
         return pgPool.withTransaction(sqlConnection -> verifyTenantStagePermissionExistsOperation
                         .execute(sqlConnection, shard, tenantId, stageId, userId, permission))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));

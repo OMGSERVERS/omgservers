@@ -2,7 +2,7 @@ package com.omgservers.tester.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
@@ -14,7 +14,7 @@ import com.omgservers.schema.entrypoint.support.CreateTokenSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -77,7 +77,7 @@ public class SupportApiTester {
                 .when().put("/omgservers/v1/entrypoint/support/request/delete-tenant");
         responseSpecification.then().statusCode(200);
 
-        final var response = responseSpecification.getBody().as(DeleteVersionDeveloperResponse.class);
+        final var response = responseSpecification.getBody().as(DeleteTenantVersionDeveloperResponse.class);
         return response.getDeleted();
     }
 
@@ -100,7 +100,7 @@ public class SupportApiTester {
     public CreateTenantPermissionsSupportResponse createTenantPermissions(final String token,
                                                                           final Long tenantId,
                                                                           final Long userId,
-                                                                          Set<TenantPermissionEnum> permissions)
+                                                                          Set<TenantPermissionQualifierEnum> permissions)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -121,7 +121,7 @@ public class SupportApiTester {
     public DeleteTenantPermissionsSupportResponse deleteTenantPermissions(final String token,
                                                                           final Long tenantId,
                                                                           final Long userId,
-                                                                          Set<TenantPermissionEnum> permissions)
+                                                                          Set<TenantPermissionQualifierEnum> permissions)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()

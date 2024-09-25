@@ -2,13 +2,13 @@ local omgserver = require("omgservers.omgserver")
 
 local GAME_MODE = "test"
 
-local function handle_initialization(self, runtime_qualifier, version_config)
+local function handle_initialization(self, runtime_qualifier, tenant_version_config)
 	print(socket.gettime() .. " [GAMESERVER] Server was initialized, qualifier=" .. runtime_qualifier)
 	print(socket.gettime() .. " [GAMESERVER] Version config")
-	pprint(version_config)
+	pprint(tenant_version_config)
 
 	self.runtime_qualifier = runtime_qualifier
-	self.version_config = version_config
+	self.tenant_version_config = tenant_version_config
 end
 
 local function handle_command(self, command_qualifier, command_body)
@@ -63,8 +63,8 @@ local function handle_server_event(self, event)
 	local event_body = event.body
 	if event_qualifier == omgserver.constants.SERVER_INITIALIZED then
 		local runtime_qualifier = event_body.runtime_qualifier
-		local version_config = event_body.version_config
-		handle_initialization(self, runtime_qualifier, version_config)
+		local tenant_version_config = event_body.tenant_version_config
+		handle_initialization(self, runtime_qualifier, tenant_version_config)
 	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED then
 		local command_qualifier = event_body.command_qualifier
 		local command_body = event_body.command_body

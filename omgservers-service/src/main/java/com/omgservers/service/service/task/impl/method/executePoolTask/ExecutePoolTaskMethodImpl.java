@@ -24,7 +24,7 @@ public class ExecutePoolTaskMethodImpl implements ExecutePoolTaskMethod {
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, poolId={}, {}:{}",
-                            poolId, t.getClass().getSimpleName(), t.getMessage());
+                            poolId, t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .map(ExecutePoolTaskResponse::new);

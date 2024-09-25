@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -20,26 +20,26 @@ public class TenantProjectPermissionModelFactory {
     public TenantProjectPermissionModel create(final Long tenantId,
                                                final Long projectId,
                                                final Long userId,
-                                               final TenantProjectPermissionEnum permission) {
+                                               final TenantProjectPermissionQualifierEnum permissionQualifier) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, projectId, userId, permission, idempotencyKey);
+        return create(id, tenantId, projectId, userId, permissionQualifier, idempotencyKey);
     }
 
     public TenantProjectPermissionModel create(final Long tenantId,
                                                final Long projectId,
                                                final Long userId,
-                                               final TenantProjectPermissionEnum permission,
+                                               final TenantProjectPermissionQualifierEnum permissionQualifier,
                                                final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, projectId, userId, permission, idempotencyKey);
+        return create(id, tenantId, projectId, userId, permissionQualifier, idempotencyKey);
     }
 
     public TenantProjectPermissionModel create(final Long id,
                                                final Long tenantId,
                                                final Long projectId,
                                                final Long userId,
-                                               final TenantProjectPermissionEnum permission,
+                                               final TenantProjectPermissionQualifierEnum permissionQualifier,
                                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -51,7 +51,7 @@ public class TenantProjectPermissionModelFactory {
         tenantProjectPermission.setModified(now);
         tenantProjectPermission.setIdempotencyKey(idempotencyKey);
         tenantProjectPermission.setUserId(userId);
-        tenantProjectPermission.setPermission(permission);
+        tenantProjectPermission.setPermission(permissionQualifier);
         tenantProjectPermission.setDeleted(false);
         return tenantProjectPermission;
     }

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ public class TenantProjectPermissionModelMapper {
         tenantProjectPermission.setModified(row.getOffsetDateTime("modified").toInstant());
         tenantProjectPermission.setIdempotencyKey(row.getString("idempotency_key"));
         tenantProjectPermission.setUserId(row.getLong("user_id"));
-        tenantProjectPermission.setPermission(TenantProjectPermissionEnum.valueOf(row.getString("permission")));
+        tenantProjectPermission.setPermission(TenantProjectPermissionQualifierEnum.valueOf(row.getString("permission")));
         tenantProjectPermission.setDeleted(row.getBoolean("deleted"));
         return tenantProjectPermission;
     }

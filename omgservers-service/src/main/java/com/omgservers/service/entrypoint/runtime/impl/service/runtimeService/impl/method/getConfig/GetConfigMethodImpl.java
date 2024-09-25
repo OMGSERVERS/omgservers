@@ -3,9 +3,12 @@ package com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.im
 import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeResponse;
 import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -38,9 +41,13 @@ class GetConfigMethodImpl implements GetConfigMethod {
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     final var tenantId = runtime.getTenantId();
-                    final var versionId = runtime.getDeploymentId();
-                    return getTenantVersion(tenantId, versionId)
-                            .map(TenantVersionModel::getConfig);
+                    final var deploymentId = runtime.getDeploymentId();
+                    return getTenantDeployment(tenantId, deploymentId)
+                            .flatMap(tenantDeployment -> {
+                                final var versionId = tenantDeployment.getVersionId();
+                                return getTenantVersion(tenantId, versionId)
+                                        .map(TenantVersionModel::getConfig);
+                            });
                 })
                 .map(GetConfigRuntimeResponse::new);
     }
@@ -49,6 +56,12 @@ class GetConfigMethodImpl implements GetConfigMethod {
         final var request = new GetRuntimeRequest(id);
         return runtimeModule.getRuntimeService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
+    }
+
+    Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
+        final var request = new GetTenantDeploymentRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantDeployment(request)
+                .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {

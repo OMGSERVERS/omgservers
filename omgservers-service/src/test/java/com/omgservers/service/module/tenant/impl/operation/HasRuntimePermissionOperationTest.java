@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation;
 
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.VerifyTenantPermissionExistsOperationTestInterface;
@@ -46,7 +46,7 @@ class HasRuntimePermissionOperationTest extends Assertions {
         final var tenant = tenantModelFactory.create();
         upsertTenantOperation.upsertTenant(shard, tenant);
         final var permission =
-                tenantPermissionModelFactory.create(tenant.getId(), userId(), TenantPermissionEnum.PROJECT_MANAGEMENT);
+                tenantPermissionModelFactory.create(tenant.getId(), userId(), TenantPermissionQualifierEnum.PROJECT_MANAGEMENT);
         upsertTenantPermissionOperation.upsertTenantPermission(shard, permission);
 
         assertTrue(hasTenantPermissionOperation.execute(shard,
@@ -62,7 +62,7 @@ class HasRuntimePermissionOperationTest extends Assertions {
         assertFalse(hasTenantPermissionOperation.execute(shard,
                 tenantId(),
                 userId(),
-                TenantPermissionEnum.PROJECT_MANAGEMENT));
+                TenantPermissionQualifierEnum.PROJECT_MANAGEMENT));
     }
 
     Long userId() {

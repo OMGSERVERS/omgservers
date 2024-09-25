@@ -23,7 +23,7 @@ public class ExecuteMatchmakerTaskMethodImpl implements ExecuteMatchmakerTaskMet
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, matchmakerId={}, {}:{}",
-                            matchmakerId, t.getClass().getSimpleName(), t.getMessage());
+                            matchmakerId, t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .map(ExecuteMatchmakerTaskResponse::new);

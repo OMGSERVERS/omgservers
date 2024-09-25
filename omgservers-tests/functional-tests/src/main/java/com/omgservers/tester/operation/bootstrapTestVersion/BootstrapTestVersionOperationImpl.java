@@ -1,6 +1,6 @@
 package com.omgservers.tester.operation.bootstrapTestVersion;
 
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
@@ -35,7 +35,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
 
     @Override
     public TestVersionDto bootstrapTestVersion(final String mainLua,
-                                               final TenantVersionConfigDto versionConfig) throws IOException {
+                                               final TenantVersionConfigDto tenantVersionConfig) throws IOException {
         final var adminToken = adminApiTester.createAdminToken();
 
         final var supportToken = supportApiTester.createSupportToken();
@@ -48,39 +48,26 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         supportApiTester.createTenantPermissions(supportToken,
                 tenantId,
                 developerUserId,
-                Set.of(TenantPermissionEnum.PROJECT_MANAGEMENT, TenantPermissionEnum.GETTING_DASHBOARD));
+                Set.of(TenantPermissionQualifierEnum.PROJECT_MANAGEMENT,
+                        TenantPermissionQualifierEnum.GETTING_DASHBOARD));
 
         final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
-        final var createProjectDeveloperResponse = developerApiTester.createProject(developerToken, tenantId);
-        final var projectId = createProjectDeveloperResponse.getProjectId();
-        final var stageId = createProjectDeveloperResponse.getStageId();
-        final var stageSecret = createProjectDeveloperResponse.getSecret();
+        final var createProjectDeveloperResponse = developerApiTester.createTenantProject(developerToken, tenantId);
+        final var tenantProjectId = createProjectDeveloperResponse.getTenantProjectId();
+        final var tenantStageId = createProjectDeveloperResponse.getTenantStageId();
+        final var tenantStageSecret = createProjectDeveloperResponse.getTenantStageSecret();
 
-        final var createVersionDeveloperResponse = developerApiTester
-                .buildVersion(developerToken, tenantId, stageId, versionConfig, mainLua);
-        final var versionId = createVersionDeveloperResponse.getId();
+        final var buildTenantVersionDeveloperResponse = developerApiTester
+                .buildTenantVersion(developerToken, tenantId, tenantProjectId, tenantVersionConfig, mainLua);
+        final var tenantVersionId = buildTenantVersionDeveloperResponse.getTenantVersionId();
 
-        var currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);
-        var attempt = 1;
-        var maxAttempts = 12;
-        while ((currentVersionDashboard.getVersion().getLobbyRefs().isEmpty() ||
-                currentVersionDashboard.getVersion().getMatchmakerRefs().isEmpty()) &&
-                attempt < maxAttempts) {
-            try {
-                log.info("Waiting for deployment, attempt={}", attempt);
-                Thread.sleep((long) attempt * 2 * 1000);
-                currentVersionDashboard = developerApiTester.getVersionDashboard(developerToken, tenantId, versionId);
-                attempt++;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        waitForBuilding(developerToken, tenantId, tenantVersionId);
 
-        if (attempt < maxAttempts) {
-            log.info("Version was deployed, version={}", versionId);
-        } else {
-            throw new IllegalStateException("Version was not deployed, versionId=" + versionId);
-        }
+        final var deployVersionDeveloperResponse = developerApiTester
+                .deployTenantVersion(developerToken, tenantId, tenantStageId, tenantVersionId);
+        final var tenantDeploymentId = deployVersionDeveloperResponse.getTenantDeploymentId();
+
+        waitForDeployment(developerToken, tenantId, tenantDeploymentId);
 
         return TestVersionDto.builder()
                 .adminToken(adminToken)
@@ -89,10 +76,66 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
                 .developerUserId(developerUserId)
                 .developerPassword(developerPassword)
                 .developerToken(developerToken)
-                .projectId(projectId)
-                .stageId(stageId)
-                .stageSecret(stageSecret)
-                .versionId(versionId)
+                .tenantProjectId(tenantProjectId)
+                .tenantStageId(tenantStageId)
+                .tenantStageSecret(tenantStageSecret)
+                .tenantVersionId(tenantVersionId)
+                .tenantDeploymentId(tenantDeploymentId)
                 .build();
+    }
+
+    private void waitForBuilding(final String developerToken,
+                                 final Long tenantId,
+                                 final Long tenantVersionId) throws IOException {
+        var currentTenantVersionDashboard = developerApiTester
+                .getTenantVersionDashboard(developerToken, tenantId, tenantVersionId);
+        var attempt = 1;
+        var maxAttempts = 12;
+        while ((currentTenantVersionDashboard.getTenantImageRefs().isEmpty()) &&
+                attempt < maxAttempts) {
+            try {
+                log.info("Waiting for building, attempt={}", attempt);
+                Thread.sleep((long) attempt * 2 * 1000);
+                currentTenantVersionDashboard = developerApiTester
+                        .getTenantVersionDashboard(developerToken, tenantId, tenantVersionId);
+                attempt++;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (attempt < maxAttempts) {
+            log.info("Version was built, tenantVersionId={}", tenantVersionId);
+        } else {
+            throw new IllegalStateException("Version was not built, tenantVersionId=" + tenantVersionId);
+        }
+    }
+
+    private void waitForDeployment(final String developerToken,
+                                   final Long tenantId,
+                                   final Long tenantDeploymentId) throws IOException {
+        var currentTenantDeploymentDashboard = developerApiTester
+                .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
+        var attempt = 1;
+        var maxAttempts = 12;
+        while ((currentTenantDeploymentDashboard.getTenantLobbyRefs().isEmpty() ||
+                currentTenantDeploymentDashboard.getTenantMatchmakerRefs().isEmpty()) &&
+                attempt < maxAttempts) {
+            try {
+                log.info("Waiting for deployment, attempt={}", attempt);
+                Thread.sleep((long) attempt * 2 * 1000);
+                currentTenantDeploymentDashboard = developerApiTester
+                        .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
+                attempt++;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (attempt < maxAttempts) {
+            log.info("Version was deployed, tenantDeploymentId={}", tenantDeploymentId);
+        } else {
+            throw new IllegalStateException("Version was not deployed, tenantDeploymentId=" + tenantDeploymentId);
+        }
     }
 }

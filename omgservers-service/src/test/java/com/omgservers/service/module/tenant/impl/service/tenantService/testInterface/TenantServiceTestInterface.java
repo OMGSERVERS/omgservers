@@ -86,6 +86,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermission
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
@@ -200,6 +202,11 @@ public class TenantServiceTestInterface {
 
     public GetTenantProjectResponse getTenantProject(final GetTenantProjectRequest request) {
         return tenantService.getTenantProject(request)
+                .await().atMost(Duration.ofSeconds(TIMEOUT));
+    }
+
+    public GetTenantProjectDataResponse getTenantProjectData(final GetTenantProjectDataRequest request) {
+        return tenantService.getTenantProjectData(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 

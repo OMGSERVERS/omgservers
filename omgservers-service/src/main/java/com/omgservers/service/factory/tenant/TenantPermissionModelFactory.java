@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ public class TenantPermissionModelFactory {
     public TenantPermissionModel create(
             final Long tenantId,
             final Long userId,
-            final TenantPermissionEnum permission) {
+            final TenantPermissionQualifierEnum permission) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, userId, permission, idempotencyKey);
@@ -29,7 +29,7 @@ public class TenantPermissionModelFactory {
     public TenantPermissionModel create(
             final Long tenantId,
             final Long userId,
-            final TenantPermissionEnum permission,
+            final TenantPermissionQualifierEnum permission,
             final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, tenantId, userId, permission, idempotencyKey);
@@ -38,7 +38,7 @@ public class TenantPermissionModelFactory {
     static public TenantPermissionModel create(final Long id,
                                                final Long tenantId,
                                                final Long userId,
-                                               final TenantPermissionEnum permission,
+                                               final TenantPermissionQualifierEnum permission,
                                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

@@ -5,14 +5,14 @@ import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.player.PlayerModel;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
 import com.omgservers.schema.module.client.SyncClientRequest;
 import com.omgservers.schema.module.client.SyncClientResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
@@ -32,9 +32,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Comparator;
-import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -59,10 +56,10 @@ class CreateClientMethodImpl implements CreateClientMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var stageId = request.getStageId();
-        final var secret = request.getStageSecret();
+        final var stageId = request.getTenantStageId();
+        final var stageSecret = request.getTenantStageSecret();
 
-        return validateStageSecret(tenantId, stageId, secret)
+        return validateStageSecret(tenantId, stageId, stageSecret)
                 .flatMap(rawToken -> findOrCreatePlayer(userId, tenantId, stageId)
                         .flatMap(player -> {
                             final var playerId = player.getId();
@@ -115,38 +112,25 @@ class CreateClientMethodImpl implements CreateClientMethod {
     Uni<ClientModel> createClient(final Long userId,
                                   final Long playerId,
                                   final Long tenantId,
-                                  final Long stageId) {
-        return selectStageVersionProjection(tenantId, stageId)
-                .map(versionProjection -> {
-                    final var versionId = versionProjection.getId();
+                                  final Long tenantStageId) {
+        return selectTenantDeployment(tenantId, tenantStageId)
+                .map(tenantDeployment -> {
+                    final var tenantDeploymentId = tenantDeployment.getId();
                     final var client = clientModelFactory.create(userId,
                             playerId,
                             tenantId,
-                            versionId);
+                            tenantDeploymentId);
 
                     return client;
                 });
     }
 
-    Uni<TenantVersionProjectionModel> selectStageVersionProjection(final Long tenantId, final Long stageId) {
-        return viewVersionProjections(tenantId, stageId)
-                .map(versions -> {
-                    if (versions.isEmpty()) {
-                        throw new ServerSideNotFoundException(
-                                ExceptionQualifierEnum.VERSION_NOT_FOUND,
-                                String.format("version was not selected, tenantId=%d, stageId=%d", tenantId, stageId));
-                    } else {
-                        return versions.stream()
-                                .max(Comparator.comparing(TenantVersionProjectionModel::getId))
-                                .get();
-                    }
-                });
-    }
-
-    Uni<List<TenantVersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
-        final var request = new ViewTenantVersionsRequest(tenantId, stageId);
-        return tenantModule.getTenantService().viewTenantVersions(request)
-                .map(ViewTenantVersionsResponse::getTenantVersionProjections);
+    Uni<TenantDeploymentModel> selectTenantDeployment(final Long tenantId, final Long tenantStageId) {
+        final var request = new SelectTenantDeploymentRequest(tenantId,
+                tenantStageId,
+                SelectTenantDeploymentRequest.Strategy.LATEST);
+        return tenantModule.getTenantService().selectTenantDeployment(request)
+                .map(SelectTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<Boolean> syncClient(ClientModel client) {

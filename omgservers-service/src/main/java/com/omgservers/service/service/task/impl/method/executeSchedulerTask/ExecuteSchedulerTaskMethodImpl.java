@@ -21,7 +21,7 @@ public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMetho
         return schedulerTask.executeTask()
                 .onFailure()
                 .recoverWithUni(t -> {
-                    log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage());
+                    log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .invoke(result -> log.info("Task finished, result={}", result))

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation;
 
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -52,7 +52,7 @@ class UpsertTenantProjectPermissionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
 
         final var permission = tenantProjectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(),
-                TenantProjectPermissionEnum.STAGE_MANAGEMENT);
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT);
 
         final var changeContext = upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
         assertTrue(changeContext.getResult());
@@ -66,7 +66,7 @@ class UpsertTenantProjectPermissionOperationTest extends Assertions {
         final var project = tenantProjectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
         final var permission = tenantProjectPermissionModelFactory.create(tenant.getId(), project.getId(), userId(),
-                TenantProjectPermissionEnum.STAGE_MANAGEMENT);
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT);
         upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
 
         final var changeContext = upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
@@ -78,7 +78,7 @@ class UpsertTenantProjectPermissionOperationTest extends Assertions {
         final var shard = 0;
 
         final var permission = tenantProjectPermissionModelFactory.create(tenantId(), projectId(), userId(),
-                TenantProjectPermissionEnum.STAGE_MANAGEMENT);
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT);
         assertThrows(ServerSideBadRequestException.class, () -> upsertProjectPermissionOperation
                 .upsertProjectPermission(shard, permission));
     }
@@ -93,13 +93,13 @@ class UpsertTenantProjectPermissionOperationTest extends Assertions {
         final var permission1 = tenantProjectPermissionModelFactory.create(tenant.getId(),
                 project.getId(),
                 userId(),
-                TenantProjectPermissionEnum.STAGE_MANAGEMENT);
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT);
         upsertProjectPermissionOperation.upsertProjectPermission(shard, permission1);
 
         final var permission2 = tenantProjectPermissionModelFactory.create(tenant.getId(),
                 project.getId(),
                 userId(),
-                TenantProjectPermissionEnum.STAGE_MANAGEMENT,
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT,
                 permission1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertProjectPermissionOperation.upsertProjectPermission(shard, permission2));

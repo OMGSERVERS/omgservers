@@ -35,7 +35,7 @@ public class TenantPermissionModel {
     Long userId;
 
     @NotNull
-    TenantPermissionEnum permission;
+    TenantPermissionQualifierEnum permission;
 
     @NotNull
     Boolean deleted;

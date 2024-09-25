@@ -1,7 +1,8 @@
 package com.omgservers.schema.module.tenant.tenantStage.dto;
 
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +16,11 @@ import java.util.List;
 public class TenantStageDataDto {
 
     @NotNull
-    TenantStageModel stage;
+    TenantStageModel tenantStage;
 
     @NotNull
-    List<TenantVersionProjectionModel> versionProjections;
+    List<TenantStagePermissionModel> tenantStagePermissions;
+
+    @NotNull
+    List<TenantDeploymentModel> tenantDeployments;
 }

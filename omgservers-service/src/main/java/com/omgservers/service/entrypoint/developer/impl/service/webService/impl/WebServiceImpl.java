@@ -1,23 +1,35 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl;
 
-import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeployVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetStageDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantStageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantStageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetVersionDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.BuildVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -45,38 +57,78 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetStageDashboardDeveloperResponse> getStageDashboard(final GetStageDashboardDeveloperRequest request) {
-        return developerService.getStageDashboard(request);
+    public Uni<CreateTenantProjectDeveloperResponse> createTenantProject(
+            final CreateTenantProjectDeveloperRequest request) {
+        return developerService.createTenantProject(request);
     }
 
     @Override
-    public Uni<CreateProjectDeveloperResponse> createProject(final CreateProjectDeveloperRequest request) {
-        return developerService.createProject(request);
+    public Uni<GetTenantProjectDashboardDeveloperResponse> getTenantProjectDashboard(
+            final GetTenantProjectDashboardDeveloperRequest request) {
+        return developerService.getTenantProjectDashboard(request);
     }
 
     @Override
-    public Uni<CreateVersionDeveloperResponse> createVersion(final CreateVersionDeveloperRequest request) {
-        return developerService.createVersion(request);
+    public Uni<DeleteTenantProjectDeveloperResponse> deleteTenantProject(
+            final DeleteTenantProjectDeveloperRequest request) {
+        return developerService.deleteTenantProject(request);
     }
 
     @Override
-    public Uni<GetVersionDashboardDeveloperResponse> getVersionDashboard(
-            final GetVersionDashboardDeveloperRequest request) {
-        return developerService.getVersionDashboard(request);
+    public Uni<CreateTenantStageDeveloperResponse> createTenantStage(final CreateTenantStageDeveloperRequest request) {
+        return developerService.createTenantStage(request);
     }
 
     @Override
-    public Uni<BuildVersionDeveloperResponse> buildVersion(final BuildVersionDeveloperRequest request) {
-        return developerService.buildVersion(request);
+    public Uni<GetTenantStageDashboardDeveloperResponse> getTenantStageDashboard(
+            final GetTenantStageDashboardDeveloperRequest request) {
+        return developerService.getTenantStageDashboard(request);
     }
 
     @Override
-    public Uni<DeployVersionDeveloperResponse> deployVersion(final DeployVersionDeveloperRequest request) {
-        return developerService.deployVersion(request);
+    public Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(final DeleteTenantStageDeveloperRequest request) {
+        return developerService.deleteTenantStage(request);
     }
 
     @Override
-    public Uni<DeleteVersionDeveloperResponse> deleteVersion(final DeleteVersionDeveloperRequest request) {
-        return developerService.deleteVersion(request);
+    public Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(
+            final CreateTenantVersionDeveloperRequest request) {
+        return developerService.createTenantVersion(request);
+    }
+
+    @Override
+    public Uni<BuildTenantVersionDeveloperResponse> buildTenantVersion(
+            final BuildTenantVersionDeveloperRequest request) {
+        return developerService.buildTenantVersion(request);
+    }
+
+    @Override
+    public Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
+            final GetTenantVersionDashboardDeveloperRequest request) {
+        return developerService.getTenantVersionDashboard(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantVersionDeveloperResponse> deleteTenantVersion(
+            final DeleteTenantVersionDeveloperRequest request) {
+        return developerService.deleteTenantVersion(request);
+    }
+
+    @Override
+    public Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(
+            final DeployTenantVersionDeveloperRequest request) {
+        return developerService.deployTenantVersion(request);
+    }
+
+    @Override
+    public Uni<GetTenantDeploymentDashboardDeveloperResponse> getTenantDeploymentDashboard(
+            final GetTenantDeploymentDashboardDeveloperRequest request) {
+        return developerService.getTenantDeploymentDashboard(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
+            final DeleteTenantDeploymentDeveloperRequest request) {
+        return developerService.deleteTenantDeployment(request);
     }
 }

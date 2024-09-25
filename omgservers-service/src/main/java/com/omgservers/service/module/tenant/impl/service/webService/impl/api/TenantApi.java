@@ -10,6 +10,8 @@ import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
@@ -86,6 +88,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermission
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
@@ -186,6 +190,10 @@ public interface TenantApi {
     @PUT
     @Path("/get-tenant-project")
     Uni<GetTenantProjectResponse> getTenantProject(GetTenantProjectRequest request);
+
+    @PUT
+    @Path("/get-tenant-project-data")
+    Uni<GetTenantProjectDataResponse> getTenantProjectData(GetTenantProjectDataRequest request);
 
     @PUT
     @Path("/sync-tenant-project")
@@ -345,6 +353,10 @@ public interface TenantApi {
     @PUT
     @Path("/get-tenant-deployment")
     Uni<GetTenantDeploymentResponse> getTenantDeployment(GetTenantDeploymentRequest request);
+
+    @PUT
+    @Path("/get-tenant-deployment-data")
+    Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(GetTenantDeploymentDataRequest request);
 
     @PUT
     @Path("/select-tenant-deployment")

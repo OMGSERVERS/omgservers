@@ -40,9 +40,9 @@ public class DefoldDeployVersionIT extends BaseTestClass {
 
     @Test
     void defoldDeployVersionIT() throws Exception {
-        final var versionConfig = TenantVersionConfigDto.create();
-        versionConfig.setUserData(new UserData("deploy-version"));
-        final var testVersion = createTestVersionOperation.createTestVersion(versionConfig);
+        final var tenatnVersionConfig = TenantVersionConfigDto.create();
+        tenatnVersionConfig.setUserData(new UserData("deploy-version"));
+        final var testVersion = createTestVersionOperation.createTestVersion(tenatnVersionConfig);
 
         final var developerUserId = testVersion.getDeveloperUserId();
         final var developerPassword = testVersion.getDeveloperPassword();
@@ -55,13 +55,18 @@ public class DefoldDeployVersionIT extends BaseTestClass {
 
             Thread.sleep(1000);
 
-            final var versionDashboard = developerApiTester.getVersionDashboard(testVersion.getDeveloperToken(),
-                    testVersion.getTenantId(), testVersion.getVersionId());
-            log.info("Version dashboard, {}", versionDashboard);
-            assertEquals(1, versionDashboard.getVersion().getImageRefs().size());
+            final var tenantVersionDashboard = developerApiTester
+                    .getTenantVersionDashboard(testVersion.getDeveloperToken(),
+                            testVersion.getTenantId(),
+                            testVersion.getTenantVersionId());
+            log.info("Version dashboard, {}", tenantVersionDashboard);
+            assertEquals(1, tenantVersionDashboard.getTenantImageRefs().size());
 
-            developerApiTester.deployVersion(testVersion.getDeveloperToken(), testVersion.getTenantId(),
-                    testVersion.getVersionId());
+            final var tenantDeploymentId = developerApiTester.deployTenantVersion(testVersion.getDeveloperToken(),
+                    testVersion.getTenantId(),
+                    testVersion.getTenantStageId(),
+                    testVersion.getTenantVersionId()).getTenantDeploymentId();
+            testVersion.setTenantDeploymentId(tenantDeploymentId);
 
             waitForDeploymentOperation.waitForDeployment(testVersion);
 

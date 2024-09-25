@@ -19,26 +19,26 @@ public class ClientModelFactory {
     public ClientModel create(final Long userId,
                               final Long playerId,
                               final Long tenantId,
-                              final Long deploymentId) {
+                              final Long tenantDeploymentId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, userId, playerId, tenantId, deploymentId, idempotencyKey);
+        return create(id, userId, playerId, tenantId, tenantDeploymentId, idempotencyKey);
     }
 
     public ClientModel create(final Long userId,
                               final Long playerId,
                               final Long tenantId,
-                              final Long deploymentId,
+                              final Long tenantDeploymentId,
                               final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, userId, playerId, tenantId, deploymentId, idempotencyKey);
+        return create(id, userId, playerId, tenantId, tenantDeploymentId, idempotencyKey);
     }
 
     public ClientModel create(final Long id,
                               final Long userId,
                               final Long playerId,
                               final Long tenantId,
-                              final Long deploymentId,
+                              final Long tenantDeploymentId,
                               final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -50,7 +50,7 @@ public class ClientModelFactory {
         client.setUserId(userId);
         client.setPlayerId(playerId);
         client.setTenantId(tenantId);
-        client.setDeploymentId(deploymentId);
+        client.setDeploymentId(tenantDeploymentId);
         client.setDeleted(false);
 
         return client;

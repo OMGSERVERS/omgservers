@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ public class TenantStagePermissionModelFactory {
     public TenantStagePermissionModel create(final Long tenantId,
                                              final Long stageId,
                                              final Long userId,
-                                             final TenantStagePermissionEnum permission) {
+                                             final TenantStagePermissionQualifierEnum permission) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, tenantId, stageId, userId, permission, idempotencyKey);
@@ -29,7 +29,7 @@ public class TenantStagePermissionModelFactory {
     public TenantStagePermissionModel create(final Long tenantId,
                                              final Long stageId,
                                              final Long userId,
-                                             final TenantStagePermissionEnum permission,
+                                             final TenantStagePermissionQualifierEnum permission,
                                              final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, tenantId, stageId, userId, permission, idempotencyKey);
@@ -39,7 +39,7 @@ public class TenantStagePermissionModelFactory {
                                              final Long tenantId,
                                              final Long stageId,
                                              final Long userId,
-                                             final TenantStagePermissionEnum permission,
+                                             final TenantStagePermissionQualifierEnum permission,
                                              final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

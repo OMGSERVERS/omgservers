@@ -1,6 +1,6 @@
 package com.omgservers.tester.operation.createTestVersion;
 
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.tester.component.AdminApiTester;
 import com.omgservers.tester.component.DeveloperApiTester;
@@ -47,17 +47,18 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
         supportApiTester.createTenantPermissions(supportToken,
                 tenantId,
                 developerUserId,
-                Set.of(TenantPermissionEnum.PROJECT_MANAGEMENT, TenantPermissionEnum.GETTING_DASHBOARD));
+                Set.of(TenantPermissionQualifierEnum.PROJECT_MANAGEMENT,
+                        TenantPermissionQualifierEnum.GETTING_DASHBOARD));
 
         final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
-        final var createProjectDeveloperResponse = developerApiTester.createProject(developerToken, tenantId);
-        final var projectId = createProjectDeveloperResponse.getProjectId();
-        final var stageId = createProjectDeveloperResponse.getStageId();
-        final var stageSecret = createProjectDeveloperResponse.getSecret();
+        final var createProjectDeveloperResponse = developerApiTester.createTenantProject(developerToken, tenantId);
+        final var tenantProjectId = createProjectDeveloperResponse.getTenantProjectId();
+        final var tenantStageId = createProjectDeveloperResponse.getTenantStageId();
+        final var tenantStageSecret = createProjectDeveloperResponse.getTenantStageSecret();
 
         final var createVersionDeveloperResponse = developerApiTester
-                .createVersion(developerToken, tenantId, stageId, versionConfig);
-        final var versionId = createVersionDeveloperResponse.getId();
+                .createTenantVersion(developerToken, tenantId, tenantProjectId, versionConfig);
+        final var versionId = createVersionDeveloperResponse.getTenantVersionId();
 
         return TestVersionDto.builder()
                 .adminToken(adminToken)
@@ -66,10 +67,10 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
                 .developerUserId(developerUserId)
                 .developerPassword(developerPassword)
                 .developerToken(developerToken)
-                .projectId(projectId)
-                .stageId(stageId)
-                .stageSecret(stageSecret)
-                .versionId(versionId)
+                .tenantProjectId(tenantProjectId)
+                .tenantStageId(tenantStageId)
+                .tenantStageSecret(tenantStageSecret)
+                .tenantVersionId(versionId)
                 .build();
     }
 }

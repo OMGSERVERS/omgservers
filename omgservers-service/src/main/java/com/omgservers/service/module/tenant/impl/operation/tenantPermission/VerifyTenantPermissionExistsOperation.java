@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantPermission;
 
-import com.omgservers.schema.model.tenantPermission.TenantPermissionEnum;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
@@ -9,5 +9,5 @@ public interface VerifyTenantPermissionExistsOperation {
                          int shard,
                          Long tenantId,
                          Long userId,
-                         TenantPermissionEnum tenantPermissionQualifier);
+                         TenantPermissionQualifierEnum tenantPermissionQualifier);
 }

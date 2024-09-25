@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantProjectPermission;
 
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.service.operation.hasObject.HasObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -23,7 +23,7 @@ class VerifyTenantProjectPermissionExistsOperationImpl implements VerifyTenantPr
                                 final Long tenantId,
                                 final Long tenantProjectId,
                                 final Long userId,
-                                final TenantProjectPermissionEnum tenantProjectPermissionQualifier) {
+                                final TenantProjectPermissionQualifierEnum tenantProjectPermissionQualifier) {
         return hasObjectOperation.hasObject(
                 sqlConnection,
                 shard,

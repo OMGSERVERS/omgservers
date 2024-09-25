@@ -30,17 +30,17 @@ class SelectTenantDeploymentMethodImpl implements SelectTenantDeploymentMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();
-                    final var stageId = request.getStageId();
+                    final var tenantStageId = request.getTenantStageId();
                     return pgPool.withTransaction(
                             sqlConnection -> selectActiveTenantDeploymentsByTenantStageIdOperation
-                                    .execute(sqlConnection, shardModel.shard(), tenantId, stageId)
+                                    .execute(sqlConnection, shardModel.shard(), tenantId, tenantStageId)
                                     .map(tenantDeployments -> {
                                         if (tenantDeployments.isEmpty()) {
                                             throw new ServerSideNotFoundException(
                                                     ExceptionQualifierEnum.DEPLOYMENT_NOT_FOUND,
                                                     String.format("deployment was not selected, " +
                                                             "there aren't active stage deployments, " +
-                                                            "stageId=%s", stageId));
+                                                            "tenantStageId=%s", tenantStageId));
                                         }
 
                                         final var strategy = request.getStrategy();

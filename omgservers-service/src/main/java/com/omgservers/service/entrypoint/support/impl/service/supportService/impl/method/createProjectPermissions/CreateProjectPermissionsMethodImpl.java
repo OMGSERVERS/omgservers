@@ -11,7 +11,7 @@ import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantPro
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
@@ -78,7 +78,7 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
     Uni<Boolean> createProjectPermission(final Long tenantId,
                                          final Long projectId,
                                          final Long userId,
-                                         final TenantProjectPermissionEnum permission) {
+                                         final TenantProjectPermissionQualifierEnum permission) {
         return syncTenantProjectPermission(tenantId,
                 projectId,
                 userId,
@@ -100,7 +100,7 @@ class CreateProjectPermissionsMethodImpl implements CreateProjectPermissionsMeth
     Uni<Boolean> syncTenantProjectPermission(final Long tenantId,
                                              final Long projectId,
                                              final Long userId,
-                                             final TenantProjectPermissionEnum permission) {
+                                             final TenantProjectPermissionQualifierEnum permission) {
         final var projectPermission = tenantProjectPermissionModelFactory
                 .create(tenantId, projectId, userId, permission);
 

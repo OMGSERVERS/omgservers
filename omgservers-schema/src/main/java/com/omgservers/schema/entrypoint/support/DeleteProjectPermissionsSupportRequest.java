@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.support;
 
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,5 +24,5 @@ public class DeleteProjectPermissionsSupportRequest {
     Long userId;
 
     @NotEmpty
-    Set<TenantProjectPermissionEnum> permissionsToDelete;
+    Set<TenantProjectPermissionQualifierEnum> permissionsToDelete;
 }

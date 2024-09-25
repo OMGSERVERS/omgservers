@@ -10,5 +10,5 @@ public interface BootstrapTestVersionOperation {
     TestVersionDto bootstrapTestVersion(String mainLua) throws IOException;
 
     TestVersionDto bootstrapTestVersion(String mainLua,
-                                        TenantVersionConfigDto versionConfig) throws IOException;
+                                        TenantVersionConfigDto tenantVersionConfig) throws IOException;
 }

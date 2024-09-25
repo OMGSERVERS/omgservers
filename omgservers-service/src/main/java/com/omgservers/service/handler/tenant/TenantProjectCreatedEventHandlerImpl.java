@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
@@ -67,7 +67,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                                                             final Long tenantStageId,
                                                             final String idempotencyKey) {
         final var builderUserId = getConfigOperation.getServiceConfig().defaults().builderUserId();
-        final var permission = TenantProjectPermissionEnum.VERSION_MANAGEMENT;
+        final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
         final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
                 tenantStageId,
                 builderUserId,
@@ -82,7 +82,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                                                             final Long tenantStageId,
                                                             final String idempotencyKey) {
         final var serviceUserId = getConfigOperation.getServiceConfig().defaults().serviceUserId();
-        final var permission = TenantProjectPermissionEnum.VERSION_MANAGEMENT;
+        final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
         final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
                 tenantStageId,
                 serviceUserId,

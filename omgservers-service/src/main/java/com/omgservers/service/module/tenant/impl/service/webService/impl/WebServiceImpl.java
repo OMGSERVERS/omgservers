@@ -10,6 +10,8 @@ import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
@@ -86,6 +88,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermission
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
@@ -201,6 +205,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<GetTenantProjectResponse> getTenantProject(final GetTenantProjectRequest request) {
         return tenantService.getTenantProject(request);
+    }
+
+    @Override
+    public Uni<GetTenantProjectDataResponse> getTenantProjectData(final GetTenantProjectDataRequest request) {
+        return tenantService.getTenantProjectData(request);
     }
 
     @Override
@@ -401,6 +410,11 @@ public class WebServiceImpl implements WebService {
     @Override
     public Uni<GetTenantDeploymentResponse> getTenantDeployment(final GetTenantDeploymentRequest request) {
         return tenantService.getTenantDeployment(request);
+    }
+
+    @Override
+    public Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(final GetTenantDeploymentDataRequest request) {
+        return tenantService.getTenantDeploymentData(request);
     }
 
     @Override

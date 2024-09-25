@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantStagePermission;
 
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionEnum;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
@@ -10,5 +10,5 @@ public interface VerifyTenantStagePermissionExistsOperation {
                          Long tenantId,
                          Long tenantStageId,
                          Long userId,
-                         TenantStagePermissionEnum tenantStagePermissionQualifier);
+                         TenantStagePermissionQualifierEnum tenantStagePermissionQualifier);
 }

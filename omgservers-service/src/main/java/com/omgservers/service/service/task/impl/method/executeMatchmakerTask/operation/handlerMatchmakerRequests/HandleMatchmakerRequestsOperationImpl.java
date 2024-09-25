@@ -1,16 +1,19 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handlerMatchmakerRequests;
 
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -35,14 +38,24 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                                               final MatchmakerChangeOfStateModel changeOfState) {
         final var matchmakerId = matchmaker.getId();
         final var tenantId = matchmaker.getTenantId();
-        final var versionId = matchmaker.getDeploymentId();
+        final var tenantDeploymentId = matchmaker.getDeploymentId();
         // TODO cache version config and reuse each of iteration
-        return getTenantVersionConfig(tenantId, versionId)
-                .invoke(versionConfig -> executeMatchmaker(matchmakerId,
-                        currentState,
-                        changeOfState,
-                        versionConfig))
+        return getTenantDeployment(tenantId, tenantDeploymentId)
+                .flatMap(tenantDeployment -> {
+                    final var tenantVersionId = tenantDeployment.getVersionId();
+                    return getTenantVersionConfig(tenantId, tenantVersionId)
+                            .invoke(versionConfig -> executeMatchmaker(matchmakerId,
+                                    currentState,
+                                    changeOfState,
+                                    versionConfig));
+                })
                 .replaceWithVoid();
+    }
+
+    Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
+        final var request = new GetTenantDeploymentRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantDeployment(request)
+                .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionConfigDto> getTenantVersionConfig(final Long tenantId, final Long versionId) {

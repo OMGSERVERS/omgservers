@@ -26,7 +26,7 @@ public class ExecuteJenkinsRequestTaskMethodImpl implements ExecuteJenkinsReques
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, tenant={}, {}:{}",
-                            tenantId, t.getClass().getSimpleName(), t.getMessage());
+                            tenantId, t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .map(ExecuteJenkinsRequestTaskResponse::new);

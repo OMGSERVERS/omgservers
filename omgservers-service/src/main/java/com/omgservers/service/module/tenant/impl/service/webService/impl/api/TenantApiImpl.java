@@ -11,6 +11,8 @@ import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
@@ -87,6 +89,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermission
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
@@ -205,6 +209,11 @@ class TenantApiImpl implements TenantApi {
     @Override
     public Uni<GetTenantProjectResponse> getTenantProject(final GetTenantProjectRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantProject);
+    }
+
+    @Override
+    public Uni<GetTenantProjectDataResponse> getTenantProjectData(final GetTenantProjectDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantProjectData);
     }
 
     @Override
@@ -406,6 +415,11 @@ class TenantApiImpl implements TenantApi {
     @Override
     public Uni<GetTenantDeploymentResponse> getTenantDeployment(final GetTenantDeploymentRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDeployment);
+    }
+
+    @Override
+    public Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(final GetTenantDeploymentDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDeploymentData);
     }
 
     @Override

@@ -3,10 +3,9 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
-import com.omgservers.service.module.tenant.impl.operation.tenantVersion.SelectTenantVersionOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantImageRef.SelectActiveTenantImageRefsByTenantVersionIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.tenantLobbyRef.SelectActiveTenantLobbyRefsByTenantDeploymentIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.tenantMatchmakerRef.SelectActiveTenantMatchmakerRefsByTenantDeploymentIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantJenkinsRequest.SelectActiveTenantJenkinsRequestsByTenantVersionIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantVersion.SelectTenantVersionOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,29 +19,28 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
 
-    final SelectActiveTenantMatchmakerRefsByTenantDeploymentIdOperation
-            selectActiveTenantMatchmakerRefsByTenantDeploymentIdOperation;
-    final SelectActiveTenantLobbyRefsByTenantDeploymentIdOperation
-            selectActiveTenantLobbyRefsByTenantDeploymentIdOperation;
-    final SelectActiveTenantImageRefsByTenantVersionIdOperation selectActiveTenantImageRefsByTenantVersionIdOperation;
+    final SelectActiveTenantJenkinsRequestsByTenantVersionIdOperation
+            selectActiveTenantJenkinsRequestsByTenantVersionIdOperation;
     final SelectTenantVersionOperation selectTenantVersionOperation;
+    final SelectActiveTenantImageRefsByTenantVersionIdOperation
+            selectActiveTenantImageRefsByTenantVersionIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
     public Uni<GetTenantVersionDataResponse> execute(final GetTenantVersionDataRequest request) {
-        log.debug("Get version data, request={}", request);
+        log.debug("Get tenant version data, request={}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final int shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getTenantVersionId();
-                    final var versionData = new TenantVersionDataDto();
+                    final var tenantVersionId = request.getTenantVersionId();
+                    final var tenantVersionData = new TenantVersionDataDto();
 
                     return pgPool.withTransaction(sqlConnection ->
-                            fillData(sqlConnection, shard, tenantId, versionId, versionData));
+                            fillData(sqlConnection, shard, tenantId, tenantVersionId, tenantVersionData));
                 })
                 .map(GetTenantVersionDataResponse::new);
     }
@@ -50,64 +48,58 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
     Uni<TenantVersionDataDto> fillData(final SqlConnection sqlConnection,
                                        final int shard,
                                        final Long tenantId,
-                                       final Long versionId,
-                                       final TenantVersionDataDto versionData) {
-        return selectVersion(sqlConnection, shard, tenantId, versionId, versionData)
-                .flatMap(voidItem -> selectImageRefs(sqlConnection, shard, tenantId, versionId, versionData))
-                .flatMap(voidItem -> selectLobbyRefs(sqlConnection, shard, tenantId, versionId, versionData))
-                .flatMap(voidItem -> selectMatchmakerRefs(sqlConnection, shard, tenantId, versionId, versionData))
-                .replaceWith(versionData);
+                                       final Long tenantVersionId,
+                                       final TenantVersionDataDto tenantVersionData) {
+        return fillTenantVersion(sqlConnection, shard, tenantId, tenantVersionId, tenantVersionData)
+                .flatMap(voidItem -> fillTenantJenkinsRequests(sqlConnection,
+                        shard,
+                        tenantId,
+                        tenantVersionId,
+                        tenantVersionData))
+                .flatMap(voidItem -> fillTenantImageRef(sqlConnection,
+                        shard,
+                        tenantId,
+                        tenantVersionId,
+                        tenantVersionData))
+                .replaceWith(tenantVersionData);
     }
 
-    Uni<Void> selectVersion(final SqlConnection sqlConnection,
-                            final int shard,
-                            final Long tenantId,
-                            final Long versionId,
-                            final TenantVersionDataDto versionData) {
+    Uni<Void> fillTenantVersion(final SqlConnection sqlConnection,
+                                final int shard,
+                                final Long tenantId,
+                                final Long versionId,
+                                final TenantVersionDataDto tenantVersionData) {
         return selectTenantVersionOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         versionId)
-                .invoke(versionData::setTenantVersion)
+                .invoke(tenantVersionData::setTenantVersion)
                 .replaceWithVoid();
     }
 
-    Uni<Void> selectImageRefs(final SqlConnection sqlConnection,
-                              final int shard,
-                              final Long tenantId,
-                              final Long versionId,
-                              final TenantVersionDataDto versionData) {
+    Uni<Void> fillTenantJenkinsRequests(final SqlConnection sqlConnection,
+                                        final int shard,
+                                        final Long tenantId,
+                                        final Long tenantVersionId,
+                                        final TenantVersionDataDto tenantVersionData) {
+        return selectActiveTenantJenkinsRequestsByTenantVersionIdOperation.execute(sqlConnection,
+                        shard,
+                        tenantId,
+                        tenantVersionId)
+                .invoke(tenantVersionData::setTenantJenkinsRequests)
+                .replaceWithVoid();
+    }
+
+    Uni<Void> fillTenantImageRef(final SqlConnection sqlConnection,
+                                 final int shard,
+                                 final Long tenantId,
+                                 final Long tenantVersionId,
+                                 final TenantVersionDataDto tenantVersionData) {
         return selectActiveTenantImageRefsByTenantVersionIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
-                        versionId)
-                .invoke(versionData::setTenantImageRefs)
-                .replaceWithVoid();
-    }
-
-    Uni<Void> selectLobbyRefs(final SqlConnection sqlConnection,
-                              final int shard,
-                              final Long tenantId,
-                              final Long versionId,
-                              final TenantVersionDataDto versionData) {
-        return selectActiveTenantLobbyRefsByTenantDeploymentIdOperation.execute(sqlConnection,
-                        shard,
-                        tenantId,
-                        versionId)
-                .invoke(versionData::setTenantLobbyRefs)
-                .replaceWithVoid();
-    }
-
-    Uni<Void> selectMatchmakerRefs(final SqlConnection sqlConnection,
-                                   final int shard,
-                                   final Long tenantId,
-                                   final Long versionId,
-                                   final TenantVersionDataDto versionData) {
-        return selectActiveTenantMatchmakerRefsByTenantDeploymentIdOperation.execute(sqlConnection,
-                        shard,
-                        tenantId,
-                        versionId)
-                .invoke(versionData::setTenantMatchmakerRefs)
+                        tenantVersionId)
+                .invoke(tenantVersionData::setTenantImageRefs)
                 .replaceWithVoid();
     }
 }

@@ -28,9 +28,9 @@ class GetTenantDeploymentMethodImpl implements GetTenantDeploymentMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
-                    final var id = request.getId();
+                    final var tenantDeploymentId = request.getTenantDeploymentId();
                     return pgPool.withTransaction(sqlConnection -> selectTenantDeploymentOperation
-                            .execute(sqlConnection, shard, tenantId, id));
+                            .execute(sqlConnection, shard, tenantId, tenantDeploymentId));
                 })
                 .map(GetTenantDeploymentResponse::new);
     }

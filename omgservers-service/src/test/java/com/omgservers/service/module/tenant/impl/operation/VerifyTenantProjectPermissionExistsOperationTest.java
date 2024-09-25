@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation;
 
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
@@ -53,7 +53,7 @@ class VerifyTenantProjectPermissionExistsOperationTest extends Assertions {
         final var project = tenantProjectModelFactory.create(tenant.getId());
         upsertProjectOperation.upsertProject(shard, project);
         final var permission = tenantProjectPermissionModelFactory.create(tenant.getId(), project.getId(), userId,
-                TenantProjectPermissionEnum.STAGE_MANAGEMENT);
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT);
         upsertProjectPermissionOperation.upsertProjectPermission(shard, permission);
 
         assertTrue(hasProjectPermissionOperation.hasProjectPermission(shard,
@@ -71,7 +71,7 @@ class VerifyTenantProjectPermissionExistsOperationTest extends Assertions {
                 tenantId(),
                 projectId(),
                 userId(),
-                TenantProjectPermissionEnum.STAGE_MANAGEMENT));
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT));
     }
 
     Long userId() {

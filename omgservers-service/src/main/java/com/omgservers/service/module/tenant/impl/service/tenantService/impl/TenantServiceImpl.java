@@ -11,6 +11,8 @@ import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
@@ -87,6 +89,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermission
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
@@ -141,6 +145,7 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.GetTenantMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.SyncTenantMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.DeleteTenantDeploymentMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.GetTenantDeploymentDataMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.GetTenantDeploymentMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.SelectTenantDeploymentMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.SyncTenantDeploymentMethod;
@@ -179,6 +184,7 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantPermission.VerifyTenantPermissionExistsMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantPermission.ViewTenantPermissionsMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantProject.DeleteTenantProjectMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantProject.GetTenantProjectDataMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantProject.GetTenantProjectMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantProject.SyncTenantProjectMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantProject.ViewTenantProjectsMethod;
@@ -239,6 +245,7 @@ public class TenantServiceImpl implements TenantService {
     final SyncTenantMatchmakerRefMethod syncTenantMatchmakerRefMethod;
     final FindTenantMatchmakerRefMethod findTenantMatchmakerRefMethod;
     final ViewTenantLobbyRequestsMethod viewTenantLobbyRequestsMethod;
+    final GetTenantDeploymentDataMethod getTenantDeploymentDataMethod;
     final FindTenantLobbyRequestMethod findTenantLobbyRequestMethod;
     final SyncTenantLobbyRequestMethod syncTenantLobbyRequestMethod;
     final GetTenantMatchmakerRefMethod getTenantMatchmakerRefMethod;
@@ -276,8 +283,9 @@ public class TenantServiceImpl implements TenantService {
     final ViewTenantStagesMethod viewTenantStagesMethod;
     final SyncTenantStageMethod syncTenantStageMethod;
     final GetTenantStageMethod getTenantStageMethod;
+    final GetTenantDataMethod getTenantDataMethod;
+    final GetTenantProjectDataMethod getTenantProjectDataMethod;
     final DeleteTenantMethod deleteTenantMethod;
-    final GetTenantDataMethod getTenantDetails;
     final SyncTenantMethod syncTenantMethod;
     final GetTenantMethod getTenantMethod;
 
@@ -302,7 +310,7 @@ public class TenantServiceImpl implements TenantService {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantData,
-                getTenantDetails::getTenantData);
+                getTenantDataMethod::getTenantData);
     }
 
     @Override
@@ -369,6 +377,14 @@ public class TenantServiceImpl implements TenantService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantProject,
                 getTenantProjectMethod::execute);
+    }
+
+    @Override
+    public Uni<GetTenantProjectDataResponse> getTenantProjectData(@Valid final GetTenantProjectDataRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getTenantProjectData,
+                getTenantProjectDataMethod::execute);
     }
 
     @Override
@@ -577,7 +593,7 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<GetTenantVersionDataResponse> getTenantVersionData(@Valid final GetTenantVersionDataRequest request) {
+    public Uni<GetTenantVersionDataResponse> getTenantVersionData(GetTenantVersionDataRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantVersionData,
@@ -738,6 +754,14 @@ public class TenantServiceImpl implements TenantService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantDeployment,
                 getTenantDeploymentMethod::execute);
+    }
+
+    @Override
+    public Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(GetTenantDeploymentDataRequest request) {
+        return handleInternalRequestOperation.handleInternalRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::getTenantDeploymentData,
+                getTenantDeploymentDataMethod::execute);
     }
 
     @Override

@@ -13,12 +13,14 @@ public class TestVersionDto {
     String supportPassword;
     String supportToken;
 
-    Long tenantId;
     Long developerUserId;
     String developerPassword;
     String developerToken;
-    Long projectId;
-    Long stageId;
-    String stageSecret;
-    Long versionId;
+
+    Long tenantId;
+    Long tenantProjectId;
+    Long tenantStageId;
+    String tenantStageSecret;
+    Long tenantVersionId;
+    Long tenantDeploymentId;
 }

@@ -30,13 +30,13 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
 
         final var tenantId = request.getTenantId();
         return createTenantProject(tenantId)
-                .flatMap(project -> {
-                    final var projectId = project.getId();
-                    return createStage(tenantId, projectId)
-                            .map(stage -> {
-                                final var stageId = stage.getId();
-                                final var stageSecret = stage.getSecret();
-                                return new CreateProjectSupportResponse(projectId, stageId, stageSecret);
+                .flatMap(tenantProject -> {
+                    final var tenantProjectId = tenantProject.getId();
+                    return createTenantStage(tenantId, tenantProjectId)
+                            .map(tenantStage -> {
+                                final var stageId = tenantStage.getId();
+                                final var stageSecret = tenantStage.getSecret();
+                                return new CreateProjectSupportResponse(tenantProjectId, stageId, stageSecret);
                             });
                 });
     }
@@ -48,11 +48,11 @@ class CreateProjectMethodImpl implements CreateProjectMethod {
                 .replaceWith(project);
     }
 
-    Uni<TenantStageModel> createStage(final Long tenantId,
-                                      final Long projectId) {
-        final var stage = tenantStageModelFactory.create(tenantId, projectId);
-        final var syncStageInternalRequest = new SyncTenantStageRequest(stage);
+    Uni<TenantStageModel> createTenantStage(final Long tenantId,
+                                            final Long tenantProjectId) {
+        final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
+        final var syncStageInternalRequest = new SyncTenantStageRequest(tenantStage);
         return tenantModule.getTenantService().syncTenantStage(syncStageInternalRequest)
-                .replaceWith(stage);
+                .replaceWith(tenantStage);
     }
 }

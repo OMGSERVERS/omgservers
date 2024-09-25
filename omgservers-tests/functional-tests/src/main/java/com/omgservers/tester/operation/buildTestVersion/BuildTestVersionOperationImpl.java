@@ -29,12 +29,13 @@ class BuildTestVersionOperationImpl implements BuildTestVersionOperation {
     public Long buildTestVersion(final TestVersionDto testVersion,
                                  final String mainLua,
                                  final TenantVersionConfigDto newVersionConfig) throws IOException {
-        final var buildVersionDeveloperResponse = developerApiTester.buildVersion(testVersion.getDeveloperToken(),
-                testVersion.getTenantId(),
-                testVersion.getStageId(),
-                newVersionConfig,
-                mainLua);
+        final var buildVersionDeveloperResponse = developerApiTester
+                .buildTenantVersion(testVersion.getDeveloperToken(),
+                        testVersion.getTenantId(),
+                        testVersion.getTenantProjectId(),
+                        newVersionConfig,
+                        mainLua);
 
-        return buildVersionDeveloperResponse.getId();
+        return buildVersionDeveloperResponse.getTenantVersionId();
     }
 }

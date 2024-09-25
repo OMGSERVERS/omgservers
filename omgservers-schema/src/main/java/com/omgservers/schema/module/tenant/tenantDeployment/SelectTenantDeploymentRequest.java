@@ -15,7 +15,7 @@ public class SelectTenantDeploymentRequest implements ShardedRequest {
     Long tenantId;
 
     @NotNull
-    Long stageId;
+    Long tenantStageId;
 
     @NotNull
     Strategy strategy;

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.testInterface;
 
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.service.module.tenant.impl.operation.tenantProjectPermission.VerifyTenantProjectPermissionExistsOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ public class VerifyProjectPermissionExistsOperationTestInterface {
                                        Long tenantId,
                                        Long projectId,
                                        Long userId,
-                                       TenantProjectPermissionEnum permission) {
+                                       TenantProjectPermissionQualifierEnum permission) {
         return pgPool.withTransaction(sqlConnection -> verifyTenantProjectPermissionExistsOperation
                         .execute(sqlConnection, shard, tenantId, projectId, userId, permission))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
