@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteProjectPermissionsSupportRequest {
+public class CreateTenantProjectPermissionsSupportRequest {
 
     @NotNull
     Long tenantId;
@@ -24,5 +24,5 @@ public class DeleteProjectPermissionsSupportRequest {
     Long userId;
 
     @NotEmpty
-    Set<TenantProjectPermissionQualifierEnum> permissionsToDelete;
+    Set<TenantProjectPermissionQualifierEnum> permissionsToCreate;
 }

@@ -2,14 +2,14 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
-import com.omgservers.schema.entrypoint.support.CreateProjectPermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateProjectPermissionsSupportResponse;
-import com.omgservers.schema.entrypoint.support.CreateProjectSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateProjectSupportResponse;
-import com.omgservers.schema.entrypoint.support.CreateStagePermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStagePermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTokenSupportRequest;
@@ -18,28 +18,28 @@ import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportResponse;
-import com.omgservers.schema.entrypoint.support.DeleteProjectSupportRequest;
-import com.omgservers.schema.entrypoint.support.DeleteProjectSupportResponse;
-import com.omgservers.schema.entrypoint.support.DeleteStagePermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.DeleteStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createDeveloper.CreateDeveloperMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createProject.CreateProjectMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createProjectPermissions.CreateProjectPermissionsMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createStagePermissions.CreateStagePermissionsMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createTenant.CreateTenantMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createTenantPermissions.CreateTenantPermissionsMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.createToken.CreateTokenMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteDeveloper.DeleteDeveloperMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteProject.DeleteProjectMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteProjectPermissions.DeleteProjectPermissionsMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteStagePermissions.DeleteStagePermissionsMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteTenant.DeleteTenantMethod;
-import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.deleteTenantPermissions.DeleteTenantPermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateDeveloperMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantPermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectPermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantStagePermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTokenMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteDeveloperMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteProjectPermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantPermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantProjectMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantStagePermissionsMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -52,88 +52,90 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SupportServiceImpl implements SupportService {
 
-    final CreateProjectPermissionsMethod createProjectPermissionsMethod;
+    final CreateTenantProjectPermissionsMethod createTenantProjectPermissionsMethod;
+    final CreateTenantStagePermissionsMethod createTenantStagePermissionsMethod;
+    final DeleteTenantStagePermissionsMethod deleteTenantStagePermissionsMethod;
     final DeleteProjectPermissionsMethod deleteProjectPermissionsMethod;
     final CreateTenantPermissionsMethod createTenantPermissionsMethod;
     final DeleteTenantPermissionsMethod deleteTenantPermissionsMethod;
-    final CreateStagePermissionsMethod createStagePermissionsMethod;
-    final DeleteStagePermissionsMethod deleteStagePermissionsMethod;
+    final CreateTenantProjectMethod createTenantProjectMethod;
+    final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final CreateDeveloperMethod createDeveloperMethod;
     final DeleteDeveloperMethod deleteDeveloperMethod;
-    final CreateProjectMethod createProjectMethod;
-    final DeleteProjectMethod deleteProjectMethod;
     final CreateTenantMethod createTenantMethod;
     final DeleteTenantMethod deleteTenantMethod;
     final CreateTokenMethod createTokenMethod;
 
     @Override
     public Uni<CreateTokenSupportResponse> createToken(@Valid final CreateTokenSupportRequest request) {
-        return createTokenMethod.createToken(request);
+        return createTokenMethod.execute(request);
     }
 
     @Override
     public Uni<CreateTenantSupportResponse> createTenant(@Valid final CreateTenantSupportRequest request) {
-        return createTenantMethod.createTenant(request);
+        return createTenantMethod.execute(request);
     }
 
     @Override
     public Uni<DeleteTenantSupportResponse> deleteTenant(@Valid final DeleteTenantSupportRequest request) {
-        return deleteTenantMethod.deleteTenant(request);
+        return deleteTenantMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateProjectSupportResponse> createProject(@Valid final CreateProjectSupportRequest request) {
-        return createProjectMethod.createProject(request);
+    public Uni<CreateTenantProjectSupportResponse> createTenantProject(
+            @Valid final CreateTenantProjectSupportRequest request) {
+        return createTenantProjectMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteProjectSupportResponse> deleteProject(@Valid final DeleteProjectSupportRequest request) {
-        return deleteProjectMethod.deleteProject(request);
+    public Uni<DeleteTenantProjectSupportResponse> deleteTenantProject(
+            @Valid final DeleteTenantProjectSupportRequest request) {
+        return deleteTenantProjectMethod.execute(request);
     }
 
     @Override
     public Uni<CreateDeveloperSupportResponse> createDeveloper(@Valid final CreateDeveloperSupportRequest request) {
-        return createDeveloperMethod.createDeveloper(request);
+        return createDeveloperMethod.execute(request);
     }
 
     @Override
     public Uni<DeleteDeveloperSupportResponse> deleteDeveloper(@Valid final DeleteDeveloperSupportRequest request) {
-        return deleteDeveloperMethod.deleteDeveloper(request);
+        return deleteDeveloperMethod.execute(request);
     }
 
     @Override
     public Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
             @Valid final CreateTenantPermissionsSupportRequest request) {
-        return createTenantPermissionsMethod.createTenantPermissions(request);
+        return createTenantPermissionsMethod.execute(request);
     }
 
     @Override
     public Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
             @Valid final DeleteTenantPermissionsSupportRequest request) {
-        return deleteTenantPermissionsMethod.deleteTenantPermissions(request);
+        return deleteTenantPermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateProjectPermissionsSupportResponse> createProjectPermissions(
-            @Valid final CreateProjectPermissionsSupportRequest request) {
-        return createProjectPermissionsMethod.createProjectPermissions(request);
+    public Uni<CreateTenantProjectPermissionsSupportResponse> createTenantProjectPermissions(
+            @Valid final CreateTenantProjectPermissionsSupportRequest request) {
+        return createTenantProjectPermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteProjectPermissionsSupportResponse> deleteProjectPermissions(
+    public Uni<DeleteProjectPermissionsSupportResponse> deleteTenantProjectPermissions(
             @Valid final DeleteProjectPermissionsSupportRequest request) {
-        return deleteProjectPermissionsMethod.deleteProjectPermissions(request);
+        return deleteProjectPermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateStagePermissionsSupportResponse> createStagePermissions(
-            @Valid final CreateStagePermissionsSupportRequest request) {
-        return createStagePermissionsMethod.createStagePermissions(request);
+    public Uni<CreateTenantStagePermissionsSupportResponse> createTenantStagePermissions(
+            @Valid final CreateTenantStagePermissionsSupportRequest request) {
+        return createTenantStagePermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteStagePermissionsSupportResponse> deleteStagePermissions(
-            @Valid final DeleteStagePermissionsSupportRequest request) {
-        return deleteStagePermissionsMethod.deleteStagePermissions(request);
+    public Uni<DeleteTenantStagePermissionsSupportResponse> deleteTenantStagePermissions(
+            @Valid final DeleteTenantStagePermissionsSupportRequest request) {
+        return deleteTenantStagePermissionsMethod.execute(request);
     }
 }
