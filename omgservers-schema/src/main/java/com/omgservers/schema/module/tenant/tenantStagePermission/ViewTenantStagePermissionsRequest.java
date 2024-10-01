@@ -15,7 +15,7 @@ public class ViewTenantStagePermissionsRequest implements ShardedRequest {
     Long tenantId;
 
     @NotNull
-    Long stageId;
+    Long tenantStageId;
 
     @Override
     public String getRequestShardKey() {

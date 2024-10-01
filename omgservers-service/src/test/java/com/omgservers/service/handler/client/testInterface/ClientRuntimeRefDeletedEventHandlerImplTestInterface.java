@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.client.testInterface;
 
 import com.omgservers.service.event.EventModel;
-import com.omgservers.service.handler.client.ClientRuntimeRefDeletedEventHandlerImpl;
+import com.omgservers.service.handler.impl.client.ClientRuntimeRefDeletedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

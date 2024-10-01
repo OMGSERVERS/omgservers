@@ -28,7 +28,7 @@ class ViewTenantLobbyRefsMethodImpl implements ViewTenantLobbyRefsMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var tenantDeploymentId = request.getDeploymentId();
+                    final var tenantDeploymentId = request.getTenantDeploymentId();
                     return pgPool.withTransaction(
                             sqlConnection -> selectActiveTenantLobbyRefsByTenantDeploymentIdOperation
                                     .execute(sqlConnection,

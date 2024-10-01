@@ -28,12 +28,12 @@ class ViewTenantVersionsMethodImpl implements ViewTenantVersionsMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var stageId = request.getProjectId();
+                    final var tenantProjectId = request.getTenantProjectId();
                     return pgPool.withTransaction(sqlConnection -> selectActiveTenantVersionProjectionsByTenantProjectIdOperation
                             .execute(sqlConnection,
                                     shard.shard(),
                                     tenantId,
-                                    stageId
+                                    tenantProjectId
                             )
                     );
                 })

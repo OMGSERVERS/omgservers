@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.pool.testInterface;
 
 import com.omgservers.service.event.EventModel;
-import com.omgservers.service.handler.pool.PoolServerContainerCreatedEventHandlerImpl;
+import com.omgservers.service.handler.impl.pool.PoolServerContainerCreatedEventHandlerImpl;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

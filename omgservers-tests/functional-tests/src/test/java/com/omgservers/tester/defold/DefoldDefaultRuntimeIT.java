@@ -115,6 +115,8 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
                         Collections.singletonList(serverMessage1.getId()));
                 assertEquals("{\"text\":\"confirm_message\"}",
                         ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
+            } catch (Exception e) {
+                throw e;
             }
 
         } finally {

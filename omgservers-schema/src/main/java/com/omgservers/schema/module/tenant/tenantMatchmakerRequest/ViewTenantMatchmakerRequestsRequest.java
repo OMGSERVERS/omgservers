@@ -15,7 +15,7 @@ public class ViewTenantMatchmakerRequestsRequest implements ShardedRequest {
     Long tenantId;
 
     @NotNull
-    Long deploymentId;
+    Long tenantDeploymentId;
 
     @Override
     public String getRequestShardKey() {

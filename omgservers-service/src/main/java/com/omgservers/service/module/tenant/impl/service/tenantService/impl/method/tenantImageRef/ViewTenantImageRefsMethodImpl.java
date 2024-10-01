@@ -32,13 +32,13 @@ class ViewTenantImageRefsMethodImpl implements ViewTenantImageRefsMethod {
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     return pgPool.withTransaction(sqlConnection -> {
-                                final var versionId = request.getVersionId();
-                                if (Objects.nonNull(versionId)) {
+                                final var tenantVersionId = request.getTenantVersionId();
+                                if (Objects.nonNull(tenantVersionId)) {
                                     return selectActiveTenantImageRefsByTenantVersionIdOperation
                                             .execute(sqlConnection,
                                                     shard.shard(),
                                                     tenantId,
-                                                    versionId);
+                                                    tenantVersionId);
                                 } else {
                                     return selectActiveTenantImageRefsByTenantIdOperation
                                             .execute(sqlConnection,

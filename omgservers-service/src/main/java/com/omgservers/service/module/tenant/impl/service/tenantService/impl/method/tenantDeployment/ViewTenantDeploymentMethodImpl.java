@@ -32,13 +32,13 @@ class ViewTenantDeploymentMethodImpl implements ViewTenantDeploymentMethod {
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     return pgPool.withTransaction(sqlConnection -> {
-                                final var stageId = request.getStageId();
-                                if (Objects.nonNull(stageId)) {
+                                final var tenantStageId = request.getTenantStageId();
+                                if (Objects.nonNull(tenantStageId)) {
                                     return selectActiveTenantDeploymentsByTenantStageIdOperation
                                             .execute(sqlConnection,
                                                     shard.shard(),
                                                     tenantId,
-                                                    stageId);
+                                                    tenantStageId);
                                 } else {
                                     return selectActiveTenantDeploymentsByTenantIdOperation
                                             .execute(sqlConnection,

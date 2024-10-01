@@ -29,13 +29,14 @@ class ViewTenantLobbyRequestsMethodImpl implements ViewTenantLobbyRequestsMethod
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getDeploymentId();
-                    return pgPool.withTransaction(sqlConnection -> selectActiveTenantLobbyRequestsByTenantDeploymentIdOperation
-                            .execute(sqlConnection,
-                                    shard.shard(),
-                                    tenantId,
-                                    versionId
-                            )
+                    final var tenantDeploymentId = request.getTenantDeploymentId();
+                    return pgPool.withTransaction(sqlConnection ->
+                            selectActiveTenantLobbyRequestsByTenantDeploymentIdOperation
+                                    .execute(sqlConnection,
+                                            shard.shard(),
+                                            tenantId,
+                                            tenantDeploymentId
+                                    )
                     );
                 })
                 .map(ViewTenantLobbyRequestsResponse::new);

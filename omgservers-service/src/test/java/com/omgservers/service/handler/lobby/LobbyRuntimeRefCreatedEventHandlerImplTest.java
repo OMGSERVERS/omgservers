@@ -2,6 +2,7 @@ package com.omgservers.service.handler.lobby;
 
 import com.omgservers.service.event.body.module.lobby.LobbyRuntimeRefCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.handler.impl.lobby.LobbyRuntimeRefCreatedEventHandlerImpl;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

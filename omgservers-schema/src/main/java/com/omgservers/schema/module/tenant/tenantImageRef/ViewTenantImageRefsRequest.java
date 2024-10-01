@@ -14,7 +14,7 @@ public class ViewTenantImageRefsRequest implements ShardedRequest {
     @NotNull
     Long tenantId;
 
-    Long versionId;
+    Long tenantVersionId;
 
     @Override
     public String getRequestShardKey() {

@@ -3,6 +3,7 @@ package com.omgservers.service.handler.lobby;
 import com.omgservers.schema.module.lobby.DeleteLobbyRuntimeRefRequest;
 import com.omgservers.service.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.handler.impl.lobby.LobbyRuntimeRefDeletedEventHandlerImpl;
 import com.omgservers.service.module.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;

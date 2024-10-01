@@ -28,13 +28,13 @@ class ViewTenantStagePermissionsMethodImpl implements ViewTenantStagePermissions
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var stageId = request.getStageId();
+                    final var tenantStageId = request.getTenantStageId();
                     return pgPool.withTransaction(
                             sqlConnection -> selectActiveTenantStagePermissionsByTenantStageIdOperation
                                     .execute(sqlConnection,
                                             shard.shard(),
                                             tenantId,
-                                            stageId
+                                            tenantStageId
                                     ));
                 })
                 .map(ViewTenantStagePermissionsResponse::new);

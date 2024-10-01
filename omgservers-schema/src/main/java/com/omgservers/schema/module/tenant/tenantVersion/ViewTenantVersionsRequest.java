@@ -15,7 +15,7 @@ public class ViewTenantVersionsRequest implements ShardedRequest {
     Long tenantId;
 
     @NotNull
-    Long projectId;
+    Long tenantProjectId;
 
     @Override
     public String getRequestShardKey() {
