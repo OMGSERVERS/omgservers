@@ -31,7 +31,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./projectctl.sh build testWithSonar
       - name: Start containers
-        run: ./projectctl.sh integration up && sleep 30
+        run: ./projectctl.sh integration up && sleep 60
       - name: Run tests
         run: ./projectctl.sh integration test
       - name: Log builder job
