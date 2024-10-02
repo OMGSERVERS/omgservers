@@ -130,7 +130,7 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
                         "OMGSERVERS_TENANT_ID", testVersion.getTenantId().toString(),
                         "OMGSERVERS_TENANT_STAGE_ID", testVersion.getTenantStageId().toString(),
                         "OMGSERVERS_TENANT_STAGE_SECRET", testVersion.getTenantStageSecret()))
-                .withNetworkMode("host");
+                .withExtraHost("host.docker.internal", "host-gateway");
     }
 
     @Data
