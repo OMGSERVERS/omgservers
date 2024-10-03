@@ -26,10 +26,10 @@ class ParseDockerRepositoryOperationImpl implements ParseDockerRepositoryOperati
         try {
             final var namespace = parts[0];
             final var tenantId = Long.parseLong(parts[1]);
-            final var projectId = Long.parseLong(parts[2]);
+            final var tenantProjectId = Long.parseLong(parts[2]);
             final var qualifier = DockerRegistryContainerQualifierEnum.fromString(parts[3]);
 
-            return new DockerRegistryRepositoryDto(namespace, tenantId, projectId, qualifier);
+            return new DockerRegistryRepositoryDto(namespace, tenantId, tenantProjectId, qualifier);
         } catch (IllegalArgumentException e) {
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, e.getMessage(), e);
         }

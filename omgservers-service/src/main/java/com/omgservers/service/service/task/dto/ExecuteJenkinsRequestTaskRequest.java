@@ -14,5 +14,5 @@ public class ExecuteJenkinsRequestTaskRequest {
     Long tenantId;
 
     @NotNull
-    Long jenkinsRequestId;
+    Long tenantJenkinsRequestId;
 }

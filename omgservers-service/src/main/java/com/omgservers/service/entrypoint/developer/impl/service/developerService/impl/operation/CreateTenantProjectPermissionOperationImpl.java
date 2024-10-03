@@ -21,11 +21,11 @@ class CreateTenantProjectPermissionOperationImpl implements CreateTenantProjectP
 
     @Override
     public Uni<TenantProjectPermissionModel> execute(final Long tenantId,
-                                                     final Long projectId,
+                                                     final Long tenantProjectId,
                                                      final Long userId,
                                                      final TenantProjectPermissionQualifierEnum permissionQualifier) {
         final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
-                projectId,
+                tenantProjectId,
                 userId,
                 permissionQualifier);
         final var request = new SyncTenantProjectPermissionRequest(projectPermission);

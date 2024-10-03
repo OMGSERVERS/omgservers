@@ -2,18 +2,18 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
-import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
@@ -41,15 +41,15 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
-        final var projectId = request.getTenantProjectId();
+        final var tenantProjectId = request.getTenantProjectId();
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getTenantProject(tenantId, projectId))
+                        .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))
                         .flatMap(project -> {
                             final var permissionsToCreate = request.getPermissionsToCreate();
                             return Multi.createFrom().iterable(permissionsToCreate)
                                     .onItem().transformToUniAndConcatenate(permission ->
-                                            createProjectPermission(tenantId, projectId, userId, permission)
+                                            createTenantProjectPermission(tenantId, tenantProjectId, userId, permission)
                                                     .map(created -> Tuple2.of(permission, created)))
                                     .collect().asList();
                         }))
@@ -75,20 +75,20 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
-    Uni<Boolean> createProjectPermission(final Long tenantId,
-                                         final Long projectId,
-                                         final Long userId,
-                                         final TenantProjectPermissionQualifierEnum permission) {
+    Uni<Boolean> createTenantProjectPermission(final Long tenantId,
+                                               final Long tenantProjectId,
+                                               final Long userId,
+                                               final TenantProjectPermissionQualifierEnum permission) {
         return syncTenantProjectPermission(tenantId,
-                projectId,
+                tenantProjectId,
                 userId,
                 permission)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Sync project permission was failed, " +
-                                    "tenantId={}, projectId={}, userId={}, permission={}, {}:{}",
+                                    "tenantId={}, tenantProjectId={}, userId={}, permission={}, {}:{}",
                             tenantId,
-                            projectId,
+                            tenantProjectId,
                             userId,
                             permission,
                             t.getClass().getSimpleName(),
@@ -98,13 +98,13 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
     }
 
     Uni<Boolean> syncTenantProjectPermission(final Long tenantId,
-                                             final Long projectId,
+                                             final Long tenantProjectId,
                                              final Long userId,
                                              final TenantProjectPermissionQualifierEnum permission) {
-        final var projectPermission = tenantProjectPermissionModelFactory
-                .create(tenantId, projectId, userId, permission);
+        final var tenantProjectPermission = tenantProjectPermissionModelFactory
+                .create(tenantId, tenantProjectId, userId, permission);
 
-        final var request = new SyncTenantProjectPermissionRequest(projectPermission);
+        final var request = new SyncTenantProjectPermissionRequest(tenantProjectPermission);
         return tenantModule.getTenantService().syncTenantProjectPermission(request)
                 .map(SyncTenantProjectPermissionResponse::getCreated);
     }

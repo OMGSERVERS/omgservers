@@ -34,9 +34,11 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                     final var tenantProjectId = tenantProject.getId();
                     return createTenantStage(tenantId, tenantProjectId)
                             .map(tenantStage -> {
-                                final var stageId = tenantStage.getId();
-                                final var stageSecret = tenantStage.getSecret();
-                                return new CreateTenantProjectSupportResponse(tenantProjectId, stageId, stageSecret);
+                                final var tenantStageId = tenantStage.getId();
+                                final var tenantStageSecret = tenantStage.getSecret();
+                                return new CreateTenantProjectSupportResponse(tenantProjectId,
+                                        tenantStageId,
+                                        tenantStageSecret);
                             });
                 });
     }

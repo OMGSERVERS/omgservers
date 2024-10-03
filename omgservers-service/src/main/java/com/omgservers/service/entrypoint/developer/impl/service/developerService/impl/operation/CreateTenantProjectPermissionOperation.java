@@ -6,7 +6,7 @@ import io.smallrye.mutiny.Uni;
 
 public interface CreateTenantProjectPermissionOperation {
     Uni<TenantProjectPermissionModel> execute(final Long tenantId,
-                                              final Long projectId,
+                                              final Long tenantProjectId,
                                               final Long userId,
                                               final TenantProjectPermissionQualifierEnum permissionQualifier);
 }

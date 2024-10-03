@@ -135,12 +135,9 @@ build_testWithSonar() {
 }
 
 build_beforeCommit() {
-#  build_withTests
-
-  localtesting_up
-  development_up
-  integration_up
-  standalone_up
+  environment_down
+  build_withTests
+  integration_test
 
   environment_down
 }

@@ -22,7 +22,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
         final var repositoryModel = parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString);
         assertEquals("omgservers", repositoryModel.getNamespace());
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
-        assertEquals(231077687903387648L, repositoryModel.getProjectId());
+        assertEquals(231077687903387648L, repositoryModel.getTenantProjectId());
         assertEquals(DockerRegistryContainerQualifierEnum.UNIVERSAL, repositoryModel.getContainer());
     }
 
@@ -33,7 +33,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
         final var repositoryModel = parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString);
         assertEquals("omgservers", repositoryModel.getNamespace());
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
-        assertEquals(231077687903387648L, repositoryModel.getProjectId());
+        assertEquals(231077687903387648L, repositoryModel.getTenantProjectId());
         assertEquals(DockerRegistryContainerQualifierEnum.LOBBY, repositoryModel.getContainer());
     }
 
@@ -44,7 +44,7 @@ class ParseDockerRegistryRepositoryOperationTest extends Assertions {
         final var repositoryModel = parseDockerRepositoryOperation.parseDockerRegistryRepository(repositoryString);
         assertEquals("omgservers", repositoryModel.getNamespace());
         assertEquals(245515657456648192L, repositoryModel.getTenantId());
-        assertEquals(231077687903387648L, repositoryModel.getProjectId());
+        assertEquals(231077687903387648L, repositoryModel.getTenantProjectId());
         assertEquals(DockerRegistryContainerQualifierEnum.MATCH, repositoryModel.getContainer());
     }
 

@@ -19,13 +19,13 @@ public class ExecuteStageTaskMethodImpl implements ExecuteStageTaskMethod {
         log.debug("Execute stage task, request={}", request);
 
         final var tenantId = request.getTenantId();
-        final var stageId = request.getStageId();
+        final var tenantStageId = request.getTenantStageId();
 
-        return stageTask.executeTask(tenantId, stageId)
+        return stageTask.executeTask(tenantId, tenantStageId)
                 .onFailure()
                 .recoverWithUni(t -> {
-                    log.warn("Job task failed, stageId={}:{}, {}:{}",
-                            tenantId, stageId, t.getClass().getSimpleName(), t.getMessage(), t);
+                    log.warn("Job task failed, tenantStage={}:{}, {}:{}",
+                            tenantId, tenantStageId, t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .map(ExecuteStageTaskResponse::new);

@@ -2,18 +2,18 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantStagePermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantStagePermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
-import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
@@ -41,15 +41,15 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
-        final var stageId = request.getTenantStageId();
+        final var tenantStageId = request.getTenantStageId();
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(project -> getTenantStage(tenantId, stageId))
+                        .flatMap(project -> getTenantStage(tenantId, tenantStageId))
                         .flatMap(stage -> {
                             final var permissionsToCreate = request.getPermissionsToCreate();
                             return Multi.createFrom().iterable(permissionsToCreate)
                                     .onItem().transformToUniAndConcatenate(permission ->
-                                            createStagePermission(tenantId, stageId, userId, permission)
+                                            createStagePermission(tenantId, tenantStageId, userId, permission)
                                                     .map(created -> Tuple2.of(permission, created)))
                                     .collect().asList();
                         }))
@@ -76,19 +76,19 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
     }
 
     Uni<Boolean> createStagePermission(final Long tenantId,
-                                       final Long stageId,
+                                       final Long tenantStageId,
                                        final Long userId,
                                        final TenantStagePermissionQualifierEnum permission) {
         return syncStagePermission(tenantId,
-                stageId,
+                tenantStageId,
                 userId,
                 permission)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Sync stage permission was failed, " +
-                                    "tenantId={}, stageId={}, userId={}, permission={}, {}:{}",
+                                    "tenantId={}, tenantStageId={}, userId={}, permission={}, {}:{}",
                             tenantId,
-                            stageId,
+                            tenantStageId,
                             userId,
                             permission,
                             t.getClass().getSimpleName(),
@@ -98,11 +98,11 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
     }
 
     Uni<Boolean> syncStagePermission(final Long tenantId,
-                                     final Long stageId,
+                                     final Long tenantStageId,
                                      final Long userId,
                                      final TenantStagePermissionQualifierEnum permission) {
         final var stagePermission = tenantStagePermissionModelFactory
-                .create(tenantId, stageId, userId, permission);
+                .create(tenantId, tenantStageId, userId, permission);
 
         final var request = new SyncTenantStagePermissionRequest(stagePermission);
         return tenantModule.getTenantService().syncTenantStagePermission(request)

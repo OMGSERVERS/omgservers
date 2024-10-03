@@ -71,10 +71,10 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
-    Uni<Void> buildLuaJitRuntime(final Long projectId,
+    Uni<Void> buildLuaJitRuntime(final Long tenantProjectId,
                                  final TenantVersionModel tenantVersion,
                                  final String idempotencyKey) {
-        return runLuaJitRuntimeBuilderV1(projectId, tenantVersion)
+        return runLuaJitRuntimeBuilderV1(tenantProjectId, tenantVersion)
                 .flatMap(buildNumber -> syncTenantJenkinsRequest(tenantVersion,
                         TenantJenkinsRequestQualifierEnum.LUAJIT_RUNTIME_BUILDER_V1,
                         buildNumber,
@@ -82,12 +82,12 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<Integer> runLuaJitRuntimeBuilderV1(final Long projectId,
+    Uni<Integer> runLuaJitRuntimeBuilderV1(final Long tenantProjectId,
                                            final TenantVersionModel tenantVersion) {
         final var tenantId = tenantVersion.getTenantId();
         final var tenantStageId = tenantVersion.getProjectId();
         final var tenantVersionId = tenantVersion.getId();
-        final var groupId = String.format("omgservers/%d/%d", tenantId, projectId);
+        final var groupId = String.format("omgservers/%d/%d", tenantId, tenantProjectId);
         final var containerName = "universal";
         final var base64Archive = tenantVersion.getBase64Archive();
         final var request = new RunLuaJitRuntimeBuilderV1Request(groupId,

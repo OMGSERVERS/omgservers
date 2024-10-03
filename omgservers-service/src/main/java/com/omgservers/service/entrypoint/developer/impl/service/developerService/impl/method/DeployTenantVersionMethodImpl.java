@@ -74,14 +74,14 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                 );
     }
 
-    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long versionId) {
-        final var request = new GetTenantVersionRequest(tenantId, versionId);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long tenantVersionId) {
+        final var request = new GetTenantVersionRequest(tenantId, tenantVersionId);
         return tenantModule.getTenantService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
-    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long stageId) {
-        final var request = new GetTenantStageRequest(tenantId, stageId);
+    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
+        final var request = new GetTenantStageRequest(tenantId, tenantStageId);
         return tenantModule.getTenantService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }

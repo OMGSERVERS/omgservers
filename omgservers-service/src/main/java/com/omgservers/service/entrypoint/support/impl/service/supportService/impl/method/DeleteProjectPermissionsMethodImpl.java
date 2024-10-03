@@ -87,8 +87,8 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
     }
 
     Uni<List<TenantProjectPermissionModel>> viewTenantProjectPermissions(final Long tenantId,
-                                                                         final Long projectId) {
-        final var request = new ViewTenantProjectPermissionsRequest(tenantId, projectId);
+                                                                         final Long tenantProjectId) {
+        final var request = new ViewTenantProjectPermissionsRequest(tenantId, tenantProjectId);
         return tenantModule.getTenantService().viewTenantProjectPermissions(request)
                 .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }

@@ -54,8 +54,8 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
                 .replaceWithVoid();
     }
 
-    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long versionId) {
-        final var request = new GetTenantVersionRequest(tenantId, versionId);
+    Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long tenantVersionId) {
+        final var request = new GetTenantVersionRequest(tenantId, tenantVersionId);
         return tenantModule.getTenantService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }

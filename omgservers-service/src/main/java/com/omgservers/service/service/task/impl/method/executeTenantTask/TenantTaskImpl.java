@@ -1,18 +1,18 @@
 package com.omgservers.service.service.task.impl.method.executeTenantTask;
 
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsRequest;
 import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
 import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesRequest;
 import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesResponse;
-import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.task.TaskService;
+import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -70,8 +70,8 @@ public class TenantTaskImpl {
                 );
     }
 
-    Uni<List<TenantStageModel>> viewTenantStages(final Long tenantId, final Long projectId) {
-        final var request = new ViewTenantStagesRequest(tenantId, projectId);
+    Uni<List<TenantStageModel>> viewTenantStages(final Long tenantId, final Long tenantProjectId) {
+        final var request = new ViewTenantStagesRequest(tenantId, tenantProjectId);
         return tenantModule.getTenantService().viewTenantStages(request)
                 .map(ViewTenantStagesResponse::getTenantStages);
     }

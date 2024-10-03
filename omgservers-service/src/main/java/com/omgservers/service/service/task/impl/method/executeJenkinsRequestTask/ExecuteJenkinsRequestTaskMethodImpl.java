@@ -20,7 +20,7 @@ public class ExecuteJenkinsRequestTaskMethodImpl implements ExecuteJenkinsReques
         log.debug("Execute jenkins request task, request={}", request);
 
         final var tenantId = request.getTenantId();
-        final var jenkinsRequestId = request.getJenkinsRequestId();
+        final var jenkinsRequestId = request.getTenantJenkinsRequestId();
 
         return jenkinsRequestTask.executeTask(tenantId, jenkinsRequestId)
                 .onFailure()

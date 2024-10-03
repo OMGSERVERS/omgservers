@@ -67,12 +67,12 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
     Uni<Void> fillTenantVersion(final SqlConnection sqlConnection,
                                 final int shard,
                                 final Long tenantId,
-                                final Long versionId,
+                                final Long tenantVersionId,
                                 final TenantVersionDataDto tenantVersionData) {
         return selectTenantVersionOperation.execute(sqlConnection,
                         shard,
                         tenantId,
-                        versionId)
+                        tenantVersionId)
                 .invoke(tenantVersionData::setTenantVersion)
                 .replaceWithVoid();
     }

@@ -67,8 +67,8 @@ public class PlayerApiTester {
 
     public Long createClient(final String token,
                              final Long tenantId,
-                             final Long stageId,
-                             final String secret)
+                             final Long tenantStageId,
+                             final String tenantStageSecret)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -76,7 +76,9 @@ public class PlayerApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateClientPlayerRequest(tenantId, stageId, secret)))
+                .body(objectMapper.writeValueAsString(new CreateClientPlayerRequest(tenantId,
+                        tenantStageId,
+                        tenantStageSecret)))
                 .when().put("/omgservers/v1/entrypoint/player/request/create-client");
         responseSpecification.then().statusCode(200);
 

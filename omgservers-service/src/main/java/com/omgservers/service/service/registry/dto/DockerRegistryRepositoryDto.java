@@ -11,11 +11,11 @@ public class DockerRegistryRepositoryDto {
 
     String namespace;
     Long tenantId;
-    Long projectId;
+    Long tenantProjectId;
     DockerRegistryContainerQualifierEnum container;
 
     @Override
     public String toString() {
-        return String.format("%s/%d/%d/%s", namespace, tenantId, projectId, container.getQualifier());
+        return String.format("%s/%d/%d/%s", namespace, tenantId, tenantProjectId, container.getQualifier());
     }
 }

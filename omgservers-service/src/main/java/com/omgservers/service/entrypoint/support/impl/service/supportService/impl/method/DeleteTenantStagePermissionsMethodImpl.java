@@ -42,12 +42,12 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
-        final var stageId = request.getTenantStageId();
+        final var tenantStageId = request.getTenantStageId();
 
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getTenantStage(tenantId, stageId))
-                        .flatMap(stage -> viewTenantStagePermissions(tenantId, stageId)
+                        .flatMap(tenant -> getTenantStage(tenantId, tenantStageId))
+                        .flatMap(stage -> viewTenantStagePermissions(tenantId, tenantStageId)
                                 .flatMap(stagePermissions -> {
                                     final var requestPermissionToDelete = request.getPermissionsToDelete();
 
@@ -87,8 +87,8 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
     }
 
     Uni<List<TenantStagePermissionModel>> viewTenantStagePermissions(final Long tenantId,
-                                                                     final Long stageId) {
-        final var request = new ViewTenantStagePermissionsRequest(tenantId, stageId);
+                                                                     final Long tenantStageId) {
+        final var request = new ViewTenantStagePermissionsRequest(tenantId, tenantStageId);
         return tenantModule.getTenantService().viewTenantStagePermissions(request)
                 .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }

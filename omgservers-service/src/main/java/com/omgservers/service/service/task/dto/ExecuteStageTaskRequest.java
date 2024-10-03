@@ -14,5 +14,5 @@ public class ExecuteStageTaskRequest {
     Long tenantId;
 
     @NotNull
-    Long stageId;
+    Long tenantStageId;
 }

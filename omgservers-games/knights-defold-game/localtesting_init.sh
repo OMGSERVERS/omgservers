@@ -16,7 +16,7 @@ if [ -z "${TENANT_ID}" ]; then
   exit 1
 fi
 
-echo "Create a new project"
+echo "Create a new tenant project"
 
 ./omgserversctl.sh support createProject ${TENANT_ID}
 

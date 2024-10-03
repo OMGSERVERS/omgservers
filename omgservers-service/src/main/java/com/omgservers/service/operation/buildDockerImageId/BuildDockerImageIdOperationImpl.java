@@ -12,9 +12,9 @@ class BuildDockerImageIdOperationImpl implements BuildDockerImageIdOperation {
 
     @Override
     public String buildDockerImageId(final DockerRegistryRepositoryDto dockerRepository,
-                                     final Long versionId) {
+                                     final Long tenantVersionId) {
         final var repositoryString = dockerRepository.toString();
-        final var imageId = String.format("%s:%d", repositoryString, versionId);
+        final var imageId = String.format("%s:%d", repositoryString, tenantVersionId);
         return imageId;
     }
 }

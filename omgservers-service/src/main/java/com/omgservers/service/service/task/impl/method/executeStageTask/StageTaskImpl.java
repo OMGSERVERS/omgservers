@@ -1,16 +1,16 @@
 package com.omgservers.service.service.task.impl.method.executeStageTask;
 
+import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
-import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -31,8 +31,8 @@ public class StageTaskImpl {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
-    public Uni<Boolean> executeTask(final Long tenantId, final Long stageId) {
-        return getTenantStage(tenantId, stageId)
+    public Uni<Boolean> executeTask(final Long tenantId, final Long tenantStageId) {
+        return getTenantStage(tenantId, tenantStageId)
                 .flatMap(stage -> handleStage(stage)
                         .replaceWith(Boolean.TRUE));
     }
@@ -43,11 +43,11 @@ public class StageTaskImpl {
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<Void> handleStage(final TenantStageModel stage) {
-        final var tenantId = stage.getTenantId();
-        final var stageId = stage.getId();
+    Uni<Void> handleStage(final TenantStageModel tenantStage) {
+        final var tenantId = tenantStage.getTenantId();
+        final var tenantStageId = tenantStage.getId();
 
-        return viewVersionProjections(tenantId, stageId)
+        return viewVersionProjections(tenantId, tenantStageId)
                 .flatMap(versions -> {
                     if (versions.size() > 1) {
                         final var previousVersions = versions.subList(0, versions.size() - 1);
@@ -61,32 +61,32 @@ public class StageTaskImpl {
                 });
     }
 
-    Uni<List<TenantVersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long stageId) {
-        final var request = new ViewTenantVersionsRequest(tenantId, stageId);
+    Uni<List<TenantVersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long tenantStageId) {
+        final var request = new ViewTenantVersionsRequest(tenantId, tenantStageId);
         return tenantModule.getTenantService().viewTenantVersions(request)
                 .map(ViewTenantVersionsResponse::getTenantVersionProjections);
     }
 
-    Uni<Boolean> handlePreviousVersion(final TenantVersionProjectionModel versionProjection) {
-        final var tenantId = versionProjection.getTenantId();
-        final var versionId = versionProjection.getId();
+    Uni<Boolean> handlePreviousVersion(final TenantVersionProjectionModel tenantVersionProjection) {
+        final var tenantId = tenantVersionProjection.getTenantId();
+        final var tenantVersionId = tenantVersionProjection.getId();
 
-        return handlePreviousVersionRuntimes(versionProjection)
+        return handlePreviousVersionRuntimes(tenantVersionProjection)
                 .flatMap(isEmpty -> {
                     if (isEmpty) {
-                        log.info("Previous versionProjection without clients was found, version={}/{}", tenantId,
-                                versionId);
-                        return deleteTenantVersion(tenantId, versionId);
+                        log.info("Previous tenantVersionProjection without clients was found, version={}/{}", tenantId,
+                                tenantVersionId);
+                        return deleteTenantVersion(tenantId, tenantVersionId);
                     } else {
                         return Uni.createFrom().item(Boolean.FALSE);
                     }
                 });
     }
 
-    Uni<Boolean> handlePreviousVersionRuntimes(final TenantVersionProjectionModel versionProjection) {
-        final var tenantId = versionProjection.getTenantId();
-        final var versionId = versionProjection.getId();
-        return viewTenantLobbyRefs(tenantId, versionId)
+    Uni<Boolean> handlePreviousVersionRuntimes(final TenantVersionProjectionModel tenantVersionProjection) {
+        final var tenantId = tenantVersionProjection.getTenantId();
+        final var tenantVersionId = tenantVersionProjection.getId();
+        return viewTenantLobbyRefs(tenantId, tenantVersionId)
                 .flatMap(versionRuntimes -> Multi.createFrom().iterable(versionRuntimes)
                         .onItem().transformToUniAndConcatenate(versionRuntime -> {
                             final var runtimeId = versionRuntime.getLobbyId();
@@ -100,8 +100,8 @@ public class StageTaskImpl {
                         }));
     }
 
-    Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long versionId) {
-        final var request = new ViewTenantLobbyRefsRequest(tenantId, versionId);
+    Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long tenantVersionId) {
+        final var request = new ViewTenantLobbyRefsRequest(tenantId, tenantVersionId);
         return tenantModule.getTenantService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }

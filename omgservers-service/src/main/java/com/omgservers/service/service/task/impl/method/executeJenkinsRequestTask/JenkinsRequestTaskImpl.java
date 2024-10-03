@@ -40,8 +40,8 @@ public class JenkinsRequestTaskImpl {
     final TenantImageRefModelFactory tenantImageRefModelFactory;
     final EventModelFactory eventModelFactory;
 
-    public Uni<Boolean> executeTask(final Long tenantId, final Long jenkinsRequestId) {
-        return getTenantJenkinsRequest(tenantId, jenkinsRequestId)
+    public Uni<Boolean> executeTask(final Long tenantId, final Long tenantJenkinsRequestId) {
+        return getTenantJenkinsRequest(tenantId, tenantJenkinsRequestId)
                 .flatMap(jenkinsRequest -> handleJenkinsRequest(jenkinsRequest)
                         .replaceWith(Boolean.TRUE));
     }

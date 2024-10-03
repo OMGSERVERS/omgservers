@@ -26,7 +26,7 @@ class FindPlayerMethodImpl implements FindPlayerMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var userId = request.getUserId();
-                    final var stageId = request.getStageId();
+                    final var stageId = request.getTenantStageId();
                     return pgPool.withTransaction(sqlConnection -> selectPlayerByUserIdAndStageIdOperation
                             .selectPlayerByUserIdAndStageId(sqlConnection, shard.shard(), userId, stageId));
                 })

@@ -58,8 +58,8 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
-    Uni<TenantVersionConfigDto> getTenantVersionConfig(final Long tenantId, final Long versionId) {
-        final var request = new GetTenantVersionConfigRequest(tenantId, versionId);
+    Uni<TenantVersionConfigDto> getTenantVersionConfig(final Long tenantId, final Long tenantVersionId) {
+        final var request = new GetTenantVersionConfigRequest(tenantId, tenantVersionId);
         return tenantModule.getTenantService().getTenantVersionConfig(request)
                 .map(GetTenantVersionConfigResponse::getTenantVersionConfig);
     }

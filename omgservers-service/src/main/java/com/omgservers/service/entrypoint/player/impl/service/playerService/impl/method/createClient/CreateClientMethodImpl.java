@@ -56,14 +56,14 @@ class CreateClientMethodImpl implements CreateClientMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var stageId = request.getTenantStageId();
-        final var stageSecret = request.getTenantStageSecret();
+        final var tenantStageId = request.getTenantStageId();
+        final var tenantStageSecret = request.getTenantStageSecret();
 
-        return validateStageSecret(tenantId, stageId, stageSecret)
-                .flatMap(rawToken -> findOrCreatePlayer(userId, tenantId, stageId)
+        return validateStageSecret(tenantId, tenantStageId, tenantStageSecret)
+                .flatMap(rawToken -> findOrCreatePlayer(userId, tenantId, tenantStageId)
                         .flatMap(player -> {
                             final var playerId = player.getId();
-                            return createClient(userId, playerId, tenantId, stageId)
+                            return createClient(userId, playerId, tenantId, tenantStageId)
                                     .flatMap(client -> syncClient(client)
                                             .replaceWith(client.getId()));
                         })
@@ -72,9 +72,9 @@ class CreateClientMethodImpl implements CreateClientMethod {
     }
 
     Uni<TenantStageModel> validateStageSecret(final Long tenantId,
-                                              final Long stageId,
+                                              final Long tenantStageId,
                                               final String secret) {
-        final var request = new GetTenantStageRequest(tenantId, stageId);
+        final var request = new GetTenantStageRequest(tenantId, tenantStageId);
         return tenantModule.getTenantService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage)
                 .invoke(tenantStage -> {
@@ -88,22 +88,22 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     Uni<PlayerModel> findOrCreatePlayer(final Long userId,
                                         final Long tenantId,
-                                        final Long stageId) {
-        return findPlayer(userId, stageId)
+                                        final Long tennatStageId) {
+        return findPlayer(userId, tennatStageId)
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithUni(t -> createPlayer(userId, tenantId, stageId));
+                .recoverWithUni(t -> createPlayer(userId, tenantId, tennatStageId));
     }
 
-    Uni<PlayerModel> findPlayer(final Long userId, final Long stageId) {
-        final var request = new FindPlayerRequest(userId, stageId);
+    Uni<PlayerModel> findPlayer(final Long userId, final Long tenantStageId) {
+        final var request = new FindPlayerRequest(userId, tenantStageId);
         return userModule.getUserService().findPlayer(request)
                 .map(FindPlayerResponse::getPlayer);
     }
 
     Uni<PlayerModel> createPlayer(final Long userId,
                                   final Long tenantId,
-                                  final Long stageId) {
-        final var player = playerModelFactory.create(userId, tenantId, stageId);
+                                  final Long tenantStageId) {
+        final var player = playerModelFactory.create(userId, tenantId, tenantStageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
         return userModule.getUserService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);

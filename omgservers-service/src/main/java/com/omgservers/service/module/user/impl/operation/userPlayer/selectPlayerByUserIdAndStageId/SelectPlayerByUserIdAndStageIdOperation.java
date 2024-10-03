@@ -8,5 +8,5 @@ public interface SelectPlayerByUserIdAndStageIdOperation {
     Uni<PlayerModel> selectPlayerByUserIdAndStageId(SqlConnection sqlConnection,
                                                     int shard,
                                                     Long userId,
-                                                    Long stageId);
+                                                    Long tenantStageId);
 }

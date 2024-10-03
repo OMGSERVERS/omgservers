@@ -26,7 +26,7 @@ class SelectPlayerByUserIdAndStageIdOperationImpl implements SelectPlayerByUserI
     public Uni<PlayerModel> selectPlayerByUserIdAndStageId(final SqlConnection sqlConnection,
                                                            final int shard,
                                                            final Long userId,
-                                                           final Long stageId) {
+                                                           final Long tenantStageId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
@@ -37,7 +37,7 @@ class SelectPlayerByUserIdAndStageIdOperationImpl implements SelectPlayerByUserI
                         order by id desc
                         limit 1
                         """,
-                List.of(userId, stageId),
+                List.of(userId, tenantStageId),
                 "Player",
                 playerModelMapper::fromRow);
     }

@@ -98,9 +98,9 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
             case UNIVERSAL -> TenantImageRefQualifierEnum.UNIVERSAL;
         };
 
-        final var tenantImageRef = tenantImageRefModelFactory.create(tenantId,
-                versionId,
-                tenantImageRefQualifier,
+        final var tenantImage = tenantImageModelFactory.create(tenantId,
+                tenantVersionId,
+                tenantImageQualifier,
                 imageId,
                 idempotencyKey);
 

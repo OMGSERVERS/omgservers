@@ -75,9 +75,9 @@ public class TenantVersionCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> requestTenantVersionBuilding(final Long tenantId,
-                                              final Long versionId,
+                                              final Long tenantVersionId,
                                               final String idempotencyKey) {
-        final var eventBody = new VersionBuildingRequestedEventBodyModel(tenantId, versionId);
+        final var eventBody = new VersionBuildingRequestedEventBodyModel(tenantId, tenantVersionId);
         final var eventModel = eventModelFactory.create(eventBody,
                 idempotencyKey + "/" + eventBody.getQualifier());
 

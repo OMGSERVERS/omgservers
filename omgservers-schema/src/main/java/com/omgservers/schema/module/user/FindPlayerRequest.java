@@ -1,7 +1,6 @@
 package com.omgservers.schema.module.user;
 
 import com.omgservers.schema.module.ShardedRequest;
-import com.omgservers.schema.module.ShardedRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,7 @@ public class FindPlayerRequest implements ShardedRequest {
     Long userId;
 
     @NotNull
-    Long stageId;
+    Long tenantStageId;
 
     @Override
     public String getRequestShardKey() {
