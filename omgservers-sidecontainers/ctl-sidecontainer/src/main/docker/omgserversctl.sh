@@ -98,18 +98,18 @@ help() {
       echo "     - DELETED"
     fi
   fi
-  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProject" ]; then
-    echo " omgserversctl support createProject <tenant_id>"
-    if [ "$1" = "support createProject" ]; then
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantProject" ]; then
+    echo " omgserversctl support createTenantProject <tenant_id>"
+    if [ "$1" = "support createTenantProject" ]; then
       echo "   produces:"
-      echo "     - PROJECT_ID"
-      echo "     - STAGE_ID"
-      echo "     - STAGE_SECRET"
+      echo "     - TENANT_PROJECT_ID"
+      echo "     - TENANT_STAGE_ID"
+      echo "     - TENANT_STAGE_SECRET"
     fi
   fi
-  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProject" ]; then
-    echo " omgserversctl support deleteProject <tenant_id> <project_id>"
-    if [ "$1" = "support deleteProject" ]; then
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantProject" ]; then
+    echo " omgserversctl support deleteTenantProject <tenant_id> <tenant_project_id>"
+    if [ "$1" = "support deleteTenantProject" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
@@ -138,33 +138,37 @@ help() {
       echo "     - GETTING_DASHBOARD"
     fi
   fi
-  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
-    echo " omgserversctl support createProjectPermission <tenant_id> <project_id> <user_id> <project_permission>"
-    if [ "$1" = "support createProjectPermission" ]; then
-      echo "   project_permission:"
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantProjectPermission" ]; then
+    echo " omgserversctl support createTenantProjectPermission <tenant_id> <tenant_project_id> <user_id> <tenant_project_permission>"
+    if [ "$1" = "support createTenantProjectPermission" ]; then
+      echo "   tenant_project_permission:"
       echo "     - STAGE_MANAGEMENT"
-    fi
-  fi
-  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
-    echo " omgserversctl support deleteProjectPermission <tenant_id> <project_id> <user_id> <project_permission>"
-    if [ "$1" = "support deleteProjectPermission" ]; then
-      echo "   project_permission:"
-      echo "     - STAGE_MANAGEMENT"
-    fi
-  fi
-  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
-    echo " omgserversctl support createStagePermission <tenant_id> <stage_id> <user_id> <stage_permission>"
-    if [ "$1" = "support createStagePermission" ]; then
-      echo "   stage_permission:"
       echo "     - VERSION_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
     fi
   fi
-  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
-    echo " omgserversctl support deleteStagePermission <tenant_id> <stage_id> <user_id> <stage_permission>"
-    if [ "$1" = "support deleteStagePermission" ]; then
-      echo "   stage_permission:"
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantProjectPermission" ]; then
+    echo " omgserversctl support deleteTenantProjectPermission <tenant_id> <tenant_project_id> <user_id> <tenant_project_permission>"
+    if [ "$1" = "support deleteTenantProjectPermission" ]; then
+      echo "   tenant_project_permission:"
+      echo "     - STAGE_MANAGEMENT"
       echo "     - VERSION_MANAGEMENT"
+      echo "     - GETTING_DASHBOARD"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantStagePermission" ]; then
+    echo " omgserversctl support createTenantStagePermission <tenant_id> <tenant_stage_id> <user_id> <tenant_stage_permission>"
+    if [ "$1" = "support createTenantStagePermission" ]; then
+      echo "   tenant_stage_permission:"
+      echo "     - DEPLOYMENT_MANAGEMENT"
+      echo "     - GETTING_DASHBOARD"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantStagePermission" ]; then
+    echo " omgserversctl support deleteTenantStagePermission <tenant_id> <tenant_stage_id> <user_id> <tenant_stage_permission>"
+    if [ "$1" = "support deleteTenantStagePermission" ]; then
+      echo "   tenant_stage_permission:"
+      echo "     - DEPLOYMENT_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
     fi
   fi
@@ -187,40 +191,86 @@ help() {
       echo "     - DEVELOPER_TOKEN"
     fi
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProject" ]; then
-    echo " omgserversctl developer createProject <tenant_id>"
-    if [ "$1" = "developer createProject" ]; then
-      echo "   produces:"
-      echo "     - PROJECT_ID"
-      echo "     - STAGE_ID"
-      echo "     - STAGE_SECRET"
-    fi
-  fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createVersion" ]; then
-    echo " omgserversctl developer createVersion <tenant_id> <stage_id> <config_path>"
-    if [ "$1" = "developer createVersion" ]; then
-      echo "   produces:"
-      echo "     - VERSION_ID"
-    fi
-  fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDashboard" ]; then
     echo " omgserversctl developer getTenantDashboard <tenant_id>"
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDashboard" ]; then
-    echo " omgserversctl developer getStageDashboard <tenant_id> <stage_id>"
-  fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getVersionDashboard" ]; then
-    echo " omgserversctl developer getVersionDashboard <tenant_id> <version_id>"
-  fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer buildVersion" ]; then
-    echo " omgserversctl developer buildVersion <tenant_id> <stage_id> <project_path>"
-    if [ "$1" = "developer buildVersion" ]; then
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createTenantProject" ]; then
+    echo " omgserversctl developer createTenantProject <tenant_id>"
+    if [ "$1" = "developer createTenantProject" ]; then
       echo "   produces:"
-      echo "     - VERSION_ID"
+      echo "     - TENANT_PROJECT_ID"
+      echo "     - TENANT_STAGE_ID"
+      echo "     - TENANT_STAGE_SECRET"
     fi
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
-    echo " omgserversctl developer deployVersion <tenant_id> <versionId>"
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantProjectDashboard" ]; then
+    echo " omgserversctl developer getTenantProjectDashboard <tenant_id> <tenant_project_id>"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteTenantProject" ]; then
+      echo " omgserversctl developer deleteTenantProject <tenant_id> <tenant_project_id>"
+      if [ "$1" = "developer deleteTenantProject" ]; then
+        echo "   produces:"
+        echo "     - DELETED"
+      fi
+    fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createTenantStage" ]; then
+    echo " omgserversctl developer createTenantStage <tenant_id> <tenant_project_id>"
+    if [ "$1" = "developer createTenantStage" ]; then
+      echo "   produces:"
+      echo "     - TENANT_STAGE_ID"
+      echo "     - TENANT_STAGE_SECRET"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantStageDashboard" ]; then
+    echo " omgserversctl developer getTenantStageDashboard <tenant_id> <tenant_stage_id>"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteTenantStage" ]; then
+    echo " omgserversctl developer deleteTenantStage <tenant_id> <tenant_stage_id>"
+    if [ "$1" = "developer deleteTenantStage" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createTenantVersion" ]; then
+    echo " omgserversctl developer createTenantVersion <tenant_id> <tenant_project_id> <config_path>"
+    if [ "$1" = "developer createTenantVersion" ]; then
+      echo "   produces:"
+      echo "     - TENANT_VERSION_ID"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer buildTenantVersion" ]; then
+    echo " omgserversctl developer buildTenantVersion <tenant_id> <tenant_project_id> <project_path>"
+    if [ "$1" = "developer buildTenantVersion" ]; then
+      echo "   produces:"
+      echo "     - TENANT_VERSION_ID"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantVersionDashboard" ]; then
+    echo " omgserversctl developer getTenantVersionDashboard <tenant_id> <tenant_version_id>"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteTenantVersion" ]; then
+    echo " omgserversctl developer deleteTenantVersion <tenant_id> <tenant_version_id>"
+    if [ "$1" = "developer deleteTenantVersion" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployTenantVersion" ]; then
+    echo " omgserversctl developer deployTenantVersion <tenant_id> <tenant_stage_id> <tenant_version_id>"
+    if [ "$1" = "developer deployTenantVersion" ]; then
+      echo "   produces:"
+      echo "     - TENANT_DEPLOYMENT_ID"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDeploymentDashboard" ]; then
+    echo " omgserversctl developer getTenantDeploymentDashboard <tenant_id> <tenant_deployment_id>"
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteTenantDeployment" ]; then
+    echo " omgserversctl developer deleteTenantDeployment <tenant_id> <tenant_deployment_id>"
+    if [ "$1" = "developer deleteTenantDeployment" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
   fi
 }
 
@@ -554,13 +604,13 @@ support_deleteTenant() {
   fi
 }
 
-support_createProject() {
+support_createTenantProject() {
   internal_useEnvironment
 
   TENANT_ID=$1
 
   if [ -z "${TENANT_ID}" ]; then
-    help "support createProject"
+    help "support createTenantProject"
     exit 1
   fi
 
@@ -571,8 +621,9 @@ support_createProject() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project"
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant-project"
   REQUEST="{\"tenant_id\": ${TENANT_ID}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-project_${TENANT_ID}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -583,9 +634,9 @@ support_createProject() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT_ID}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -594,50 +645,51 @@ support_createProject() {
     exit 1
   fi
 
-  PROJECT_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT_ID}.json | jq -r .project_id)
-  if [ -z "$PROJECT_ID" -o "$PROJECT_ID" == "null" ]; then
-    echo "ERROR: PROJECT_ID was not received"
+  TENANT_PROJECT_ID=$(cat ${RESPONSE_FILE} | jq -r .tenant_project_id)
+  if [ -z "$TENANT_PROJECT_ID" -o "$TENANT_PROJECT_ID" == "null" ]; then
+    echo "ERROR: TENANT_PROJECT_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_TENANT_PROJECT_ID=$TENANT_PROJECT_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  STAGE_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_id)
-  if [ -z "${STAGE_ID}" -o "${STAGE_ID}" == "null" ]; then
-    echo "ERROR: STAGE_ID was not received"
+  TENANT_STAGE_ID=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_id)
+  if [ -z "${TENANT_STAGE_ID}" -o "${STAGE_ID}" == "null" ]; then
+    echo "ERROR: TENANT_STAGE_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_ID=${STAGE_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_TENANT_STAGE_ID=${TENANT_STAGE_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  STAGE_SECRET=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT_ID}.json | jq -r .stage_secret)
-  if [ -z "${STAGE_SECRET}" -o "${STAGE_SECRET}" == "null" ]; then
-    echo "ERROR: STAGE_SECRET was not received"
+  TENANT_STAGE_SECRET=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_secret)
+  if [ -z "${TENANT_STAGE_SECRET}" -o "${TENANT_STAGE_SECRET}" == "null" ]; then
+    echo "ERROR: TENANT_STAGE_SECRET was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_STAGE_SECRET=${STAGE_SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_TENANT_STAGE_SECRET=${TENANT_STAGE_SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=${PROJECT_ID}, STAGE_ID=${STAGE_ID}, STAGE_SECRET=${STAGE_SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was created, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}, TENANT_STAGE_ID=${TENANT_STAGE_ID}, TENANT_STAGE_SECRET=${TENANT_STAGE_SECRET}"
 }
 
-support_deleteProject() {
+support_deleteTenantProject() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  PROJECT_ID=$2
+  TENANT_PROJECT_ID=$2
 
-  if [ -z "${TENANT_ID}" -o -z "${PROJECT_ID}" ]; then
-    help "support deleteProject"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" ]; then
+    help "support deleteTenantProject"
     exit 1
   fi
 
-  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+  SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project"
-  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"project_id\": ${PROJECT_ID} }"
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-project"
+  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"tenant_project_id\": ${TENANT_PROJECT_ID}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-project_${TENANT_ID}_${TENANT_PROJECT_ID}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -648,9 +700,9 @@ support_deleteProject() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -659,7 +711,7 @@ support_deleteProject() {
     exit 1
   fi
 
-  DELETED=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT_ID}_${PROJECT_ID}.json | jq -r .deleted)
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
     echo "ERROR: DELETED was not received"
     exit 1
@@ -667,9 +719,9 @@ support_deleteProject() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was deleted, TENANT_ID=${TENANT_ID}, PROJECT_ID=${PROJECT_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was deleted, TENANT_ID=${TENANT_ID}, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was not deleted, TENANT_ID=${TENANT_ID}, PROJECT_ID=${PROJECT_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was not deleted, TENANT_ID=${TENANT_ID}, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
   fi
 }
 
@@ -751,6 +803,7 @@ support_createTenantPermission() {
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${TENANT_PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -761,9 +814,9 @@ support_createTenantPermission() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -772,7 +825,7 @@ support_createTenantPermission() {
     exit 1
   fi
 
-  CREATED_PERMISSION=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
+  CREATED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .created_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
@@ -801,6 +854,7 @@ support_deleteTenantPermission() {
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-permissions"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${TENANT_PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -811,9 +865,9 @@ support_deleteTenantPermission() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -822,27 +876,27 @@ support_deleteTenantPermission() {
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-permissions_${TENANT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
+  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
-support_createProjectPermission() {
+support_createTenantProjectPermission() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  PROJECT_ID=$2
+  TENANT_PROJECT_ID=$2
   USER_ID=$3
-  PROJECT_PERMISSION=$4
+  TENANT_PROJECT_PERMISSION=$4
 
-  if [ -z "${TENANT_ID}" -o -z "${PROJECT_ID}" -o -z "${USER_ID}" -o -z "${PROJECT_PERMISSION}" ]; then
-    help "support createProjectPermission"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" -o -z "${USER_ID}" -o -z "${TENANT_PROJECT_PERMISSION}" ]; then
+    help "support createTenantProjectPermission"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, PROJECT_PERMISSION=${PROJECT_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project permission, TENANT_PROJECT_PERMISSION=${TENANT_PROJECT_PERMISSION}"
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -851,8 +905,9 @@ support_createProjectPermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"project_id\": ${PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${PROJECT_PERMISSION}\"]}"
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant-project-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_project_id\": ${TENANT_PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${TENANT_PROJECT_PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-project-permissions_${TENANT_ID}_${TENANT_PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PROJECT_PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -863,9 +918,9 @@ support_createProjectPermission() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -874,27 +929,27 @@ support_createProjectPermission() {
     exit 1
   fi
 
-  CREATED_PERMISSION=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
+  CREATED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .created_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created tenant project permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
-support_deleteProjectPermission() {
+support_deleteTenantProjectPermission() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  PROJECT_ID=$2
+  TENANT_PROJECT_ID=$2
   USER_ID=$3
-  PROJECT_PERMISSION=$4
+  TENANT_PROJECT_PERMISSION=$4
 
-  if [ -z "${TENANT_ID}" -o -z "${PROJECT_ID}" -o -z "${USER_ID}" -o -z "${PROJECT_PERMISSION}" ]; then
-    help "support createProjectPermission"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" -o -z "${USER_ID}" -o -z "${TENANT_PROJECT_PERMISSION}" ]; then
+    help "support deleteTenantProjectPermission"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, PROJECT_PERMISSION=${PROJECT_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project permission, TENANT_PROJECT_PERMISSION=${TENANT_PROJECT_PERMISSION}"
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -903,8 +958,9 @@ support_deleteProjectPermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"project_id\": ${PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${PROJECT_PERMISSION}\"]}"
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-project-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_project_id\": ${TENANT_PROJECT_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${TENANT_PROJECT_PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-project-permissions_${TENANT_ID}_${TENANT_PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PROJECT_PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -915,9 +971,9 @@ support_deleteProjectPermission() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -926,27 +982,27 @@ support_deleteProjectPermission() {
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project-permissions_${TENANT_ID}_${PROJECT_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
+  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -r .deleted_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted tenant project permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
-support_createStagePermission() {
+support_createTenantStagePermission() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  STAGE_ID=$2
+  TENANT_STAGE_ID=$2
   USER_ID=$3
-  STAGE_PERMISSION=$4
+  TENANT_STAGE_PERMISSION=$4
 
-  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${USER_ID}" -o -z "${STAGE_PERMISSION}" ]; then
-    help "support createStagePermission"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_STAGE_ID}" -o -z "${USER_ID}" -o -z "${TENANT_STAGE_PERMISSION}" ]; then
+    help "support createTenantStagePermission"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant stage, TENANT_STAGE_ID=${TENANT_STAGE_ID}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, STAGE_PERMISSION=${STAGE_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant stage permission, TENANT_STAGE_PERMISSION=${TENANT_STAGE_PERMISSION}"
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -955,8 +1011,9 @@ support_createStagePermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-stage-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${STAGE_PERMISSION}\"]}"
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant-stage-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_stage_id\": ${TENANT_STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_create\": [\"${TENANT_STAGE_PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT_ID}_${TENANT_STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_STAGE_PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -967,9 +1024,9 @@ support_createStagePermission() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -978,27 +1035,27 @@ support_createStagePermission() {
     exit 1
   fi
 
-  CREATED_PERMISSION=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -c -r .created_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
+  CREATED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .created_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created tenant stage permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
-support_deleteStagePermission() {
+support_deleteTenantStagePermission() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  STAGE_ID=$2
+  TENANT_STAGE_ID=$2
   USER_ID=$3
-  STAGE_PERMISSION=$4
+  TENANT_STAGE_PERMISSION=$4
 
-  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${USER_ID}" -o -z "${STAGE_PERMISSION}" ]; then
-    help "support deleteStagePermission"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_STAGE_ID}" -o -z "${USER_ID}" -o -z "${TENANT_STAGE_PERMISSION}" ]; then
+    help "support deleteTenantStagePermission"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant stage, TENANT_STAGE_ID=${TENANT_STAGE_ID}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER_ID=${USER_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project permission, STAGE_PERMISSION=${STAGE_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project permission, TENANT_STAGE_PERMISSION=${TENANT_STAGE_PERMISSION}"
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1007,8 +1064,9 @@ support_deleteStagePermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-stage-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${STAGE_PERMISSION}\"]}"
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-stage-permissions"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_stage_id\": ${STAGE_ID}, \"user_id\": ${USER_ID}, \"permissions_to_delete\": [\"${TENANT_STAGE_PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT_ID}_${TENANT_STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_STAGE_PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1019,9 +1077,9 @@ support_deleteStagePermission() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1030,11 +1088,32 @@ support_deleteStagePermission() {
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT_ID}_${STAGE_ID}_${DEVELOPER_USER_ID}_${TENANT_PERMISSION}.json | jq -r .deleted_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
+  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -r .deleted_permissions)
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted tenant stage permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
 # DEVELOPER
+
+developer_useCredentials() {
+  internal_useEnvironment
+
+  DEVELOPER_USER_ID=$1
+  DEVELOPER_PASSWORD=$2
+
+  if [ -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
+    help "developer useCredentials"
+    exit 1
+  fi
+
+  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$DEVELOPER_PASSWORD" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
+
+  internal_useEnvironment
+  developer_createToken ${DEVELOPER_USER_ID} ${DEVELOPER_PASSWORD}
+}
+
 
 developer_printCurrent() {
   internal_useEnvironment
@@ -1098,160 +1177,6 @@ developer_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created"
 }
 
-developer_useCredentials() {
-  internal_useEnvironment
-
-  DEVELOPER_USER_ID=$1
-  DEVELOPER_PASSWORD=$2
-
-  if [ -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
-    help "developer useCredentials"
-    exit 1
-  fi
-
-  echo "export OMGSERVERSCTL_DEVELOPER_USER_ID=$DEVELOPER_USER_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$DEVELOPER_PASSWORD" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER_ID=$DEVELOPER_USER_ID"
-
-  internal_useEnvironment
-  developer_createToken ${DEVELOPER_USER_ID} ${DEVELOPER_PASSWORD}
-}
-
-developer_createProject() {
-  internal_useEnvironment
-
-  TENANT_ID=$1
-
-  if [ -z "${TENANT_ID}" ]; then
-    help "developer createProject"
-    exit 1
-  fi
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
-
-  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
-
-  if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
-    exit 1
-  fi
-
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-project"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}}"
-
-  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
-  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
-  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
-
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
-    "${ENDPOINT}" \
-    -H "Content-type: application/json" \
-    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
-    -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT_ID}.json)
-
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
-  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
-
-  if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
-    exit 1
-  fi
-
-  PROJECT_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT_ID}.json | jq -r .project_id)
-  if [ -z "$PROJECT_ID" -o "$PROJECT_ID" == "null" ]; then
-    echo "ERROR: PROJECT_ID was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERSCTL_PROJECT_ID=$PROJECT_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  STAGE_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT_ID}.json | jq -r .stage_id)
-  if [ -z "$STAGE_ID" -o "$STAGE_ID" == "null" ]; then
-    echo "ERROR: STAGE_ID was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERSCTL_STAGE_ID=$STAGE_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  STAGE_SECRET=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT_ID}.json | jq -r .secret)
-  if [ -z "$STAGE_SECRET" -o "$STAGE_SECRET" == "null" ]; then
-    echo "ERROR: STAGE_SECRET was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERSCTL_STAGE_SECRET=$STAGE_SECRET" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT_ID=${PROJECT_ID}, STAGE_ID=${STAGE_ID}, STAGE_SECRET=${STAGE_SECRET}"
-}
-
-developer_createVersion() {
-  internal_useEnvironment
-
-  TENANT_ID=$1
-  STAGE_ID=$2
-  CONFIG_PATH=$3
-
-  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${CONFIG_PATH}" ]; then
-    help "developer createVersion"
-    exit 1
-  fi
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=${STAGE_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=${CONFIG_PATH}"
-
-  if [ ! -f ${CONFIG_PATH} ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Config file was not found, CONFIG_PATH=${CONFIG_PATH}"
-    exit 1
-  fi
-
-  VERSION_CONFIG=$(cat ${CONFIG_PATH} | jq -c -r)
-
-  if [ -z "${VERSION_CONFIG}" -o "${VERSION_CONFIG}" == "null" ]; then
-    echo "ERROR: Version config is empty"
-    exit 1
-  fi
-
-  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
-
-  if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
-    exit 1
-  fi
-
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-version"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}, \"version_config\": ${VERSION_CONFIG}}"
-
-  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
-  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
-  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
-
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
-    "${ENDPOINT}" \
-    -H "Content-type: application/json" \
-    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
-    -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT_ID}_${STAGE_ID}.json)
-
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT_ID}_${STAGE_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
-  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
-
-  if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
-    exit 1
-  fi
-
-  VERSION_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
-  if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
-    echo "ERROR: VERSION_ID was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION_ID=${VERSION_ID}"
-}
-
 developer_getTenantDashboard() {
   internal_useEnvironment
 
@@ -1297,19 +1222,17 @@ developer_getTenantDashboard() {
   type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT_ID}.json | jq
 }
 
-developer_getStageDashboard() {
+developer_createTenantProject() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  STAGE_ID=$2
 
-  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" ]; then
-    help "developer getStageDashboard"
+  if [ -z "${TENANT_ID}" ]; then
+    help "developer createTenantProject"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=$STAGE_ID"
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -1318,8 +1241,8 @@ developer_getStageDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-stage-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"stage_id\": ${STAGE_ID}}"
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-tenant-project"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1330,9 +1253,9 @@ developer_getStageDashboard() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json)
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-tenant-project_${TENANT_ID}.json)
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-tenant-project_${TENANT_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1341,32 +1264,53 @@ developer_getStageDashboard() {
     exit 1
   fi
 
-  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT_ID}_${STAGE_ID}.json | jq
+  TENANT_PROJECT_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-tenant-project_${TENANT_ID}.json | jq -r .tenant_project_id)
+  if [ -z "$TENANT_PROJECT_ID" -o "$TENANT_PROJECT_ID" == "null" ]; then
+    echo "ERROR: TENANT_PROJECT_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_TENANT_PROJECT_ID=$TENANT_PROJECT_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  TENANT_STAGE_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-tenant-project_${TENANT_ID}.json | jq -r .tenant_stage_id)
+  if [ -z "$TENANT_STAGE_ID" -o "$TENANT_STAGE_ID" == "null" ]; then
+    echo "ERROR: TENANT_STAGE_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_TENANT_STAGE_ID=$TENANT_STAGE_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  TENANT_STAGE_SECRET=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-tenant-project_${TENANT_ID}.json | jq -r .tenant_stage_secret)
+  if [ -z "$TENANT_STAGE_SECRET" -o "$TENANT_STAGE_SECRET" == "null" ]; then
+    echo "ERROR: TENANT_STAGE_SECRET was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_TENANT_STAGE_SECRET=${TENANT_STAGE_SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was created, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}, TENANT_STAGE_ID=${TENANT_STAGE_ID}, TENANT_STAGE_SECRET=${TENANT_STAGE_SECRET}"
 }
 
-developer_getVersionDashboard() {
+developer_getTenantProjectDashboard() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  VERSION_ID=$2
+  TENANT_PROJECT_ID=$2
 
-  if [ -z "${TENANT_ID}" -o -z "${VERSION_ID}" ]; then
-    help "developer getVersionDashboard"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" ]; then
+    help "developer getTenantProjectDashboard"
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION_ID=$VERSION_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
 
-  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-version-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"version_id\": ${VERSION_ID}}"
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-project-dashboard"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_project_id\": ${TENANT_PROJECT_ID}}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1377,9 +1321,9 @@ developer_getVersionDashboard() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json)
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-project-dashboard_${TENANT_ID}_${TENANT_PROJECT_ID}.json)
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-project-dashboard_${TENANT_ID}_${TENANT_PROJECT_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1388,23 +1332,320 @@ developer_getVersionDashboard() {
     exit 1
   fi
 
-  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT_ID}_${VERSION_ID}.json | jq
+  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-project-dashboard_${TENANT_ID}_${TENANT_PROJECT_ID}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-project-dashboard_${TENANT_ID}_${TENANT_PROJECT_ID}.json | jq
 }
 
-developer_buildVersion() {
+developer_deleteTenantProject() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  STAGE_ID=$2
+  TENANT_PROJECT_ID=$1
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" ]; then
+    help "developer deleteTenantProject"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-tenant-project"
+  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"tenant_project_id\": \"${TENANT_PROJECT_ID}\" }"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-tenant-project_${TENANT_ID}_${TENANT_PROJECT_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was deleted, TENANT_ID=${TENANT_ID}, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was not deleted, TENANT_ID=${TENANT_ID}, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
+  fi
+}
+
+developer_createTenantStage() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_PROJECT_ID=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" ]; then
+    help "developer createTenantStage"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=$TENANT_ID"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-tenant-stage"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-tenant-stage_${TENANT_ID}_${TENANT_PROJECT_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  TENANT_STAGE_ID=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_id)
+  if [ -z "$TENANT_STAGE_ID" -o "$TENANT_STAGE_ID" == "null" ]; then
+    echo "ERROR: TENANT_STAGE_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_TENANT_STAGE_ID=$TENANT_STAGE_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  TENANT_STAGE_SECRET=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_secret)
+  if [ -z "$TENANT_STAGE_SECRET" -o "$TENANT_STAGE_SECRET" == "null" ]; then
+    echo "ERROR: TENANT_STAGE_SECRET was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_TENANT_STAGE_SECRET=$TENANT_STAGE_SECRET" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant stage was created, TENANT_STAGE_ID=${TENANT_STAGE_ID}, TENANT_STAGE_SECRET=${TENANT_STAGE_SECRET}"
+}
+
+developer_getTenantStageDashboard() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_STAGE_ID=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_STAGE_ID}" ]; then
+    help "developer getTenantStageDashboard"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant stage, TENANT_STAGE_ID=${TENANT_STAGE_ID}"
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-stage-dashboard"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_stage_id\": ${TENANT_STAGE_ID}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-stage-dashboard_${TENANT_ID}_${TENANT_STAGE_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-project-dashboard_${TENANT_ID}_${TENANT_PROJECT_ID}.json)
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
+}
+
+developer_deleteTenantStage() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_STAGE_ID=$1
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_STAGE_ID}" ]; then
+    help "developer deleteTenantStage"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant stage, TENANT_STAGE_ID=${TENANT_STAGE_ID}"
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-tenant-stage"
+  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"tenant_stage_id\": \"${TENANT_STAGE_ID}\" }"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-tenant-stage_${TENANT_ID}_${TENANT_STAGE_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant stage was deleted, TENANT_ID=${TENANT_ID}, TENANT_STAGE_ID=${TENANT_STAGE_ID}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant stage was not deleted, TENANT_ID=${TENANT_ID}, TENANT_STAGE_ID=${TENANT_STAGE_ID}"
+  fi
+}
+
+developer_createTenantVersion() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_PROJECT_ID=$2
+  CONFIG_PATH=$3
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" -o -z "${CONFIG_PATH}" ]; then
+    help "developer createTenantVersion"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant project, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=${CONFIG_PATH}"
+
+  if [ ! -f ${CONFIG_PATH} ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Config file was not found, CONFIG_PATH=${CONFIG_PATH}"
+    exit 1
+  fi
+
+  TENANT_VERSION_CONFIG=$(cat ${CONFIG_PATH} | jq -c -r)
+
+  if [ -z "${TENANT_VERSION_CONFIG}" -o "${TENANT_VERSION_CONFIG}" == "null" ]; then
+    echo "ERROR: Tenant version config is empty"
+    exit 1
+  fi
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-tenant-version"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_project_id\": ${TENANT_PROJECT_ID}, \"tenant_version_config\": ${TENANT_VERSION_CONFIG}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-tenant-version_${TENANT_ID}_${TENANT_STAGE_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  TENANT_VERSION_ID=$(cat ${RESPONSE_FILE} | jq -r .tenant_version_id)
+  if [ -z "$TENANT_VERSION_ID" -o "$TENANT_VERSION_ID" == "null" ]; then
+    echo "ERROR: TENANT_VERSION_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_TENANT_VERSION_ID=${TENANT_VERSION_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was created, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
+}
+
+developer_buildTenantVersion() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_PROJECT_ID=$2
   PROJECT_PATH=$3
 
-  if [ -z "${TENANT_ID}" -o -z "${STAGE_ID}" -o -z "${PROJECT_PATH}" ]; then
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" -o -z "${PROJECT_PATH}" ]; then
     help "developer buildVersion"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project path, PROJECT_PATH=${PROJECT_PATH}"
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
@@ -1414,7 +1655,7 @@ developer_buildVersion() {
     exit 1
   fi
 
-  ARCHIVE_PATH=$(eval echo ${OMGSERVERSCTL_DIRECTORY}/versions/version_${TENANT_ID}_${STAGE_ID}.zip)
+  ARCHIVE_PATH=$(eval echo ${OMGSERVERSCTL_DIRECTORY}/versions/version_${TENANT_ID}_${TENANT_PROJECT_ID}.zip)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=${ARCHIVE_PATH}"
 
   pushd ${PROJECT_PATH}
@@ -1433,22 +1674,23 @@ developer_buildVersion() {
 
   popd >> /dev/null
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/build-version"
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/build-tenant-version"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-build-tenant-version_${TENANT_ID}_${TENANT_PROJECT_ID}.json"
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: multipart/form-data" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -F "tenantId=${TENANT_ID}" \
-    -F "stageId=${STAGE_ID}" \
+    -F "tenantProjectId=${TENANT_PROJECT_ID}" \
     -F "config.json=@${PROJECT_PATH}/config.json" \
     -F "version.zip=@${ARCHIVE_PATH}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1457,29 +1699,29 @@ developer_buildVersion() {
     exit 1
   fi
 
-  VERSION_ID=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-build-version_${TENANT_ID}_${STAGE_ID}.json | jq -r .id)
-  if [ -z "$VERSION_ID" -o "$VERSION_ID" == "null" ]; then
-    echo "ERROR: VERSION_ID was not received"
+  TENANT_VERSION_ID=$(cat ${RESPONSE_FILE} | jq -r .id)
+  if [ -z "${TENANT_VERSION_ID}" -o "${TENANT_VERSION_ID}" == "null" ]; then
+    echo "ERROR: TENANT_VERSION_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_VERSION_ID=$VERSION_ID" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_TENANT_VERSION_ID=${TENANT_VERSION_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was built, VERSION_ID=${VERSION_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was built, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
 }
 
-developer_deployVersion() {
+developer_getTenantVersionDashboard() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  VERSION_ID=$2
+  TENANT_VERSION_ID=$2
 
-  if [ -z "${TENANT_ID}" -o -z "${VERSION_ID}" ]; then
-    help "developer deployVersion"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_VERSION_ID}" ]; then
+    help "developer getTenantVersionDashboard"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION_ID=${VERSION_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant version, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -1488,8 +1730,9 @@ developer_deployVersion() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/deploy-version"
-  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"version_id\": ${VERSION_ID}}"
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-version-dashboard"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_version_id\": ${TENANT_VERSION_ID}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-version-dashboard_${TENANT_ID}_${TENANT_VERSION_ID}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1500,9 +1743,9 @@ developer_deployVersion() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT_ID}_${VERSION_ID}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT_ID}_${VERSION_ID}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1511,7 +1754,230 @@ developer_deployVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deploy was requested"
+  type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
+}
+
+developer_deleteTenantVersion() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_VERSION_ID=$1
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_VERSION_ID}" ]; then
+    help "developer deleteTenantVersion"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant version, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-tenant-version"
+  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"tenant_version_id\": \"${TENANT_VERSION_ID}\" }"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-tenant-version_${TENANT_ID}_${TENANT_VERSION_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was deleted, TENANT_ID=${TENANT_ID}, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was not deleted, TENANT_ID=${TENANT_ID}, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
+  fi
+}
+
+developer_deployTenantVersion() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_STAGE_ID=$2
+  TENANT_VERSION_ID=$3
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_STAGE_ID}" -o -z "${TENANT_VERSION_ID}" ]; then
+    help "developer deployTenantVersion"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant stage, TENANT_STAGE_ID=${TENANT_STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant version, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/deploy-tenant-version"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_stage_id\": ${TENANT_STAGE_ID}, \"tenant_version_id\": ${TENANT_VERSION_ID}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-tenant-version_${TENANT_ID}_${TENANT_STAGE_ID}_${TENANT_VERSION_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  TENANT_DEPLOYMENT_ID=$(cat ${RESPONSE_FILE} | jq -r .tenant_deployment_id)
+  if [ -z "${TENANT_DEPLOYMENT_ID}" -o "${TENANT_DEPLOYMENT_ID}" == "null" ]; then
+    echo "ERROR: TENANT_DEPLOYMENT_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was created, TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}"
+}
+
+developer_getTenantDeploymentDashboard() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_DEPLOYMENT_ID=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_DEPLOYMENT_ID}" ]; then
+    help "developer getTenantDeploymentDashboard"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant deployment, TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-deployment-dashboard"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"tenant_deployment_id\": ${TENANT_DEPLOYMENT_ID}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-deployment-dashboard_${TENANT_ID}_${TENANT_DEPLOYMENT_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
+}
+
+developer_deleteTenantDeployment() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  TENANT_DEPLOYMENT_ID=$1
+
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_DEPLOYMENT_ID}" ]; then
+    help "developer deleteTenantDeployment"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant deployment, TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}"
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-tenant-deployment"
+  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"tenant_deployment_id\": \"${TENANT_DEPLOYMENT_ID}\" }"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-tenant-deployment_${TENANT_ID}_${TENANT_DEPLOYMENT_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was deleted, TENANT_ID=${TENANT_ID}, TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was not deleted, TENANT_ID=${TENANT_ID}, TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}"
+  fi
 }
 
 # INTERNAL
@@ -1603,24 +2069,24 @@ elif [ "$1" = "support" ]; then
     support_createTenant
   elif [ "$2" = "deleteTenant" ]; then
     support_deleteTenant $3
-  elif [ "$2" = "createProject" ]; then
-    support_createProject $3
-  elif [ "$2" = "deleteProject" ]; then
-    support_deleteProject $3 $4
+  elif [ "$2" = "createTenantProject" ]; then
+    support_createTenantProject $3
+  elif [ "$2" = "deleteTenantProject" ]; then
+    support_deleteTenantProject $3 $4
   elif [ "$2" = "createDeveloper" ]; then
     support_createDeveloper $3
   elif [ "$2" = "createTenantPermission" ]; then
     support_createTenantPermission $3 $4 $5
   elif [ "$2" = "deleteTenantPermission" ]; then
     support_deleteTenantPermission $3 $4 $5
-  elif [ "$2" = "createProjectPermission" ]; then
-    support_createProjectPermission $3 $4 $5 $6
-  elif [ "$2" = "deleteProjectPermission" ]; then
-    support_deleteProjectPermission $3 $4 $5 $6
-  elif [ "$2" = "createStagePermission" ]; then
-    support_createStagePermission $3 $4 $5 $6
-  elif [ "$2" = "deleteStagePermission" ]; then
-    support_deleteStagePermission $3 $4 $5 $6
+  elif [ "$2" = "createTenantProjectPermission" ]; then
+    support_createTenantProjectPermission $3 $4 $5 $6
+  elif [ "$2" = "deleteTenantProjectPermission" ]; then
+    support_deleteTenantProjectPermission $3 $4 $5 $6
+  elif [ "$2" = "createTenantStagePermission" ]; then
+    support_createTenantStagePermission $3 $4 $5 $6
+  elif [ "$2" = "deleteTenantStagePermission" ]; then
+    support_deleteTenantStagePermission $3 $4 $5 $6
   else
     help "support"
   fi
@@ -1632,20 +2098,34 @@ elif [ "$1" = "developer" ]; then
       developer_printCurrent
   elif [ "$2" = "createToken" ]; then
     developer_createToken
-  elif [ "$2" = "createProject" ]; then
-    developer_createProject $3
-  elif [ "$2" = "createVersion" ]; then
-    developer_createVersion $3 $4 $5
   elif [ "$2" = "getTenantDashboard" ]; then
     developer_getTenantDashboard $3
-  elif [ "$2" = "getStageDashboard" ]; then
-    developer_getStageDashboard $3 $4
-  elif [ "$2" = "getVersionDashboard" ]; then
-    developer_getVersionDashboard $3 $4
-  elif [ "$2" = "buildVersion" ]; then
-    developer_buildVersion $3 $4 $5
-  elif [ "$2" = "deployVersion" ]; then
-    developer_deployVersion $3 $4
+  elif [ "$2" = "createTenantProject" ]; then
+    developer_createTenantProject $3
+  elif [ "$2" = "getTenantProjectDashboard" ]; then
+    developer_getTenantProjectDashboard $3 $4
+  elif [ "$2" = "deleteTenantProject" ]; then
+    developer_deleteTenantProject $3 $4
+  elif [ "$2" = "createTenantStage" ]; then
+    developer_createTenantStage $3 $4
+  elif [ "$2" = "getTenantStageDashboard" ]; then
+    developer_getTenantStageDashboard $3 $4
+  elif [ "$2" = "deleteTenantStage" ]; then
+    developer_deleteTenantStage $3 $4
+  elif [ "$2" = "createTenantVersion" ]; then
+    developer_createTenantVersion $3 $4 $5
+  elif [ "$2" = "buildTenantVersion" ]; then
+    developer_buildTenantVersion $3 $4 $5
+  elif [ "$2" = "getTenantVersionDashboard" ]; then
+    developer_getTenantVersionDashboard $3 $4
+  elif [ "$2" = "deleteTenantVersion" ]; then
+    developer_deleteTenantVersion $3 $4
+  elif [ "$2" = "deployTenantVersion" ]; then
+    developer_deployTenantVersion $3 $4 $5
+  elif [ "$2" = "getTenantDeploymentDashboard" ]; then
+    developer_getTenantDeploymentDashboard $3 $4
+  elif [ "$2" = "deleteTenantDeployment" ]; then
+      developer_deleteTenantDeployment $3 $4
   else
     help "developer"
   fi
