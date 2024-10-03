@@ -1,10 +1,10 @@
 package com.omgservers.service.service.task.impl.method.executeJenkinsRequestTask;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
+import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
 import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
@@ -12,7 +12,7 @@ import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBo
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.event.EventService;
@@ -37,7 +37,7 @@ public class JenkinsRequestTaskImpl {
     final JenkinsService jenkinsService;
     final EventService eventService;
 
-    final TenantImageRefModelFactory tenantImageRefModelFactory;
+    final TenantImageModelFactory tenantImageModelFactory;
     final EventModelFactory eventModelFactory;
 
     public Uni<Boolean> executeTask(final Long tenantId, final Long tenantJenkinsRequestId) {
@@ -84,7 +84,7 @@ public class JenkinsRequestTaskImpl {
                 .flatMap(imageId -> {
                     log.info("Jenkins job was finished, qualifier={}, buildNumber={}, imageId={}",
                             qualifier, buildNumber, imageId);
-                    return syncTenantImageRef(versionJenkinsRequest, imageId, idempotencyKey);
+                    return syncTenantImage(versionJenkinsRequest, imageId, idempotencyKey);
                 })
                 .map(created -> JenkinsRequestResultEnum.FINISHED)
                 .onFailure(ServerSideBadRequestException.class)
@@ -106,22 +106,22 @@ public class JenkinsRequestTaskImpl {
                 .map(GetLuaJitRuntimeBuilderV1Response::getImageId);
     }
 
-    Uni<Boolean> syncTenantImageRef(final TenantJenkinsRequestModel versionJenkinsRequest,
-                                    final String imageId,
-                                    final String idempotencyKey) {
+    Uni<Boolean> syncTenantImage(final TenantJenkinsRequestModel versionJenkinsRequest,
+                                 final String imageId,
+                                 final String idempotencyKey) {
 
         final var tenantId = versionJenkinsRequest.getTenantId();
         final var versionId = versionJenkinsRequest.getVersionId();
 
-        final var versionImageRef = tenantImageRefModelFactory.create(tenantId,
+        final var versionImage = tenantImageModelFactory.create(tenantId,
                 versionId,
-                TenantImageRefQualifierEnum.UNIVERSAL,
+                TenantImageQualifierEnum.UNIVERSAL,
                 imageId,
                 idempotencyKey);
 
-        final var request = new SyncTenantImageRefRequest(versionImageRef);
-        return tenantModule.getTenantService().syncTenantImageRefWithIdempotency(request)
-                .map(SyncTenantImageRefResponse::getCreated);
+        final var request = new SyncTenantImageRequest(versionImage);
+        return tenantModule.getTenantService().syncTenantImageWithIdempotency(request)
+                .map(SyncTenantImageResponse::getCreated);
     }
 
     Uni<Boolean> syncVersionBuildingFinished(final TenantJenkinsRequestModel versionJenkinsRequest) {

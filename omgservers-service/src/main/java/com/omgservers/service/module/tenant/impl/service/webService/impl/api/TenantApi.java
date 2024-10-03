@@ -20,16 +20,16 @@ import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeployment
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
@@ -323,28 +323,28 @@ public interface TenantApi {
     Uni<DeleteTenantJenkinsRequestResponse> deleteTenantJenkinsRequest(DeleteTenantJenkinsRequestRequest request);
 
     /*
-    TenantImageRef
+    TenantImage
      */
 
     @PUT
-    @Path("/get-tenant-image-ref")
-    Uni<GetTenantImageRefResponse> getTenantImageRef(GetTenantImageRefRequest request);
+    @Path("/get-tenant-image")
+    Uni<GetTenantImageResponse> getTenantImage(GetTenantImageRequest request);
 
     @PUT
-    @Path("/find-tenant-image-ref")
-    Uni<FindTenantImageRefResponse> findTenantImageRef(FindTenantImageRefRequest request);
+    @Path("/find-tenant-image")
+    Uni<FindTenantImageResponse> findTenantImage(FindTenantImageRequest request);
 
     @PUT
-    @Path("/view-tenant-image-refs")
-    Uni<ViewTenantImageRefsResponse> viewTenantImageRefs(ViewTenantImageRefsRequest request);
+    @Path("/view-tenant-images")
+    Uni<ViewTenantImageResponse> viewTenantImages(ViewTenantImageRequest request);
 
     @PUT
-    @Path("/sync-tenant-image-ref")
-    Uni<SyncTenantImageRefResponse> syncTenantImageRef(SyncTenantImageRefRequest request);
+    @Path("/sync-tenant-image")
+    Uni<SyncTenantImageResponse> syncTenantImage(SyncTenantImageRequest request);
 
     @PUT
-    @Path("/delete-tenant-image-ref")
-    Uni<DeleteTenantImageRefResponse> deleteTenantImageRef(DeleteTenantImageRefRequest request);
+    @Path("/delete-tenant-image")
+    Uni<DeleteTenantImageResponse> deleteTenantImage(DeleteTenantImageRequest request);
 
     /*
     TenantDeployment

@@ -21,16 +21,16 @@ import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeployment
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
@@ -150,11 +150,11 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.SelectTenantDeploymentMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.SyncTenantDeploymentMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.ViewTenantDeploymentMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImageRef.DeleteTenantImageRefMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImageRef.FindTenantImageRefMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImageRef.GetTenantImageRefMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImageRef.SyncTenantImageRefMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImageRef.ViewTenantImageRefsMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.DeleteTenantImageMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.FindTenantImageMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.GetTenantImageMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.SyncTenantImageMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.ViewTenantImagesMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantJenkinsRequest.DeleteTenantJenkinsRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantJenkinsRequest.GetTenantJenkinsRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantJenkinsRequest.SyncTenantJenkinsRequestMethod;
@@ -256,25 +256,25 @@ public class TenantServiceImpl implements TenantService {
     final GetTenantLobbyRequestMethod getTenantLobbyRequestMethod;
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
     final DeleteTenantLobbyRefMethod deleteTenantLobbyRefMethod;
-    final DeleteTenantImageRefMethod deleteTenantImageRefMethod;
+    final DeleteTenantImageMethod deleteTenantImageMethod;
     final SyncTenantPermissionMethod syncTenantPermissionMethod;
     final GetTenantVersionDataMethod getTenantVersionDataMethod;
     final SyncTenantDeploymentMethod syncTenantDeploymentMethod;
     final ViewTenantDeploymentMethod viewTenantDeploymentMethod;
-    final ViewTenantImageRefsMethod viewTenantImageRefsMethod;
+    final ViewTenantImagesMethod viewTenantImagesMethod;
     final ViewTenantLobbyRefsMethod viewTenantLobbyRefsMethod;
     final DeleteTenantVersionMethod deleteTenantVersionMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final GetTenantDeploymentMethod getTenantDeploymentMethod;
     final SyncTenantLobbyRefMethod syncTenantLobbyRefMethod;
     final FindTenantLobbyRefMethod findTenantLobbyRefMethod;
-    final FindTenantImageRefMethod findTenantImageRefMethod;
-    final SyncTenantImageRefMethod syncTenantImageRefMethod;
+    final FindTenantImageMethod findTenantImageMethod;
+    final SyncTenantImageMethod syncTenantImageMethod;
     final GetTenantStageDataMethod getTenantStageDataMethod;
     final ViewTenantVersionsMethod viewTenantVersionsMethod;
     final ViewTenantProjectsMethod viewTenantProjectsMethod;
     final GetTenantLobbyRefMethod getTenantLobbyRefMethod;
-    final GetTenantImageRefMethod getTenantImageRefMethod;
+    final GetTenantImageMethod getTenantImageMethod;
     final SyncTenantVersionMethod syncTenantVersionMethod;
     final DeleteTenantStageMethod deleteTenantStageMethod;
     final SyncTenantProjectMethod syncTenantProjectMethod;
@@ -683,52 +683,52 @@ public class TenantServiceImpl implements TenantService {
     }
 
     /*
-    TenantImageRef
+    TenantImage
      */
 
     @Override
-    public Uni<GetTenantImageRefResponse> getTenantImageRef(@Valid final GetTenantImageRefRequest request) {
+    public Uni<GetTenantImageResponse> getTenantImage(@Valid final GetTenantImageRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantImageRef,
-                getTenantImageRefMethod::execute);
+                TenantModuleClient::getTenantImage,
+                getTenantImageMethod::execute);
     }
 
     @Override
-    public Uni<FindTenantImageRefResponse> findTenantImageRef(@Valid final FindTenantImageRefRequest request) {
+    public Uni<FindTenantImageResponse> findTenantImage(@Valid final FindTenantImageRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findTenantImageRef,
-                findTenantImageRefMethod::execute);
+                TenantModuleClient::findTenantImage,
+                findTenantImageMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantImageRefsResponse> viewTenantImageRefs(@Valid final ViewTenantImageRefsRequest request) {
+    public Uni<ViewTenantImageResponse> viewTenantImages(@Valid final ViewTenantImageRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantImageRefs,
-                viewTenantImageRefsMethod::execute);
+                TenantModuleClient::viewTenantImages,
+                viewTenantImagesMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantImageRefResponse> syncTenantImageRef(@Valid final SyncTenantImageRefRequest request) {
+    public Uni<SyncTenantImageResponse> syncTenantImage(@Valid final SyncTenantImageRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantImageRef,
-                syncTenantImageRefMethod::execute);
+                TenantModuleClient::syncTenantImage,
+                syncTenantImageMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantImageRefResponse> syncTenantImageRefWithIdempotency(
-            @Valid final SyncTenantImageRefRequest request) {
-        return syncTenantImageRef(request)
+    public Uni<SyncTenantImageResponse> syncTenantImageWithIdempotency(
+            @Valid final SyncTenantImageRequest request) {
+        return syncTenantImage(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantImageRef(),
+                            log.warn("Idempotency was violated, object={}, {}", request.getTenantImage(),
                                     t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantImageRefResponse(Boolean.FALSE));
+                            return Uni.createFrom().item(new SyncTenantImageResponse(Boolean.FALSE));
                         }
                     }
 
@@ -737,11 +737,11 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantImageRefResponse> deleteTenantImageRef(@Valid final DeleteTenantImageRefRequest request) {
+    public Uni<DeleteTenantImageResponse> deleteTenantImage(@Valid final DeleteTenantImageRequest request) {
         return handleInternalRequestOperation.handleInternalRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantImageRef,
-                deleteTenantImageRefMethod::execute);
+                TenantModuleClient::deleteTenantImage,
+                deleteTenantImageMethod::execute);
     }
 
     /*

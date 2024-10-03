@@ -5,8 +5,8 @@ import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
+import com.omgservers.schema.model.tenantImage.TenantImageModel;
+import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
 import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
@@ -18,7 +18,7 @@ import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
@@ -28,7 +28,7 @@ import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectReques
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
-import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.factory.tenant.TenantJenkinsRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
@@ -58,7 +58,7 @@ public class TenantTestDataFactory {
     final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
     final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
     final TenantDeploymentModelFactory tenantDeploymentModelFactory;
-    final TenantImageRefModelFactory tenantImageRefModelFactory;
+    final TenantImageModelFactory tenantImageModelFactory;
     final TenantLobbyRefModelFactory tenantLobbyRefModelFactory;
     final TenantVersionModelFactory tenantVersionModelFactory;
     final TenantProjectModelFactory tenantProjectModelFactory;
@@ -116,16 +116,16 @@ public class TenantTestDataFactory {
         return versionJenkinsRequest;
     }
 
-    public TenantImageRefModel createTenantImageRef(final TenantVersionModel tenantVersion) {
+    public TenantImageModel createTenantImage(final TenantVersionModel tenantVersion) {
         final var tenantId = tenantVersion.getTenantId();
         final var tenantVersionId = tenantVersion.getId();
-        final var tenantImageRef = tenantImageRefModelFactory.create(tenantId,
+        final var tenantImage = tenantImageModelFactory.create(tenantId,
                 tenantVersionId,
-                TenantImageRefQualifierEnum.UNIVERSAL,
+                TenantImageQualifierEnum.UNIVERSAL,
                 "universal:latest");
-        final var syncTenantImageRefRequest = new SyncTenantImageRefRequest(tenantImageRef);
-        tenantService.syncTenantImageRef(syncTenantImageRefRequest);
-        return tenantImageRef;
+        final var syncTenantImageRequest = new SyncTenantImageRequest(tenantImage);
+        tenantService.syncTenantImage(syncTenantImageRequest);
+        return tenantImage;
     }
 
     public TenantLobbyRequestModel createTenantLobbyRequest(final TenantDeploymentModel tenantDeployment) {

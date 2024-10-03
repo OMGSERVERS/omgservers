@@ -1,7 +1,6 @@
 package com.omgservers.schema.module.tenant.tenantProject.dto;
 
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;

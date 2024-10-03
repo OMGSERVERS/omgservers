@@ -21,16 +21,16 @@ import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeployment
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
@@ -380,32 +380,32 @@ class TenantApiImpl implements TenantApi {
     }
 
     /*
-    TenantImageRef
+    TenantImage
      */
 
     @Override
-    public Uni<GetTenantImageRefResponse> getTenantImageRef(final GetTenantImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantImageRef);
+    public Uni<GetTenantImageResponse> getTenantImage(final GetTenantImageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantImage);
     }
 
     @Override
-    public Uni<FindTenantImageRefResponse> findTenantImageRef(final FindTenantImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantImageRef);
+    public Uni<FindTenantImageResponse> findTenantImage(final FindTenantImageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantImage);
     }
 
     @Override
-    public Uni<ViewTenantImageRefsResponse> viewTenantImageRefs(final ViewTenantImageRefsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantImageRefs);
+    public Uni<ViewTenantImageResponse> viewTenantImages(final ViewTenantImageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantImages);
     }
 
     @Override
-    public Uni<SyncTenantImageRefResponse> syncTenantImageRef(final SyncTenantImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantImageRef);
+    public Uni<SyncTenantImageResponse> syncTenantImage(final SyncTenantImageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantImage);
     }
 
     @Override
-    public Uni<DeleteTenantImageRefResponse> deleteTenantImageRef(final DeleteTenantImageRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantImageRef);
+    public Uni<DeleteTenantImageResponse> deleteTenantImage(final DeleteTenantImageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantImage);
     }
 
     /*

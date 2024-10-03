@@ -8,7 +8,7 @@ import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
+import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.model.user.UserModel;
@@ -41,7 +41,7 @@ public class TestDataFactory {
         final var tenantVersion = tenantTestDataFactory.createTenantVersion(tenantProject);
         final var tenantDeployment = tenantTestDataFactory.createTenantDeployment(tenantStage,
                 tenantVersion);
-        final var tenantImageRef = tenantTestDataFactory.createTenantImageRef(tenantVersion);
+        final var tenantImage = tenantTestDataFactory.createTenantImage(tenantVersion);
 
         final var lobby = lobbyTestDataFactory.createLobby(tenantDeployment);
         final var lobbyRuntime = runtimeTestDataFactory.createLobbyRuntime(tenant,
@@ -68,7 +68,7 @@ public class TestDataFactory {
                 .tenantStage(tenantStage)
                 .tenantVersion(tenantVersion)
                 .tenantDeployment(tenantDeployment)
-                .tenantImageRef(tenantImageRef)
+                .tenantImage(tenantImage)
 
                 .lobby(lobby)
                 .lobbyRuntime(lobbyRuntime)
@@ -88,7 +88,7 @@ public class TestDataFactory {
         TenantStageModel tenantStage;
         TenantVersionModel tenantVersion;
         TenantDeploymentModel tenantDeployment;
-        TenantImageRefModel tenantImageRef;
+        TenantImageModel tenantImage;
 
         LobbyModel lobby;
         RuntimeModel lobbyRuntime;

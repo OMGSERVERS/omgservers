@@ -5,8 +5,8 @@ import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
+import com.omgservers.schema.model.tenantImage.TenantImageModel;
+import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestRequest;
@@ -15,8 +15,8 @@ import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
@@ -83,13 +83,13 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                     return getTenantDeployment(tenantId, deploymentId)
                             .flatMap(tenantDeployment -> {
                                 final var versionId = tenantDeployment.getVersionId();
-                                return viewTenantImageRef(tenantId, versionId)
-                                        .map(tenantImageRefs -> selectTenantImageRef(runtime, tenantImageRefs))
-                                        .flatMap(tenantImageRef -> {
+                                return viewTenantImage(tenantId, versionId)
+                                        .map(tenantImages -> selectTenantImage(runtime, tenantImages))
+                                        .flatMap(tenantImage -> {
                                             final var userId = runtime.getUserId();
                                             final var password = generateSecureStringOperation.generateSecureString();
                                             final var idempotencyKey = event.getId().toString();
-                                            final var imageId = tenantImageRef.getImageId();
+                                            final var imageId = tenantImage.getImageId();
                                             return createUser(userId, password, idempotencyKey)
                                                     .flatMap(user -> syncPoolRequest(runtime, user, password, imageId));
                                         });
@@ -110,23 +110,23 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
-    Uni<List<TenantImageRefModel>> viewTenantImageRef(final Long tenantId, final Long versionId) {
-        final var request = new ViewTenantImageRefsRequest(tenantId, versionId);
-        return tenantModule.getTenantService().viewTenantImageRefs(request)
-                .map(ViewTenantImageRefsResponse::getTenantImageRefs);
+    Uni<List<TenantImageModel>> viewTenantImage(final Long tenantId, final Long tenantVersionId) {
+        final var request = new ViewTenantImageRequest(tenantId, tenantVersionId);
+        return tenantModule.getTenantService().viewTenantImages(request)
+                .map(ViewTenantImageResponse::getTenantImages);
     }
 
-    TenantImageRefModel selectTenantImageRef(final RuntimeModel runtime,
-                                             final List<TenantImageRefModel> tenantImageRefs) {
-        final var universalImageRefOptional = getImageByQualifier(tenantImageRefs,
-                TenantImageRefQualifierEnum.UNIVERSAL);
-        return universalImageRefOptional
+    TenantImageModel selectTenantImage(final RuntimeModel runtime,
+                                       final List<TenantImageModel> tenantImages) {
+        final var universalImageOptional = getImageByQualifier(tenantImages,
+                TenantImageQualifierEnum.UNIVERSAL);
+        return universalImageOptional
                 .orElseGet(() -> switch (runtime.getQualifier()) {
                     case LOBBY -> {
-                        final var lobbyImageRefOptional = getImageByQualifier(tenantImageRefs,
-                                TenantImageRefQualifierEnum.LOBBY);
-                        if (lobbyImageRefOptional.isPresent()) {
-                            yield lobbyImageRefOptional.get();
+                        final var lobbyImageOptional = getImageByQualifier(tenantImages,
+                                TenantImageQualifierEnum.LOBBY);
+                        if (lobbyImageOptional.isPresent()) {
+                            yield lobbyImageOptional.get();
                         } else {
                             throw new ServerSideConflictException(
                                     ExceptionQualifierEnum.IMAGE_NOT_FOUND,
@@ -134,10 +134,10 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                         }
                     }
                     case MATCH -> {
-                        final var matchImageRefOptional = getImageByQualifier(tenantImageRefs,
-                                TenantImageRefQualifierEnum.MATCH);
-                        if (matchImageRefOptional.isPresent()) {
-                            yield matchImageRefOptional.get();
+                        final var matchImageOptional = getImageByQualifier(tenantImages,
+                                TenantImageQualifierEnum.MATCH);
+                        if (matchImageOptional.isPresent()) {
+                            yield matchImageOptional.get();
                         } else {
                             throw new ServerSideConflictException(
                                     ExceptionQualifierEnum.IMAGE_NOT_FOUND,
@@ -147,10 +147,10 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 });
     }
 
-    Optional<TenantImageRefModel> getImageByQualifier(final List<TenantImageRefModel> tenantImageRefs,
-                                                      final TenantImageRefQualifierEnum qualifier) {
-        return tenantImageRefs.stream()
-                .filter(imageRef -> imageRef.getQualifier().equals(qualifier))
+    Optional<TenantImageModel> getImageByQualifier(final List<TenantImageModel> tenantImages,
+                                                   final TenantImageQualifierEnum qualifier) {
+        return tenantImages.stream()
+                .filter(tenantImage -> tenantImage.getQualifier().equals(qualifier))
                 .findFirst();
     }
 

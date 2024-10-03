@@ -91,7 +91,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
                 .getTenantVersionDashboard(developerToken, tenantId, tenantVersionId);
         var attempt = 1;
         var maxAttempts = 12;
-        while ((currentTenantVersionDashboard.getTenantImageRefs().isEmpty()) &&
+        while ((currentTenantVersionDashboard.getTenantImages().isEmpty()) &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for building, attempt={}", attempt);

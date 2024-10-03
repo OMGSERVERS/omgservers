@@ -1,6 +1,6 @@
 package com.omgservers.schema.module.tenant.tenantVersion.dto;
 
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefModel;
+import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import jakarta.validation.constraints.NotNull;
@@ -22,5 +22,5 @@ public class TenantVersionDataDto {
     List<TenantJenkinsRequestModel> tenantJenkinsRequests;
 
     @NotNull
-    List<TenantImageRefModel> tenantImageRefs;
+    List<TenantImageModel> tenantImages;
 }

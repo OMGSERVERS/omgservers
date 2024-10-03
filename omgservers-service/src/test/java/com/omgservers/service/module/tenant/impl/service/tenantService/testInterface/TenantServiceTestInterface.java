@@ -18,16 +18,16 @@ import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeployment
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.DeleteTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.FindTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.GetTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.ViewTenantImageRefsResponse;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
@@ -382,36 +382,36 @@ public class TenantServiceTestInterface {
     }
 
     /*
-    TenantImageRef
+    TenantImage
      */
 
-    public GetTenantImageRefResponse getTenantImageRef(final GetTenantImageRefRequest request) {
-        return tenantService.getTenantImageRef(request)
+    public GetTenantImageResponse getTenantImage(final GetTenantImageRequest request) {
+        return tenantService.getTenantImage(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindTenantImageRefResponse findTenantImageRef(final FindTenantImageRefRequest request) {
-        return tenantService.findTenantImageRef(request)
+    public FindTenantImageResponse findTenantImage(final FindTenantImageRequest request) {
+        return tenantService.findTenantImage(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewTenantImageRefsResponse viewTenantImageRefs(final ViewTenantImageRefsRequest request) {
-        return tenantService.viewTenantImageRefs(request)
+    public ViewTenantImageResponse viewTenantImages(final ViewTenantImageRequest request) {
+        return tenantService.viewTenantImages(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncTenantImageRefResponse syncTenantImageRef(final SyncTenantImageRefRequest request) {
-        return tenantService.syncTenantImageRef(request)
+    public SyncTenantImageResponse syncTenantImage(final SyncTenantImageRequest request) {
+        return tenantService.syncTenantImage(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncTenantImageRefResponse syncTenantImageRefWithIdempotency(final SyncTenantImageRefRequest request) {
-        return tenantService.syncTenantImageRefWithIdempotency(request)
+    public SyncTenantImageResponse syncTenantImageWithIdempotency(final SyncTenantImageRequest request) {
+        return tenantService.syncTenantImageWithIdempotency(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteTenantImageRefResponse deleteTenantImageRef(final DeleteTenantImageRefRequest request) {
-        return tenantService.deleteTenantImageRef(request)
+    public DeleteTenantImageResponse deleteTenantImage(final DeleteTenantImageRequest request) {
+        return tenantService.deleteTenantImage(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 

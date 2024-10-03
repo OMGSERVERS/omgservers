@@ -32,9 +32,9 @@ class SyncTenantDeploymentMethodImpl implements SyncTenantDeploymentMethod {
         log.debug("Sync tenant deployment, request={}", request);
 
         final var shardKey = request.getRequestShardKey();
-        final var versionImageRef = request.getTenantDeployment();
-        final var tenantId = versionImageRef.getTenantId();
-        final var stageId = versionImageRef.getStageId();
+        final var tenantDeployment = request.getTenantDeployment();
+        final var tenantId = tenantDeployment.getTenantId();
+        final var stageId = tenantDeployment.getStageId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
@@ -49,7 +49,7 @@ class SyncTenantDeploymentMethodImpl implements SyncTenantDeploymentMethod {
                                                     return upsertTenantDeploymentOperation.execute(changeContext,
                                                             sqlConnection,
                                                             shardModel.shard(),
-                                                            versionImageRef);
+                                                            tenantDeployment);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,

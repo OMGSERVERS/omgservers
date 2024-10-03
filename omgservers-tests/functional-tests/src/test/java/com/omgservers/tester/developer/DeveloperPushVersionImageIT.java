@@ -48,7 +48,7 @@ public class DeveloperPushVersionImageIT extends BaseTestClass {
             final var tenantVersionDashboard = developerApiTester.getTenantVersionDashboard(testVersion.getDeveloperToken(),
                     testVersion.getTenantId(), testVersion.getTenantVersionId());
             log.info("Tenant version dashboard, {}", tenantVersionDashboard);
-            assertEquals(1, tenantVersionDashboard.getTenantImageRefs().size());
+            assertEquals(1, tenantVersionDashboard.getTenantImages().size());
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }

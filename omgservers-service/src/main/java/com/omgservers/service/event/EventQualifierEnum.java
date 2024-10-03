@@ -51,8 +51,8 @@ import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyMod
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.TenantImageRefCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.TenantImageRefDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantImageCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantImageDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefCreatedEventBodyModel;
@@ -107,8 +107,8 @@ public enum EventQualifierEnum {
     TENANT_DEPLOYMENT_DELETED(TenantDeploymentDeletedEventBodyModel.class, true),
     TENANT_JENKINS_REQUEST_CREATED(TenantJenkinsRequestCreatedEventBodyModel.class, true),
     TENANT_JENKINS_REQUEST_DELETED(TenantJenkinsRequestDeletedEventBodyModel.class, true),
-    TENANT_IMAGE_REF_CREATED(TenantImageRefCreatedEventBodyModel.class, true),
-    TENANT_IMAGE_REF_DELETED(TenantImageRefDeletedEventBodyModel.class, true),
+    TENANT_IMAGE_CREATED(TenantImageCreatedEventBodyModel.class, true),
+    TENANT_IMAGE_DELETED(TenantImageDeletedEventBodyModel.class, true),
     TENANT_LOBBY_REQUEST_CREATED(TenantLobbyRequestCreatedEventBodyModel.class, true),
     TENANT_LOBBY_REQUEST_DELETED(TenantLobbyRequestDeletedEventBodyModel.class, true),
     TENANT_LOBBY_REF_CREATED(TenantLobbyRefCreatedEventBodyModel.class, false),

@@ -32,8 +32,8 @@ class RuntimeDeploymentRequestedEventHandlerImplTest extends Assertions {
         final var tenantVersion = testDataFactory.getTenantTestDataFactory().createTenantVersion(tenantProject);
         final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
                 .createTenantDeployment(tenantStage, tenantVersion);
-        final var tenantImageRef = testDataFactory.getTenantTestDataFactory()
-                .createTenantImageRef(tenantVersion);
+        final var tenantImage = testDataFactory.getTenantTestDataFactory()
+                .createTenantImage(tenantVersion);
         final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(tenantDeployment);
         final var lobbyRuntime = testDataFactory.getRuntimeTestDataFactory()
                 .createLobbyRuntime(tenant, tenantDeployment, lobby);

@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.operation.DeleteTenantImageRefByTenantVersionIdOperation;
+import com.omgservers.service.handler.operation.DeleteTenantImageByTenantVersionIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantJenkinsRequestsByTenantVersionIdOperation;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +24,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
 
     final DeleteTenantJenkinsRequestsByTenantVersionIdOperation deleteTenantJenkinsRequestsByTenantVersionIdOperation;
-    final DeleteTenantImageRefByTenantVersionIdOperation deleteTenantImageRefByTenantVersionIdOperation;
+    final DeleteTenantImageByTenantVersionIdOperation deleteTenantImageByTenantVersionIdOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -48,7 +48,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
                             tenantProjectId);
 
                     return deleteTenantJenkinsRequestsByTenantVersionIdOperation.execute(tenantId, tenantVersionId)
-                            .flatMap(voidItem -> deleteTenantImageRefByTenantVersionIdOperation
+                            .flatMap(voidItem -> deleteTenantImageByTenantVersionIdOperation
                                     .execute(tenantId, tenantVersionId));
                 })
                 .replaceWithVoid();

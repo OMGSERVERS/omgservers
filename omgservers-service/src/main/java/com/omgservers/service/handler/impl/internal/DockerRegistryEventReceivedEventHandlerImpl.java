@@ -2,14 +2,14 @@ package com.omgservers.service.handler.impl.internal;
 
 import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.tenantImageRef.TenantImageRefQualifierEnum;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefRequest;
-import com.omgservers.schema.module.tenant.tenantImageRef.SyncTenantImageRefResponse;
+import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.tenant.TenantImageRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.buildDockerImageId.BuildDockerImageIdOperation;
@@ -37,7 +37,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
     final BuildDockerImageIdOperation buildDockerImageIdOperation;
     final GetConfigOperation getConfigOperation;
 
-    final TenantImageRefModelFactory tenantImageRefModelFactory;
+    final TenantImageModelFactory tenantImageModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -76,7 +76,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
             final var imageId = registryHost + "/" +
                     buildDockerImageIdOperation.buildDockerImageId(dockerRepository, versionId);
 
-            return syncTenantImageRef(tenantId,
+            return syncTenantImage(tenantId,
                     versionId,
                     imageId,
                     dockerRepository.getContainer(),
@@ -87,15 +87,15 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         }
     }
 
-    Uni<Boolean> syncTenantImageRef(final Long tenantId,
-                                    final Long versionId,
-                                    final String imageId,
-                                    final DockerRegistryContainerQualifierEnum qualifier,
-                                    final String idempotencyKey) {
-        final var tenantImageRefQualifier = switch (qualifier) {
-            case LOBBY -> TenantImageRefQualifierEnum.LOBBY;
-            case MATCH -> TenantImageRefQualifierEnum.MATCH;
-            case UNIVERSAL -> TenantImageRefQualifierEnum.UNIVERSAL;
+    Uni<Boolean> syncTenantImage(final Long tenantId,
+                                 final Long tenantVersionId,
+                                 final String imageId,
+                                 final DockerRegistryContainerQualifierEnum qualifier,
+                                 final String idempotencyKey) {
+        final var tenantImageQualifier = switch (qualifier) {
+            case LOBBY -> TenantImageQualifierEnum.LOBBY;
+            case MATCH -> TenantImageQualifierEnum.MATCH;
+            case UNIVERSAL -> TenantImageQualifierEnum.UNIVERSAL;
         };
 
         final var tenantImage = tenantImageModelFactory.create(tenantId,
@@ -104,9 +104,9 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
                 imageId,
                 idempotencyKey);
 
-        final var request = new SyncTenantImageRefRequest(tenantImageRef);
-        return tenantModule.getTenantService().syncTenantImageRefWithIdempotency(request)
-                .map(SyncTenantImageRefResponse::getCreated);
+        final var request = new SyncTenantImageRequest(tenantImage);
+        return tenantModule.getTenantService().syncTenantImageWithIdempotency(request)
+                .map(SyncTenantImageResponse::getCreated);
     }
 
     String getRegistryHost(final DockerRegistryEventDto event) {
