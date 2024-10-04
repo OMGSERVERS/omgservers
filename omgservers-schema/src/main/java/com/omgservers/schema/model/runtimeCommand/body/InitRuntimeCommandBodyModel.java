@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class InitRuntimeCommandBodyModel extends RuntimeCommandBodyModel {
 
     @NotNull
-    RuntimeConfigDto config;
+    RuntimeConfigDto runtimeConfig;
 
     @Override
     public RuntimeCommandQualifierEnum getQualifier() {

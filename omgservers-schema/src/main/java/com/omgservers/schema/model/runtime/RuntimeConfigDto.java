@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.runtime;
 
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class RuntimeConfigDto {
 
     LobbyConfigDto lobbyConfig;
     MatchConfigDto matchConfig;
+    TenantVersionConfigDto versionConfig;
 
     @Data
     @Builder

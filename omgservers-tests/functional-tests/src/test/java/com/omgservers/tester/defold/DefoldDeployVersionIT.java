@@ -41,7 +41,7 @@ public class DefoldDeployVersionIT extends BaseTestClass {
     @Test
     void defoldDeployVersionIT() throws Exception {
         final var tenatnVersionConfig = TenantVersionConfigDto.create();
-        tenatnVersionConfig.setUserData(new UserData("deploy-version"));
+        tenatnVersionConfig.setUserData(new UserData(DefoldDeployVersionIT.class.getSimpleName()));
         final var testVersion = createTestVersionOperation.createTestVersion(tenatnVersionConfig);
 
         final var developerUserId = testVersion.getDeveloperUserId();

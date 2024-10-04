@@ -32,29 +32,28 @@ class SyncTenantLobbyRequestMethodImpl implements SyncTenantLobbyRequestMethod {
         log.debug("Sync tenant lobby request, request={}", request);
 
         final var shardKey = request.getRequestShardKey();
-        final var versionLobbyRequest = request.getTenantLobbyRequest();
-        final var tenantId = versionLobbyRequest.getTenantId();
-        final var deploymentId = versionLobbyRequest.getDeploymentId();
+        final var tenantLobbyRequest = request.getTenantLobbyRequest();
+        final var tenantId = tenantLobbyRequest.getTenantId();
+        final var tenantDeploymentId = tenantLobbyRequest.getDeploymentId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+        return checkShardOperation.checkShard(shardKey)
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantDeploymentExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, deploymentId)
+                                            .execute(sqlConnection, shard, tenantId, tenantDeploymentId)
                                             .flatMap(exists -> {
                                                 if (exists) {
                                                     return upsertTenantLobbyRequestOperation
                                                             .execute(changeContext,
                                                                     sqlConnection,
                                                                     shardModel.shard(),
-                                                                    versionLobbyRequest);
+                                                                    tenantLobbyRequest);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
                                                             "tenant deployment does not exist or was deleted, id=" +
-                                                                    deploymentId);
+                                                                    tenantDeploymentId);
                                                 }
                                             })
 

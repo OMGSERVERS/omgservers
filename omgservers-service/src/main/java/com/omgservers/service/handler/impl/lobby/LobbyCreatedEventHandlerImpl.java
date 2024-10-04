@@ -3,12 +3,19 @@ package com.omgservers.service.handler.impl.lobby;
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.lobby.GetLobbyRequest;
 import com.omgservers.schema.module.lobby.GetLobbyResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.lobby.LobbyCreatedEventBodyModel;
@@ -57,8 +64,19 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(lobby -> {
                     log.info("Lobby was created, id={}", lobbyId);
 
-                    return syncRuntime(lobby, idempotencyKey)
-                            .flatMap(created -> syncTenantLobbyRef(lobby, idempotencyKey));
+                    final var tenantId = lobby.getTenantId();
+                    final var tenantDeploymentId = lobby.getDeploymentId();
+                    return getTenantDeployment(tenantId, tenantDeploymentId)
+                            .flatMap(tenantDeployment -> {
+                                final var deploymentVersionId = tenantDeployment.getVersionId();
+                                return getTenantVersion(tenantId, deploymentVersionId)
+                                        .flatMap(tenantVersion -> {
+                                            final var tenantVersionConfig = tenantVersion
+                                                    .getConfig();
+                                            return createRuntime(lobby, tenantVersionConfig, idempotencyKey)
+                                                    .flatMap(created -> createTenantLobbyRef(lobby, idempotencyKey));
+                                        });
+                            });
                 })
                 .replaceWithVoid();
     }
@@ -69,16 +87,30 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 .map(GetLobbyResponse::getLobby);
     }
 
-    Uni<Boolean> syncRuntime(final LobbyModel lobby, final String idempotencyKey) {
+    Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
+        final var request = new GetTenantDeploymentRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantDeployment(request)
+                .map(GetTenantDeploymentResponse::getTenantDeployment);
+    }
+
+    Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
+    }
+
+    Uni<Boolean> createRuntime(final LobbyModel lobby,
+                               final TenantVersionConfigDto tenantVersionConfig,
+                               final String idempotencyKey) {
         final var lobbyId = lobby.getId();
         final var tenantId = lobby.getTenantId();
         final var deploymentId = lobby.getDeploymentId();
         final var runtimeId = lobby.getRuntimeId();
 
         final var runtimeConfig = RuntimeConfigDto.create();
-        runtimeConfig.setLobbyConfig(RuntimeConfigDto.LobbyConfigDto.builder()
-                .lobbyId(lobbyId)
-                .build());
+        runtimeConfig.setLobbyConfig(new RuntimeConfigDto.LobbyConfigDto(lobbyId));
+        runtimeConfig.setVersionConfig(tenantVersionConfig);
+
         final var runtime = runtimeModelFactory.create(runtimeId,
                 tenantId,
                 deploymentId,
@@ -92,8 +124,8 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 .map(SyncRuntimeResponse::getCreated);
     }
 
-    Uni<Boolean> syncTenantLobbyRef(final LobbyModel lobby,
-                                    final String idempotencyKey) {
+    Uni<Boolean> createTenantLobbyRef(final LobbyModel lobby,
+                                      final String idempotencyKey) {
         final var tenantId = lobby.getTenantId();
         final var lobbyId = lobby.getId();
         final var deploymentId = lobby.getDeploymentId();

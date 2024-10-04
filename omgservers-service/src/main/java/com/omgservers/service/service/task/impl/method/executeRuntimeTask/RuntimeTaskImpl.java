@@ -57,19 +57,21 @@ public class RuntimeTaskImpl {
         final var inactiveInterval = getConfigOperation.getServiceConfig().runtimes().inactiveInterval();
         final var now = Instant.now();
         if (runtime.getLastActivity().plusSeconds(inactiveInterval).isBefore(now)) {
-            return syncInactiveRuntimeDetectedEvent(runtime.getId())
+            return createInactiveRuntimeDetectedEvent(runtime.getId())
                     .replaceWithVoid();
         } else {
             return Uni.createFrom().voidItem();
         }
     }
 
-    Uni<Boolean> syncInactiveRuntimeDetectedEvent(final Long runtimeId) {
+    Uni<Boolean> createInactiveRuntimeDetectedEvent(final Long runtimeId) {
         final var eventBody = new InactiveRuntimeDetectedEventBodyModel(runtimeId);
-        final var eventModel = eventModelFactory.create(eventBody);
+        // It's possible only once per each runtime
+        final var idempotencyKey = eventBody.getQualifier() + "/" + runtimeId.toString();
+        final var eventModel = eventModelFactory.create(eventBody, idempotencyKey);
 
         final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEvent(syncEventRequest)
+        return eventService.syncEventWithIdempotency(syncEventRequest)
                 .map(SyncEventResponse::getCreated);
     }
 
@@ -78,7 +80,7 @@ public class RuntimeTaskImpl {
         return viewRuntimeAssignments(runtimeId)
                 .map(this::filterInactiveClients)
                 .flatMap(inactiveClients -> Multi.createFrom().iterable(inactiveClients)
-                        .onItem().transformToUniAndConcatenate(this::syncInactiveClientDetectedEvent)
+                        .onItem().transformToUniAndConcatenate(this::createInactiveClientDetectedEvent)
                         .collect().asList())
                 .replaceWithVoid();
     }
@@ -101,9 +103,11 @@ public class RuntimeTaskImpl {
                 .toList();
     }
 
-    Uni<Boolean> syncInactiveClientDetectedEvent(RuntimeAssignmentModel inactiveClient) {
+    Uni<Boolean> createInactiveClientDetectedEvent(RuntimeAssignmentModel inactiveClient) {
         final var clientId = inactiveClient.getClientId();
         final var eventBody = new InactiveClientDetectedEventBodyModel(clientId);
+        // It's possible only once per each client
+        final var idempotencyKey = eventBody.getQualifier() + "/" + clientId.toString();
         final var eventModel = eventModelFactory.create(eventBody);
 
         final var syncEventRequest = new SyncEventRequest(eventModel);

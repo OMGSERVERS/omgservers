@@ -3,14 +3,20 @@ package com.omgservers.service.handler.impl.matchmaker;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
-import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
@@ -61,8 +67,21 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
                         .flatMap(match -> {
                             log.info("Match was created, match={}/{}", matchmakerId, matchId);
 
-                            final var deploymentId = matchmaker.getDeploymentId();
-                            return syncRuntime(matchmaker, match, deploymentId, event.getIdempotencyKey());
+                            final var tenantId = matchmaker.getTenantId();
+                            final var tenantDeploymentId = matchmaker.getDeploymentId();
+                            return getTenantDeployment(tenantId, tenantDeploymentId)
+                                    .flatMap(tenantDeployment -> {
+                                        final var deploymentVersionId = tenantDeployment.getVersionId();
+                                        return getTenantVersion(tenantId, deploymentVersionId)
+                                                .flatMap(tenantVersion -> {
+                                                    final var tenantVersionConfig = tenantVersion
+                                                            .getConfig();
+                                                    return createRuntime(matchmaker,
+                                                            match,
+                                                            tenantVersionConfig,
+                                                            event.getIdempotencyKey());
+                                                });
+                                    });
                         })
                 )
                 .replaceWithVoid();
@@ -80,28 +99,40 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
-    Uni<Boolean> syncRuntime(final MatchmakerModel matchmaker,
-                             final MatchmakerMatchModel matchmakerMatch,
-                             final Long deploymentId,
-                             final String idempotencyKey) {
+    Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
+        final var request = new GetTenantDeploymentRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantDeployment(request)
+                .map(GetTenantDeploymentResponse::getTenantDeployment);
+    }
+
+    Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
+        final var request = new GetTenantVersionRequest(tenantId, id);
+        return tenantModule.getTenantService().getTenantVersion(request)
+                .map(GetTenantVersionResponse::getTenantVersion);
+    }
+
+    Uni<Boolean> createRuntime(final MatchmakerModel matchmaker,
+                               final MatchmakerMatchModel matchmakerMatch,
+                               final TenantVersionConfigDto tenantVersionConfig,
+                               final String idempotencyKey) {
         final var tenantId = matchmaker.getTenantId();
         final var matchmakerId = matchmaker.getId();
         final var matchId = matchmakerMatch.getId();
         final var runtimeId = matchmakerMatch.getRuntimeId();
+
         final var runtimeConfig = new RuntimeConfigDto();
         runtimeConfig.setMatchConfig(new RuntimeConfigDto.MatchConfigDto(matchmakerId, matchId));
+        runtimeConfig.setVersionConfig(tenantVersionConfig);
+
         final var runtime = runtimeModelFactory.create(
                 runtimeId,
                 tenantId,
-                deploymentId,
+                matchmaker.getDeploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 generateIdOperation.generateId(),
                 runtimeConfig,
                 idempotencyKey);
-        return syncRuntime(runtime);
-    }
 
-    Uni<Boolean> syncRuntime(final RuntimeModel runtime) {
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
         return runtimeModule.getRuntimeService().syncRuntimeWithIdempotency(syncRuntimeRequest)
                 .map(SyncRuntimeResponse::getCreated);

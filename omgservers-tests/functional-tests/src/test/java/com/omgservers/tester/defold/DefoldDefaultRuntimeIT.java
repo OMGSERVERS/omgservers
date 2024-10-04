@@ -64,7 +64,7 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
                 add(new TenantVersionGroupDto("players", 1, 16));
             }}));
         }});
-        versionConfig.setUserData(new UserData("deploy-version"));
+        versionConfig.setUserData(new UserData(DefoldDefaultRuntimeIT.class.getSimpleName()));
         final var testVersion = createTestVersionOperation.createTestVersion(versionConfig);
 
         final var developerUserId = testVersion.getDeveloperUserId();

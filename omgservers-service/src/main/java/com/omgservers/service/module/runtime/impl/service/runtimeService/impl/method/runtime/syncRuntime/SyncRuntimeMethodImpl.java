@@ -51,7 +51,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                                     if (inserted) {
                                         // InitRuntime is always first command of runtime
                                         final var commandBody = InitRuntimeCommandBodyModel.builder()
-                                                .config(runtime.getConfig())
+                                                .runtimeConfig(runtime.getConfig())
                                                 .build();
                                         final var initCommand = runtimeCommandModelFactory
                                                 .create(runtime.getId(), commandBody);

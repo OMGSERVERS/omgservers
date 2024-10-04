@@ -2,8 +2,6 @@ package com.omgservers.service.entrypoint.runtime.impl.service.webService.impl.a
 
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
-import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeRequest;
-import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeResponse;
 import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
@@ -22,10 +20,6 @@ public interface RuntimeApi {
     @PUT
     @Path("/create-token")
     Uni<CreateTokenRuntimeResponse> createToken(@NotNull CreateTokenRuntimeRequest request);
-
-    @PUT
-    @Path("/get-config")
-    Uni<GetConfigRuntimeResponse> getConfig(@NotNull GetConfigRuntimeRequest request);
 
     @PUT
     @Path("/interchange")

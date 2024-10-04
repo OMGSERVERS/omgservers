@@ -2,16 +2,18 @@ local omgserver = require("omgservers.omgserver")
 
 local GAME_MODE = "test"
 
-local function handle_initialization(self, runtime_qualifier, tenant_version_config)
-	print(socket.gettime() .. " [GAMESERVER] Server was initialized, qualifier=" .. runtime_qualifier)
-	print(socket.gettime() .. " [GAMESERVER] Version config")
-	pprint(tenant_version_config)
-
+local function handle_started(self, runtime_qualifier)
+	print(socket.gettime() .. " [GAMESERVER] Server was started, qualifier=" .. runtime_qualifier)
 	self.runtime_qualifier = runtime_qualifier
-	self.tenant_version_config = tenant_version_config
 end
 
 local function handle_command(self, command_qualifier, command_body)
+	if command_qualifier == omgserver.constants.INIT_RUNTIME then
+		local runtime_config = command_body.runtime_config
+		print("Runtime config was received")
+		pprint(runtime_config)
+	end
+
 	if self.runtime_qualifier == omgserver.constants.LOBBY then
 		if command_qualifier == omgserver.constants.ADD_CLIENT then
 			local client_id = command_body.client_id
@@ -61,10 +63,9 @@ local function handle_server_event(self, event)
 	
 	local event_qualifier = event.qualifier
 	local event_body = event.body
-	if event_qualifier == omgserver.constants.SERVER_INITIALIZED then
+	if event_qualifier == omgserver.constants.SERVER_STARTED then
 		local runtime_qualifier = event_body.runtime_qualifier
-		local tenant_version_config = event_body.tenant_version_config
-		handle_initialization(self, runtime_qualifier, tenant_version_config)
+		handle_started(self, runtime_qualifier)
 	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED then
 		local command_qualifier = event_body.command_qualifier
 		local command_body = event_body.command_body
@@ -79,7 +80,8 @@ local function handle_server_event(self, event)
 end
 
 function init(self)
-	omgserver:init(function(event) handle_server_event(self, event) end, true)
+	local debug = true
+	omgserver:start(function(event) handle_server_event(self, event) end, debug)
 end
 
 function update(self, dt)

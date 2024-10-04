@@ -14,7 +14,7 @@ omgserver = {
 		RUNTIME_ID = "OMGSERVERS_RUNTIME_ID",
 		RUNTIME_QUALIFIER = "OMGSERVERS_RUNTIME_QUALIFIER",
 		-- Server event qualifiers
-		SERVER_INITIALIZED = "SERVER_INITIALIZED",
+		SERVER_STARTED = "SERVER_STARTED",
 		COMMAND_RECEIVED = "COMMAND_RECEIVED",
 		MESSAGE_RECEIVED = "MESSAGE_RECEIVED",
 		-- Runtime qualifiers
@@ -96,7 +96,6 @@ omgserver = {
 		set_service_urls = function(components, service_url)
 			components.service_urls = {
 				create_token = service_url .. "/omgservers/v1/entrypoint/runtime/request/create-token",
-				get_config = service_url .. "/omgservers/v1/entrypoint/runtime/request/get-config",
 				interchange = service_url .. "/omgservers/v1/entrypoint/runtime/request/interchange",
 				connection = service_url .. "/omgservers/v1/entrypoint/websocket/connection",
 			}
@@ -105,11 +104,6 @@ omgserver = {
 			components.tokens = {
 				api_token = api_token,
 				ws_token = ws_token,
-			}
-		end,
-		set_config = function(components, version_config)
-			components.config = {
-				version_config = version_config,
 			}
 		end,
 		set_connection = function(components, ws_connection)
@@ -189,19 +183,6 @@ omgserver = {
 		local response_handler = self:build_handler(callback)
 		local request_url = self.components.service_urls.create_token
 		self:request_server(request_url, request_body, response_handler, nil)
-	end,
-	get_config = function(self, api_token, callback)
-		assert(self.components.server_environment, "Component server_environment must be set")
-		assert(self.components.service_urls, "Component service_urls must be set")
-
-		local runtime_id = self.components.server_environment.runtime_id
-
-		local request_body = {
-		}
-
-		local response_handler = self:build_handler(callback)
-		local request_url = self.components.service_urls.get_config
-		self:request_server(request_url, request_body, response_handler, api_token)
 	end,
 	ws_connect = function(self, callback)
 		assert(self.components.server_environment, "Component server_environment must be set")
@@ -331,7 +312,7 @@ omgserver = {
 			handler(server_event)
 		end
 	end,
-	init = function(self, handler, debug, interval)
+	start = function(self, handler, debug, interval)
 		self.settings.debug = debug or false
 		self.settings.iterate_interval = interval or 1
 		print(socket.gettime() .. " [OMGSERVER] Setting, debug=" .. tostring(self.settings.debug) .. ", interval=" .. self.settings.iterate_interval)
@@ -377,19 +358,13 @@ omgserver = {
 			local ws_token = create_token_response.ws_token
 			self.components:set_tokens(api_token, ws_token)
 
-			self:get_config(api_token, function(get_config_status, get_config_response)
-				local version_config = get_config_response.version_config
-				self.components:set_config(version_config)
-
-				self:ws_connect(function()
-					self.components.server_state:add_server_event({
-						qualifier = omgserver.constants.SERVER_INITIALIZED,
-						body = {
-							runtime_qualifier = runtime_qualifier,
-							version_config = version_config
-						}
-					})
-				end)
+			self:ws_connect(function()
+				self.components.server_state:add_server_event({
+					qualifier = omgserver.constants.SERVER_STARTED,
+					body = {
+						runtime_qualifier = runtime_qualifier,
+					}
+				})
 			end)
 		end)
 	end,
@@ -500,16 +475,12 @@ return {
 		end,
 	},
 	-- Methods
-	init = function(self, handler, debug, interval)
-		omgserver:init(handler, debug, interval)
+	start = function(self, handler, debug, interval)
+		omgserver:start(handler, debug, interval)
 	end,
 	get_qualifier = function(self)
 		assert(omgserver.components.server_environment, "Server was not initialized")
 		return omgserver.components.server_environment.runtime_qualifier
-	end,
-	get_config = function(self)
-		assert(omgserver.components.config, "Server was not initialized")
-		return omgserver.components.config.version_config
 	end,
 	update = function(self, dt)
 		omgserver:update(dt)

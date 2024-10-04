@@ -56,8 +56,8 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
                             tenantDeployment.getStageId());
 
                     // TODO: creating lobby/matchmaker requests only if developer requested it
-                    return syncVersionLobbyRequest(tenantId, id, idempotencyKey)
-                            .flatMap(created -> syncTenantMatchmakerRequest(tenantId, id, idempotencyKey));
+                    return createTenantLobbyRequest(tenantId, id, idempotencyKey)
+                            .flatMap(created -> createTenantMatchmakerRequest(tenantId, id, idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -68,22 +68,22 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
-    Uni<Boolean> syncVersionLobbyRequest(final Long tenantId,
-                                         final Long tenantDeploymentId,
-                                         final String idempotencyKey) {
-        final var versionLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
+    Uni<Boolean> createTenantLobbyRequest(final Long tenantId,
+                                          final Long tenantDeploymentId,
+                                          final String idempotencyKey) {
+        final var tenantLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
                 tenantDeploymentId,
                 idempotencyKey);
-        final var request = new SyncTenantLobbyRequestRequest(versionLobbyRequest);
+        final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
         return tenantModule.getTenantService().syncTenantLobbyRequestWithIdempotency(request)
                 .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 
-    Uni<Boolean> syncTenantMatchmakerRequest(final Long tenantId,
-                                             final Long tenantDeploymentId,
-                                             final String idempotencyKey) {
-        final var tenantMatchmakerRequest =
-                tenantMatchmakerRequestModelFactory.create(tenantId, tenantDeploymentId, idempotencyKey);
+    Uni<Boolean> createTenantMatchmakerRequest(final Long tenantId,
+                                               final Long tenantDeploymentId,
+                                               final String idempotencyKey) {
+        final var tenantMatchmakerRequest = tenantMatchmakerRequestModelFactory
+                .create(tenantId, tenantDeploymentId, idempotencyKey);
         final var request = new SyncTenantMatchmakerRequestRequest(tenantMatchmakerRequest);
         return tenantModule.getTenantService().syncTenantMatchmakerRequestWithIdempotency(request)
                 .map(SyncTenantMatchmakerRequestResponse::getCreated);

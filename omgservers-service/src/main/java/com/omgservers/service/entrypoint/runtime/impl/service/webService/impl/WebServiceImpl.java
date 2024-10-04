@@ -2,8 +2,6 @@ package com.omgservers.service.entrypoint.runtime.impl.service.webService.impl;
 
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
-import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeRequest;
-import com.omgservers.schema.entrypoint.runtime.GetConfigRuntimeResponse;
 import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
 import com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.RuntimeService;
@@ -24,11 +22,6 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<CreateTokenRuntimeResponse> createToken(final CreateTokenRuntimeRequest request) {
         return runtimeService.createToken(request);
-    }
-
-    @Override
-    public Uni<GetConfigRuntimeResponse> getConfig(final GetConfigRuntimeRequest request) {
-        return runtimeService.getConfig(request);
     }
 
     @Override
