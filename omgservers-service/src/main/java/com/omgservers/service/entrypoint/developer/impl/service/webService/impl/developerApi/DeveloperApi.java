@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl.developerApi;
 
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -101,9 +101,9 @@ public interface DeveloperApi {
     Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(@NotNull CreateTenantVersionDeveloperRequest request);
 
     @PUT
-    @Path("/build-tenant-version")
-    Uni<BuildTenantVersionDeveloperResponse> buildTenantVersion(@RestForm("tenantId") Long tenantId,
-                                                                @RestForm("tenantProjectId") Long tenantProjectId,
+    @Path("/upload-files-archive")
+    Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(@RestForm("tenantId") Long tenantId,
+                                                                @RestForm("tenantVersionId") Long tenantVersionId,
                                                                 @RestForm(FileUpload.ALL) List<FileUpload> files);
 
     @PUT

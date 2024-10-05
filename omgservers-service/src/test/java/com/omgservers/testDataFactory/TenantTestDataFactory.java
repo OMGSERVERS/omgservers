@@ -18,6 +18,7 @@ import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantFilesArchive.SyncTenantFilesArchiveRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
@@ -28,6 +29,7 @@ import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectReques
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
+import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
 import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.factory.tenant.TenantJenkinsRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
@@ -57,13 +59,14 @@ public class TenantTestDataFactory {
     final TenantJenkinsRequestModelFactory tenantJenkinsRequestModelFactory;
     final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
     final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
+    final TenantFilesArchiveModelFactory tenantFilesArchiveModelFactory;
     final TenantDeploymentModelFactory tenantDeploymentModelFactory;
-    final TenantImageModelFactory tenantImageModelFactory;
     final TenantLobbyRefModelFactory tenantLobbyRefModelFactory;
     final TenantVersionModelFactory tenantVersionModelFactory;
     final TenantProjectModelFactory tenantProjectModelFactory;
-    final TenantModelFactory tenantModelFactory;
     final TenantStageModelFactory tenantStageModelFactory;
+    final TenantImageModelFactory tenantImageModelFactory;
+    final TenantModelFactory tenantModelFactory;
 
     public TenantModel createTenant() {
         final var tenant = tenantModelFactory.create();
@@ -92,13 +95,22 @@ public class TenantTestDataFactory {
         final var tenantId = tenantProject.getTenantId();
         final var tenantProjectId = tenantProject.getId();
         final var tenantVersionConfig = TenantVersionConfigDto.create();
-        final var base64Archive = Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8));
         final var tenantVersion = tenantVersionModelFactory.create(tenantId,
                 tenantProjectId,
-                tenantVersionConfig,
-                base64Archive);
+                tenantVersionConfig);
         final var syncTenantVersionRequest = new SyncTenantVersionRequest(tenantVersion);
         tenantService.syncTenantVersion(syncTenantVersionRequest);
+        return tenantVersion;
+    }
+
+    public TenantVersionModel createTenantFilesArchive(final TenantVersionModel tenantVersion) {
+        final var tenantId = tenantVersion.getTenantId();
+        final var tenantVersionId = tenantVersion.getId();
+        final var tenantFilesArchive = tenantFilesArchiveModelFactory.create(tenantId,
+                tenantVersionId,
+                Base64.getEncoder().encodeToString("dummy".getBytes(StandardCharsets.UTF_8)));
+        final var syncTenantFilesArchiveRequest = new SyncTenantFilesArchiveRequest(tenantFilesArchive);
+        tenantService.syncTenantFilesArchive(syncTenantFilesArchiveRequest);
         return tenantVersion;
     }
 

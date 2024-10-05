@@ -20,7 +20,7 @@ public class VersionBuildingRequestedEventBodyModel extends EventBodyModel {
     Long tenantId;
 
     @NotNull
-    Long versionId;
+    Long tenantVersionId;
 
     @Override
     public EventQualifierEnum getQualifier() {

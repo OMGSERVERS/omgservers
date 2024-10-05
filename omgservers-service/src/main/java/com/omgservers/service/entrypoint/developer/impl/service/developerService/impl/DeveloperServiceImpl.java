@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl;
 
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -31,7 +31,7 @@ import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDevelop
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.BuildTenantVersionMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.UploadFilesArchiveMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantProjectMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantStageMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantVersionMethod;
@@ -68,7 +68,7 @@ class DeveloperServiceImpl implements DeveloperService {
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final DeleteTenantVersionMethod deleteTenantVersionMethod;
     final DeployTenantVersionMethod deployTenantVersionMethod;
-    final BuildTenantVersionMethod buildTenantVersionMethod;
+    final UploadFilesArchiveMethod uploadFilesArchiveMethod;
 
     final DeleteTenantStageMethod deleteTenantStageMethod;
 
@@ -130,9 +130,9 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<BuildTenantVersionDeveloperResponse> buildTenantVersion(
-            @Valid final BuildTenantVersionDeveloperRequest request) {
-        return buildTenantVersionMethod.execute(request);
+    public Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(
+            @Valid final UploadFilesArchiveDeveloperRequest request) {
+        return uploadFilesArchiveMethod.execute(request);
     }
 
     @Override

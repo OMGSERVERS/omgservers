@@ -3,8 +3,8 @@ package com.omgservers.service.handler.operation;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Multi;
@@ -19,20 +19,20 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeleteTenantImageByTenantVersionIdOperationImpl implements DeleteTenantImageByTenantVersionIdOperation {
+class DeleteTenantImagesByTenantVersionIdOperationImpl implements DeleteTenantImagesByTenantVersionIdOperation {
 
     final TenantModule tenantModule;
 
     @Override
     public Uni<Void> execute(final Long tenantId, final Long tenantVersionId) {
-        return viewTenantImage(tenantId, tenantVersionId)
+        return viewTenantImages(tenantId, tenantVersionId)
                 .flatMap(tenantImages -> Multi.createFrom().iterable(tenantImages)
                         .onItem().transformToUniAndConcatenate(tenantImage ->
                                 deleteTenantImage(tenantId, tenantImage.getId())
                                         .onFailure(ServerSideClientException.class)
                                         .recoverWithItem(t -> {
                                             log.warn("Failed to delete tenant image, " +
-                                                            "tenantStage={}/{}, " +
+                                                            "tenantVersion={}/{}, " +
                                                             "tenantImageId={}" +
                                                             "{}:{}",
                                                     tenantId,
@@ -48,10 +48,10 @@ class DeleteTenantImageByTenantVersionIdOperationImpl implements DeleteTenantIma
                 );
     }
 
-    Uni<List<TenantImageModel>> viewTenantImage(final Long tenantId, final Long tenantVersionId) {
-        final var request = new ViewTenantImageRequest(tenantId, tenantVersionId);
+    Uni<List<TenantImageModel>> viewTenantImages(final Long tenantId, final Long tenantVersionId) {
+        final var request = new ViewTenantImagesRequest(tenantId, tenantVersionId);
         return tenantModule.getTenantService().viewTenantImages(request)
-                .map(ViewTenantImageResponse::getTenantImages);
+                .map(ViewTenantImagesResponse::getTenantImages);
     }
 
     Uni<Boolean> deleteTenantImage(final Long tenantId, final Long id) {

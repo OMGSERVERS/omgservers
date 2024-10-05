@@ -2,9 +2,9 @@ package com.omgservers.service.module.tenant.impl.operation;
 
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.SelectVersionOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertProjectOperationTestInterface;
@@ -18,9 +18,6 @@ import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @Slf4j
 @QuarkusTest
@@ -69,8 +66,9 @@ class SelectTenantDeploymentOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
-        final var version1 = tenantVersionModelFactory.create(tenant.getId(), project.getId(), TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+        final var version1 = tenantVersionModelFactory.create(tenant.getId(),
+                project.getId(),
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, version1);
 
         final var version2 = selectVersionOperation.selectVersion(shard, tenant.getId(), version1.getId(), false);

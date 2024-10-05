@@ -1,31 +1,28 @@
 package com.omgservers.service.module.tenant.impl.operation;
 
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
+import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.factory.tenant.TenantModelFactory;
-import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertProjectOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertStageOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantDeploymentOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantOperationTestInterface;
-import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionLobbyRefOperationTestInterface;
 import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertTenantVersionOperationTestInterface;
+import com.omgservers.service.module.tenant.impl.operation.testInterface.UpsertVersionLobbyRefOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @Slf4j
 @QuarkusTest
@@ -81,8 +78,7 @@ class UpsertTenantImageOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
                 project.getId(),
-                TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, version);
         final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
                 stage.getId(),
@@ -109,8 +105,7 @@ class UpsertTenantImageOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
                 project.getId(),
-                TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, version);
         final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
                 stage.getId(),
@@ -146,8 +141,7 @@ class UpsertTenantImageOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var version = tenantVersionModelFactory.create(tenant.getId(),
                 project.getId(),
-                TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, version);
         final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
                 stage.getId(),

@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService;
 
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -55,7 +55,7 @@ public interface DeveloperService {
 
     Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(@Valid CreateTenantVersionDeveloperRequest request);
 
-    Uni<BuildTenantVersionDeveloperResponse> buildTenantVersion(@Valid BuildTenantVersionDeveloperRequest request);
+    Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(@Valid UploadFilesArchiveDeveloperRequest request);
 
     Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
             @Valid GetTenantVersionDashboardDeveloperRequest request);

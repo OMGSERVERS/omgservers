@@ -51,6 +51,8 @@ import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyMod
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestCreatedEventBodyModel;
@@ -105,6 +107,8 @@ public enum EventQualifierEnum {
     TENANT_STAGE_DELETED(TenantStageDeletedEventBodyModel.class, true),
     TENANT_DEPLOYMENT_CREATED(TenantDeploymentCreatedEventBodyModel.class, true),
     TENANT_DEPLOYMENT_DELETED(TenantDeploymentDeletedEventBodyModel.class, true),
+    TENANT_FILES_ARCHIVE_CREATED(TenantFilesArchiveCreatedEventBodyModel.class, true),
+    TENANT_FILES_ARCHIVE_DELETED(TenantFilesArchiveDeletedEventBodyModel.class, true),
     TENANT_JENKINS_REQUEST_CREATED(TenantJenkinsRequestCreatedEventBodyModel.class, true),
     TENANT_JENKINS_REQUEST_DELETED(TenantJenkinsRequestDeletedEventBodyModel.class, true),
     TENANT_IMAGE_CREATED(TenantImageCreatedEventBodyModel.class, true),

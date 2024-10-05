@@ -30,12 +30,11 @@ class BuildTestVersionOperationImpl implements BuildTestVersionOperation {
                                  final String mainLua,
                                  final TenantVersionConfigDto newVersionConfig) throws IOException {
         final var buildVersionDeveloperResponse = developerApiTester
-                .buildTenantVersion(testVersion.getDeveloperToken(),
+                .uploadFilesArchive(testVersion.getDeveloperToken(),
                         testVersion.getTenantId(),
-                        testVersion.getTenantProjectId(),
-                        newVersionConfig,
+                        testVersion.getTenantVersionId(),
                         mainLua);
 
-        return buildVersionDeveloperResponse.getTenantVersionId();
+        return buildVersionDeveloperResponse.getTenantFilesArchiveId();
     }
 }

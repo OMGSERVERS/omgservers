@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteTenantJenkinsRequestOperationTest extends Assertions {
+class DeleteTenantFilesArchiveOperationTest extends Assertions {
     private static final long TIMEOUT = 1L;
 
     @Inject

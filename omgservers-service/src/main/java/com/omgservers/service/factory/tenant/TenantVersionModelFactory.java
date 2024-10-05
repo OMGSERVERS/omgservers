@@ -1,3 +1,4 @@
+
 package com.omgservers.service.factory.tenant;
 
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
@@ -20,15 +21,13 @@ public class TenantVersionModelFactory {
     public TenantVersionModel create(
             final Long tenantId,
             final Long tenantProjectId,
-            final TenantVersionConfigDto versionConfig,
-            final String base64Archive) {
+            final TenantVersionConfigDto versionConfig) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id,
                 tenantId,
                 tenantProjectId,
                 versionConfig,
-                base64Archive,
                 idempotencyKey);
     }
 
@@ -36,14 +35,12 @@ public class TenantVersionModelFactory {
             final Long tenantId,
             final Long tenantProjectId,
             final TenantVersionConfigDto versionConfig,
-            final String base64Archive,
             final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id,
                 tenantId,
                 tenantProjectId,
                 versionConfig,
-                base64Archive,
                 idempotencyKey);
     }
 
@@ -51,7 +48,6 @@ public class TenantVersionModelFactory {
                                      final Long tenantId,
                                      final Long tenantProjectId,
                                      final TenantVersionConfigDto versionConfig,
-                                     final String base64Archive,
                                      final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -63,7 +59,6 @@ public class TenantVersionModelFactory {
         tenantVersion.setModified(now);
         tenantVersion.setIdempotencyKey(idempotencyKey);
         tenantVersion.setConfig(versionConfig);
-        tenantVersion.setBase64Archive(base64Archive);
         tenantVersion.setDeleted(false);
         return tenantVersion;
     }

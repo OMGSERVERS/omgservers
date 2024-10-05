@@ -24,9 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 @Slf4j
 @QuarkusTest
 class UpsertTenantMatchmakerRefOperationTest extends Assertions {
@@ -81,8 +78,7 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, tenantStage);
         final var tenantVersion = tenantVersionModelFactory.create(tenant.getId(),
                 tenantProject.getId(),
-                TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, tenantVersion);
         final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
                 tenantStage.getId(),
@@ -109,8 +105,7 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, tenantStage);
         final var tenantVersion = tenantVersionModelFactory.create(tenant.getId(),
                 tenantProject.getId(),
-                TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, tenantVersion);
         final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
                 tenantStage.getId(),
@@ -149,8 +144,7 @@ class UpsertTenantMatchmakerRefOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, tenantStage);
         final var tenantVersion = tenantVersionModelFactory.create(tenant.getId(),
                 tenantProject.getId(),
-                TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, tenantVersion);
         final var tenantDeployment = tenantDeploymentModelFactory.create(tenant.getId(),
                 tenantStage.getId(),

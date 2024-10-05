@@ -1,4 +1,4 @@
-package com.omgservers.schema.module.tenant.tenantImage;
+package com.omgservers.schema.module.tenant.tenantFilesArchive;
 
 import com.omgservers.schema.module.ShardedRequest;
 import jakarta.validation.constraints.NotNull;
@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewTenantImageRequest implements ShardedRequest {
+public class GetTenantFilesArchiveRequest implements ShardedRequest {
 
     @NotNull
     Long tenantId;
 
-    Long tenantVersionId;
+    @NotNull
+    Long id;
 
     @Override
     public String getRequestShardKey() {

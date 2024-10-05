@@ -22,5 +22,6 @@ public class TestVersionDto {
     Long tenantStageId;
     String tenantStageSecret;
     Long tenantVersionId;
+    Long tenantFilesArchiveId;
     Long tenantDeploymentId;
 }

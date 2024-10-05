@@ -7,8 +7,9 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.operation.DeleteTenantImageByTenantVersionIdOperation;
+import com.omgservers.service.handler.operation.DeleteTenantImagesByTenantVersionIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantJenkinsRequestsByTenantVersionIdOperation;
+import com.omgservers.service.handler.operation.test.DeleteTenantFilesArchivesByTenantVersionIdOperation;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +25,8 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
 
     final DeleteTenantJenkinsRequestsByTenantVersionIdOperation deleteTenantJenkinsRequestsByTenantVersionIdOperation;
-    final DeleteTenantImageByTenantVersionIdOperation deleteTenantImageByTenantVersionIdOperation;
+    final DeleteTenantFilesArchivesByTenantVersionIdOperation deleteTenantFilesArchivesByTenantVersionIdOperation;
+    final DeleteTenantImagesByTenantVersionIdOperation deleteTenantImagesByTenantVersionIdOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -47,9 +49,11 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
                             tenantVersionId,
                             tenantProjectId);
 
-                    return deleteTenantJenkinsRequestsByTenantVersionIdOperation.execute(tenantId, tenantVersionId)
-                            .flatMap(voidItem -> deleteTenantImageByTenantVersionIdOperation
-                                    .execute(tenantId, tenantVersionId));
+                    return deleteTenantFilesArchivesByTenantVersionIdOperation.execute(tenantId, tenantVersionId)
+                            .flatMap(voidItem -> deleteTenantJenkinsRequestsByTenantVersionIdOperation.execute(tenantId,
+                                    tenantVersionId))
+                            .flatMap(voidItem -> deleteTenantImagesByTenantVersionIdOperation.execute(tenantId,
+                                    tenantVersionId));
                 })
                 .replaceWithVoid();
     }

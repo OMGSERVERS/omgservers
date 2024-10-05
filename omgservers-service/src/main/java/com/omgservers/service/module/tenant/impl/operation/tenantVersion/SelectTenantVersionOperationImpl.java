@@ -29,7 +29,7 @@ class SelectTenantVersionOperationImpl implements SelectTenantVersionOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, tenant_id, project_id, created, modified, config, archive, deleted
+                        select id, idempotency_key, tenant_id, project_id, created, modified, config, deleted
                         from $schema.tab_tenant_version
                         where tenant_id = $1 and id = $2
                         limit 1

@@ -1,9 +1,9 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantVersion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.event.body.module.tenant.TenantVersionCreatedEventBodyModel;
-import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.service.event.body.module.tenant.TenantVersionCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
-import java.util.Base64;
 import java.util.List;
 
 @Slf4j
@@ -38,8 +37,8 @@ class UpsertTenantVersionOperationImpl implements UpsertTenantVersionOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_version(
-                            id, idempotency_key, tenant_id, project_id, created, modified, config, archive, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            id, idempotency_key, tenant_id, project_id, created, modified, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
@@ -51,7 +50,6 @@ class UpsertTenantVersionOperationImpl implements UpsertTenantVersionOperation {
                         tenantVersion.getCreated().atOffset(ZoneOffset.UTC),
                         tenantVersion.getModified().atOffset(ZoneOffset.UTC),
                         getConfigString(tenantVersion),
-                        getArchiveBytes(tenantVersion),
                         tenantVersion.getDeleted()
                 ),
                 () -> new TenantVersionCreatedEventBodyModel(tenantVersion.getTenantId(), tenantVersion.getId()),
@@ -65,9 +63,5 @@ class UpsertTenantVersionOperationImpl implements UpsertTenantVersionOperation {
         } catch (IOException e) {
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
         }
-    }
-
-    byte[] getArchiveBytes(final TenantVersionModel version) {
-        return Base64.getDecoder().decode(version.getBase64Archive());
     }
 }

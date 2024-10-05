@@ -15,8 +15,8 @@ import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
@@ -111,9 +111,9 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
     }
 
     Uni<List<TenantImageModel>> viewTenantImage(final Long tenantId, final Long tenantVersionId) {
-        final var request = new ViewTenantImageRequest(tenantId, tenantVersionId);
+        final var request = new ViewTenantImagesRequest(tenantId, tenantVersionId);
         return tenantModule.getTenantService().viewTenantImages(request)
-                .map(ViewTenantImageResponse::getTenantImages);
+                .map(ViewTenantImagesResponse::getTenantImages);
     }
 
     TenantImageModel selectTenantImage(final RuntimeModel runtime,

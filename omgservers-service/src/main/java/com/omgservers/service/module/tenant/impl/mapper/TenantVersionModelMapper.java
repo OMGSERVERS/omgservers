@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.Base64;
 
 @Slf4j
 @ApplicationScoped
@@ -31,7 +30,6 @@ public class TenantVersionModelMapper {
         version.setDeleted(row.getBoolean("deleted"));
         try {
             version.setConfig(objectMapper.readValue(row.getString("config"), TenantVersionConfigDto.class));
-            version.setBase64Archive(Base64.getEncoder().encodeToString(row.getBuffer("archive").getBytes()));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "version can't be parsed, version=" + version, e);

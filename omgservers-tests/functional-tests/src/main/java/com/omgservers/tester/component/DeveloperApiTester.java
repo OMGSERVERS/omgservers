@@ -2,7 +2,6 @@ package com.omgservers.tester.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -31,6 +30,7 @@ import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDevelop
 import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.dto.tenant.TenantDashboardDto;
 import com.omgservers.schema.entrypoint.developer.dto.tenantDeployment.TenantDeploymentDashboardDto;
 import com.omgservers.schema.entrypoint.developer.dto.tenantProject.TenantProjectDashboardDto;
@@ -47,7 +47,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Slf4j
@@ -246,10 +245,9 @@ public class DeveloperApiTester {
         return response;
     }
 
-    public BuildTenantVersionDeveloperResponse buildTenantVersion(final String token,
+    public UploadFilesArchiveDeveloperResponse uploadFilesArchive(final String token,
                                                                   final Long tenantId,
-                                                                  final Long tenantProjectId,
-                                                                  final TenantVersionConfigDto tenantVersionConfig,
+                                                                  final Long tenantVersionId,
                                                                   final String mainLua) throws IOException {
 
         final var archiveBytes = createVersionArchiveOperation.createArchive(Map.of("main.lua", mainLua));
@@ -261,17 +259,14 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.MULTIPART)
                 .formParam("tenantId", tenantId)
-                .formParam("tenantProjectId", tenantProjectId)
-                .multiPart("config.json", "config.json",
-                        objectMapper.writeValueAsString(tenantVersionConfig).getBytes(StandardCharsets.UTF_8),
-                        "application/octet-stream")
+                .formParam("tenantVersionId", tenantVersionId)
                 .multiPart("version.zip", "version.zip",
                         archiveBytes, "application/octet-stream")
-                .when().put("/omgservers/v1/entrypoint/developer/request/build-tenant-version");
+                .when().put("/omgservers/v1/entrypoint/developer/request/upload-files-archive");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
-                .as(BuildTenantVersionDeveloperResponse.class);
+                .as(UploadFilesArchiveDeveloperResponse.class);
         return response;
     }
 

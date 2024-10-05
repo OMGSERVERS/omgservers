@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BuildTenantVersionDeveloperResponse {
+public class UploadFilesArchiveDeveloperResponse {
 
-    Long tenantVersionId;
+    Long tenantFilesArchiveId;
 }

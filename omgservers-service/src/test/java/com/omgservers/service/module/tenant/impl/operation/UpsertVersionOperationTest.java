@@ -17,9 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 @Slf4j
 @QuarkusTest
 class UpsertVersionOperationTest extends Assertions {
@@ -57,9 +54,9 @@ class UpsertVersionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, tenantProject);
         final var tenantStage = tenantStageModelFactory.create(tenant.getId(), tenantProject.getId());
         upsertStageOperation.upsertStage(shard, tenantStage);
-        final var tenantVersion =
-                tenantVersionModelFactory.create(tenant.getId(), tenantProject.getId(), TenantVersionConfigDto.create(),
-                        Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+        final var tenantVersion = tenantVersionModelFactory.create(tenant.getId(),
+                tenantProject.getId(),
+                TenantVersionConfigDto.create());
         final var changeContext = upsertVersionOperation.upsertTenantVersion(shard, tenantVersion);
         assertTrue(changeContext.getResult());
     }
@@ -73,9 +70,9 @@ class UpsertVersionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
-        final var version =
-                tenantVersionModelFactory.create(tenant.getId(), project.getId(), TenantVersionConfigDto.create(),
-                        Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+        final var version = tenantVersionModelFactory.create(tenant.getId(),
+                project.getId(),
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, version);
 
         final var changeContext = upsertVersionOperation.upsertTenantVersion(shard, version);
@@ -93,14 +90,12 @@ class UpsertVersionOperationTest extends Assertions {
         upsertStageOperation.upsertStage(shard, stage);
         final var version1 = tenantVersionModelFactory.create(tenant.getId(),
                 project.getId(),
-                TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive1".getBytes(StandardCharsets.UTF_8)));
+                TenantVersionConfigDto.create());
         upsertVersionOperation.upsertTenantVersion(shard, version1);
 
         final var version2 = tenantVersionModelFactory.create(tenant.getId(),
                 project.getId(),
                 TenantVersionConfigDto.create(),
-                Base64.getEncoder().encodeToString("archive2".getBytes(StandardCharsets.UTF_8)),
                 version1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertVersionOperation.upsertTenantVersion(shard, version2));

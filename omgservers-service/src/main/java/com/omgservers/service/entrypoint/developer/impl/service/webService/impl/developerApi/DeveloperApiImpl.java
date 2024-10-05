@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl.developerApi;
 
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -97,7 +97,8 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(@NotNull final DeleteTenantStageDeveloperRequest request) {
+    public Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(
+            @NotNull final DeleteTenantStageDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantStage);
     }
 
@@ -108,11 +109,11 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<BuildTenantVersionDeveloperResponse> buildTenantVersion(final Long tenantId,
-                                                                       final Long tenantProjectId,
+    public Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(final Long tenantId,
+                                                                       final Long tenantVersionId,
                                                                        final List<FileUpload> files) {
-        final var request = new BuildTenantVersionDeveloperRequest(tenantId, tenantProjectId, files);
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::buildTenantVersion);
+        final var request = new UploadFilesArchiveDeveloperRequest(tenantId, tenantVersionId, files);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::uploadFilesArchive);
     }
 
     @Override

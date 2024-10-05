@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService;
 
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -30,6 +28,8 @@ import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDevelop
 import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
@@ -54,7 +54,7 @@ public interface WebService {
 
     Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(CreateTenantVersionDeveloperRequest request);
 
-    Uni<BuildTenantVersionDeveloperResponse> buildTenantVersion(BuildTenantVersionDeveloperRequest request);
+    Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(UploadFilesArchiveDeveloperRequest request);
 
     Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
             GetTenantVersionDashboardDeveloperRequest request);

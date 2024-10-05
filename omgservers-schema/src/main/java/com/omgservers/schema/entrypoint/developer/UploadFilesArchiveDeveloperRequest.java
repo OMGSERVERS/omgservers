@@ -13,13 +13,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BuildTenantVersionDeveloperRequest {
+public class UploadFilesArchiveDeveloperRequest {
 
     @NotNull
     Long tenantId;
 
     @NotNull
-    Long tenantProjectId;
+    Long tenantVersionId;
 
     @NotEmpty
     @ToString.Exclude

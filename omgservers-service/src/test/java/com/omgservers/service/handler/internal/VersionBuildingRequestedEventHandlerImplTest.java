@@ -37,9 +37,14 @@ class VersionBuildingRequestedEventHandlerImplTest extends Assertions {
                 .thenReturn(Uni.createFrom().item(new RunLuaJitRuntimeBuilderV1Response(1)));
 
         final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var tenantProject = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
-        final var tenantStage = testDataFactory.getTenantTestDataFactory().createStage(tenantProject);
-        final var tenantVersion = testDataFactory.getTenantTestDataFactory().createTenantVersion(tenantProject);
+        final var tenantProject = testDataFactory.getTenantTestDataFactory()
+                .createTenantProject(tenant);
+        final var tenantStage = testDataFactory.getTenantTestDataFactory()
+                .createStage(tenantProject);
+        final var tenantVersion = testDataFactory.getTenantTestDataFactory()
+                .createTenantVersion(tenantProject);
+        final var tenantFilesArchive = testDataFactory.getTenantTestDataFactory()
+                .createTenantFilesArchive(tenantVersion);
 
         final var eventBody = new VersionBuildingRequestedEventBodyModel(tenant.getId(), tenantVersion.getId());
         final var eventModel = eventModelFactory.create(eventBody);

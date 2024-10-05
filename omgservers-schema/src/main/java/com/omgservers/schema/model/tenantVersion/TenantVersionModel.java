@@ -41,10 +41,5 @@ public class TenantVersionModel {
     TenantVersionConfigDto config;
 
     @NotNull
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    String base64Archive;
-
-    @NotNull
     Boolean deleted;
 }

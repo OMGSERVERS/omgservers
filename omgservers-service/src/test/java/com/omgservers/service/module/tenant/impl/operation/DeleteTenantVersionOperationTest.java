@@ -18,9 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 @Slf4j
 @QuarkusTest
 class DeleteTenantVersionOperationTest extends Assertions {
@@ -65,9 +62,9 @@ class DeleteTenantVersionOperationTest extends Assertions {
         upsertProjectOperation.upsertProject(shard, project);
         final var stage = tenantStageModelFactory.create(tenant.getId(), project.getId());
         upsertStageOperation.upsertStage(shard, stage);
-        final var version =
-                tenantVersionModelFactory.create(tenant.getId(), project.getId(), TenantVersionConfigDto.create(),
-                        Base64.getEncoder().encodeToString("archive".getBytes(StandardCharsets.UTF_8)));
+        final var version = tenantVersionModelFactory.create(tenant.getId(),
+                project.getId(),
+                TenantVersionConfigDto.create());
         final var id = version.getId();
         upsertVersionOperation.upsertTenantVersion(shard, version);
 

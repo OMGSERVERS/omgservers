@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage;
 
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImageResponse;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
 import com.omgservers.service.module.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantVersionIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
@@ -25,7 +25,7 @@ class ViewTenantImagesMethodImpl implements ViewTenantImagesMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewTenantImageResponse> execute(final ViewTenantImageRequest request) {
+    public Uni<ViewTenantImagesResponse> execute(final ViewTenantImagesRequest request) {
         log.debug("View tenant images, request={}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -48,6 +48,6 @@ class ViewTenantImagesMethodImpl implements ViewTenantImagesMethod {
                             }
                     );
                 })
-                .map(ViewTenantImageResponse::new);
+                .map(ViewTenantImagesResponse::new);
     }
 }

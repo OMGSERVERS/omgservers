@@ -57,9 +57,13 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         final var tenantStageId = createProjectDeveloperResponse.getTenantStageId();
         final var tenantStageSecret = createProjectDeveloperResponse.getTenantStageSecret();
 
+        final var createTenantVersionDeveloperResponse =
+                developerApiTester.createTenantVersion(developerToken, tenantId, tenantProjectId, tenantVersionConfig);
+        final var tenantVersionId = createTenantVersionDeveloperResponse.getTenantVersionId();
+
         final var buildTenantVersionDeveloperResponse = developerApiTester
-                .buildTenantVersion(developerToken, tenantId, tenantProjectId, tenantVersionConfig, mainLua);
-        final var tenantVersionId = buildTenantVersionDeveloperResponse.getTenantVersionId();
+                .uploadFilesArchive(developerToken, tenantId, tenantVersionId, mainLua);
+        final var tenantFilesArchiveId = buildTenantVersionDeveloperResponse.getTenantFilesArchiveId();
 
         waitForBuilding(developerToken, tenantId, tenantVersionId);
 
@@ -80,6 +84,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
                 .tenantStageId(tenantStageId)
                 .tenantStageSecret(tenantStageSecret)
                 .tenantVersionId(tenantVersionId)
+                .tenantFilesArchiveId(tenantFilesArchiveId)
                 .tenantDeploymentId(tenantDeploymentId)
                 .build();
     }

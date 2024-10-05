@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewTenantImageResponse {
+public class ViewTenantImagesResponse {
 
     List<TenantImageModel> tenantImages;
 }

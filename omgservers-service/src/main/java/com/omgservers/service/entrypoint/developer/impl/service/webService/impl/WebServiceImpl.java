@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl;
 
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.BuildTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -30,6 +28,8 @@ import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDevelop
 import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -97,9 +97,9 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<BuildTenantVersionDeveloperResponse> buildTenantVersion(
-            final BuildTenantVersionDeveloperRequest request) {
-        return developerService.buildTenantVersion(request);
+    public Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(
+            final UploadFilesArchiveDeveloperRequest request) {
+        return developerService.uploadFilesArchive(request);
     }
 
     @Override

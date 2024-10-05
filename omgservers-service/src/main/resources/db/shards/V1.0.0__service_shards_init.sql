@@ -223,6 +223,16 @@ create table if not exists tab_tenant_version (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     config json not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_tenant_files_archive (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
     archive bytea not null,
     deleted boolean not null
 );
@@ -319,6 +329,8 @@ create index if not exists idx_tenant_stage_permission_stage_id on tab_tenant_st
 create unique index idx_tenant_stage_permission_uniqueness on tab_tenant_stage_permission(stage_id, user_id, permission) where deleted = false;
 create index if not exists idx_tenant_version_tenant_id on tab_tenant_version(tenant_id);
 create index if not exists idx_tenant_version_project_id on tab_tenant_version(project_id);
+create index if not exists idx_tenant_files_archive_tenant_id on tab_tenant_files_archive(tenant_id);
+create index if not exists idx_tenant_files_archive_version_id on tab_tenant_files_archive(version_id);
 create index if not exists idx_tenant_jenkins_request_tenant_id on tab_tenant_jenkins_request(tenant_id);
 create index if not exists idx_tenant_jenkins_request_version_id on tab_tenant_jenkins_request(version_id);
 create index if not exists idx_tenant_image_tenant_id on tab_tenant_image(tenant_id);
