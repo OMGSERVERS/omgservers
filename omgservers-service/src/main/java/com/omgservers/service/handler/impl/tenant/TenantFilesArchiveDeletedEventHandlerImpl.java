@@ -5,7 +5,7 @@ import com.omgservers.schema.module.tenant.tenantFilesArchive.GetTenantFilesArch
 import com.omgservers.schema.module.tenant.tenantFilesArchive.GetTenantFilesArchiveResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -30,7 +30,7 @@ public class TenantFilesArchiveDeletedEventHandlerImpl implements EventHandler {
     public Uni<Void> handle(final EventModel event) {
         log.debug("Handle event, {}", event);
 
-        final var body = (TenantFilesArchiveCreatedEventBodyModel) event.getBody();
+        final var body = (TenantFilesArchiveDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
         final var id = body.getId();
 
