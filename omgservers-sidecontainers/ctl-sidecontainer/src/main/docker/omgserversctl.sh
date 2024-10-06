@@ -238,11 +238,11 @@ help() {
       echo "     - TENANT_VERSION_ID"
     fi
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer buildTenantVersion" ]; then
-    echo " omgserversctl developer buildTenantVersion <tenant_id> <tenant_project_id> <project_path>"
-    if [ "$1" = "developer buildTenantVersion" ]; then
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadFilesArchive" ]; then
+    echo " omgserversctl developer uploadFilesArchive <tenant_id> <tenant_version_id> <files_directory_path>"
+    if [ "$1" = "developer uploadFilesArchive" ]; then
       echo "   produces:"
-      echo "     - TENANT_VERSION_ID"
+      echo "     - TENANT_FILES_ARCHIVE_ID"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantVersionDashboard" ]; then
@@ -1632,21 +1632,21 @@ developer_createTenantVersion() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was created, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
 }
 
-developer_buildTenantVersion() {
+developer_uploadFilesArchive() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  TENANT_PROJECT_ID=$2
-  PROJECT_PATH=$3
+  TENANT_VERSION_ID=$2
+  FILES_DIRECTORY_PATH=$3
 
-  if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" -o -z "${PROJECT_PATH}" ]; then
-    help "developer buildVersion"
+  if [ -z "${TENANT_ID}" -o -z "${TENANT_VERSION_ID}" -o -z "${FILES_DIRECTORY_PATH}" ]; then
+    help "developer uploadFilesArchive"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, TENANT_PROJECT_ID=${TENANT_PROJECT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project path, PROJECT_PATH=${PROJECT_PATH}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant version, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using filed directory path, FILES_DIRECTORY_PATH=${FILES_DIRECTORY_PATH}"
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -1655,38 +1655,27 @@ developer_buildTenantVersion() {
     exit 1
   fi
 
-  ARCHIVE_PATH=$(eval echo ${OMGSERVERSCTL_DIRECTORY}/versions/version_${TENANT_ID}_${TENANT_PROJECT_ID}.zip)
+  ARCHIVE_PATH=$(eval echo ${OMGSERVERSCTL_DIRECTORY}/versions/version_${TENANT_ID}_${TENANT_VERSION_ID}.zip)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=${ARCHIVE_PATH}"
 
-  pushd ${PROJECT_PATH}
-
-  if [ ! -f "config.json" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Version config.json was not found, PROJECT_PATH=${PROJECT_PATH}"
-    exit 1
-  fi
-
-  if [ ! -f "main.lua" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Version main.lua was not found, PROJECT_PATH=${PROJECT_PATH}"
-    exit 1
-  fi
+  pushd ${FILES_DIRECTORY_PATH}
 
   find . -type f -name "*.lua" | zip -@ ${ARCHIVE_PATH}
 
   popd >> /dev/null
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/build-tenant-version"
+  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/upload-files-archive"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-build-tenant-version_${TENANT_ID}_${TENANT_PROJECT_ID}.json"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-upload-files-archive_${TENANT_ID}_${TENANT_VERSION_ID}.json"
 
   HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: multipart/form-data" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -F "tenantId=${TENANT_ID}" \
-    -F "tenantProjectId=${TENANT_PROJECT_ID}" \
-    -F "config.json=@${PROJECT_PATH}/config.json" \
+    -F "tenantVersionId=${TENANT_VERSION_ID}" \
     -F "version.zip=@${ARCHIVE_PATH}" \
     -o ${RESPONSE_FILE})
 
@@ -1699,14 +1688,14 @@ developer_buildTenantVersion() {
     exit 1
   fi
 
-  TENANT_VERSION_ID=$(cat ${RESPONSE_FILE} | jq -r .id)
-  if [ -z "${TENANT_VERSION_ID}" -o "${TENANT_VERSION_ID}" == "null" ]; then
-    echo "ERROR: TENANT_VERSION_ID was not received"
+  TENANT_FILES_ARCHIVE_ID=$(cat ${RESPONSE_FILE} | jq -r .tenant_files_archive_id)
+  if [ -z "${TENANT_FILES_ARCHIVE_ID}" -o "${TENANT_FILES_ARCHIVE_ID}" == "null" ]; then
+    echo "ERROR: TENANT_FILES_ARCHIVE_ID was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_TENANT_VERSION_ID=${TENANT_VERSION_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_TENANT_FILES_ARCHIVE_ID=${TENANT_FILES_ARCHIVE_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was built, TENANT_VERSION_ID=${TENANT_VERSION_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant files archive was uploaded, TENANT_FILES_ARCHIVE_ID=${TENANT_FILES_ARCHIVE_ID}"
 }
 
 developer_getTenantVersionDashboard() {
@@ -2114,8 +2103,8 @@ elif [ "$1" = "developer" ]; then
     developer_deleteTenantStage $3 $4
   elif [ "$2" = "createTenantVersion" ]; then
     developer_createTenantVersion $3 $4 $5
-  elif [ "$2" = "buildTenantVersion" ]; then
-    developer_buildTenantVersion $3 $4 $5
+  elif [ "$2" = "uploadFilesArchive" ]; then
+    developer_uploadFilesArchive $3 $4 $5
   elif [ "$2" = "getTenantVersionDashboard" ]; then
     developer_getTenantVersionDashboard $3 $4
   elif [ "$2" = "deleteTenantVersion" ]; then
