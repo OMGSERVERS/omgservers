@@ -21,33 +21,33 @@ public class TenantVersionModelFactory {
     public TenantVersionModel create(
             final Long tenantId,
             final Long tenantProjectId,
-            final TenantVersionConfigDto versionConfig) {
+            final TenantVersionConfigDto tenantVersionConfigDto) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id,
                 tenantId,
                 tenantProjectId,
-                versionConfig,
+                tenantVersionConfigDto,
                 idempotencyKey);
     }
 
     public TenantVersionModel create(
             final Long tenantId,
             final Long tenantProjectId,
-            final TenantVersionConfigDto versionConfig,
+            final TenantVersionConfigDto tenantVersionConfigDto,
             final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id,
                 tenantId,
                 tenantProjectId,
-                versionConfig,
+                tenantVersionConfigDto,
                 idempotencyKey);
     }
 
     public TenantVersionModel create(final Long id,
                                      final Long tenantId,
                                      final Long tenantProjectId,
-                                     final TenantVersionConfigDto versionConfig,
+                                     final TenantVersionConfigDto tenantVersionConfigDto,
                                      final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -58,7 +58,7 @@ public class TenantVersionModelFactory {
         tenantVersion.setCreated(now);
         tenantVersion.setModified(now);
         tenantVersion.setIdempotencyKey(idempotencyKey);
-        tenantVersion.setConfig(versionConfig);
+        tenantVersion.setConfig(tenantVersionConfigDto);
         tenantVersion.setDeleted(false);
         return tenantVersion;
     }

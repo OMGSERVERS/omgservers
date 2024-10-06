@@ -39,21 +39,22 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getTenantProjectId();
-        final var versionConfig = request.getTenantVersionConfig();
+        final var tenantVersionConfig = request.getTenantVersionConfig();
 
         final var permissionQualifier = TenantProjectPermissionQualifierEnum
                 .VERSION_MANAGEMENT;
         return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId, permissionQualifier)
-                .flatMap(voidItem -> createTenantVersion(tenantId, tenantProjectId, versionConfig))
+                .flatMap(voidItem -> createTenantVersion(tenantId, tenantProjectId, tenantVersionConfig))
                 .map(TenantVersionModel::getId)
                 .map(CreateTenantVersionDeveloperResponse::new);
     }
 
     Uni<TenantVersionModel> createTenantVersion(final Long tenantId,
                                                 final Long tenantProjectId,
-                                                final TenantVersionConfigDto versionConfig) {
-        // TODO: fix empty archive field
-        final var tenantVersion = tenantVersionModelFactory.create(tenantId, tenantProjectId, versionConfig, "");
+                                                final TenantVersionConfigDto tenantVersionConfigDto) {
+        final var tenantVersion = tenantVersionModelFactory.create(tenantId,
+                tenantProjectId,
+                tenantVersionConfigDto);
         final var request = new SyncTenantVersionRequest(tenantVersion);
         return tenantModule.getTenantService().syncTenantVersion(request)
                 .replaceWith(tenantVersion);
