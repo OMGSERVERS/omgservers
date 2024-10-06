@@ -28,13 +28,13 @@ class ViewTenantProjectPermissionsMethodImpl implements ViewTenantProjectPermiss
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var projectId = request.getTenantProjectId();
+                    final var tenantProjectId = request.getTenantProjectId();
                     return pgPool.withTransaction(
                             sqlConnection -> selectActiveTenantProjectPermissionsByTenantProjectIdOperation
                                     .execute(sqlConnection,
                                             shard.shard(),
                                             tenantId,
-                                            projectId
+                                            tenantProjectId
                                     ));
                 })
                 .map(ViewTenantProjectPermissionsResponse::new);

@@ -69,14 +69,14 @@ public class JenkinsRequestTaskImpl {
 
     Uni<JenkinsRequestResultEnum> checkVersionJenkinsRequest(final TenantJenkinsRequestModel versionJenkinsRequest) {
         final var tenantId = versionJenkinsRequest.getTenantId();
-        final var versionId = versionJenkinsRequest.getVersionId();
+        final var tenantVersionId = versionJenkinsRequest.getVersionId();
         final var qualifier = versionJenkinsRequest.getQualifier();
         final var buildNumber = versionJenkinsRequest.getBuildNumber();
         final var idempotencyKey = versionJenkinsRequest.getId().toString();
-        log.info("Checking jenkins request, versionJenkinsRequest={}/{}, versionId={}, qualifier={}, buildNumber={}",
+        log.info("Checking jenkins request, versionJenkinsRequest={}/{}, tenantVersionId={}, qualifier={}, buildNumber={}",
                 tenantId,
                 versionJenkinsRequest.getId(),
-                versionId,
+                tenantVersionId,
                 qualifier,
                 buildNumber);
 

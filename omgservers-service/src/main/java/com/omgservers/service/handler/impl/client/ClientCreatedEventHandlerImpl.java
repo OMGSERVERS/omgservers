@@ -68,8 +68,8 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                     final var deploymentId = client.getDeploymentId();
                     return getTenantDeployment(tenantId, deploymentId)
                             .flatMap(tenantDeployment -> {
-                                final var versionId = tenantDeployment.getVersionId();
-                                return getTenantVersion(tenantId, versionId)
+                                final var deploymentVersionId = tenantDeployment.getVersionId();
+                                return getTenantVersion(tenantId, deploymentVersionId)
                                         .flatMap(tenantVersion -> handleEvent(client, tenantVersion, idempotencyKey));
                             });
                 })

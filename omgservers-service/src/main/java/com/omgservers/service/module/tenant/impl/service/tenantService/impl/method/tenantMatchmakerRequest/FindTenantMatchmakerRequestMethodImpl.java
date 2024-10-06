@@ -27,13 +27,13 @@ class FindTenantMatchmakerRequestMethodImpl implements FindTenantMatchmakerReque
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getDeploymentId();
+                    final var tenantDeploymentId = request.getDeploymentId();
                     final var matchmakerId = request.getMatchmakerId();
                     return pgPool.withTransaction(sqlConnection -> selectTenantMatchmakerRequestByMatchmakerIdOperation
                             .execute(sqlConnection,
                                     shardModel.shard(),
                                     tenantId,
-                                    versionId,
+                                    tenantDeploymentId,
                                     matchmakerId));
                 })
                 .map(FindTenantMatchmakerRequestResponse::new);

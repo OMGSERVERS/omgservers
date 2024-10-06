@@ -36,12 +36,12 @@ public class TenantImageDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantImage(tenantId, id)
                 .flatMap(tenantImage -> {
-                    final var versionId = tenantImage.getVersionId();
+                    final var tenantVersionId = tenantImage.getVersionId();
                     final var qualifier = tenantImage.getQualifier();
-                    log.info("Tenant image was deleted, id={}, version={}/{}, qualifier={}",
+                    log.info("Tenant image was deleted, id={}, tenantVersion={}/{}, qualifier={}",
                             tenantImage.getId(),
                             tenantId,
-                            versionId,
+                            tenantVersionId,
                             qualifier);
 
                     // TODO: clean up docker registry

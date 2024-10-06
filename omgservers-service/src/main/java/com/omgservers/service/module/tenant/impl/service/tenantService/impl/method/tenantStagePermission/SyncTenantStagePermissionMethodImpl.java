@@ -34,14 +34,14 @@ class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMe
         final var shardKey = request.getRequestShardKey();
         final var permission = request.getTenantStagePermission();
         final var tenantId = permission.getTenantId();
-        final var stageId = permission.getStageId();
+        final var tenantStageId = permission.getStageId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                                    verifyTenantStageExistsOperation.execute(sqlConnection, shard, tenantId, stageId)
+                                    verifyTenantStageExistsOperation.execute(sqlConnection, shard, tenantId, tenantStageId)
                                             .flatMap(exists -> {
                                                 if (exists) {
                                                     return upsertTenantStagePermissionOperation.execute(
@@ -52,7 +52,7 @@ class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMe
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "stage does not exist or was deleted, id=" + stageId);
+                                                            "stage does not exist or was deleted, id=" + tenantStageId);
                                                 }
                                             })
                             )

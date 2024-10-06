@@ -8,6 +8,6 @@ public interface SelectTenantMatchmakerRequestByMatchmakerIdOperation {
     Uni<TenantMatchmakerRequestModel> execute(SqlConnection sqlConnection,
                                               int shard,
                                               Long tenantId,
-                                              Long deploymentId,
+                                              Long tenantDeploymentId,
                                               Long matchmakerId);
 }

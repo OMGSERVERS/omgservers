@@ -26,7 +26,7 @@ class SelectTenantMatchmakerRequestByMatchmakerIdOperationImpl
             final SqlConnection sqlConnection,
             final int shard,
             final Long tenantId,
-            final Long deploymentId,
+            final Long tenantDeploymentId,
             final Long matchmakerId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
@@ -40,7 +40,7 @@ class SelectTenantMatchmakerRequestByMatchmakerIdOperationImpl
                         """,
                 List.of(
                         tenantId,
-                        deploymentId,
+                        tenantDeploymentId,
                         matchmakerId
                 ),
                 "Tenant matchmaker version",

@@ -29,12 +29,12 @@ class SyncTenantVersionMethodImpl implements SyncTenantVersionMethod {
 
     @Override
     public Uni<SyncTenantVersionResponse> execute(final SyncTenantVersionRequest request) {
-        log.debug("Sync version, request={}", request);
+        log.debug("Sync tenant version, request={}", request);
 
         final var shardKey = request.getRequestShardKey();
-        final var version = request.getTenantVersion();
-        final var tenantId = version.getTenantId();
-        final var projectId = version.getProjectId();
+        final var tenantVersion = request.getTenantVersion();
+        final var tenantId = tenantVersion.getTenantId();
+        final var tenantProjectId = tenantVersion.getProjectId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
@@ -42,17 +42,17 @@ class SyncTenantVersionMethodImpl implements SyncTenantVersionMethod {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantProjectExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, projectId)
+                                            .execute(sqlConnection, shard, tenantId, tenantProjectId)
                                             .flatMap(exists -> {
                                                 if (exists) {
                                                     return upsertTenantVersionOperation.execute(changeContext,
                                                             sqlConnection,
                                                             shard,
-                                                            version);
+                                                            tenantVersion);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "project does not exist or was deleted, id=" + projectId);
+                                                            "project does not exist or was deleted, id=" + tenantProjectId);
                                                 }
                                             })
                             )

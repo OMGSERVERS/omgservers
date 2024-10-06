@@ -71,13 +71,13 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         final var tag = event.getTarget().getTag();
         try {
             final var tenantId = dockerRepository.getTenantId();
-            final var versionId = Long.valueOf(tag);
+            final var tenantVersionId = Long.valueOf(tag);
             final var registryHost = getRegistryHost(event);
             final var imageId = registryHost + "/" +
-                    buildDockerImageIdOperation.buildDockerImageId(dockerRepository, versionId);
+                    buildDockerImageIdOperation.buildDockerImageId(dockerRepository, tenantVersionId);
 
             return syncTenantImage(tenantId,
-                    versionId,
+                    tenantVersionId,
                     imageId,
                     dockerRepository.getContainer(),
                     idempotencyKey)

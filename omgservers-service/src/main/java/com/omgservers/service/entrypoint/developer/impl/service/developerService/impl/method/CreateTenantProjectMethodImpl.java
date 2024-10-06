@@ -59,10 +59,12 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                 .flatMap(voidItem -> createTenantProject(tenantId, userId)
                         .flatMap(tenantProject -> createTenantStage(tenantId, tenantProject.getId(), userId)
                                 .map(tenantStage -> {
-                                    final var projectId = tenantProject.getId();
-                                    final var stageId = tenantStage.getId();
-                                    final var secret = tenantStage.getSecret();
-                                    return new CreateTenantProjectDeveloperResponse(projectId, stageId, secret);
+                                    final var tenantProjectId = tenantProject.getId();
+                                    final var tenantStageId = tenantStage.getId();
+                                    final var tenantStageSecret = tenantStage.getSecret();
+                                    return new CreateTenantProjectDeveloperResponse(tenantProjectId,
+                                            tenantStageId,
+                                            tenantStageSecret);
                                 })));
     }
 

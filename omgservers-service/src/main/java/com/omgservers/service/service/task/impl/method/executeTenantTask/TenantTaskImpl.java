@@ -61,9 +61,9 @@ public class TenantTaskImpl {
 
     Uni<Void> handleProject(final TenantProjectModel project) {
         final var tenantId = project.getTenantId();
-        final var projectId = project.getId();
-        return viewTenantStages(tenantId, projectId)
-                .flatMap(stages -> Multi.createFrom().iterable(stages)
+        final var tenantProjectId = project.getId();
+        return viewTenantStages(tenantId, tenantProjectId)
+                .flatMap(tenantStages -> Multi.createFrom().iterable(tenantStages)
                         .onItem().transformToUniAndConcatenate(this::handleStage)
                         .collect().asList()
                         .replaceWithVoid()
@@ -76,10 +76,10 @@ public class TenantTaskImpl {
                 .map(ViewTenantStagesResponse::getTenantStages);
     }
 
-    Uni<Void> handleStage(final TenantStageModel stage) {
-        final var tenantId = stage.getTenantId();
-        final var stageId = stage.getId();
-        final var request = new ExecuteStageTaskRequest(tenantId, stageId);
+    Uni<Void> handleStage(final TenantStageModel tenantStage) {
+        final var tenantId = tenantStage.getTenantId();
+        final var tenantStageId = tenantStage.getId();
+        final var request = new ExecuteStageTaskRequest(tenantId, tenantStageId);
         return taskService.executeStageTask(request)
                 .replaceWithVoid();
     }

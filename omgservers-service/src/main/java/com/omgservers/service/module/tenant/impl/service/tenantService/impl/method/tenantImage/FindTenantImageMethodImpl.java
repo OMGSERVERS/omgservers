@@ -27,14 +27,15 @@ class FindTenantImageMethodImpl implements FindTenantImageMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getTenantVersionId();
+                    final var tenantVersionId = request.getTenantVersionId();
                     final var qualifier = request.getQualifier();
-                    return pgPool.withTransaction(sqlConnection -> selectTenantImageByTenantVersionIdAndQualifierOperation
-                            .execute(sqlConnection,
-                                    shardModel.shard(),
-                                    tenantId,
-                                    versionId,
-                                    qualifier));
+                    return pgPool.withTransaction(
+                            sqlConnection -> selectTenantImageByTenantVersionIdAndQualifierOperation
+                                    .execute(sqlConnection,
+                                            shardModel.shard(),
+                                            tenantId,
+                                            tenantVersionId,
+                                            qualifier));
                 })
                 .map(FindTenantImageResponse::new);
     }

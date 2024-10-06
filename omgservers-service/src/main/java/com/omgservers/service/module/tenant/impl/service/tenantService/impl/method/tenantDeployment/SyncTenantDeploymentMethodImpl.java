@@ -34,15 +34,14 @@ class SyncTenantDeploymentMethodImpl implements SyncTenantDeploymentMethod {
         final var shardKey = request.getRequestShardKey();
         final var tenantDeployment = request.getTenantDeployment();
         final var tenantId = tenantDeployment.getTenantId();
-        final var stageId = tenantDeployment.getStageId();
+        final var tenantStageId = tenantDeployment.getStageId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+        return checkShardOperation.checkShard(shardKey)
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantStageExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, stageId)
+                                            .execute(sqlConnection, shard, tenantId, tenantStageId)
                                             .flatMap(exists -> {
                                                 // TODO: add version existence checking
                                                 if (exists) {
@@ -53,7 +52,7 @@ class SyncTenantDeploymentMethodImpl implements SyncTenantDeploymentMethod {
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "stage does not exist or was deleted, id=" + stageId);
+                                                            "stage does not exist or was deleted, id=" + tenantStageId);
                                                 }
                                             })
 

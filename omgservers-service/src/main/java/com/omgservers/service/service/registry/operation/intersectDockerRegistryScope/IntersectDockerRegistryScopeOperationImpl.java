@@ -58,10 +58,10 @@ class IntersectDockerRegistryScopeOperationImpl implements IntersectDockerRegist
         }
 
         final var tenantId = resourceScope.getResourceName().getRepository().getTenantId();
-        final var projectId = resourceScope.getResourceName().getRepository().getTenantProjectId();
+        final var tenantProjectId = resourceScope.getResourceName().getRepository().getTenantProjectId();
 
-        return getTenantProject(tenantId, projectId)
-                .flatMap(tenantProject -> viewTenantProjectPermissions(tenantId, projectId)
+        return getTenantProject(tenantId, tenantProjectId)
+                .flatMap(tenantProject -> viewTenantProjectPermissions(tenantId, tenantProjectId)
                         .map(tenantProjectPermissions -> {
                             final var userPermissions = tenantProjectPermissions
                                     .stream()

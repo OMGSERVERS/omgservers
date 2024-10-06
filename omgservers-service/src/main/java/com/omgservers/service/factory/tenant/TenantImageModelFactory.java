@@ -18,26 +18,26 @@ public class TenantImageModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public TenantImageModel create(final Long tenantId,
-                                   final Long versionId,
+                                   final Long tenantVersionId,
                                    final TenantImageQualifierEnum qualifier,
                                    final String imageId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, versionId, qualifier, imageId, idempotencyKey);
+        return create(id, tenantId, tenantVersionId, qualifier, imageId, idempotencyKey);
     }
 
     public TenantImageModel create(final Long tenantId,
-                                   final Long versionId,
+                                   final Long tenantVersionId,
                                    final TenantImageQualifierEnum qualifier,
                                    final String imageId,
                                    final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, versionId, qualifier, imageId, idempotencyKey);
+        return create(id, tenantId, tenantVersionId, qualifier, imageId, idempotencyKey);
     }
 
     public TenantImageModel create(final Long id,
                                    final Long tenantId,
-                                   final Long versionId,
+                                   final Long tenantVersionId,
                                    final TenantImageQualifierEnum qualifier,
                                    final String imageId,
                                    final String idempotencyKey) {
@@ -47,7 +47,7 @@ public class TenantImageModelFactory {
         tenantImageModel.setId(id);
         tenantImageModel.setIdempotencyKey(idempotencyKey);
         tenantImageModel.setTenantId(tenantId);
-        tenantImageModel.setVersionId(versionId);
+        tenantImageModel.setVersionId(tenantVersionId);
         tenantImageModel.setCreated(now);
         tenantImageModel.setModified(now);
         tenantImageModel.setQualifier(qualifier);

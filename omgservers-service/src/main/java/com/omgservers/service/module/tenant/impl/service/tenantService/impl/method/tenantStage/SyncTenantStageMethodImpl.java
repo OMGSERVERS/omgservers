@@ -29,30 +29,29 @@ class SyncTenantStageMethodImpl implements SyncTenantStageMethod {
 
     @Override
     public Uni<SyncTenantStageResponse> execute(final SyncTenantStageRequest request) {
-        log.debug("Sync stage, request={}", request);
+        log.debug("Sync tenant stage, request={}", request);
 
         final var shardKey = request.getRequestShardKey();
-        final var stage = request.getTenantStage();
-        final var tenantId = stage.getTenantId();
-        final var projectId = stage.getProjectId();
+        final var tenantStage = request.getTenantStage();
+        final var tenantId = tenantStage.getTenantId();
+        final var tenantProjectId = tenantStage.getProjectId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+        return checkShardOperation.checkShard(shardKey)
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantProjectExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, projectId)
+                                            .execute(sqlConnection, shard, tenantId, tenantProjectId)
                                             .flatMap(exists -> {
                                                 if (exists) {
                                                     return upsertTenantStageOperation.execute(changeContext,
                                                             sqlConnection,
                                                             shard,
-                                                            stage);
+                                                            tenantStage);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "project does not exist or was deleted, id=" + projectId);
+                                                            "project does not exist or was deleted, id=" + tenantProjectId);
                                                 }
                                             })
                             )

@@ -35,16 +35,16 @@ class SyncTenantFilesArchiveMethodImpl implements SyncTenantFilesArchiveMethod {
         final var shardKey = request.getRequestShardKey();
         final var tenantFilesArchive = request.getTenantFilesArchive();
         final var tenantId = tenantFilesArchive.getTenantId();
-        final var versionId = tenantFilesArchive.getVersionId();
+        final var tenantVersionId = tenantFilesArchive.getVersionId();
 
         return checkShardOperation.checkShard(shardKey)
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantVersionExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, versionId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .execute(sqlConnection, shard, tenantId, tenantVersionId)
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertTenantFilesArchiveOperation
                                                             .execute(changeContext,
                                                                     sqlConnection,
@@ -53,7 +53,8 @@ class SyncTenantFilesArchiveMethodImpl implements SyncTenantFilesArchiveMethod {
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "version does not exist or was deleted, id=" + versionId);
+                                                            "tenant version does not exist or was deleted, id=" +
+                                                                    tenantVersionId);
                                                 }
                                             })
 

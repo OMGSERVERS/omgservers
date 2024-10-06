@@ -24,7 +24,7 @@ class SelectTenantLobbyRefByLobbyIdOperationImpl implements SelectTenantLobbyRef
     public Uni<TenantLobbyRefModel> execute(final SqlConnection sqlConnection,
                                             final int shard,
                                             final Long tenantId,
-                                            final Long deploymentId,
+                                            final Long tenantDeploymentId,
                                             final Long lobbyId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
@@ -36,7 +36,7 @@ class SelectTenantLobbyRefByLobbyIdOperationImpl implements SelectTenantLobbyRef
                         order by id desc
                         limit 1
                         """,
-                List.of(tenantId, deploymentId, lobbyId),
+                List.of(tenantId, tenantDeploymentId, lobbyId),
                 "Tenant lobby ref",
                 tenantLobbyRefModelMapper::fromRow);
     }

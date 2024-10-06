@@ -20,17 +20,18 @@ class VerifyTenantProjectPermissionExistsMethodImpl implements VerifyTenantProje
     final PgPool pgPool;
 
     @Override
-    public Uni<VerifyTenantProjectPermissionExistsResponse> execute(VerifyTenantProjectPermissionExistsRequest request) {
+    public Uni<VerifyTenantProjectPermissionExistsResponse> execute(
+            VerifyTenantProjectPermissionExistsRequest request) {
         log.debug("Has tenant project permission, request={}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var projectId = request.getTenantProjectId();
+                    final var tenantProjectId = request.getTenantProjectId();
                     final var userId = request.getUserId();
                     final var permission = request.getTenantProjectPermissionQualifier();
                     return pgPool.withTransaction(sqlConnection -> verifyTenantProjectPermissionExistsOperation
-                            .execute(sqlConnection, shard.shard(), tenantId, projectId, userId, permission));
+                            .execute(sqlConnection, shard.shard(), tenantId, tenantProjectId, userId, permission));
                 })
                 .map(VerifyTenantProjectPermissionExistsResponse::new);
     }

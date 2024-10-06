@@ -39,13 +39,13 @@ public class TenantJenkinsRequestDeletedEventHandlerImpl implements EventHandler
 
         return getTenantJenkinsRequest(tenantId, tenantJenkinsRequestId)
                 .flatMap(tenantJenkinsRequest -> {
-                    final var versionId = tenantJenkinsRequest.getVersionId();
+                    final var jenkinsRequestVersionId = tenantJenkinsRequest.getVersionId();
                     final var qualifier = tenantJenkinsRequest.getQualifier();
                     log.info("Tenant jenkins request was deleted, " +
-                                    "tenantJenkinsRequestId={}, version={}/{}, qualifier={}",
+                                    "tenantJenkinsRequestId={}, tenantVersion={}/{}, qualifier={}",
                             tenantJenkinsRequest.getId(),
                             tenantId,
-                            versionId,
+                            jenkinsRequestVersionId,
                             qualifier);
 
                     return findAndDeleteJobOperation.execute(tenantId, tenantJenkinsRequestId);

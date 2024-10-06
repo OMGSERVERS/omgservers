@@ -8,6 +8,6 @@ public interface SelectTenantLobbyRefByLobbyIdOperation {
     Uni<TenantLobbyRefModel> execute(SqlConnection sqlConnection,
                                      int shard,
                                      Long tenantId,
-                                     Long deploymentId,
+                                     Long tenantDeploymentId,
                                      Long lobbyId);
 }

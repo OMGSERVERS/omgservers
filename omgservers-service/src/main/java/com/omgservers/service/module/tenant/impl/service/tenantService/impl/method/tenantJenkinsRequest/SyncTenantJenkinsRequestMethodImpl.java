@@ -35,7 +35,7 @@ class SyncTenantJenkinsRequestMethodImpl implements SyncTenantJenkinsRequestMeth
         final var shardKey = request.getRequestShardKey();
         final var versionJenkinsRequest = request.getTenantJenkinsRequest();
         final var tenantId = versionJenkinsRequest.getTenantId();
-        final var versionId = versionJenkinsRequest.getVersionId();
+        final var tenantVersionId = versionJenkinsRequest.getVersionId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
@@ -43,7 +43,7 @@ class SyncTenantJenkinsRequestMethodImpl implements SyncTenantJenkinsRequestMeth
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantVersionExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, versionId)
+                                            .execute(sqlConnection, shard, tenantId, tenantVersionId)
                                             .flatMap(has -> {
                                                 if (has) {
                                                     return upsertTenantJenkinsRequestOperation
@@ -54,7 +54,7 @@ class SyncTenantJenkinsRequestMethodImpl implements SyncTenantJenkinsRequestMeth
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "version does not exist or was deleted, id=" + versionId);
+                                                            "version does not exist or was deleted, id=" + tenantVersionId);
                                                 }
                                             })
 

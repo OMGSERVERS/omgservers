@@ -27,11 +27,11 @@ class VerifyTenantStagePermissionExistsMethodImpl implements VerifyTenantStagePe
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
-                    final var stageId = request.getTenantStageId();
+                    final var tenantStageId = request.getTenantStageId();
                     final var userId = request.getUserId();
                     final var permission = request.getPermission();
                     return pgPool.withTransaction(sqlConnection -> verifyTenantStagePermissionExistsOperation
-                            .execute(sqlConnection, shard, tenantId, stageId, userId, permission));
+                            .execute(sqlConnection, shard, tenantId, tenantStageId, userId, permission));
                 })
                 .map(VerifyTenantStagePermissionExistsResponse::new);
     }

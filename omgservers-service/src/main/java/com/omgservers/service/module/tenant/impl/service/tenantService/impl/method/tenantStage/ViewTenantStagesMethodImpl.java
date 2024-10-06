@@ -27,12 +27,12 @@ class ViewTenantStagesMethodImpl implements ViewTenantStagesMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
-                    final var projectId = request.getTenantProjectId();
+                    final var tenantProjectId = request.getTenantProjectId();
                     return pgPool.withTransaction(sqlConnection -> selectActiveTenantStagesByTenantProjectIdOperation
                             .execute(sqlConnection,
                                     shard.shard(),
                                     tenantId,
-                                    projectId
+                                    tenantProjectId
                             )
                     );
                 })

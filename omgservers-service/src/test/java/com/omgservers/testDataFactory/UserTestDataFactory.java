@@ -1,8 +1,8 @@
 package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.player.PlayerModel;
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
@@ -54,8 +54,8 @@ public class UserTestDataFactory {
                                         final TenantStageModel stage) {
         final var userId = user.getId();
         final var tenantId = tenant.getId();
-        final var stageId = stage.getId();
-        final var player = playerModelFactory.create(userId, tenantId, stageId);
+        final var tenantStageId = stage.getId();
+        final var player = playerModelFactory.create(userId, tenantId, tenantStageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
         userService.syncPlayer(syncPlayerRequest);
         return player;

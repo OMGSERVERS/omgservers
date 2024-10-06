@@ -27,15 +27,15 @@ class PushTestVersionImageOperationImpl implements PushTestVersionImageOperation
         final var imageId = imageIdOptional.get();
 
         final var tenantId = testVersionDto.getTenantId();
-        final var projectId = testVersionDto.getTenantProjectId();
-        final var versionId = testVersionDto.getTenantVersionId();
+        final var tenantProjectId = testVersionDto.getTenantProjectId();
+        final var tenantVersionId = testVersionDto.getTenantVersionId();
         final var repository = String.format("localhost:5000/omgservers/%s/%s/universal",
                 tenantId,
-                projectId);
-        dockerClient.tagImageCmd(imageId, repository, versionId.toString()).exec();
+                tenantProjectId);
+        dockerClient.tagImageCmd(imageId, repository, tenantVersionId.toString()).exec();
 
         log.info("Pushing...");
-        dockerClient.pushImageCmd(repository + ":" + versionId)
+        dockerClient.pushImageCmd(repository + ":" + tenantVersionId)
                 .start()
                 .awaitCompletion(1, TimeUnit.MINUTES);
         log.info("Pushed");

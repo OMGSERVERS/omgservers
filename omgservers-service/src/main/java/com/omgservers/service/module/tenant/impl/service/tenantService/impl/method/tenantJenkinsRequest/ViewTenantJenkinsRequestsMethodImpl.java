@@ -34,13 +34,13 @@ class ViewTenantJenkinsRequestsMethodImpl implements ViewTenantJenkinsRequestsMe
                 .flatMap(shard -> {
                     final var tenantId = request.getTenantId();
                     return pgPool.withTransaction(sqlConnection -> {
-                        final var versionId = request.getTenantVersionId();
-                        if (Objects.nonNull(versionId)) {
+                        final var tenantVersionId = request.getTenantVersionId();
+                        if (Objects.nonNull(tenantVersionId)) {
                             return selectActiveTenantJenkinsRequestsByTenantVersionIdOperation
                                     .execute(sqlConnection,
                                             shard.shard(),
                                             tenantId,
-                                            versionId);
+                                            tenantVersionId);
                         } else {
                             return selectActiveTenantJenkinsRequestsByTenantIdOperation
                                     .execute(sqlConnection,

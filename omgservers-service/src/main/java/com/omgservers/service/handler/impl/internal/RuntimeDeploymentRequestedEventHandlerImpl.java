@@ -82,8 +82,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                     final var deploymentId = runtime.getDeploymentId();
                     return getTenantDeployment(tenantId, deploymentId)
                             .flatMap(tenantDeployment -> {
-                                final var versionId = tenantDeployment.getVersionId();
-                                return viewTenantImage(tenantId, versionId)
+                                final var deploymentVersionId = tenantDeployment.getVersionId();
+                                return viewTenantImage(tenantId, deploymentVersionId)
                                         .map(tenantImages -> selectTenantImage(runtime, tenantImages))
                                         .flatMap(tenantImage -> {
                                             final var userId = runtime.getUserId();

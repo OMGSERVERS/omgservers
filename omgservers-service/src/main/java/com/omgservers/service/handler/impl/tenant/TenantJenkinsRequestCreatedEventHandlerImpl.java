@@ -47,14 +47,14 @@ public class TenantJenkinsRequestCreatedEventHandlerImpl implements EventHandler
 
         return getTenantJenkinsRequest(tenantId, id)
                 .flatMap(tenantJenkinsRequest -> {
-                    final var versionId = tenantJenkinsRequest.getVersionId();
+                    final var jenkinsRequestVersionId = tenantJenkinsRequest.getVersionId();
                     final var qualifier = tenantJenkinsRequest.getQualifier();
                     final var buildNumber = tenantJenkinsRequest.getBuildNumber();
                     log.info("Tenant jenkins request was created, " +
-                                    "id={}, version={}/{}, qualifier={}, buildNumber={}",
+                                    "id={}, tenantVersion={}/{}, qualifier={}, buildNumber={}",
                             tenantJenkinsRequest.getId(),
                             tenantId,
-                            versionId,
+                            jenkinsRequestVersionId,
                             qualifier,
                             buildNumber);
 

@@ -26,13 +26,13 @@ class FindTenantLobbyRefMethodImpl implements FindTenantLobbyRefMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getDeploymentId();
+                    final var tenantDeploymentId = request.getDeploymentId();
                     final var lobbyId = request.getLobbyId();
                     return pgPool.withTransaction(sqlConnection -> selectTenantLobbyRefByLobbyIdOperation
                             .execute(sqlConnection,
                                     shardModel.shard(),
                                     tenantId,
-                                    versionId,
+                                    tenantDeploymentId,
                                     lobbyId));
                 })
                 .map(FindTenantLobbyRefResponse::new);

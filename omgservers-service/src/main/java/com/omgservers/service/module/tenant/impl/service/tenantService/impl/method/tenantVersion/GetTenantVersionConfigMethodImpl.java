@@ -28,9 +28,9 @@ class GetTenantVersionConfigMethodImpl implements GetTenantVersionConfigMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
-                    final var versionId = request.getTenantVersionId();
+                    final var tenantVersionId = request.getTenantVersionId();
                     return pgPool.withTransaction(sqlConnection -> selectTenantVersionConfigOperation
-                            .execute(sqlConnection, shard, tenantId, versionId));
+                            .execute(sqlConnection, shard, tenantId, tenantVersionId));
                 })
                 .map(GetTenantVersionConfigResponse::new);
     }

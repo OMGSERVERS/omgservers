@@ -42,12 +42,12 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
-        final var projectId = request.getTenantProjectId();
+        final var tenantProjectId = request.getTenantProjectId();
 
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getTenantProject(tenantId, projectId))
-                        .flatMap(project -> viewTenantProjectPermissions(tenantId, projectId)
+                        .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))
+                        .flatMap(project -> viewTenantProjectPermissions(tenantId, tenantProjectId)
                                 .flatMap(projectPermissions -> {
                                     final var requestPermissionToDelete = request.getPermissionsToDelete();
 

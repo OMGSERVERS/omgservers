@@ -34,7 +34,7 @@ class SyncTenantImageMethodImpl implements SyncTenantImageMethod {
         final var shardKey = request.getRequestShardKey();
         final var tenantImage = request.getTenantImage();
         final var tenantId = tenantImage.getTenantId();
-        final var versionId = tenantImage.getVersionId();
+        final var tenantVersionId = tenantImage.getVersionId();
 
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
@@ -42,7 +42,7 @@ class SyncTenantImageMethodImpl implements SyncTenantImageMethod {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
                                     (changeContext, sqlConnection) -> verifyTenantVersionExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, versionId)
+                                            .execute(sqlConnection, shard, tenantId, tenantVersionId)
                                             .flatMap(exists -> {
                                                 if (exists) {
                                                     return upsertTenantImageOperation
@@ -53,7 +53,7 @@ class SyncTenantImageMethodImpl implements SyncTenantImageMethod {
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "version does not exist or was deleted, id=" + versionId);
+                                                            "version does not exist or was deleted, id=" + tenantVersionId);
                                                 }
                                             })
 
