@@ -30,7 +30,7 @@ class TenantImageDeletedEventHandlerImplTest extends Assertions {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        final var testData = testDataFactory.createTestData();
+        final var testData = testDataFactory.createDefaultTestData();
 
         final var tenantId = testData.getTenantImage().getTenantId();
         final var id = testData.getTenantImage().getId();

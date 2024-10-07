@@ -5,6 +5,7 @@ import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
@@ -13,9 +14,16 @@ import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
 import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantFilesArchive.SyncTenantFilesArchiveRequest;
@@ -25,8 +33,11 @@ import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequ
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionRequest;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
@@ -37,8 +48,11 @@ import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
+import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
+import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
+import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -55,12 +69,15 @@ public class TenantTestDataFactory {
 
     final TenantServiceTestInterface tenantService;
 
+    final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
     final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
+    final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
     final TenantJenkinsRequestModelFactory tenantJenkinsRequestModelFactory;
     final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
     final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
     final TenantFilesArchiveModelFactory tenantFilesArchiveModelFactory;
     final TenantDeploymentModelFactory tenantDeploymentModelFactory;
+    final TenantPermissionModelFactory tenantPermissionModelFactory;
     final TenantLobbyRefModelFactory tenantLobbyRefModelFactory;
     final TenantVersionModelFactory tenantVersionModelFactory;
     final TenantProjectModelFactory tenantProjectModelFactory;
@@ -75,11 +92,35 @@ public class TenantTestDataFactory {
         return tenant;
     }
 
+    public TenantPermissionModel createTenantPermission(final TenantModel tenant,
+                                                        final UserModel developerUser,
+                                                        final TenantPermissionQualifierEnum permission) {
+        final var tenantId = tenant.getId();
+        final var userId = developerUser.getId();
+        final var tenantPermission = tenantPermissionModelFactory.create(tenantId, userId, permission);
+        final var syncTenantPermissionRequest = new SyncTenantPermissionRequest(tenantPermission);
+        tenantService.syncTenantPermission(syncTenantPermissionRequest);
+        return tenantPermission;
+    }
+
     public TenantProjectModel createTenantProject(final TenantModel tenant) {
         final var tenantProject = tenantProjectModelFactory.create(tenant.getId());
         final var syncTenantProjectRequest = new SyncTenantProjectRequest(tenantProject);
         tenantService.syncTenantProject(syncTenantProjectRequest);
         return tenantProject;
+    }
+
+    public TenantProjectPermissionModel createTenantProjectPermission(final TenantProjectModel tenantProject,
+                                                                      final UserModel developerUser,
+                                                                      final TenantProjectPermissionQualifierEnum permission) {
+        final var tenantId = tenantProject.getTenantId();
+        final var tenantProjectId = tenantProject.getId();
+        final var userId = developerUser.getId();
+        final var tenantProjectPermission = tenantProjectPermissionModelFactory
+                .create(tenantId, tenantProjectId, userId, permission);
+        final var syncTenantProjectPermissionRequest = new SyncTenantProjectPermissionRequest(tenantProjectPermission);
+        tenantService.syncTenantProjectPermission(syncTenantProjectPermissionRequest);
+        return tenantProjectPermission;
     }
 
     public TenantStageModel createStage(final TenantProjectModel tenantProject) {
@@ -89,6 +130,19 @@ public class TenantTestDataFactory {
         final var syncTenantStageRequest = new SyncTenantStageRequest(tenantStage);
         tenantService.syncTenantStage(syncTenantStageRequest);
         return tenantStage;
+    }
+
+    public TenantStagePermissionModel createTenantStagePermission(final TenantStageModel tenantStage,
+                                                                  final UserModel developerUser,
+                                                                  final TenantStagePermissionQualifierEnum permission) {
+        final var tenantId = tenantStage.getTenantId();
+        final var tenantStageId = tenantStage.getId();
+        final var userId = developerUser.getId();
+        final var tenantStagePermission = tenantStagePermissionModelFactory
+                .create(tenantId, tenantStageId, userId, permission);
+        final var syncTenantStagePermissionRequest = new SyncTenantStagePermissionRequest(tenantStagePermission);
+        tenantService.syncTenantStagePermission(syncTenantStagePermissionRequest);
+        return tenantStagePermission;
     }
 
     public TenantVersionModel createTenantVersion(final TenantProjectModel tenantProject) {
@@ -103,7 +157,7 @@ public class TenantTestDataFactory {
         return tenantVersion;
     }
 
-    public TenantVersionModel createTenantFilesArchive(final TenantVersionModel tenantVersion) {
+    public TenantFilesArchiveModel createTenantFilesArchive(final TenantVersionModel tenantVersion) {
         final var tenantId = tenantVersion.getTenantId();
         final var tenantVersionId = tenantVersion.getId();
         final var tenantFilesArchive = tenantFilesArchiveModelFactory.create(tenantId,
@@ -111,7 +165,7 @@ public class TenantTestDataFactory {
                 Base64.getEncoder().encodeToString("dummy".getBytes(StandardCharsets.UTF_8)));
         final var syncTenantFilesArchiveRequest = new SyncTenantFilesArchiveRequest(tenantFilesArchive);
         tenantService.syncTenantFilesArchive(syncTenantFilesArchiveRequest);
-        return tenantVersion;
+        return tenantFilesArchive;
     }
 
     public TenantJenkinsRequestModel createTenantJenkinsRequest(final TenantVersionModel tenantVersion,
@@ -163,7 +217,7 @@ public class TenantTestDataFactory {
         return tenantLobbyRef;
     }
 
-    public TenantMatchmakerRequestModel createTenantMatchmakerRequestModel(
+    public TenantMatchmakerRequestModel createTenantMatchmakerRequest(
             final TenantDeploymentModel tenantDeployment) {
         final var tenantId = tenantDeployment.getTenantId();
         final var tenantDeploymentId = tenantDeployment.getId();

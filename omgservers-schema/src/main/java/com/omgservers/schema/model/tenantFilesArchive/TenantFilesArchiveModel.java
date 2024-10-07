@@ -42,4 +42,16 @@ public class TenantFilesArchiveModel {
 
     @NotNull
     Boolean deleted;
+
+    public TenantFilesArchiveProjectionModel mapToProjection() {
+        final var tenantFilesArchiveProjection = new TenantFilesArchiveProjectionModel();
+        tenantFilesArchiveProjection.setId(id);
+        tenantFilesArchiveProjection.setIdempotencyKey(idempotencyKey);
+        tenantFilesArchiveProjection.setTenantId(tenantId);
+        tenantFilesArchiveProjection.setVersionId(versionId);
+        tenantFilesArchiveProjection.setCreated(created);
+        tenantFilesArchiveProjection.setModified(modified);
+        tenantFilesArchiveProjection.setDeleted(deleted);
+        return tenantFilesArchiveProjection;
+    }
 }

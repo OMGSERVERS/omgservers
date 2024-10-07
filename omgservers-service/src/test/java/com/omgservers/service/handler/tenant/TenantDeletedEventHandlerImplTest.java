@@ -30,7 +30,7 @@ class TenantDeletedEventHandlerImplTest extends Assertions {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        final var testData = testDataFactory.createTestData();
+        final var testData = testDataFactory.createDefaultTestData();
         final var tenantId = testData.getTenant().getId();
 
         final var deleteTenantRequest = new DeleteTenantRequest(tenantId);

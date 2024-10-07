@@ -31,7 +31,7 @@ class TenantCreatedEventHandlerImplTest extends Assertions {
     void givenHandler_whenRetry_thenFinished() {
         bootstrapService.bootstrap();
 
-        final var testData = testDataFactory.createTestData();
+        final var testData = testDataFactory.createDefaultTestData();
         final var tenantId = testData.getTenant().getId();
 
         final var eventBody = new TenantCreatedEventBodyModel(tenantId);
