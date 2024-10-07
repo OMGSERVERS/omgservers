@@ -35,7 +35,7 @@ public class PoolServerModel {
     PoolServerQualifierEnum qualifier;
 
     @NotNull
-    PoolServerConfigModel config;
+    PoolServerConfigDto config;
 
     @NotNull
     Boolean deleted;

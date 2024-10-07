@@ -11,11 +11,11 @@ import java.net.URI;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PoolServerConfigModel {
+public class PoolServerConfigDto {
 
-    static public PoolServerConfigModel create() {
-        final var serverConfig = new PoolServerConfigModel();
-        return serverConfig;
+    static public PoolServerConfigDto create() {
+        final var poolServerConfig = new PoolServerConfigDto();
+        return poolServerConfig;
     }
 
     DockerHostConfig dockerHostConfig;

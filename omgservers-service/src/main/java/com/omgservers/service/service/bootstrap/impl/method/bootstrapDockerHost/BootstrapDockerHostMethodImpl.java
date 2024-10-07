@@ -2,7 +2,7 @@ package com.omgservers.service.service.bootstrap.impl.method.bootstrapDockerHost
 
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
+import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
@@ -30,8 +30,8 @@ class BootstrapDockerHostMethodImpl implements BootstrapDockerHostMethod {
 
         final var dockerHostConfig = getConfigOperation.getServiceConfig().bootstrap().dockerHost();
 
-        final var serverConfig = PoolServerConfigModel.create();
-        serverConfig.setDockerHostConfig(new PoolServerConfigModel.DockerHostConfig(
+        final var serverConfig = PoolServerConfigDto.create();
+        serverConfig.setDockerHostConfig(new PoolServerConfigDto.DockerHostConfig(
                 dockerHostConfig.uri(),
                 dockerHostConfig.cpuCount(),
                 dockerHostConfig.memorySize(),

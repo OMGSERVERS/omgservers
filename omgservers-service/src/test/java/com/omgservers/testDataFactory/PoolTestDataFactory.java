@@ -3,7 +3,7 @@ package com.omgservers.testDataFactory;
 import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
-import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
+import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerConfigDto;
@@ -81,8 +81,8 @@ public class PoolTestDataFactory {
 
     public PoolServerModel createPoolServer(final PoolModel pool) {
         final var poolId = pool.getId();
-        final var config = PoolServerConfigModel.create();
-        config.setDockerHostConfig(PoolServerConfigModel.DockerHostConfig.builder()
+        final var config = PoolServerConfigDto.create();
+        config.setDockerHostConfig(PoolServerConfigDto.DockerHostConfig.builder()
                 .dockerDaemonUri(URI.create("unix:///var/run/docker.sock"))
                 .cpuCount(1000)
                 .memorySize(2048)

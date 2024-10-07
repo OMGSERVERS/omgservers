@@ -1,7 +1,7 @@
 package com.omgservers.service.module.pool.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
+import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
@@ -31,7 +31,7 @@ public class PoolServerModelMapper {
         poolServer.setDeleted(row.getBoolean("deleted"));
         try {
             poolServer.setConfig(objectMapper
-                    .readValue(row.getString("config"), PoolServerConfigModel.class));
+                    .readValue(row.getString("config"), PoolServerConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "poo server config can't be parsed, poolServer=" + poolServer, e);

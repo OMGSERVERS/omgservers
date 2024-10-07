@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.pool;
 
-import com.omgservers.schema.model.poolServer.PoolServerConfigModel;
+import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
@@ -20,7 +20,7 @@ public class PoolServerModelFactory {
 
     public PoolServerModel create(final Long poolId,
                                   final PoolServerQualifierEnum qualifier,
-                                  final PoolServerConfigModel config) {
+                                  final PoolServerConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, poolId, qualifier, config, idempotencyKey);
@@ -28,7 +28,7 @@ public class PoolServerModelFactory {
 
     public PoolServerModel create(final Long poolId,
                                   final PoolServerQualifierEnum qualifier,
-                                  final PoolServerConfigModel config,
+                                  final PoolServerConfigDto config,
                                   final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, poolId, qualifier, config, idempotencyKey);
@@ -37,7 +37,7 @@ public class PoolServerModelFactory {
     public PoolServerModel create(final Long id,
                                   final Long poolId,
                                   final PoolServerQualifierEnum qualifier,
-                                  final PoolServerConfigModel config,
+                                  final PoolServerConfigDto config,
                                   final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
