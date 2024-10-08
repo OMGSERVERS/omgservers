@@ -1,4 +1,4 @@
-package com.omgservers.service.module.tenant.impl.operation.getTenantModuleClient;
+package com.omgservers.service.module.docker.impl.operation;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
@@ -10,25 +10,25 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @ApplicationScoped
-class GetTenantModuleClientOperationImpl implements GetTenantModuleClientOperation {
+class GetDockerModuleClientOperationImpl implements GetDockerModuleClientOperation {
 
-    final Map<URI, TenantModuleClient> cache;
+    final Map<URI, DockerModuleClient> cache;
 
-    GetTenantModuleClientOperationImpl() {
+    GetDockerModuleClientOperationImpl() {
         cache = new ConcurrentHashMap<>();
     }
 
     @Override
-    public synchronized TenantModuleClient getClient(final URI uri) {
+    public synchronized DockerModuleClient getClient(final URI uri) {
         if (!cache.containsKey(uri)) {
             final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)
-                    .build(TenantModuleClient.class);
-
+                    .build(DockerModuleClient.class);
             log.info("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }
+
         return cache.get(uri);
     }
 

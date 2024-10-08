@@ -18,6 +18,9 @@ public class PoolServerConfigDto {
         return poolServerConfig;
     }
 
+    @NotNull
+    URI serverUri;
+
     DockerHostConfig dockerHostConfig;
 
     @Data

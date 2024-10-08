@@ -1,8 +1,10 @@
 package com.omgservers.service.handler.impl.pool;
 
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.LogConfig;
-import com.github.dockerjava.api.model.RestartPolicy;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.module.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.docker.StartDockerContainerResponse;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerRequest;
@@ -12,35 +14,31 @@ import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePo
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
-import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimePoolServerContainerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.docker.DockerModule;
+import com.omgservers.service.module.docker.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Map;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler {
 
-    final PoolModule poolModule;
     final RuntimeModule runtimeModule;
+    final DockerModule dockerModule;
+    final PoolModule poolModule;
 
-    final GetDockerClientOperation getDockerClientOperation;
+    final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
     final GetConfigOperation getConfigOperation;
 
     final RuntimePoolServerContainerRefModelFactory runtimePoolServerContainerRefModelFactory;
@@ -66,7 +64,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
 
                     return syncRuntimePoolServerContainerRef(poolServerContainer)
                             .flatMap(created -> getPoolServer(poolId, serverId)
-                                    .flatMap(poolServer -> startPoolServerContainer(poolServer, poolServerContainer)));
+                                    .flatMap(poolServer -> startDockerContainer(poolServer, poolServerContainer)));
                 })
                 .replaceWithVoid();
     }
@@ -111,67 +109,10 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
-    Uni<Void> startPoolServerContainer(final PoolServerModel poolServer,
-                                       final PoolServerContainerModel poolServerContainer) {
-        return Uni.createFrom().voidItem()
-                .emitOn(Infrastructure.getDefaultWorkerPool())
-                .invoke(voidItem -> {
-                    final var imageId = poolServerContainer.getConfig().getImageId();
-                    final var containerName = poolServerContainer.getContainerName();
-                    final var environment = poolServerContainer.getConfig().getEnvironment().entrySet().stream()
-                            .map(entry -> entry.getKey() + "=" + entry.getValue())
-                            .toList();
-
-                    final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
-                    final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
-                    final var dockerNetwork = getConfigOperation.getServiceConfig().runtimes().dockerNetwork();
-
-                    try {
-                        // Convert milliseconds -> microseconds
-                        final var cpuQuotaInMicroseconds = poolServerContainer.getConfig()
-                                .getCpuLimitInMilliseconds() * 1000L;
-                        // Convert megabytes -> bytes
-                        final var memoryLimitInBytes = poolServerContainer.getConfig()
-                                .getMemoryLimitInMegabytes() * 1024L * 1024L;
-
-                        final var logConfig = new LogConfig();
-                        logConfig.setType(LogConfig.LoggingType.JSON_FILE);
-                        logConfig.setConfig(Map.of(
-                                "max-size", "10m",
-                                "max-file", "8"
-                        ));
-
-                        final var hostConfig = HostConfig.newHostConfig()
-                                .withLogConfig(logConfig)
-                                .withNetworkMode(dockerNetwork)
-                                .withCpuQuota(cpuQuotaInMicroseconds)
-                                .withMemory(memoryLimitInBytes);
-
-                        final var createContainerResponse = dockerClient.createContainerCmd(imageId)
-                                .withName(containerName)
-                                .withEnv(environment)
-                                .withHostConfig(hostConfig)
-                                .exec();
-                        log.info("Docker container was created, " +
-                                        "containerName={}, dockerNetwork={}, cpuQuota={}, memoryLimit={}, response={}",
-                                containerName,
-                                dockerNetwork,
-                                cpuQuotaInMicroseconds,
-                                memoryLimitInBytes,
-                                createContainerResponse);
-
-                        final var inspectContainerResponse = dockerClient.inspectContainerCmd(containerName)
-                                .exec();
-                        log.info("Docker container was inspected, response={}", inspectContainerResponse);
-
-                        final var startContainerResponse = dockerClient.startContainerCmd(containerName)
-                                .exec();
-
-                        log.info("Docker container was started, response={}", startContainerResponse);
-                    } catch (Exception e) {
-                        // TODO: handle docker exception
-                        log.error("Start container failed, {}:{}", e.getClass().getSimpleName(), e.getMessage());
-                    }
-                });
+    Uni<Boolean> startDockerContainer(final PoolServerModel poolServer,
+                                      final PoolServerContainerModel poolServerContainer) {
+        final var request = new StartDockerContainerRequest(poolServer, poolServerContainer);
+        return dockerModule.getService().startDockerContainer(request)
+                .map(StartDockerContainerResponse::getStarted);
     }
 }

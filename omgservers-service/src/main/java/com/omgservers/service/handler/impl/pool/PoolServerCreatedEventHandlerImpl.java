@@ -10,7 +10,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
+import com.omgservers.service.module.docker.impl.operation.GetDockerDaemonClientOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
     final RuntimeModule runtimeModule;
     final PoolModule poolModule;
 
-    final GetDockerClientOperation getDockerClientOperation;
+    final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
     final GetConfigOperation getConfigOperation;
 
     @Override
@@ -45,7 +45,7 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(server -> {
 
                     final var dockerDaemonUri = server.getConfig().getDockerHostConfig().getDockerDaemonUri();
-                    final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
+                    final var dockerClient = getDockerDaemonClientOperation.getClient(dockerDaemonUri);
 
                     try {
                         dockerClient.pingCmd().exec();

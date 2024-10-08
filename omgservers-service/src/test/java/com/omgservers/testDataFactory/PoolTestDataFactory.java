@@ -90,7 +90,7 @@ public class PoolTestDataFactory {
                 .build());
 
         final var poolServer = poolServerModelFactory.create(poolId,
-                PoolServerQualifierEnum.DOCKER_HOST, config);
+                PoolServerQualifierEnum.SERVICE_DOCKER_HOST, config);
         final var syncPoolServerRequest = new SyncPoolServerRequest(poolServer);
         poolService.syncPoolServer(syncPoolServerRequest);
         return poolServer;

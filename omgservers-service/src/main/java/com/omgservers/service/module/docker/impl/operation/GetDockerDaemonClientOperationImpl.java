@@ -1,4 +1,4 @@
-package com.omgservers.service.operation.getDockerClient;
+package com.omgservers.service.module.docker.impl.operation;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
@@ -14,13 +14,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @ApplicationScoped
-class GetDockerClientOperationImpl implements GetDockerClientOperation {
+class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperation {
 
     final GetConfigOperation getConfigOperation;
 
     final Map<URI, DockerClient> cache;
 
-    GetDockerClientOperationImpl(final GetConfigOperation getConfigOperation) {
+    GetDockerDaemonClientOperationImpl(final GetConfigOperation getConfigOperation) {
         this.getConfigOperation = getConfigOperation;
         cache = new ConcurrentHashMap<>();
     }

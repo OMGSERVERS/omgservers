@@ -1,8 +1,14 @@
 package com.omgservers.schema.model.poolServer;
 
 public enum PoolServerQualifierEnum {
+
     /**
-     * It's a server with preinstalled docker daemon
+     * Using service host as a docker host for containers.
      */
-    DOCKER_HOST,
+    SERVICE_DOCKER_HOST,
+
+    /**
+     * Using remote docker host to run docker containers.
+     */
+    REMOTE_DOCKER_HOST,
 }

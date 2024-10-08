@@ -124,8 +124,6 @@ public interface ServiceConfig {
 
         BootstrapDefaultPoolConfig defaultPool();
 
-        BootstrapDockerHostConfig dockerHost();
-
         BootstrapRelayJobConfig relayJob();
 
         BootstrapSchedulerJobConfig schedulerJob();
@@ -157,12 +155,8 @@ public interface ServiceConfig {
 
     interface BootstrapDefaultPoolConfig {
         boolean enabled();
-    }
 
-    interface BootstrapDockerHostConfig {
-        boolean enabled();
-
-        URI uri();
+        URI dockerUri();
 
         int cpuCount();
 

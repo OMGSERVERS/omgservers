@@ -1,7 +1,10 @@
 package com.omgservers.service.handler.impl.pool;
 
-import com.github.dockerjava.api.exception.NotFoundException;
-import com.github.dockerjava.api.exception.NotModifiedException;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
+import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
+import com.omgservers.schema.module.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerRequest;
@@ -13,16 +16,13 @@ import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePo
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
-import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
-import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.docker.DockerModule;
+import com.omgservers.service.module.docker.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.operation.getDockerClient.GetDockerClientOperation;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,9 +34,10 @@ import lombok.extern.slf4j.Slf4j;
 public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
+    final DockerModule dockerModule;
     final PoolModule poolModule;
 
-    final GetDockerClientOperation getDockerClientOperation;
+    final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -58,7 +59,7 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
 
                     return findAndDeleteRuntimePoolServerContainerRef(poolServerContainer)
                             .flatMap(voidItem -> getPoolServer(poolId, serverId)
-                                    .flatMap(poolServer -> stopServerContainer(poolServer, poolServerContainer)));
+                                    .flatMap(poolServer -> stopDockerContainer(poolServer, poolServerContainer)));
                 })
                 .replaceWithVoid();
     }
@@ -101,26 +102,10 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
-    Uni<Void> stopServerContainer(final PoolServerModel poolServer,
-                                  final PoolServerContainerModel poolServerContainer) {
-        return Uni.createFrom().voidItem()
-                .emitOn(Infrastructure.getDefaultWorkerPool())
-                .invoke(voidItem -> {
-                    final var containerName = poolServerContainer.getContainerName();
-                    final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
-                    final var dockerClient = getDockerClientOperation.getClient(dockerDaemonUri);
-
-                    try {
-                        final var stopContainerResponse = dockerClient.stopContainerCmd(containerName).exec();
-                        log.info("Stop container, response={}", stopContainerResponse);
-                        final var removeContainerResponse = dockerClient.removeContainerCmd(containerName).exec();
-                        log.info("Remove container, response={}", removeContainerResponse);
-                    } catch (NotModifiedException e) {
-                        log.info("Stop container failed, {}", e.getMessage());
-                    } catch (NotFoundException e) {
-                        log.info("Container was not found to stop, {}", e.getMessage());
-                    }
-                })
-                .replaceWithVoid();
+    Uni<Boolean> stopDockerContainer(final PoolServerModel poolServer,
+                                     final PoolServerContainerModel poolServerContainer) {
+        final var request = new StopDockerContainerRequest(poolServer, poolServerContainer);
+        return dockerModule.getService().stopDockerContainer(request)
+                .map(StopDockerContainerResponse::getStopped);
     }
 }

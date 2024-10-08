@@ -21,12 +21,12 @@ class GetClientModuleClientOperationImpl implements GetClientModuleClientOperati
     @Override
     public synchronized ClientModuleClient getClient(final URI uri) {
         if (!cache.containsKey(uri)) {
-            ClientModuleClient restClient = RestClientBuilder.newBuilder()
+            final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)
                     .build(ClientModuleClient.class);
             log.info("Module client was created, uri={}", uri);
 
-            cache.put(uri, restClient);
+            cache.put(uri, client);
         }
 
         return cache.get(uri);
