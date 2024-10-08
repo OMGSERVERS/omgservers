@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.operation.test;
+package com.omgservers.service.handler.operation;
 
 import io.smallrye.mutiny.Uni;
 

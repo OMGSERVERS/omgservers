@@ -9,7 +9,7 @@ import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEvent
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.handler.operation.DeleteTenantImagesByTenantVersionIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantJenkinsRequestsByTenantVersionIdOperation;
-import com.omgservers.service.handler.operation.test.DeleteTenantFilesArchivesByTenantVersionIdOperation;
+import com.omgservers.service.handler.operation.DeleteTenantFilesArchivesByTenantVersionIdOperation;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,4 +1,4 @@
-package com.omgservers.service.handler.operation.test;
+package com.omgservers.service.handler.operation;
 
 import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveProjectionModel;
 import com.omgservers.schema.module.tenant.tenantFilesArchive.DeleteTenantFilesArchiveRequest;
