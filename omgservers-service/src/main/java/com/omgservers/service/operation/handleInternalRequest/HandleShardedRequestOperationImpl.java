@@ -16,16 +16,16 @@ import java.util.function.Function;
 
 @ApplicationScoped
 @AllArgsConstructor
-class HandleInternalRequestOperationImpl implements HandleInternalRequestOperation {
+class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation {
 
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public <T extends ShardedRequest, R, C> Uni<R> handleInternalRequest(final Logger log,
-                                                                         final T request,
-                                                                         final Function<URI, C> api,
-                                                                         final BiFunction<C, T, Uni<? extends R>> route,
-                                                                         final Function<T, Uni<? extends R>> handle) {
+    public <T extends ShardedRequest, R, C> Uni<R> handleShardedRequest(final Logger log,
+                                                                        final T request,
+                                                                        final Function<URI, C> api,
+                                                                        final BiFunction<C, T, Uni<? extends R>> route,
+                                                                        final Function<T, Uni<? extends R>> handle) {
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     if (shard.locked()) {

@@ -28,7 +28,7 @@ import com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method
 import com.omgservers.service.module.lobby.impl.service.lobbyService.impl.method.lobbyRuntimeRef.syncLobbyRuntimeRef.SyncLobbyRuntimeRefMethod;
 import com.omgservers.service.module.lobby.impl.service.webService.impl.api.LobbyApi;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -50,12 +50,12 @@ class LobbyServiceImpl implements LobbyService {
     final GetLobbyMethod getLobbyMethod;
 
     final GetLobbyModuleClientOperation getMatchServiceApiClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final HandleShardedRequestOperation handleShardedRequestOperation;
     final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetLobbyResponse> getLobby(@Valid final GetLobbyRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::getLobby,
                 getLobbyMethod::getLobby);
@@ -63,7 +63,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<SyncLobbyResponse> syncLobby(@Valid final SyncLobbyRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::syncLobby,
                 syncLobbyMethod::syncLobby);
@@ -87,7 +87,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<DeleteLobbyResponse> deleteLobby(@Valid final DeleteLobbyRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::deleteLobby,
                 deleteLobbyMethod::deleteLobby);
@@ -95,7 +95,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<GetLobbyRuntimeRefResponse> getLobbyRuntimeRef(@Valid final GetLobbyRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::getLobbyRuntimeRef,
                 getLobbyRuntimeRefMethod::getLobbyRuntimeRef);
@@ -103,7 +103,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<FindLobbyRuntimeRefResponse> findLobbyRuntimeRef(@Valid final FindLobbyRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::findLobbyRuntimeRef,
                 findLobbyRuntimeRefMethod::findLobbyRuntimeRef);
@@ -111,7 +111,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(@Valid final SyncLobbyRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::syncLobbyRuntimeRef,
                 syncLobbyRuntimeRefMethod::syncLobbyRuntimeRef);
@@ -119,7 +119,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<DeleteLobbyRuntimeRefResponse> deleteLobbyRuntimeRef(@Valid final DeleteLobbyRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::deleteLobbyRuntimeRef,
                 deleteLobbyRuntimeRefMethod::deleteLobbyRuntimeRef);

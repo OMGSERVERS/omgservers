@@ -43,7 +43,7 @@ import com.omgservers.service.module.user.impl.service.userService.impl.method.u
 import com.omgservers.service.module.user.impl.service.userService.impl.method.user.getUser.GetUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.user.syncUser.SyncUserMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -69,13 +69,13 @@ class UserServiceImpl implements UserService {
     final SyncUserMethod syncUserMethod;
     final GetUserMethod getUserMethod;
 
+    final HandleShardedRequestOperation handleShardedRequestOperation;
     final GetUserModuleClientOperation getUserModuleClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
     final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetUserResponse> getUser(@Valid final GetUserRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getUser,
                 getUserMethod::getUser);
@@ -83,7 +83,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<SyncUserResponse> syncUser(@Valid final SyncUserRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncUser,
                 syncUserMethod::syncUser);
@@ -107,7 +107,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<DeleteUserResponse> deleteUser(@Valid final DeleteUserRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deleteUser,
                 deleteUserMethod::deleteUser);
@@ -115,7 +115,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<CreateTokenResponse> createToken(@Valid final CreateTokenRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::createToken,
                 createTokenMethod::createToken);
@@ -123,7 +123,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<GetPlayerResponse> getPlayer(@Valid final GetPlayerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getPlayer,
                 getPlayerMethod::getPlayer);
@@ -131,7 +131,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<GetPlayerAttributesResponse> getPlayerAttributes(@Valid final GetPlayerAttributesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getPlayerAttributes,
                 getPlayerAttributesMethod::getPlayerAttributes);
@@ -139,7 +139,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<GetPlayerProfileResponse> getPlayerProfile(@Valid final GetPlayerProfileRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::getPlayerProfile,
                 getPlayerProfileMethod::getPlayerProfile);
@@ -147,7 +147,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<FindPlayerResponse> findPlayer(@Valid final FindPlayerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::findPlayer,
                 findPlayerMethod::findPlayer);
@@ -155,7 +155,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<SyncPlayerResponse> syncPlayer(@Valid final SyncPlayerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncPlayer,
                 syncPlayerMethod::syncPlayer);
@@ -164,7 +164,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(
             @Valid final UpdatePlayerAttributesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::updatePlayerAttributes,
                 updatePlayerAttributes::updatePlayerAttributes);
@@ -172,7 +172,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(@Valid final UpdatePlayerProfileRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::updatePlayerProfile,
                 updatePlayerProfileMethod::updatePlayerProfile);
@@ -180,7 +180,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public Uni<DeletePlayerResponse> deletePlayer(@Valid final DeletePlayerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::deletePlayer,
                 deletePlayerMethod::deletePlayer);

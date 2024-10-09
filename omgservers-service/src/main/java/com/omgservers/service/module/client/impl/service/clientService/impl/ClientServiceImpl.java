@@ -58,7 +58,7 @@ import com.omgservers.service.module.client.impl.service.clientService.impl.meth
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.syncClientRuntimeRef.SyncClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.viewClientRuntimeRefs.ViewClientRuntimeRefsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -90,12 +90,12 @@ public class ClientServiceImpl implements ClientService {
     final GetClientMethod getClientMethod;
 
     final GetClientModuleClientOperation getClientModuleClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final HandleShardedRequestOperation handleShardedRequestOperation;
     final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetClientResponse> getClient(@Valid final GetClientRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::getClient,
                 getClientMethod::getClient);
@@ -103,7 +103,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<SyncClientResponse> syncClient(@Valid final SyncClientRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::syncClient,
                 syncClientMethod::syncClient);
@@ -111,7 +111,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<DeleteClientResponse> deleteClient(@Valid final DeleteClientRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::deleteClient,
                 deleteClientMethod::deleteClient);
@@ -119,7 +119,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<InterchangeResponse> interchange(@Valid final InterchangeRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::interchange,
                 interchangeMethod::interchange);
@@ -128,7 +128,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<ViewClientMessagesResponse> viewClientMessages(
             @Valid final ViewClientMessagesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::viewClientMessages,
                 viewClientMessagesMethod::viewClientMessages);
@@ -136,7 +136,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<SyncClientMessageResponse> syncClientMessage(@Valid final SyncClientMessageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::syncClientMessage,
                 syncClientMessageMethod::syncClientMessage);
@@ -163,7 +163,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<DeleteClientMessagesResponse> deleteClientMessages(
             @Valid final DeleteClientMessagesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::deleteClientMessages,
                 deleteClientMessagesMethod::deleteClientMessages);
@@ -171,7 +171,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(@Valid final GetClientRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::getClientRuntimeRef,
                 getClientRuntimeRefMethod::getClientRuntimeRef);
@@ -179,7 +179,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(@Valid final FindClientRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::findClientRuntimeRef,
                 findClientRuntimeRefMethod::findClientRuntimeRef);
@@ -187,7 +187,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(@Valid final ViewClientRuntimeRefsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::viewClientRuntimeRefs,
                 viewClientRuntimeRefsMethod::viewClientRuntimeRefs);
@@ -195,7 +195,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(@Valid final SyncClientRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::syncClientRuntimeRef,
                 syncClientRuntimeRefMethod::syncClientRuntimeRef);
@@ -204,7 +204,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(
             @Valid final DeleteClientRuntimeRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::deleteClientRuntimeRef,
                 deleteClientRuntimeRefMethod::deleteClientRuntimeRef);
@@ -213,7 +213,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<GetClientMatchmakerRefResponse> getClientMatchmakerRef(
             @Valid final GetClientMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::getClientMatchmakerRef,
                 getClientMatchmakerRefMethod::getClientMatchmakerRef);
@@ -222,7 +222,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<FindClientMatchmakerRefResponse> findClientMatchmakerRef(
             @Valid final FindClientMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::findClientMatchmakerRef,
                 findClientMatchmakerRefMethod::findClientMatchmakerRef);
@@ -231,7 +231,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<ViewClientMatchmakerRefsResponse> viewClientMatchmakerRefs(
             @Valid final ViewClientMatchmakerRefsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::viewClientMatchmakerRefs,
                 viewClientMatchmakerRefsMethod::viewClientMatchmakerRefs);
@@ -240,7 +240,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<SyncClientMatchmakerRefResponse> syncClientMatchmakerRef(
             @Valid final SyncClientMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::syncClientMatchmakerRef,
                 syncClientMatchmakerRefMethod::syncClientMatchmakerRef);
@@ -249,7 +249,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<DeleteClientMatchmakerRefResponse> deleteClientMatchmakerRef(
             @Valid final DeleteClientMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::deleteClientMatchmakerRef,
                 deleteClientMatchmakerRefMethod::deleteClientMatchmakerRef);

@@ -223,7 +223,7 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantVersion.SyncTenantVersionMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantVersion.ViewTenantVersionsMethod;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -310,7 +310,7 @@ public class TenantServiceImpl implements TenantService {
     final GetTenantMethod getTenantMethod;
 
     final GetTenantModuleClientOperation getTenantModuleClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final HandleShardedRequestOperation handleShardedRequestOperation;
     final CalculateShardOperation calculateShardOperation;
 
     /*
@@ -319,7 +319,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantResponse> getTenant(@Valid final GetTenantRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenant,
                 getTenantMethod::getTenant);
@@ -327,7 +327,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantDataResponse> getTenantData(@Valid final GetTenantDataRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantData,
                 getTenantDataMethod::getTenantData);
@@ -335,7 +335,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantResponse> syncTenant(@Valid final SyncTenantRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenant,
                 syncTenantMethod::syncTenant);
@@ -343,7 +343,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<DeleteTenantResponse> deleteTenant(@Valid final DeleteTenantRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenant,
                 deleteTenantMethod::deleteTenant);
@@ -355,7 +355,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<ViewTenantPermissionsResponse> viewTenantPermissions(@Valid final ViewTenantPermissionsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantPermissions,
                 viewTenantPermissionsMethod::execute);
@@ -364,7 +364,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<VerifyTenantPermissionExistsResponse> verifyTenantPermissionExists(
             @Valid final VerifyTenantPermissionExistsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::verifyTenantPermissionExists,
                 verifyTenantPermissionExistsMethod::execute);
@@ -372,7 +372,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantPermissionResponse> syncTenantPermission(@Valid final SyncTenantPermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantPermission,
                 syncTenantPermissionMethod::execute);
@@ -381,7 +381,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantPermissionResponse> deleteTenantPermission(
             @Valid final DeleteTenantPermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantPermission,
                 deleteTenantPermissionMethod::execute);
@@ -393,7 +393,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantProjectResponse> getTenantProject(@Valid final GetTenantProjectRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantProject,
                 getTenantProjectMethod::execute);
@@ -401,7 +401,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantProjectDataResponse> getTenantProjectData(@Valid final GetTenantProjectDataRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantProjectData,
                 getTenantProjectDataMethod::execute);
@@ -409,7 +409,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantProjectResponse> syncTenantProject(@Valid final SyncTenantProjectRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantProject,
                 syncTenantProjectMethod::execute);
@@ -417,7 +417,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<ViewTenantProjectsResponse> viewTenantProjects(@Valid final ViewTenantProjectsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantProjects,
                 viewTenantProjectsMethod::execute);
@@ -425,7 +425,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<DeleteTenantProjectResponse> deleteTenantProject(@Valid final DeleteTenantProjectRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantProject,
                 deleteTenantProjectMethod::execute);
@@ -438,7 +438,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantProjectPermissionsResponse> viewTenantProjectPermissions(
             @Valid final ViewTenantProjectPermissionsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantProjectPermissions,
                 viewTenantProjectPermissionsMethod::execute);
@@ -447,7 +447,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<VerifyTenantProjectPermissionExistsResponse> verifyTenantProjectPermissionExists(
             @Valid final VerifyTenantProjectPermissionExistsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::verifyTenantProjectPermissionExists,
                 verifyTenantProjectPermissionExistsMethod::execute);
@@ -456,7 +456,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(
             @Valid final SyncTenantProjectPermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantProjectPermission,
                 syncTenantProjectPermissionMethod::execute);
@@ -483,7 +483,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
             @Valid final DeleteTenantProjectPermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantProjectPermission,
                 deleteTenantProjectPermissionMethod::execute);
@@ -495,7 +495,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantStageResponse> getTenantStage(@Valid final GetTenantStageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantStage,
                 getTenantStageMethod::execute);
@@ -503,7 +503,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantStageDataResponse> getTenantStageData(@Valid final GetTenantStageDataRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantStageData,
                 getTenantStageDataMethod::execute);
@@ -511,7 +511,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantStageResponse> syncTenantStage(@Valid final SyncTenantStageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantStage,
                 syncTenantStageMethod::execute);
@@ -519,7 +519,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<ViewTenantStagesResponse> viewTenantStages(@Valid final ViewTenantStagesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantStages,
                 viewTenantStagesMethod::execute);
@@ -527,7 +527,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<DeleteTenantStageResponse> deleteTenantStage(@Valid final DeleteTenantStageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantStage,
                 deleteTenantStageMethod::execute);
@@ -540,7 +540,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantStagePermissionsResponse> viewTenantStagePermissions(
             @Valid final ViewTenantStagePermissionsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantStagePermissions,
                 viewTenantStagePermissionsMethod::execute);
@@ -549,7 +549,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<VerifyTenantStagePermissionExistsResponse> verifyTenantStagePermissionExists(
             @Valid final VerifyTenantStagePermissionExistsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::verifyTenantStagePermissionExists,
                 verifyTenantStagePermissionExistsMethod::execute);
@@ -558,7 +558,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantStagePermissionResponse> syncTenantStagePermission(
             @Valid final SyncTenantStagePermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantStagePermission,
                 syncTenantStagePermissionMethod::execute);
@@ -585,7 +585,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantStagePermissionResponse> deleteTenantStagePermission(
             @Valid final DeleteTenantStagePermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantStagePermission,
                 deleteTenantStagePermissionMethod::execute);
@@ -597,7 +597,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantVersionResponse> getTenantVersion(@Valid final GetTenantVersionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantVersion,
                 getTenantVersionMethod::execute);
@@ -606,7 +606,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantVersionConfigResponse> getTenantVersionConfig(
             @Valid final GetTenantVersionConfigRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantVersionConfig,
                 getTenantVersionConfigMethod::execute);
@@ -614,7 +614,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantVersionDataResponse> getTenantVersionData(GetTenantVersionDataRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantVersionData,
                 getTenantVersionDataMethod::execute);
@@ -622,7 +622,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<ViewTenantVersionsResponse> viewTenantVersions(@Valid final ViewTenantVersionsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantVersions,
                 viewTenantVersionsMethod::execute);
@@ -630,7 +630,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantVersionResponse> syncTenantVersion(@Valid final SyncTenantVersionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantVersion,
                 syncTenantVersionMethod::execute);
@@ -638,7 +638,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<DeleteTenantVersionResponse> deleteTenantVersion(@Valid final DeleteTenantVersionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantVersion,
                 deleteTenantVersionMethod::execute);
@@ -650,7 +650,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantFilesArchiveResponse> getTenantFilesArchive(@Valid final GetTenantFilesArchiveRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantFilesArchive,
                 getTenantFilesArchiveMethod::execute);
@@ -659,7 +659,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<FindTenantFilesArchiveResponse> findTenantFilesArchive(
             @Valid final FindTenantFilesArchiveRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::findTenantFilesArchive,
                 findTenantFilesArchiveMethod::execute);
@@ -668,7 +668,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantFilesArchivesResponse> viewTenantFilesArchives(
             @Valid final ViewTenantFilesArchivesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantFilesArchives,
                 viewTenantFilesArchivesMethod::execute);
@@ -677,7 +677,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantFilesArchiveResponse> syncTenantFilesArchive(
             @Valid final SyncTenantFilesArchiveRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantFilesArchive,
                 syncTenantFilesArchiveMethod::execute);
@@ -686,7 +686,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantFilesArchiveResponse> deleteTenantFilesArchive(
             @Valid final DeleteTenantFilesArchiveRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantFilesArchive,
                 deleteTenantFilesArchiveMethod::execute);
@@ -699,7 +699,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantJenkinsRequestResponse> getTenantJenkinsRequest(
             @Valid final GetTenantJenkinsRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantJenkinsRequest,
                 getTenantJenkinsRequestMethod::execute);
@@ -708,7 +708,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantJenkinsRequestsResponse> viewTenantJenkinsRequests(
             @Valid final ViewTenantJenkinsRequestsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantJenkinsRequests,
                 viewTenantJenkinsRequestsMethod::execute);
@@ -717,7 +717,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequest(
             @Valid final SyncTenantJenkinsRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantJenkinsRequest,
                 syncTenantJenkinsRequestMethod::execute);
@@ -744,7 +744,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantJenkinsRequestResponse> deleteTenantJenkinsRequest(
             @Valid final DeleteTenantJenkinsRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantJenkinsRequest,
                 deleteTenantJenkinsRequestMethod::execute);
@@ -756,7 +756,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantImageResponse> getTenantImage(@Valid final GetTenantImageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantImage,
                 getTenantImageMethod::execute);
@@ -764,7 +764,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<FindTenantImageResponse> findTenantImage(@Valid final FindTenantImageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::findTenantImage,
                 findTenantImageMethod::execute);
@@ -772,7 +772,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<ViewTenantImagesResponse> viewTenantImages(@Valid final ViewTenantImagesRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantImages,
                 viewTenantImagesMethod::execute);
@@ -780,7 +780,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantImageResponse> syncTenantImage(@Valid final SyncTenantImageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantImage,
                 syncTenantImageMethod::execute);
@@ -806,7 +806,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<DeleteTenantImageResponse> deleteTenantImage(@Valid final DeleteTenantImageRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantImage,
                 deleteTenantImageMethod::execute);
@@ -818,7 +818,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantDeploymentResponse> getTenantDeployment(@Valid final GetTenantDeploymentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantDeployment,
                 getTenantDeploymentMethod::execute);
@@ -826,7 +826,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(GetTenantDeploymentDataRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantDeploymentData,
                 getTenantDeploymentDataMethod::execute);
@@ -835,7 +835,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SelectTenantDeploymentResponse> selectTenantDeployment(
             @Valid final SelectTenantDeploymentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::selectTenantDeployment,
                 selectTenantDeploymentMethod::execute);
@@ -843,7 +843,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(@Valid final ViewTenantDeploymentsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantDeployments,
                 viewTenantDeploymentMethod::execute);
@@ -851,7 +851,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantDeploymentResponse> syncTenantDeployment(@Valid final SyncTenantDeploymentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantDeployment,
                 syncTenantDeploymentMethod::execute);
@@ -860,7 +860,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(
             @Valid final DeleteTenantDeploymentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantDeployment,
                 deleteTenantDeploymentMethod::execute);
@@ -873,7 +873,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantLobbyRequestResponse> getTenantLobbyRequest(
             @Valid final GetTenantLobbyRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantLobbyRequest,
                 getTenantLobbyRequestMethod::execute);
@@ -882,7 +882,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<FindTenantLobbyRequestResponse> findTenantLobbyRequest(
             @Valid final FindTenantLobbyRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::findTenantLobbyRequest,
                 findTenantLobbyRequestMethod::execute);
@@ -891,7 +891,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantLobbyRequestsResponse> viewTenantLobbyRequests(
             @Valid final ViewTenantLobbyRequestsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantLobbyRequests,
                 viewTenantLobbyRequestsMethod::execute);
@@ -900,7 +900,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequest(
             @Valid final SyncTenantLobbyRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantLobbyRequest,
                 syncTenantLobbyRequestMethod::execute);
@@ -927,7 +927,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantLobbyRequestResponse> deleteTenantLobbyRequest(
             @Valid final DeleteTenantLobbyRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantLobbyRequest,
                 deleteTenantLobbyRequestMethod::execute);
@@ -939,7 +939,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<GetTenantLobbyRefResponse> getTenantLobbyRef(@Valid final GetTenantLobbyRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantLobbyRef,
                 getTenantLobbyRefMethod::execute);
@@ -947,7 +947,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<FindTenantLobbyRefResponse> findTenantLobbyRef(@Valid final FindTenantLobbyRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::findTenantLobbyRef,
                 findTenantLobbyRefMethod::execute);
@@ -955,7 +955,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(@Valid final ViewTenantLobbyRefsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantLobbyRefs,
                 viewTenantLobbyRefsMethod::execute);
@@ -963,7 +963,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(@Valid final SyncTenantLobbyRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantLobbyRef,
                 syncTenantLobbyRefMethod::execute);
@@ -988,7 +988,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(@Valid final DeleteTenantLobbyRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantLobbyRef,
                 deleteTenantLobbyRefMethod::execute);
@@ -1001,7 +1001,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantMatchmakerRequestResponse> getTenantMatchmakerRequest(
             @Valid final GetTenantMatchmakerRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantMatchmakerRequest,
                 getTenantMatchmakerRequestMethod::execute);
@@ -1010,7 +1010,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<FindTenantMatchmakerRequestResponse> findTenantMatchmakerRequest(
             @Valid final FindTenantMatchmakerRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::findTenantMatchmakerRequest,
                 findTenantMatchmakerRequestMethod::execute);
@@ -1019,7 +1019,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantMatchmakerRequestsResponse> viewTenantMatchmakerRequests(
             @Valid final ViewTenantMatchmakerRequestsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantMatchmakerRequests,
                 viewTenantMatchmakerRequestsMethod::execute);
@@ -1028,7 +1028,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequest(
             @Valid final SyncTenantMatchmakerRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantMatchmakerRequest,
                 syncTenantMatchmakerRequestMethod::execute);
@@ -1055,7 +1055,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantMatchmakerRequestResponse> deleteTenantMatchmakerRequest(
             @Valid final DeleteTenantMatchmakerRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantMatchmakerRequest,
                 deleteTenantMatchmakerRequestMethod::execute);
@@ -1068,7 +1068,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantMatchmakerRefResponse> getTenantMatchmakerRef(
             @Valid final GetTenantMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::getTenantMatchmakerRef,
                 getTenantMatchmakerRefMethod::execute);
@@ -1077,7 +1077,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<FindTenantMatchmakerRefResponse> findTenantMatchmakerRef(
             @Valid final FindTenantMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::findTenantMatchmakerRef,
                 findTenantMatchmakerRefMethod::execute);
@@ -1086,7 +1086,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(
             @Valid final ViewTenantMatchmakerRefsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::viewTenantMatchmakerRefs,
                 viewTenantMatchmakerRefsMethod::execute);
@@ -1095,7 +1095,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(
             @Valid final SyncTenantMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::syncTenantMatchmakerRef,
                 syncTenantMatchmakerRefMethod::execute);
@@ -1122,7 +1122,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(
             @Valid final DeleteTenantMatchmakerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::deleteTenantMatchmakerRef,
                 deleteTenantMatchmakerRefMethod::execute);

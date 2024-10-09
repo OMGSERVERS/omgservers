@@ -31,7 +31,7 @@ import com.omgservers.service.module.root.impl.service.rootService.impl.method.r
 import com.omgservers.service.module.root.impl.service.rootService.impl.method.rootEntityRef.viewRootEntityRefs.ViewRootEntityRefsMethod;
 import com.omgservers.service.module.root.impl.service.webService.impl.api.RootApi;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -53,13 +53,13 @@ class RootServiceImpl implements RootService {
     final SyncRootMethod syncRootMethod;
     final GetRootMethod getRootMethod;
 
-    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final HandleShardedRequestOperation handleShardedRequestOperation;
     final GetRootModuleClientOperation getRootModuleClientOperation;
     final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetRootResponse> getRoot(@Valid final GetRootRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::getRoot,
                 getRootMethod::getRoot);
@@ -67,7 +67,7 @@ class RootServiceImpl implements RootService {
 
     @Override
     public Uni<SyncRootResponse> syncRoot(@Valid final SyncRootRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::syncRoot,
                 syncRootMethod::syncRoot);
@@ -91,7 +91,7 @@ class RootServiceImpl implements RootService {
 
     @Override
     public Uni<DeleteRootResponse> deleteRoot(@Valid final DeleteRootRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::deleteRoot,
                 deleteRootMethod::deleteRoot);
@@ -99,7 +99,7 @@ class RootServiceImpl implements RootService {
 
     @Override
     public Uni<GetRootEntityRefResponse> getRootEntityRef(@Valid final GetRootEntityRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::getRootEntityRef,
                 getRootEntityRefMethod::getRootEntityRef);
@@ -107,7 +107,7 @@ class RootServiceImpl implements RootService {
 
     @Override
     public Uni<FindRootEntityRefResponse> findRootEntityRef(@Valid final FindRootEntityRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::findRootEntityRef,
                 findRootEntityRefMethod::findRootEntityRef);
@@ -115,7 +115,7 @@ class RootServiceImpl implements RootService {
 
     @Override
     public Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(@Valid final ViewRootEntityRefsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::viewRootEntityRefs,
                 viewRootEntityRefsMethod::viewRootEntityRefs);
@@ -123,7 +123,7 @@ class RootServiceImpl implements RootService {
 
     @Override
     public Uni<SyncRootEntityRefResponse> syncRootEntityRef(@Valid final SyncRootEntityRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::syncRootEntityRef,
                 syncRootEntityRefMethod::syncRootEntityRef);
@@ -149,7 +149,7 @@ class RootServiceImpl implements RootService {
 
     @Override
     public Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(@Valid final DeleteRootEntityRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
                 RootApi::deleteRootEntityRef,
                 deleteRootEntityRefMethod::deleteRootEntityRef);

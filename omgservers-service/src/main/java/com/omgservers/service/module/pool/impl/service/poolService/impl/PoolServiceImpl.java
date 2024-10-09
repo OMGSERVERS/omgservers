@@ -58,7 +58,7 @@ import com.omgservers.service.module.pool.impl.service.poolService.impl.method.p
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolServerContainer.viewPoolServerContainers.ViewPoolServerContainersMethod;
 import com.omgservers.service.module.pool.impl.service.webService.impl.api.PoolApi;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -89,13 +89,13 @@ class PoolServiceImpl implements PoolService {
     final SyncPoolMethod syncPoolMethod;
     final GetPoolMethod getPoolMethod;
 
-    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final HandleShardedRequestOperation handleShardedRequestOperation;
     final GetPoolModuleClientOperation getPoolModuleClientOperation;
     final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetPoolResponse> getPool(@Valid final GetPoolRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::getPool,
                 getPoolMethod::getPool);
@@ -103,7 +103,7 @@ class PoolServiceImpl implements PoolService {
 
     @Override
     public Uni<SyncPoolResponse> syncPool(@Valid final SyncPoolRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::syncPool,
                 syncPoolMethod::syncPool);
@@ -127,7 +127,7 @@ class PoolServiceImpl implements PoolService {
 
     @Override
     public Uni<DeletePoolResponse> deletePool(@Valid final DeletePoolRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::deletePool,
                 deletePoolMethod::deletePool);
@@ -135,7 +135,7 @@ class PoolServiceImpl implements PoolService {
 
     @Override
     public Uni<GetPoolServerResponse> getPoolServer(@Valid final GetPoolServerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::getPoolServer,
                 getPoolServerMethod::getPoolServer);
@@ -143,7 +143,7 @@ class PoolServiceImpl implements PoolService {
 
     @Override
     public Uni<ViewPoolServerResponse> viewPoolServers(@Valid final ViewPoolServersRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::viewPoolServers,
                 viewPoolServersMethod::viewPoolServers);
@@ -151,7 +151,7 @@ class PoolServiceImpl implements PoolService {
 
     @Override
     public Uni<SyncPoolServerResponse> syncPoolServer(@Valid final SyncPoolServerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::syncPoolServer,
                 syncPoolServerMethod::syncPoolServer);
@@ -176,7 +176,7 @@ class PoolServiceImpl implements PoolService {
 
     @Override
     public Uni<DeletePoolServerResponse> deletePoolServer(@Valid final DeletePoolServerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::deletePoolServer,
                 deletePoolServerMethod::deletePoolServer);
@@ -185,7 +185,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolRequestResponse> getPoolRequest(
             @Valid final GetPoolRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::getPoolRequest,
                 getPoolRequestMethod::getPoolRequest);
@@ -194,7 +194,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<FindPoolRequestResponse> findPoolRequest(
             @Valid final FindPoolRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::findPoolRequest,
                 findPoolRequestMethod::findPoolRequest);
@@ -203,7 +203,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<ViewPoolRequestsResponse> viewPoolRequests(
             @Valid final ViewPoolRequestsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::viewPoolRequests,
                 viewPoolRequestsMethod::viewPoolRequests);
@@ -211,7 +211,7 @@ class PoolServiceImpl implements PoolService {
 
     @Override
     public Uni<SyncPoolRequestResponse> syncPoolRequest(@Valid final SyncPoolRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::syncPoolRequest,
                 syncPoolRequestMethod::syncPoolRequest);
@@ -237,7 +237,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolRequestResponse> deletePoolRequest(
             @Valid final DeletePoolRequestRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::deletePoolRequest,
                 deletePoolRequestMethod::deletePoolRequest);
@@ -246,7 +246,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolServerContainerResponse> getPoolServerContainer(
             @Valid final GetPoolServerContainerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::getPoolServerContainer,
                 getPoolServerContainerMethod::getPoolServerContainer);
@@ -255,7 +255,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<FindPoolServerContainerResponse> findPoolServerContainer(
             @Valid final FindPoolServerContainerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::findPoolServerContainer,
                 findPoolServerContainerMethod::findPoolServerContainer);
@@ -264,7 +264,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<ViewPoolServerContainersResponse> viewPoolServerContainers(
             @Valid final ViewPoolServerContainersRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::viewPoolServerContainers,
                 viewPoolServerContainersMethod::viewPoolServerContainers);
@@ -273,7 +273,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(
             @Valid final SyncPoolServerContainerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::syncPoolServerContainer,
                 syncPoolServerContainerMethod::syncPoolServerContainer);
@@ -282,7 +282,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(
             @Valid final DeletePoolServerContainerRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::deletePoolServerContainer,
                 deletePoolServerContainerMethod::deletePoolServerContainer);

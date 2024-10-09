@@ -78,7 +78,7 @@ import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.me
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolServerContainerRef.findRuntimePoolServerContainerRef.FindRuntimePoolServerContainerRefMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolServerContainerRef.getRuntimePoolServerContainerRef.GetRuntimePoolServerContainerRefMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolServerContainerRef.syncRuntimePoolServerContainerRef.SyncRuntimePoolServerContainerRefMethod;
-import com.omgservers.service.operation.handleInternalRequest.HandleInternalRequestOperation;
+import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -117,11 +117,11 @@ public class RuntimeServiceImpl implements RuntimeService {
     final GetRuntimeMethod getRuntimeMethod;
 
     final GetRuntimeModuleClientOperation getRuntimeModuleClientOperation;
-    final HandleInternalRequestOperation handleInternalRequestOperation;
+    final HandleShardedRequestOperation handleShardedRequestOperation;
 
     @Override
     public Uni<SyncRuntimeResponse> syncRuntime(@Valid final SyncRuntimeRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncLobbyRuntime,
                 syncRuntimeMethod::syncRuntime);
@@ -146,7 +146,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<GetRuntimeResponse> getRuntime(@Valid final GetRuntimeRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::getRuntime,
                 getRuntimeMethod::getRuntime);
@@ -154,7 +154,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<DeleteRuntimeResponse> deleteRuntime(@Valid final DeleteRuntimeRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntime,
                 deleteRuntimeMethod::deleteRuntime);
@@ -162,7 +162,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<SyncRuntimePermissionResponse> syncRuntimePermission(@Valid final SyncRuntimePermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntimePermission,
                 syncRuntimePermissionMethod::syncRuntimePermission);
@@ -171,7 +171,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(
             @Valid final ViewRuntimePermissionsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::viewRuntimePermissions,
                 viewRuntimePermissionsMethod::viewRuntimePermissions);
@@ -179,7 +179,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<FindRuntimePermissionResponse> findRuntimePermission(@Valid final FindRuntimePermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::findRuntimePermission,
                 findRuntimePermissionMethod::findRuntimePermission);
@@ -188,7 +188,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(
             @Valid final DeleteRuntimePermissionRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntimePermission,
                 deleteRuntimePermissionMethod::deleteRuntimePermission);
@@ -196,7 +196,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(@Valid final ViewRuntimeCommandsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::viewRuntimeCommands,
                 viewRuntimeCommandsMethod::viewRuntimeCommands);
@@ -204,7 +204,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(@Valid final SyncRuntimeCommandRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntimeCommand,
                 syncRuntimeCommandMethod::syncRuntimeCommand);
@@ -212,7 +212,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<SyncClientCommandResponse> syncClientCommand(@Valid final SyncClientCommandRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncClientCommand,
                 syncClientCommandMethod::syncClientCommand);
@@ -237,7 +237,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid final DeleteRuntimeCommandRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntimeCommand,
                 deleteRuntimeCommandMethod::deleteRuntimeCommand);
@@ -245,7 +245,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(@Valid final DeleteRuntimeCommandsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntimeCommands,
                 deleteRuntimeCommandsMethod::deleteRuntimeCommands);
@@ -253,7 +253,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(@Valid final GetRuntimeAssignmentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::getRuntimeAssignment,
                 getRuntimeAssignmentMethod::getRuntimeAssignment);
@@ -261,7 +261,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(@Valid final FindRuntimeAssignmentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::findRuntimeAssignment,
                 findRuntimeAssignmentMethod::findRuntimeAssignment);
@@ -270,7 +270,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(
             @Valid final ViewRuntimeAssignmentsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::viewRuntimeAssignments,
                 viewRuntimeAssignmentsMethod::viewRuntimeAssignments);
@@ -279,7 +279,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(
             @Valid final CountRuntimeAssignmentsRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::countRuntimeAssignments,
                 countRuntimeAssignmentsMethod::countRuntimeAssignments);
@@ -287,7 +287,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(@Valid final SyncRuntimeAssignmentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntimeAssignment,
                 syncRuntimeAssignmentMethod::syncRuntimeAssignment);
@@ -296,7 +296,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
             @Valid final UpdateRuntimeAssignmentLastActivityRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::updateRuntimeAssignmentLastActivity,
                 updateRuntimeAssignmentLastActivity::updateRuntimeAssignmentLastActivity);
@@ -305,7 +305,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(
             @Valid final DeleteRuntimeAssignmentRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntimeAssignment,
                 deleteRuntimeAssignmentMethod::deleteRuntimeAssignment);
@@ -314,7 +314,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
             @Valid final GetRuntimePoolServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::getRuntimePoolServerContainerRef,
                 getRuntimePoolServerContainerRefMethod::getRuntimePoolServerContainerRef);
@@ -323,7 +323,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
             @Valid final FindRuntimePoolServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::findRuntimePoolServerContainerRef,
                 findRuntimePoolServerContainerRefMethod::findRuntimePoolServerContainerRef);
@@ -332,7 +332,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
             @Valid final SyncRuntimePoolServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::syncRuntimePoolServerContainerRef,
                 syncRuntimePoolServerContainerRefMethod::syncRuntimePoolServerContainerRef);
@@ -341,7 +341,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
             @Valid final DeleteRuntimePoolServerContainerRefRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::deleteRuntimePoolServerContainerRef,
                 deleteRuntimePoolServerContainerRefMethod::deleteRuntimePoolServerContainerRef);
@@ -349,7 +349,7 @@ public class RuntimeServiceImpl implements RuntimeService {
 
     @Override
     public Uni<InterchangeResponse> interchange(@Valid final InterchangeRequest request) {
-        return handleInternalRequestOperation.handleInternalRequest(log, request,
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
                 RuntimeModuleClient::interchange,
                 interchangeMethod::interchange);
