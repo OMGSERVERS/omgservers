@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.matchmaker;
 
-import com.omgservers.schema.model.request.MatchmakerRequestConfigModel;
+import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ public class MatchmakerRequestModelFactory {
                                          Long userId,
                                          Long clientId,
                                          String mode,
-                                         MatchmakerRequestConfigModel config) {
+                                         MatchmakerRequestConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, matchmakerId, userId, clientId, mode, config, idempotencyKey);
@@ -31,7 +31,7 @@ public class MatchmakerRequestModelFactory {
                                          Long userId,
                                          Long clientId,
                                          String mode,
-                                         MatchmakerRequestConfigModel config,
+                                         MatchmakerRequestConfigDto config,
                                          String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, matchmakerId, userId, clientId, mode, config, idempotencyKey);
@@ -42,7 +42,7 @@ public class MatchmakerRequestModelFactory {
                                          Long userId,
                                          Long clientId,
                                          String mode,
-                                         MatchmakerRequestConfigModel config,
+                                         MatchmakerRequestConfigDto config,
                                          String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

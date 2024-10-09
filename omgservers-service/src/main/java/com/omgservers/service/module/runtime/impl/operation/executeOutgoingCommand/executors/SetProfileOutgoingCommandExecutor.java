@@ -7,7 +7,7 @@ import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyModel;
+import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
@@ -44,7 +44,7 @@ public class SetProfileOutgoingCommandExecutor implements OutgoingCommandExecuto
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute set profile outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (SetProfileOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (SetProfileOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var clientId = commandBody.getClientId();
         final var profile = commandBody.getProfile();
 

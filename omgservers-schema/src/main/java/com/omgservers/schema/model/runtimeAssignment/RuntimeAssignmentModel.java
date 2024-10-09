@@ -38,7 +38,7 @@ public class RuntimeAssignmentModel {
     Instant lastActivity;
 
     @NotNull
-    RuntimeAssignmentConfigModel config;
+    RuntimeAssignmentConfigDto config;
 
     @NotNull
     Boolean deleted;

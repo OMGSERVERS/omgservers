@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.operation;
 
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigDto;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
@@ -53,7 +53,7 @@ class DeleteMatchmakerMatchRuntimeRefOperationTest extends Assertions {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
         final var matchmakerMatch = matchmakerMatchModelFactory
-                .create(matchmaker.getId(), new MatchmakerMatchConfigModel());
+                .create(matchmaker.getId(), new MatchmakerMatchConfigDto());
         upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
         final var matchmakerMatchClient = matchmakerMatchClientModelFactory
                 .create(matchmaker.getId(),
@@ -61,7 +61,7 @@ class DeleteMatchmakerMatchRuntimeRefOperationTest extends Assertions {
                         userId(),
                         clientId(),
                         groupName(),
-                        new MatchmakerMatchClientConfigModel());
+                        new MatchmakerMatchClientConfigDto());
         upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchmakerMatchClient);
 
         final var changeContext = deleteMatchClientOperation

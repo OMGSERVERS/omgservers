@@ -1,9 +1,7 @@
 package com.omgservers.schema.model.message;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.message.MessageModel;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +24,7 @@ class MessageModelTest extends Assertions {
         final var qualifier = MessageQualifierEnum.SERVER_WELCOME_MESSAGE;
         final var tenantId = 2000L;
         final var versionId = 3000L;
-        final var body = new ServerWelcomeMessageBodyModel(tenantId, versionId, Instant.now());
+        final var body = new ServerWelcomeMessageBodyDto(tenantId, versionId, Instant.now());
 
         final var messageModel = new MessageModel(id,
                 qualifier,

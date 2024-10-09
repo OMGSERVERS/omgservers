@@ -1,6 +1,7 @@
 package com.omgservers.service.handler.impl.runtime;
 
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyDto;
 import com.omgservers.schema.module.client.DeleteClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.DeleteClientRuntimeRefResponse;
 import com.omgservers.schema.module.client.FindClientRuntimeRefRequest;
@@ -17,7 +18,6 @@ import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeleted
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -95,7 +95,7 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncDeleteClientRuntimeCommand(final Long runtimeId,
                                                 final Long clientId,
                                                 final String idempotencyKey) {
-        final var runtimeCommandBody = new DeleteClientRuntimeCommandBodyModel(clientId);
+        final var runtimeCommandBody = new DeleteClientRuntimeCommandBodyDto(clientId);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody, idempotencyKey);
         return syncRuntimeCommand(runtimeCommand);
     }

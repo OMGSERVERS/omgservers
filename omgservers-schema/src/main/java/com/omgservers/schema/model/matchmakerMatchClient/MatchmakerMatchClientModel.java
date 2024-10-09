@@ -45,7 +45,7 @@ public class MatchmakerMatchClientModel {
 
     @NotNull
     @EqualsAndHashCode.Exclude
-    MatchmakerMatchClientConfigModel config;
+    MatchmakerMatchClientConfigDto config;
 
     @NotNull
     Boolean deleted;

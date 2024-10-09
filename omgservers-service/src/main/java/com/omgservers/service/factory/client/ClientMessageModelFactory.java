@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.client;
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
-import com.omgservers.schema.model.message.MessageBodyModel;
+import com.omgservers.schema.model.message.MessageBodyDto;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ public class ClientMessageModelFactory {
 
     public ClientMessageModel create(final Long clientId,
                                      final MessageQualifierEnum qualifier,
-                                     final MessageBodyModel body) {
+                                     final MessageBodyDto body) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, clientId, qualifier, body, idempotencyKey);
@@ -28,7 +28,7 @@ public class ClientMessageModelFactory {
 
     public ClientMessageModel create(final Long clientId,
                                      final MessageQualifierEnum qualifier,
-                                     final MessageBodyModel body,
+                                     final MessageBodyDto body,
                                      final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, clientId, qualifier, body, idempotencyKey);
@@ -37,7 +37,7 @@ public class ClientMessageModelFactory {
     public ClientMessageModel create(final Long id,
                                      final Long clientId,
                                      final MessageQualifierEnum qualifier,
-                                     final MessageBodyModel body,
+                                     final MessageBodyDto body,
                                      final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

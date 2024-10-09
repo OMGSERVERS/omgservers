@@ -1,7 +1,7 @@
 package com.omgservers.tester.match;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
@@ -122,13 +122,13 @@ public class MatchAddClientIT extends BaseTestClass {
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment1.getId()));
             assertEquals("{text=match_client_was_added}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage1.getBody()).getMessage().toString());
 
             final var serverMessage2 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment2.getId()));
             assertEquals("{text=match_client_was_added}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage2.getBody()).getMessage().toString());
 
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());

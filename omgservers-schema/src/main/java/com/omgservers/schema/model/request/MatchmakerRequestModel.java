@@ -44,7 +44,7 @@ public class MatchmakerRequestModel {
 
     @NotNull
     @EqualsAndHashCode.Exclude
-    MatchmakerRequestConfigModel config;
+    MatchmakerRequestConfigDto config;
 
     @NotNull
     Boolean deleted;

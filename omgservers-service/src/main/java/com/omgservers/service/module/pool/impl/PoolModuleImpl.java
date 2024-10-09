@@ -14,5 +14,5 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class PoolModuleImpl implements PoolModule {
 
-    final PoolService poolService;
+    final PoolService service;
 }

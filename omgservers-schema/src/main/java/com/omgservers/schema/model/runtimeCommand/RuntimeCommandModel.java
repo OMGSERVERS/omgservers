@@ -37,7 +37,7 @@ public class RuntimeCommandModel {
     RuntimeCommandQualifierEnum qualifier;
 
     @NotNull
-    RuntimeCommandBodyModel body;
+    RuntimeCommandBodyDto body;
 
     @NotNull
     Boolean deleted;

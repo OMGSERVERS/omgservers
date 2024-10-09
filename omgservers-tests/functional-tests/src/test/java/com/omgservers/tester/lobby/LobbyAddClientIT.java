@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -74,7 +74,7 @@ public class LobbyAddClientIT extends BaseTestClass {
                     Collections.singletonList(matchmakerAssignment.getId()));
 
             assertEquals("{text=client_was_added}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage.getBody()).getMessage().toString());
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }

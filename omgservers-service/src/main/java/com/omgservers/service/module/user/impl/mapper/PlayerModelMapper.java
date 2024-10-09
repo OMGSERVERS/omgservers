@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -30,7 +30,7 @@ public class PlayerModelMapper {
         player.setStageId(row.getLong("stage_id"));
         player.setDeleted(row.getBoolean("deleted"));
         try {
-            player.setAttributes(objectMapper.readValue(row.getString("attributes"), PlayerAttributesModel.class));
+            player.setAttributes(objectMapper.readValue(row.getString("attributes"), PlayerAttributesDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "player attributes can't be parsed, player=" + player, e);

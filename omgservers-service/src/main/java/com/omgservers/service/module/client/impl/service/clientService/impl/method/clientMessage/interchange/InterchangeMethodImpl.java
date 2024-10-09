@@ -4,8 +4,8 @@ import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.message.MessageModel;
-import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyModel;
-import com.omgservers.schema.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
+import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyDto;
+import com.omgservers.schema.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyDto;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.InterchangeRequest;
@@ -112,7 +112,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                                  final Object message) {
         final var clientId = clientRuntimeRef.getClientId();
         final var runtimeId = clientRuntimeRef.getRuntimeId();
-        final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyModel(clientId, message);
+        final var runtimeCommandBody = new HandleMessageRuntimeCommandBodyDto(clientId, message);
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId,
                 runtimeCommandBody);
         final var request = new SyncClientCommandRequest(clientId, runtimeCommand);
@@ -139,7 +139,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
                                 } else{
                                     return Multi.createFrom().iterable(messages)
                                             .onItem().transformToUniAndConcatenate(message -> {
-                                                if (message.getBody() instanceof final ClientOutgoingMessageBodyModel messageBody) {
+                                                if (message.getBody() instanceof final ClientOutgoingMessageBodyDto messageBody) {
                                                     return syncHandleMessageRuntimeCommand(clientRuntimeRef,
                                                             messageBody.getData());
                                                 } else {

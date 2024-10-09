@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.request.MatchmakerRequestConfigModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
@@ -31,7 +31,7 @@ public class MatchmakerRequestModelMapper {
         matchmakerRequest.setMode(row.getString("mode"));
         matchmakerRequest.setDeleted(row.getBoolean("deleted"));
         try {
-            matchmakerRequest.setConfig(objectMapper.readValue(row.getString("config"), MatchmakerRequestConfigModel.class));
+            matchmakerRequest.setConfig(objectMapper.readValue(row.getString("config"), MatchmakerRequestConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "matchmakerRequest config can't be parsed, matchmakerRequest=" + matchmakerRequest, e);

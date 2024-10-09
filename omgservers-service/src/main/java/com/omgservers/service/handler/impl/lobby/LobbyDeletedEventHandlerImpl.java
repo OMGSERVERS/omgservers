@@ -4,7 +4,7 @@ import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
-import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
+import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.module.client.DeleteClientRequest;
@@ -104,7 +104,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Boolean> syncDisconnectionMessage(final Long clientId, final String idempotencyKey) {
-        final var messageBody = new DisconnectionReasonMessageBodyModel(DisconnectionReasonEnum.INTERNAL_FAILURE);
+        final var messageBody = new DisconnectionReasonMessageBodyDto(DisconnectionReasonEnum.INTERNAL_FAILURE);
         final var disconnectionMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
                 messageBody,

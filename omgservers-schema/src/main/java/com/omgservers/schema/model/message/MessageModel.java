@@ -21,5 +21,5 @@ public class MessageModel {
 
     @NotNull
     @ToString.Exclude
-    MessageBodyModel body;
+    MessageBodyDto body;
 }

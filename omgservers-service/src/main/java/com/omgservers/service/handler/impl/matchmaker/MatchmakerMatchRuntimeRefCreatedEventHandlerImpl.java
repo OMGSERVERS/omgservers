@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
-import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
@@ -64,7 +64,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
     Uni<Boolean> syncPrepareMatchMatchmakerCommand(final Long matchmakerId,
                                                    final Long matchId,
                                                    final String idempotencyKey) {
-        final var commandBody = new PrepareMatchMatchmakerCommandBodyModel(matchId);
+        final var commandBody = new PrepareMatchMatchmakerCommandBodyDto(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody, idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
         return matchmakerModule.getService().syncMatchmakerCommandWithIdempotency(request)

@@ -1,9 +1,7 @@
 package com.omgservers.schema.model.matchmakerCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +28,7 @@ class MatchmakerCommandModelTest extends Assertions {
         final var qualifier = MatchmakerCommandQualifierEnum.KICK_CLIENT;
         final var clientId = 3000L;
         final var matchId = 4000L;
-        final var body = new KickClientMatchmakerCommandBodyModel(clientId, matchId);
+        final var body = new KickClientMatchmakerCommandBodyDto(clientId, matchId);
         final var deleted = false;
 
         final var matchmakerCommandModel = new MatchmakerCommandModel(id,

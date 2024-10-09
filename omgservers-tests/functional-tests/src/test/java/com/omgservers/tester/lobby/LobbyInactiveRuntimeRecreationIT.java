@@ -2,8 +2,8 @@ package com.omgservers.tester.lobby;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
-import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyDto;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -64,7 +64,7 @@ public class LobbyInactiveRuntimeRecreationIT extends BaseTestClass {
             final var lobbyAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage1.getId()));
-            final var lobbyRuntimeId1 = ((RuntimeAssignmentMessageBodyModel) lobbyAssignment1.getBody())
+            final var lobbyRuntimeId1 = ((RuntimeAssignmentMessageBodyDto) lobbyAssignment1.getBody())
                     .getRuntimeId();
             final var matchmakerAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
@@ -86,7 +86,7 @@ public class LobbyInactiveRuntimeRecreationIT extends BaseTestClass {
                     MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
                     Collections.singletonList(matchmakerAssignment1.getId()));
             assertEquals(DisconnectionReasonEnum.INTERNAL_FAILURE,
-                    ((DisconnectionReasonMessageBodyModel) disconnectionMessage1.getBody()).getReason());
+                    ((DisconnectionReasonMessageBodyDto) disconnectionMessage1.getBody()).getReason());
 
             final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
 
@@ -96,7 +96,7 @@ public class LobbyInactiveRuntimeRecreationIT extends BaseTestClass {
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage2.getId()));
 
-            final var lobbyRuntimeId2 = ((RuntimeAssignmentMessageBodyModel) lobbyAssignment2.getBody())
+            final var lobbyRuntimeId2 = ((RuntimeAssignmentMessageBodyDto) lobbyAssignment2.getBody())
                     .getRuntimeId();
             assertNotEquals(lobbyRuntimeId2, lobbyRuntimeId1);
 

@@ -1,45 +1,36 @@
 package com.omgservers.schema.model.outgoingCommand;
 
-import com.omgservers.schema.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.KickClientOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.KickClientOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
-import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyModel;
+import com.omgservers.schema.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.KickClientOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyDto;
 import lombok.Getter;
 
 @Getter
 public enum OutgoingCommandQualifierEnum {
 
-    RESPOND_CLIENT(RespondClientOutgoingCommandBodyModel.class, false),
-    SET_ATTRIBUTES(SetAttributesOutgoingCommandBodyModel.class, true),
-    SET_PROFILE(SetProfileOutgoingCommandBodyModel.class, true),
+    RESPOND_CLIENT(RespondClientOutgoingCommandBodyDto.class, false),
+    SET_ATTRIBUTES(SetAttributesOutgoingCommandBodyDto.class, true),
+    SET_PROFILE(SetProfileOutgoingCommandBodyDto.class, true),
 
-    MULTICAST_MESSAGE(MulticastMessageOutgoingCommandBodyModel.class, false),
-    BROADCAST_MESSAGE(BroadcastMessageOutgoingCommandBodyModel.class, false),
+    MULTICAST_MESSAGE(MulticastMessageOutgoingCommandBodyDto.class, false),
+    BROADCAST_MESSAGE(BroadcastMessageOutgoingCommandBodyDto.class, false),
 
-    REQUEST_MATCHMAKING(RequestMatchmakingOutgoingCommandBodyModel.class, true),
-    KICK_CLIENT(KickClientOutgoingCommandBodyModel.class, true),
-    STOP_MATCHMAKING(StopMatchmakingOutgoingCommandBodyModel.class, true),
+    REQUEST_MATCHMAKING(RequestMatchmakingOutgoingCommandBodyDto.class, true),
+    KICK_CLIENT(KickClientOutgoingCommandBodyDto.class, true),
+    STOP_MATCHMAKING(StopMatchmakingOutgoingCommandBodyDto.class, true),
 
-    UPGRADE_CONNECTION(UpgradeConnectionOutgoingCommandBodyModel.class, true);
+    UPGRADE_CONNECTION(UpgradeConnectionOutgoingCommandBodyDto.class, true);
 
-    final Class<? extends OutgoingCommandBodyModel> bodyClass;
+    final Class<? extends OutgoingCommandBodyDto> bodyClass;
     final Boolean infoLogging;
 
-    OutgoingCommandQualifierEnum(Class<? extends OutgoingCommandBodyModel> bodyClass, Boolean infoLogging) {
+    OutgoingCommandQualifierEnum(Class<? extends OutgoingCommandBodyDto> bodyClass, Boolean infoLogging) {
         this.bodyClass = bodyClass;
         this.infoLogging = infoLogging;
     }

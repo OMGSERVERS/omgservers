@@ -1,23 +1,23 @@
 package com.omgservers.schema.model.runtimeCommand;
 
-import com.omgservers.schema.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
-import com.omgservers.schema.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyModel;
-import com.omgservers.schema.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyModel;
-import com.omgservers.schema.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyModel;
-import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.body.AddClientRuntimeCommandBodyDto;
+import com.omgservers.schema.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyDto;
+import com.omgservers.schema.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyDto;
+import com.omgservers.schema.model.runtimeCommand.body.HandleMessageRuntimeCommandBodyDto;
+import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyDto;
 import lombok.Getter;
 
 @Getter
 public enum RuntimeCommandQualifierEnum {
-    INIT_RUNTIME(InitRuntimeCommandBodyModel.class),
-    ADD_CLIENT(AddClientRuntimeCommandBodyModel.class),
-    ADD_MATCH_CLIENT(AddMatchClientRuntimeCommandBodyModel.class),
-    DELETE_CLIENT(DeleteClientRuntimeCommandBodyModel.class),
-    HANDLE_MESSAGE(HandleMessageRuntimeCommandBodyModel.class);
+    INIT_RUNTIME(InitRuntimeCommandBodyDto.class),
+    ADD_CLIENT(AddClientRuntimeCommandBodyDto.class),
+    ADD_MATCH_CLIENT(AddMatchClientRuntimeCommandBodyDto.class),
+    DELETE_CLIENT(DeleteClientRuntimeCommandBodyDto.class),
+    HANDLE_MESSAGE(HandleMessageRuntimeCommandBodyDto.class);
 
-    final Class<? extends RuntimeCommandBodyModel> bodyClass;
+    final Class<? extends RuntimeCommandBodyDto> bodyClass;
 
-    RuntimeCommandQualifierEnum(Class<? extends RuntimeCommandBodyModel> bodyClass) {
+    RuntimeCommandQualifierEnum(Class<? extends RuntimeCommandBodyDto> bodyClass) {
         this.bodyClass = bodyClass;
     }
 }

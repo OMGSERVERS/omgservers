@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -52,7 +52,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var matchmakerMatch =
-                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigModel());
+                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigDto());
         upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
 
         final var matchClient = matchmakerMatchClientModelFactory.create(matchmaker.getId(),
@@ -60,7 +60,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
                 userId(),
                 clientId(),
                 groupName(),
-                new MatchmakerMatchClientConfigModel());
+                new MatchmakerMatchClientConfigDto());
         final var changeContext = upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchClient);
         assertTrue(changeContext.getResult());
     }
@@ -72,7 +72,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var matchmakerMatch =
-                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigModel());
+                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigDto());
         upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
 
         final var matchClient = matchmakerMatchClientModelFactory.create(matchmaker.getId(),
@@ -80,7 +80,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
                 userId(),
                 clientId(),
                 groupName(),
-                new MatchmakerMatchClientConfigModel());
+                new MatchmakerMatchClientConfigDto());
         upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchClient);
 
         final var changeContext = upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchClient);
@@ -95,7 +95,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
                 userId(),
                 clientId(),
                 groupName(),
-                new MatchmakerMatchClientConfigModel());
+                new MatchmakerMatchClientConfigDto());
 
         assertThrows(ServerSideBadRequestException.class, () ->
                 upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchClient));
@@ -108,7 +108,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var matchmakerMatch =
-                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigModel());
+                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigDto());
         upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
 
         final var matchClient1 = matchmakerMatchClientModelFactory.create(matchmaker.getId(),
@@ -116,7 +116,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
                 userId(),
                 clientId(),
                 groupName(),
-                new MatchmakerMatchClientConfigModel());
+                new MatchmakerMatchClientConfigDto());
         upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchClient1);
 
         final var matchClient2 = matchmakerMatchClientModelFactory.create(matchmaker.getId(),
@@ -124,7 +124,7 @@ class UpsertMatchmakerMatchClientOperationTest extends Assertions {
                 userId(),
                 clientId(),
                 groupName(),
-                new MatchmakerMatchClientConfigModel(),
+                new MatchmakerMatchClientConfigDto(),
                 matchClient1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->

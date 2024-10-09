@@ -2,7 +2,7 @@ package com.omgservers.tester.lobby;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
-import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
+import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -66,7 +66,7 @@ public class LobbyInactiveClientDetectionIT extends BaseTestClass {
                     Collections.singletonList(matchmakerAssignment.getId()));
 
             assertEquals(DisconnectionReasonEnum.CLIENT_INACTIVITY,
-                    ((DisconnectionReasonMessageBodyModel) disconnectionMessage.getBody()).getReason());
+                    ((DisconnectionReasonMessageBodyDto) disconnectionMessage.getBody()).getReason());
 
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());

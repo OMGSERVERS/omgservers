@@ -25,7 +25,7 @@ import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -53,7 +53,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
     public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
         log.debug("Create client, request={}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();
@@ -128,8 +128,8 @@ class CreateClientMethodImpl implements CreateClientMethod {
     Uni<TenantDeploymentModel> selectTenantDeployment(final Long tenantId, final Long tenantStageId) {
         final var request = new SelectTenantDeploymentRequest(tenantId,
                 tenantStageId,
-                SelectTenantDeploymentRequest.Strategy.LATEST);
-        return tenantModule.getTenantService().selectTenantDeployment(request)
+                SelectTenantDeploymentRequest.StrategyEnum.LATEST);
+        return tenantModule.getService().selectTenantDeployment(request)
                 .map(SelectTenantDeploymentResponse::getTenantDeployment);
     }
 

@@ -3,9 +3,9 @@ package com.omgservers.testDataFactory;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigDto;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
@@ -65,7 +65,7 @@ public class MatchmakerTestDataFactory {
     public MatchmakerMatchModel createMatchmakerMatch(final MatchmakerModel matchmaker) {
         final var matchmakerId = matchmaker.getId();
 
-        final var config = new MatchmakerMatchConfigModel(TenantVersionModeDto.create("mode", 2, 16));
+        final var config = new MatchmakerMatchConfigDto(TenantVersionModeDto.create("mode", 2, 16));
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmakerId, config);
         final var syncMatchmakerMatchRequest = new SyncMatchmakerMatchRequest(matchmakerMatch);
         matchmakerService.syncMatchmakerMatch(syncMatchmakerMatchRequest);
@@ -94,7 +94,7 @@ public class MatchmakerTestDataFactory {
         final var userId = client.getUserId();
         final var clientId = client.getId();
 
-        final var config = new MatchmakerMatchClientConfigModel();
+        final var config = new MatchmakerMatchClientConfigDto();
         final var matchmakerMatchClient = matchmakerMatchClientModelFactory.create(matchmakerId,
                 matchId,
                 userId,

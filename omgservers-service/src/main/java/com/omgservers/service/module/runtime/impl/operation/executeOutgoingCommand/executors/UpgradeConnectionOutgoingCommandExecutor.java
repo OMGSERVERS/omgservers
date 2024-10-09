@@ -5,11 +5,11 @@ import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyDto;
 import com.omgservers.schema.model.message.body.ConnectionUpgradeQualifierEnum;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyModel;
+import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionQualifierEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
@@ -50,7 +50,7 @@ public class UpgradeConnectionOutgoingCommandExecutor implements OutgoingCommand
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute upgrade connection outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (UpgradeConnectionOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (UpgradeConnectionOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var clientId = commandBody.getClientId();
         final var protocol = commandBody.getProtocol();
 
@@ -81,8 +81,8 @@ public class UpgradeConnectionOutgoingCommandExecutor implements OutgoingCommand
         return switch (protocol) {
             case WEBSOCKET -> {
                 final var wsToken = issueJwtTokenOperation.issueWsJwtToken(clientId, runtimeId, UserRoleEnum.PLAYER);
-                final var webSocketConfig = new ConnectionUpgradeMessageBodyModel.WebSocketConfig(wsToken);
-                final var messageBody = ConnectionUpgradeMessageBodyModel.builder()
+                final var webSocketConfig = new ConnectionUpgradeMessageBodyDto.WebSocketConfig(wsToken);
+                final var messageBody = ConnectionUpgradeMessageBodyDto.builder()
                         .clientId(clientId)
                         .protocol(ConnectionUpgradeQualifierEnum.WEBSOCKET)
                         .webSocketConfig(webSocketConfig)

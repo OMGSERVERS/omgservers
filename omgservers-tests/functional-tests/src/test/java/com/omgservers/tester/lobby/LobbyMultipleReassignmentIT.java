@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
@@ -103,7 +103,7 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
 
             final var matchAssignment1 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
-                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                            ((RuntimeAssignmentMessageBodyDto) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.MATCH),
                     Collections.singletonList(matchmakerAssignment1.getId()));
 
@@ -111,7 +111,7 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
 
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
-                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                            ((RuntimeAssignmentMessageBodyDto) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.LOBBY),
                     Collections.singletonList(matchAssignment1.getId()));
 
@@ -121,7 +121,7 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
 
             final var matchAssignment2 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
-                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                            ((RuntimeAssignmentMessageBodyDto) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.MATCH),
                     Collections.singletonList(lobbyAssignment2.getId()));
 
@@ -129,7 +129,7 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
 
             final var lobbyAssignment3 = playerApiTester.waitMessage(testClient,
                     message -> message.getQualifier().equals(MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE) &&
-                            ((RuntimeAssignmentMessageBodyModel) message.getBody()).getRuntimeQualifier().equals(
+                            ((RuntimeAssignmentMessageBodyDto) message.getBody()).getRuntimeQualifier().equals(
                                     RuntimeQualifierEnum.LOBBY),
                     Collections.singletonList(matchAssignment2.getId()));
 

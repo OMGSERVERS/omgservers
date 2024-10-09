@@ -16,5 +16,5 @@ public class OutgoingCommandModel {
     OutgoingCommandQualifierEnum qualifier;
 
     @NotNull
-    OutgoingCommandBodyModel body;
+    OutgoingCommandBodyDto body;
 }

@@ -1,7 +1,6 @@
 package com.omgservers.schema.module.user;
 
-import com.omgservers.schema.model.player.PlayerAttributesModel;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetPlayerAttributesResponse {
 
-    PlayerAttributesModel attributes;
+    PlayerAttributesDto attributes;
 }

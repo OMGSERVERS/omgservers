@@ -4,7 +4,7 @@ import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
@@ -103,7 +103,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncDeleteClientMatchmakerCommand(final Long matchmakerId,
                                                    final Long clientId,
                                                    final String idempotencyKey) {
-        final var commandBody = new DeleteClientMatchmakerCommandBodyModel(clientId);
+        final var commandBody = new DeleteClientMatchmakerCommandBodyDto(clientId);
         final var commandIdempotencyKey = idempotencyKey + "/" + matchmakerId;
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId,
                 commandBody,

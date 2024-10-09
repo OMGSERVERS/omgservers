@@ -1,9 +1,7 @@
 package com.omgservers.schema.module.user;
 
 import com.omgservers.schema.module.ShardedRequest;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
-import com.omgservers.schema.module.ShardedRequest;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +19,7 @@ public class UpdatePlayerAttributesRequest implements ShardedRequest {
     Long playerId;
 
     @NotNull
-    PlayerAttributesModel attributes;
+    PlayerAttributesDto attributes;
 
     @Override
     public String getRequestShardKey() {

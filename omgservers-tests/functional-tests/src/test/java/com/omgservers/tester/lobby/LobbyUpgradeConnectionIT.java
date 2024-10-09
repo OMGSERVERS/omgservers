@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyDto;
 import com.omgservers.schema.model.message.body.ConnectionUpgradeQualifierEnum;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
@@ -73,11 +73,11 @@ public class LobbyUpgradeConnectionIT extends BaseTestClass {
                     Collections.singletonList(matchmakerAssignment.getId()));
 
             assertEquals(testClient.getClientId(),
-                    ((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getClientId());
+                    ((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getClientId());
             assertEquals(ConnectionUpgradeQualifierEnum.WEBSOCKET,
-                    ((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getProtocol());
-            assertNotNull(((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getWebSocketConfig());
-            assertNotNull(((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getWebSocketConfig()
+                    ((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getProtocol());
+            assertNotNull(((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig());
+            assertNotNull(((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig()
                     .getWsToken());
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
@@ -57,7 +57,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationTest extends Assertions {
             add(TenantVersionGroupDto.create("red", 1, 4));
             add(TenantVersionGroupDto.create("blue", 1, 4));
         }});
-        final var matchmakerMatchConfig = new MatchmakerMatchConfigModel(modeConfig);
+        final var matchmakerMatchConfig = new MatchmakerMatchConfigDto(modeConfig);
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmaker.getId(), matchmakerMatchConfig);
         upsertMatchmakerMatchOperationTestInterface.upsertMatchmakerMatch(shard, matchmakerMatch);
 
@@ -80,7 +80,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationTest extends Assertions {
             add(TenantVersionGroupDto.create("red", 1, 4));
             add(TenantVersionGroupDto.create("blue", 1, 4));
         }});
-        final var matchmakerMatchConfig = new MatchmakerMatchConfigModel(modeConfig);
+        final var matchmakerMatchConfig = new MatchmakerMatchConfigDto(modeConfig);
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmaker.getId(), matchmakerMatchConfig);
         upsertMatchmakerMatchOperationTestInterface.upsertMatchmakerMatch(shard, matchmakerMatch);
 
@@ -115,7 +115,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationTest extends Assertions {
             add(TenantVersionGroupDto.create("red", 1, 4));
             add(TenantVersionGroupDto.create("blue", 1, 4));
         }});
-        final var matchmakerMatchConfig = new MatchmakerMatchConfigModel(modeConfig);
+        final var matchmakerMatchConfig = new MatchmakerMatchConfigDto(modeConfig);
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmaker.getId(), matchmakerMatchConfig);
         upsertMatchmakerMatchOperationTestInterface.upsertMatchmakerMatch(shard, matchmakerMatch);
 

@@ -2,6 +2,7 @@ package com.omgservers.service.module.runtime.impl.operation.executeOutgoingComm
 
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.ViewClientMatchmakerRefsRequest;
@@ -12,9 +13,8 @@ import com.omgservers.schema.module.user.GetPlayerAttributesRequest;
 import com.omgservers.schema.module.user.GetPlayerAttributesResponse;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyModel;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
-import com.omgservers.schema.model.request.MatchmakerRequestConfigModel;
+import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyDto;
+import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -60,7 +60,7 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute request matchmaking outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (RequestMatchmakingOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (RequestMatchmakingOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var clientId = commandBody.getClientId();
         final var mode = commandBody.getMode();
 
@@ -130,7 +130,7 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
                 .map(ViewClientMatchmakerRefsResponse::getClientMatchmakerRefs);
     }
 
-    Uni<PlayerAttributesModel> getPlayerAttributes(final Long userId, final Long playerId) {
+    Uni<PlayerAttributesDto> getPlayerAttributes(final Long userId, final Long playerId) {
         final var request = new GetPlayerAttributesRequest(userId, playerId);
         return userModule.getService().getPlayerAttributes(request)
                 .map(GetPlayerAttributesResponse::getAttributes);
@@ -140,8 +140,8 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
                                        final Long userId,
                                        final Long clientId,
                                        final String mode,
-                                       final PlayerAttributesModel attributes) {
-        final var requestConfig = new MatchmakerRequestConfigModel(attributes);
+                                       final PlayerAttributesDto attributes) {
+        final var requestConfig = new MatchmakerRequestConfigDto(attributes);
         final var requestModel = matchmakerRequestModelFactory.create(matchmakerId,
                 userId,
                 clientId,

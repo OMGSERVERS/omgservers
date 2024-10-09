@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
@@ -56,7 +56,7 @@ public class LobbyAssignmentIT extends BaseTestClass {
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage.getId()));
 
-            final var messageBody = ((RuntimeAssignmentMessageBodyModel) lobbyAssignment.getBody());
+            final var messageBody = ((RuntimeAssignmentMessageBodyDto) lobbyAssignment.getBody());
             assertNotNull(messageBody.getRuntimeId());
             assertEquals(RuntimeQualifierEnum.LOBBY, messageBody.getRuntimeQualifier());
             assertNotNull(messageBody.getRuntimeConfig());

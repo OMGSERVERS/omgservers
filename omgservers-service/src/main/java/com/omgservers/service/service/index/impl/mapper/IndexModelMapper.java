@@ -1,7 +1,7 @@
 package com.omgservers.service.service.index.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.index.IndexConfigModel;
+import com.omgservers.schema.model.index.IndexConfigDto;
 import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -27,7 +27,7 @@ public class IndexModelMapper {
         index.setModified(row.getOffsetDateTime("modified").toInstant());
         index.setDeleted(row.getBoolean("deleted"));
         try {
-            index.setConfig(objectMapper.readValue(row.getString("config"), IndexConfigModel.class));
+            index.setConfig(objectMapper.readValue(row.getString("config"), IndexConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "index config can't be parsed, index=" + index, e);

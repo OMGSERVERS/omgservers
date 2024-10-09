@@ -1,7 +1,7 @@
 package com.omgservers.tester.defold;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
@@ -108,13 +108,13 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
                         MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                         Collections.singletonList(matchAssignment.getId()));
                 assertEquals("{\"text\":\"hello_message\"}",
-                        ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+                        ((ServerOutgoingMessageBodyDto) serverMessage1.getBody()).getMessage().toString());
 
                 final var serverMessage2 = playerApiTester.waitMessage(supervisorClient,
                         MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                         Collections.singletonList(serverMessage1.getId()));
                 assertEquals("{\"text\":\"confirm_message\"}",
-                        ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
+                        ((ServerOutgoingMessageBodyDto) serverMessage2.getBody()).getMessage().toString());
             } catch (Exception e) {
                 throw e;
             }

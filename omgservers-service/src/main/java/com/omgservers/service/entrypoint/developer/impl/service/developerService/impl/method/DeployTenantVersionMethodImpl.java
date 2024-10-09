@@ -17,7 +17,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -53,7 +53,7 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                             final var stageProjectId = tenantStage.getProjectId();
                             if (versionProjectId.equals(stageProjectId)) {
                                 final var userId = securityIdentity.<Long>getAttribute(
-                                        ServiceSecurityAttributes.USER_ID.getAttributeName());
+                                        ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
                                 final var permissionQualifier =
                                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT;
                                 return checkTenantStagePermissionOperation.execute(tenantId,

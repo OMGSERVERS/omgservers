@@ -12,7 +12,7 @@ import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
 import com.omgservers.schema.model.message.MessageModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyDto;
 import com.omgservers.tester.dto.TestClientDto;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import io.restassured.RestAssured;
@@ -89,7 +89,7 @@ public class PlayerApiTester {
     public void sendMessage(TestClientDto testClient, Object data) throws JsonProcessingException {
         final var messageModel = new MessageModel(idGenerator.getAndIncrement(),
                 MessageQualifierEnum.CLIENT_OUTGOING_MESSAGE,
-                new ClientOutgoingMessageBodyModel(data));
+                new ClientOutgoingMessageBodyDto(data));
         interchange(testClient, Collections.singletonList(messageModel), new ArrayList<>());
     }
 

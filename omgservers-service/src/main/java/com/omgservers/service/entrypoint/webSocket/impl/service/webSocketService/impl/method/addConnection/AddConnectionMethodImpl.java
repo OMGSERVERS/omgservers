@@ -6,7 +6,7 @@ import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.AddConnectionWebSocketResponse;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import com.omgservers.service.service.room.RoomService;
 import com.omgservers.service.service.room.dto.AddConnectionRequest;
 import com.omgservers.service.service.router.RouterService;
@@ -39,7 +39,7 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
 
         final var securityIdentity = request.getSecurityIdentity();
         final var runtimeId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName());
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName());
 
         return calculateShardOperation.calculateShard(runtimeId.toString())
                 .flatMap(shardModel -> {
@@ -69,11 +69,11 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
                                                       final WebSocketConnection webSocketConnection,
                                                       final Long runtimeId) {
         final var clientId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributes.CLIENT_ID.getAttributeName());
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName());
         final var tokenId = securityIdentity
-                .<String>getAttribute(ServiceSecurityAttributes.TOKEN_ID.getAttributeName());
+                .<String>getAttribute(ServiceSecurityAttributesEnum.TOKEN_ID.getAttributeName());
         final var userRole = securityIdentity
-                .<UserRoleEnum>getAttribute(ServiceSecurityAttributes.USER_ROLE.getAttributeName());
+                .<UserRoleEnum>getAttribute(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName());
 
         final var request = new AddConnectionRequest(webSocketConnection,
                 runtimeId,

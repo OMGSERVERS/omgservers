@@ -1,6 +1,6 @@
 package com.omgservers.service.module.user.impl.operation.userPlayer.updatePlayerAttributes;
 
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -11,5 +11,5 @@ public interface UpdatePlayerAttributesOperation {
                                         int shard,
                                         Long userId,
                                         Long playerId,
-                                        PlayerAttributesModel attributes);
+                                        PlayerAttributesDto attributes);
 }

@@ -38,7 +38,7 @@ public class MatchmakerCommandModel {
 
     @NotNull
     @EqualsAndHashCode.Exclude
-    MatchmakerCommandBodyModel body;
+    MatchmakerCommandBodyDto body;
 
     @NotNull
     Boolean deleted;

@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -46,7 +46,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(),
-                new InitRuntimeCommandBodyModel());
+                new InitRuntimeCommandBodyDto());
         final var changeContext = upsertRuntimeCommandOperation.upsertRuntimeCommand(shard, runtimeCommand);
         assertTrue(changeContext.getResult());
     }
@@ -61,7 +61,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand = runtimeCommandModelFactory.create(runtime.getId(),
-                new InitRuntimeCommandBodyModel());
+                new InitRuntimeCommandBodyDto());
         upsertRuntimeCommandOperation.upsertRuntimeCommand(shard, runtimeCommand);
 
         final var changeContext = upsertRuntimeCommandOperation.upsertRuntimeCommand(shard, runtimeCommand);
@@ -71,7 +71,7 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
     @Test
     void givenUnknownId_whenUpsertRuntimeCommand_thenException() {
         final var shard = 0;
-        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyModel());
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyDto());
         assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimeCommandOperation
                 .upsertRuntimeCommand(shard, runtimeCommand));
     }
@@ -86,11 +86,11 @@ class UpsertRuntimeCommandOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand1 = runtimeCommandModelFactory.create(runtime.getId(),
-                new InitRuntimeCommandBodyModel());
+                new InitRuntimeCommandBodyDto());
         upsertRuntimeCommandOperation.upsertRuntimeCommand(shard, runtimeCommand1);
 
         final var runtimeCommand2 = runtimeCommandModelFactory.create(runtime.getId(),
-                new InitRuntimeCommandBodyModel(),
+                new InitRuntimeCommandBodyDto(),
                 runtimeCommand1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->

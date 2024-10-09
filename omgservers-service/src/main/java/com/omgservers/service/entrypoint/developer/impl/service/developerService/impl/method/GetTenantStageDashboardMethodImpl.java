@@ -12,7 +12,7 @@ import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantStageMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,7 +37,7 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
             final GetTenantStageDashboardDeveloperRequest request) {
         log.debug("Get tenant stage dashboard, request={}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();

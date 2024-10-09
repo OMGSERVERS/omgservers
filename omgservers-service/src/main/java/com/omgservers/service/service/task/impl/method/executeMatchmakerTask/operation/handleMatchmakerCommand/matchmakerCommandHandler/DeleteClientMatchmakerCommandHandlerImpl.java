@@ -3,7 +3,7 @@ package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.op
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +27,7 @@ class DeleteClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
                        final MatchmakerCommandModel matchmakerCommand) {
         log.debug("Handle matchmaker command, {}", matchmakerCommand);
 
-        final var body = (DeleteClientMatchmakerCommandBodyModel) matchmakerCommand.getBody();
+        final var body = (DeleteClientMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var clientId = body.getId();
 
         // Step 1. Finding client's requests and adding for removing

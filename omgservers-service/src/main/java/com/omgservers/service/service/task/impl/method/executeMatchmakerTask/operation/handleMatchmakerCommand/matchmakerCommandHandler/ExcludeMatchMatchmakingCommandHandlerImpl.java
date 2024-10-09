@@ -3,7 +3,7 @@ package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.op
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
@@ -26,7 +26,7 @@ class ExcludeMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHand
     public void handle(final MatchmakerStateModel currentState,
                        final MatchmakerChangeOfStateModel changeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        final var body = (ExcludeMatchMatchmakerCommandBodyModel) matchmakerCommand.getBody();
+        final var body = (ExcludeMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var matchId = body.getMatchId();
 
         final var excludedMatches = currentState.getMatches()

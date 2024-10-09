@@ -2,7 +2,7 @@ package com.omgservers.service.handler.impl.client;
 
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyDto;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.client.GetClientRequest;
@@ -111,7 +111,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
         final var tenantId = client.getTenantId();
         final var tenantVersionId = tenantVersion.getId();
         final var tenantVersionCreated = tenantVersion.getCreated();
-        final var messageBody = new ServerWelcomeMessageBodyModel(tenantId, tenantVersionId, tenantVersionCreated);
+        final var messageBody = new ServerWelcomeMessageBodyDto(tenantId, tenantVersionId, tenantVersionCreated);
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
                 messageBody,

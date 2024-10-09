@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.matchmaker;
 
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
@@ -19,7 +19,7 @@ public class MatchmakerMatchModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public MatchmakerMatchModel create(final Long matchmakerId,
-                                       final MatchmakerMatchConfigModel matchmakerMatchConfig) {
+                                       final MatchmakerMatchConfigDto matchmakerMatchConfig) {
         final var id = generateIdOperation.generateId();
         final var runtimeId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
@@ -27,7 +27,7 @@ public class MatchmakerMatchModelFactory {
     }
 
     public MatchmakerMatchModel create(final Long matchmakerId,
-                                       final MatchmakerMatchConfigModel matchmakerMatchConfig,
+                                       final MatchmakerMatchConfigDto matchmakerMatchConfig,
                                        final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         final var runtimeId = generateIdOperation.generateId();
@@ -37,7 +37,7 @@ public class MatchmakerMatchModelFactory {
     public MatchmakerMatchModel create(final Long id,
                                        final Long matchmakerId,
                                        final Long runtimeId,
-                                       final MatchmakerMatchConfigModel matchmakerMatchConfig,
+                                       final MatchmakerMatchConfigDto matchmakerMatchConfig,
                                        final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

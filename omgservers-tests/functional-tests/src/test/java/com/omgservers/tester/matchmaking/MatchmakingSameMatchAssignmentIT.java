@@ -1,7 +1,7 @@
 package com.omgservers.tester.matchmaking;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
@@ -107,8 +107,8 @@ public class MatchmakingSameMatchAssignmentIT extends BaseTestClass {
             // Joined the same match
 
             assertEquals(
-                    ((RuntimeAssignmentMessageBodyModel) matchAssignment1.getBody()).getRuntimeId(),
-                    ((RuntimeAssignmentMessageBodyModel) matchAssignment2.getBody()).getRuntimeId()
+                    ((RuntimeAssignmentMessageBodyDto) matchAssignment1.getBody()).getRuntimeId(),
+                    ((RuntimeAssignmentMessageBodyDto) matchAssignment2.getBody()).getRuntimeId()
             );
 
         } finally {

@@ -2,7 +2,7 @@ package com.omgservers.tester.match;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
@@ -145,7 +145,7 @@ public class MatchKickClientIT extends BaseTestClass {
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment1.getId()));
             assertEquals("{text=client_was_deleted}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage1.getBody()).getMessage().toString());
 
             // Lobby assignment for client2
 

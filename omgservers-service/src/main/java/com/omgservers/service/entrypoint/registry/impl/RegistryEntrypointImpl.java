@@ -14,5 +14,5 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RegistryEntrypointImpl implements RegistryEntrypoint {
 
-    final RegistryService registryService;
+    final RegistryService service;
 }

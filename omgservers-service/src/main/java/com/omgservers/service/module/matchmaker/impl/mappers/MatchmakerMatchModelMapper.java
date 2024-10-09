@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
@@ -32,7 +32,7 @@ public class MatchmakerMatchModelMapper {
         matchmakerMatch.setDeleted(row.getBoolean("deleted"));
         try {
             matchmakerMatch.setConfig(objectMapper.readValue(row.getString("config"),
-                    MatchmakerMatchConfigModel.class));
+                    MatchmakerMatchConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "matchmakerMatch config can't be parsed, matchmakerMatch=" + matchmakerMatch, e);

@@ -1,7 +1,7 @@
 package com.omgservers.tester.match;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
@@ -110,7 +110,7 @@ public class MatchHandleMessageIT extends BaseTestClass {
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment.getId()));
             assertEquals("{text=match_message_was_handled}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage.getBody()).getMessage().toString());
 
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());

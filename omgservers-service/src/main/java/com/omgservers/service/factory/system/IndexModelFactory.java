@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.system;
 
-import com.omgservers.schema.model.index.IndexConfigModel;
+import com.omgservers.schema.model.index.IndexConfigDto;
 import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,26 +17,26 @@ public class IndexModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public IndexModel create(final IndexConfigModel config) {
+    public IndexModel create(final IndexConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, config, idempotencyKey);
     }
 
-    public IndexModel create(final IndexConfigModel config,
+    public IndexModel create(final IndexConfigDto config,
                              final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, config, idempotencyKey);
     }
 
     public IndexModel create(final Long id,
-                             final IndexConfigModel config) {
+                             final IndexConfigDto config) {
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, config, idempotencyKey);
     }
 
     public IndexModel create(final Long id,
-                             final IndexConfigModel config,
+                             final IndexConfigDto config,
                              final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

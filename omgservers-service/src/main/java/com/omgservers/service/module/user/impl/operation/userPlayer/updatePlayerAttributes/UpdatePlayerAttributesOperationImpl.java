@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.operation.userPlayer.updatePlayerAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
@@ -34,7 +34,7 @@ class UpdatePlayerAttributesOperationImpl implements UpdatePlayerAttributesOpera
                                                final int shard,
                                                final Long userId,
                                                final Long playerId,
-                                               final PlayerAttributesModel attributes) {
+                                               final PlayerAttributesDto attributes) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
@@ -53,7 +53,7 @@ class UpdatePlayerAttributesOperationImpl implements UpdatePlayerAttributesOpera
         );
     }
 
-    String getAttributesString(PlayerAttributesModel attributes) {
+    String getAttributesString(PlayerAttributesDto attributes) {
         try {
             return objectMapper.writeValueAsString(attributes);
         } catch (IOException e) {

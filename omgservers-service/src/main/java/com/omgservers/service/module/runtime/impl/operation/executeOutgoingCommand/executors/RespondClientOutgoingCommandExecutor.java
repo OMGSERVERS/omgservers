@@ -1,13 +1,13 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
+import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyDto;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
@@ -48,7 +48,7 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute respond client outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (RespondClientOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (RespondClientOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var clientId = commandBody.getClientId();
         final var message = commandBody.getMessage();
 
@@ -75,7 +75,7 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
 
     Uni<Boolean> syncClientMessage(final Long clientId,
                                    final Object message) {
-        final var messageBody = new ServerOutgoingMessageBodyModel(message);
+        final var messageBody = new ServerOutgoingMessageBodyDto(message);
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                 messageBody);

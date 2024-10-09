@@ -1,7 +1,7 @@
 package com.omgservers.tester.match;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyDto;
 import com.omgservers.schema.model.message.body.ConnectionUpgradeQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
@@ -108,11 +108,11 @@ public class MatchUpgradeConnectionIT extends BaseTestClass {
                     Collections.singletonList(matchAssignment.getId()));
 
             assertEquals(testClient.getClientId(),
-                    ((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getClientId());
+                    ((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getClientId());
             assertEquals(ConnectionUpgradeQualifierEnum.WEBSOCKET,
-                    ((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getProtocol());
-            assertNotNull(((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getWebSocketConfig());
-            assertNotNull(((ConnectionUpgradeMessageBodyModel) connectionUpgrade.getBody()).getWebSocketConfig()
+                    ((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getProtocol());
+            assertNotNull(((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig());
+            assertNotNull(((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig()
                     .getWsToken());
 
         } finally {

@@ -31,7 +31,7 @@ public class IndexModel {
 
     @NotNull
     @ToString.Exclude
-    IndexConfigModel config;
+    IndexConfigDto config;
 
     @NotNull
     Boolean deleted;

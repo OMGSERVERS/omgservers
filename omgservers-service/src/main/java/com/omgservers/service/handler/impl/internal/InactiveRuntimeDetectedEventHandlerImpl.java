@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.impl.internal;
 
-import com.omgservers.schema.model.matchmakerCommand.body.DeleteMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.DeleteMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
 import com.omgservers.schema.module.lobby.DeleteLobbyResponse;
@@ -107,7 +107,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncDeleteMatchMatchmakerCommand(final Long matchmakerId,
                                                   final Long matchId,
                                                   final String idempotencyKey) {
-        final var commandBody = new DeleteMatchMatchmakerCommandBodyModel(matchId);
+        final var commandBody = new DeleteMatchMatchmakerCommandBodyDto(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId,
                 commandBody,
                 idempotencyKey);

@@ -18,14 +18,14 @@ public class SelectTenantDeploymentRequest implements ShardedRequest {
     Long tenantStageId;
 
     @NotNull
-    Strategy strategy;
+    StrategyEnum strategy;
 
     @Override
     public String getRequestShardKey() {
         return tenantId.toString();
     }
 
-    public enum Strategy {
+    public enum StrategyEnum {
         LATEST,
     }
 }

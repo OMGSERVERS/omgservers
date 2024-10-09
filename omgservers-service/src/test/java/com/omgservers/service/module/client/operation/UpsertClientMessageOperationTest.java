@@ -1,7 +1,7 @@
 package com.omgservers.service.module.client.operation;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -45,7 +45,7 @@ class UpsertClientMessageOperationTest extends Assertions {
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
-                new ServerWelcomeMessageBodyModel(tenantId(), versionId(), Instant.now()));
+                new ServerWelcomeMessageBodyDto(tenantId(), versionId(), Instant.now()));
         final var changeContext = upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
         assertTrue(changeContext.getResult());
     }
@@ -58,7 +58,7 @@ class UpsertClientMessageOperationTest extends Assertions {
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
-                new ServerWelcomeMessageBodyModel(tenantId(), versionId(), Instant.now()));
+                new ServerWelcomeMessageBodyDto(tenantId(), versionId(), Instant.now()));
         upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
 
         final var changeContext = upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
@@ -70,7 +70,7 @@ class UpsertClientMessageOperationTest extends Assertions {
         final var shard = 0;
         final var clientMessage = clientMessageModelFactory.create(clientId(),
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
-                new ServerWelcomeMessageBodyModel(tenantId(), versionId(), Instant.now()));
+                new ServerWelcomeMessageBodyDto(tenantId(), versionId(), Instant.now()));
         assertThrows(ServerSideBadRequestException.class, () ->
                 upsertClientMessageOperation.upsertClientMessage(shard, clientMessage));
     }
@@ -83,12 +83,12 @@ class UpsertClientMessageOperationTest extends Assertions {
 
         final var clientMessage1 = clientMessageModelFactory.create(client.getId(),
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
-                new ServerWelcomeMessageBodyModel(tenantId(), versionId(), Instant.now()));
+                new ServerWelcomeMessageBodyDto(tenantId(), versionId(), Instant.now()));
         upsertClientMessageOperation.upsertClientMessage(shard, clientMessage1);
 
         final var clientMessage2 = clientMessageModelFactory.create(client.getId(),
                 MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
-                new ServerWelcomeMessageBodyModel(tenantId(), versionId(), Instant.now()),
+                new ServerWelcomeMessageBodyDto(tenantId(), versionId(), Instant.now()),
                 clientMessage1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->

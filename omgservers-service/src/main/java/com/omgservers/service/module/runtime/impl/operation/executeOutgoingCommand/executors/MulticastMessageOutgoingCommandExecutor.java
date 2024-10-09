@@ -1,13 +1,13 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyDto;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
@@ -54,7 +54,7 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute multicast message outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (MulticastMessageOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (MulticastMessageOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var clients = commandBody.getClients();
         final var message = commandBody.getMessage();
 
@@ -106,7 +106,7 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
 
     Uni<Boolean> syncClientMessage(final Long clientId,
                                    final Object message) {
-        final var messageBody = new ServerOutgoingMessageBodyModel(message);
+        final var messageBody = new ServerOutgoingMessageBodyDto(message);
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                 messageBody);

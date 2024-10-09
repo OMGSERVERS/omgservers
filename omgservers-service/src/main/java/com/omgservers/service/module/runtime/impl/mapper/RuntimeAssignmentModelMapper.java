@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -30,7 +30,7 @@ public class RuntimeAssignmentModelMapper {
         runtimeAssignment.setLastActivity(row.getOffsetDateTime("last_activity").toInstant());
         try {
             runtimeAssignment.setConfig(objectMapper.readValue(row.getString("config"),
-                    RuntimeAssignmentConfigModel.class));
+                    RuntimeAssignmentConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                     "runtime assignment can't be parsed, runtimeAssignment=" + runtimeAssignment, e);

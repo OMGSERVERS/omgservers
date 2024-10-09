@@ -36,7 +36,7 @@ public class MatchmakerMatchModel {
 
     @NotNull
     @EqualsAndHashCode.Exclude
-    MatchmakerMatchConfigModel config;
+    MatchmakerMatchConfigDto config;
 
     @NotNull
     MatchmakerMatchStatusEnum status;

@@ -3,7 +3,7 @@ package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.op
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.DeleteMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.DeleteMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,7 +25,7 @@ class DeleteMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandl
     public void handle(final MatchmakerStateModel currentState,
                        final MatchmakerChangeOfStateModel changeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        final var body = (DeleteMatchMatchmakerCommandBodyModel) matchmakerCommand.getBody();
+        final var body = (DeleteMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var matchId = body.getMatchId();
 
         final var deletedMatches = currentState.getMatches()

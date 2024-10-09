@@ -1,8 +1,8 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking;
 
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigDto;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
@@ -120,7 +120,7 @@ public class DoGreedyMatchmakingStateFactory {
         }
 
         MatchmakingMatch createMatch(final Long matchmakerId) {
-            final var matchConfig = new MatchmakerMatchConfigModel(modeConfig);
+            final var matchConfig = new MatchmakerMatchConfigDto(modeConfig);
             final var matchModel = matchmakerMatchModelFactory.create(matchmakerId, matchConfig);
             final var newMatch = new MatchmakingMatch(matchModel);
             createdMatches.add(newMatch);
@@ -260,7 +260,7 @@ public class DoGreedyMatchmakingStateFactory {
                     userId,
                     clientId,
                     config.getName(),
-                    new MatchmakerMatchClientConfigModel(request));
+                    new MatchmakerMatchClientConfigDto(request));
             clients.add(newMatchClient);
             return newMatchClient;
         }

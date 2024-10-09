@@ -3,7 +3,7 @@ package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.op
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +27,7 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
                        final MatchmakerCommandModel matchmakerCommand) {
         log.debug("Handle matchmaker command, {}", matchmakerCommand);
 
-        final var body = (KickClientMatchmakerCommandBodyModel) matchmakerCommand.getBody();
+        final var body = (KickClientMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var clientId = body.getClientId();
         final var matchId = body.getMatchId();
 

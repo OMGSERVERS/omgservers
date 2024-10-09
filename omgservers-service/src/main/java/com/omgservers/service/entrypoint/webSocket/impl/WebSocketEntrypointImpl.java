@@ -14,5 +14,5 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class WebSocketEntrypointImpl implements WebSocketEntrypoint {
 
-    final WebSocketService webSocketService;
+    final WebSocketService service;
 }

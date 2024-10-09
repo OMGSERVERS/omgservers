@@ -1,15 +1,15 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
+import com.omgservers.schema.model.outgoingCommand.body.KickClientOutgoingCommandBodyDto;
 import com.omgservers.schema.module.client.DeleteClientRequest;
 import com.omgservers.schema.module.client.DeleteClientResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.KickClientOutgoingCommandBodyModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
@@ -52,7 +52,7 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute kick client outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (KickClientOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (KickClientOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var clientId = commandBody.getClientId();
 
         return checkShardOperation.checkShard(runtimeId.toString())
@@ -115,7 +115,7 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
     Uni<Boolean> syncKickClientMatchmakerCommand(final Long matchmakerId,
                                                  final Long matchId,
                                                  final Long clientId) {
-        final var commandBody = new KickClientMatchmakerCommandBodyModel(clientId, matchId);
+        final var commandBody = new KickClientMatchmakerCommandBodyDto(clientId, matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
         return matchmakerModule.getService().syncMatchmakerCommand(request)

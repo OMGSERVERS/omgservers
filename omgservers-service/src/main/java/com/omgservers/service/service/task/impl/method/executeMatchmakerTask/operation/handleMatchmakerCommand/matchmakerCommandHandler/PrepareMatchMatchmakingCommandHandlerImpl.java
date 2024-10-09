@@ -3,7 +3,7 @@ package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.op
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyModel;
+import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
@@ -26,7 +26,7 @@ class PrepareMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHand
     public void handle(final MatchmakerStateModel currentState,
                        final MatchmakerChangeOfStateModel changeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        final var body = (PrepareMatchMatchmakerCommandBodyModel) matchmakerCommand.getBody();
+        final var body = (PrepareMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var matchId = body.getMatchId();
 
         final var preparedMatches = currentState.getMatches()

@@ -12,7 +12,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDt
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantVersionMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,7 +37,7 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
             final GetTenantVersionDashboardDeveloperRequest request) {
         log.debug("Get tenant version dashboard, request={}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName());
+        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantVersionId = request.getTenantVersionId();

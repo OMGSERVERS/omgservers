@@ -1,31 +1,31 @@
 package com.omgservers.schema.model.message;
 
-import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyModel;
-import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyModel;
-import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
-import com.omgservers.schema.model.message.body.MatchmakerAssignmentMessageBodyModel;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
-import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyModel;
+import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyDto;
+import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyDto;
+import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyDto;
+import com.omgservers.schema.model.message.body.MatchmakerAssignmentMessageBodyDto;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
+import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyDto;
 
 public enum MessageQualifierEnum {
     // Client messages
-    CLIENT_OUTGOING_MESSAGE(ClientOutgoingMessageBodyModel.class),
+    CLIENT_OUTGOING_MESSAGE(ClientOutgoingMessageBodyDto.class),
     // Server messages
-    SERVER_WELCOME_MESSAGE(ServerWelcomeMessageBodyModel.class),
-    RUNTIME_ASSIGNMENT_MESSAGE(RuntimeAssignmentMessageBodyModel.class),
-    MATCHMAKER_ASSIGNMENT_MESSAGE(MatchmakerAssignmentMessageBodyModel.class),
-    CONNECTION_UPGRADE_MESSAGE(ConnectionUpgradeMessageBodyModel.class),
-    DISCONNECTION_REASON_MESSAGE(DisconnectionReasonMessageBodyModel.class),
-    SERVER_OUTGOING_MESSAGE(ServerOutgoingMessageBodyModel.class);
+    SERVER_WELCOME_MESSAGE(ServerWelcomeMessageBodyDto.class),
+    RUNTIME_ASSIGNMENT_MESSAGE(RuntimeAssignmentMessageBodyDto.class),
+    MATCHMAKER_ASSIGNMENT_MESSAGE(MatchmakerAssignmentMessageBodyDto.class),
+    CONNECTION_UPGRADE_MESSAGE(ConnectionUpgradeMessageBodyDto.class),
+    DISCONNECTION_REASON_MESSAGE(DisconnectionReasonMessageBodyDto.class),
+    SERVER_OUTGOING_MESSAGE(ServerOutgoingMessageBodyDto.class);
 
-    final Class<? extends MessageBodyModel> bodyClass;
+    final Class<? extends MessageBodyDto> bodyClass;
 
-    MessageQualifierEnum(Class<? extends MessageBodyModel> bodyClass) {
+    MessageQualifierEnum(Class<? extends MessageBodyDto> bodyClass) {
         this.bodyClass = bodyClass;
     }
 
-    public Class<? extends MessageBodyModel> getBodyClass() {
+    public Class<? extends MessageBodyDto> getBodyClass() {
         return bodyClass;
     }
 }

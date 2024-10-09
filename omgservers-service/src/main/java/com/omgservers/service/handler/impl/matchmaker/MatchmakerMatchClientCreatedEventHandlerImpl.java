@@ -11,7 +11,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchClientCreatedEventBodyModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -83,7 +83,7 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                                        final Long clientId,
                                        final MatchmakerMatchClientModel matchClient,
                                        final String idempotencyKey) {
-        final var runtimeAssignmentConfig = RuntimeAssignmentConfigModel.create();
+        final var runtimeAssignmentConfig = RuntimeAssignmentConfigDto.create();
         runtimeAssignmentConfig.setMatchClient(matchClient);
         final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtimeId,
                 clientId,

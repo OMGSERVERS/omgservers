@@ -1,6 +1,6 @@
 package com.omgservers.service.service.router.impl.method.routeServerConnection;
 
-import com.omgservers.service.security.ServiceSecurityAttributes;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import com.omgservers.service.service.router.component.RouterConnectionsContainer;
 import com.omgservers.service.service.router.component.RouterWebSocketClient;
 import com.omgservers.service.service.router.dto.RouteServerConnectionRequest;
@@ -29,9 +29,9 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
 
         final var securityIdentity = request.getSecurityIdentity();
         final var rawToken = securityIdentity
-                .<String>getAttribute(ServiceSecurityAttributes.RAW_TOKEN.getAttributeName());
+                .<String>getAttribute(ServiceSecurityAttributesEnum.RAW_TOKEN.getAttributeName());
         final var runtimeId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName());
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName());
 
         return webSocketConnector
                 .baseUri(serverUri)

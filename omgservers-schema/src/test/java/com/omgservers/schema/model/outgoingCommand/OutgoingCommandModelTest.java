@@ -1,9 +1,7 @@
 package com.omgservers.schema.model.outgoingCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyModel;
+import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +22,7 @@ class OutgoingCommandModelTest extends Assertions {
         final var qualifier = OutgoingCommandQualifierEnum.RESPOND_CLIENT;
         final var clientId = 2000L;
         final var message = "helloworld";
-        final var body = new RespondClientOutgoingCommandBodyModel(clientId, message);
+        final var body = new RespondClientOutgoingCommandBodyDto(clientId, message);
 
         final var outgoingCommandModel = new OutgoingCommandModel(qualifier,
                 body);

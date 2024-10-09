@@ -1,14 +1,14 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.user.UpdatePlayerAttributesRequest;
 import com.omgservers.schema.module.user.UpdatePlayerAttributesResponse;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyModel;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
@@ -45,7 +45,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute set attributes outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (SetAttributesOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (SetAttributesOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var clientId = commandBody.getClientId();
         final var attributes = commandBody.getAttributes();
 
@@ -72,7 +72,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
     }
 
     Uni<Boolean> setAttributes(final Long clientId,
-                               final PlayerAttributesModel attributes) {
+                               final PlayerAttributesDto attributes) {
         return getClient(clientId)
                 .flatMap(client -> {
                     final var userId = client.getUserId();
@@ -90,7 +90,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
 
     Uni<Boolean> updatePlayerAttributes(final Long userId,
                                         final Long playerId,
-                                        final PlayerAttributesModel attributes) {
+                                        final PlayerAttributesDto attributes) {
         final var request = new UpdatePlayerAttributesRequest(userId, playerId, attributes);
         return userModule.getService().updatePlayerAttributes(request)
                 .map(UpdatePlayerAttributesResponse::getUpdated);

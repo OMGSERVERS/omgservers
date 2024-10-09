@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.user;
 
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,7 +48,7 @@ public class PlayerModelFactory {
         player.setModified(now);
         player.setTenantId(tenantId);
         player.setStageId(stageId);
-        player.setAttributes(PlayerAttributesModel.create());
+        player.setAttributes(PlayerAttributesDto.create());
         player.setProfile(new Object());
         player.setDeleted(false);
 

@@ -18,26 +18,26 @@ public class ServiceIdentityAugmentor implements SecurityIdentityAugmentor {
         if (securityIdentity.getPrincipal() instanceof JsonWebToken jsonWebToken) {
             final var securityIdentityBuilder = QuarkusSecurityIdentity.builder(securityIdentity);
 
-            securityIdentityBuilder.addAttribute(ServiceSecurityAttributes.TOKEN_ID.getAttributeName(),
+            securityIdentityBuilder.addAttribute(ServiceSecurityAttributesEnum.TOKEN_ID.getAttributeName(),
                     jsonWebToken.getTokenID());
-            securityIdentityBuilder.addAttribute(ServiceSecurityAttributes.RAW_TOKEN.getAttributeName(),
+            securityIdentityBuilder.addAttribute(ServiceSecurityAttributesEnum.RAW_TOKEN.getAttributeName(),
                     jsonWebToken.getRawToken());
 
-            jsonWebToken.<String>claim(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName())
+            jsonWebToken.<String>claim(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName())
                     .ifPresent(claim -> securityIdentityBuilder
-                            .addAttribute(ServiceSecurityAttributes.RUNTIME_ID.getAttributeName(),
+                            .addAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName(),
                                     Long.valueOf(claim)));
-            jsonWebToken.<String>claim(ServiceSecurityAttributes.USER_ID.getAttributeName())
+            jsonWebToken.<String>claim(ServiceSecurityAttributesEnum.USER_ID.getAttributeName())
                     .ifPresent(claim -> securityIdentityBuilder
-                            .addAttribute(ServiceSecurityAttributes.USER_ID.getAttributeName(),
+                            .addAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName(),
                                     Long.valueOf(claim)));
-            jsonWebToken.<String>claim(ServiceSecurityAttributes.CLIENT_ID.getAttributeName())
+            jsonWebToken.<String>claim(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName())
                     .ifPresent(claim -> securityIdentityBuilder
-                            .addAttribute(ServiceSecurityAttributes.CLIENT_ID.getAttributeName(),
+                            .addAttribute(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName(),
                                     Long.valueOf(claim)));
-            jsonWebToken.<String>claim(ServiceSecurityAttributes.USER_ROLE.getAttributeName())
+            jsonWebToken.<String>claim(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName())
                     .ifPresent(claim -> securityIdentityBuilder
-                            .addAttribute(ServiceSecurityAttributes.USER_ROLE.getAttributeName(),
+                            .addAttribute(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName(),
                                     UserRoleEnum.fromString(claim)));
 
             final var augmentedSecurityIdentity = securityIdentityBuilder.build();

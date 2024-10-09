@@ -1,9 +1,9 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.syncRuntime;
 
+import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyDto;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeResponse;
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.runtime.upsertRuntime.UpsertRuntimeOperation;
@@ -50,7 +50,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
                                 .call(inserted -> {
                                     if (inserted) {
                                         // InitRuntime is always first command of runtime
-                                        final var commandBody = InitRuntimeCommandBodyModel.builder()
+                                        final var commandBody = InitRuntimeCommandBodyDto.builder()
                                                 .runtimeConfig(runtime.getConfig())
                                                 .build();
                                         final var initCommand = runtimeCommandModelFactory

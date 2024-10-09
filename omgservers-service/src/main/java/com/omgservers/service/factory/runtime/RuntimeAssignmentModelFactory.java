@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.runtime;
 
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ public class RuntimeAssignmentModelFactory {
     public RuntimeAssignmentModel create(final Long runtimeId,
                                          final Long clientId) {
         final var id = generateIdOperation.generateId();
-        final var config = RuntimeAssignmentConfigModel.create();
+        final var config = RuntimeAssignmentConfigDto.create();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, runtimeId, clientId, config, idempotencyKey);
     }
@@ -29,13 +29,13 @@ public class RuntimeAssignmentModelFactory {
                                          final Long clientId,
                                          final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        final var config = RuntimeAssignmentConfigModel.create();
+        final var config = RuntimeAssignmentConfigDto.create();
         return create(id, runtimeId, clientId, config, idempotencyKey);
     }
 
     public RuntimeAssignmentModel create(final Long runtimeId,
                                          final Long clientId,
-                                         final RuntimeAssignmentConfigModel config) {
+                                         final RuntimeAssignmentConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, runtimeId, clientId, config, idempotencyKey);
@@ -43,7 +43,7 @@ public class RuntimeAssignmentModelFactory {
 
     public RuntimeAssignmentModel create(final Long runtimeId,
                                          final Long clientId,
-                                         final RuntimeAssignmentConfigModel config,
+                                         final RuntimeAssignmentConfigDto config,
                                          final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, runtimeId, clientId, config, idempotencyKey);
@@ -52,7 +52,7 @@ public class RuntimeAssignmentModelFactory {
     public RuntimeAssignmentModel create(final Long id,
                                          final Long runtimeId,
                                          final Long clientId,
-                                         final RuntimeAssignmentConfigModel config,
+                                         final RuntimeAssignmentConfigDto config,
                                          final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

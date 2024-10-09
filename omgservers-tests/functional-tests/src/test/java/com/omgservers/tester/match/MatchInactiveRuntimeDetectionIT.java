@@ -1,7 +1,7 @@
 package com.omgservers.tester.match;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
@@ -85,7 +85,7 @@ public class MatchInactiveRuntimeDetectionIT extends BaseTestClass {
             final var lobbyAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(welcomeMessage1.getId()));
-            final var lobbyRuntimeId1 = ((RuntimeAssignmentMessageBodyModel) lobbyAssignment1.getBody())
+            final var lobbyRuntimeId1 = ((RuntimeAssignmentMessageBodyDto) lobbyAssignment1.getBody())
                     .getRuntimeId();
             final var matchmakerAssignment1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.MATCHMAKER_ASSIGNMENT_MESSAGE,
@@ -111,7 +111,7 @@ public class MatchInactiveRuntimeDetectionIT extends BaseTestClass {
             final var lobbyAssignment2 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(matchAssignment1.getId()));
-            final var lobbyRuntimeId2 = ((RuntimeAssignmentMessageBodyModel) lobbyAssignment2.getBody())
+            final var lobbyRuntimeId2 = ((RuntimeAssignmentMessageBodyDto) lobbyAssignment2.getBody())
                     .getRuntimeId();
 
             assertEquals(lobbyRuntimeId1, lobbyRuntimeId2);

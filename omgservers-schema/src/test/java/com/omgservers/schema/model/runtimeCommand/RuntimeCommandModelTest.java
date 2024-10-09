@@ -2,7 +2,7 @@ package com.omgservers.schema.model.runtimeCommand;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
-import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ class RuntimeCommandModelTest extends Assertions {
         final var created = Instant.now();
         final var modified = Instant.now();
         final var qualifier = RuntimeCommandQualifierEnum.INIT_RUNTIME;
-        final var body = new InitRuntimeCommandBodyModel(RuntimeConfigDto.create());
+        final var body = new InitRuntimeCommandBodyDto(RuntimeConfigDto.create());
         final var deleted = false;
 
         final var runtimeCommandModel = new RuntimeCommandModel(id,

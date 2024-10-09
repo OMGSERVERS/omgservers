@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.runtime;
 
-import com.omgservers.schema.model.runtimeCommand.RuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandBodyDto;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,14 +18,14 @@ public class RuntimeCommandModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public RuntimeCommandModel create(final Long runtimeId,
-                                      final RuntimeCommandBodyModel body) {
+                                      final RuntimeCommandBodyDto body) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, runtimeId, body, idempotencyKey);
     }
 
     public RuntimeCommandModel create(final Long runtimeId,
-                                      final RuntimeCommandBodyModel body,
+                                      final RuntimeCommandBodyDto body,
                                       final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, runtimeId, body, idempotencyKey);
@@ -33,7 +33,7 @@ public class RuntimeCommandModelFactory {
 
     public RuntimeCommandModel create(final Long id,
                                       final Long runtimeId,
-                                      final RuntimeCommandBodyModel body,
+                                      final RuntimeCommandBodyDto body,
                                       final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

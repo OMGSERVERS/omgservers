@@ -1,6 +1,6 @@
 package com.omgservers.service.service.bootstrap.impl.method.bootstrapServerIndex;
 
-import com.omgservers.schema.model.index.IndexConfigModel;
+import com.omgservers.schema.model.index.IndexConfigDto;
 import com.omgservers.service.service.index.dto.SyncIndexRequest;
 import com.omgservers.service.factory.system.IndexModelFactory;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -28,7 +28,7 @@ class BootstrapServerIndexMethodImpl implements BootstrapServerIndexMethod {
         final var indexId = getConfigOperation.getServiceConfig().defaults().indexId();
         final var servers = getConfigOperation.getServiceConfig().bootstrap().index().servers();
         final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
-        final var indexConfig = IndexConfigModel.create(servers, shardCount);
+        final var indexConfig = IndexConfigDto.create(servers, shardCount);
         final var index = indexModelFactory.create(indexId, indexConfig, "bootstrap/index");
 
         final var request = new SyncIndexRequest(index);

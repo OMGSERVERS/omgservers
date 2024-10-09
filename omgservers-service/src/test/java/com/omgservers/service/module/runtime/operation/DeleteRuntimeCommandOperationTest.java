@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.operation;
 
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
-import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyDto;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeCommandOperationTestInterface;
@@ -50,7 +50,7 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
 
         final var runtimeCommand =
-                runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyModel());
+                runtimeCommandModelFactory.create(runtime.getId(), new InitRuntimeCommandBodyDto());
         upsertRuntimeCommandOperation.upsertRuntimeCommand(shard, runtimeCommand);
 
         final var changeContext =

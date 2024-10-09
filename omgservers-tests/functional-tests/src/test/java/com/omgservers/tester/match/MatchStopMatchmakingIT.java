@@ -1,8 +1,8 @@
 package com.omgservers.tester.match;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
@@ -111,14 +111,14 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(matchmakerAssignment1.getId()));
 
-            final var runtimeId1 = ((RuntimeAssignmentMessageBodyModel) matchAssignment1.getBody()).getRuntimeId();
+            final var runtimeId1 = ((RuntimeAssignmentMessageBodyDto) matchAssignment1.getBody()).getRuntimeId();
 
             final var serverMessage1 = playerApiTester.waitMessage(testClient1,
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment1.getId()));
 
             assertEquals("{text=matchmaking_was_stop}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage1.getBody()).getMessage().toString());
 
 
             final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion);
@@ -140,14 +140,14 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
                     MessageQualifierEnum.RUNTIME_ASSIGNMENT_MESSAGE,
                     Collections.singletonList(matchmakerAssignment2.getId()));
 
-            final var runtimeId2 = ((RuntimeAssignmentMessageBodyModel) matchAssignment2.getBody()).getRuntimeId();
+            final var runtimeId2 = ((RuntimeAssignmentMessageBodyDto) matchAssignment2.getBody()).getRuntimeId();
 
             final var serverMessage2 = playerApiTester.waitMessage(testClient2,
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchAssignment1.getId()));
 
             assertEquals("{text=matchmaking_was_stop}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage2.getBody()).getMessage().toString());
 
             assertNotEquals(runtimeId1, runtimeId2);
 

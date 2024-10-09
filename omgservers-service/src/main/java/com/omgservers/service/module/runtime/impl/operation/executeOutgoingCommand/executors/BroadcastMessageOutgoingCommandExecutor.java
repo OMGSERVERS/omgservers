@@ -2,10 +2,10 @@ package com.omgservers.service.module.runtime.impl.operation.executeOutgoingComm
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyModel;
+import com.omgservers.schema.model.outgoingCommand.body.BroadcastMessageOutgoingCommandBodyDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
@@ -50,7 +50,7 @@ public class BroadcastMessageOutgoingCommandExecutor implements OutgoingCommandE
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute broadcast message outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (BroadcastMessageOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (BroadcastMessageOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var message = commandBody.getMessage();
 
         return checkShardOperation.checkShard(runtimeId.toString())
@@ -92,7 +92,7 @@ public class BroadcastMessageOutgoingCommandExecutor implements OutgoingCommandE
 
     Uni<Boolean> syncClientMessage(final Long clientId,
                                    final Object message) {
-        final var messageBody = new ServerOutgoingMessageBodyModel(message);
+        final var messageBody = new ServerOutgoingMessageBodyDto(message);
         final var clientMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                 messageBody);

@@ -1,7 +1,7 @@
 package com.omgservers.service.module.user.impl.operation.userPlayer.selectPlayerAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.player.PlayerAttributesModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.user.impl.mapper.PlayerModelMapper;
@@ -26,10 +26,10 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<PlayerAttributesModel> selectPlayerAttributes(final SqlConnection sqlConnection,
-                                                             final int shard,
-                                                             final Long userId,
-                                                             final Long playerId) {
+    public Uni<PlayerAttributesDto> selectPlayerAttributes(final SqlConnection sqlConnection,
+                                                           final int shard,
+                                                           final Long userId,
+                                                           final Long playerId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
@@ -43,7 +43,7 @@ class SelectPlayerAttributesOperationImpl implements SelectPlayerAttributesOpera
                 "Player attributes",
                 row -> {
                     try {
-                        return objectMapper.readValue(row.getString("attributes"), PlayerAttributesModel.class);
+                        return objectMapper.readValue(row.getString("attributes"), PlayerAttributesDto.class);
                     } catch (IOException e) {
                         throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
                                 String.format("player attributes can't be parsed, userId=%d, playerId=%d",

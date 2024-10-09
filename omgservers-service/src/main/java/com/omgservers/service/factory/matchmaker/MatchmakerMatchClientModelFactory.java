@@ -1,6 +1,6 @@
 package com.omgservers.service.factory.matchmaker;
 
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigDto;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ public class MatchmakerMatchClientModelFactory {
                                              final Long userId,
                                              final Long clientId,
                                              final String groupName,
-                                             final MatchmakerMatchClientConfigModel config) {
+                                             final MatchmakerMatchClientConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, matchmakerId, matchId, userId, clientId, groupName, config, idempotencyKey);
@@ -33,7 +33,7 @@ public class MatchmakerMatchClientModelFactory {
                                              final Long userId,
                                              final Long clientId,
                                              final String groupName,
-                                             final MatchmakerMatchClientConfigModel config,
+                                             final MatchmakerMatchClientConfigDto config,
                                              final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         return create(id, matchmakerId, matchId, userId, clientId, groupName, config, idempotencyKey);
@@ -45,7 +45,7 @@ public class MatchmakerMatchClientModelFactory {
                                              final Long userId,
                                              final Long clientId,
                                              final String groupName,
-                                             final MatchmakerMatchClientConfigModel config,
+                                             final MatchmakerMatchClientConfigDto config,
                                              final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 

@@ -1,7 +1,7 @@
 package com.omgservers.tester.lobby;
 
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyModel;
+import com.omgservers.schema.model.message.body.ServerOutgoingMessageBodyDto;
 import com.omgservers.tester.BaseTestClass;
 import com.omgservers.tester.component.PlayerApiTester;
 import com.omgservers.tester.component.SupportApiTester;
@@ -117,7 +117,7 @@ public class LobbySetProfileIT extends BaseTestClass {
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchmakerAssignment1.getId()));
             assertEquals("{text=profile_was_init}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage1.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage1.getBody()).getMessage().toString());
 
             final var testClient2 = bootstrapTestClientOperation.bootstrapTestClient(testVersion, testClient1);
 
@@ -139,7 +139,7 @@ public class LobbySetProfileIT extends BaseTestClass {
                     MessageQualifierEnum.SERVER_OUTGOING_MESSAGE,
                     Collections.singletonList(matchmakerAssignment2.getId()));
             assertEquals("{text=profile_was_checked}",
-                    ((ServerOutgoingMessageBodyModel) serverMessage2.getBody()).getMessage().toString());
+                    ((ServerOutgoingMessageBodyDto) serverMessage2.getBody()).getMessage().toString());
 
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());

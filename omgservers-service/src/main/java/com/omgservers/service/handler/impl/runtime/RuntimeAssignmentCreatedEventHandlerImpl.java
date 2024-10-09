@@ -5,8 +5,8 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.runtimeCommand.body.AddClientRuntimeCommandBodyModel;
-import com.omgservers.schema.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyModel;
+import com.omgservers.schema.model.runtimeCommand.body.AddClientRuntimeCommandBodyDto;
+import com.omgservers.schema.model.runtimeCommand.body.AddMatchClientRuntimeCommandBodyDto;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.SyncClientRuntimeRefRequest;
@@ -106,7 +106,7 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
                                 if (Objects.nonNull(runtimeAssignment.getConfig().getMatchClient())) {
                                     final var groupName = runtimeAssignment.getConfig().getMatchClient().getGroupName();
-                                    final var runtimeCommandBody = new AddMatchClientRuntimeCommandBodyModel(userId,
+                                    final var runtimeCommandBody = new AddMatchClientRuntimeCommandBodyDto(userId,
                                             clientId,
                                             groupName,
                                             attributes,
@@ -116,7 +116,7 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
                                             idempotencyKey);
                                     return syncRuntimeCommand(runtimeCommand);
                                 } else {
-                                    final var runtimeCommandBody = new AddClientRuntimeCommandBodyModel(userId,
+                                    final var runtimeCommandBody = new AddClientRuntimeCommandBodyDto(userId,
                                             clientId,
                                             attributes,
                                             profile);

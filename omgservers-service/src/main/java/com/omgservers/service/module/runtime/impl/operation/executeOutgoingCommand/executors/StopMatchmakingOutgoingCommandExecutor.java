@@ -1,13 +1,13 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
+import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyModel;
+import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
@@ -41,7 +41,7 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
     public Uni<Void> execute(final Long runtimeId, final OutgoingCommandModel outgoingCommand) {
         log.debug("Execute stop matchmaking outgoing command, outgoingCommand={}", outgoingCommand);
 
-        final var commandBody = (StopMatchmakingOutgoingCommandBodyModel) outgoingCommand.getBody();
+        final var commandBody = (StopMatchmakingOutgoingCommandBodyDto) outgoingCommand.getBody();
         final var reason = commandBody.getReason();
 
         return checkShardOperation.checkShard(runtimeId.toString())
@@ -70,7 +70,7 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
     }
 
     Uni<Boolean> syncExcludeMatchMatchmakerCommand(final Long matchmakerId, final Long matchId) {
-        final var commandBody = new ExcludeMatchMatchmakerCommandBodyModel(matchId);
+        final var commandBody = new ExcludeMatchMatchmakerCommandBodyDto(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
         return matchmakerModule.getService().syncMatchmakerCommand(request)

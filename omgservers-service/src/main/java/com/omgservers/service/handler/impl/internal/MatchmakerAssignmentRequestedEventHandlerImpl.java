@@ -4,7 +4,7 @@ import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
-import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyModel;
+import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyDto;
 import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.schema.module.client.DeleteClientRequest;
 import com.omgservers.schema.module.client.DeleteClientResponse;
@@ -127,7 +127,7 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
     }
 
     Uni<Boolean> syncDisconnectionMessage(final Long clientId, final String idempotencyKey) {
-        final var messageBody = new DisconnectionReasonMessageBodyModel(DisconnectionReasonEnum.INTERNAL_FAILURE);
+        final var messageBody = new DisconnectionReasonMessageBodyDto(DisconnectionReasonEnum.INTERNAL_FAILURE);
         final var disconnectionMessage = clientMessageModelFactory.create(clientId,
                 MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
                 messageBody,

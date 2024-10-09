@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.schema.model.player.PlayerAttributesModel;
-import com.omgservers.schema.model.request.MatchmakerRequestConfigModel;
+import com.omgservers.schema.model.player.PlayerAttributesDto;
+import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerRequestModelFactory;
@@ -50,7 +50,7 @@ class SelectActiveMatchmakerMatchClientsByMatchIdOperationTest extends Assertion
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerRequestConfig = MatchmakerRequestConfigModel.create(PlayerAttributesModel.create());
+        final var matchmakerRequestConfig = MatchmakerRequestConfigDto.create(PlayerAttributesDto.create());
         final var matchmakerRequest1 = matchmakerRequestModelFactory
                 .create(matchmaker.getId(), userId(), clientId(), modeName(), matchmakerRequestConfig);
         upsertMatchmakerRequestOperation.upsertMatchmakerRequest(shard, matchmakerRequest1);

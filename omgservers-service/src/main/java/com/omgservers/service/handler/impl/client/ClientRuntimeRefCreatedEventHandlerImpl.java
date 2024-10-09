@@ -2,7 +2,7 @@ package com.omgservers.service.handler.impl.client;
 
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyModel;
+import com.omgservers.schema.model.message.body.RuntimeAssignmentMessageBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.module.client.GetClientRuntimeRefRequest;
@@ -88,7 +88,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncRuntimeAssignmentMessage(final RuntimeModel runtime,
                                               final Long clientId,
                                               final String idempotencyKey) {
-        final var messageBody = new RuntimeAssignmentMessageBodyModel(runtime.getId(),
+        final var messageBody = new RuntimeAssignmentMessageBodyDto(runtime.getId(),
                 runtime.getQualifier(),
                 runtime.getConfig());
         final var clientMessage = clientMessageModelFactory.create(clientId,
