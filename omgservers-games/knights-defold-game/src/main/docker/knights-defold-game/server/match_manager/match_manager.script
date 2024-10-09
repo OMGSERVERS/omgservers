@@ -17,7 +17,7 @@ local WAITING_STATE = "waiting"
 local QUEUEING_STATE = "queueing"
 local SIMULATION_STATE = "simulation"
 
-local function runtime_initialized(self, version_config)
+local function init_runtime(self, version_config)
 	self.version_config = version_config
 	self.spawn_requests = {}
 	self.match_state = WAITING_STATE
@@ -195,14 +195,15 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(runtime_messages.constants.RUNTIME_INITIALIZED) then
-		local version_config = message.version_config
-		runtime_initialized(self, version_config)
-		
-	elseif message_id == hash(runtime_messages.constants.COMMAND_RECEIVED) then
+	if message_id == hash(runtime_messages.constants.COMMAND_RECEIVED) then
 		local command_qualifier = message.command_qualifier
 		local command_body = message.command_body
-		if command_qualifier == omgserver.constants.ADD_MATCH_CLIENT then
+		
+		if command_qualifier == omgserver.constants.INIT_RUNTIME then
+			local version_config = command_body.runtime_config.version_config
+			init_runtime(self, version_config)
+			
+		elseif command_qualifier == omgserver.constants.ADD_MATCH_CLIENT then
 			local client_id = command_body.client_id
 			local profile = command_body.profile
 			add_match_client(self, client_id, profile)

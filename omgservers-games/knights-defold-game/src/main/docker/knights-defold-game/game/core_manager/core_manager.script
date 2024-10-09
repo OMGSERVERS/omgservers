@@ -54,8 +54,8 @@ local function lobby_assigned(self, runtime_qualifier, runtime_id)
 	-- This event is not triggered
 end
 
-local function greeted(self, version_id, version_created)
-	print(socket.gettime() .. " [CORE_MANAGER] User greeted at " .. os.date() .. ", version_id=" .. version_id .. ", version_created=" .. version_created)
+local function greeted(self, tenant_version_id, tenant_version_created)
+	print(socket.gettime() .. " [CORE_MANAGER] User greeted at " .. os.date() .. ", tenant_version_id=" .. tenant_version_id .. ", tenant_version_created=" .. tenant_version_created)
 
 	local auth_message = auth_messages:create_set_state_requested_message("Getting profile")
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
@@ -169,9 +169,9 @@ function on_message(self, message_id, message, sender)
 		signed_in(self, client_id)
 		
 	elseif message_id == hash(core_messages.constants.USER_GREETED) then
-		local version_id = message.version_id
-		local version_created = message.version_created
-		greeted(self, version_id, version_created)
+		local tenant_version_id = message.tenant_version_id
+		local tenant_version_created = message.tenant_version_created
+		greeted(self, tenant_version_id, tenant_version_created)
 		
 	elseif message_id == hash(core_messages.constants.RUNTIME_ASSIGNED) then
 		local runtime_qualifier = message.runtime_qualifier

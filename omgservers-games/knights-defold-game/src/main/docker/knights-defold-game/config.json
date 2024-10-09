@@ -12,5 +12,8 @@
         }
       ]
     }
-  ]
+  ],
+  "user_data": {
+    "game_title": "Knights Defold Game"
+  }
 }

@@ -4,23 +4,9 @@ local omgserver = require("omgservers.omgserver")
 local LOBBY_MANAGER = "lobby_manager#lobby_manager"
 local MATCH_MANAGER = "match_manager#match_manager"
 
-local function server_initialized(self, runtime_qualifier, version_config)
-	print(socket.gettime() .. " [SERVER_MANAGER] Server was initialized, qualifier=" .. runtime_qualifier)
-	print(socket.gettime() .. " [SERVER_MANAGER] Version config")
-	pprint(version_config)
-
+local function server_started(self, runtime_qualifier)
+	print(socket.gettime() .. " [SERVER_MANAGER] Server was started, qualifier=" .. runtime_qualifier)
 	self.runtime_qualifier = runtime_qualifier
-	self.version_config = version_config
-
-	local runtime_message = runtime_messages:create_runtime_initialized_message(version_config)
-
-	if runtime_qualifier == omgserver.constants.LOBBY then
-		msg.post(LOBBY_MANAGER, runtime_messages.constants.RUNTIME_INITIALIZED, runtime_message)
-	elseif runtime_qualifier == omgserver.constants.MATCH then
-		msg.post(MATCH_MANAGER, runtime_messages.constants.RUNTIME_INITIALIZED, runtime_message)
-	else
-		error("[SERVER_MANAGER] Unknown runtime qualifier was received, runtime_qualifier=" .. tostring(runtime_qualifier))
-	end
 end
 
 local function command_received(self, command_qualifier, command_body)
@@ -59,10 +45,9 @@ local function handle_server_event(self, event)
 	local event_qualifier = event.qualifier
 	local event_body = event.body
 
-	if event_qualifier == omgserver.constants.SERVER_INITIALIZED then
+	if event_qualifier == omgserver.constants.SERVER_STARTED then
 		local runtime_qualifier = event_body.runtime_qualifier
-		local version_config = event_body.version_config
-		server_initialized(self, runtime_qualifier, version_config)
+		server_started(self, runtime_qualifier)
 		
 	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED then
 		local command_qualifier = event_body.command_qualifier
@@ -79,7 +64,7 @@ end
 
 function init(self)
 	local debug = true
-	omgserver:init(function(event) handle_server_event(self, event) end, debug)
+	omgserver:start(function(event) handle_server_event(self, event) end, debug)
 end
 
 function update(self, dt)

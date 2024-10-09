@@ -8,16 +8,18 @@ local omgserver = require("omgservers.omgserver")
 
 local DEFAULT_GAME_MODE = "death-match"
 
-local function runtime_initialized(self, version_config)
-	self.version_config = version_config
-end
-
 local function handle_command_received_message(self, message)
 	local command_qualifier = message.command_qualifier
 	local command_body = message.command_body
 
+	-- Init runtime
+	if command_qualifier == omgserver.constants.INIT_RUNTIME then
+		self.version_config = command_body.runtime_config.version_config
+		print(socket.gettime() .. " [LOBBY_MANAGER] Runtime was initialized")
+		pprint(self.version_config)
+		
 	-- Add client
-	if command_qualifier == omgserver.constants.ADD_CLIENT then
+	elseif command_qualifier == omgserver.constants.ADD_CLIENT then
 		local client_id = command_body.client_id
 		local profile = command_body.profile
 
@@ -53,7 +55,7 @@ local function handle_command_received_message(self, message)
 				local server_message = server_messages:create_set_profile_message(wrapped_profile.profile)
 				omgserver.service_commands:respond_client(client_id, json.encode(server_message))
 			else
-				print(socket.gettime() .. " [LOBBY_HANDLER] Profile was not found while handling request_profile message, client_id=" .. client_id)
+				print(socket.gettime() .. " [LOBBY_MANAGER] Profile was not found while handling request_profile message, client_id=" .. client_id)
 			end
 
 		-- Request matchmaking
@@ -73,7 +75,7 @@ local function handle_command_received_message(self, message)
 
 			omgserver.service_commands:request_matchmaking(client_id, DEFAULT_GAME_MODE)
 		else
-			print(socket.gettime() .. " [LOBBY_HANDLER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
+			print(socket.gettime() .. " [LOBBY_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
 		end
 	end
 end
@@ -83,11 +85,7 @@ local function handle_message_received_message(self, message)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(runtime_messages.constants.RUNTIME_INITIALIZED) then
-		local version_config = message.version_config
-		runtime_initialized(self, version_config)
-		
-	elseif message_id == hash(runtime_messages.constants.COMMAND_RECEIVED) then
+	if message_id == hash(runtime_messages.constants.COMMAND_RECEIVED) then
 		handle_command_received_message(self, message)
 	elseif message_id == hash(runtime_messages.constants.MESSAGE_RECEIVED) then
 		handle_message_received_message(self, message)

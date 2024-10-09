@@ -37,10 +37,10 @@ core_messages = {
 			client_id = client_id,
 		}
 	end,
-	create_user_greeted_message = function(self, version_id, version_created)
+	create_user_greeted_message = function(self, tenant_version_id, tenant_version_created)
 		return {
-			version_id = version_id,
-			version_created = version_created,
+			tenant_version_id = tenant_version_id,
+			tenant_version_created = tenant_version_created,
 		}
 	end,
 	create_runtime_assigned_message = function(self, runtime_qualifier, runtime_id)

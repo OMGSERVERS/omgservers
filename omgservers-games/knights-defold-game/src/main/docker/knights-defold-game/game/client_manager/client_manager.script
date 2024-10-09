@@ -30,9 +30,9 @@ local function signed_in(self, client_id)
 	msg.post(CORE_MANAGER, core_messages.constants.SIGNED_IN, core_message)
 end
 
-local function greeted(self, version_id, version_created)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
-	local core_message = core_messages:create_user_greeted_message(version_id, version_created)
+local function greeted(self, tenant_version_id, tenant_version_created)
+	print(socket.gettime() .. " [CLIENT_MANAGER] Greeted, tenant_version_id=" .. tenant_version_id .. ", tenant_version_created=" .. tenant_version_created)
+	local core_message = core_messages:create_user_greeted_message(tenant_version_id, tenant_version_created)
 	msg.post(CORE_MANAGER, core_messages.constants.USER_GREETED, core_message)
 end
 
@@ -87,8 +87,8 @@ local function handle_client_event(self, event)
 		signed_in(self, client_id)
 
 	elseif event_qualifier == omgplayer.constants.GREETED then
-		local version_id = event_body.version_id
-		local version_created = event_body.version_created
+		local version_id = event_body.tenant_version_id
+		local version_created = event_body.tenant_version_created
 		greeted(self, version_id, version_created)
 
 	elseif event_qualifier == omgplayer.constants.ASSIGNED then
@@ -117,11 +117,11 @@ function init(self)
 
 		local service_url = "http://localhost:8080"
 		local tenant_id = localtesting.tenant_id
-		local stage_id = localtesting.stage_id
-		local stage_secret = localtesting.stage_secret
+		local tennat_stage_id = localtesting.tenant_stage_id
+		local tennat_stage_secret = localtesting.tenant_stage_secret
 		local debug = false
 
-		omgplayer:init(service_url, tenant_id, stage_id, stage_secret, function(event) handle_client_event(self, event) end, debug)
+		omgplayer:init(service_url, tenant_id, tennat_stage_id, tennat_stage_secret, function(event) handle_client_event(self, event) end, debug)
 	else
 		error("[CLIENT_MANAGER] Only localtesting is supported")
 	end
