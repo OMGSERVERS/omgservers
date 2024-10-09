@@ -51,13 +51,13 @@ class DeleteTenantJenkinsRequestsByTenantVersionIdOperationImpl
 
     Uni<List<TenantJenkinsRequestModel>> viewTenantDeployments(final Long tenantId, final Long tenantVersionId) {
         final var request = new ViewTenantJenkinsRequestsRequest(tenantId, tenantVersionId);
-        return tenantModule.getTenantService().viewTenantJenkinsRequests(request)
+        return tenantModule.getService().viewTenantJenkinsRequests(request)
                 .map(ViewTenantJenkinsRequestsResponse::getTenantJenkinsRequests);
     }
 
     Uni<Boolean> deleteTenantJenkinsRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantJenkinsRequest(request)
+        return tenantModule.getService().deleteTenantJenkinsRequest(request)
                 .map(DeleteTenantJenkinsRequestResponse::getDeleted);
     }
 }

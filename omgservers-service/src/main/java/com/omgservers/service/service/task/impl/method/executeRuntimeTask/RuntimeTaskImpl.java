@@ -44,7 +44,7 @@ public class RuntimeTaskImpl {
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -87,7 +87,7 @@ public class RuntimeTaskImpl {
 
     Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignments(final Long runtimeId) {
         final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimeAssignments(request)
+        return runtimeModule.getService().viewRuntimeAssignments(request)
                 .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 

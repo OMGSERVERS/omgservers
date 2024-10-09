@@ -102,13 +102,13 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {
         final var request = new DeleteClientRequest(clientId);
-        return clientModule.getClientService().deleteClient(request)
+        return clientModule.getService().deleteClient(request)
                 .map(DeleteClientResponse::getDeleted);
     }
 
@@ -118,7 +118,7 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
         final var commandBody = new KickClientMatchmakerCommandBodyModel(clientId, matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+        return matchmakerModule.getService().syncMatchmakerCommand(request)
                 .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {

@@ -50,13 +50,13 @@ class DeleteTenantStagesByTenantProjectIdOperationImpl implements DeleteTenantSt
 
     Uni<List<TenantStageModel>> viewTenantStages(final Long tenantId, final Long tenantProjectId) {
         final var request = new ViewTenantStagesRequest(tenantId, tenantProjectId);
-        return tenantModule.getTenantService().viewTenantStages(request)
+        return tenantModule.getService().viewTenantStages(request)
                 .map(ViewTenantStagesResponse::getTenantStages);
     }
 
     Uni<Boolean> deleteTenantStage(final Long tenantId, final Long id) {
         final var request = new DeleteTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantStage(request)
+        return tenantModule.getService().deleteTenantStage(request)
                 .map(DeleteTenantStageResponse::getDeleted);
     }
 }

@@ -82,13 +82,13 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> getRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new GetRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().getRuntimeAssignment(request)
+        return runtimeModule.getService().getRuntimeAssignment(request)
                 .map(GetRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<RuntimeModel> getRuntime(final Long runtimeId) {
         final var request = new GetRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -102,7 +102,7 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var request = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getRuntimeService().syncRuntimeCommand(request)
+        return runtimeModule.getService().syncRuntimeCommand(request)
                 .map(SyncRuntimeCommandResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -128,13 +128,13 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<ClientRuntimeRefModel> findClientRuntimeRef(final Long clientId, final Long runtimeId) {
         final var request = new FindClientRuntimeRefRequest(clientId, runtimeId);
-        return clientModule.getClientService().findClientRuntimeRef(request)
+        return clientModule.getService().findClientRuntimeRef(request)
                 .map(FindClientRuntimeRefResponse::getClientRuntimeRef);
     }
 
     Uni<Boolean> deleteClientRuntimeRef(final Long clientId, final Long id) {
         final var request = new DeleteClientRuntimeRefRequest(clientId, id);
-        return clientModule.getClientService().deleteClientRuntimeRef(request)
+        return clientModule.getService().deleteClientRuntimeRef(request)
                 .map(DeleteClientRuntimeRefResponse::getDeleted);
     }
 }

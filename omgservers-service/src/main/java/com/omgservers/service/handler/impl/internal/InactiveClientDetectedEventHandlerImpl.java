@@ -61,7 +61,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -76,13 +76,13 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+        return clientModule.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {
         final var request = new DeleteClientRequest(clientId);
-        return clientModule.getClientService().deleteClient(request)
+        return clientModule.getService().deleteClient(request)
                 .map(DeleteClientResponse::getDeleted);
     }
 }

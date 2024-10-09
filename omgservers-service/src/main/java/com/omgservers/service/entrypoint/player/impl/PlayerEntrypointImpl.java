@@ -15,7 +15,7 @@ class PlayerEntrypointImpl implements PlayerEntrypoint {
     final PlayerService playerService;
 
     @Override
-    public PlayerService getPlayerService() {
+    public PlayerService getService() {
         return playerService;
     }
 }

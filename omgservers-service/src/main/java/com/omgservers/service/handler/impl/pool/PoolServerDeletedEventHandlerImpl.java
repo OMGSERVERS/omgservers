@@ -53,7 +53,7 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().getPoolServer(request)
+        return poolModule.getService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
@@ -81,7 +81,7 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
     Uni<List<PoolServerContainerModel>> viewPoolServerContainers(final Long poolId,
                                                                  final Long serverId) {
         final var request = new ViewPoolServerContainersRequest(poolId, serverId);
-        return poolModule.getPoolService().viewPoolServerContainers(request)
+        return poolModule.getService().viewPoolServerContainers(request)
                 .map(ViewPoolServerContainersResponse::getPoolServerContainers);
     }
 
@@ -89,7 +89,7 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
                                            final Long serverId,
                                            final Long id) {
         final var request = new DeletePoolServerContainerRequest(poolId, serverId, id);
-        return poolModule.getPoolService().deletePoolServerContainer(request)
+        return poolModule.getService().deletePoolServerContainer(request)
                 .map(DeletePoolServerContainerResponse::getDeleted);
     }
 }

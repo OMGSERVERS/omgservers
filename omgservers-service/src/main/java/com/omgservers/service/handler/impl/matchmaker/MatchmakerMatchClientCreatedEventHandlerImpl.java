@@ -69,13 +69,13 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
 
     Uni<MatchmakerMatchClientModel> getMatchClient(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerMatchClientRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().getMatchmakerMatchClient(request)
+        return matchmakerModule.getService().getMatchmakerMatchClient(request)
                 .map(GetMatchmakerMatchClientResponse::getMatchClient);
     }
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+        return matchmakerModule.getService().getMatchmakerMatch(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
@@ -90,7 +90,7 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                 runtimeAssignmentConfig,
                 idempotencyKey);
         final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
-        return runtimeModule.getRuntimeService().syncRuntimeAssignment(request)
+        return runtimeModule.getService().syncRuntimeAssignment(request)
                 .map(SyncRuntimeAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

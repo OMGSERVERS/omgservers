@@ -65,19 +65,19 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantDeployment(request)
+        return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantStage(request)
+        return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<TenantDeploymentDataDto> getTenantDeploymentData(final Long tenantId, final Long tenantDeploymentId) {
         final var request = new GetTenantDeploymentDataRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getTenantService().getTenantDeploymentData(request)
+        return tenantModule.getService().getTenantDeploymentData(request)
                 .map(GetTenantDeploymentDataResponse::getTenantDeploymentData);
     }
 }

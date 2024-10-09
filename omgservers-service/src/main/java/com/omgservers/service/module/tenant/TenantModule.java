@@ -4,5 +4,5 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.TenantSer
 
 public interface TenantModule {
 
-    TenantService getTenantService();
+    TenantService getService();
 }

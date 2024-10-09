@@ -83,13 +83,13 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<Boolean> deleteLobby(final Long lobbyId) {
         final var request = new DeleteLobbyRequest(lobbyId);
-        return lobbyModule.getLobbyService().deleteLobby(request)
+        return lobbyModule.getService().deleteLobby(request)
                 .map(DeleteLobbyResponse::getDeleted);
     }
 
@@ -100,7 +100,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 deploymentId,
                 idempotencyKey);
         final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        return tenantModule.getTenantService().syncTenantLobbyRequestWithIdempotency(request)
+        return tenantModule.getService().syncTenantLobbyRequestWithIdempotency(request)
                 .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 
@@ -112,7 +112,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 commandBody,
                 idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommandWithIdempotency(request)
+        return matchmakerModule.getService().syncMatchmakerCommandWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

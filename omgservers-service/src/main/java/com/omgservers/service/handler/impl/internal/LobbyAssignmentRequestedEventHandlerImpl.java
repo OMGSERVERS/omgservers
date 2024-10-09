@@ -106,13 +106,13 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
 
     Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long deploymentId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, deploymentId);
-        return tenantModule.getTenantService().viewTenantLobbyRefs(request)
+        return tenantModule.getService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<LobbyModel> getLobby(final Long lobbyId) {
         final var request = new GetLobbyRequest(lobbyId);
-        return lobbyModule.getLobbyService().getLobby(request)
+        return lobbyModule.getService().getLobby(request)
                 .map(GetLobbyResponse::getLobby);
     }
 
@@ -123,7 +123,7 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
                 clientId,
                 idempotencyKey);
         final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
-        return runtimeModule.getRuntimeService().syncRuntimeAssignment(request)
+        return runtimeModule.getService().syncRuntimeAssignment(request)
                 .map(SyncRuntimeAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -149,13 +149,13 @@ public class LobbyAssignmentRequestedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+        return clientModule.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {
         final var request = new DeleteClientRequest(clientId);
-        return clientModule.getClientService().deleteClient(request)
+        return clientModule.getService().deleteClient(request)
                 .map(DeleteClientResponse::getDeleted);
     }
 }

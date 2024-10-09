@@ -65,25 +65,25 @@ class DeleteTenantPermissionsMethodImpl implements DeleteTenantPermissionsMethod
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getUserService().getUser(request)
+        return userModule.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getTenantService().getTenant(getTenantRequest)
+        return tenantModule.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<List<TenantPermissionModel>> viewTenantPermissions(final Long tenantId) {
         final var request = new ViewTenantPermissionsRequest(tenantId);
-        return tenantModule.getTenantService().viewTenantPermissions(request)
+        return tenantModule.getService().viewTenantPermissions(request)
                 .map(ViewTenantPermissionsResponse::getTenantPermissions);
     }
 
     Uni<Boolean> deleteTenantPermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantPermissionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantPermission(request)
+        return tenantModule.getService().deleteTenantPermission(request)
                 .map(DeleteTenantPermissionResponse::getDeleted);
     }
 }

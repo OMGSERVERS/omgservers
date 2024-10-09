@@ -4,5 +4,5 @@ import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 
 public interface PoolModule {
 
-    PoolService getPoolService();
+    PoolService getService();
 }

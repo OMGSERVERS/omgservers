@@ -57,14 +57,14 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().getTenantStage(request)
+        return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<Boolean> deleteTenantStage(final Long tenantId,
                                    final Long id) {
         final var request = new DeleteTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantStage(request)
+        return tenantModule.getService().deleteTenantStage(request)
                 .map(DeleteTenantStageResponse::getDeleted);
     }
 }

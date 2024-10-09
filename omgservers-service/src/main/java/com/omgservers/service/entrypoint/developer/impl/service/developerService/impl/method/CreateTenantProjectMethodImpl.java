@@ -72,7 +72,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var tenantProject = tenantProjectModelFactory.create(tenantId);
         final var tenantProjectId = tenantProject.getId();
         final var request = new SyncTenantProjectRequest(tenantProject);
-        return tenantModule.getTenantService().syncTenantProject(request)
+        return tenantModule.getService().syncTenantProject(request)
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
                         TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT))
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
@@ -88,7 +88,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var tenantStageId = tenantStage.getId();
         final var request = new SyncTenantStageRequest(tenantStage);
-        return tenantModule.getTenantService().syncTenantStage(request)
+        return tenantModule.getService().syncTenantStage(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT))
                 .replaceWith(tenantStage);

@@ -59,7 +59,7 @@ public class MatchmakerAssignmentDeletedEventHandlerImpl implements EventHandler
 
     Uni<MatchmakerAssignmentModel> getMatchmakerAssignment(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerAssignmentRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().getMatchmakerAssignment(request)
+        return matchmakerModule.getService().getMatchmakerAssignment(request)
                 .map(GetMatchmakerAssignmentResponse::getMatchmakerAssignment);
     }
 
@@ -74,13 +74,13 @@ public class MatchmakerAssignmentDeletedEventHandlerImpl implements EventHandler
 
     Uni<ClientMatchmakerRefModel> findClientMatchmakerRef(final Long clientId, final Long matchmakerId) {
         final var request = new FindClientMatchmakerRefRequest(clientId, matchmakerId);
-        return clientModule.getClientService().findClientMatchmakerRef(request)
+        return clientModule.getService().findClientMatchmakerRef(request)
                 .map(FindClientMatchmakerRefResponse::getClientMatchmakerRef);
     }
 
     Uni<Boolean> deleteClientMatchmakerRef(final Long clientId, final Long id) {
         final var request = new DeleteClientMatchmakerRefRequest(clientId, id);
-        return clientModule.getClientService().deleteClientMatchmakerRef(request)
+        return clientModule.getService().deleteClientMatchmakerRef(request)
                 .map(DeleteClientMatchmakerRefResponse::getDeleted);
     }
 }

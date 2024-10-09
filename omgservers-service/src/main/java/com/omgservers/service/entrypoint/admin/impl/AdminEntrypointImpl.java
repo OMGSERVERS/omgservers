@@ -14,7 +14,7 @@ public class AdminEntrypointImpl implements AdminEntrypoint {
 
     final AdminService adminService;
 
-    public AdminService getAdminService() {
+    public AdminService getService() {
         return adminService;
     }
 }

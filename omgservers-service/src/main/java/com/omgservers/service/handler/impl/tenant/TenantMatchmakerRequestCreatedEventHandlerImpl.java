@@ -58,7 +58,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
 
     Uni<TenantMatchmakerRequestModel> getTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantMatchmakerRequest(request)
+        return tenantModule.getService().getTenantMatchmakerRequest(request)
                 .map(GetTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
     }
 
@@ -72,7 +72,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
                 deploymentId,
                 idempotencyKey);
         final var request = new SyncMatchmakerRequest(matchmaker);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerWithIdempotency(request)
+        return matchmakerModule.getService().syncMatchmakerWithIdempotency(request)
                 .map(SyncMatchmakerResponse::getCreated);
     }
 }

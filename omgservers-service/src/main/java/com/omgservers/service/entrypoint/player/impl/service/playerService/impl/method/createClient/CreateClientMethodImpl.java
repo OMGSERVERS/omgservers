@@ -75,7 +75,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                               final Long tenantStageId,
                                               final String secret) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().getTenantStage(request)
+        return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage)
                 .invoke(tenantStage -> {
                     final var stageSecret = tenantStage.getSecret();
@@ -96,7 +96,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     Uni<PlayerModel> findPlayer(final Long userId, final Long tenantStageId) {
         final var request = new FindPlayerRequest(userId, tenantStageId);
-        return userModule.getUserService().findPlayer(request)
+        return userModule.getService().findPlayer(request)
                 .map(FindPlayerResponse::getPlayer);
     }
 
@@ -105,7 +105,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long tenantStageId) {
         final var player = playerModelFactory.create(userId, tenantId, tenantStageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
-        return userModule.getUserService().syncPlayer(syncPlayerRequest)
+        return userModule.getService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);
     }
 
@@ -135,7 +135,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     Uni<Boolean> syncClient(ClientModel client) {
         final var request = new SyncClientRequest(client);
-        return clientModule.getClientService().syncClient(request)
+        return clientModule.getService().syncClient(request)
                 .map(SyncClientResponse::getCreated);
     }
 }

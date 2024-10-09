@@ -4,5 +4,5 @@ import com.omgservers.service.entrypoint.support.impl.service.supportService.Sup
 
 public interface SupportEntrypoint {
 
-    SupportService getSupportService();
+    SupportService getService();
 }

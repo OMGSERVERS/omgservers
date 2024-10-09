@@ -48,7 +48,7 @@ public class TenantFilesArchiveDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantFilesArchiveModel> getTenantFilesArchive(final Long tenantId, final Long id) {
         final var request = new GetTenantFilesArchiveRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantFilesArchive(request)
+        return tenantModule.getService().getTenantFilesArchive(request)
                 .map(GetTenantFilesArchiveResponse::getTenantFilesArchive);
     }
 }

@@ -14,7 +14,7 @@ public class SupportEntrypointImpl implements SupportEntrypoint {
 
     final SupportService supportService;
 
-    public SupportService getSupportService() {
+    public SupportService getService() {
         return supportService;
     }
 }

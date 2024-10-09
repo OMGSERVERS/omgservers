@@ -79,7 +79,7 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantDeployment(request)
+        return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 }

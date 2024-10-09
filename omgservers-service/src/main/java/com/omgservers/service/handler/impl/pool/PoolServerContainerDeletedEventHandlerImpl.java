@@ -68,7 +68,7 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
                                                          final Long serverId,
                                                          final Long id) {
         final var request = new GetPoolServerContainerRequest(poolId, serverId, id);
-        return poolModule.getPoolService().getPoolServerContainer(request)
+        return poolModule.getService().getPoolServerContainer(request)
                 .map(GetPoolServerContainerResponse::getPoolServerContainer);
     }
 
@@ -83,7 +83,7 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
 
     Uni<RuntimePoolServerContainerRefModel> findRuntimePoolServerContainerRef(final Long runtimeId) {
         final var request = new FindRuntimePoolServerContainerRefRequest(runtimeId);
-        return runtimeModule.getRuntimeService().findRuntimePoolServerContainerRef(request)
+        return runtimeModule.getService().findRuntimePoolServerContainerRef(request)
                 .map(FindRuntimePoolServerContainerRefResponse::getRuntimePoolServerContainerRef);
     }
 
@@ -92,13 +92,13 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
         final var runtimeId = runtimeServerContainerRef.getRuntimeId();
         final var id = runtimeServerContainerRef.getId();
         final var request = new DeleteRuntimePoolServerContainerRefRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimePoolServerContainerRef(request)
+        return runtimeModule.getService().deleteRuntimePoolServerContainerRef(request)
                 .map(DeleteRuntimePoolServerContainerRefResponse::getDeleted);
     }
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().getPoolServer(request)
+        return poolModule.getService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 

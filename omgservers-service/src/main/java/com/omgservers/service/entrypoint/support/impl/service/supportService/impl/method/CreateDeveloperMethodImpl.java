@@ -44,7 +44,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
         final var syncUserShardedRequest = new SyncUserRequest(user);
-        return userModule.getUserService().syncUser(syncUserShardedRequest)
+        return userModule.getService().syncUser(syncUserShardedRequest)
                 .replaceWith(user);
     }
 }

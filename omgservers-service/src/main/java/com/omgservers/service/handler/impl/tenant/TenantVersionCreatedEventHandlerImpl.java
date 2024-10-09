@@ -51,7 +51,7 @@ public class TenantVersionCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 }

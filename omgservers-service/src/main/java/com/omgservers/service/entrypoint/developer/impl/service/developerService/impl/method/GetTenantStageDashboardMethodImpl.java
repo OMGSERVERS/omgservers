@@ -59,13 +59,13 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().getTenantStage(request)
+        return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<TenantStageDataDto> getTenantStageData(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageDataRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().getTenantStageData(request)
+        return tenantModule.getService().getTenantStageData(request)
                 .map(GetTenantStageDataResponse::getTenantStageData);
     }
 }

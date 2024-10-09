@@ -52,13 +52,13 @@ class BootstrapBuilderUserMethodImpl implements BootstrapBuilderUserMethod {
 
     Uni<UserModel> getUser(final Long userId) {
         final var request = new GetUserRequest(userId);
-        return userModule.getUserService().getUser(request)
+        return userModule.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<Boolean> syncUser(final UserModel userModel) {
         final var request = new SyncUserRequest(userModel);
-        return userModule.getUserService().syncUserWithIdempotency(request)
+        return userModule.getService().syncUserWithIdempotency(request)
                 .map(SyncUserResponse::getCreated);
     }
 }

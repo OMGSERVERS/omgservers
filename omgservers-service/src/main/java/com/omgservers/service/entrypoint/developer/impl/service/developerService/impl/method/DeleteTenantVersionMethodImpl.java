@@ -57,14 +57,14 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Boolean> deleteTenantVersion(final Long tenantId,
                                      final Long id) {
         final var request = new DeleteTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantVersion(request)
+        return tenantModule.getService().deleteTenantVersion(request)
                 .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

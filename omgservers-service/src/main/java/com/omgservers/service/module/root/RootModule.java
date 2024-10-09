@@ -4,5 +4,5 @@ import com.omgservers.service.module.root.impl.service.rootService.RootService;
 
 public interface RootModule {
 
-    RootService getRootService();
+    RootService getService();
 }

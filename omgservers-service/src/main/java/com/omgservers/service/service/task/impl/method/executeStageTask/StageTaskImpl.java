@@ -39,7 +39,7 @@ public class StageTaskImpl {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantStage(request)
+        return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
@@ -63,7 +63,7 @@ public class StageTaskImpl {
 
     Uni<List<TenantVersionProjectionModel>> viewVersionProjections(final Long tenantId, final Long tenantStageId) {
         final var request = new ViewTenantVersionsRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().viewTenantVersions(request)
+        return tenantModule.getService().viewTenantVersions(request)
                 .map(ViewTenantVersionsResponse::getTenantVersionProjections);
     }
 
@@ -102,19 +102,19 @@ public class StageTaskImpl {
 
     Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long tenantVersionId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, tenantVersionId);
-        return tenantModule.getTenantService().viewTenantLobbyRefs(request)
+        return tenantModule.getService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<Integer> countRuntimeAssignments(Long runtimeId) {
         final var request = new CountRuntimeAssignmentsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().countRuntimeAssignments(request)
+        return runtimeModule.getService().countRuntimeAssignments(request)
                 .map(CountRuntimeAssignmentsResponse::getCount);
     }
 
     Uni<Boolean> deleteTenantVersion(final Long tenantId, final Long id) {
         final var request = new DeleteTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantVersion(request)
+        return tenantModule.getService().deleteTenantVersion(request)
                 .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

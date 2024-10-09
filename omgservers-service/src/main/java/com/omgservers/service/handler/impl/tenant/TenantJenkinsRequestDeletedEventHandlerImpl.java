@@ -55,7 +55,7 @@ public class TenantJenkinsRequestDeletedEventHandlerImpl implements EventHandler
 
     Uni<TenantJenkinsRequestModel> getTenantJenkinsRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantJenkinsRequest(request)
+        return tenantModule.getService().getTenantJenkinsRequest(request)
                 .map(GetTenantJenkinsRequestResponse::getTenantJenkinsRequest);
     }
 }

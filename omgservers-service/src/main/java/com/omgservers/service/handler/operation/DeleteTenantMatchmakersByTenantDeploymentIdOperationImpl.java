@@ -51,13 +51,13 @@ class DeleteTenantMatchmakersByTenantDeploymentIdOperationImpl
 
     Uni<List<TenantMatchmakerRefModel>> viewTenantMatchmakerRefs(final Long tenantId, final Long tenantDeploymentId) {
         final var request = new ViewTenantMatchmakerRefsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getTenantService().viewTenantMatchmakerRefs(request)
+        return tenantModule.getService().viewTenantMatchmakerRefs(request)
                 .map(ViewTenantMatchmakerRefsResponse::getTenantMatchmakerRefs);
     }
 
     Uni<Boolean> deleteMatchmaker(final Long matchmakerId) {
         final var request = new DeleteMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().deleteMatchmaker(request)
+        return matchmakerModule.getService().deleteMatchmaker(request)
                 .map(DeleteMatchmakerResponse::getDeleted);
     }
 

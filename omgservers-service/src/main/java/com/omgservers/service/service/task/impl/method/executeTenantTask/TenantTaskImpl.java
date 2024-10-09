@@ -39,7 +39,7 @@ public class TenantTaskImpl {
 
     Uni<TenantModel> getTenant(final Long id) {
         final var request = new GetTenantRequest(id);
-        return tenantModule.getTenantService().getTenant(request)
+        return tenantModule.getService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -55,7 +55,7 @@ public class TenantTaskImpl {
 
     Uni<List<TenantProjectModel>> viewTenantProjects(final Long tenantId) {
         final var request = new ViewTenantProjectsRequest(tenantId);
-        return tenantModule.getTenantService().viewTenantProjects(request)
+        return tenantModule.getService().viewTenantProjects(request)
                 .map(ViewTenantProjectsResponse::getTenantProjects);
     }
 
@@ -72,7 +72,7 @@ public class TenantTaskImpl {
 
     Uni<List<TenantStageModel>> viewTenantStages(final Long tenantId, final Long tenantProjectId) {
         final var request = new ViewTenantStagesRequest(tenantId, tenantProjectId);
-        return tenantModule.getTenantService().viewTenantStages(request)
+        return tenantModule.getService().viewTenantStages(request)
                 .map(ViewTenantStagesResponse::getTenantStages);
     }
 

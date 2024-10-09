@@ -15,7 +15,7 @@ class TenantModuleImpl implements TenantModule {
     final TenantService tenantService;
 
     @Override
-    public TenantService getTenantService() {
+    public TenantService getService() {
         return tenantService;
     }
 

@@ -120,19 +120,19 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
     Uni<List<ClientMatchmakerRefModel>> viewClientMatchmakerRefs(final Long clientId) {
         final var request = new ViewClientMatchmakerRefsRequest(clientId);
-        return clientModule.getClientService().viewClientMatchmakerRefs(request)
+        return clientModule.getService().viewClientMatchmakerRefs(request)
                 .map(ViewClientMatchmakerRefsResponse::getClientMatchmakerRefs);
     }
 
     Uni<PlayerAttributesModel> getPlayerAttributes(final Long userId, final Long playerId) {
         final var request = new GetPlayerAttributesRequest(userId, playerId);
-        return userModule.getUserService().getPlayerAttributes(request)
+        return userModule.getService().getPlayerAttributes(request)
                 .map(GetPlayerAttributesResponse::getAttributes);
     }
 
@@ -148,7 +148,7 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
                 mode,
                 requestConfig);
         final var request = new SyncMatchmakerRequestRequest(requestModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerRequestWithIdempotency(request)
+        return matchmakerModule.getService().syncMatchmakerRequestWithIdempotency(request)
                 .map(SyncMatchmakerRequestResponse::getCreated);
     }
 }

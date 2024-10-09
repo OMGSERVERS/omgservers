@@ -84,7 +84,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -104,7 +104,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
     Uni<List<ClientRuntimeRefModel>> viewClientRuntimeRefs(final Long clientId) {
         final var request = new ViewClientRuntimeRefsRequest(clientId);
-        return clientModule.getClientService().viewClientRuntimeRefs(request)
+        return clientModule.getService().viewClientRuntimeRefs(request)
                 .map(ViewClientRuntimeRefsResponse::getClientRuntimeRefs);
     }
 
@@ -116,13 +116,13 @@ class InterchangeMethodImpl implements InterchangeMethod {
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId,
                 runtimeCommandBody);
         final var request = new SyncClientCommandRequest(clientId, runtimeCommand);
-        return runtimeModule.getRuntimeService().syncClientCommandWithIdempotency(request)
+        return runtimeModule.getService().syncClientCommandWithIdempotency(request)
                 .map(SyncClientCommandResponse::getCreated);
     }
 
     Uni<Boolean> updateRuntimeAssignmentLastActivity(final Long runtimeId, final Long clientId) {
         final var request = new UpdateRuntimeAssignmentLastActivityRequest(runtimeId, clientId);
-        return runtimeModule.getRuntimeService().updateRuntimeAssignmentLastActivity(request)
+        return runtimeModule.getService().updateRuntimeAssignmentLastActivity(request)
                 .map(UpdateRuntimeAssignmentLastActivityResponse::getUpdated);
     }
 

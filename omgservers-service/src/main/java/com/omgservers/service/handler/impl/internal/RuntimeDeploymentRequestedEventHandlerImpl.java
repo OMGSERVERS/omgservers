@@ -100,19 +100,19 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantDeployment(request)
+        return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<List<TenantImageModel>> viewTenantImage(final Long tenantId, final Long tenantVersionId) {
         final var request = new ViewTenantImagesRequest(tenantId, tenantVersionId);
-        return tenantModule.getTenantService().viewTenantImages(request)
+        return tenantModule.getService().viewTenantImages(request)
                 .map(ViewTenantImagesResponse::getTenantImages);
     }
 
@@ -160,7 +160,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(id, UserRoleEnum.RUNTIME, passwordHash, idempotencyKey);
         final var request = new SyncUserRequest(user);
-        return userModule.getUserService().syncUser(request)
+        return userModule.getService().syncUser(request)
                 .map(SyncUserResponse::getCreated)
                 .replaceWith(user)
                 .onFailure(ServerSideConflictException.class)
@@ -171,7 +171,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
                             // User was already created
                             final var getUserRequest = new GetUserRequest(id);
-                            return userModule.getUserService().getUser(getUserRequest)
+                            return userModule.getService().getUser(getUserRequest)
                                     .map(GetUserResponse::getUser);
 
                         }
@@ -213,7 +213,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<Boolean> syncPoolRequest(final PoolRequestModel poolRequest) {
         final var request = new SyncPoolRequestRequest(poolRequest);
-        return poolModule.getPoolService().syncPoolRequestWithIdempotency(request)
+        return poolModule.getService().syncPoolRequestWithIdempotency(request)
                 .map(SyncPoolRequestResponse::getCreated);
     }
 }

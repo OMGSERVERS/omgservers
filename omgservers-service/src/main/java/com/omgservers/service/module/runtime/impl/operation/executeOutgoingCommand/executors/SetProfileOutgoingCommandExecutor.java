@@ -82,7 +82,7 @@ public class SetProfileOutgoingCommandExecutor implements OutgoingCommandExecuto
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -90,7 +90,7 @@ public class SetProfileOutgoingCommandExecutor implements OutgoingCommandExecuto
                                      final Long playerId,
                                      final Object profile) {
         final var request = new UpdatePlayerProfileRequest(userId, playerId, profile);
-        return userModule.getUserService().updatePlayerProfile(request)
+        return userModule.getService().updatePlayerProfile(request)
                 .map(UpdatePlayerProfileResponse::getUpdated);
     }
 }

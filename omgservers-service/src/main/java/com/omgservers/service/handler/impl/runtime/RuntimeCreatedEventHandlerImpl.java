@@ -102,7 +102,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeModel> getRuntime(final Long runtimeId) {
         final var request = new GetRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -113,7 +113,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var lobbyId = runtime.getConfig().getLobbyConfig().getLobbyId();
                 final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId, idempotencyKey);
                 final var request = new SyncLobbyRuntimeRefRequest(lobbyRuntimeRef);
-                yield lobbyModule.getLobbyService().syncLobbyRuntimeRef(request)
+                yield lobbyModule.getService().syncLobbyRuntimeRef(request)
                         .map(SyncLobbyRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
                         .recoverWithItem(Boolean.FALSE)
@@ -137,7 +137,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var matchRuntimeRef = matchmakerMatchRuntimeRefModelFactory
                         .create(matchmakerId, matchId, runtimeId, idempotencyKey);
                 final var request = new SyncMatchmakerMatchRuntimeRefRequest(matchRuntimeRef);
-                yield matchmakerModule.getMatchmakerService().syncMatchmakerMatchRuntimeRef(request)
+                yield matchmakerModule.getService().syncMatchmakerMatchRuntimeRef(request)
                         .map(SyncMatchmakerMatchRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
                         .recoverWithItem(Boolean.FALSE)

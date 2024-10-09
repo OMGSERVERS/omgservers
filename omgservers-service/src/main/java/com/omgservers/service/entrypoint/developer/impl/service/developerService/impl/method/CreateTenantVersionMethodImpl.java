@@ -56,7 +56,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
                 tenantProjectId,
                 tenantVersionConfigDto);
         final var request = new SyncTenantVersionRequest(tenantVersion);
-        return tenantModule.getTenantService().syncTenantVersion(request)
+        return tenantModule.getService().syncTenantVersion(request)
                 .replaceWith(tenantVersion);
     }
 }

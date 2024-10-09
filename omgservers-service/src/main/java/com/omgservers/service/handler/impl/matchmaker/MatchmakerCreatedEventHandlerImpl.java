@@ -68,7 +68,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
+        return matchmakerModule.getService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
@@ -81,7 +81,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                 matchmakerId,
                 idempotencyKey);
         final var request = new SyncTenantMatchmakerRefRequest(tenantMatchmakerRef);
-        return tenantModule.getTenantService().syncTenantMatchmakerRefWithIdempotency(request)
+        return tenantModule.getService().syncTenantMatchmakerRefWithIdempotency(request)
                 .map(SyncTenantMatchmakerRefResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithItem(Boolean.FALSE);

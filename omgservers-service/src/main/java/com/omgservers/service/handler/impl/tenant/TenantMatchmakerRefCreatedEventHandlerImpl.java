@@ -57,7 +57,7 @@ public class TenantMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
 
     Uni<TenantMatchmakerRefModel> getTenantMatchmakerRef(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantMatchmakerRef(request)
+        return tenantModule.getService().getTenantMatchmakerRef(request)
                 .map(GetTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 
@@ -75,13 +75,13 @@ public class TenantMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                                                                   final Long deploymentId,
                                                                   final Long matchmakerId) {
         final var request = new FindTenantMatchmakerRequestRequest(tenantId, deploymentId, matchmakerId);
-        return tenantModule.getTenantService().findTenantMatchmakerRequest(request)
+        return tenantModule.getService().findTenantMatchmakerRequest(request)
                 .map(FindTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
     }
 
     Uni<Boolean> deleteTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantMatchmakerRequest(request)
+        return tenantModule.getService().deleteTenantMatchmakerRequest(request)
                 .map(DeleteTenantMatchmakerRequestResponse::getDeleted);
     }
 }

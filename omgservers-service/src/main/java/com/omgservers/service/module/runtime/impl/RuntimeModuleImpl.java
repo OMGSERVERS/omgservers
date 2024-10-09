@@ -14,7 +14,7 @@ class RuntimeModuleImpl implements RuntimeModule {
 
     final RuntimeService runtimeService;
 
-    public RuntimeService getRuntimeService() {
+    public RuntimeService getService() {
         return runtimeService;
     }
 

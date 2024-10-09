@@ -4,5 +4,5 @@ import com.omgservers.service.module.user.impl.service.userService.UserService;
 
 public interface UserModule {
 
-    UserService getUserService();
+    UserService getService();
 }

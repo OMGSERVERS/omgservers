@@ -47,7 +47,7 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
 
     Uni<TenantProjectDataDto> getTenantProjectData(final Long tenantId, final Long tenantProjectId) {
         final var request = new GetTenantProjectDataRequest(tenantId, tenantProjectId);
-        return tenantModule.getTenantService().getTenantProjectData(request)
+        return tenantModule.getService().getTenantProjectData(request)
                 .map(GetTenantProjectDataResponse::getTenantProjectData);
     }
 }

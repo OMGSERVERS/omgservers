@@ -50,13 +50,13 @@ class DeleteTenantLobbyRequestsByTenantDeploymentIdOperationImpl
     Uni<List<TenantLobbyRequestModel>> viewTenantLobbyRequests(final Long tenantId,
                                                                final Long tenantDeploymentId) {
         final var request = new ViewTenantLobbyRequestsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getTenantService().viewTenantLobbyRequests(request)
+        return tenantModule.getService().viewTenantLobbyRequests(request)
                 .map(ViewTenantLobbyRequestsResponse::getTenantLobbyRequests);
     }
 
     Uni<Boolean> deleteTenantLobbyRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantLobbyRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantLobbyRequest(request)
+        return tenantModule.getService().deleteTenantLobbyRequest(request)
                 .map(DeleteTenantLobbyRequestResponse::getDeleted);
     }
 }

@@ -50,13 +50,13 @@ class DeleteTenantDeploymentsByTenantStageIdOperationImpl implements DeleteTenan
 
     Uni<List<TenantDeploymentModel>> viewTenantDeployments(final Long tenantId, final Long tenantStageId) {
         final var request = new ViewTenantDeploymentsRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().viewTenantDeployments(request)
+        return tenantModule.getService().viewTenantDeployments(request)
                 .map(ViewTenantDeploymentsResponse::getTenantDeployments);
     }
 
     Uni<Boolean> deleteTenantDeployment(final Long tenantId, final Long id) {
         final var request = new DeleteTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantDeployment(request)
+        return tenantModule.getService().deleteTenantDeployment(request)
                 .map(DeleteTenantDeploymentResponse::getDeleted);
     }
 }

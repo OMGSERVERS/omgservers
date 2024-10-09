@@ -4,5 +4,5 @@ import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.M
 
 public interface MatchmakerModule {
 
-    MatchmakerService getMatchmakerService();
+    MatchmakerService getService();
 }

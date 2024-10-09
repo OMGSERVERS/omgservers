@@ -56,7 +56,7 @@ public class VersionBuildingFailedEventHandlerImpl implements EventHandler {
 
     Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -72,13 +72,13 @@ public class VersionBuildingFailedEventHandlerImpl implements EventHandler {
     Uni<List<TenantJenkinsRequestModel>> viewTenantJenkinsRequests(final Long tenantId,
                                                                    final Long tenantVersionId) {
         final var request = new ViewTenantJenkinsRequestsRequest(tenantId, tenantVersionId);
-        return tenantModule.getTenantService().viewTenantJenkinsRequests(request)
+        return tenantModule.getService().viewTenantJenkinsRequests(request)
                 .map(ViewTenantJenkinsRequestsResponse::getTenantJenkinsRequests);
     }
 
     Uni<Boolean> deleteTenantJenkinsRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantJenkinsRequest(request)
+        return tenantModule.getService().deleteTenantJenkinsRequest(request)
                 .map(DeleteTenantJenkinsRequestResponse::getDeleted);
     }
 }

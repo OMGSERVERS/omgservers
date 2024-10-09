@@ -90,19 +90,19 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
+        return matchmakerModule.getService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<MatchmakerMatchClientModel> getMatchClient(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerMatchClientRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().getMatchmakerMatchClient(request)
+        return matchmakerModule.getService().getMatchmakerMatchClient(request)
                 .map(GetMatchmakerMatchClientResponse::getMatchClient);
     }
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 

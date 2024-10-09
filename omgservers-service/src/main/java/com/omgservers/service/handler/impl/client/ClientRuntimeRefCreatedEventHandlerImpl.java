@@ -75,13 +75,13 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<ClientRuntimeRefModel> getClientRuntimeRef(final Long clientId, final Long id) {
         final var request = new GetClientRuntimeRefRequest(clientId, id);
-        return clientModule.getClientService().getClientRuntimeRef(request)
+        return clientModule.getService().getClientRuntimeRef(request)
                 .map(GetClientRuntimeRefResponse::getClientRuntimeRef);
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -96,7 +96,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
                 messageBody,
                 idempotencyKey);
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+        return clientModule.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
@@ -120,7 +120,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<List<ClientRuntimeRefModel>> viewClientRuntimeRefs(final Long clientId) {
         final var request = new ViewClientRuntimeRefsRequest(clientId);
-        return clientModule.getClientService().viewClientRuntimeRefs(request)
+        return clientModule.getService().viewClientRuntimeRefs(request)
                 .map(ViewClientRuntimeRefsResponse::getClientRuntimeRefs);
     }
 
@@ -135,13 +135,13 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> findRuntimeAssignment(final Long runtimeId, final Long clientId) {
         final var request = new FindRuntimeAssignmentRequest(runtimeId, clientId);
-        return runtimeModule.getRuntimeService().findRuntimeAssignment(request)
+        return runtimeModule.getService().findRuntimeAssignment(request)
                 .map(FindRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeAssignment(request)
+        return runtimeModule.getService().deleteRuntimeAssignment(request)
                 .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 }

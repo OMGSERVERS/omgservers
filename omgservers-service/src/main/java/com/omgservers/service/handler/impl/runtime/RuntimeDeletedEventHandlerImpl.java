@@ -110,7 +110,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -145,13 +145,13 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<RuntimeCommandModel>> viewRuntimeCommands(final Long runtimeId) {
         final var request = new ViewRuntimeCommandsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimeCommands(request)
+        return runtimeModule.getService().viewRuntimeCommands(request)
                 .map(ViewRuntimeCommandsResponse::getRuntimeCommands);
     }
 
     Uni<Boolean> deleteRuntimeCommand(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeCommandRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeCommand(request)
+        return runtimeModule.getService().deleteRuntimeCommand(request)
                 .map(DeleteRuntimeCommandResponse::getDeleted);
     }
 
@@ -180,13 +180,13 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeAssignment(request)
+        return runtimeModule.getService().deleteRuntimeAssignment(request)
                 .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 
     Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignments(final Long runtimeId) {
         final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimeAssignments(request)
+        return runtimeModule.getService().viewRuntimeAssignments(request)
                 .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 
@@ -217,13 +217,13 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     Uni<LobbyRuntimeRefModel> findLobbyRuntimeRef(final Long lobbyId) {
         final var request = new FindLobbyRuntimeRefRequest(lobbyId);
-        return lobbyModule.getLobbyService().findLobbyRuntimeRef(request)
+        return lobbyModule.getService().findLobbyRuntimeRef(request)
                 .map(FindLobbyRuntimeRefResponse::getLobbyRuntimeRef);
     }
 
     Uni<Boolean> deleteLobbyRuntimeRef(final Long lobbyId, final Long id) {
         final var request = new DeleteLobbyRuntimeRefRequest(lobbyId, id);
-        return lobbyModule.getLobbyService().deleteLobbyRuntimeRef(request)
+        return lobbyModule.getService().deleteLobbyRuntimeRef(request)
                 .map(DeleteLobbyRuntimeRefResponse::getDeleted);
     }
 
@@ -240,7 +240,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     Uni<MatchmakerMatchRuntimeRefModel> findMatchRuntimeRef(final Long matchmakerId,
                                                             final Long matchId) {
         final var request = new FindMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().findMatchmakerMatchRuntimeRef(request)
+        return matchmakerModule.getService().findMatchmakerMatchRuntimeRef(request)
                 .map(FindMatchmakerMatchRuntimeRefResponse::getMatchRuntimeRef);
     }
 
@@ -248,7 +248,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                                        final Long matchId,
                                        final Long id) {
         final var request = new DeleteMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatchRuntimeRef(request)
+        return matchmakerModule.getService().deleteMatchmakerMatchRuntimeRef(request)
                 .map(DeleteMatchmakerMatchRuntimeRefResponse::getDeleted);
     }
 
@@ -262,7 +262,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimePoolServerContainerRefModel> findPoolRuntimeServerContainerRef(final Long runtimeId) {
         final var request = new FindRuntimePoolServerContainerRefRequest(runtimeId);
-        return runtimeModule.getRuntimeService().findRuntimePoolServerContainerRef(request)
+        return runtimeModule.getService().findRuntimePoolServerContainerRef(request)
                 .map(FindRuntimePoolServerContainerRefResponse::getRuntimePoolServerContainerRef);
     }
 
@@ -271,7 +271,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var serverId = runtimePoolServerContainerRef.getServerId();
         final var containerId = runtimePoolServerContainerRef.getContainerId();
         final var request = new DeletePoolServerContainerRequest(poolId, serverId, containerId);
-        return poolModule.getPoolService().deletePoolServerContainer(request)
+        return poolModule.getService().deletePoolServerContainer(request)
                 .map(DeletePoolServerContainerResponse::getDeleted);
     }
 

@@ -67,7 +67,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantModel> getTenant(final Long id) {
         final var request = new GetTenantRequest(id);
-        return tenantModule.getTenantService().getTenant(request)
+        return tenantModule.getService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -84,13 +84,13 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     Uni<RootEntityRefModel> findRootEntityRef(final Long rootId,
                                               final Long tenantId) {
         final var request = new FindRootEntityRefRequest(rootId, tenantId);
-        return rootModule.getRootService().findRootEntityRef(request)
+        return rootModule.getService().findRootEntityRef(request)
                 .map(FindRootEntityRefResponse::getRootEntityRef);
     }
 
     Uni<Boolean> deleteRootEntityRef(final Long rootId, final Long id) {
         final var request = new DeleteRootEntityRefRequest(rootId, id);
-        return rootModule.getRootService().deleteRootEntityRef(request)
+        return rootModule.getService().deleteRootEntityRef(request)
                 .map(DeleteRootEntityRefResponse::getDeleted);
     }
 }

@@ -29,7 +29,7 @@ class BootstrapServiceRootMethodImpl implements BootstrapServiceRootMethod {
         final var root = rootModelFactory.create(rootId, "bootstrap/root");
 
         final var request = new SyncRootRequest(root);
-        return rootModule.getRootService().syncRootWithIdempotency(request)
+        return rootModule.getService().syncRootWithIdempotency(request)
                 .replaceWithVoid();
     }
 }

@@ -77,7 +77,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -96,7 +96,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<ClientMatchmakerRefModel>> viewClientMatchmakerRefs(final Long clientId) {
         final var request = new ViewClientMatchmakerRefsRequest(clientId);
-        return clientModule.getClientService().viewClientMatchmakerRefs(request)
+        return clientModule.getService().viewClientMatchmakerRefs(request)
                 .map(ViewClientMatchmakerRefsResponse::getClientMatchmakerRefs);
     }
 
@@ -109,7 +109,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                 commandBody,
                 commandIdempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommandWithIdempotency(request)
+        return matchmakerModule.getService().syncMatchmakerCommandWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
@@ -137,7 +137,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<ClientRuntimeRefModel>> viewClientRuntimeRefs(final Long clientId) {
         final var request = new ViewClientRuntimeRefsRequest(clientId);
-        return clientModule.getClientService().viewClientRuntimeRefs(request)
+        return clientModule.getService().viewClientRuntimeRefs(request)
                 .map(ViewClientRuntimeRefsResponse::getClientRuntimeRefs);
     }
 
@@ -152,13 +152,13 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> findRuntimeAssignment(final Long runtimeId, final Long clientId) {
         final var request = new FindRuntimeAssignmentRequest(runtimeId, clientId);
-        return runtimeModule.getRuntimeService().findRuntimeAssignment(request)
+        return runtimeModule.getService().findRuntimeAssignment(request)
                 .map(FindRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().deleteRuntimeAssignment(request)
+        return runtimeModule.getService().deleteRuntimeAssignment(request)
                 .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 }

@@ -44,7 +44,7 @@ public class RootDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RootModel> getRoot(final Long id) {
         final var request = new GetRootRequest(id);
-        return rootModule.getRootService().getRoot(request)
+        return rootModule.getService().getRoot(request)
                 .map(GetRootResponse::getRoot);
     }
 }

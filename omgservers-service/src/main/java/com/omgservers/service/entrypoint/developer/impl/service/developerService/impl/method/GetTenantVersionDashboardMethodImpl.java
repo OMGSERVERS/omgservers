@@ -59,13 +59,13 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<TenantVersionDataDto> getTenantVersionData(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionDataRequest(tenantId, tenantVersionId);
-        return tenantModule.getTenantService().getTenantVersionData(request)
+        return tenantModule.getService().getTenantVersionData(request)
                 .map(GetTenantVersionDataResponse::getTenantVersionData);
     }
 }

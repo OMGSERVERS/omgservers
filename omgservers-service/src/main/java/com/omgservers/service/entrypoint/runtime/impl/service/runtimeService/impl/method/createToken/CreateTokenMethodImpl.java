@@ -51,13 +51,13 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     Uni<String> createUserToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userModule.getUserService().createToken(createTokenRequest)
+        return userModule.getService().createToken(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken);
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 }

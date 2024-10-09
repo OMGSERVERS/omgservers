@@ -48,7 +48,7 @@ public class LobbyRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<LobbyRuntimeRefModel> getLobbyRuntimeRef(final Long lobbyId, final Long id) {
         final var request = new GetLobbyRuntimeRefRequest(lobbyId, id);
-        return lobbyModule.getLobbyService().getLobbyRuntimeRef(request)
+        return lobbyModule.getService().getLobbyRuntimeRef(request)
                 .map(GetLobbyRuntimeRefResponse::getLobbyRuntimeRef);
     }
 }

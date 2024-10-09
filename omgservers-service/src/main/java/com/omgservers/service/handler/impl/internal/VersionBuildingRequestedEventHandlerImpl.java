@@ -65,13 +65,13 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<TenantFilesArchiveModel> findTenantFilesArchive(Long tenantId, Long tenantVersionId) {
         final var request = new FindTenantFilesArchiveRequest(tenantId, tenantVersionId);
-        return tenantModule.getTenantService().findTenantFilesArchive(request)
+        return tenantModule.getService().findTenantFilesArchive(request)
                 .map(FindTenantFilesArchiveResponse::getTenantFilesArchive);
     }
 
@@ -115,7 +115,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var request = new SyncTenantJenkinsRequestRequest(tenantJenkinsRequest);
-        return tenantModule.getTenantService().syncTenantJenkinsRequestWithIdempotency(request)
+        return tenantModule.getService().syncTenantJenkinsRequestWithIdempotency(request)
                 .map(SyncTenantJenkinsRequestResponse::getCreated);
     }
 }

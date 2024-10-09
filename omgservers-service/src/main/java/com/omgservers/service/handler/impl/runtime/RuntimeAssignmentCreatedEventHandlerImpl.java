@@ -84,7 +84,7 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> getRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new GetRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getRuntimeService().getRuntimeAssignment(request)
+        return runtimeModule.getService().getRuntimeAssignment(request)
                 .map(GetRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
@@ -131,19 +131,19 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
     Uni<PlayerModel> getPlayer(final Long userId, final Long id) {
         final var request = new GetPlayerRequest(userId, id);
-        return userModule.getUserService().getPlayer(request)
+        return userModule.getService().getPlayer(request)
                 .map(GetPlayerResponse::getPlayer);
     }
 
     Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var request = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getRuntimeService().syncRuntimeCommand(request)
+        return runtimeModule.getService().syncRuntimeCommand(request)
                 .map(SyncRuntimeCommandResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -163,7 +163,7 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
                                       final String idempotencyKey) {
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(clientId, runtimeId, idempotencyKey);
         final var request = new SyncClientRuntimeRefRequest(clientRuntimeRef);
-        return clientModule.getClientService().syncClientRuntimeRef(request)
+        return clientModule.getService().syncClientRuntimeRef(request)
                 .map(SyncClientRuntimeRefResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithItem(Boolean.FALSE)

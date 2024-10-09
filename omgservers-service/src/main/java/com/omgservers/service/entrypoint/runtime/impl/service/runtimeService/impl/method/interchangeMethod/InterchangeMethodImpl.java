@@ -33,7 +33,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
         final var consumedCommands = request.getConsumedCommands();
 
         final var interchangeRequest = new InterchangeRequest(runtimeId, outgoingCommands, consumedCommands);
-        return runtimeModule.getRuntimeService().interchange(interchangeRequest)
+        return runtimeModule.getService().interchange(interchangeRequest)
                 .map(InterchangeResponse::getIncomingCommands)
                 .map(InterchangeRuntimeResponse::new);
     }

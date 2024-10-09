@@ -48,7 +48,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     Uni<Boolean> deleteTenantProject(final Long tenantId,
                                      final Long id) {
         final var request = new DeleteTenantProjectRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantProject(request)
+        return tenantModule.getService().deleteTenantProject(request)
                 .map(DeleteTenantProjectResponse::getDeleted);
     }
 }

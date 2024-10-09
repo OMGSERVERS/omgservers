@@ -14,7 +14,7 @@ class RuntimeEntrypointImpl implements RuntimeEntrypoint {
 
     final RuntimeService runtimeService;
 
-    public RuntimeService getRuntimeService() {
+    public RuntimeService getService() {
         return runtimeService;
     }
 }

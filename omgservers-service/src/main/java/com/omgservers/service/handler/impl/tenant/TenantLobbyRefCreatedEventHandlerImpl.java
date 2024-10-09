@@ -60,7 +60,7 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantLobbyRefModel> getTenantLobbyRef(final Long tenantId, final Long id) {
         final var request = new GetTenantLobbyRefRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantLobbyRef(request)
+        return tenantModule.getService().getTenantLobbyRef(request)
                 .map(GetTenantLobbyRefResponse::getTenantLobbyRef);
     }
 
@@ -78,13 +78,13 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
                                                         final Long tenantDeploymentId,
                                                         final Long lobbyId) {
         final var request = new FindTenantLobbyRequestRequest(tenantId, tenantDeploymentId, lobbyId);
-        return tenantModule.getTenantService().findTenantLobbyRequest(request)
+        return tenantModule.getService().findTenantLobbyRequest(request)
                 .map(FindTenantLobbyRequestResponse::getTenantLobbyRequest);
     }
 
     Uni<Boolean> deleteTenantLobbyRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantLobbyRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantLobbyRequest(request)
+        return tenantModule.getService().deleteTenantLobbyRequest(request)
                 .map(DeleteTenantLobbyRequestResponse::getDeleted);
     }
 }

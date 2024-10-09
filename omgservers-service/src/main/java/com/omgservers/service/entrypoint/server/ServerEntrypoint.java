@@ -4,5 +4,5 @@ import com.omgservers.service.entrypoint.server.impl.service.serverService.Serve
 
 public interface ServerEntrypoint {
 
-    ServerService getServerService();
+    ServerService getService();
 }

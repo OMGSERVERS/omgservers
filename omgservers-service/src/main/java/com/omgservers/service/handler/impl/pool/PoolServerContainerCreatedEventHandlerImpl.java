@@ -73,7 +73,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                                                          final Long serverId,
                                                          final Long id) {
         final var request = new GetPoolServerContainerRequest(poolId, serverId, id);
-        return poolModule.getPoolService().getPoolServerContainer(request)
+        return poolModule.getService().getPoolServerContainer(request)
                 .map(GetPoolServerContainerResponse::getPoolServerContainer);
     }
 
@@ -87,7 +87,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                 serverId,
                 containerId);
         final var request = new SyncRuntimePoolServerContainerRefRequest(runtimeServerContainerRef);
-        return runtimeModule.getRuntimeService().syncRuntimePoolServerContainerRef(request)
+        return runtimeModule.getService().syncRuntimePoolServerContainerRef(request)
                 .map(SyncRuntimePoolServerContainerRefResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -105,7 +105,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().getPoolServer(request)
+        return poolModule.getService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 

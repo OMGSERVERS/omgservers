@@ -57,7 +57,7 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
 
     Uni<ClientMatchmakerRefModel> getClientMatchmakerRef(final Long clientId, final Long id) {
         final var request = new GetClientMatchmakerRefRequest(clientId, id);
-        return clientModule.getClientService().getClientMatchmakerRef(request)
+        return clientModule.getService().getClientMatchmakerRef(request)
                 .map(GetClientMatchmakerRefResponse::getClientMatchmakerRef);
     }
 
@@ -70,7 +70,7 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                 messageBody,
                 idempotencyKey);
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+        return clientModule.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 }

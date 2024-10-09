@@ -48,7 +48,7 @@ public class JenkinsRequestTaskImpl {
 
     Uni<TenantJenkinsRequestModel> getTenantJenkinsRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantJenkinsRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantJenkinsRequest(request)
+        return tenantModule.getService().getTenantJenkinsRequest(request)
                 .map(GetTenantJenkinsRequestResponse::getTenantJenkinsRequest);
     }
 
@@ -120,7 +120,7 @@ public class JenkinsRequestTaskImpl {
                 idempotencyKey);
 
         final var request = new SyncTenantImageRequest(versionImage);
-        return tenantModule.getTenantService().syncTenantImageWithIdempotency(request)
+        return tenantModule.getService().syncTenantImageWithIdempotency(request)
                 .map(SyncTenantImageResponse::getCreated);
     }
 

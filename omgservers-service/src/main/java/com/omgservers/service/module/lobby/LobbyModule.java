@@ -4,5 +4,5 @@ import com.omgservers.service.module.lobby.impl.service.lobbyService.LobbyServic
 
 public interface LobbyModule {
 
-    LobbyService getLobbyService();
+    LobbyService getService();
 }

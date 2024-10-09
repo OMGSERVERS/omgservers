@@ -83,19 +83,19 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
     Uni<LobbyModel> getLobby(final Long id) {
         final var request = new GetLobbyRequest(id);
-        return lobbyModule.getLobbyService().getLobby(request)
+        return lobbyModule.getService().getLobby(request)
                 .map(GetLobbyResponse::getLobby);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantDeployment(request)
+        return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -120,7 +120,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var request = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getRuntimeService().syncRuntimeWithIdempotency(request)
+        return runtimeModule.getService().syncRuntimeWithIdempotency(request)
                 .map(SyncRuntimeResponse::getCreated);
     }
 
@@ -134,7 +134,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 lobbyId,
                 idempotencyKey);
         final var request = new SyncTenantLobbyRefRequest(tenantLobbyRef);
-        return tenantModule.getTenantService().syncTenantLobbyRefWithIdempotency(request)
+        return tenantModule.getService().syncTenantLobbyRefWithIdempotency(request)
                 .map(SyncTenantLobbyRefResponse::getCreated);
     }
 }

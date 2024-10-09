@@ -4,5 +4,5 @@ import com.omgservers.service.entrypoint.admin.impl.service.adminService.AdminSe
 
 public interface AdminEntrypoint {
 
-    AdminService getAdminService();
+    AdminService getService();
 }

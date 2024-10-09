@@ -84,7 +84,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getClientService().getClient(request)
+        return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -92,7 +92,7 @@ public class SetAttributesOutgoingCommandExecutor implements OutgoingCommandExec
                                         final Long playerId,
                                         final PlayerAttributesModel attributes) {
         final var request = new UpdatePlayerAttributesRequest(userId, playerId, attributes);
-        return userModule.getUserService().updatePlayerAttributes(request)
+        return userModule.getService().updatePlayerAttributes(request)
                 .map(UpdatePlayerAttributesResponse::getUpdated);
     }
 }

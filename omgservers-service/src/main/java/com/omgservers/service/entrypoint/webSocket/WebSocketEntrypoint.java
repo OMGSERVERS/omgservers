@@ -4,5 +4,5 @@ import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService
 
 public interface WebSocketEntrypoint {
 
-    WebSocketService getWebSocketService();
+    WebSocketService getService();
 }

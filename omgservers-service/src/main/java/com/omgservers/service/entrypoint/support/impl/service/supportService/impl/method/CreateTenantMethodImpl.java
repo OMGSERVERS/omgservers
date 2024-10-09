@@ -28,7 +28,7 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
 
         final var tenant = tenantModelFactory.create();
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);
-        return tenantModule.getTenantService().syncTenant(syncTenantInternalRequest)
+        return tenantModule.getService().syncTenant(syncTenantInternalRequest)
                 .replaceWith(new CreateTenantSupportResponse(tenant.getId()));
     }
 }

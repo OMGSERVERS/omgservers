@@ -90,7 +90,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -102,7 +102,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
                 tenantVersionId,
                 base64Archive);
         final var request = new SyncTenantFilesArchiveRequest(tenantFilesArchive);
-        return tenantModule.getTenantService().syncTenantFilesArchive(request)
+        return tenantModule.getService().syncTenantFilesArchive(request)
                 .replaceWith(tenantFilesArchive);
     }
 }

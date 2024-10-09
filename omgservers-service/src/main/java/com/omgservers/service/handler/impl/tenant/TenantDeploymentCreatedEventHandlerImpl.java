@@ -64,7 +64,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantDeployment(request)
+        return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
@@ -75,7 +75,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
                 tenantDeploymentId,
                 idempotencyKey);
         final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        return tenantModule.getTenantService().syncTenantLobbyRequestWithIdempotency(request)
+        return tenantModule.getService().syncTenantLobbyRequestWithIdempotency(request)
                 .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 
@@ -85,7 +85,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
         final var tenantMatchmakerRequest = tenantMatchmakerRequestModelFactory
                 .create(tenantId, tenantDeploymentId, idempotencyKey);
         final var request = new SyncTenantMatchmakerRequestRequest(tenantMatchmakerRequest);
-        return tenantModule.getTenantService().syncTenantMatchmakerRequestWithIdempotency(request)
+        return tenantModule.getService().syncTenantMatchmakerRequestWithIdempotency(request)
                 .map(SyncTenantMatchmakerRequestResponse::getCreated);
     }
 }

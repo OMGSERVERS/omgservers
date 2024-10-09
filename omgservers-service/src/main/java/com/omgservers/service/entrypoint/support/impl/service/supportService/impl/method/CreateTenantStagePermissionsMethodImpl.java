@@ -59,19 +59,19 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getUserService().getUser(request)
+        return userModule.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getTenantService().getTenant(getTenantRequest)
+        return tenantModule.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantStage(request)
+        return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
@@ -105,7 +105,7 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
                 .create(tenantId, tenantStageId, userId, permission);
 
         final var request = new SyncTenantStagePermissionRequest(stagePermission);
-        return tenantModule.getTenantService().syncTenantStagePermission(request)
+        return tenantModule.getService().syncTenantStagePermission(request)
                 .map(SyncTenantStagePermissionResponse::getCreated);
     }
 }

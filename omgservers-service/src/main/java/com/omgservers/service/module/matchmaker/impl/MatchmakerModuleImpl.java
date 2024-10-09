@@ -14,7 +14,7 @@ class MatchmakerModuleImpl implements MatchmakerModule {
 
     final MatchmakerService matchmakerService;
 
-    public MatchmakerService getMatchmakerService() {
+    public MatchmakerService getService() {
         return matchmakerService;
     }
 

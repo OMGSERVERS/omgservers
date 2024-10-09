@@ -15,7 +15,7 @@ class ClientModuleImpl implements ClientModule {
     final ClientService clientService;
 
     @Override
-    public ClientService getClientService() {
+    public ClientService getService() {
         return clientService;
     }
 }

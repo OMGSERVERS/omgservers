@@ -59,7 +59,7 @@ public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler
 
     Uni<MatchmakerAssignmentModel> getMatchmakerAssignment(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerAssignmentRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().getMatchmakerAssignment(request)
+        return matchmakerModule.getService().getMatchmakerAssignment(request)
                 .map(GetMatchmakerAssignmentResponse::getMatchmakerAssignment);
     }
 
@@ -68,7 +68,7 @@ public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler
                                          final String idempotencyKey) {
         final var clientMatchmakerRef = clientMatchmakerRefModelFactory.create(clientId, matchmakerId, idempotencyKey);
         final var request = new SyncClientMatchmakerRefRequest(clientMatchmakerRef);
-        return clientModule.getClientService().syncClientMatchmakerRef(request)
+        return clientModule.getService().syncClientMatchmakerRef(request)
                 .map(SyncClientMatchmakerRefResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

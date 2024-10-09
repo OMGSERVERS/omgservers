@@ -4,5 +4,5 @@ import com.omgservers.service.module.runtime.impl.service.runtimeService.Runtime
 
 public interface RuntimeModule {
 
-    RuntimeService getRuntimeService();
+    RuntimeService getService();
 }

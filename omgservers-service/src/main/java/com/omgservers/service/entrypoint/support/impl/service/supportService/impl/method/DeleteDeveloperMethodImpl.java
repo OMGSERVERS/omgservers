@@ -23,7 +23,7 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
 
         final var userId = request.getUserId();
         final var deleteUserRequest = new DeleteUserRequest(userId);
-        return userModule.getUserService().deleteUser(deleteUserRequest)
+        return userModule.getService().deleteUser(deleteUserRequest)
                 .map(DeleteUserResponse::getDeleted)
                 .map(DeleteDeveloperSupportResponse::new);
     }

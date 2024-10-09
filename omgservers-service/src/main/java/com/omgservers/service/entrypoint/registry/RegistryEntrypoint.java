@@ -4,5 +4,5 @@ import com.omgservers.service.entrypoint.registry.impl.service.registryService.R
 
 public interface RegistryEntrypoint {
 
-    RegistryService getRegistryService();
+    RegistryService getService();
 }

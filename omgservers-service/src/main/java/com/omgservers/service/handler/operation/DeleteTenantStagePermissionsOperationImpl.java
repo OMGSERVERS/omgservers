@@ -50,13 +50,13 @@ class DeleteTenantStagePermissionsOperationImpl implements DeleteTenantStagePerm
 
     Uni<List<TenantStagePermissionModel>> viewTenantStagePermissions(final Long tenantId, final Long tenantStageId) {
         final var request = new ViewTenantStagePermissionsRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().viewTenantStagePermissions(request)
+        return tenantModule.getService().viewTenantStagePermissions(request)
                 .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }
 
     Uni<Boolean> deleteTenantStagePermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantStagePermissionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantStagePermission(request)
+        return tenantModule.getService().deleteTenantStagePermission(request)
                 .map(DeleteTenantStagePermissionResponse::getDeleted);
     }
 }

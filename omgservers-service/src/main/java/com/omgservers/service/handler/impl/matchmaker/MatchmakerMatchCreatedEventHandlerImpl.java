@@ -89,25 +89,25 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
+        return matchmakerModule.getService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+        return matchmakerModule.getService().getMatchmakerMatch(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantDeployment(request)
+        return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantVersion(request)
+        return tenantModule.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -134,7 +134,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getRuntimeService().syncRuntimeWithIdempotency(syncRuntimeRequest)
+        return runtimeModule.getService().syncRuntimeWithIdempotency(syncRuntimeRequest)
                 .map(SyncRuntimeResponse::getCreated);
     }
 }

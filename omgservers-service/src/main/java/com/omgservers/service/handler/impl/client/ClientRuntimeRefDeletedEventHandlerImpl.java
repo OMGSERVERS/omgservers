@@ -55,7 +55,7 @@ public class ClientRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
     Uni<ClientRuntimeRefModel> getClientRuntimeRef(final Long clientId, final Long id) {
         final var request = new GetClientRuntimeRefRequest(clientId, id);
-        return clientModule.getClientService().getClientRuntimeRef(request)
+        return clientModule.getService().getClientRuntimeRef(request)
                 .map(GetClientRuntimeRefResponse::getClientRuntimeRef);
     }
 }

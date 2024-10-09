@@ -14,7 +14,7 @@ class UserModuleImpl implements UserModule {
 
     final UserService userService;
 
-    public UserService getUserService() {
+    public UserService getService() {
         return userService;
     }
 }

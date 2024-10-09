@@ -65,7 +65,7 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getRuntimeService().getRuntime(request)
+        return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -73,7 +73,7 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
         final var commandBody = new ExcludeMatchMatchmakerCommandBodyModel(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommand(request)
+        return matchmakerModule.getService().syncMatchmakerCommand(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

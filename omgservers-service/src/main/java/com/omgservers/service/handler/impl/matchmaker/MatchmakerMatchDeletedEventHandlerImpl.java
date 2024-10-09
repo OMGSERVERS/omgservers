@@ -66,13 +66,13 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().getMatchmakerMatch(request)
+        return matchmakerModule.getService().getMatchmakerMatch(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {
         final var request = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().deleteRuntime(request)
+        return runtimeModule.getService().deleteRuntime(request)
                 .map(DeleteRuntimeResponse::getDeleted);
     }
 
@@ -102,13 +102,13 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<MatchmakerMatchClientModel>> viewMatchClients(final Long matchmakerId, final Long matchId) {
         final var request = new ViewMatchmakerMatchClientsRequest(matchmakerId, matchId);
-        return matchmakerModule.getMatchmakerService().viewMatchmakerMatchClients(request)
+        return matchmakerModule.getService().viewMatchmakerMatchClients(request)
                 .map(ViewMatchmakerMatchClientsResponse::getMatchClients);
     }
 
     Uni<Boolean> deleteMatchClient(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerMatchClientRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatchClient(request)
+        return matchmakerModule.getService().deleteMatchmakerMatchClient(request)
                 .map(DeleteMatchmakerMatchClientResponse::getDeleted);
     }
 }

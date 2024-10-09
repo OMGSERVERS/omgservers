@@ -100,7 +100,7 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
 
     Uni<List<TenantMatchmakerRefModel>> viewTenantMatchmakerRefs(final Long tenantId, final Long deploymentId) {
         final var request = new ViewTenantMatchmakerRefsRequest(tenantId, deploymentId);
-        return tenantModule.getTenantService().viewTenantMatchmakerRefs(request)
+        return tenantModule.getService().viewTenantMatchmakerRefs(request)
                 .map(ViewTenantMatchmakerRefsResponse::getTenantMatchmakerRefs);
     }
 
@@ -111,7 +111,7 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
                 clientId,
                 idempotencyKey);
         final var request = new SyncMatchmakerAssignmentRequest(matchmakerAssignment);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerAssignment(request)
+        return matchmakerModule.getService().syncMatchmakerAssignment(request)
                 .map(SyncMatchmakerAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -137,13 +137,13 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+        return clientModule.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {
         final var request = new DeleteClientRequest(clientId);
-        return clientModule.getClientService().deleteClient(request)
+        return clientModule.getService().deleteClient(request)
                 .map(DeleteClientResponse::getDeleted);
     }
 }

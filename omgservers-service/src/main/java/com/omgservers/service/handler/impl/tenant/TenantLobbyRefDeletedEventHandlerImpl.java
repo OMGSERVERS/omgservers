@@ -54,7 +54,7 @@ public class TenantLobbyRefDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantLobbyRefModel> getTenantLobbyRef(final Long tenantId, final Long id) {
         final var request = new GetTenantLobbyRefRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantLobbyRef(request)
+        return tenantModule.getService().getTenantLobbyRef(request)
                 .map(GetTenantLobbyRefResponse::getTenantLobbyRef);
     }
 }

@@ -105,7 +105,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
                 idempotencyKey);
 
         final var request = new SyncTenantImageRequest(tenantImage);
-        return tenantModule.getTenantService().syncTenantImageWithIdempotency(request)
+        return tenantModule.getService().syncTenantImageWithIdempotency(request)
                 .map(SyncTenantImageResponse::getCreated);
     }
 

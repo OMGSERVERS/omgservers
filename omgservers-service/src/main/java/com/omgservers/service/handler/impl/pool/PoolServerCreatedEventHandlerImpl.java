@@ -64,7 +64,7 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().getPoolServer(request)
+        return poolModule.getService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 }

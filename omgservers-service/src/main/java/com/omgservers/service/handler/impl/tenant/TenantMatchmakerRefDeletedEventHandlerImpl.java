@@ -53,7 +53,7 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
     Uni<TenantMatchmakerRefModel> getTenantMatchmakerRef(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantMatchmakerRef(request)
+        return tenantModule.getService().getTenantMatchmakerRef(request)
                 .map(GetTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 }

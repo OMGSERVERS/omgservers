@@ -23,7 +23,7 @@ class CheckRuntimePermissionOperationImpl implements CheckRuntimePermissionOpera
                                             final Long userId,
                                             final RuntimePermissionEnum permission) {
         final var request = new FindRuntimePermissionRequest(runtimeId, userId, permission);
-        return runtimeModule.getRuntimeService().findRuntimePermission(request)
+        return runtimeModule.getService().findRuntimePermission(request)
                 .replaceWithVoid()
                 .onFailure(ServerSideNotFoundException.class)
                 .transform(t -> new ServerSideForbiddenException(ExceptionQualifierEnum.PERMISSION_NOT_FOUND,

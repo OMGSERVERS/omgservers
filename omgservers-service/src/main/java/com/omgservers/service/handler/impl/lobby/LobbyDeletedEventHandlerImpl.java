@@ -80,7 +80,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
     Uni<LobbyModel> getLobby(final Long id) {
         final var request = new GetLobbyRequest(id);
-        return lobbyModule.getLobbyService().getLobby(request)
+        return lobbyModule.getService().getLobby(request)
                 .map(GetLobbyResponse::getLobby);
     }
 
@@ -99,7 +99,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignments(final Long runtimeId) {
         final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
-        return runtimeModule.getRuntimeService().viewRuntimeAssignments(request)
+        return runtimeModule.getService().viewRuntimeAssignments(request)
                 .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 
@@ -114,13 +114,13 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessageWithIdempotency(request)
+        return clientModule.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {
         final var request = new DeleteClientRequest(clientId);
-        return clientModule.getClientService().deleteClient(request)
+        return clientModule.getService().deleteClient(request)
                 .map(DeleteClientResponse::getDeleted);
     }
 
@@ -139,7 +139,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
                                                 final Long deploymentId,
                                                 final Long lobbyId) {
         final var request = new FindTenantLobbyRefRequest(tenantId, deploymentId, lobbyId);
-        return tenantModule.getTenantService().findTenantLobbyRef(request)
+        return tenantModule.getService().findTenantLobbyRef(request)
                 .map(FindTenantLobbyRefResponse::getTenantLobbyRef);
     }
 
@@ -147,13 +147,13 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
         final var tenantId = tenantLobbyRef.getTenantId();
         final var id = tenantLobbyRef.getId();
         final var request = new DeleteTenantLobbyRefRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantLobbyRef(request)
+        return tenantModule.getService().deleteTenantLobbyRef(request)
                 .map(DeleteTenantLobbyRefResponse::getDeleted);
     }
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {
         final var request = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getRuntimeService().deleteRuntime(request)
+        return runtimeModule.getService().deleteRuntime(request)
                 .map(DeleteRuntimeResponse::getDeleted);
     }
 }

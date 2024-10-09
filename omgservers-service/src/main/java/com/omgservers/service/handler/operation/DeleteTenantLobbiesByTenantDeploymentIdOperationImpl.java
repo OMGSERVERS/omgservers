@@ -50,13 +50,13 @@ class DeleteTenantLobbiesByTenantDeploymentIdOperationImpl implements DeleteTena
 
     Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long tenantDeploymentId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getTenantService().viewTenantLobbyRefs(request)
+        return tenantModule.getService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<Boolean> deleteLobby(final Long lobbyId) {
         final var request = new DeleteLobbyRequest(lobbyId);
-        return lobbyModule.getLobbyService().deleteLobby(request)
+        return lobbyModule.getService().deleteLobby(request)
                 .map(DeleteLobbyResponse::getDeleted);
     }
 }

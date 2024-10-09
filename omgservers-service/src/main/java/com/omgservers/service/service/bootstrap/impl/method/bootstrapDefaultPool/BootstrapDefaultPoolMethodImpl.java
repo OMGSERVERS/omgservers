@@ -57,7 +57,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
         final var pool = poolModelFactory.create(defaultPoolId, "bootstrap/defaultPool");
         final var request = new SyncPoolRequest(pool);
-        return poolModule.getPoolService().syncPoolWithIdempotency(request)
+        return poolModule.getService().syncPoolWithIdempotency(request)
                 .replaceWith(pool);
     }
 
@@ -80,7 +80,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 idempotencyKey);
 
         final var request = new SyncPoolServerRequest(poolServer);
-        return poolModule.getPoolService().syncPoolServerWithIdempotency(request)
+        return poolModule.getService().syncPoolServerWithIdempotency(request)
                 .map(SyncPoolServerResponse::getCreated);
     }
 }

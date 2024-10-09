@@ -115,7 +115,7 @@ public class MulticastMessageOutgoingCommandExecutor implements OutgoingCommandE
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getClientService().syncClientMessage(request)
+        return clientModule.getService().syncClientMessage(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 }

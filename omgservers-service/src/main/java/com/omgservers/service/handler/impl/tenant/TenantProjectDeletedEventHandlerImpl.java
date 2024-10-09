@@ -56,7 +56,7 @@ public class TenantProjectDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantProject(request)
+        return tenantModule.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 

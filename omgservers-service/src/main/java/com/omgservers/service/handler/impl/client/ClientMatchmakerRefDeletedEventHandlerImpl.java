@@ -48,7 +48,7 @@ public class ClientMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
     Uni<ClientMatchmakerRefModel> getClientMatchmakerRef(final Long clientId, final Long id) {
         final var request = new GetClientMatchmakerRefRequest(clientId, id);
-        return clientModule.getClientService().getClientMatchmakerRef(request)
+        return clientModule.getService().getClientMatchmakerRef(request)
                 .map(GetClientMatchmakerRefResponse::getClientMatchmakerRef);
     }
 }

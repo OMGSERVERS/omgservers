@@ -29,7 +29,7 @@ class CreateTenantProjectPermissionOperationImpl implements CreateTenantProjectP
                 userId,
                 permissionQualifier);
         final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-        return tenantModule.getTenantService().syncTenantProjectPermission(request)
+        return tenantModule.getService().syncTenantProjectPermission(request)
                 .replaceWith(projectPermission);
     }
 }

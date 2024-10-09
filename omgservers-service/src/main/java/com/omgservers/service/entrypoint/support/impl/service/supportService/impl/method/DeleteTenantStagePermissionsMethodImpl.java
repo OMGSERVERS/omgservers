@@ -70,32 +70,32 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getUserService().getUser(request)
+        return userModule.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getTenantService().getTenant(getTenantRequest)
+        return tenantModule.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantStage(request)
+        return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<List<TenantStagePermissionModel>> viewTenantStagePermissions(final Long tenantId,
                                                                      final Long tenantStageId) {
         final var request = new ViewTenantStagePermissionsRequest(tenantId, tenantStageId);
-        return tenantModule.getTenantService().viewTenantStagePermissions(request)
+        return tenantModule.getService().viewTenantStagePermissions(request)
                 .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }
 
     Uni<Boolean> deleteTenantStagePermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantStagePermissionRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantStagePermission(request)
+        return tenantModule.getService().deleteTenantStagePermission(request)
                 .map(DeleteTenantStagePermissionResponse::getDeleted);
     }
 }

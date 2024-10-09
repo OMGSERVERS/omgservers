@@ -15,7 +15,7 @@ public class ServerEntrypointImpl implements ServerEntrypoint {
     final ServerService serverService;
 
     @Override
-    public ServerService getServerService() {
+    public ServerService getService() {
         return serverService;
     }
 }

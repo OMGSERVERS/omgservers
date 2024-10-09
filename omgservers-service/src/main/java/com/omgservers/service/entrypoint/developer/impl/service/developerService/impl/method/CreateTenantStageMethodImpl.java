@@ -61,7 +61,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var tenantStageId = tenantStage.getId();
         final var request = new SyncTenantStageRequest(tenantStage);
-        return tenantModule.getTenantService().syncTenantStage(request)
+        return tenantModule.getService().syncTenantStage(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT))
                 .replaceWith(tenantStage);

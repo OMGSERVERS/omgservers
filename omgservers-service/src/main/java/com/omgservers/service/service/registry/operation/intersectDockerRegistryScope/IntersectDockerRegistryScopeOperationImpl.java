@@ -83,14 +83,14 @@ class IntersectDockerRegistryScopeOperationImpl implements IntersectDockerRegist
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantProject(request)
+        return tenantModule.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
     Uni<List<TenantProjectPermissionModel>> viewTenantProjectPermissions(final Long tenantId,
                                                                          final Long tenantProjectId) {
         final var request = new ViewTenantProjectPermissionsRequest(tenantId, tenantProjectId);
-        return tenantModule.getTenantService().viewTenantProjectPermissions(request)
+        return tenantModule.getService().viewTenantProjectPermissions(request)
                 .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }
 }

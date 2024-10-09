@@ -66,7 +66,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantModel> getTenant(final Long id) {
         final var request = new GetTenantRequest(id);
-        return tenantModule.getTenantService().getTenant(request)
+        return tenantModule.getService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -77,7 +77,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                 RootEntityRefQualifierEnum.TENANT,
                 tenantId);
         final var request = new SyncRootEntityRefRequest(rootEntityRef);
-        return rootModule.getRootService().syncRootEntityRefWithIdempotency(request)
+        return rootModule.getService().syncRootEntityRefWithIdempotency(request)
                 .map(SyncRootEntityRefResponse::getCreated);
     }
 

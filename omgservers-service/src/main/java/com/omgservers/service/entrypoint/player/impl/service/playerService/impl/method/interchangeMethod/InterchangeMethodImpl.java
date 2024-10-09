@@ -33,7 +33,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
         final var consumedMessages = request.getConsumedMessages();
 
         final var interchangeRequest = new InterchangeRequest(userId, clientId, messagesToHandle, consumedMessages);
-        return clientModule.getClientService().interchange(interchangeRequest)
+        return clientModule.getService().interchange(interchangeRequest)
                 .map(InterchangeResponse::getIncomingMessages)
                 .map(InterchangePlayerResponse::new);
     }

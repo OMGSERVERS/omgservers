@@ -58,7 +58,7 @@ public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantLobbyRequestModel> getTenantLobbyRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantLobbyRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantLobbyRequest(request)
+        return tenantModule.getService().getTenantLobbyRequest(request)
                 .map(GetTenantLobbyRequestResponse::getTenantLobbyRequest);
     }
 
@@ -72,7 +72,7 @@ public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
                 deploymentId,
                 idempotencyKey);
         final var request = new SyncLobbyRequest(lobby);
-        return lobbyModule.getLobbyService().syncLobbyWithIdempotency(request)
+        return lobbyModule.getService().syncLobbyWithIdempotency(request)
                 .map(SyncLobbyResponse::getCreated);
     }
 }

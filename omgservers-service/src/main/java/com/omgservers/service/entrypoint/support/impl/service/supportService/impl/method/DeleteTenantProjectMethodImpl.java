@@ -24,7 +24,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getTenantProjectId();
         final var deleteTenantRequest = new DeleteTenantProjectRequest(tenantId, tenantProjectId);
-        return tenantModule.getTenantService().deleteTenantProject(deleteTenantRequest)
+        return tenantModule.getService().deleteTenantProject(deleteTenantRequest)
                 .map(DeleteTenantProjectResponse::getDeleted)
                 .map(DeleteTenantProjectSupportResponse::new);
     }

@@ -50,7 +50,7 @@ public class TenantMatchmakerRequestDeletedEventHandlerImpl implements EventHand
 
     Uni<TenantMatchmakerRequestModel> getTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantMatchmakerRequest(request)
+        return tenantModule.getService().getTenantMatchmakerRequest(request)
                 .map(GetTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
     }
 }

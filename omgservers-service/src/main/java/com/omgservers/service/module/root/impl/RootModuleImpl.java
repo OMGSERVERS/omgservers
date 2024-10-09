@@ -15,7 +15,7 @@ class RootModuleImpl implements RootModule {
     final RootService rootService;
 
     @Override
-    public RootService getRootService() {
+    public RootService getService() {
         return rootService;
     }
 }

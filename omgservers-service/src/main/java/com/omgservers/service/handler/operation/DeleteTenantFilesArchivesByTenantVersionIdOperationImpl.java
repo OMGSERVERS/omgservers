@@ -52,13 +52,13 @@ class DeleteTenantFilesArchivesByTenantVersionIdOperationImpl
     Uni<List<TenantFilesArchiveProjectionModel>> viewTenantFilesArchives(final Long tenantId,
                                                                          final Long tenantVersionId) {
         final var request = new ViewTenantFilesArchivesRequest(tenantId, tenantVersionId);
-        return tenantModule.getTenantService().viewTenantFilesArchives(request)
+        return tenantModule.getService().viewTenantFilesArchives(request)
                 .map(ViewTenantFilesArchivesResponse::getTenantFilesArchives);
     }
 
     Uni<Boolean> deleteTenantFilesArchive(final Long tenantId, final Long id) {
         final var request = new DeleteTenantFilesArchiveRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantFilesArchive(request)
+        return tenantModule.getService().deleteTenantFilesArchive(request)
                 .map(DeleteTenantFilesArchiveResponse::getDeleted);
     }
 }

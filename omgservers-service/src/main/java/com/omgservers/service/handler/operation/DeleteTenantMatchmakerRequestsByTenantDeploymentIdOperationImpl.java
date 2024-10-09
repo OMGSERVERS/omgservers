@@ -50,13 +50,13 @@ class DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperationImpl
     Uni<List<TenantMatchmakerRequestModel>> viewTenantMatchmakerRequests(final Long tenantId,
                                                                          final Long tenantDeploymentId) {
         final var request = new ViewTenantMatchmakerRequestsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getTenantService().viewTenantMatchmakerRequests(request)
+        return tenantModule.getService().viewTenantMatchmakerRequests(request)
                 .map(ViewTenantMatchmakerRequestsResponse::getTenantMatchmakerRequests);
     }
 
     Uni<Boolean> deleteTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantMatchmakerRequest(request)
+        return tenantModule.getService().deleteTenantMatchmakerRequest(request)
                 .map(DeleteTenantMatchmakerRequestResponse::getDeleted);
     }
 }

@@ -14,7 +14,7 @@ class LobbyModuleImpl implements LobbyModule {
 
     final LobbyService lobbyService;
 
-    public LobbyService getLobbyService() {
+    public LobbyService getService() {
         return lobbyService;
     }
 }

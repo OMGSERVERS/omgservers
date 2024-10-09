@@ -40,7 +40,7 @@ public class MatchmakerTaskImpl {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
+        return matchmakerModule.getService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
@@ -92,14 +92,14 @@ public class MatchmakerTaskImpl {
 
     Uni<MatchmakerStateModel> getMatchmakerState(final Long matchmakerId) {
         final var request = new GetMatchmakerStateRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmakerState(request)
+        return matchmakerModule.getService().getMatchmakerState(request)
                 .map(GetMatchmakerStateResponse::getMatchmakerStateModel);
     }
 
     Uni<Boolean> updateMatchmakerState(final Long matchmakerId,
                                        final MatchmakerChangeOfStateModel changeOfState) {
         final var request = new UpdateMatchmakerStateRequest(matchmakerId, changeOfState);
-        return matchmakerModule.getMatchmakerService().updateMatchmakerState(request)
+        return matchmakerModule.getService().updateMatchmakerState(request)
                 .map(UpdateMatchmakerStateResponse::getUpdated);
     }
 

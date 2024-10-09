@@ -46,7 +46,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     Uni<TenantProjectModel> createTenantProject(final Long tenantId) {
         final var tenantProject = tenantProjectModelFactory.create(tenantId);
         final var syncProjectInternalRequest = new SyncTenantProjectRequest(tenantProject);
-        return tenantModule.getTenantService().syncTenantProject(syncProjectInternalRequest)
+        return tenantModule.getService().syncTenantProject(syncProjectInternalRequest)
                 .replaceWith(tenantProject);
     }
 
@@ -54,7 +54,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                                             final Long tenantProjectId) {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var syncStageInternalRequest = new SyncTenantStageRequest(tenantStage);
-        return tenantModule.getTenantService().syncTenantStage(syncStageInternalRequest)
+        return tenantModule.getService().syncTenantStage(syncStageInternalRequest)
                 .replaceWith(tenantStage);
     }
 }

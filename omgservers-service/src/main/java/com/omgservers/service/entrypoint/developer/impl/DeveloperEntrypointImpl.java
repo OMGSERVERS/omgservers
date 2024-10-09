@@ -15,7 +15,7 @@ class DeveloperEntrypointImpl implements DeveloperEntrypoint {
     final DeveloperService developerService;
 
     @Override
-    public DeveloperService getDeveloperService() {
+    public DeveloperService getService() {
         return developerService;
     }
 }

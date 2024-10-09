@@ -82,7 +82,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().getMatchmaker(request)
+        return matchmakerModule.getService().getMatchmaker(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
@@ -111,13 +111,13 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<MatchmakerCommandModel>> viewMatchmakerCommands(final Long matchmakerId) {
         final var request = new ViewMatchmakerCommandsRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().viewMatchmakerCommands(request)
+        return matchmakerModule.getService().viewMatchmakerCommands(request)
                 .map(ViewMatchmakerCommandsResponse::getMatchmakerCommands);
     }
 
     Uni<Boolean> deleteMatchmakerCommand(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerCommandRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchmakerCommand(request)
+        return matchmakerModule.getService().deleteMatchmakerCommand(request)
                 .map(DeleteMatchmakerCommandResponse::getDeleted);
     }
 
@@ -146,13 +146,13 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<MatchmakerRequestModel>> viewRequests(final Long matchmakerId) {
         final var request = new ViewMatchmakerRequestsRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().viewMatchmakerRequests(request)
+        return matchmakerModule.getService().viewMatchmakerRequests(request)
                 .map(ViewMatchmakerRequestsResponse::getMatchmakerRequests);
     }
 
     Uni<Boolean> deleteRequest(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerRequestRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchmakerRequest(request)
+        return matchmakerModule.getService().deleteMatchmakerRequest(request)
                 .map(DeleteMatchmakerRequestResponse::getDeleted);
     }
 
@@ -181,13 +181,13 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<MatchmakerMatchModel>> viewMatches(final Long matchmakerId) {
         final var request = new ViewMatchmakerMatchesRequest(matchmakerId);
-        return matchmakerModule.getMatchmakerService().viewMatchmakerMatches(request)
+        return matchmakerModule.getService().viewMatchmakerMatches(request)
                 .map(ViewMatchmakerMatchesResponse::getMatchmakerMatches);
     }
 
     Uni<Boolean> deleteMatch(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerMatchRequest(matchmakerId, id);
-        return matchmakerModule.getMatchmakerService().deleteMatchmakerMatch(request)
+        return matchmakerModule.getService().deleteMatchmakerMatch(request)
                 .map(DeleteMatchmakerMatchResponse::getDeleted);
     }
 
@@ -206,7 +206,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                                                           final Long deploymentId,
                                                           final Long matchmakerId) {
         final var request = new FindTenantMatchmakerRefRequest(tenantId, deploymentId, matchmakerId);
-        return tenantModule.getTenantService().findTenantMatchmakerRef(request)
+        return tenantModule.getService().findTenantMatchmakerRef(request)
                 .map(FindTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 
@@ -214,7 +214,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
         final var tenantId = tenantMatchmakerRef.getTenantId();
         final var id = tenantMatchmakerRef.getId();
         final var request = new DeleteTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantMatchmakerRef(request)
+        return tenantModule.getService().deleteTenantMatchmakerRef(request)
                 .map(DeleteTenantMatchmakerRefResponse::getDeleted);
     }
 

@@ -57,7 +57,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
                                                                      final Long matchId,
                                                                      final Long id) {
         final var request = new GetMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getMatchmakerService().getMatchmakerMatchRuntimeRef(request)
+        return matchmakerModule.getService().getMatchmakerMatchRuntimeRef(request)
                 .map(GetMatchmakerMatchRuntimeRefResponse::getMatchmakerMatchRuntimeRef);
     }
 
@@ -67,7 +67,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
         final var commandBody = new PrepareMatchMatchmakerCommandBodyModel(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody, idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getMatchmakerService().syncMatchmakerCommandWithIdempotency(request)
+        return matchmakerModule.getService().syncMatchmakerCommandWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

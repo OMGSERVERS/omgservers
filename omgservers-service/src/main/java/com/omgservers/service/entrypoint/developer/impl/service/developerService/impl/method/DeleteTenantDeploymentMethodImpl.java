@@ -57,14 +57,14 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
 
     Uni<TenantDeploymentModel> getTenantDeployment(Long tenantId, Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().getTenantDeployment(request)
+        return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<Boolean> deleteTenantDeployment(final Long tenantId,
                                         final Long id) {
         final var request = new DeleteTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getTenantService().deleteTenantDeployment(request)
+        return tenantModule.getService().deleteTenantDeployment(request)
                 .map(DeleteTenantDeploymentResponse::getDeleted);
     }
 }
