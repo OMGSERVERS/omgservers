@@ -42,7 +42,9 @@ omgserver = {
 	settings = {
 		debug = false,
 		trace = false,
-		iterate_interval = 1,
+		default_interval = nil,
+		fast_interval = nil,
+		iterations_threshold = nil,
 	},
 	components = {
 		server_state = {
@@ -50,7 +52,9 @@ omgserver = {
 			outgoing_commands = {},
 			consumed_commands = {},
 			server_events = {},
-			iterate_timer = 0,
+			iteration_timer = 0,
+			iterations_in_vain = 0,
+			fast_iterations = false,
 			-- Methods
 			add_outgoing_command = function(server_state, command)
 				server_state.outgoing_commands[#server_state.outgoing_commands + 1] = command
@@ -161,7 +165,8 @@ omgserver = {
 		local method = "PUT"
 
 		if self.settings.trace then
-			print(socket.gettime() .. " [OMGSERVER] Request, " .. method .. " " .. url .. ", body=" .. encoded_body)
+			local fast_iterations = self.components.server_state.fast_iterations
+			print(socket.gettime() .. " [OMGSERVER] Request, " .. method .. " " .. url .. ", fast_iterations=" .. tostring(fast_iterations) .. ", body=" .. encoded_body)
 		end
 
 		self.components.server_state.waiting_for_response = true
@@ -257,7 +262,8 @@ omgserver = {
 		self:request_server(request_url, request_body, response_handler, api_token)
 	end,
 	iterate = function(self, api_token)
-		local outgoing_commands = self.components.server_state:pull_outgoing_commands()
+		local server_state = self.components.server_state
+		local outgoing_commands = server_state:pull_outgoing_commands()
 		if #outgoing_commands > 0 then
 			if self.settings.debug then
 				print(socket.gettime() .. " [OMGSERVER] Outgoing commands, outgoing_commands=" .. json.encode(outgoing_commands))
@@ -265,6 +271,19 @@ omgserver = {
 		end
 
 		local consumed_commands = self.components.server_state:pull_consumed_commands()
+
+		-- Switch between default and fast interchange intervals
+		if #consumed_commands > 0 then
+			server_state.iterations_in_vain = 0 
+			server_state.fast_iterations = true
+		else
+			local iterations_in_vain = server_state.iterations_in_vain
+			if iterations_in_vain >= self.settings.iterations_threshold then
+				server_state.fast_iterations = false
+			else
+				server_state.iterations_in_vain = iterations_in_vain + 1
+			end
+		end
 
 		self:interchange(api_token, outgoing_commands, consumed_commands, function(interchange_status, interchange_response)
 			local incoming_commands = interchange_response.incoming_commands
@@ -287,7 +306,7 @@ omgserver = {
 				})
 			end
 		end)
-	end,	
+	end,
 	update = function(self, dt)
 		assert(self.components.event_handler, "Component event_handler must be set")
 
@@ -296,10 +315,15 @@ omgserver = {
 				-- 
 			else
 				local server_state = self.components.server_state
-				local iterate_interval = omgserver.settings.iterate_interval
-				server_state.iterate_timer = server_state.iterate_timer + dt
-				if server_state.iterate_timer >= iterate_interval then
-					server_state.iterate_timer = server_state.iterate_timer - iterate_interval
+				local iterate_interval
+				if server_state.fast_iterations then
+					iterate_interval = self.settings.fast_interval
+				else
+					iterate_interval = self.settings.default_interval
+				end
+				server_state.iteration_timer = server_state.iteration_timer + dt
+				if server_state.iteration_timer >= iterate_interval then
+					server_state.iteration_timer = 0
 					local api_token = self.components.tokens.api_token
 					omgserver:iterate(api_token)
 				end
@@ -312,10 +336,13 @@ omgserver = {
 			handler(server_event)
 		end
 	end,
-	start = function(self, handler, debug, interval)
+	start = function(self, handler, debug, default_interval, fast_interval, iterations_threshold)
 		self.settings.debug = debug or false
-		self.settings.iterate_interval = interval or 1
-		print(socket.gettime() .. " [OMGSERVER] Setting, debug=" .. tostring(self.settings.debug) .. ", interval=" .. self.settings.iterate_interval)
+		self.settings.default_interval = default_interval or 1
+		self.settings.fast_interval = fast_interval or self.settings.default_interval * 0.5
+		assert(self.settings.default_interval > self.settings.fast_interval , "Fast interval should be less than default")
+		self.settings.iterations_threshold = iterations_threshold or 4
+		print(socket.gettime() .. " [OMGSERVER] Setting, debug=" .. tostring(self.settings.debug) .. ", default_interval=" .. self.settings.default_interval .. ", fast_interval=" .. self.settings.fast_interval)
 
 		self.components:set_event_handler(handler)
 
@@ -475,8 +502,8 @@ return {
 		end,
 	},
 	-- Methods
-	start = function(self, handler, debug, interval)
-		omgserver:start(handler, debug, interval)
+	start = function(self, handler, debug, default_interval, fast_interval, iterations_threshold)
+		omgserver:start(handler, debug, default_interval, fast_interval, iterations_threshold)
 	end,
 	get_qualifier = function(self)
 		assert(omgserver.components.server_environment, "Server was not initialized")
