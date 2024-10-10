@@ -14,9 +14,13 @@ public class TenantStagePermissionDto {
 
     Long id;
 
+    Long tenantId;
+
+    Long stageId;
+
     Instant created;
 
     Long userId;
 
-    TenantStagePermissionQualifierEnum tenantStagePermission;
+    TenantStagePermissionQualifierEnum permission;
 }

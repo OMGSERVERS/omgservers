@@ -13,5 +13,9 @@ public class TenantStageDto {
 
     Long id;
 
+    Long tenantId;
+
+    Long projectId;
+
     Instant created;
 }

@@ -13,5 +13,9 @@ public class TenantVersionDto {
 
     Long id;
 
+    Long tenantId;
+
+    Long projectId;
+
     Instant created;
 }

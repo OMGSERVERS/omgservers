@@ -1490,7 +1490,7 @@ developer_getTenantStageDashboard() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-project-dashboard_${TENANT_ID}_${TENANT_PROJECT_ID}.json)
+    -o ${RESPONSE_FILE})
 
   cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs

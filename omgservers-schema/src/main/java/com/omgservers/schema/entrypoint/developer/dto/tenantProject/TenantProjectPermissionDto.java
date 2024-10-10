@@ -14,9 +14,13 @@ public class TenantProjectPermissionDto {
 
     Long id;
 
+    Long tenantId;
+
+    Long projectId;
+
     Instant created;
 
     Long userId;
 
-    TenantProjectPermissionQualifierEnum tenantProjectPermission;
+    TenantProjectPermissionQualifierEnum permission;
 }

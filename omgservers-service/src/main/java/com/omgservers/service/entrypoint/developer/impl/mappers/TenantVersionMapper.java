@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface TenantVersionMapper {
 
-    TenantVersionDto mapToDto(TenantVersionModel model);
+    TenantVersionDto modelToDto(TenantVersionModel model);
 
     TenantVersionDashboardDto dataToDashboard(TenantVersionDataDto data);
 }

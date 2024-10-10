@@ -14,6 +14,10 @@ public class TenantJenkinsRequestDto {
 
     Long id;
 
+    Long tenantId;
+
+    Long versionId;
+
     Instant created;
 
     TenantJenkinsRequestQualifierEnum qualifier;

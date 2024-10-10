@@ -13,5 +13,11 @@ public class TenantDeploymentDto {
 
     Long id;
 
+    Long tenantId;
+
+    Long stageId;
+
+    Long versionId;
+
     Instant created;
 }

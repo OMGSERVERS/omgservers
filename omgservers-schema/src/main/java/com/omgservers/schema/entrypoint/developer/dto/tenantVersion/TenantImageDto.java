@@ -14,6 +14,10 @@ public class TenantImageDto {
 
     Long id;
 
+    Long tenantId;
+
+    Long versionId;
+
     Instant created;
 
     TenantImageQualifierEnum qualifier;

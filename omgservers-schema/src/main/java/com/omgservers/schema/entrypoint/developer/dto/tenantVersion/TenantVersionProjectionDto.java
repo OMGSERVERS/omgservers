@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.developer.dto.tenantProject;
+package com.omgservers.schema.entrypoint.developer.dto.tenantVersion;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,4 +14,6 @@ public class TenantVersionProjectionDto {
     Long id;
 
     Instant created;
+
+    Long projectId;
 }

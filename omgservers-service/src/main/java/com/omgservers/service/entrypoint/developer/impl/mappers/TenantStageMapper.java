@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface TenantStageMapper {
 
-    TenantStageDto mapToDto(TenantStageModel model);
+    TenantStageDto modelToDto(TenantStageModel model);
 
     TenantStageDashboardDto dataToDashboard(TenantStageDataDto data);
 }

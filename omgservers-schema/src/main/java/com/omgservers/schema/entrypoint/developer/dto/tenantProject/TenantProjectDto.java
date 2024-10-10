@@ -13,5 +13,7 @@ public class TenantProjectDto {
 
     Long id;
 
+    Long tenantId;
+
     Instant created;
 }
