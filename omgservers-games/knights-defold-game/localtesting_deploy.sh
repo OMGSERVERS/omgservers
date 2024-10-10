@@ -45,7 +45,7 @@ docker login -u ${DEVELOPER_USER_ID} -p ${DEVELOPER_PASSWORD} localhost:5000
 docker tag ${IMAGE_ID} ${TARGET_IMAGE_ID}
 docker push ${TARGET_IMAGE_ID}
 
-echo "Create version deployment"
+echo "Deploy a new version"
 
 ./omgserversctl.sh developer deployTenantVersion ${TENANT_ID} ${TENANT_STAGE_ID} ${TENANT_VERSION_ID}
 TENANT_DEPLOYMENT_ID=$(./omgserversctl.sh environment printVariable TENANT_DEPLOYMENT_ID)

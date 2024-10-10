@@ -9,11 +9,14 @@ import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
+import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -40,13 +43,14 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
 
     @Override
     public Uni<DeployTenantVersionDeveloperResponse> execute(final DeployTenantVersionDeveloperRequest request) {
-        log.debug("Deploy version, request={}", request);
+        log.debug("Deploy tenant version, request={}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();
         final var tenantVersionId = request.getTenantVersionId();
 
-        return getTenantVersion(tenantId, tenantVersionId)
+        return verifyAtLeastOneTenantImageExists(tenantId, tenantVersionId)
+                .flatMap(voidItem -> getTenantVersion(tenantId, tenantVersionId))
                 .flatMap(tenantVersion -> getTenantStage(tenantId, tenantStageId)
                         .flatMap(tenantStage -> {
                             final var versionProjectId = tenantVersion.getProjectId();
@@ -84,6 +88,18 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
         return tenantModule.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
+    }
+
+    Uni<Void> verifyAtLeastOneTenantImageExists(final Long tenantId, final Long tenantVersionId) {
+        final var request = new ViewTenantImagesRequest(tenantId, tenantVersionId);
+        return tenantModule.getService().viewTenantImages(request)
+                .map(ViewTenantImagesResponse::getTenantImages)
+                .invoke(tenantImages -> {
+                    if (tenantImages.isEmpty()) {
+                        throw new ServerSideConflictException(ExceptionQualifierEnum.WRONG_VERSION_STATE);
+                    }
+                })
+                .replaceWithVoid();
     }
 
     Uni<TenantDeploymentModel> createTenantDeployment(final Long tenantId,
