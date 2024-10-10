@@ -91,7 +91,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                             final var idempotencyKey = event.getId().toString();
                                             final var imageId = tenantImage.getImageId();
                                             return createUser(userId, password, idempotencyKey)
-                                                    .flatMap(user -> syncPoolRequest(runtime, user, password, imageId));
+                                                    .flatMap(user -> syncPoolRequest(runtime, password, imageId));
                                         });
                             });
                 })
@@ -182,7 +182,6 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
     }
 
     Uni<Boolean> syncPoolRequest(final RuntimeModel runtime,
-                                 final UserModel user,
                                  final String password,
                                  final String imageId) {
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
@@ -197,9 +196,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         final var serviceUri = getConfigOperation.getServiceConfig().runtimes().serviceUri();
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_URL", serviceUri.toString());
-        environment.put("OMGSERVERS_USER_ID", user.getId().toString());
-        environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
+        environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
         poolRequestConfig.getServerContainerConfig().setEnvironment(environment);
 

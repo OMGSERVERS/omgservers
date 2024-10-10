@@ -9,9 +9,8 @@ omgserver = {
 		WS_EXIT_CODE = 5,
 		-- Server environment variables
 		SERVICE_URL = "OMGSERVERS_URL",
-		RUNTIME_USER_ID = "OMGSERVERS_USER_ID",
-		USER_PASSWORD = "OMGSERVERS_PASSWORD",
 		RUNTIME_ID = "OMGSERVERS_RUNTIME_ID",
+		USER_PASSWORD = "OMGSERVERS_PASSWORD",
 		RUNTIME_QUALIFIER = "OMGSERVERS_RUNTIME_QUALIFIER",
 		-- Server event qualifiers
 		SERVER_STARTED = "SERVER_STARTED",
@@ -88,12 +87,11 @@ omgserver = {
 				handler = handler
 			}
 		end,
-		set_server_environment = function(components, service_url, user_id, password, runtime_id, runtime_qualifier)
+		set_server_environment = function(components, service_url, runtime_id, password, runtime_qualifier)
 			components.server_environment = {
 				service_url = service_url,
-				user_id = user_id,
-				password = password,
 				runtime_id = runtime_id,
+				password = password,
 				runtime_qualifier = runtime_qualifier,
 			}
 		end,
@@ -351,19 +349,14 @@ omgserver = {
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=service_url")
 		end
 
-		local user_id = os.getenv(omgserver.constants.RUNTIME_USER_ID)
-		if not user_id then
-			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=user_id")
-		end
-
-		local password = os.getenv(omgserver.constants.USER_PASSWORD)
-		if not password then
-			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=password")
-		end
-
 		local runtime_id = os.getenv(omgserver.constants.RUNTIME_ID)
 		if not runtime_id then
 			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=runtime_id")
+		end
+		
+		local password = os.getenv(omgserver.constants.USER_PASSWORD)
+		if not password then
+			self:terminate_server(self.constants.ENVIRONMENT_EXIT_CODE, "environment variable is nil, variable=password")
 		end
 
 		local runtime_qualifier = os.getenv(omgserver.constants.RUNTIME_QUALIFIER)
@@ -372,12 +365,11 @@ omgserver = {
 		end
 
 		print(socket.gettime() .. " [OMGSERVER] Environment, service_url=" .. service_url)
-		print(socket.gettime() .. " [OMGSERVER] Environment, user_id=" .. user_id)
-		print(socket.gettime() .. " [OMGSERVER] Environment, password=" .. string.sub(password, 1, 4) .. "..")
 		print(socket.gettime() .. " [OMGSERVER] Environment, runtime_id=" .. runtime_id)
+		print(socket.gettime() .. " [OMGSERVER] Environment, password=" .. string.sub(password, 1, 4) .. "..")
 		print(socket.gettime() .. " [OMGSERVER] Environment, runtime_qualifier=" .. runtime_qualifier)
 
-		self.components:set_server_environment(service_url, user_id, password, runtime_id, runtime_qualifier)
+		self.components:set_server_environment(service_url, runtime_id, password, runtime_qualifier)
 		self.components:set_service_urls(service_url)
 
 		self:create_token(function(create_token_status, create_token_response)

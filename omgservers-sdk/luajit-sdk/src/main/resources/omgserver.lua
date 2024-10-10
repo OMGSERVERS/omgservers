@@ -22,10 +22,9 @@ local internal = {
 }
 
 local components = {
-    create_server_environment = function(self, service_url, user_id, password, runtime_id, qualifier)
+    create_server_environment = function(self, service_url, runtime_id, password, qualifier)
         return {
             service_url = service_url,
-            user_id = user_id,
             password = password,
             runtime_id = runtime_id,
             qualifier = qualifier,
@@ -118,11 +117,6 @@ local server = {
             error("service_url is nil")
         end
 
-        local user_id = os.getenv("OMGSERVERS_USER_ID")
-        if not user_id then
-            error("user_id is nil")
-        end
-
         local password = os.getenv("OMGSERVERS_PASSWORD")
         if not password then
             error("password is nil")
@@ -138,9 +132,8 @@ local server = {
             error("runtime_qualifier is nil")
         end
 
-        self.components.server_environment = components:create_server_environment(service_url, user_id, password, runtime_id, runtime_qualifier)
+        self.components.server_environment = components:create_server_environment(service_url, runtime_id, password, runtime_qualifier)
         internal:log("Environment, service_url=" .. service_url)
-        internal:log("Environment, user_id=" .. user_id)
         internal:log("Environment, password=" .. string.sub(password, 1, 4) .. "..")
         internal:log("Environment, runtime_id=" .. runtime_id)
         internal:log("Environment, runtime_qualifier=" .. runtime_qualifier)
@@ -154,7 +147,6 @@ local server = {
         assert(self_components.service_urls, "Service urls must be set")
 
         local runtime_id = self_components.server_environment.runtime_id
-        local user_id = self_components.server_environment.user_id
         local password = self_components.server_environment.password
 
         local request_body = {
