@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl.developerApi;
 
-import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -10,6 +8,10 @@ import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperRequest;
@@ -30,6 +32,8 @@ import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDevelop
 import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -145,5 +149,16 @@ class DeveloperApiImpl implements DeveloperApi {
     public Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
             @NotNull final DeleteTenantDeploymentDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantDeployment);
+    }
+
+    @Override
+    public Uni<DeleteLobbyDeveloperResponse> deleteLobby(@NotNull final DeleteLobbyDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteLobby);
+    }
+
+    @Override
+    public Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(
+            @NotNull final DeleteMatchmakerDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmaker);
     }
 }

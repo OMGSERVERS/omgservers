@@ -272,6 +272,20 @@ help() {
       echo "     - DELETED"
     fi
   fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteLobby" ]; then
+    echo " omgserversctl developer deleteLobby <lobby_id>"
+    if [ "$1" = "developer deleteLobby" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteMatchmaker" ]; then
+    echo " omgserversctl developer deleteMatchmaker <matchmaker_id>"
+    if [ "$1" = "developer deleteMatchmaker" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
+  fi
 }
 
 logs() {
@@ -1914,7 +1928,7 @@ developer_deleteTenantDeployment() {
   internal_useEnvironment
 
   TENANT_ID=$1
-  TENANT_DEPLOYMENT_ID=$1
+  TENANT_DEPLOYMENT_ID=$2
 
   if [ -z "${TENANT_ID}" -o -z "${TENANT_DEPLOYMENT_ID}" ]; then
     help "developer deleteTenantDeployment"
@@ -1932,7 +1946,7 @@ developer_deleteTenantDeployment() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-tenant-deployment"
-  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"tenant_deployment_id\": \"${TENANT_DEPLOYMENT_ID}\" }"
+  REQUEST="{\"tenant_id\": \"${TENANT_ID}\", \"id\": \"${TENANT_DEPLOYMENT_ID}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-tenant-deployment_${TENANT_ID}_${TENANT_DEPLOYMENT_ID}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1966,6 +1980,120 @@ developer_deleteTenantDeployment() {
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was deleted, TENANT_ID=${TENANT_ID}, TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}"
   else
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was not deleted, TENANT_ID=${TENANT_ID}, TENANT_DEPLOYMENT_ID=${TENANT_DEPLOYMENT_ID}"
+  fi
+}
+
+developer_deleteLobby() {
+  internal_useEnvironment
+
+  LOBBY_ID=$1
+
+  if [ -z "${LOBBY_ID}" ]; then
+    help "developer deleteLobby"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using lobby, LOBBY_ID=${LOBBY_ID}"
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-lobby"
+  REQUEST="{\"lobby_id\": \"${LOBBY_ID}\" }"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-lobby_${LOBBY_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Lobby was deleted, LOBBY_ID=${LOBBY_ID}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Lobby was not deleted, LOBBY_ID=${LOBBY_ID}"
+  fi
+}
+
+developer_deleteMatchmaker() {
+  internal_useEnvironment
+
+  MATCHMAKER_ID=$1
+
+  if [ -z "${MATCHMAKER_ID}" ]; then
+    help "developer deleteMatchmaker"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using matchmaker, MATCHMAKER_ID=${MATCHMAKER_ID}"
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-matchmaker"
+  REQUEST="{\"matchmaker_id\": \"${MATCHMAKER_ID}\" }"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-matchmaker_${MATCHMAKER_ID}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Matchmaker was deleted, MATCHMAKER_ID=${MATCHMAKER_ID}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Matchmaker was not deleted, MATCHMAKER_ID=${MATCHMAKER_ID}"
   fi
 }
 
@@ -2114,7 +2242,11 @@ elif [ "$1" = "developer" ]; then
   elif [ "$2" = "getTenantDeploymentDashboard" ]; then
     developer_getTenantDeploymentDashboard $3 $4
   elif [ "$2" = "deleteTenantDeployment" ]; then
-      developer_deleteTenantDeployment $3 $4
+    developer_deleteTenantDeployment $3 $4
+  elif [ "$2" = "deleteLobby" ]; then
+    developer_deleteLobby $3
+  elif [ "$2" = "deleteMatchmaker" ]; then
+    developer_deleteMatchmaker $3
   else
     help "developer"
   fi

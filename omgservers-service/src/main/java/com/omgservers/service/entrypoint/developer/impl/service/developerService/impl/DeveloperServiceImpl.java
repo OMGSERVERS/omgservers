@@ -1,7 +1,5 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl;
 
-import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -10,6 +8,10 @@ import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperRequest;
@@ -30,12 +32,15 @@ import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDevelop
 import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.UploadFilesArchiveMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantProjectMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantStageMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantVersionMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTokenMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteLobbyMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteMatchmakerMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantDeploymentMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantProjectMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantStageMethod;
@@ -46,6 +51,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantProjectDashboardMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantStageDashboardMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantVersionDashboardMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.UploadFilesArchiveMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -69,12 +75,12 @@ class DeveloperServiceImpl implements DeveloperService {
     final DeleteTenantVersionMethod deleteTenantVersionMethod;
     final DeployTenantVersionMethod deployTenantVersionMethod;
     final UploadFilesArchiveMethod uploadFilesArchiveMethod;
-
-    final DeleteTenantStageMethod deleteTenantStageMethod;
-
     final GetTenantDashboardMethod getTenantDashboardMethod;
+    final DeleteTenantStageMethod deleteTenantStageMethod;
     final CreateTenantStageMethod createTenantStageMethod;
+    final DeleteMatchmakerMethod deleteMatchmakerMethod;
     final CreateTokenMethod createTokenMethod;
+    final DeleteLobbyMethod deleteLobbyMethod;
 
     @Override
     public Uni<CreateTokenDeveloperResponse> createToken(@Valid final CreateTokenDeveloperRequest request) {
@@ -163,5 +169,16 @@ class DeveloperServiceImpl implements DeveloperService {
     public Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
             @Valid final DeleteTenantDeploymentDeveloperRequest request) {
         return deleteTenantDeploymentMethod.execute(request);
+    }
+
+    @Override
+    public Uni<DeleteLobbyDeveloperResponse> deleteLobby(@Valid final DeleteLobbyDeveloperRequest request) {
+        return deleteLobbyMethod.execute(request);
+    }
+
+    @Override
+    public Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(
+            @Valid final DeleteMatchmakerDeveloperRequest request) {
+        return deleteMatchmakerMethod.execute(request);
     }
 }

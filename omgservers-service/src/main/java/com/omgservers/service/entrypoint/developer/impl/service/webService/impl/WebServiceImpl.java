@@ -8,6 +8,10 @@ import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperRequest;
@@ -130,5 +134,15 @@ class WebServiceImpl implements WebService {
     public Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
             final DeleteTenantDeploymentDeveloperRequest request) {
         return developerService.deleteTenantDeployment(request);
+    }
+
+    @Override
+    public Uni<DeleteLobbyDeveloperResponse> deleteLobby(final DeleteLobbyDeveloperRequest request) {
+        return developerService.deleteLobby(request);
+    }
+
+    @Override
+    public Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(final DeleteMatchmakerDeveloperRequest request) {
+        return developerService.deleteMatchmaker(request);
     }
 }

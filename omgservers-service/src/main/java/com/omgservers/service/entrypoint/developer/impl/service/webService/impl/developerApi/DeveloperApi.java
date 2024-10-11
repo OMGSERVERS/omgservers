@@ -1,6 +1,5 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl.developerApi;
 
-import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -9,6 +8,10 @@ import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperRequest;
@@ -29,6 +32,7 @@ import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDevelop
 import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
@@ -132,5 +136,13 @@ public interface DeveloperApi {
     @Path("/delete-tenant-deployment")
     Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
             @NotNull DeleteTenantDeploymentDeveloperRequest request);
+
+    @PUT
+    @Path("/delete-lobby")
+    Uni<DeleteLobbyDeveloperResponse> deleteLobby(@NotNull DeleteLobbyDeveloperRequest request);
+
+    @PUT
+    @Path("/delete-matchmaker")
+    Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(@NotNull DeleteMatchmakerDeveloperRequest request);
 
 }
