@@ -13,7 +13,7 @@ public class TenantVersionDashboardDto {
 
     TenantVersionDto tenantVersion;
 
-    List<TenantJenkinsRequestDto> tenantJenkinsRequests;
+    List<TenantBuildRequestDto> tenantBuildRequests;
 
     List<TenantImageDto> tenantImages;
 }

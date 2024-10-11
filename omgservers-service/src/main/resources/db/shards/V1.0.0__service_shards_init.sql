@@ -237,7 +237,7 @@ create table if not exists tab_tenant_files_archive (
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_jenkins_request (
+create table if not exists tab_tenant_build_request (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -331,8 +331,8 @@ create index if not exists idx_tenant_version_tenant_id on tab_tenant_version(te
 create index if not exists idx_tenant_version_project_id on tab_tenant_version(project_id);
 create index if not exists idx_tenant_files_archive_tenant_id on tab_tenant_files_archive(tenant_id);
 create index if not exists idx_tenant_files_archive_version_id on tab_tenant_files_archive(version_id);
-create index if not exists idx_tenant_jenkins_request_tenant_id on tab_tenant_jenkins_request(tenant_id);
-create index if not exists idx_tenant_jenkins_request_version_id on tab_tenant_jenkins_request(version_id);
+create index if not exists idx_tenant_build_request_tenant_id on tab_tenant_build_request(tenant_id);
+create index if not exists idx_tenant_build_request_version_id on tab_tenant_build_request(version_id);
 create index if not exists idx_tenant_image_tenant_id on tab_tenant_image(tenant_id);
 create index if not exists idx_tenant_image_version_id on tab_tenant_image(version_id);
 create index if not exists idx_tenant_deployment_tenant_id on tab_tenant_deployment(tenant_id);

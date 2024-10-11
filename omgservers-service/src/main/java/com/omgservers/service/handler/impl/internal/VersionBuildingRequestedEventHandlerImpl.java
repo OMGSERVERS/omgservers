@@ -1,18 +1,18 @@
 package com.omgservers.service.handler.impl.internal;
 
+import com.omgservers.schema.model.tenantBuildRequest.TenantBuildRequestQualifierEnum;
 import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
-import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestResponse;
 import com.omgservers.schema.module.tenant.tenantFilesArchive.FindTenantFilesArchiveRequest;
 import com.omgservers.schema.module.tenant.tenantFilesArchive.FindTenantFilesArchiveResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
-import com.omgservers.service.factory.tenant.TenantJenkinsRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantBuildRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.service.jenkins.JenkinsService;
@@ -33,7 +33,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
 
     final JenkinsService jenkinsService;
 
-    final TenantJenkinsRequestModelFactory tenantJenkinsRequestModelFactory;
+    final TenantBuildRequestModelFactory tenantBuildRequestModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -79,8 +79,8 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                                  final TenantFilesArchiveModel tenantFilesArchive,
                                  final String idempotencyKey) {
         return runLuaJitRuntimeBuilderV1(tenantProjectId, tenantFilesArchive)
-                .flatMap(buildNumber -> createTenantJenkinsRequest(tenantFilesArchive,
-                        TenantJenkinsRequestQualifierEnum.LUAJIT_RUNTIME_BUILDER_V1,
+                .flatMap(buildNumber -> createTenantBuildRequest(tenantFilesArchive,
+                        TenantBuildRequestQualifierEnum.JENKINS_LUAJIT_RUNTIME_BUILDER_V1,
                         buildNumber,
                         idempotencyKey))
                 .replaceWithVoid();
@@ -102,20 +102,20 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 .map(RunLuaJitRuntimeBuilderV1Response::getBuildNumber);
     }
 
-    Uni<Boolean> createTenantJenkinsRequest(final TenantFilesArchiveModel tenantFilesArchive,
-                                            final TenantJenkinsRequestQualifierEnum qualifier,
-                                            final Integer buildNumber,
-                                            final String idempotencyKey) {
+    Uni<Boolean> createTenantBuildRequest(final TenantFilesArchiveModel tenantFilesArchive,
+                                          final TenantBuildRequestQualifierEnum qualifier,
+                                          final Integer buildNumber,
+                                          final String idempotencyKey) {
         final var tenantId = tenantFilesArchive.getTenantId();
         final var tenantVersionId = tenantFilesArchive.getVersionId();
-        final var tenantJenkinsRequest = tenantJenkinsRequestModelFactory.create(tenantId,
+        final var tenantBuildRequest = tenantBuildRequestModelFactory.create(tenantId,
                 tenantVersionId,
                 qualifier,
                 buildNumber,
                 idempotencyKey);
 
-        final var request = new SyncTenantJenkinsRequestRequest(tenantJenkinsRequest);
-        return tenantModule.getService().syncTenantJenkinsRequestWithIdempotency(request)
-                .map(SyncTenantJenkinsRequestResponse::getCreated);
+        final var request = new SyncTenantBuildRequestRequest(tenantBuildRequest);
+        return tenantModule.getService().syncTenantBuildRequestWithIdempotency(request)
+                .map(SyncTenantBuildRequestResponse::getCreated);
     }
 }

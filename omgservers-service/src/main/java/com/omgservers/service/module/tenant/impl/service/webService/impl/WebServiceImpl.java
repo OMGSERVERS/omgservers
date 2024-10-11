@@ -8,6 +8,14 @@ import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
@@ -40,14 +48,6 @@ import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
@@ -387,31 +387,31 @@ public class WebServiceImpl implements WebService {
     }
 
     /*
-    TenantJenkinsRequest
+    TenantBuildRequest
      */
 
     @Override
-    public Uni<GetTenantJenkinsRequestResponse> getTenantJenkinsRequest(
-            final GetTenantJenkinsRequestRequest request) {
-        return tenantService.getTenantJenkinsRequest(request);
+    public Uni<GetTenantBuildRequestResponse> getTenantBuildRequest(
+            final GetTenantBuildRequestRequest request) {
+        return tenantService.getTenantBuildRequest(request);
     }
 
     @Override
-    public Uni<ViewTenantJenkinsRequestsResponse> viewTenantJenkinsRequests(
-            final ViewTenantJenkinsRequestsRequest request) {
-        return tenantService.viewTenantJenkinsRequests(request);
+    public Uni<ViewTenantBuildRequestsResponse> viewTenantBuildRequests(
+            final ViewTenantBuildRequestsRequest request) {
+        return tenantService.viewTenantBuildRequests(request);
     }
 
     @Override
-    public Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequest(
-            final SyncTenantJenkinsRequestRequest request) {
-        return tenantService.syncTenantJenkinsRequest(request);
+    public Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequest(
+            final SyncTenantBuildRequestRequest request) {
+        return tenantService.syncTenantBuildRequest(request);
     }
 
     @Override
-    public Uni<DeleteTenantJenkinsRequestResponse> deleteTenantJenkinsRequest(
-            final DeleteTenantJenkinsRequestRequest request) {
-        return tenantService.deleteTenantJenkinsRequest(request);
+    public Uni<DeleteTenantBuildRequestResponse> deleteTenantBuildRequest(
+            final DeleteTenantBuildRequestRequest request) {
+        return tenantService.deleteTenantBuildRequest(request);
     }
 
     /*

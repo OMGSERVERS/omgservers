@@ -47,6 +47,7 @@ import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyM
 import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantBuildRequestCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentCreatedEventBodyModel;
@@ -55,8 +56,7 @@ import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveCreated
 import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.TenantJenkinsRequestDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantBuildRequestDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRequestCreatedEventBodyModel;
@@ -109,8 +109,8 @@ public enum EventQualifierEnum {
     TENANT_DEPLOYMENT_DELETED(TenantDeploymentDeletedEventBodyModel.class, true),
     TENANT_FILES_ARCHIVE_CREATED(TenantFilesArchiveCreatedEventBodyModel.class, true),
     TENANT_FILES_ARCHIVE_DELETED(TenantFilesArchiveDeletedEventBodyModel.class, true),
-    TENANT_JENKINS_REQUEST_CREATED(TenantJenkinsRequestCreatedEventBodyModel.class, true),
-    TENANT_JENKINS_REQUEST_DELETED(TenantJenkinsRequestDeletedEventBodyModel.class, true),
+    TENANT_BUILD_REQUEST_CREATED(TenantBuildRequestCreatedEventBodyModel.class, true),
+    TENANT_BUILD_REQUEST_DELETED(TenantBuildRequestDeletedEventBodyModel.class, true),
     TENANT_IMAGE_CREATED(TenantImageCreatedEventBodyModel.class, true),
     TENANT_IMAGE_DELETED(TenantImageDeletedEventBodyModel.class, true),
     TENANT_LOBBY_REQUEST_CREATED(TenantLobbyRequestCreatedEventBodyModel.class, true),

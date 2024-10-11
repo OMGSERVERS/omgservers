@@ -8,6 +8,14 @@ import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
@@ -38,14 +46,6 @@ import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
@@ -389,34 +389,34 @@ public class TenantServiceTestInterface {
     }
 
     /*
-    TenantJenkinsRequest
+    TenantBuildRequest
      */
 
-    public GetTenantJenkinsRequestResponse getTenantJenkinsRequest(final GetTenantJenkinsRequestRequest request) {
-        return tenantService.getTenantJenkinsRequest(request)
+    public GetTenantBuildRequestResponse getTenantBuildRequest(final GetTenantBuildRequestRequest request) {
+        return tenantService.getTenantBuildRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewTenantJenkinsRequestsResponse viewTenantJenkinsRequests(
-            final ViewTenantJenkinsRequestsRequest request) {
-        return tenantService.viewTenantJenkinsRequests(request)
+    public ViewTenantBuildRequestsResponse viewTenantBuildRequests(
+            final ViewTenantBuildRequestsRequest request) {
+        return tenantService.viewTenantBuildRequests(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncTenantJenkinsRequestResponse syncTenantJenkinsRequest(final SyncTenantJenkinsRequestRequest request) {
-        return tenantService.syncTenantJenkinsRequest(request)
+    public SyncTenantBuildRequestResponse syncTenantBuildRequest(final SyncTenantBuildRequestRequest request) {
+        return tenantService.syncTenantBuildRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncTenantJenkinsRequestResponse syncTenantJenkinsRequestWithIdempotency(
-            final SyncTenantJenkinsRequestRequest request) {
-        return tenantService.syncTenantJenkinsRequestWithIdempotency(request)
+    public SyncTenantBuildRequestResponse syncTenantBuildRequestWithIdempotency(
+            final SyncTenantBuildRequestRequest request) {
+        return tenantService.syncTenantBuildRequestWithIdempotency(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteTenantJenkinsRequestResponse deleteTenantJenkinsRequest(
-            final DeleteTenantJenkinsRequestRequest request) {
-        return tenantService.deleteTenantJenkinsRequest(request)
+    public DeleteTenantBuildRequestResponse deleteTenantBuildRequest(
+            final DeleteTenantBuildRequestRequest request) {
+        return tenantService.deleteTenantBuildRequest(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 

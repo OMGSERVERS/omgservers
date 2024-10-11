@@ -1,8 +1,8 @@
 package com.omgservers.service.service.task.impl;
 
 import com.omgservers.service.service.task.TaskService;
-import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskResponse;
+import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
@@ -17,7 +17,7 @@ import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
-import com.omgservers.service.service.task.impl.method.executeJenkinsRequestTask.ExecuteJenkinsRequestTaskMethod;
+import com.omgservers.service.service.task.impl.method.executeBuildRequestTask.ExecuteBuildRequestTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executePoolTask.ExecutePoolTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRelayTask.ExecuteRelayTaskMethod;
@@ -43,7 +43,7 @@ class TaskServiceImpl implements TaskService {
     final ExecuteTenantTaskMethod executeTenantTaskMethod;
     final ExecuteStageTaskMethod executeStageTaskMethod;
     final ExecuteRelayTaskMethod executeRelayTaskMethod;
-    final ExecuteJenkinsRequestTaskMethod executeJenkinsRequestTaskMethod;
+    final ExecuteBuildRequestTaskMethod executeBuildRequestTaskMethod;
     final ExecutePoolTaskMethod executePoolTaskMethod;
 
     @Override
@@ -82,7 +82,7 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Uni<ExecuteJenkinsRequestTaskResponse> executeJenkinsRequestTask(@Valid final ExecuteJenkinsRequestTaskRequest request) {
-        return executeJenkinsRequestTaskMethod.executeJenkinsRequestTask(request);
+    public Uni<ExecuteBuildRequestTaskResponse> executeBuildRequestTask(@Valid final ExecuteBuildRequestTaskRequest request) {
+        return executeBuildRequestTaskMethod.execute(request);
     }
 }

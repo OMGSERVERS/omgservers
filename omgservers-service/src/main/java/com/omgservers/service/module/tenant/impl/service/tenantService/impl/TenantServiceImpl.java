@@ -9,6 +9,10 @@ import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
@@ -41,14 +45,10 @@ import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
@@ -154,6 +154,7 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.GetTenantDataMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.GetTenantMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant.SyncTenantMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.DeleteTenantBuildRequestMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.DeleteTenantDeploymentMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.GetTenantDeploymentDataMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantDeployment.GetTenantDeploymentMethod;
@@ -170,10 +171,9 @@ import com.omgservers.service.module.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.GetTenantImageMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.SyncTenantImageMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantImage.ViewTenantImagesMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantJenkinsRequest.DeleteTenantJenkinsRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantJenkinsRequest.GetTenantJenkinsRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantJenkinsRequest.SyncTenantJenkinsRequestMethod;
-import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantJenkinsRequest.ViewTenantJenkinsRequestsMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.GetTenantBuildRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.SyncTenantBuildRequestMethod;
+import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.ViewTenantBuildRequestsMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.DeleteTenantLobbyRefMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.FindTenantLobbyRefMethod;
 import com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.GetTenantLobbyRefMethod;
@@ -248,16 +248,14 @@ public class TenantServiceImpl implements TenantService {
     final DeleteTenantStagePermissionMethod deleteTenantStagePermissionMethod;
     final SyncTenantProjectPermissionMethod syncTenantProjectPermissionMethod;
     final GetTenantMatchmakerRequestMethod getTenantMatchmakerRequestMethod;
-    final DeleteTenantJenkinsRequestMethod deleteTenantJenkinsRequestMethod;
     final ViewTenantStagePermissionsMethod viewTenantStagePermissionsMethod;
-    final ViewTenantJenkinsRequestsMethod viewTenantJenkinsRequestsMethod;
     final DeleteTenantMatchmakerRefMethod deleteTenantMatchmakerRefMethod;
     final SyncTenantStagePermissionMethod syncTenantStagePermissionMethod;
-    final SyncTenantJenkinsRequestMethod syncTenantJenkinsRequestMethod;
     final ViewTenantMatchmakerRefsMethod viewTenantMatchmakerRefsMethod;
     final DeleteTenantLobbyRequestMethod deleteTenantLobbyRequestMethod;
     final DeleteTenantFilesArchiveMethod deleteTenantFilesArchiveMethod;
-    final GetTenantJenkinsRequestMethod getTenantJenkinsRequestMethod;
+    final DeleteTenantBuildRequestMethod deleteTenantBuildRequestMethod;
+    final ViewTenantBuildRequestsMethod viewTenantBuildRequestsMethod;
     final SyncTenantMatchmakerRefMethod syncTenantMatchmakerRefMethod;
     final FindTenantMatchmakerRefMethod findTenantMatchmakerRefMethod;
     final ViewTenantLobbyRequestsMethod viewTenantLobbyRequestsMethod;
@@ -272,6 +270,8 @@ public class TenantServiceImpl implements TenantService {
     final GetTenantVersionConfigMethod getTenantVersionConfigMethod;
     final DeleteTenantDeploymentMethod deleteTenantDeploymentMethod;
     final SelectTenantDeploymentMethod selectTenantDeploymentMethod;
+    final SyncTenantBuildRequestMethod syncTenantBuildRequestMethod;
+    final GetTenantBuildRequestMethod getTenantBuildRequestMethod;
     final GetTenantLobbyRequestMethod getTenantLobbyRequestMethod;
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
     final GetTenantFilesArchiveMethod getTenantFilesArchiveMethod;
@@ -693,47 +693,47 @@ public class TenantServiceImpl implements TenantService {
     }
 
     /*
-    TenantJenkinsRequest
+    TenantBuildRequest
      */
 
     @Override
-    public Uni<GetTenantJenkinsRequestResponse> getTenantJenkinsRequest(
-            @Valid final GetTenantJenkinsRequestRequest request) {
+    public Uni<GetTenantBuildRequestResponse> getTenantBuildRequest(
+            @Valid final GetTenantBuildRequestRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantJenkinsRequest,
-                getTenantJenkinsRequestMethod::execute);
+                TenantModuleClient::getTenantBuildRequest,
+                getTenantBuildRequestMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantJenkinsRequestsResponse> viewTenantJenkinsRequests(
-            @Valid final ViewTenantJenkinsRequestsRequest request) {
+    public Uni<ViewTenantBuildRequestsResponse> viewTenantBuildRequests(
+            @Valid final ViewTenantBuildRequestsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantJenkinsRequests,
-                viewTenantJenkinsRequestsMethod::execute);
+                TenantModuleClient::viewTenantBuildRequests,
+                viewTenantBuildRequestsMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequest(
-            @Valid final SyncTenantJenkinsRequestRequest request) {
+    public Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequest(
+            @Valid final SyncTenantBuildRequestRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantJenkinsRequest,
-                syncTenantJenkinsRequestMethod::execute);
+                TenantModuleClient::syncTenantBuildRequest,
+                syncTenantBuildRequestMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequestWithIdempotency(
-            @Valid final SyncTenantJenkinsRequestRequest request) {
-        return syncTenantJenkinsRequest(request)
+    public Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequestWithIdempotency(
+            @Valid final SyncTenantBuildRequestRequest request) {
+        return syncTenantBuildRequest(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantJenkinsRequest(),
+                            log.warn("Idempotency was violated, object={}, {}", request.getTenantBuildRequest(),
                                     t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantJenkinsRequestResponse(Boolean.FALSE));
+                            return Uni.createFrom().item(new SyncTenantBuildRequestResponse(Boolean.FALSE));
                         }
                     }
 
@@ -742,12 +742,12 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantJenkinsRequestResponse> deleteTenantJenkinsRequest(
-            @Valid final DeleteTenantJenkinsRequestRequest request) {
+    public Uni<DeleteTenantBuildRequestResponse> deleteTenantBuildRequest(
+            @Valid final DeleteTenantBuildRequestRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantJenkinsRequest,
-                deleteTenantJenkinsRequestMethod::execute);
+                TenantModuleClient::deleteTenantBuildRequest,
+                deleteTenantBuildRequestMethod::execute);
     }
 
     /*

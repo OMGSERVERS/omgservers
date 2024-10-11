@@ -8,7 +8,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.handler.operation.DeleteTenantImagesByTenantVersionIdOperation;
-import com.omgservers.service.handler.operation.DeleteTenantJenkinsRequestsByTenantVersionIdOperation;
+import com.omgservers.service.handler.operation.DeleteTenantBuildRequestsByTenantVersionIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantFilesArchivesByTenantVersionIdOperation;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +24,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
 
-    final DeleteTenantJenkinsRequestsByTenantVersionIdOperation deleteTenantJenkinsRequestsByTenantVersionIdOperation;
+    final DeleteTenantBuildRequestsByTenantVersionIdOperation deleteTenantBuildRequestsByTenantVersionIdOperation;
     final DeleteTenantFilesArchivesByTenantVersionIdOperation deleteTenantFilesArchivesByTenantVersionIdOperation;
     final DeleteTenantImagesByTenantVersionIdOperation deleteTenantImagesByTenantVersionIdOperation;
 
@@ -50,7 +50,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
                             tenantProjectId);
 
                     return deleteTenantFilesArchivesByTenantVersionIdOperation.execute(tenantId, tenantVersionId)
-                            .flatMap(voidItem -> deleteTenantJenkinsRequestsByTenantVersionIdOperation.execute(tenantId,
+                            .flatMap(voidItem -> deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId,
                                     tenantVersionId))
                             .flatMap(voidItem -> deleteTenantImagesByTenantVersionIdOperation.execute(tenantId,
                                     tenantVersionId));

@@ -8,6 +8,14 @@ import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
@@ -40,14 +48,6 @@ import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.DeleteTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.GetTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestResponse;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.ViewTenantJenkinsRequestsResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
@@ -270,21 +270,21 @@ public interface TenantService {
     Uni<DeleteTenantFilesArchiveResponse> deleteTenantFilesArchive(@Valid DeleteTenantFilesArchiveRequest request);
 
     /*
-    TenantJenkinsRequest
+    TenantBuildRequest
      */
 
-    Uni<GetTenantJenkinsRequestResponse> getTenantJenkinsRequest(@Valid GetTenantJenkinsRequestRequest request);
+    Uni<GetTenantBuildRequestResponse> getTenantBuildRequest(@Valid GetTenantBuildRequestRequest request);
 
-    Uni<ViewTenantJenkinsRequestsResponse> viewTenantJenkinsRequests(
-            @Valid ViewTenantJenkinsRequestsRequest request);
+    Uni<ViewTenantBuildRequestsResponse> viewTenantBuildRequests(
+            @Valid ViewTenantBuildRequestsRequest request);
 
-    Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequest(@Valid SyncTenantJenkinsRequestRequest request);
+    Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequest(@Valid SyncTenantBuildRequestRequest request);
 
-    Uni<SyncTenantJenkinsRequestResponse> syncTenantJenkinsRequestWithIdempotency(
-            @Valid SyncTenantJenkinsRequestRequest request);
+    Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequestWithIdempotency(
+            @Valid SyncTenantBuildRequestRequest request);
 
-    Uni<DeleteTenantJenkinsRequestResponse> deleteTenantJenkinsRequest(
-            @Valid DeleteTenantJenkinsRequestRequest request);
+    Uni<DeleteTenantBuildRequestResponse> deleteTenantBuildRequest(
+            @Valid DeleteTenantBuildRequestRequest request);
 
     /*
     TenantImage

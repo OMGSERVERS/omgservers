@@ -1,7 +1,7 @@
 package com.omgservers.service.service.task;
 
-import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskResponse;
+import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
@@ -35,5 +35,5 @@ public interface TaskService {
 
     Uni<ExecuteRelayTaskResponse> executeRelayTask(@Valid ExecuteRelayTaskRequest request);
 
-    Uni<ExecuteJenkinsRequestTaskResponse> executeJenkinsRequestTask(@Valid ExecuteJenkinsRequestTaskRequest request);
+    Uni<ExecuteBuildRequestTaskResponse> executeBuildRequestTask(@Valid ExecuteBuildRequestTaskRequest request);
 }

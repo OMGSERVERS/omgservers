@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataReq
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
 import com.omgservers.service.module.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantVersionIdOperation;
-import com.omgservers.service.module.tenant.impl.operation.tenantJenkinsRequest.SelectActiveTenantJenkinsRequestsByTenantVersionIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantBuildRequest.SelectActiveTenantBuildRequestsByTenantVersionIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantVersion.SelectTenantVersionOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -19,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
 
-    final SelectActiveTenantJenkinsRequestsByTenantVersionIdOperation
-            selectActiveTenantJenkinsRequestsByTenantVersionIdOperation;
+    final SelectActiveTenantBuildRequestsByTenantVersionIdOperation
+            selectActiveTenantBuildRequestsByTenantVersionIdOperation;
     final SelectTenantVersionOperation selectTenantVersionOperation;
     final SelectActiveTenantImageByTenantVersionIdOperation
             selectActiveTenantImageByTenantVersionIdOperation;
@@ -51,7 +51,7 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
                                        final Long tenantVersionId,
                                        final TenantVersionDataDto tenantVersionData) {
         return fillTenantVersion(sqlConnection, shard, tenantId, tenantVersionId, tenantVersionData)
-                .flatMap(voidItem -> fillTenantJenkinsRequests(sqlConnection,
+                .flatMap(voidItem -> fillTenantBuildRequests(sqlConnection,
                         shard,
                         tenantId,
                         tenantVersionId,
@@ -77,16 +77,16 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillTenantJenkinsRequests(final SqlConnection sqlConnection,
-                                        final int shard,
-                                        final Long tenantId,
-                                        final Long tenantVersionId,
-                                        final TenantVersionDataDto tenantVersionData) {
-        return selectActiveTenantJenkinsRequestsByTenantVersionIdOperation.execute(sqlConnection,
+    Uni<Void> fillTenantBuildRequests(final SqlConnection sqlConnection,
+                                      final int shard,
+                                      final Long tenantId,
+                                      final Long tenantVersionId,
+                                      final TenantVersionDataDto tenantVersionData) {
+        return selectActiveTenantBuildRequestsByTenantVersionIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantVersionId)
-                .invoke(tenantVersionData::setTenantJenkinsRequests)
+                .invoke(tenantVersionData::setTenantBuildRequests)
                 .replaceWithVoid();
     }
 

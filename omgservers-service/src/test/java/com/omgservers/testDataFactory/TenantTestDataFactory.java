@@ -4,12 +4,12 @@ import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantBuildRequest.TenantBuildRequestModel;
+import com.omgservers.schema.model.tenantBuildRequest.TenantBuildRequestQualifierEnum;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
-import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestModel;
-import com.omgservers.schema.model.tenantJenkinsRequest.TenantJenkinsRequestQualifierEnum;
 import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
 import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
@@ -25,10 +25,10 @@ import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantFilesArchive.SyncTenantFilesArchiveRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantJenkinsRequest.SyncTenantJenkinsRequestRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
@@ -39,10 +39,10 @@ import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantPro
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
+import com.omgservers.service.factory.tenant.TenantBuildRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
 import com.omgservers.service.factory.tenant.TenantImageModelFactory;
-import com.omgservers.service.factory.tenant.TenantJenkinsRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
@@ -72,7 +72,7 @@ public class TenantTestDataFactory {
     final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
     final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
     final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
-    final TenantJenkinsRequestModelFactory tenantJenkinsRequestModelFactory;
+    final TenantBuildRequestModelFactory tenantBuildRequestModelFactory;
     final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
     final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
     final TenantFilesArchiveModelFactory tenantFilesArchiveModelFactory;
@@ -168,18 +168,18 @@ public class TenantTestDataFactory {
         return tenantFilesArchive;
     }
 
-    public TenantJenkinsRequestModel createTenantJenkinsRequest(final TenantVersionModel tenantVersion,
-                                                                final TenantJenkinsRequestQualifierEnum qualifier,
-                                                                final Integer buildNumber) {
+    public TenantBuildRequestModel createTenantBuildRequest(final TenantVersionModel tenantVersion,
+                                                            final TenantBuildRequestQualifierEnum qualifier,
+                                                            final Integer buildNumber) {
         final var tenantId = tenantVersion.getTenantId();
         final var tenantVersionId = tenantVersion.getId();
-        final var versionJenkinsRequest = tenantJenkinsRequestModelFactory.create(tenantId,
+        final var tenantBuildRequest = tenantBuildRequestModelFactory.create(tenantId,
                 tenantVersionId,
                 qualifier,
                 buildNumber);
-        final var syncTenantJenkinsRequestRequest = new SyncTenantJenkinsRequestRequest(versionJenkinsRequest);
-        tenantService.syncTenantJenkinsRequest(syncTenantJenkinsRequestRequest);
-        return versionJenkinsRequest;
+        final var syncTenantBuildRequestRequest = new SyncTenantBuildRequestRequest(tenantBuildRequest);
+        tenantService.syncTenantBuildRequest(syncTenantBuildRequestRequest);
+        return tenantBuildRequest;
     }
 
     public TenantImageModel createTenantImage(final TenantVersionModel tenantVersion) {

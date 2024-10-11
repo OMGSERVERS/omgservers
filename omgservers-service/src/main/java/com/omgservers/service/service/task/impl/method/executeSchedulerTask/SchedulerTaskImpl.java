@@ -4,7 +4,7 @@ import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.ViewJobsRequest;
 import com.omgservers.service.service.task.TaskService;
-import com.omgservers.service.service.task.dto.ExecuteJenkinsRequestTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
@@ -50,8 +50,8 @@ public class SchedulerTaskImpl {
             case POOL -> taskService
                     .executePoolTask(new ExecutePoolTaskRequest(job.getEntityId()))
                     .replaceWithVoid();
-            case JENKINS_REQUEST -> taskService
-                    .executeJenkinsRequestTask(new ExecuteJenkinsRequestTaskRequest(job.getShardKey(),
+            case BUILD_REQUEST -> taskService
+                    .executeBuildRequestTask(new ExecuteBuildRequestTaskRequest(job.getShardKey(),
                             job.getEntityId()))
                     .replaceWithVoid();
         };
