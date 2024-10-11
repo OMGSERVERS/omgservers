@@ -8,7 +8,7 @@ local function initialized(self)
 	print(socket.gettime() .. " [CLIENT_MANAGER] Client was initialized")
 end
 
-local function signing_up_requested(self)
+local function sign_up(self)
 	print(socket.gettime() .. " [CLIENT_MANAGER] Signing up was requested")
 	omgplayer:sign_up()
 end
@@ -19,7 +19,7 @@ local function signed_up(self, user_id, password)
 	msg.post(CORE_MANAGER, core_messages.constants.SIGNED_UP, core_message)
 end
 
-local function signing_in_requested(self, user_id, password)
+local function sign_in(self, user_id, password)
 	print(socket.gettime() .. " [CLIENT_MANAGER] Signing in was requested, user_id=" .. user_id)
 	omgplayer:sign_in(user_id, password)
 end
@@ -59,11 +59,15 @@ local function failed(self, reason)
 	msg.post(CORE_MANAGER, core_messages.constants.CLIENT_FAILED, core_message)
 end
 
-local function sending_requested(self, text_message)
-	omgplayer:send_message(text_message)
+local function send_command(self, message)
+	omgplayer:send_service_message(message)
 end
 
-local function reconnecting_requested(self, message)
+local function send_message(self, message)
+	omgplayer:send_text_message(message)
+end
+
+local function reconnect(self, message)
 	print(socket.gettime() .. " [CLIENT_MANAGER] Reconnectining was requested")
 end
 
@@ -132,20 +136,22 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(client_messages.constants.SIGNING_UP_REQUESTED) then
-		signing_up_requested(self)
+	if message_id == hash(client_messages.constants.SIGN_UP) then
+		sign_up(self)
 
-	elseif message_id == hash(client_messages.constants.SIGNING_IN_REQUESTED) then
+	elseif message_id == hash(client_messages.constants.SIGN_IN) then
 		local user_id = message.user_id
 		local password = message.password
-		signing_in_requested(self, user_id, password)
+		sign_in(self, user_id, password)
 
-	elseif message_id == hash(client_messages.constants.SENDING_REQUESTED) then
-		local text_message = message.text_message
-		sending_requested(self, text_message)
+	elseif message_id == hash(client_messages.constants.SEND_COMMAND) then
+		send_command(self, message.message)
 
-	elseif message_id == hash(client_messages.constants.RECONNECTING_REQUESTED) then
-		reconnecting_requested(self)
+	elseif message_id == hash(client_messages.constants.SEND_MESSAGE) then
+		send_message(self, message.message)
+
+	elseif message_id == hash(client_messages.constants.RECONNECT) then
+		reconnect(self)
 
 	end
 end

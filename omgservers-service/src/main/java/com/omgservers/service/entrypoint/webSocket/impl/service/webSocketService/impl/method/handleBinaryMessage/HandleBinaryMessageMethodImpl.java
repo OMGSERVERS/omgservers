@@ -32,13 +32,13 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
         log.debug("Handle binary message, request={}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
-        final var message = request.getMessage();
+        final var buffer = request.getBuffer();
 
         final var webSocketType = webSocketConnectionsContainer.getType(webSocketConnection);
         if (webSocketType.isPresent()) {
             return switch (webSocketType.get()) {
-                case ROUTED -> transferBinaryMessage(webSocketConnection, message);
-                case SERVER -> handleBinaryMessage(webSocketConnection, message);
+                case ROUTED -> routeBinaryMessage(webSocketConnection, buffer);
+                case SERVER -> handleBinaryMessage(webSocketConnection, buffer);
             };
         } else {
             return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
@@ -46,16 +46,16 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
         }
     }
 
-    Uni<HandleBinaryMessageWebSocketResponse> transferBinaryMessage(final WebSocketConnection webSocketConnection,
-                                                                    final Buffer message) {
-        final var request = new TransferServerBinaryMessageRequest(webSocketConnection, message);
+    Uni<HandleBinaryMessageWebSocketResponse> routeBinaryMessage(final WebSocketConnection webSocketConnection,
+                                                                 final Buffer buffer) {
+        final var request = new TransferServerBinaryMessageRequest(webSocketConnection, buffer);
         return routerService.transferServerBinaryMessage(request)
                 .replaceWith(new HandleBinaryMessageWebSocketResponse());
     }
 
     Uni<HandleBinaryMessageWebSocketResponse> handleBinaryMessage(final WebSocketConnection webSocketConnection,
-                                                                  final Buffer message) {
-        final var request = new HandleBinaryMessageRequest(webSocketConnection, message);
+                                                                  final Buffer buffer) {
+        final var request = new HandleBinaryMessageRequest(webSocketConnection, buffer);
         return roomService.handleBinaryMessage(request)
                 .replaceWith(new HandleBinaryMessageWebSocketResponse());
     }

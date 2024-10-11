@@ -67,8 +67,8 @@ public class WebSocketEndpoint {
 
     @OnBinaryMessage
     public Uni<Void> onBinaryMessage(final WebSocketConnection webSocketConnection,
-                                     final Buffer message) {
-        final var request = new HandleBinaryMessageWebSocketRequest(securityIdentity, webSocketConnection, message);
+                                     final Buffer buffer) {
+        final var request = new HandleBinaryMessageWebSocketRequest(securityIdentity, webSocketConnection, buffer);
         return webService.handleBinaryMessage(request)
                 .replaceWithVoid();
     }

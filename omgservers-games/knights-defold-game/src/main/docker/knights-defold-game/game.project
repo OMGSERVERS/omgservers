@@ -16,6 +16,7 @@ input_method = HiddenInputField
 title = knights-defold-game
 dependencies#0 = https://github.com/defold/extension-websocket/archive/refs/tags/4.0.0.zip
 dependencies#1 = https://github.com/britzl/defold-orthographic/archive/refs/tags/3.3.2.zip
+dependencies#2 = https://github.com/defold/extension-crypt/archive/master.zip
 
 [graphics]
 default_texture_min_filter = nearest

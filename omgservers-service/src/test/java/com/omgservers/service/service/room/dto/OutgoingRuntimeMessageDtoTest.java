@@ -1,4 +1,4 @@
-package com.omgservers.service.service.room.impl.method.handleTextMessage;
+package com.omgservers.service.service.room.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
@@ -11,28 +11,32 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @QuarkusTest
-class IncomingTextMessageDtoTest extends Assertions {
+class OutgoingRuntimeMessageDtoTest extends Assertions {
 
     @Inject
     ObjectMapper objectMapper;
 
     @Test
-    void givenIncomingTextMessageDto_whenReadValue_thenParsed() throws IOException {
-        final var testMessageDto = new TestMessageDto("move_player", 123, 321);
+    void givenOutgoingWebSocketMessageDto_whenReadValue_thenParsed() throws IOException {
+        final var testMessageDto = new OutgoingRuntimeMessageDtoTest.TestMessageDto(
+                "move_player", 123, 321);
         final var testMessageString = objectMapper.writeValueAsString(testMessageDto);
 
-        final var textMessageDto = new IncomingTextMessageDto(123456789L, testMessageString);
+        final var textMessageDto = new OutgoingRuntimeMessageDto(List.of(123456789L),
+                MessageEncodingEnum.TXT,
+                testMessageString);
         final var textMessageString = objectMapper.writeValueAsString(textMessageDto);
         final var textMessageObject = objectMapper
-                .readValue(textMessageString, IncomingTextMessageDto.class);
+                .readValue(textMessageString, OutgoingRuntimeMessageDto.class);
 
-        final var testMessageObject = objectMapper
-                .readValue(textMessageObject.getMessage(), TestMessageDto.class);
+        final var testMessageObject = objectMapper.readValue(textMessageObject.getMessage(),
+                OutgoingRuntimeMessageDtoTest.TestMessageDto.class);
 
-        assertEquals(textMessageDto.getClientId(), textMessageObject.getClientId());
+        assertEquals(textMessageDto.getClients().getFirst(), textMessageObject.getClients().getFirst());
         assertEquals(testMessageDto.getQualifier(), testMessageObject.getQualifier());
         assertEquals(testMessageDto.getX(), testMessageObject.getX());
         assertEquals(testMessageDto.getY(), testMessageObject.getY());

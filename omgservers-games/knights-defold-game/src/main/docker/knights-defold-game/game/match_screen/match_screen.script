@@ -24,8 +24,8 @@ local function create_client(self, client_id, nickname)
 	if client_id == core_state.state.client_id then
 		-- Send initial spawn request
 		local game_message = game_messages:create_request_spawn_message()
-		local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
-		msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+		local client_message = client_messages:create_send_message_message(json.encode(game_message))
+		msg.post(CLIENT_MANAGER, client_messages.constants.SEND_MESSAGE, client_message)
 	end
 end
 
@@ -174,8 +174,8 @@ local function apply_events(self, events)
 					
 					-- Send spawn request
 					local game_message = game_messages:create_request_spawn_message()
-					local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
-					msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+					local client_message = client_messages:create_send_message_message(json.encode(game_message))
+					msg.post(CLIENT_MANAGER, client_messages.constants.SEND_MESSAGE, client_message)
 				end
 
 				kill_player(self, killed_client_id)
@@ -194,8 +194,8 @@ local function request_move(self)
 		
 		-- Move player
 		local game_message = game_messages:create_move_player_message(self.point.x, self.point.y)
-		local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
-		msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+		local client_message = client_messages:create_send_message_message(json.encode(game_message))
+		msg.post(CLIENT_MANAGER, client_messages.constants.SEND_MESSAGE, client_message)
 
 		self.point = nil
 	end

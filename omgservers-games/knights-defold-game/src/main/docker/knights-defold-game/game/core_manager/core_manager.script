@@ -13,6 +13,8 @@ local SCREENS_MANAGER = "screens_manager#screens_manager"
 local CLIENT_MANAGER = "client_manager#client_manager"
 
 local function game_started(self)
+	self.started_at = socket.gettime()
+	
 	print(socket.gettime() .. " [CORE_MANAGER] Game started at " .. os.date())
 	core_state:change_game_state(core_state.constants.IN_AUTH)
 
@@ -30,8 +32,8 @@ local function auth_screen_created(self, collection_id)
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
 
 	-- Sign up
-	local client_message = client_messages:create_signing_up_requested_message()
-	msg.post(CLIENT_MANAGER, client_messages.constants.SIGNING_UP_REQUESTED, client_message)
+	local client_message = client_messages:create_sign_up_message()
+	msg.post(CLIENT_MANAGER, client_messages.constants.SIGN_UP, client_message)
 end
 
 local function signed_up(self, user_id, password)
@@ -41,8 +43,8 @@ local function signed_up(self, user_id, password)
 	msg.post(self.screen_collection_id, auth_messages.constants.SET_STATE_REQUESTED, auth_message)
 
 	-- Sign in
-	local client_message = client_messages:create_signing_in_requested_message(user_id, password)
-	msg.post(CLIENT_MANAGER, client_messages.constants.SIGNING_IN_REQUESTED, client_message)
+	local client_message = client_messages:create_sign_in_message(user_id, password)
+	msg.post(CLIENT_MANAGER, client_messages.constants.SIGN_IN, client_message)
 end
 
 local function signed_in(self, client_id)
@@ -62,8 +64,8 @@ local function greeted(self, tenant_version_id, tenant_version_created)
 
 	-- Request profile
 	local game_message = game_messages:create_request_profile_message()
-	local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
-	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+	local client_message = client_messages:create_send_command_message(json.encode(game_message))
+	msg.post(CLIENT_MANAGER, client_messages.constants.SEND_COMMAND, client_message)
 
 	core_state:change_game_state(core_state.constants.GETTING_PROFILE)
 end
@@ -90,8 +92,8 @@ local function lobby_screen_created(self, collection_id)
 
 	-- Request matchmaking
 	local game_message = game_messages:create_request_matchmaking_message()
-	local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
-	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+	local client_message = client_messages:create_send_command_message(json.encode(game_message))
+	msg.post(CLIENT_MANAGER, client_messages.constants.SEND_COMMAND, client_message)
 end
 
 local function match_assigned(self, runtime_qualifier, runtime_id)
@@ -105,8 +107,8 @@ local function connection_upgraded(self)
 	
 	-- Request match state
 	local game_message = game_messages:create_request_state_message()
-	local client_message = client_messages:create_sending_requested_message(json.encode(game_message))
-	msg.post(CLIENT_MANAGER, client_messages.constants.SENDING_REQUESTED, client_message)
+	local client_message = client_messages:create_send_message_message(json.encode(game_message))
+	msg.post(CLIENT_MANAGER, client_messages.constants.SEND_MESSAGE, client_message)
 end
 
 local function set_state(self, settings, dangling_players, spawned_players)
@@ -120,6 +122,9 @@ local function set_state(self, settings, dangling_players, spawned_players)
 end
 
 local function match_screen_created(self, collection_id)
+	local joining_time = socket.gettime() - self.started_at
+	print(socket.gettime() .. " [CORE_MANAGER] It takes " .. joining_time .. " seconds to join")
+	
 	print(socket.gettime() .. " [CORE_MANAGER] Match screen was created at " .. os.date())
 	
 	self.screen_collection_id = collection_id

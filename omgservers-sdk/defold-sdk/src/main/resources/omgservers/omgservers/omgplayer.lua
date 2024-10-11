@@ -442,8 +442,8 @@ omgplayer = {
 			local request_token = server_components.api_token.raw_token
 			omgplayer.http_client:request_server(request_url, request_body, response_handler, failure_handler, 4, request_token)
 		end,
-		ws_connect = function(server, runtime_id, ws_token, callback)
-			local connection_url = server.components.server_urls.connection .. "?runtime_id=" .. runtime_id .. "&ws_token=" .. ws_token
+		ws_connect = function(server, ws_token, callback)
+			local connection_url = server.components.server_urls.connection .. "?ws_token=" .. ws_token
 			local params = {
 				protocol = "omgservers"
 			}
@@ -470,30 +470,43 @@ omgplayer = {
 
 			server.components:set_connection(ws_connection)
 		end,
-		send_message = function(server, message)
+		send_text_message = function(server, message)
+			assert(server.components.server_client, "Component server_client must be created")
+			assert(type(message) == "string", "Message has to be string")
+			assert(server.components.connection, "Connection must be created")
+
+			-- Send using upgraded connection
+			websocket.send(server.components.connection.ws_connection, message, {
+				type = websocket.DATA_TYPE_TEXT
+			})
+			
+		end,
+		send_binary_message = function(server, buffer)
+			assert(server.components.server_client, "Component server_client must be created")
+			assert(type(buffer) == "string", "Message has to be string")
+			assert(server.components.connection, "Connection must be created")
+
+			-- Send using upgraded connection
+			websocket.send(server.components.connection.ws_connection, buffer, {
+				type = websocket.DATA_BINARY_TEXT
+			})
+			
+		end,
+		send_service_message = function(server, message)
 			assert(server.components.server_client, "Component server_client must be created")
 			assert(type(message) == "string", "Message has to be string")
 
-			local server_components = server.components
+			-- Send using service command
+			local message_id = server.components.server_client:generate_message_id()
 
-			-- Send using connection if it exists
-			if server_components.connection then
-				websocket.send(server_components.connection.ws_connection, message, {
-					type = websocket.DATA_TYPE_TEXT
-				})
-			else
-				-- Send using service command
-				local message_id = server_components.server_client:generate_message_id()
-
-				local outgoing_message = {
-					id = message_id,
-					qualifier = "CLIENT_OUTGOING_MESSAGE",
-					body = {
-						data = message
-					}
+			local outgoing_message = {
+				id = message_id,
+				qualifier = "CLIENT_OUTGOING_MESSAGE",
+				body = {
+					data = message
 				}
-				server_components.server_client:add_outgoing_message(outgoing_message)
-			end
+			}
+			server.components.server_client:add_outgoing_message(outgoing_message)
 		end,
 	},
 	-- Flow
@@ -612,8 +625,7 @@ omgplayer = {
 					local web_socket_config = incoming_message.body.web_socket_config
 					local ws_token = web_socket_config.ws_token
 
-					local runtime_id = flow_components.player_state:get_runtime_id()
-					omgplayer.server:ws_connect(runtime_id, ws_token, function()
+					omgplayer.server:ws_connect(ws_token, function()
 						omgplayer.trigger:trigger_connection_upgraded_event()
 					end)
 				else
@@ -724,10 +736,17 @@ return {
 
 		omgplayer.flow:sign_in(user_id, password)
 	end,
-	send_message = function(self, message)
+	send_text_message = function(self, message)
 		assert(message, "Message must not be nil")
-
-		omgplayer.server:send_message(message)
+		omgplayer.server:send_text_message(message)
+	end,
+	send_binary_message = function(self, buffer)
+		assert(buffer, "Buffer must not be nil")
+		omgplayer.server:send_binary_message(buffer)
+	end,
+	send_service_message = function(self, message)
+		assert(buffer, "Message must not be nil")
+		omgplayer.server:send_service_message(message)
 	end,
 	update = function(self, dt)
 		assert(dt, "Value dt must be set")

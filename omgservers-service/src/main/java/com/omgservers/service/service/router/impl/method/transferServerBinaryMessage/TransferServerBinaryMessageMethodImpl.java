@@ -19,9 +19,9 @@ class TransferServerBinaryMessageMethodImpl implements TransferServerBinaryMessa
     public Uni<TransferServerBinaryMessageResponse> transferServerBinaryMessage(
             final TransferServerBinaryMessageRequest request) {
         final var serverConnection = request.getServerConnection();
-        final var message = request.getMessage();
+        final var buffer = request.getBuffer();
         final var clientConnection = routerConnectionsContainer.getClientConnection(serverConnection);
-        return clientConnection.sendBinary(message)
+        return clientConnection.sendBinary(buffer)
                 .replaceWith(new TransferServerBinaryMessageResponse());
     }
 }

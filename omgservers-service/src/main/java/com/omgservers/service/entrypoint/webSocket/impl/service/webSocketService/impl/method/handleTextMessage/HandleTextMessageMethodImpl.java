@@ -35,7 +35,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
         final var webSocketType = webSocketConnectionsContainer.getType(webSocketConnection);
         if (webSocketType.isPresent()) {
             return switch (webSocketType.get()) {
-                case ROUTED -> transferTextMessage(webSocketConnection, message);
+                case ROUTED -> routeTextMessage(webSocketConnection, message);
                 case SERVER -> handleTextMessage(webSocketConnection, message);
             };
         } else {
@@ -44,8 +44,8 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
         }
     }
 
-    Uni<HandleTextMessageWebSocketResponse> transferTextMessage(final WebSocketConnection webSocketConnection,
-                                                                final String message) {
+    Uni<HandleTextMessageWebSocketResponse> routeTextMessage(final WebSocketConnection webSocketConnection,
+                                                             final String message) {
         final var request = new TransferServerTextMessageRequest(webSocketConnection, message);
         return routerService.transferServerTextMessage(request)
                 .replaceWith(new HandleTextMessageWebSocketResponse());

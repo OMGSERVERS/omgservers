@@ -35,8 +35,10 @@ omgserver = {
 		REQUEST_MATCHMAKING = "REQUEST_MATCHMAKING",
 		STOP_MATCHMAKING = "STOP_MATCHMAKING",
 		UPGRADE_CONNECTION = "UPGRADE_CONNECTION",
-		-- Miscellaneous
-		UPGRADE_CONNECTION_WEBSOCKET_PROTOCOL = "WEBSOCKET",
+		-- Websockets protocol
+		WEBSOCKET_PROTOCOL = "WEBSOCKET",
+		BASE64_ENCODED = "B64",
+		PLAIN_TEXT = "TXT",
 	},
 	settings = {
 		debug = false,
@@ -215,13 +217,19 @@ omgserver = {
 			elseif data.event == websocket.EVENT_MESSAGE then
 				local decoded_message = json.decode(data.message)
 				local client_id = decoded_message.client_id
-				local text_message = decoded_message.message
+				local encoding = decoded_message.encoding
+				local message
+				if encoding == omgserver.constants.BASE64_ENCODED then
+					message = crypt.decode_base64(decoded_message.message)
+				elseif encoding == omgserver.constants.PLAIN_TEXT then
+					message = decoded_message.message
+				end
 				
 				self.components.server_state:add_server_event({
 					qualifier = omgserver.constants.MESSAGE_RECEIVED,
 					body = {
 						client_id = client_id,
-						message = text_message,
+						message = message,
 					},
 				})
 			end
@@ -229,12 +237,13 @@ omgserver = {
 
 		self.components:set_connection(ws_connection)
 	end,
-	ws_send = function(self, clients, message)
+	ws_send = function(self, clients, encoding, message)
 		assert(omgserver.components.connection, "Connection was not created")
 		assert(type(message) == "string", "Message has to be string")
 
 		local encoded_message = json.encode({
 			clients = clients,
+			encoding = encoding,
 			message = message,
 		})
 
@@ -474,7 +483,7 @@ return {
 				qualifier = omgserver.constants.UPGRADE_CONNECTION,
 				body = {
 					client_id = client_id,
-					protocol = omgserver.constants.UPGRADE_CONNECTION_WEBSOCKET_PROTOCOL,
+					protocol = omgserver.constants.WEBSOCKET_PROTOCOL,
 				},
 			})
 		end,
@@ -482,15 +491,30 @@ return {
 	connections = {
 		respond_text_message = function(connections, client_id, message)
 			assert(omgserver.components.connection, "Connection was not created")
-			omgserver:ws_send({ client_id }, message)
+			omgserver:ws_send({ client_id }, omgserver.constants.PLAIN_TEXT, message)
+		end,
+		respond_binary_message = function(connections, client_id, message)
+			assert(omgserver.components.connection, "Connection was not created")
+			local encoded_message = crypt.encode_base64(message)
+			omgserver:ws_send({ client_id }, omgserver.constants.BASE64_ENCODED, encoded_message)
 		end,
 		multicast_text_message = function(connections, clients, message)
 			assert(omgserver.components.connection, "Connection was not created")
-			omgserver:ws_send(clients, message)
+			omgserver:ws_send(clients, omgserver.constants.PLAIN_TEXT, message)
+		end,
+		multicast_binary_message = function(connections, clients, message)
+			assert(omgserver.components.connection, "Connection was not created")
+			local encoded_message = crypt.encode_base64(message)
+			omgserver:ws_send(clients, omgserver.constants.BASE64_ENCODED, encoded_message)
 		end,
 		broadcast_text_message = function(connections, message)
 			assert(omgserver.components.connection, "Connection was not created")
-			omgserver:ws_send(nil, message)
+			omgserver:ws_send(nil, omgserver.constants.PLAIN_TEXT, message)
+		end,
+		broadcast_binary_message = function(connections, message)
+			assert(omgserver.components.connection, "Connection was not created")
+			local encoded_message = crypt.encode_base64(message)
+			omgserver:ws_send(nil, omgserver.constants.BASE64_ENCODED, encoded_message)
 		end,
 	},
 	-- Methods

@@ -16,5 +16,5 @@ public class TransferServerBinaryMessageRequest {
     WebSocketConnection serverConnection;
 
     @NotNull
-    Buffer message;
+    Buffer buffer;
 }

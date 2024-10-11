@@ -20,5 +20,5 @@ public class HandleBinaryMessageWebSocketRequest {
     WebSocketConnection webSocketConnection;
 
     @NotNull
-    Buffer message;
+    Buffer buffer;
 }

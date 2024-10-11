@@ -1,4 +1,4 @@
-package com.omgservers.service.service.room.impl.method.handleTextMessage;
+package com.omgservers.service.service.room.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OutgoingTextMessageDto {
+public class OutgoingRuntimeMessageDto {
 
     List<Long> clients;
+    MessageEncodingEnum encoding;
     String message;
 }
