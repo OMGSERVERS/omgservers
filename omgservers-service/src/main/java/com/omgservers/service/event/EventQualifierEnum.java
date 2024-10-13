@@ -1,5 +1,6 @@
 package com.omgservers.service.event;
 
+import com.omgservers.service.event.body.internal.ServiceBootstrapRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
@@ -48,6 +49,7 @@ import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyM
 import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantBuildRequestCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.tenant.TenantBuildRequestDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentCreatedEventBodyModel;
@@ -56,7 +58,6 @@ import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveCreated
 import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.TenantBuildRequestDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRequestCreatedEventBodyModel;
@@ -154,6 +155,7 @@ public enum EventQualifierEnum {
     RUNTIME_POOL_SERVER_CONTAINER_REF_CREATED(RuntimePoolServerContainerRefCreatedEventBodyModel.class, false),
     RUNTIME_POOL_SERVER_CONTAINER_REF_DELETED(RuntimePoolServerContainerRefDeletedEventBodyModel.class, false),
     // Internal
+    SERVICE_BOOTSTRAP_REQUESTED(ServiceBootstrapRequestedEventBodyModel.class, false),
     DOCKER_REGISTRY_EVENT_RECEIVED(DockerRegistryEventReceivedEventBodyModel.class, false),
     VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class, false),

@@ -1,4 +1,4 @@
-package com.omgservers.service.service.bootstrap.impl.method.bootstrapDatabaseSchema;
+package com.omgservers.service.service.initializer.impl.method;
 
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapDatabaseSchemaMethodImpl implements BootstrapDatabaseSchemaMethod {
+class InitializeDatabaseSchemaMethodImpl implements InitializeDatabaseSchemaMethod {
 
     private static final String SYSTEM_SCHEMA_LOCATION = "db/system";
     private static final String SHARDS_SCHEMA_LOCATION = "db/shards";
@@ -24,8 +24,8 @@ class BootstrapDatabaseSchemaMethodImpl implements BootstrapDatabaseSchemaMethod
     final DataSource dataSource;
 
     @Override
-    public Uni<Void> bootstrapDatabaseSchema() {
-        log.debug("Bootstrap database schema");
+    public Uni<Void> execute() {
+        log.debug("Initialization of database schema");
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
@@ -47,7 +47,7 @@ class BootstrapDatabaseSchemaMethodImpl implements BootstrapDatabaseSchemaMethod
 
     public void migrateShardsSchema(final String location) {
         final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
-        final var migrationConcurrency = getConfigOperation.getServiceConfig().bootstrap().schema().concurrency();
+        final var migrationConcurrency = getConfigOperation.getServiceConfig().initialization().schema().concurrency();
         final var migrationTasks = IntStream.range(0, shardCount)
                 .mapToObj(shard -> migrateShard(location, shard)).toList();
         Uni.join().all(migrationTasks).usingConcurrencyOf(migrationConcurrency)

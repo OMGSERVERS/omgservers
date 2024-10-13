@@ -18,6 +18,8 @@ public interface ServiceConfig {
 
     JwtConfig jwt();
 
+    InitializationConfig initialization();
+
     BootstrapConfig bootstrap();
 
     ClientsConfig clients();
@@ -96,16 +98,20 @@ public interface ServiceConfig {
 
         String dockerNetwork();
 
-        URI serviceUri();
-
         int defaultCpuLimit();
 
         int defaultMemoryLimit();
     }
 
-    interface BootstrapConfig {
+    interface InitializationConfig {
         BootstrapSchemaConfig schema();
 
+        BootstrapRelayJobConfig relayJob();
+
+        BootstrapSchedulerJobConfig schedulerJob();
+    }
+
+    interface BootstrapConfig {
         BootstrapIndexConfig index();
 
         BootstrapDefaultUsersConfig defaultUsers();
@@ -124,9 +130,7 @@ public interface ServiceConfig {
 
         BootstrapDefaultPoolConfig defaultPool();
 
-        BootstrapRelayJobConfig relayJob();
-
-        BootstrapSchedulerJobConfig schedulerJob();
+        BootstrapDockerHostConfig dockerHost();
     }
 
     interface BootstrapSchemaConfig {
@@ -155,8 +159,14 @@ public interface ServiceConfig {
 
     interface BootstrapDefaultPoolConfig {
         boolean enabled();
+    }
 
-        URI dockerUri();
+    interface BootstrapDockerHostConfig {
+        boolean enabled();
+
+        URI serviceUri();
+
+        URI dockerDaemonUri();
 
         int cpuCount();
 

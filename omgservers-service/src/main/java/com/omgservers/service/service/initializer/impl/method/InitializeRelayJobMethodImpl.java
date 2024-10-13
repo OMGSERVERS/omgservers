@@ -1,8 +1,8 @@
-package com.omgservers.service.service.bootstrap.impl.method.bootstrapSchedulerJob;
+package com.omgservers.service.service.initializer.impl.method;
 
-import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskRequest;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.task.TaskService;
+import com.omgservers.service.service.task.dto.ExecuteRelayTaskRequest;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Uni;
@@ -13,32 +13,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapSchedulerJobMethodImpl implements BootstrapSchedulerJobMethod {
+class InitializeRelayJobMethodImpl implements InitializeRelayJobMethod {
 
     final TaskService taskService;
 
     final GetConfigOperation getConfigOperation;
-
     final Scheduler scheduler;
 
     @Override
-    public Uni<Void> bootstrapSchedulerJob() {
-        log.debug("Bootstrap scheduler job");
+    public Uni<Void> execute() {
+        log.debug("Initialization of relay job");
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
-                    final var interval = getConfigOperation.getServiceConfig().bootstrap().schedulerJob().interval();
-                    final var trigger = scheduler.newJob("scheduler")
+                    final var interval = getConfigOperation.getServiceConfig().initialization().relayJob().interval();
+                    final var trigger = scheduler.newJob("relay")
                             .setInterval(interval)
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                             .setAsyncTask(scheduledExecution -> {
-                                final var request = new ExecuteSchedulerTaskRequest();
-                                return taskService.executeSchedulerTask(request)
+                                final var request = new ExecuteRelayTaskRequest();
+                                return taskService.executeRelayTask(request)
                                         .replaceWithVoid();
                             })
                             .schedule();
 
-                    log.info("Scheduler job was scheduled, {}", trigger);
+                    log.info("Relay job was scheduled, {}", trigger);
                 });
     }
 }
