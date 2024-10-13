@@ -126,7 +126,7 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
 
     private GenericContainer startDefoldTestClient(final TestVersionDto testVersion) {
         return new GenericContainer("omgservers/defold-test-client:1.0.0-SNAPSHOT")
-                .withEnv(Map.of("OMGSERVERS_URL", "http://host.docker.internal:8080",
+                .withEnv(Map.of("OMGSERVERS_SERVICE_URL", "http://host.docker.internal:8080",
                         "OMGSERVERS_TENANT_ID", testVersion.getTenantId().toString(),
                         "OMGSERVERS_TENANT_STAGE_ID", testVersion.getTenantStageId().toString(),
                         "OMGSERVERS_TENANT_STAGE_SECRET", testVersion.getTenantStageSecret()))

@@ -115,7 +115,7 @@ public class PoolTaskImpl {
         config.setMemoryLimitInMegabytes(poolRequest.getConfig()
                 .getServerContainerConfig().getMemoryLimitInMegabytes());
         config.setEnvironment(poolRequest.getConfig().getServerContainerConfig().getEnvironment());
-        config.getEnvironment().put("OMGSERVERS_URL", poolServer.getConfig().getServiceUri().toString());
+        config.getEnvironment().put("OMGSERVERS_SERVICE_URL", poolServer.getConfig().getServiceUri().toString());
         final var poolServerContainer = poolServerContainerModelFactory.create(poolId,
                 poolServerId,
                 runtimeId,

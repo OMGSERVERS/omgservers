@@ -1,6 +1,6 @@
 local omgplayer = require("omgservers.omgplayer")
 
-local service_url = os.getenv("OMGSERVERS_URL") or "http://localhost:8080"
+local service_url = os.getenv("OMGSERVERS_SERVICE_URL") or "http://localhost:8080"
 local tenant_id = os.getenv("OMGSERVERS_TENANT_ID")
 local tenant_stage_id = os.getenv("OMGSERVERS_TENANT_STAGE_ID")
 local tenant_stage_secret = os.getenv("OMGSERVERS_TENANT_STAGE_SECRET")

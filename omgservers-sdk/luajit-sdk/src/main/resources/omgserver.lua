@@ -112,7 +112,7 @@ local server = {
     components = {},
     -- methods
     bootstrap = function(self)
-        local service_url = os.getenv("OMGSERVERS_URL")
+        local service_url = os.getenv("OMGSERVERS_SERVICE_URL")
         if not service_url then
             error("service_url is nil")
         end
