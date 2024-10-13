@@ -56,8 +56,8 @@ public class DockerServiceImpl implements DockerService {
                                 final Function<T, Uni<R>> execute,
                                 final BiFunction<DockerModuleClient, T, Uni<R>> route) {
         return switch (poolServer.getQualifier()) {
-            case SERVICE_DOCKER_HOST -> {
-                final var poolServerUri = poolServer.getConfig().getServerUri();
+            case DEFAULT_HOST -> {
+                final var poolServerUri = poolServer.getConfig().getServiceUri();
                 final var thisServerUri = getConfigOperation.getServiceConfig().index().serverUri();
                 if (poolServerUri.equals(thisServerUri)) {
                     yield execute.apply(request);
@@ -66,7 +66,7 @@ public class DockerServiceImpl implements DockerService {
                     yield route.apply(client, request);
                 }
             }
-            case REMOTE_DOCKER_HOST -> execute.apply(request);
+            case REMOTE_HOST -> execute.apply(request);
         };
     }
 }

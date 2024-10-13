@@ -18,8 +18,11 @@ public class PoolServerConfigDto {
         return poolServerConfig;
     }
 
+    /**
+     * The URI for runtimes within this server to connect to the service.
+     */
     @NotNull
-    URI serverUri;
+    URI serviceUri;
 
     DockerHostConfig dockerHostConfig;
 

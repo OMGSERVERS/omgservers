@@ -3,12 +3,12 @@ package com.omgservers.schema.model.poolServer;
 public enum PoolServerQualifierEnum {
 
     /**
-     * Using service host as a docker host for containers.
+     * Default host to run docker containers
      */
-    SERVICE_DOCKER_HOST,
+    DEFAULT_HOST,
 
     /**
-     * Using remote docker host to run docker containers.
+     * Remote host to run docker containers.
      */
-    REMOTE_DOCKER_HOST,
+    REMOTE_HOST,
 }

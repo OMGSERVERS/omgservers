@@ -193,9 +193,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         poolRequestConfig.getServerContainerConfig().setCpuLimitInMilliseconds(defaultCpuLimit);
         final var defaultMemoryLimit = getConfigOperation.getServiceConfig().runtimes().defaultMemoryLimit();
         poolRequestConfig.getServerContainerConfig().setMemoryLimitInMegabytes(defaultMemoryLimit);
-        final var serviceUri = getConfigOperation.getServiceConfig().runtimes().serviceUri();
         final var environment = new HashMap<String, String>();
-        environment.put("OMGSERVERS_URL", serviceUri.toString());
         environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());

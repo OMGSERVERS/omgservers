@@ -71,7 +71,7 @@ public class PoolTaskImpl {
                                             // TODO: implement smart logic
 
                                             final var selectedServer = poolServers.get(0);
-                                            return syncPoolServerContainer(poolId, selectedServer.getId(), poolRequest);
+                                            return syncPoolServerContainer(selectedServer, poolRequest);
                                         })
                                         .collect().asList()
                                         .replaceWithVoid()
@@ -102,9 +102,10 @@ public class PoolTaskImpl {
                 .map(ViewPoolServerContainersResponse::getPoolServerContainers);
     }
 
-    Uni<Boolean> syncPoolServerContainer(final Long poolId,
-                                         final Long serverId,
+    Uni<Boolean> syncPoolServerContainer(final PoolServerModel poolServer,
                                          final PoolRequestModel poolRequest) {
+        final var poolId = poolServer.getPoolId();
+        final var poolServerId = poolServer.getId();
         final var runtimeId = poolRequest.getRuntimeId();
         final var runtimeQualifier = poolRequest.getRuntimeQualifier();
         final var config = PoolServerContainerConfigDto.create();
@@ -114,8 +115,9 @@ public class PoolTaskImpl {
         config.setMemoryLimitInMegabytes(poolRequest.getConfig()
                 .getServerContainerConfig().getMemoryLimitInMegabytes());
         config.setEnvironment(poolRequest.getConfig().getServerContainerConfig().getEnvironment());
+        config.getEnvironment().put("OMGSERVERS_URL", poolServer.getConfig().getServiceUri().toString());
         final var poolServerContainer = poolServerContainerModelFactory.create(poolId,
-                serverId,
+                poolServerId,
                 runtimeId,
                 runtimeQualifier,
                 config);
