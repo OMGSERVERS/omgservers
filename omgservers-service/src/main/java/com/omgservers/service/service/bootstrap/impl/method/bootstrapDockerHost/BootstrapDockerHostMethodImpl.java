@@ -56,7 +56,10 @@ class BootstrapDockerHostMethodImpl implements BootstrapDockerHostMethod {
 
     Uni<Boolean> createPoolServer(final Long defaultPoolId,
                                   final ServiceConfig.BootstrapDockerHostConfig dockerHostConfig) {
+        final var serverUri = getConfigOperation.getServiceConfig().index().serverUri();
+
         final var poolServerConfig = PoolServerConfigDto.create();
+        poolServerConfig.setServerUri(serverUri);
         poolServerConfig.setServiceUri(dockerHostConfig.serviceUri());
         poolServerConfig.setDockerHostConfig(new PoolServerConfigDto.DockerHostConfig(
                 dockerHostConfig.dockerDaemonUri(),
@@ -64,11 +67,10 @@ class BootstrapDockerHostMethodImpl implements BootstrapDockerHostMethod {
                 dockerHostConfig.memorySize(),
                 dockerHostConfig.maxContainers()));
 
-        final var serverUri = getConfigOperation.getServiceConfig().index().serverUri();
         final var idempotencyKey = "bootstrap/poolServer/" + serverUri;
 
         final var poolServer = poolServerModelFactory.create(defaultPoolId,
-                PoolServerQualifierEnum.DEFAULT_HOST,
+                PoolServerQualifierEnum.DOCKER_HOST,
                 poolServerConfig,
                 idempotencyKey);
 

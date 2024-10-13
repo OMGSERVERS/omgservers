@@ -3,8 +3,8 @@ package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketServic
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleTextMessageWebSocketResponse;
-import com.omgservers.service.service.room.RoomService;
-import com.omgservers.service.service.room.dto.HandleTextMessageRequest;
+import com.omgservers.service.service.dispatcher.DispatcherService;
+import com.omgservers.service.service.dispatcher.dto.HandleTextMessageRequest;
 import com.omgservers.service.service.router.RouterService;
 import com.omgservers.service.service.router.dto.TransferServerTextMessageRequest;
 import io.quarkus.websockets.next.CloseReason;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
 
     final RouterService routerService;
-    final RoomService roomService;
+    final DispatcherService dispatcherService;
 
     final WebSocketConnectionsContainer webSocketConnectionsContainer;
 
@@ -54,7 +54,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
     Uni<HandleTextMessageWebSocketResponse> handleTextMessage(final WebSocketConnection webSocketConnection,
                                                               final String message) {
         final var request = new HandleTextMessageRequest(webSocketConnection, message);
-        return roomService.handleTextMessage(request)
+        return dispatcherService.handleTextMessage(request)
                 .replaceWith(new HandleTextMessageWebSocketResponse());
     }
 }

@@ -37,9 +37,6 @@ import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
 import com.omgservers.service.service.job.dto.SyncJobResponse;
-import com.omgservers.service.service.room.RoomService;
-import com.omgservers.service.service.room.dto.CreateRoomRequest;
-import com.omgservers.service.service.room.dto.CreateRoomResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -58,7 +55,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final PoolModule poolModule;
 
     final EventService eventService;
-    final RoomService roomService;
     final JobService jobService;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
@@ -93,7 +89,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                             runtime.getQualifier());
 
                     return syncRuntimeRef(runtime, idempotencyKey)
-                            .flatMap(created -> createRoom(runtimeId))
                             .flatMap(created -> requestRuntimeDeployment(runtimeId, idempotencyKey))
                             .flatMap(created -> syncRuntimeJob(runtimeId, idempotencyKey));
                 })
@@ -155,12 +150,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                         });
             }
         };
-    }
-
-    Uni<Boolean> createRoom(final Long runtimeId) {
-        final var request = new CreateRoomRequest(runtimeId);
-        return roomService.createRoom(request)
-                .map(CreateRoomResponse::getCreated);
     }
 
     Uni<Boolean> requestRuntimeDeployment(final Long runtimeId,

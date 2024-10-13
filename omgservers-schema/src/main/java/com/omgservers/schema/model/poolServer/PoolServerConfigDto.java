@@ -18,6 +18,10 @@ public class PoolServerConfigDto {
         return poolServerConfig;
     }
 
+
+    @NotNull
+    URI serverUri;
+
     /**
      * The URI for runtimes within this server to connect to the service.
      */

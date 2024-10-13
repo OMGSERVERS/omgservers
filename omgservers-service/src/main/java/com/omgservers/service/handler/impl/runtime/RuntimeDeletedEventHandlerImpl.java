@@ -46,8 +46,6 @@ import com.omgservers.service.service.job.dto.DeleteJobRequest;
 import com.omgservers.service.service.job.dto.DeleteJobResponse;
 import com.omgservers.service.service.job.dto.FindJobRequest;
 import com.omgservers.service.service.job.dto.FindJobResponse;
-import com.omgservers.service.service.room.RoomService;
-import com.omgservers.service.service.room.dto.RemoveRoomRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -69,7 +67,6 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final UserModule userModule;
     final PoolModule poolModule;
 
-    final RoomService roomService;
     final JobService jobService;
 
     final GetServersOperation getServersOperation;
@@ -98,8 +95,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                             runtime.getDeploymentId());
 
                     // TODO: cleanup container user
-                    return deleteRoom(runtimeId)
-                            .flatMap(voidItem -> deleteRuntimeCommands(runtimeId))
+                    return deleteRuntimeCommands(runtimeId)
                             .flatMap(voidItem -> deleteRuntimeAssignments(runtimeId))
                             .flatMap(voidItem -> deleteRuntimeRef(runtime))
                             .flatMap(voidItem -> deleteRuntimeContainer(runtimeId))
@@ -112,12 +108,6 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var request = new GetRuntimeRequest(id);
         return runtimeModule.getService().getRuntime(request)
                 .map(GetRuntimeResponse::getRuntime);
-    }
-
-    Uni<Void> deleteRoom(final Long runtimeId) {
-        final var request = new RemoveRoomRequest(runtimeId);
-        return roomService.removeRoom(request)
-                .replaceWithVoid();
     }
 
     Uni<Void> deleteRuntimeCommands(final Long runtimeId) {

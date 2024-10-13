@@ -3,8 +3,8 @@ package com.omgservers.service.entrypoint.webSocket.impl.service.webSocketServic
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleBinaryMessageWebSocketResponse;
-import com.omgservers.service.service.room.RoomService;
-import com.omgservers.service.service.room.dto.HandleBinaryMessageRequest;
+import com.omgservers.service.service.dispatcher.DispatcherService;
+import com.omgservers.service.service.dispatcher.dto.HandleBinaryMessageRequest;
 import com.omgservers.service.service.router.RouterService;
 import com.omgservers.service.service.router.dto.TransferServerBinaryMessageRequest;
 import io.quarkus.websockets.next.CloseReason;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
 
     final RouterService routerService;
-    final RoomService roomService;
+    final DispatcherService dispatcherService;
 
     final WebSocketConnectionsContainer webSocketConnectionsContainer;
 
@@ -56,7 +56,7 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
     Uni<HandleBinaryMessageWebSocketResponse> handleBinaryMessage(final WebSocketConnection webSocketConnection,
                                                                   final Buffer buffer) {
         final var request = new HandleBinaryMessageRequest(webSocketConnection, buffer);
-        return roomService.handleBinaryMessage(request)
+        return dispatcherService.handleBinaryMessage(request)
                 .replaceWith(new HandleBinaryMessageWebSocketResponse());
     }
 }

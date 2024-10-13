@@ -4,8 +4,8 @@ import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.component.WebSocketConnectionsContainer;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketRequest;
 import com.omgservers.service.entrypoint.webSocket.impl.service.webSocketService.dto.HandleClosedConnectionWebSocketResponse;
-import com.omgservers.service.service.room.RoomService;
-import com.omgservers.service.service.room.dto.RemoveConnectionRequest;
+import com.omgservers.service.service.dispatcher.DispatcherService;
+import com.omgservers.service.service.dispatcher.dto.RemoveConnectionRequest;
 import com.omgservers.service.service.router.RouterService;
 import com.omgservers.service.service.router.dto.CloseClientConnectionRequest;
 import io.quarkus.websockets.next.CloseReason;
@@ -24,7 +24,7 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
     final WebSocketConnectionsContainer webSocketConnectionsContainer;
 
     final RouterService routerService;
-    final RoomService roomService;
+    final DispatcherService dispatcherService;
 
     @Override
     public Uni<HandleClosedConnectionWebSocketResponse> handleClosedConnection(
@@ -54,7 +54,7 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
 
     Uni<HandleClosedConnectionWebSocketResponse> removeRoomConnection(final WebSocketConnection serverConnection) {
         final var request = new RemoveConnectionRequest(serverConnection);
-        return roomService.removeConnection(request)
+        return dispatcherService.removeConnection(request)
                 .replaceWith(new HandleClosedConnectionWebSocketResponse());
     }
 
