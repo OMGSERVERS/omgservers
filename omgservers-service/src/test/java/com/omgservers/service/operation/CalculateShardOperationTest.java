@@ -1,16 +1,15 @@
 package com.omgservers.service.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class CalculateShardOperationTest extends Assertions {
+class CalculateShardOperationTest extends BaseTestClass {
 
     @Inject
     CalculateShardOperation calculateShardOperation;

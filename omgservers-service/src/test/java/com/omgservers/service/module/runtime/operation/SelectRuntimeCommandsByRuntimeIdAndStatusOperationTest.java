@@ -1,20 +1,20 @@
 package com.omgservers.service.module.runtime.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
-import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.selectActiveRuntimeCommandsByRuntimeId.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtime.upsertRuntime.UpsertRuntimeOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.selectActiveRuntimeCommandsByRuntimeId.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 
 @Slf4j
 @QuarkusTest
-class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends Assertions {
+class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends BaseTestClass {
     private static final long TIMEOUT = 1L;
 
     @Inject

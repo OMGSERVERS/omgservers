@@ -1,5 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerOperationTestInterface;
@@ -8,12 +9,11 @@ import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteMatchmakerOperationTest extends Assertions {
+class DeleteMatchmakerOperationTest extends BaseTestClass {
 
     @Inject
     DeleteMatchmakerOperationTestInterface deleteMatchmakerOperation;

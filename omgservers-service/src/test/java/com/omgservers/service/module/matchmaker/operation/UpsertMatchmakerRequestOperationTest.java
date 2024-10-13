@@ -1,8 +1,9 @@
 package com.omgservers.service.module.matchmaker.operation;
 
+import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
@@ -13,12 +14,11 @@ import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertMatchmakerRequestOperationTest extends Assertions {
+class UpsertMatchmakerRequestOperationTest extends BaseTestClass {
 
     @Inject
     UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;

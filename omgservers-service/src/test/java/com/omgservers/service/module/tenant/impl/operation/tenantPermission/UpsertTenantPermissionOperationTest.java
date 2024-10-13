@@ -1,5 +1,6 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantPermission;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -9,13 +10,12 @@ import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertTenantPermissionOperationTest extends Assertions {
+class UpsertTenantPermissionOperationTest extends BaseTestClass {
 
     @Inject
     UpsertTenantPermissionOperationTestInterface upsertTenantPermissionOperation;

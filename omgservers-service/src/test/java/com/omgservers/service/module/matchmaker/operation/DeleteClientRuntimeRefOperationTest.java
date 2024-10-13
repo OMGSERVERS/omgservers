@@ -1,9 +1,10 @@
 package com.omgservers.service.module.matchmaker.operation;
 
-import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionGroupDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerMatchOperationTestInterface;
@@ -13,7 +14,6 @@ import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class DeleteClientRuntimeRefOperationTest extends Assertions {
+class DeleteClientRuntimeRefOperationTest extends BaseTestClass {
 
     @Inject
     DeleteMatchmakerMatchOperationTestInterface deleteMatchOperation;

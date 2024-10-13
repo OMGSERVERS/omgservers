@@ -1,11 +1,11 @@
 package com.omgservers.service.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.BaseTestClass;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.time.Instant;
 
 @Slf4j
 @QuarkusTest
-class EventModelTest extends Assertions {
+class EventModelTest extends BaseTestClass {
 
     @Inject
     ObjectMapper objectMapper;

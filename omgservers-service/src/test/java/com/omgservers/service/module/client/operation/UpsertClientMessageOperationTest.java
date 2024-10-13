@@ -1,8 +1,9 @@
 package com.omgservers.service.module.client.operation;
 
+import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyDto;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
@@ -13,14 +14,13 @@ import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
 @Slf4j
 @QuarkusTest
-class UpsertClientMessageOperationTest extends Assertions {
+class UpsertClientMessageOperationTest extends BaseTestClass {
 
     @Inject
     UpsertClientOperationTestInterface upsertClientOperation;

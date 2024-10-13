@@ -1,9 +1,10 @@
 package com.omgservers.service.module.runtime.operation;
 
+import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyDto;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
@@ -14,12 +15,11 @@ import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertRuntimeCommandOperationTest extends Assertions {
+class UpsertRuntimeCommandOperationTest extends BaseTestClass {
 
     @Inject
     UpsertRuntimeOperationTestInterface upsertRuntimeOperation;

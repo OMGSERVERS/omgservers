@@ -1,9 +1,6 @@
 package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
@@ -11,7 +8,9 @@ import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
+import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
+import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;

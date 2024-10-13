@@ -1,16 +1,16 @@
 package com.omgservers.service.operation.parseDockerRepository;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class ParseDockerRegistryRepositoryOperationTest extends Assertions {
+class ParseDockerRegistryRepositoryOperationTest extends BaseTestClass {
 
     @Inject
     ParseDockerRepositoryOperation parseDockerRepositoryOperation;

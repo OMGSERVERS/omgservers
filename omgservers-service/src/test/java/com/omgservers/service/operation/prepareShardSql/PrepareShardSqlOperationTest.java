@@ -1,14 +1,14 @@
 package com.omgservers.service.operation.prepareShardSql;
 
+import com.omgservers.BaseTestClass;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-public class PrepareShardSqlOperationTest extends Assertions {
+public class PrepareShardSqlOperationTest extends BaseTestClass {
 
     @Inject
     PrepareShardSqlOperation prepareShardSqlOperation;

@@ -1,19 +1,19 @@
 package com.omgservers.service.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
 @Slf4j
 @QuarkusTest
-class IssueJwtTokenOperationTest extends Assertions {
+class IssueJwtTokenOperationTest extends BaseTestClass {
 
     @Inject
     IssueJwtTokenOperation issueJwtTokenOperation;

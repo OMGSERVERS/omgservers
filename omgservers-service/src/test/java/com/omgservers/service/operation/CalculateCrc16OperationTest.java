@@ -1,12 +1,11 @@
 package com.omgservers.service.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.service.operation.calculateCrc16.CalculateCrc16Operation;
 import io.quarkus.test.junit.QuarkusTest;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @QuarkusTest
-public class CalculateCrc16OperationTest extends Assertions {
+public class CalculateCrc16OperationTest extends BaseTestClass {
 
     @Inject
     CalculateCrc16Operation calculateCrc16Operation;

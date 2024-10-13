@@ -1,17 +1,17 @@
 package com.omgservers.service.service.registry.operation.parseDockerRegistryScope;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.service.service.registry.dto.DockerRegistryActionEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceTypeEnum;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class ParseDockerRegistryScopeOperationTest extends Assertions {
+class ParseDockerRegistryScopeOperationTest extends BaseTestClass {
 
     @Inject
     ParseDockerRegistryScopeOperation parseDockerRegistryScopeOperation;

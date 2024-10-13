@@ -1,7 +1,8 @@
 package com.omgservers.service.module.user.operation;
 
-import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
@@ -11,12 +12,11 @@ import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class UpsertPlayerOperationTest extends Assertions {
+class UpsertPlayerOperationTest extends BaseTestClass {
 
     @Inject
     UpsertUserOperationTestInterface upsertUserOperation;

@@ -1,5 +1,6 @@
 package com.omgservers.service.module.runtime.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeCommand.body.InitRuntimeCommandBodyDto;
@@ -10,16 +11,13 @@ import com.omgservers.service.module.runtime.operation.testInterface.UpsertRunti
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteRuntimeCommandOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
+class DeleteRuntimeCommandOperationTest extends BaseTestClass {
 
     @Inject
     DeleteRuntimeCommandOperationTestInterface deleteRuntimeCommandOperation;
@@ -38,9 +36,6 @@ class DeleteRuntimeCommandOperationTest extends Assertions {
 
     @Inject
     GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void givenRuntimeCommand_whenDeleteRuntimeCommand_thenDeleted() {

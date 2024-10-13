@@ -1,5 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -10,18 +11,15 @@ import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMa
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerRequestOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class SelectActiveMatchmakerMatchClientsByMatchIdOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
+class SelectActiveMatchmakerMatchClientsByMatchIdOperationTest extends BaseTestClass {
 
     @Inject
     UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;
@@ -40,9 +38,6 @@ class SelectActiveMatchmakerMatchClientsByMatchIdOperationTest extends Assertion
 
     @Inject
     MatchmakerRequestModelFactory matchmakerRequestModelFactory;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void givenMatchmakerRequest_whenSelectMatchmakerRequest_thenSelected() {

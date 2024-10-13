@@ -1,7 +1,5 @@
 package com.omgservers.service.service.registry.dto;
 
-import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
-import com.omgservers.service.service.registry.dto.DockerRegistryRepositoryDto;
 import io.quarkus.test.junit.QuarkusTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

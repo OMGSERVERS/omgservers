@@ -1,5 +1,6 @@
 package com.omgservers.service.module.user.operation;
 
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.user.UserModelFactory;
@@ -7,16 +8,13 @@ import com.omgservers.service.module.user.operation.testInterface.SelectUserOper
 import com.omgservers.service.module.user.operation.testInterface.UpsertUserOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class SelectUserOperationTest extends Assertions {
-    private static final long TIMEOUT = 1L;
+class SelectUserOperationTest extends BaseTestClass {
 
     @Inject
     SelectUserOperationTestInterface selectUserOperation;
@@ -29,9 +27,6 @@ class SelectUserOperationTest extends Assertions {
 
     @Inject
     GenerateIdOperation generateIdOperation;
-
-    @Inject
-    PgPool pgPool;
 
     @Test
     void givenUser_whenSelectUser_thenSelected() {

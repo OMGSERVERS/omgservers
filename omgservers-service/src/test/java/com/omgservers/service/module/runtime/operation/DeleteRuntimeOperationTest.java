@@ -1,8 +1,9 @@
 package com.omgservers.service.module.runtime.operation;
 
-import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.operation.testInterface.DeleteRuntimeOperationTestInterface;
 import com.omgservers.service.module.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
@@ -10,12 +11,11 @@ import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class DeleteRuntimeOperationTest extends Assertions {
+class DeleteRuntimeOperationTest extends BaseTestClass {
 
     @Inject
     DeleteRuntimeOperationTestInterface deleteRuntimeOperation;
