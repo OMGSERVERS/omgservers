@@ -119,13 +119,16 @@ function init(self)
 		local localtesting = require("game.localtesting")
 		print(socket.gettime() .. " [CLIENT_MANAGER] Using localtesting configuration, " .. json.encode(localtesting))
 
-		local service_url = "http://localhost:8080"
-		local tenant_id = localtesting.tenant_id
-		local tennat_stage_id = localtesting.tenant_stage_id
-		local tennat_stage_secret = localtesting.tenant_stage_secret
-		local debug = false
+		local options = {
+			service_url = "http://localhost:8080",
+			tenant_id = localtesting.tenant_id,
+			tennat_stage_id = localtesting.tenant_stage_id,
+			tennat_stage_secret = localtesting.tenant_stage_secret,
+			handler = function(event) handle_client_event(self, event) end,
+			debug = false,
+		}
 
-		omgplayer:init(service_url, tenant_id, tennat_stage_id, tennat_stage_secret, function(event) handle_client_event(self, event) end, debug)
+		omgplayer:init(options)
 	else
 		error("[CLIENT_MANAGER] Only localtesting is supported")
 	end

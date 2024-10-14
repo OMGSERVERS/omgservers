@@ -80,8 +80,11 @@ local function handle_server_event(self, event)
 end
 
 function init(self)
-	local debug = true
-	omgserver:start(function(event) handle_server_event(self, event) end, debug)
+	local options = {
+		handler = function(event) handle_server_event(self, event) end,
+		debug = true
+	}
+	omgserver:start(options)
 end
 
 function update(self, dt)

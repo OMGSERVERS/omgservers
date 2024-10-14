@@ -343,15 +343,31 @@ omgserver = {
 			handler(server_event)
 		end
 	end,
-	start = function(self, handler, debug, default_interval, fast_interval, iterations_threshold)
-		self.settings.debug = debug or false
-		self.settings.default_interval = default_interval or 1
-		self.settings.fast_interval = fast_interval or self.settings.default_interval * 0.5
+	--[[
+	{
+		self,
+		options = {
+			handler, 
+			debug, 
+			default_interval, 
+			fast_interval, 
+			iterations_threshold
+		}
+	}
+	]]
+	start = function(self, options)
+		assert(options.handler, "Value handler must be set")
+		
+		self.settings.debug = options.debug or false
+		self.settings.trace = options.trace or false
+		self.settings.default_interval = options.default_interval or 1
+		self.settings.fast_interval = options.fast_interval or self.settings.default_interval * 0.5
 		assert(self.settings.default_interval > self.settings.fast_interval , "Fast interval should be less than default")
-		self.settings.iterations_threshold = iterations_threshold or 4
-		print(socket.gettime() .. " [OMGSERVER] Setting, debug=" .. tostring(self.settings.debug) .. ", default_interval=" .. self.settings.default_interval .. ", fast_interval=" .. self.settings.fast_interval)
+		self.settings.iterations_threshold = options.iterations_threshold or 4
+		print(socket.gettime() .. " [OMGSERVER] Setting")
+		pprint(self.settings)
 
-		self.components:set_event_handler(handler)
+		self.components:set_event_handler(options.handler)
 
 		local service_url = os.getenv(omgserver.constants.SERVICE_URL)
 		if not service_url then
@@ -518,8 +534,10 @@ return {
 		end,
 	},
 	-- Methods
-	start = function(self, handler, debug, default_interval, fast_interval, iterations_threshold)
-		omgserver:start(handler, debug, default_interval, fast_interval, iterations_threshold)
+	start = function(self, options)
+		assert(options, "Options must be set")
+		
+		omgserver:start(options)
 	end,
 	get_qualifier = function(self)
 		assert(omgserver.components.server_environment, "Server was not initialized")

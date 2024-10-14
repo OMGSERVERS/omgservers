@@ -692,17 +692,26 @@ omgplayer = {
 		end,
 	},
 	-- Methods
-	init = function(self, server_url, tenant_id, tenant_stage_id, tenant_stage_secret, handler, debug, default_interval, fast_interval, iterations_threshold)
-		self.settings.debug = debug or false
-		self.settings.default_interval = default_interval or 2
-		self.settings.fast_interval = fast_interval or self.settings.default_interval * 0.25
+	init = function(self, options)
+		assert(options.service_url, "Value service_url must be set")
+		assert(options.tenant_id, "Value tenant_id must be set")
+		assert(options.tenant_stage_id, "Value tenant_stage_id must be set")
+		assert(options.tenant_stage_secret, "Value tenant_stage_secret must be set")
+		assert(options.handler, "Handler must not be nil")
+		
+		self.settings.debug = options.debug or false
+		self.settings.default_interval = options.default_interval or 2
+		self.settings.fast_interval = options.fast_interval or self.settings.default_interval * 0.25
 		assert(self.settings.default_interval > self.settings.fast_interval , "Fast interval should be less than default")
-		self.settings.iterations_threshold = iterations_threshold or 12
-		print(socket.gettime() .. " [OMGPLAYER] Setting, debug=" .. tostring(self.settings.debug) .. ", default_interval=" .. self.settings.default_interval .. ", fast_interval=" .. self.settings.fast_interval .. ", iterations_threshold=" .. self.settings.iterations_threshold)
 
-		self.server:use_url(server_url)
-		self.server:use_project(tenant_id, tenant_stage_id, tenant_stage_secret)
-		self.components:set_event_handler(handler)
+		self.settings.iterations_threshold = options.iterations_threshold or 12
+		
+		print(socket.gettime() .. " [OMGPLAYER] Setting")
+		pprint(self.settings)
+
+		self.server:use_url(options.service_url)
+		self.server:use_project(options.tenant_id, options.tenant_stage_id, options.tenant_stage_secret)
+		self.components:set_event_handler(options.handler)
 		self.trigger:trigger_initialized_event()
 	end,
 	update = function(self, dt)
@@ -718,14 +727,26 @@ omgplayer = {
 return {
 	constants = omgplayer.constants,
 	-- Methods
-	init = function(self, server_url, tenant_id, tenant_stage_id, tenant_stage_secret, handler, debug, default_interval, fast_interval, iterations_threshold)
-		assert(server_url, "Value server_url must be set")
-		assert(tenant_id, "Value tenant_id must be set")
-		assert(tenant_stage_id, "Value tenant_stage_id must be set")
-		assert(tenant_stage_secret, "Value tenant_stage_secret must be set")
-		assert(handler, "Handler must not be nil")
-
-		omgplayer:init(server_url, tenant_id, tenant_stage_id, tenant_stage_secret, handler, debug, default_interval, fast_interval, iterations_threshold)
+	--[[
+	{
+		self,
+		options = {
+			service_url,
+			tenant_id, 
+			tenant_stage_id, 
+			tenant_stage_secret, 
+			handler, 
+			debug, 
+			default_interval,
+			fast_interval,
+			iterations_threshold
+		}
+	}
+	]]
+	init = function(self, options)
+		assert(options, "Options must be set")
+		
+		omgplayer:init(options)
 	end,
 	sign_up = function(self)
 		omgplayer.flow:sign_up()

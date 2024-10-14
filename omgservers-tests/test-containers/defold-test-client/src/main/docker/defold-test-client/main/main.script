@@ -63,7 +63,15 @@ local function handle_event(self, event)
 end
 
 function init(self)
-	omgplayer:init(service_url, tenant_id, tenant_stage_id, tenant_stage_secret, function(event) handle_event(self, event) end, true)
+	local options = {
+		service_url = service_url,
+		tenant_id = tenant_id, 
+		tenant_stage_id = tenant_stage_id, 
+		tenant_stage_secret = tenant_stage_secret, 
+		handler = function(event) handle_event(self, event) end, 
+		debug = true,
+	}
+	omgplayer:init(options)
 end
 
 function update(self, dt)
