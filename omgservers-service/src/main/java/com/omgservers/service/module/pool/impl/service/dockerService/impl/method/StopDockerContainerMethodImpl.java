@@ -1,9 +1,9 @@
-package com.omgservers.service.module.docker.impl.service.dockerService.impl.method;
+package com.omgservers.service.module.pool.impl.service.dockerService.impl.method;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
 import com.omgservers.schema.module.docker.StopDockerContainerResponse;
-import com.omgservers.service.module.docker.impl.operation.GetDockerDaemonClientOperation;
+import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,5 +1,9 @@
 package com.omgservers.service.module.pool.impl.service.poolService;
 
+import com.omgservers.schema.module.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;

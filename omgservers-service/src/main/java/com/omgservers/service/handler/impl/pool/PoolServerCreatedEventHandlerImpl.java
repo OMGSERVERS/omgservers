@@ -10,7 +10,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.module.docker.impl.operation.GetDockerDaemonClientOperation;
+import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -64,7 +64,7 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getService().getPoolServer(request)
+        return poolModule.getPoolService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 }

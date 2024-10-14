@@ -209,7 +209,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<Boolean> syncPoolRequest(final PoolRequestModel poolRequest) {
         final var request = new SyncPoolRequestRequest(poolRequest);
-        return poolModule.getService().syncPoolRequestWithIdempotency(request)
+        return poolModule.getPoolService().syncPoolRequestWithIdempotency(request)
                 .map(SyncPoolRequestResponse::getCreated);
     }
 }

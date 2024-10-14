@@ -18,7 +18,9 @@ public class PoolServerConfigDto {
         return poolServerConfig;
     }
 
-
+    /**
+     * The service server to be used for communication with this PoolServer.
+     */
     @NotNull
     URI serverUri;
 

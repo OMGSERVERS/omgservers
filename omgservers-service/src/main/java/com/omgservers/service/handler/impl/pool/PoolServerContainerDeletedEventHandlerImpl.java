@@ -18,8 +18,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.docker.DockerModule;
-import com.omgservers.service.module.docker.impl.operation.GetDockerDaemonClientOperation;
+import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Uni;
@@ -34,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
-    final DockerModule dockerModule;
     final PoolModule poolModule;
 
     final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
@@ -68,7 +66,7 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
                                                          final Long serverId,
                                                          final Long id) {
         final var request = new GetPoolServerContainerRequest(poolId, serverId, id);
-        return poolModule.getService().getPoolServerContainer(request)
+        return poolModule.getPoolService().getPoolServerContainer(request)
                 .map(GetPoolServerContainerResponse::getPoolServerContainer);
     }
 
@@ -98,14 +96,14 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getService().getPoolServer(request)
+        return poolModule.getPoolService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
     Uni<Boolean> stopDockerContainer(final PoolServerModel poolServer,
                                      final PoolServerContainerModel poolServerContainer) {
         final var request = new StopDockerContainerRequest(poolServer, poolServerContainer);
-        return dockerModule.getService().stopDockerContainer(request)
+        return poolModule.getDockerService().stopDockerContainer(request)
                 .map(StopDockerContainerResponse::getStopped);
     }
 }

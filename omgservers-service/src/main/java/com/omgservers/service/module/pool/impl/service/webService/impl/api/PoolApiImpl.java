@@ -1,5 +1,9 @@
 package com.omgservers.service.module.pool.impl.service.webService.impl.api;
 
+import com.omgservers.schema.module.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
@@ -146,5 +150,15 @@ public class PoolApiImpl implements PoolApi {
     public Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(
             final DeletePoolServerContainerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deletePoolServerContainer);
+    }
+
+    @Override
+    public Uni<StartDockerContainerResponse> startDockerContainer(final StartDockerContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::startDockerContainer);
+    }
+
+    @Override
+    public Uni<StopDockerContainerResponse> stopDockerContainer(final StopDockerContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::stopDockerContainer);
     }
 }

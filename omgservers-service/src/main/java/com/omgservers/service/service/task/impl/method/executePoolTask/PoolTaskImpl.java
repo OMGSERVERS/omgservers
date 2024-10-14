@@ -52,7 +52,7 @@ public class PoolTaskImpl {
 
     Uni<PoolModel> getPool(final Long id) {
         final var request = new GetPoolRequest(id);
-        return poolModule.getService().getPool(request)
+        return poolModule.getPoolService().getPool(request)
                 .map(GetPoolResponse::getPool);
     }
 
@@ -86,19 +86,19 @@ public class PoolTaskImpl {
 
     Uni<List<PoolRequestModel>> viewPoolRequests(final Long poolId) {
         final var request = new ViewPoolRequestsRequest(poolId);
-        return poolModule.getService().viewPoolRequests(request)
+        return poolModule.getPoolService().viewPoolRequests(request)
                 .map(ViewPoolRequestsResponse::getPoolRequests);
     }
 
     Uni<List<PoolServerModel>> viewPoolServers(final Long poolId) {
         final var request = new ViewPoolServersRequest(poolId);
-        return poolModule.getService().viewPoolServers(request)
+        return poolModule.getPoolService().viewPoolServers(request)
                 .map(ViewPoolServerResponse::getPoolServers);
     }
 
     Uni<List<PoolServerContainerModel>> viewPoolServerContainers(final Long poolId) {
         final var request = new ViewPoolServerContainersRequest(poolId, null);
-        return poolModule.getService().viewPoolServerContainers(request)
+        return poolModule.getPoolService().viewPoolServerContainers(request)
                 .map(ViewPoolServerContainersResponse::getPoolServerContainers);
     }
 
@@ -122,7 +122,7 @@ public class PoolTaskImpl {
                 runtimeQualifier,
                 config);
         final var request = new SyncPoolServerContainerRequest(poolServerContainer);
-        return poolModule.getService().syncPoolServerContainer(request)
+        return poolModule.getPoolService().syncPoolServerContainer(request)
                 .map(SyncPoolServerContainerResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -141,7 +141,7 @@ public class PoolTaskImpl {
         final var poolId = poolRequest.getPoolId();
         final var id = poolRequest.getId();
         final var request = new DeletePoolRequestRequest(poolId, id);
-        return poolModule.getService().deletePoolRequest(request)
+        return poolModule.getPoolService().deletePoolRequest(request)
                 .map(DeletePoolRequestResponse::getDeleted);
     }
 }

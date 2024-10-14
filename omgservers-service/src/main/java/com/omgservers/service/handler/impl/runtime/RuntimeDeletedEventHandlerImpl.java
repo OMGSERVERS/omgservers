@@ -261,7 +261,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
         final var serverId = runtimePoolServerContainerRef.getServerId();
         final var containerId = runtimePoolServerContainerRef.getContainerId();
         final var request = new DeletePoolServerContainerRequest(poolId, serverId, containerId);
-        return poolModule.getService().deletePoolServerContainer(request)
+        return poolModule.getPoolService().deletePoolServerContainer(request)
                 .map(DeletePoolServerContainerResponse::getDeleted);
     }
 

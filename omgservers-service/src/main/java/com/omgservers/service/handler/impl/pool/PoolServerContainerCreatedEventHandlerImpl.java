@@ -18,9 +18,8 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimePoolServerContainerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.docker.DockerModule;
-import com.omgservers.service.module.docker.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -35,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
-    final DockerModule dockerModule;
     final PoolModule poolModule;
 
     final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
@@ -73,7 +71,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
                                                          final Long serverId,
                                                          final Long id) {
         final var request = new GetPoolServerContainerRequest(poolId, serverId, id);
-        return poolModule.getService().getPoolServerContainer(request)
+        return poolModule.getPoolService().getPoolServerContainer(request)
                 .map(GetPoolServerContainerResponse::getPoolServerContainer);
     }
 
@@ -105,14 +103,14 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getService().getPoolServer(request)
+        return poolModule.getPoolService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
     Uni<Boolean> startDockerContainer(final PoolServerModel poolServer,
                                       final PoolServerContainerModel poolServerContainer) {
         final var request = new StartDockerContainerRequest(poolServer, poolServerContainer);
-        return dockerModule.getService().startDockerContainer(request)
+        return poolModule.getDockerService().startDockerContainer(request)
                 .map(StartDockerContainerResponse::getStarted);
     }
 }

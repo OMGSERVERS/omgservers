@@ -38,7 +38,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
         final var pool = poolModelFactory.create(defaultPoolId, "bootstrap/defaultPool");
         final var request = new SyncPoolRequest(pool);
-        return poolModule.getService().syncPoolWithIdempotency(request)
+        return poolModule.getPoolService().syncPoolWithIdempotency(request)
                 .replaceWith(pool);
     }
 }

@@ -1,5 +1,9 @@
 package com.omgservers.service.module.pool.impl.service.webService;
 
+import com.omgservers.schema.module.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
@@ -71,4 +75,8 @@ public interface WebService {
     Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(SyncPoolServerContainerRequest request);
 
     Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(DeletePoolServerContainerRequest request);
+
+    Uni<StartDockerContainerResponse> startDockerContainer(StartDockerContainerRequest request);
+
+    Uni<StopDockerContainerResponse> stopDockerContainer(StopDockerContainerRequest request);
 }

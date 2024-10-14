@@ -1,5 +1,9 @@
 package com.omgservers.service.module.pool.impl.service.webService.impl;
 
+import com.omgservers.schema.module.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
@@ -34,6 +38,7 @@ import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerConta
 import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerResponse;
 import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
 import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
+import com.omgservers.service.module.pool.impl.service.dockerService.DockerService;
 import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -47,6 +52,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class WebServiceImpl implements WebService {
 
+    final DockerService dockerService;
     final PoolService poolService;
 
     @Override
@@ -134,5 +140,15 @@ class WebServiceImpl implements WebService {
     public Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(
             final DeletePoolServerContainerRequest request) {
         return poolService.deletePoolServerContainer(request);
+    }
+
+    @Override
+    public Uni<StartDockerContainerResponse> startDockerContainer(final StartDockerContainerRequest request) {
+        return dockerService.startDockerContainer(request);
+    }
+
+    @Override
+    public Uni<StopDockerContainerResponse> stopDockerContainer(final StopDockerContainerRequest request) {
+        return dockerService.stopDockerContainer(request);
     }
 }
