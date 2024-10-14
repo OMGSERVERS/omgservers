@@ -37,7 +37,7 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getTenantProjectId();
+        final var tenantProjectId = request.getProjectId();
         final var permissionQualifier = TenantProjectPermissionQualifierEnum.GETTING_DASHBOARD;
         return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId, permissionQualifier)
                 .flatMap(voidItem -> getTenantProjectData(tenantId, tenantProjectId))

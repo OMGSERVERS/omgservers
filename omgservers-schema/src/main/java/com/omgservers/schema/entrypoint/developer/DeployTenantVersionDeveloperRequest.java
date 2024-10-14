@@ -14,8 +14,8 @@ public class DeployTenantVersionDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantStageId;
+    Long stageId;
 
     @NotNull
-    Long tenantVersionId;
+    Long versionId;
 }

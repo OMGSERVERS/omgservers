@@ -91,7 +91,7 @@ public class DeveloperApiTester {
 
         final var response = responseSpecification.getBody()
                 .as(GetTenantDashboardDeveloperResponse.class);
-        return response.getTenantDashboard();
+        return response.getDashboard();
     }
 
     /*
@@ -133,7 +133,7 @@ public class DeveloperApiTester {
 
         final var response = responseSpecification.getBody()
                 .as(GetTenantProjectDashboardDeveloperResponse.class);
-        return response.getTenantProjectDashboard();
+        return response.getDashboard();
     }
 
     public DeleteTenantProjectDeveloperResponse deleteTenantProject(final String token,
@@ -196,7 +196,7 @@ public class DeveloperApiTester {
 
         final var response = responseSpecification.getBody()
                 .as(GetTenantStageDashboardDeveloperResponse.class);
-        return response.getTenantStageDashboard();
+        return response.getDashboard();
     }
 
     public DeleteTenantStageDeveloperResponse deleteTenantStage(final String token,
@@ -287,7 +287,7 @@ public class DeveloperApiTester {
 
         final var response = responseSpecification.getBody()
                 .as(GetTenantVersionDashboardDeveloperResponse.class);
-        return response.getTenantVersionDashboard();
+        return response.getDashboard();
     }
 
     public DeleteTenantVersionDeveloperResponse deleteTenantVersion(final String token,
@@ -352,7 +352,7 @@ public class DeveloperApiTester {
 
         final var response = responseSpecification.getBody()
                 .as(GetTenantDeploymentDashboardDeveloperResponse.class);
-        return response.getTenantDeploymentDashboard();
+        return response.getDashboard();
     }
 
     public DeleteTenantDeploymentDeveloperResponse deleteTenantDeployment(final String token,

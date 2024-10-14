@@ -41,7 +41,7 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getTenantStageId();
+        final var tenantStageId = request.getStageId();
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
                         .flatMap(project -> getTenantStage(tenantId, tenantStageId))

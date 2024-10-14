@@ -11,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class TenantVersionDashboardDto {
 
-    TenantVersionDto tenantVersion;
+    TenantVersionDto version;
 
-    List<TenantBuildRequestDto> tenantBuildRequests;
+    List<TenantBuildRequestDto> buildRequests;
 
-    List<TenantImageDto> tenantImages;
+    List<TenantImageDto> images;
 }

@@ -41,7 +41,7 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getTenantProjectId();
+        final var tenantProjectId = request.getProjectId();
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)
                         .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))

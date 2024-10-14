@@ -18,7 +18,7 @@ public class DeleteProjectPermissionsSupportRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantProjectId;
+    Long projectId;
 
     @NotNull
     Long userId;

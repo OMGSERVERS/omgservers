@@ -38,8 +38,8 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getTenantProjectId();
-        final var tenantVersionConfig = request.getTenantVersionConfig();
+        final var tenantProjectId = request.getProjectId();
+        final var tenantVersionConfig = request.getConfig();
 
         final var permissionQualifier = TenantProjectPermissionQualifierEnum
                 .VERSION_MANAGEMENT;

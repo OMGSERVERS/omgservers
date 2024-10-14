@@ -18,7 +18,7 @@ public class CreateTenantStagePermissionsSupportRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantStageId;
+    Long stageId;
 
     @NotNull
     Long userId;

@@ -81,7 +81,7 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
             final var tenantDeploymentId = developerApiTester.deployTenantVersion(testVersion.getDeveloperToken(),
                     testVersion.getTenantId(),
                     testVersion.getTenantStageId(),
-                    testVersion.getTenantVersionId()).getTenantDeploymentId();
+                    testVersion.getTenantVersionId()).getDeploymentId();
             testVersion.setTenantDeploymentId(tenantDeploymentId);
 
             waitForDeploymentOperation.waitForDeployment(testVersion);
@@ -128,8 +128,8 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
         return new GenericContainer("omgservers/defold-test-client:1.0.0-SNAPSHOT")
                 .withEnv(Map.of("OMGSERVERS_SERVICE_URL", "http://host.docker.internal:8080",
                         "OMGSERVERS_TENANT_ID", testVersion.getTenantId().toString(),
-                        "OMGSERVERS_TENANT_STAGE_ID", testVersion.getTenantStageId().toString(),
-                        "OMGSERVERS_TENANT_STAGE_SECRET", testVersion.getTenantStageSecret()))
+                        "OMGSERVERS_STAGE_ID", testVersion.getTenantStageId().toString(),
+                        "OMGSERVERS_SECRET", testVersion.getTenantStageSecret()))
                 // Make host.docker.internal work on Linux
                 .withExtraHost("host.docker.internal", "host-gateway");
     }

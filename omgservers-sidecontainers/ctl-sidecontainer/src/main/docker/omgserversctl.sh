@@ -659,28 +659,28 @@ support_createProject() {
     exit 1
   fi
 
-  PROJECT=$(cat ${RESPONSE_FILE} | jq -r .tenant_project_id)
+  PROJECT=$(cat ${RESPONSE_FILE} | jq -r .project_id)
   if [ -z "$PROJECT" -o "$PROJECT" == "null" ]; then
     echo "ERROR: PROJECT was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_PROJECT=$PROJECT" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  STAGE=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_id)
+  STAGE=$(cat ${RESPONSE_FILE} | jq -r .stage_id)
   if [ -z "${STAGE}" -o "${STAGE}" == "null" ]; then
     echo "ERROR: STAGE was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_STAGE=${STAGE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  SECRET=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_secret)
+  SECRET=$(cat ${RESPONSE_FILE} | jq -r .secret)
   if [ -z "${SECRET}" -o "${SECRET}" == "null" ]; then
     echo "ERROR: SECRET was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_SECRET=${SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
 }
 
 support_deleteProject() {
@@ -702,7 +702,7 @@ support_deleteProject() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"tenant_project_id\": ${PROJECT}}"
+  REQUEST="{\"tenant_id\": \"${TENANT}\", \"project_id\": ${PROJECT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -733,9 +733,9 @@ support_deleteProject() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   fi
 }
 
@@ -920,7 +920,7 @@ support_createProjectPermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -973,7 +973,7 @@ support_deleteProjectPermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1026,7 +1026,7 @@ support_createStagePermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-stage-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1079,7 +1079,7 @@ support_deleteStagePermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-stage-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1279,28 +1279,28 @@ developer_createProject() {
     exit 1
   fi
 
-  PROJECT=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .tenant_project_id)
+  PROJECT=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .project_id)
   if [ -z "$PROJECT" -o "$PROJECT" == "null" ]; then
     echo "ERROR: PROJECT was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_PROJECT=$PROJECT" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  STAGE=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .tenant_stage_id)
+  STAGE=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .stage_id)
   if [ -z "$STAGE" -o "$STAGE" == "null" ]; then
     echo "ERROR: STAGE was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  SECRET=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .tenant_stage_secret)
+  SECRET=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .secret)
   if [ -z "$SECRET" -o "$SECRET" == "null" ]; then
     echo "ERROR: SECRET was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_SECRET=${SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
 }
 
 developer_getProjectDashboard() {
@@ -1325,7 +1325,7 @@ developer_getProjectDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-project-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_project_id\": ${PROJECT}}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1372,7 +1372,7 @@ developer_deleteProject() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-project"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"tenant_project_id\": \"${PROJECT}\" }"
+  REQUEST="{\"tenant_id\": \"${TENANT}\", \"project_id\": \"${PROJECT}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-project_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1403,9 +1403,9 @@ developer_deleteProject() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   fi
 }
 
@@ -1454,21 +1454,21 @@ developer_createStage() {
     exit 1
   fi
 
-  STAGE=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_id)
+  STAGE=$(cat ${RESPONSE_FILE} | jq -r .stage_id)
   if [ -z "$STAGE" -o "$STAGE" == "null" ]; then
     echo "ERROR: STAGE was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  SECRET=$(cat ${RESPONSE_FILE} | jq -r .tenant_stage_secret)
+  SECRET=$(cat ${RESPONSE_FILE} | jq -r .secret)
   if [ -z "$SECRET" -o "$SECRET" == "null" ]; then
     echo "ERROR: SECRET was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_SECRET=$SECRET" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant stage was created, STAGE=${STAGE}, SECRET=${SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=${STAGE}, SECRET=${SECRET}"
 }
 
 developer_getStageDashboard() {
@@ -1493,7 +1493,7 @@ developer_getStageDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-stage-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_stage_id\": ${STAGE}}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT}_${STAGE}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1541,7 +1541,7 @@ developer_deleteStage() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-stage"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"tenant_stage_id\": \"${STAGE}\" }"
+  REQUEST="{\"tenant_id\": \"${TENANT}\", \"stage_id\": \"${STAGE}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-stage_${TENANT}_${STAGE}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1572,9 +1572,9 @@ developer_deleteStage() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant stage was deleted, TENANT=${TENANT}, STAGE=${STAGE}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was deleted, TENANT=${TENANT}, STAGE=${STAGE}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant stage was not deleted, TENANT=${TENANT}, STAGE=${STAGE}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was not deleted, TENANT=${TENANT}, STAGE=${STAGE}"
   fi
 }
 
@@ -1602,7 +1602,7 @@ developer_createVersion() {
   CONFIG=$(cat ${CONFIG_PATH} | jq -c -r)
 
   if [ -z "${CONFIG}" -o "${CONFIG}" == "null" ]; then
-    echo "ERROR: Tenant version config is empty"
+    echo "ERROR: Version config is empty"
     exit 1
   fi
 
@@ -1614,7 +1614,7 @@ developer_createVersion() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-version"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_project_id\": ${PROJECT}, \"tenant_version_config\": ${CONFIG}}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"config\": ${CONFIG}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT}_${STAGE}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1637,14 +1637,14 @@ developer_createVersion() {
     exit 1
   fi
 
-  VERSION=$(cat ${RESPONSE_FILE} | jq -r .tenant_version_id)
+  VERSION=$(cat ${RESPONSE_FILE} | jq -r .version_id)
   if [ -z "$VERSION" -o "$VERSION" == "null" ]; then
     echo "ERROR: VERSION was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_VERSION=${VERSION}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was created, VERSION=${VERSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION=${VERSION}"
 }
 
 developer_uploadFilesArchive() {
@@ -1703,14 +1703,14 @@ developer_uploadFilesArchive() {
     exit 1
   fi
 
-  FILES_ARCHIVE=$(cat ${RESPONSE_FILE} | jq -r .tenant_files_archive_id)
+  FILES_ARCHIVE=$(cat ${RESPONSE_FILE} | jq -r .files_archive_id)
   if [ -z "${FILES_ARCHIVE}" -o "${FILES_ARCHIVE}" == "null" ]; then
     echo "ERROR: FILES_ARCHIVE was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_FILES_ARCHIVE=${FILES_ARCHIVE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant files archive was uploaded, FILES_ARCHIVE=${FILES_ARCHIVE}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Files archive was uploaded, FILES_ARCHIVE=${FILES_ARCHIVE}"
 }
 
 developer_getVersionDashboard() {
@@ -1735,7 +1735,7 @@ developer_getVersionDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-version-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_version_id\": ${VERSION}}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"version_id\": ${VERSION}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1783,7 +1783,7 @@ developer_deleteVersion() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-version"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"tenant_version_id\": \"${VERSION}\" }"
+  REQUEST="{\"tenant_id\": \"${TENANT}\", \"version_id\": \"${VERSION}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-tenant-version_${TENANT}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1814,9 +1814,9 @@ developer_deleteVersion() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was deleted, TENANT=${TENANT}, VERSION=${VERSION}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was deleted, TENANT=${TENANT}, VERSION=${VERSION}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant version was not deleted, TENANT=${TENANT}, VERSION=${VERSION}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was not deleted, TENANT=${TENANT}, VERSION=${VERSION}"
   fi
 }
 
@@ -1844,7 +1844,7 @@ developer_deployVersion() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/deploy-version"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_stage_id\": ${STAGE}, \"tenant_version_id\": ${VERSION}}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"version_id\": ${VERSION}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT}_${STAGE}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1867,14 +1867,14 @@ developer_deployVersion() {
     exit 1
   fi
 
-  DEPLOYMENT=$(cat ${RESPONSE_FILE} | jq -r .tenant_deployment_id)
+  DEPLOYMENT=$(cat ${RESPONSE_FILE} | jq -r .deployment_id)
   if [ -z "${DEPLOYMENT}" -o "${DEPLOYMENT}" == "null" ]; then
     echo "ERROR: DEPLOYMENT was not received"
     exit 1
   fi
   echo "export OMGSERVERSCTL_DEPLOYMENT=${DEPLOYMENT}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was created, DEPLOYMENT=${DEPLOYMENT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=${DEPLOYMENT}"
 }
 
 developer_getDeploymentDashboard() {
@@ -1899,7 +1899,7 @@ developer_getDeploymentDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-deployment-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"tenant_deployment_id\": ${DEPLOYMENT}}"
+  REQUEST="{\"tenant_id\": ${TENANT}, \"deployment_id\": ${DEPLOYMENT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-deployment-dashboard_${TENANT}_${DEPLOYMENT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1978,9 +1978,9 @@ developer_deleteDeployment() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant deployment was not deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was not deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
   fi
 }
 

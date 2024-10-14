@@ -14,5 +14,5 @@ public class GetTenantProjectDashboardDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantProjectId;
+    Long projectId;
 }

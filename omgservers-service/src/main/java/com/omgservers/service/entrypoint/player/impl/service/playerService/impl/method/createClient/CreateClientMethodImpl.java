@@ -56,8 +56,8 @@ class CreateClientMethodImpl implements CreateClientMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getTenantStageId();
-        final var tenantStageSecret = request.getTenantStageSecret();
+        final var tenantStageId = request.getStageId();
+        final var tenantStageSecret = request.getSecret();
 
         return validateStageSecret(tenantId, tenantStageId, tenantStageSecret)
                 .flatMap(rawToken -> findOrCreatePlayer(userId, tenantId, tenantStageId)

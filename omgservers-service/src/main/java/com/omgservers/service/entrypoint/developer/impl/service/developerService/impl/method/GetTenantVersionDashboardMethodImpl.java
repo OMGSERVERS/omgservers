@@ -40,7 +40,7 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var tenantVersionId = request.getTenantVersionId();
+        final var tenantVersionId = request.getVersionId();
 
         return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(tenantVersion -> {

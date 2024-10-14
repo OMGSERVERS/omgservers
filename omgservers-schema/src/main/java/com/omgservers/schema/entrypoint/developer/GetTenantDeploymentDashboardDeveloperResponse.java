@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetTenantDeploymentDashboardDeveloperResponse {
 
-    TenantDeploymentDashboardDto tenantDeploymentDashboard;
+    TenantDeploymentDashboardDto dashboard;
 }

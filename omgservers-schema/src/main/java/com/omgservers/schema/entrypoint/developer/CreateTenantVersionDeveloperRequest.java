@@ -15,9 +15,9 @@ public class CreateTenantVersionDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantProjectId;
+    Long projectId;
 
     @NotNull
-    TenantVersionConfigDto tenantVersionConfig;
+    TenantVersionConfigDto config;
 
 }

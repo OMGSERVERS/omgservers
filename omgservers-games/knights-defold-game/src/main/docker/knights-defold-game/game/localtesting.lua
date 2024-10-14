@@ -1,5 +1,5 @@
 return {
-  tenant = "326161035314593792",
-  stage = "326161050011435008",
-  secret = "02j6h6VOnoBMdDOj9lTvjQM7Im/YrV3c",
+  tenant = "326182205896261632",
+  stage = "326182224309256192",
+  secret = "dGn3x6z6dc1h5TTFGb+X+bMIZrUNfnYY",
 }

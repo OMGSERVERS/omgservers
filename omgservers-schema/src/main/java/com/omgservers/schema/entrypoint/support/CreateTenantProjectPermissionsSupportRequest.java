@@ -18,7 +18,7 @@ public class CreateTenantProjectPermissionsSupportRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantProjectId;
+    Long projectId;
 
     @NotNull
     Long userId;

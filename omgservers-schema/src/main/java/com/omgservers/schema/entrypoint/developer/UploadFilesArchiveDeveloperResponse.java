@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UploadFilesArchiveDeveloperResponse {
 
-    Long tenantFilesArchiveId;
+    Long filesArchiveId;
 }

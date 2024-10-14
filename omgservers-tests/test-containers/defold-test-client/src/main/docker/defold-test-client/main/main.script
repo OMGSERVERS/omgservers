@@ -2,8 +2,8 @@ local omgplayer = require("omgservers.omgplayer")
 
 local service_url = os.getenv("OMGSERVERS_SERVICE_URL") or "http://localhost:8080"
 local tenant_id = os.getenv("OMGSERVERS_TENANT_ID")
-local tenant_stage_id = os.getenv("OMGSERVERS_TENANT_STAGE_ID")
-local tenant_stage_secret = os.getenv("OMGSERVERS_TENANT_STAGE_SECRET")
+local stage_id = os.getenv("OMGSERVERS_STAGE_ID")
+local secret = os.getenv("OMGSERVERS_SECRET")
 
 local function handle_event(self, event)
 	print(socket.gettime() .. " [GAMECLIENT] Event was received, event=" .. json.encode(event))
@@ -66,8 +66,8 @@ function init(self)
 	local options = {
 		service_url = service_url,
 		tenant_id = tenant_id, 
-		tenant_stage_id = tenant_stage_id, 
-		tenant_stage_secret = tenant_stage_secret, 
+		stage_id = stage_id, 
+		secret = secret, 
 		handler = function(event) handle_event(self, event) end, 
 		debug = true,
 	}

@@ -42,7 +42,7 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getTenantStageId();
+        final var tenantStageId = request.getStageId();
 
         return getUser(userId)
                 .flatMap(user -> getTenant(tenantId)

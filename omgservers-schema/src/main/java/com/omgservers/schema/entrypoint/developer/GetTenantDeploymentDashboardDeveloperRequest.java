@@ -14,5 +14,5 @@ public class GetTenantDeploymentDashboardDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantDeploymentId;
+    Long deploymentId;
 }

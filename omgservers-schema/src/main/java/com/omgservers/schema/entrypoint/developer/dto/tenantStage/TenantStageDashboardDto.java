@@ -12,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class TenantStageDashboardDto {
 
-    TenantStageDto tenantStage;
+    TenantStageDto stage;
 
-    List<TenantStagePermissionDto> tenantStagePermissions;
+    List<TenantStagePermissionDto> permissions;
 
-    List<TenantDeploymentDto> tenantDeployments;
+    List<TenantDeploymentDto> deployments;
 }

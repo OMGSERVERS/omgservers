@@ -14,5 +14,5 @@ public class DeleteTenantProjectSupportRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantProjectId;
+    Long projectId;
 }

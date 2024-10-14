@@ -52,13 +52,13 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
 
         final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
         final var createProjectDeveloperResponse = developerApiTester.createTenantProject(developerToken, tenantId);
-        final var tenantProjectId = createProjectDeveloperResponse.getTenantProjectId();
-        final var tenantStageId = createProjectDeveloperResponse.getTenantStageId();
-        final var tenantStageSecret = createProjectDeveloperResponse.getTenantStageSecret();
+        final var tenantProjectId = createProjectDeveloperResponse.getProjectId();
+        final var tenantStageId = createProjectDeveloperResponse.getStageId();
+        final var tenantStageSecret = createProjectDeveloperResponse.getSecret();
 
         final var createVersionDeveloperResponse = developerApiTester
                 .createTenantVersion(developerToken, tenantId, tenantProjectId, versionConfig);
-        final var tenantVersionId = createVersionDeveloperResponse.getTenantVersionId();
+        final var tenantVersionId = createVersionDeveloperResponse.getVersionId();
 
         return TestVersionDto.builder()
                 .adminToken(adminToken)

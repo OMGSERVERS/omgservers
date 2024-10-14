@@ -16,9 +16,9 @@ public class CreateClientPlayerRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantStageId;
+    Long stageId;
 
     @NotBlank
     @Size(max = 1024)
-    String tenantStageSecret;
+    String secret;
 }

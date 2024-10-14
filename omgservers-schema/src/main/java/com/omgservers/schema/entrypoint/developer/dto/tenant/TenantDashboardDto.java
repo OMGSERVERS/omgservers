@@ -14,7 +14,7 @@ public class TenantDashboardDto {
 
     TenantDto tenant;
 
-    List<TenantPermissionDto> tenantPermissions;
+    List<TenantPermissionDto> permissions;
 
-    List<TenantProjectDto> tenantProjects;
+    List<TenantProjectDto> projects;
 }

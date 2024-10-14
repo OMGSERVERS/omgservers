@@ -11,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 public class TenantDeploymentDashboardDto {
 
-    TenantDeploymentDto tenantDeployment;
+    TenantDeploymentDto deployment;
 
-    List<TenantLobbyRefDto> tenantLobbyRefs;
+    List<TenantLobbyRefDto> lobbyRefs;
 
-    List<TenantMatchmakerRefDto> tenantMatchmakerRefs;
+    List<TenantMatchmakerRefDto> matchmakerRefs;
 }

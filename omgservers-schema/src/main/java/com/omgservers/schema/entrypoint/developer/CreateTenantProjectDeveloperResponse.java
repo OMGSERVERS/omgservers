@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateTenantProjectDeveloperResponse {
 
-    Long tenantProjectId;
-    Long tenantStageId;
-    String tenantStageSecret;
+    Long projectId;
+    Long stageId;
+    String secret;
 }

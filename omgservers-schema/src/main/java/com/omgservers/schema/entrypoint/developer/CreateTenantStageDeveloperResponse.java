@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateTenantStageDeveloperResponse {
 
-    Long tenantStageId;
-    String tenantStageSecret;
+    Long stageId;
+    String stageSecret;
 }

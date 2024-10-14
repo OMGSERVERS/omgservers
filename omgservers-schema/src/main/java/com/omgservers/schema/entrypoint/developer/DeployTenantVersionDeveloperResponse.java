@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeployTenantVersionDeveloperResponse {
 
-    Long tenantDeploymentId;
+    Long deploymentId;
 }

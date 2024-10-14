@@ -51,7 +51,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var tenantVersionId = request.getTenantVersionId();
+        final var tenantVersionId = request.getVersionId();
         final var base64Archive = getBase64Archive(request);
 
         return getTenantVersion(tenantId, tenantVersionId)

@@ -46,8 +46,8 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
         log.debug("Deploy tenant version, request={}", request);
 
         final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getTenantStageId();
-        final var tenantVersionId = request.getTenantVersionId();
+        final var tenantStageId = request.getStageId();
+        final var tenantVersionId = request.getVersionId();
 
         return verifyAtLeastOneTenantImageExists(tenantId, tenantVersionId)
                 .flatMap(voidItem -> getTenantVersion(tenantId, tenantVersionId))

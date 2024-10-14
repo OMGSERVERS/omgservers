@@ -53,23 +53,23 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
 
         final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
         final var createProjectDeveloperResponse = developerApiTester.createTenantProject(developerToken, tenantId);
-        final var tenantProjectId = createProjectDeveloperResponse.getTenantProjectId();
-        final var tenantStageId = createProjectDeveloperResponse.getTenantStageId();
-        final var tenantStageSecret = createProjectDeveloperResponse.getTenantStageSecret();
+        final var tenantProjectId = createProjectDeveloperResponse.getProjectId();
+        final var tenantStageId = createProjectDeveloperResponse.getStageId();
+        final var tenantStageSecret = createProjectDeveloperResponse.getSecret();
 
         final var createTenantVersionDeveloperResponse =
                 developerApiTester.createTenantVersion(developerToken, tenantId, tenantProjectId, tenantVersionConfig);
-        final var tenantVersionId = createTenantVersionDeveloperResponse.getTenantVersionId();
+        final var tenantVersionId = createTenantVersionDeveloperResponse.getVersionId();
 
         final var buildTenantVersionDeveloperResponse = developerApiTester
                 .uploadFilesArchive(developerToken, tenantId, tenantVersionId, mainLua);
-        final var tenantFilesArchiveId = buildTenantVersionDeveloperResponse.getTenantFilesArchiveId();
+        final var tenantFilesArchiveId = buildTenantVersionDeveloperResponse.getFilesArchiveId();
 
         waitForBuilding(developerToken, tenantId, tenantVersionId);
 
         final var deployVersionDeveloperResponse = developerApiTester
                 .deployTenantVersion(developerToken, tenantId, tenantStageId, tenantVersionId);
-        final var tenantDeploymentId = deployVersionDeveloperResponse.getTenantDeploymentId();
+        final var tenantDeploymentId = deployVersionDeveloperResponse.getDeploymentId();
 
         waitForDeployment(developerToken, tenantId, tenantDeploymentId);
 
@@ -96,7 +96,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
                 .getTenantVersionDashboard(developerToken, tenantId, tenantVersionId);
         var attempt = 1;
         var maxAttempts = 12;
-        while ((currentTenantVersionDashboard.getTenantImages().isEmpty()) &&
+        while ((currentTenantVersionDashboard.getImages().isEmpty()) &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for building, attempt={}", attempt);
@@ -123,8 +123,8 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
                 .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
         var attempt = 1;
         var maxAttempts = 12;
-        while ((currentTenantDeploymentDashboard.getTenantLobbyRefs().isEmpty() ||
-                currentTenantDeploymentDashboard.getTenantMatchmakerRefs().isEmpty()) &&
+        while ((currentTenantDeploymentDashboard.getLobbyRefs().isEmpty() ||
+                currentTenantDeploymentDashboard.getMatchmakerRefs().isEmpty()) &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for deployment, attempt={}", attempt);

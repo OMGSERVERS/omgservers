@@ -43,7 +43,7 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var tenantDeploymentId = request.getTenantDeploymentId();
+        final var tenantDeploymentId = request.getDeploymentId();
         return getTenantDeployment(tenantId, tenantDeploymentId)
                 .flatMap(tenantDeployment -> {
                     final var tenantStageId = tenantDeployment.getStageId();

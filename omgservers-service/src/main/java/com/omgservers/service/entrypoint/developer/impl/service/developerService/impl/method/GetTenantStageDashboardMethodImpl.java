@@ -40,7 +40,7 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getTenantStageId();
+        final var tenantStageId = request.getStageId();
 
         return getTenantStage(tenantId, tenantStageId)
                 .flatMap(tenantStage -> {

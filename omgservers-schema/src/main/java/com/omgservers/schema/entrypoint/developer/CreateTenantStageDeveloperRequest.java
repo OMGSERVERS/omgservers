@@ -14,5 +14,5 @@ public class CreateTenantStageDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantProjectId;
+    Long projectId;
 }

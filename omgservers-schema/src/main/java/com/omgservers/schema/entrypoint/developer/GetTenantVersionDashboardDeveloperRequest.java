@@ -14,5 +14,5 @@ public class GetTenantVersionDashboardDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantVersionId;
+    Long versionId;
 }

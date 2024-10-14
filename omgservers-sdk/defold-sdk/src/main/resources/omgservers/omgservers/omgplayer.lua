@@ -243,11 +243,11 @@ omgplayer = {
 					connection = server_url .. "/omgservers/v1/entrypoint/dispatcher/connection",
 				}
 			end,
-			set_server_project = function(components, tenant_id, tenant_stage_id, tenant_stage_secret)
+			set_server_project = function(components, tenant_id, stage_id, secret)
 				components.server_project = {
 					tenant_id = tenant_id,
-					tenant_stage_id = tenant_stage_id,
-					tenant_stage_secret = tenant_stage_secret,
+					stage_id = stage_id,
+					secret = secret,
 				}
 			end,
 			set_user_credentials = function(components, user_id, password)
@@ -309,9 +309,9 @@ omgplayer = {
 			server.components:set_server_urls(url)
 			print(socket.gettime() .. " [OMGPLAYER] Url was changed, new_url=" .. url)
 		end,
-		use_project = function(server, tenant_id, tenant_stage_id, tenant_stage_secret)
-			server.components:set_server_project(tenant_id, tenant_stage_id, tenant_stage_secret)
-			print(socket.gettime() .. " [OMGPLAYER] Server project was set, tenant_id=" .. tenant_id .. ", tenant_stage_id=" .. tenant_stage_id .. ", tenant_stage_secret=" .. string.sub(tenant_stage_secret, 1, 4) .. "..")
+		use_project = function(server, tenant_id, stage_id, secret)
+			server.components:set_server_project(tenant_id, stage_id, secret)
+			print(socket.gettime() .. " [OMGPLAYER] Server project was set, tenant_id=" .. tenant_id .. ", stage_id=" .. stage_id .. ", secret=" .. string.sub(secret, 1, 4) .. "..")
 		end,
 		create_user = function(server, callback)
 			assert(server.components.server_urls, "Component server_urls must be set")
@@ -381,14 +381,14 @@ omgplayer = {
 			local server_components = server.components
 
 			local tenant_id = server_components.server_project.tenant_id
-			local tenant_stage_id = server_components.server_project.tenant_stage_id
-			local tenant_stage_secret = server_components.server_project.tenant_stage_secret
+			local stage_id = server_components.server_project.stage_id
+			local secret = server_components.server_project.secret
 
 			local request_url = server_components.server_urls.create_client
 			local request_body = {
 				tenant_id = tenant_id,
-				tenant_stage_id = tenant_stage_id,
-				tenant_stage_secret = tenant_stage_secret
+				stage_id = stage_id,
+				secret = secret
 			}
 			local response_handler = function(response_status, response_body)
 				local client_id = response_body.client_id
@@ -695,8 +695,8 @@ omgplayer = {
 	init = function(self, options)
 		assert(options.service_url, "Value service_url must be set")
 		assert(options.tenant_id, "Value tenant_id must be set")
-		assert(options.tenant_stage_id, "Value tenant_stage_id must be set")
-		assert(options.tenant_stage_secret, "Value tenant_stage_secret must be set")
+		assert(options.stage_id, "Value stage_id must be set")
+		assert(options.secret, "Value secret must be set")
 		assert(options.handler, "Handler must not be nil")
 		
 		self.settings.debug = options.debug or false
@@ -710,7 +710,7 @@ omgplayer = {
 		pprint(self.settings)
 
 		self.server:use_url(options.service_url)
-		self.server:use_project(options.tenant_id, options.tenant_stage_id, options.tenant_stage_secret)
+		self.server:use_project(options.tenant_id, options.stage_id, options.secret)
 		self.components:set_event_handler(options.handler)
 		self.trigger:trigger_initialized_event()
 	end,
@@ -733,8 +733,8 @@ return {
 		options = {
 			service_url,
 			tenant_id, 
-			tenant_stage_id, 
-			tenant_stage_secret, 
+			stage_id, 
+			secret, 
 			handler, 
 			debug, 
 			default_interval,

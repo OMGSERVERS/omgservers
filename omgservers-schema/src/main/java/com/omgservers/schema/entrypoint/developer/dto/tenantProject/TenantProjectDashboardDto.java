@@ -13,11 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 public class TenantProjectDashboardDto {
 
-    TenantProjectDto tenantProject;
+    TenantProjectDto project;
 
-    List<TenantProjectPermissionDto> tenantProjectPermissions;
+    List<TenantProjectPermissionDto> permissions;
 
-    List<TenantStageDto> tenantStages;
+    List<TenantStageDto> stages;
 
-    List<TenantVersionProjectionDto> tenantVersionProjections;
+    List<TenantVersionProjectionDto> versions;
 }

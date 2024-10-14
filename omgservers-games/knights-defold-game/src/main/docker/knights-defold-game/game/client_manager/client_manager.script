@@ -122,8 +122,8 @@ function init(self)
 		local options = {
 			service_url = "http://localhost:8080",
 			tenant_id = localtesting.tenant,
-			tennat_stage_id = localtesting.stage,
-			tennat_stage_secret = localtesting.secret,
+			stage_id = localtesting.stage,
+			secret = localtesting.secret,
 			handler = function(event) handle_client_event(self, event) end,
 			debug = false,
 		}

@@ -18,7 +18,7 @@ public class DeleteTenantStagePermissionsSupportRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantStageId;
+    Long stageId;
 
     @NotNull
     Long userId;

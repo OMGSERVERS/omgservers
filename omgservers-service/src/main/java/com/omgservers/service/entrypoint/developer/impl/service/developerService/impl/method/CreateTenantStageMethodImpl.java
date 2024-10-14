@@ -42,7 +42,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
 
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
         final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getTenantProjectId();
+        final var tenantProjectId = request.getProjectId();
 
         final var permissionQualifier =
                 TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT;

@@ -14,5 +14,5 @@ public class GetTenantStageDashboardDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantStageId;
+    Long stageId;
 }

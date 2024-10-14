@@ -19,7 +19,7 @@ public class UploadFilesArchiveDeveloperRequest {
     Long tenantId;
 
     @NotNull
-    Long tenantVersionId;
+    Long versionId;
 
     @NotEmpty
     @ToString.Exclude

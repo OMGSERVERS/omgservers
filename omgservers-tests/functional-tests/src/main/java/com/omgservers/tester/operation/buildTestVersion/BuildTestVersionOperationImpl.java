@@ -35,6 +35,6 @@ class BuildTestVersionOperationImpl implements BuildTestVersionOperation {
                         testVersion.getTenantVersionId(),
                         mainLua);
 
-        return buildVersionDeveloperResponse.getTenantFilesArchiveId();
+        return buildVersionDeveloperResponse.getFilesArchiveId();
     }
 }

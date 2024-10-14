@@ -35,8 +35,8 @@ class WaitForDeploymentOperationImpl implements WaitForDeploymentOperation {
                 .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
         var attempt = 1;
         var maxAttempts = 12;
-        while ((currentVersionDashboard.getTenantLobbyRefs().isEmpty() ||
-                currentVersionDashboard.getTenantMatchmakerRefs().isEmpty()) &&
+        while ((currentVersionDashboard.getLobbyRefs().isEmpty() ||
+                currentVersionDashboard.getMatchmakerRefs().isEmpty()) &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for deployment, attempt={}", attempt);
