@@ -67,16 +67,16 @@ public interface DeveloperApi {
      */
 
     @PUT
-    @Path("/create-tenant-project")
+    @Path("/create-project")
     Uni<CreateTenantProjectDeveloperResponse> createTenantProject(@NotNull CreateTenantProjectDeveloperRequest request);
 
     @PUT
-    @Path("/get-tenant-project-dashboard")
+    @Path("/get-project-dashboard")
     Uni<GetTenantProjectDashboardDeveloperResponse> getTenantProjectDashboard(
             @NotNull GetTenantProjectDashboardDeveloperRequest request);
 
     @PUT
-    @Path("/delete-tenant-project")
+    @Path("/delete-project")
     Uni<DeleteTenantProjectDeveloperResponse> deleteTenantProject(@NotNull DeleteTenantProjectDeveloperRequest request);
 
     /*
@@ -84,16 +84,16 @@ public interface DeveloperApi {
      */
 
     @PUT
-    @Path("/create-tenant-stage")
+    @Path("/create-stage")
     Uni<CreateTenantStageDeveloperResponse> createTenantStage(@NotNull CreateTenantStageDeveloperRequest request);
 
     @PUT
-    @Path("/get-tenant-stage-dashboard")
+    @Path("/get-stage-dashboard")
     Uni<GetTenantStageDashboardDeveloperResponse> getTenantStageDashboard(
             @NotNull GetTenantStageDashboardDeveloperRequest request);
 
     @PUT
-    @Path("/delete-tenant-stage")
+    @Path("/delete-stage")
     Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(@NotNull DeleteTenantStageDeveloperRequest request);
 
     /*
@@ -101,7 +101,7 @@ public interface DeveloperApi {
      */
 
     @PUT
-    @Path("/create-tenant-version")
+    @Path("/create-version")
     Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(@NotNull CreateTenantVersionDeveloperRequest request);
 
     @PUT
@@ -111,12 +111,12 @@ public interface DeveloperApi {
                                                                 @RestForm(FileUpload.ALL) List<FileUpload> files);
 
     @PUT
-    @Path("/get-tenant-version-dashboard")
+    @Path("/get-version-dashboard")
     Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
             @NotNull GetTenantVersionDashboardDeveloperRequest request);
 
     @PUT
-    @Path("/delete-tenant-version")
+    @Path("/delete-version")
     Uni<DeleteTenantVersionDeveloperResponse> deleteTenantVersion(@NotNull DeleteTenantVersionDeveloperRequest request);
 
     /*
@@ -124,16 +124,16 @@ public interface DeveloperApi {
      */
 
     @PUT
-    @Path("/deploy-tenant-version")
+    @Path("/deploy-version")
     Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(@NotNull DeployTenantVersionDeveloperRequest request);
 
     @PUT
-    @Path("/get-tenant-deployment-dashboard")
+    @Path("/get-deployment-dashboard")
     Uni<GetTenantDeploymentDashboardDeveloperResponse> getTenantDeploymentDashboard(
             @NotNull GetTenantDeploymentDashboardDeveloperRequest request);
 
     @PUT
-    @Path("/delete-tenant-deployment")
+    @Path("/delete-deployment")
     Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
             @NotNull DeleteTenantDeploymentDeveloperRequest request);
 

@@ -108,7 +108,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTenantProjectDeveloperRequest(tenantId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/create-tenant-project");
+                .when().put("/omgservers/v1/entrypoint/developer/request/create-project");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -128,7 +128,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new GetTenantProjectDashboardDeveloperRequest(tenantId, tenantProjectId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/get-tenant-project-dashboard");
+                .when().put("/omgservers/v1/entrypoint/developer/request/get-project-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -148,7 +148,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteTenantProjectDeveloperRequest(tenantId, tenantProjectId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/delete-tenant-project");
+                .when().put("/omgservers/v1/entrypoint/developer/request/delete-project");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -171,7 +171,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTenantStageDeveloperRequest(tenantId, tenantProjectId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/create-tenant-stage");
+                .when().put("/omgservers/v1/entrypoint/developer/request/create-stage");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -191,7 +191,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new GetTenantStageDashboardDeveloperRequest(tenantId, tenantStageId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/get-tenant-stage-dashboard");
+                .when().put("/omgservers/v1/entrypoint/developer/request/get-stage-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -211,7 +211,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteTenantStageDeveloperRequest(tenantId, tenantStageId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/delete-tenant-project");
+                .when().put("/omgservers/v1/entrypoint/developer/request/delete-project");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -237,7 +237,7 @@ public class DeveloperApiTester {
                 .body(objectMapper.writeValueAsString(new CreateTenantVersionDeveloperRequest(tenantId,
                         tenantProjectId,
                         tenantVersionConfig)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/create-tenant-version");
+                .when().put("/omgservers/v1/entrypoint/developer/request/create-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -282,7 +282,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new GetTenantVersionDashboardDeveloperRequest(tenantId, tenantVersionId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/get-tenant-version-dashboard");
+                .when().put("/omgservers/v1/entrypoint/developer/request/get-version-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -302,7 +302,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteTenantVersionDeveloperRequest(tenantId, tenantVersionId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/delete-tenant-version");
+                .when().put("/omgservers/v1/entrypoint/developer/request/delete-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -327,7 +327,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeployTenantVersionDeveloperRequest(tenantId, tenantStageId, tenantVersionId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/deploy-tenant-version");
+                .when().put("/omgservers/v1/entrypoint/developer/request/deploy-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -347,7 +347,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new GetTenantDeploymentDashboardDeveloperRequest(tenantId, tenantDeploymentId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/get-tenant-deployment-dashboard");
+                .when().put("/omgservers/v1/entrypoint/developer/request/get-deployment-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -367,7 +367,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteTenantDeploymentDeveloperRequest(tenantId, tenantDeploymentId)))
-                .when().put("/omgservers/v1/entrypoint/developer/request/delete-tenant-deployment");
+                .when().put("/omgservers/v1/entrypoint/developer/request/delete-deployment");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()

@@ -52,11 +52,11 @@ public interface SupportApi {
     Uni<DeleteTenantSupportResponse> deleteTenant(@NotNull DeleteTenantSupportRequest request);
 
     @PUT
-    @Path("/create-tenant-project")
+    @Path("/create-project")
     Uni<CreateTenantProjectSupportResponse> createTenantProject(@NotNull CreateTenantProjectSupportRequest request);
 
     @PUT
-    @Path("/delete-tenant-project")
+    @Path("/delete-project")
     Uni<DeleteTenantProjectSupportResponse> deleteTenantProject(@NotNull DeleteTenantProjectSupportRequest request);
 
     @PUT
@@ -78,22 +78,22 @@ public interface SupportApi {
             @NotNull DeleteTenantPermissionsSupportRequest request);
 
     @PUT
-    @Path("/create-tenant-project-permissions")
+    @Path("/create-project-permissions")
     Uni<CreateTenantProjectPermissionsSupportResponse> createTenantProjectPermissions(
             @NotNull CreateTenantProjectPermissionsSupportRequest request);
 
     @PUT
-    @Path("/delete-tenant-project-permissions")
+    @Path("/delete-project-permissions")
     Uni<DeleteProjectPermissionsSupportResponse> deleteTenantProjectPermissions(
             @NotNull DeleteProjectPermissionsSupportRequest request);
 
     @PUT
-    @Path("/create-tenant-stage-permissions")
+    @Path("/create-stage-permissions")
     Uni<CreateTenantStagePermissionsSupportResponse> createTenantStagePermissions(
             @NotNull CreateTenantStagePermissionsSupportRequest request);
 
     @PUT
-    @Path("/delete-tenant-stage-permissions")
+    @Path("/delete-stage-permissions")
     Uni<DeleteTenantStagePermissionsSupportResponse> deleteTenantStagePermissions(
             @NotNull DeleteTenantStagePermissionsSupportRequest request);
 }

@@ -7,19 +7,19 @@ echo "Use local instance of service"
 
 echo "Get tenant details"
 
-TENANT_ID=$(./omgserversctl.sh environment printVariable TENANT_ID)
-TENANT_PROJECT_ID=$(./omgserversctl.sh environment printVariable TENANT_PROJECT_ID)
-TENANT_STAGE_ID=$(./omgserversctl.sh environment printVariable TENANT_STAGE_ID)
-DEVELOPER_USER_ID=$(./omgserversctl.sh environment printVariable DEVELOPER_USER_ID)
+TENANT=$(./omgserversctl.sh environment printVariable TENANT)
+PROJECT=$(./omgserversctl.sh environment printVariable PROJECT)
+STAGE=$(./omgserversctl.sh environment printVariable STAGE)
+DEVELOPER_USER=$(./omgserversctl.sh environment printVariable DEVELOPER_USER)
 DEVELOPER_PASSWORD=$(./omgserversctl.sh environment printVariable DEVELOPER_PASSWORD)
 
-if [ -z "${TENANT_ID}" -o -z "${TENANT_PROJECT_ID}" -o -z "${TENANT_STAGE_ID}" -o -z "${DEVELOPER_USER_ID}" -o -z "${DEVELOPER_PASSWORD}" ]; then
+if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" -o -z "${DEVELOPER_USER}" -o -z "${DEVELOPER_PASSWORD}" ]; then
   echo "Tenant was not initialized, use ./localtesting_init.sh first"
   exit 1
 fi
 
-echo TENANT_ID=${TENANT_ID}
-echo TENANT_PROJECT_ID=${TENANT_PROJECT_ID}
-echo TENANT_STAGE_ID=${TENANT_STAGE_ID}
-echo DEVELOPER_USER_ID=${DEVELOPER_USER_ID}
+echo TENANT=${TENANT}
+echo PROJECT=${PROJECT}
+echo STAGE=${STAGE}
+echo DEVELOPER_USER=${DEVELOPER_USER}
 echo DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}
