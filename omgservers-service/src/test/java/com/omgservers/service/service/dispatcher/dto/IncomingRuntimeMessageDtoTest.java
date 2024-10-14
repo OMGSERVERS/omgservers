@@ -2,6 +2,8 @@ package com.omgservers.service.service.dispatcher.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.BaseTestClass;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.IncomingRuntimeMessageDto;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.MessageEncodingEnum;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;

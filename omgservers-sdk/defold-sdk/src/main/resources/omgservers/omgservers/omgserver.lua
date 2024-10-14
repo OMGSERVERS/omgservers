@@ -101,7 +101,7 @@ omgserver = {
 			components.service_urls = {
 				create_token = service_url .. "/omgservers/v1/entrypoint/runtime/request/create-token",
 				interchange = service_url .. "/omgservers/v1/entrypoint/runtime/request/interchange",
-				connection = service_url .. "/omgservers/v1/entrypoint/websocket/connection",
+				connection = service_url .. "/omgservers/v1/entrypoint/dispatcher/connection",
 			}
 		end,
 		set_tokens = function(components, api_token, ws_token)

@@ -240,7 +240,7 @@ omgplayer = {
 					create_token = server_url .. "/omgservers/v1/entrypoint/player/request/create-token",
 					create_client = server_url .. "/omgservers/v1/entrypoint/player/request/create-client",
 					interchange = server_url .. "/omgservers/v1/entrypoint/player/request/interchange",
-					connection = server_url .. "/omgservers/v1/entrypoint/websocket/connection",
+					connection = server_url .. "/omgservers/v1/entrypoint/dispatcher/connection",
 				}
 			end,
 			set_server_project = function(components, tenant_id, tenant_stage_id, tenant_stage_secret)
