@@ -4,8 +4,6 @@ import com.omgservers.service.module.dispatcher.DispatcherModule;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnectionsContainer;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleTextMessageRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleTextMessageResponse;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.RoomService;
-import com.omgservers.service.module.dispatcher.impl.service.routerService.RouterService;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.TransferServerTextMessageRequest;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
@@ -26,7 +24,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
 
     @Override
     public Uni<HandleTextMessageResponse> execute(final HandleTextMessageRequest request) {
-        log.debug("Handle text message, request={}", request);
+        log.trace("Handle text message, request={}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var message = request.getMessage();
@@ -52,7 +50,9 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
 
     Uni<HandleTextMessageResponse> handleTextMessage(final WebSocketConnection webSocketConnection,
                                                      final String message) {
-        final var request = new com.omgservers.service.module.dispatcher.impl.service.roomService.dto.HandleTextMessageRequest(webSocketConnection, message);
+        final var request =
+                new com.omgservers.service.module.dispatcher.impl.service.roomService.dto.HandleTextMessageRequest(
+                        webSocketConnection, message);
         return dispatcherModule.getRoomService().handleTextMessage(request)
                 .replaceWith(new HandleTextMessageResponse());
     }

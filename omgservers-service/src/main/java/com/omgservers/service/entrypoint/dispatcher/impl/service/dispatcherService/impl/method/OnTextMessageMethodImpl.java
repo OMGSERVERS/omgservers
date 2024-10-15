@@ -18,12 +18,10 @@ class OnTextMessageMethodImpl implements OnTextMessageMethod {
 
     @Override
     public Uni<Void> execute(final OnTextMessageDispatcherRequest request) {
-        final var securityIdentity = request.getSecurityIdentity();
         final var webSocketConnection = request.getWebSocketConnection();
         final var message = request.getMessage();
 
-        final var handleTextMessageRequest = new HandleTextMessageRequest(securityIdentity,
-                webSocketConnection,
+        final var handleTextMessageRequest = new HandleTextMessageRequest(webSocketConnection,
                 message);
         return dispatcherModule.getDispatcherService().handleTextMessage(handleTextMessageRequest)
                 .replaceWithVoid();

@@ -63,7 +63,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(clientRuntimeRef -> {
                     final var runtimeId = clientRuntimeRef.getRuntimeId();
 
-                    log.info("Client runtime ref was created, clientRuntimeRef={}/{}, runtimeId={}",
+                    log.debug("Client runtime ref was created, clientRuntimeRef={}/{}, runtimeId={}",
                             clientId, id, runtimeId);
 
                     return getRuntime(runtimeId)

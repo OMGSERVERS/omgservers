@@ -7,7 +7,6 @@ import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.d
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleOpenedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleTextMessageRequest;
 import com.omgservers.service.module.dispatcher.impl.service.webService.WebService;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
@@ -24,12 +23,9 @@ class WebServiceImpl implements WebService {
 
     final DispatcherService dispatcherService;
 
-    final SecurityIdentity securityIdentity;
-
     @Override
     public Uni<Void> onOpen(final WebSocketConnection webSocketConnection) {
-        log.info("Dispatcher connection was opened, id={}", webSocketConnection.id());
-        final var request = new HandleOpenedConnectionRequest(securityIdentity, webSocketConnection);
+        final var request = new HandleOpenedConnectionRequest(webSocketConnection);
         return dispatcherService.handleOpenedConnection(request)
                 .replaceWithVoid();
     }
@@ -37,9 +33,7 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<Void> onClose(final WebSocketConnection webSocketConnection,
                              final CloseReason closeReason) {
-        log.info("Dispatcher connection was closed, id={}, reason={}", webSocketConnection.id(),
-                closeReason.getMessage());
-        final var request = new HandleClosedConnectionRequest(securityIdentity, webSocketConnection, closeReason);
+        final var request = new HandleClosedConnectionRequest(webSocketConnection, closeReason);
         return dispatcherService.handleClosedConnection(request)
                 .replaceWithVoid();
     }
@@ -47,9 +41,7 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<Void> onError(final WebSocketConnection webSocketConnection,
                              final Throwable throwable) {
-        log.info("Dispatcher connection failed, id={}, {}:{}",
-                webSocketConnection.id(), throwable.getClass().getSimpleName(), throwable.getMessage());
-        final var request = new HandleFailedConnectionRequest(securityIdentity, webSocketConnection, throwable);
+        final var request = new HandleFailedConnectionRequest(webSocketConnection, throwable);
         return dispatcherService.handleFailedConnection(request)
                 .replaceWithVoid();
     }
@@ -57,7 +49,7 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<Void> onTextMessage(final WebSocketConnection webSocketConnection,
                                    final String message) {
-        final var request = new HandleTextMessageRequest(securityIdentity, webSocketConnection, message);
+        final var request = new HandleTextMessageRequest(webSocketConnection, message);
         return dispatcherService.handleTextMessage(request)
                 .replaceWithVoid();
     }
@@ -65,7 +57,7 @@ class WebServiceImpl implements WebService {
     @Override
     public Uni<Void> onBinaryMessage(final WebSocketConnection webSocketConnection,
                                      final Buffer buffer) {
-        final var request = new HandleBinaryMessageRequest(securityIdentity, webSocketConnection, buffer);
+        final var request = new HandleBinaryMessageRequest(webSocketConnection, buffer);
         return dispatcherService.handleBinaryMessage(request)
                 .replaceWithVoid();
     }

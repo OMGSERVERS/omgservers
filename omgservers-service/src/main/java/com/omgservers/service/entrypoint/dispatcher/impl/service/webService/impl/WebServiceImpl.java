@@ -7,7 +7,6 @@ import com.omgservers.service.entrypoint.dispatcher.dto.OnOpenDispatcherRequest;
 import com.omgservers.service.entrypoint.dispatcher.dto.OnTextMessageDispatcherRequest;
 import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.DispatcherService;
 import com.omgservers.service.entrypoint.dispatcher.impl.service.webService.WebService;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
@@ -24,35 +23,33 @@ class WebServiceImpl implements WebService {
 
     final DispatcherService dispatcherService;
 
-    final SecurityIdentity securityIdentity;
-
     @Override
     public Uni<Void> onOpen(WebSocketConnection webSocketConnection) {
-        final var request = new OnOpenDispatcherRequest(securityIdentity, webSocketConnection);
+        final var request = new OnOpenDispatcherRequest(webSocketConnection);
         return dispatcherService.onOpen(request);
     }
 
     @Override
     public Uni<Void> onClose(WebSocketConnection webSocketConnection, CloseReason closeReason) {
-        final var request = new OnCloseDispatcherRequest(securityIdentity, webSocketConnection, closeReason);
+        final var request = new OnCloseDispatcherRequest(webSocketConnection, closeReason);
         return dispatcherService.onClose(request);
     }
 
     @Override
     public Uni<Void> onError(WebSocketConnection webSocketConnection, Throwable throwable) {
-        final var request = new OnErrorDispatcherRequest(securityIdentity, webSocketConnection, throwable);
+        final var request = new OnErrorDispatcherRequest(webSocketConnection, throwable);
         return dispatcherService.onError(request);
     }
 
     @Override
     public Uni<Void> onTextMessage(WebSocketConnection webSocketConnection, String message) {
-        final var request = new OnTextMessageDispatcherRequest(securityIdentity, webSocketConnection, message);
+        final var request = new OnTextMessageDispatcherRequest(webSocketConnection, message);
         return dispatcherService.onTextMessage(request);
     }
 
     @Override
     public Uni<Void> onBinaryMessage(WebSocketConnection webSocketConnection, Buffer buffer) {
-        final var request = new OnBinaryMessageDispatcherRequest(securityIdentity, webSocketConnection, buffer);
+        final var request = new OnBinaryMessageDispatcherRequest(webSocketConnection, buffer);
         return dispatcherService.onBinaryMessage(request);
     }
 }

@@ -43,7 +43,7 @@ public class LobbyRuntimeRefDeletedEventHandlerImpl implements EventHandler {
         return getLobbyRuntimeRef(lobbyId, id)
                 .flatMap(lobbyRuntimeRef -> {
                     final var runtimeId = lobbyRuntimeRef.getRuntimeId();
-                    log.info("Lobby runtime ref was deleted, lobbyId={}, runtimeId={} ", lobbyId, runtimeId);
+                    log.debug("Lobby runtime ref was deleted, lobbyId={}, runtimeId={} ", lobbyId, runtimeId);
 
                     return Uni.createFrom().voidItem();
                 })

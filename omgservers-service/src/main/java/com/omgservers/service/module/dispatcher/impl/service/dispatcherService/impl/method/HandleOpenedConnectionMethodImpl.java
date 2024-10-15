@@ -42,14 +42,18 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
     final GetConfigOperation getConfigOperation;
 
     final DispatcherConnectionsContainer dispatcherConnectionsContainer;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<HandleOpenedConnectionResponse> execute(final HandleOpenedConnectionRequest request) {
         log.debug("Handle opened connection, request={}", request);
 
-        final var securityIdentity = request.getSecurityIdentity();
         final var runtimeId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName());
+        final var userRole = securityIdentity
+                .<UserRoleEnum>getAttribute(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName());
+        final var clientId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName());
 
         return findRuntimePoolServerContainerRef(runtimeId)
                 .flatMap(runtimePoolServerContainerRef -> {
@@ -64,11 +68,26 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
                                         final var thisServerUri = getConfigOperation
                                                 .getServiceConfig().index().serverUri();
                                         if (poolServerUri.equals(thisServerUri)) {
+                                            log.info("Dispatcher connection was established, " +
+                                                            "id={}, userRole={}, clientId={}, runtimeId={}, ",
+                                                    webSocketConnection.id(), userRole, clientId, runtimeId);
+
                                             yield addConnection(securityIdentity, webSocketConnection, runtimeId)
-                                                    .invoke(response -> dispatcherConnectionsContainer
-                                                            .put(webSocketConnection,
-                                                                    DispatcherConnectionTypeEnum.SERVER));
+                                                    .invoke(response -> dispatcherConnectionsContainer.put(
+                                                            webSocketConnection,
+                                                            DispatcherConnectionTypeEnum.SERVER));
                                         } else {
+                                            log.info("Dispatcher connection was routed, id={}, " +
+                                                            "userRole={}, " +
+                                                            "clientId={}, " +
+                                                            "runtimeId={}, " +
+                                                            "targetServer={}",
+                                                    webSocketConnection.id(),
+                                                    userRole,
+                                                    clientId,
+                                                    runtimeId,
+                                                    poolServerUri);
+
                                             yield routeConnection(securityIdentity, webSocketConnection, poolServerUri)
                                                     .invoke(response -> dispatcherConnectionsContainer.put(
                                                             webSocketConnection,

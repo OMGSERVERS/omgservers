@@ -26,6 +26,9 @@ class CreateRoomMethodImpl implements CreateRoomMethod {
         } else {
             final var room = new RoomInstance(runtimeId);
             roomsContainer.replaceRoom(room);
+
+            log.info("Room was created, runtimeId={}", runtimeId);
+
             return Uni.createFrom().item(new CreateRoomResponse(Boolean.TRUE));
         }
     }

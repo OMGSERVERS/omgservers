@@ -38,7 +38,7 @@ public class ClientMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
                 .flatMap(clientMatchmakerRef -> {
                     final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
 
-                    log.info("Client matchmaker ref was deleted, clientMatchmakerRef={}/{}, matchmakerId={}",
+                    log.debug("Client matchmaker ref was deleted, clientMatchmakerRef={}/{}, matchmakerId={}",
                             clientId, id, matchmakerId);
 
                     return Uni.createFrom().voidItem();

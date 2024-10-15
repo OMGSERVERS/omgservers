@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
+import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
-import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -43,7 +43,7 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
         return getMatchmakerMatchRuntimeRef(matchmakerId, matchId, id)
                 .flatMap(matchmakerMatchRuntimeRef -> {
                     final var runtimeId = matchmakerMatchRuntimeRef.getRuntimeId();
-                    log.info("Matchmaker match runtime ref was deleted, matchmakerId={}, matchId={}, runtimeId={} ",
+                    log.debug("Matchmaker match runtime ref was deleted, matchmakerId={}, matchId={}, runtimeId={} ",
                             matchmakerId, matchId, runtimeId);
 
                     return Uni.createFrom().voidItem();

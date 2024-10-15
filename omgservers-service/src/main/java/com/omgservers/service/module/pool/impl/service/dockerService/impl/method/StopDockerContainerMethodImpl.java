@@ -32,13 +32,17 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                     final var dockerClient = getDockerDaemonClientOperation.getClient(dockerDaemonUri);
 
                     try {
-                        final var stopContainerResponse = dockerClient.stopContainerCmd(containerName).exec();
-                        log.info("Stop container, response={}", stopContainerResponse);
-                        final var removeContainerResponse = dockerClient.removeContainerCmd(containerName).exec();
-                        log.info("Remove container, response={}", removeContainerResponse);
+                        dockerClient.stopContainerCmd(containerName).exec();
+                        log.info("The container has been stopped, containerName={}, dockerDaemonUri={}",
+                                containerName, dockerDaemonUri);
+                        // TODO: get final the container logs
+                        dockerClient.removeContainerCmd(containerName).exec();
+                        log.info("The container has been removed, containerName={}, dockerDaemonUri={}",
+                                containerName, dockerDaemonUri);
                         return new StopDockerContainerResponse(Boolean.TRUE);
                     } catch (DockerException e) {
-                        log.warn("Failed to stop docker container, {}", e.getMessage());
+                        log.warn("Failed to stop docker container, containerName={}, dockerDaemonUri={}, {}:{}",
+                                containerName, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
                         return new StopDockerContainerResponse(Boolean.FALSE);
                     }
                 });

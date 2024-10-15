@@ -47,7 +47,7 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                 .flatMap(clientMatchmakerRef -> {
                     final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
 
-                    log.info("Client matchmaker ref was created, clientMatchmakerRef={}/{}, matchmakerId={}",
+                    log.debug("Client matchmaker ref was created, clientMatchmakerRef={}/{}, matchmakerId={}",
                             clientId, id, matchmakerId);
 
                     return syncMatchmakerAssignmentMessage(clientId, matchmakerId, idempotencyKey);

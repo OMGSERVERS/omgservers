@@ -26,7 +26,7 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
     @Override
     public Uni<HandleBinaryMessageResponse> execute(
             final HandleBinaryMessageRequest request) {
-        log.debug("Handle binary message, request={}", request);
+        log.trace("Handle binary message, request={}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var buffer = request.getBuffer();

@@ -18,11 +18,9 @@ class OnOpenMethodImpl implements OnOpenMethod {
 
     @Override
     public Uni<Void> execute(final OnOpenDispatcherRequest request) {
-        final var securityIdentity = request.getSecurityIdentity();
         final var webSocketConnection = request.getWebSocketConnection();
 
-        final var handleOpenedConnectionRequest = new HandleOpenedConnectionRequest(securityIdentity,
-                webSocketConnection);
+        final var handleOpenedConnectionRequest = new HandleOpenedConnectionRequest(webSocketConnection);
         return dispatcherModule.getDispatcherService().handleOpenedConnection(handleOpenedConnectionRequest)
                 .replaceWithVoid();
     }

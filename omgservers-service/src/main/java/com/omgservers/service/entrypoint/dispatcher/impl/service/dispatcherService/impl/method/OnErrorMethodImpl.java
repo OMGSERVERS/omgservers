@@ -18,12 +18,10 @@ class OnErrorMethodImpl implements OnErrorMethod {
 
     @Override
     public Uni<Void> execute(final OnErrorDispatcherRequest request) {
-        final var securityIdentity = request.getSecurityIdentity();
         final var webSocketConnection = request.getWebSocketConnection();
         final var throwable = request.getThrowable();
 
-        final var handleFailedConnectionRequest = new HandleFailedConnectionRequest(securityIdentity,
-                webSocketConnection,
+        final var handleFailedConnectionRequest = new HandleFailedConnectionRequest(webSocketConnection,
                 throwable);
         return dispatcherModule.getDispatcherService().handleFailedConnection(handleFailedConnectionRequest)
                 .replaceWithVoid();

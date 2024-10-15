@@ -1,6 +1,5 @@
 package com.omgservers.service.entrypoint.dispatcher.dto;
 
-import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.vertx.core.buffer.Buffer;
 import jakarta.validation.constraints.NotNull;
@@ -12,9 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OnBinaryMessageDispatcherRequest {
-
-    @NotNull
-    SecurityIdentity securityIdentity;
 
     @NotNull
     WebSocketConnection webSocketConnection;

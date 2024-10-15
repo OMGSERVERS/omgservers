@@ -46,7 +46,7 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(tenantLobbyRef -> {
                     final var deploymentId = tenantLobbyRef.getDeploymentId();
                     final var lobbyId = tenantLobbyRef.getLobbyId();
-                    log.info("Tenant lobby ref was created, id={}, tenantDeployment={}/{}, lobbyId={}",
+                    log.debug("Tenant lobby ref was created, id={}, tenantDeployment={}/{}, lobbyId={}",
                             tenantLobbyRef.getId(),
                             tenantId,
                             deploymentId,

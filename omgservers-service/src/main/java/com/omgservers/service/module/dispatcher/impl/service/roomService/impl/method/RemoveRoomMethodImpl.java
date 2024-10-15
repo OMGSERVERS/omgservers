@@ -22,7 +22,10 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
         log.debug("Remove room, request={}", request);
 
         final var runtimeId = request.getRuntimeId();
+
         final var roomInstance = roomsContainer.removeRoom(runtimeId);
+        log.info("Room was removed, runtimeId={}", runtimeId);
+
         if (roomInstance.isPresent()) {
             final var roomConnections = roomInstance.get().getAllConnections();
             return Multi.createFrom().iterable(roomConnections)

@@ -18,12 +18,10 @@ class OnBinaryMessageMethodImpl implements OnBinaryMessageMethod {
 
     @Override
     public Uni<Void> execute(final OnBinaryMessageDispatcherRequest request) {
-        final var securityIdentity = request.getSecurityIdentity();
         final var webSocketConnection = request.getWebSocketConnection();
         final var buffer = request.getBuffer();
 
-        final var handleBinaryMessageRequest = new HandleBinaryMessageRequest(securityIdentity,
-                webSocketConnection,
+        final var handleBinaryMessageRequest = new HandleBinaryMessageRequest(webSocketConnection,
                 buffer);
         return dispatcherModule.getDispatcherService().handleBinaryMessage(handleBinaryMessageRequest)
                 .replaceWithVoid();

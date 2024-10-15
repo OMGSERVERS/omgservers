@@ -41,7 +41,7 @@ public class TenantLobbyRefDeletedEventHandlerImpl implements EventHandler {
                     final var deploymentId = tenantLobbyRef.getDeploymentId();
                     final var lobbyId = tenantLobbyRef.getLobbyId();
 
-                    log.info("Tenant lobby ref was deleted, id={}, tenantDeploymentId={}/{}, lobbyId={}",
+                    log.debug("Tenant lobby ref was deleted, id={}, tenantDeploymentId={}/{}, lobbyId={}",
                             tenantLobbyRef.getId(),
                             tenantId,
                             deploymentId,

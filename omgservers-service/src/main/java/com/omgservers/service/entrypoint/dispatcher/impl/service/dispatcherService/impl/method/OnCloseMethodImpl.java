@@ -18,12 +18,10 @@ class OnCloseMethodImpl implements OnCloseMethod {
 
     @Override
     public Uni<Void> execute(final OnCloseDispatcherRequest request) {
-        final var securityIdentity = request.getSecurityIdentity();
         final var webSocketConnection = request.getWebSocketConnection();
         final var closeReason = request.getCloseReason();
 
-        final var handleClosedConnectionRequest = new HandleClosedConnectionRequest(securityIdentity,
-                webSocketConnection,
+        final var handleClosedConnectionRequest = new HandleClosedConnectionRequest(webSocketConnection,
                 closeReason);
         return dispatcherModule.getDispatcherService().handleClosedConnection(handleClosedConnectionRequest)
                 .replaceWithVoid();
