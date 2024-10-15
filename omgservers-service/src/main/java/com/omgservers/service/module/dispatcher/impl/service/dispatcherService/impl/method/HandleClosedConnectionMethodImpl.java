@@ -11,7 +11,6 @@ import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.Rem
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseClientConnectionRequest;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
-import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -51,10 +50,9 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
                         .invoke(handleClosedConnectionResponse -> log.info("Dispatcher connection was closed, " +
                                 "id={}, userRole={}, runtimeId={}", webSocketConnection.id(), userRole, runtimeId));
             });
-        } else {
-            return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
-                    .replaceWith(new HandleClosedConnectionResponse());
         }
+
+        return Uni.createFrom().item(new HandleClosedConnectionResponse());
     }
 
     Uni<HandleClosedConnectionResponse> closeRoutedConnection(final WebSocketConnection serverConnection) {

@@ -7,6 +7,7 @@ import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.d
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleOpenedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleTextMessageRequest;
 import com.omgservers.service.module.dispatcher.impl.service.webService.WebService;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
@@ -23,6 +24,7 @@ class WebServiceImpl implements WebService {
 
     final DispatcherService dispatcherService;
 
+    @WithSpan
     @Override
     public Uni<Void> onOpen(final WebSocketConnection webSocketConnection) {
         final var request = new HandleOpenedConnectionRequest(webSocketConnection);
@@ -30,6 +32,7 @@ class WebServiceImpl implements WebService {
                 .replaceWithVoid();
     }
 
+    @WithSpan
     @Override
     public Uni<Void> onClose(final WebSocketConnection webSocketConnection,
                              final CloseReason closeReason) {
@@ -38,6 +41,7 @@ class WebServiceImpl implements WebService {
                 .replaceWithVoid();
     }
 
+    @WithSpan
     @Override
     public Uni<Void> onError(final WebSocketConnection webSocketConnection,
                              final Throwable throwable) {
@@ -46,6 +50,7 @@ class WebServiceImpl implements WebService {
                 .replaceWithVoid();
     }
 
+    @WithSpan
     @Override
     public Uni<Void> onTextMessage(final WebSocketConnection webSocketConnection,
                                    final String message) {
@@ -54,6 +59,7 @@ class WebServiceImpl implements WebService {
                 .replaceWithVoid();
     }
 
+    @WithSpan
     @Override
     public Uni<Void> onBinaryMessage(final WebSocketConnection webSocketConnection,
                                      final Buffer buffer) {

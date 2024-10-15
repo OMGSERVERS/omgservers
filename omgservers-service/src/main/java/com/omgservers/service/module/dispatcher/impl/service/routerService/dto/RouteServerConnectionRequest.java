@@ -1,6 +1,5 @@
 package com.omgservers.service.module.dispatcher.impl.service.routerService.dto;
 
-import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.WebSocketConnection;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,9 +12,6 @@ import java.net.URI;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteServerConnectionRequest {
-
-    @NotNull
-    SecurityIdentity securityIdentity;
 
     @NotNull
     WebSocketConnection serverConnection;

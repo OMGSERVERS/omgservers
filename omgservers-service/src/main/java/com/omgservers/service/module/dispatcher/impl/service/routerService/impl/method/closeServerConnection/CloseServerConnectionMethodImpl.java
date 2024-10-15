@@ -23,7 +23,12 @@ class CloseServerConnectionMethodImpl implements CloseServerConnectionMethod {
         final var closeReason = request.getCloseReason();
 
         final var serverConnection = routerConnectionsContainer.remove(clientConnection);
-        return serverConnection.close(closeReason)
-                .replaceWith(new CloseServerConnectionResponse());
+
+        if (serverConnection.isOpen()) {
+            return serverConnection.close(closeReason)
+                    .replaceWith(new CloseServerConnectionResponse(Boolean.TRUE));
+        } else {
+            return Uni.createFrom().item(new CloseServerConnectionResponse(Boolean.FALSE));
+        }
     }
 }

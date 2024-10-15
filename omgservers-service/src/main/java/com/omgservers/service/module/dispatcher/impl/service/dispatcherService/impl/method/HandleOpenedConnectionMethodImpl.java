@@ -69,7 +69,7 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
                                                 .getServiceConfig().index().serverUri();
                                         if (poolServerUri.equals(thisServerUri)) {
                                             log.info("Dispatcher connection was established, " +
-                                                            "id={}, userRole={}, clientId={}, runtimeId={}, ",
+                                                            "id={}, userRole={}, clientId={}, runtimeId={}",
                                                     webSocketConnection.id(), userRole, clientId, runtimeId);
 
                                             yield addConnection(securityIdentity, webSocketConnection, runtimeId)
@@ -88,7 +88,7 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
                                                     runtimeId,
                                                     poolServerUri);
 
-                                            yield routeConnection(securityIdentity, webSocketConnection, poolServerUri)
+                                            yield routeConnection(webSocketConnection, poolServerUri)
                                                     .invoke(response -> dispatcherConnectionsContainer.put(
                                                             webSocketConnection,
                                                             DispatcherConnectionTypeEnum.ROUTED));
@@ -142,10 +142,9 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
                 .replaceWith(new HandleOpenedConnectionResponse());
     }
 
-    Uni<HandleOpenedConnectionResponse> routeConnection(final SecurityIdentity securityIdentity,
-                                                        final WebSocketConnection webSocketConnection,
+    Uni<HandleOpenedConnectionResponse> routeConnection(final WebSocketConnection webSocketConnection,
                                                         final URI serverUri) {
-        final var request = new RouteServerConnectionRequest(securityIdentity, webSocketConnection, serverUri);
+        final var request = new RouteServerConnectionRequest(webSocketConnection, serverUri);
         return dispatcherModule.getRouterService().routeServerConnection(request)
                 .map(routeServerConnectionResponse -> new HandleOpenedConnectionResponse());
     }

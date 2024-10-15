@@ -25,7 +25,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     @Override
     public Uni<CreateTokenPlayerResponse> createToken(final CreateTokenPlayerRequest request) {
-        log.info("Create token, request={}", request);
+        log.debug("Create token, request={}", request);
 
         final var userId = request.getUserId();
         final var password = request.getPassword();

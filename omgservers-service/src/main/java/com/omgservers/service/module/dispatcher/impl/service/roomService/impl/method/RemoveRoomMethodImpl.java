@@ -24,14 +24,17 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
         final var runtimeId = request.getRuntimeId();
 
         final var roomInstance = roomsContainer.removeRoom(runtimeId);
-        log.info("Room was removed, runtimeId={}", runtimeId);
-
         if (roomInstance.isPresent()) {
+            log.info("Room was removed, runtimeId={}", runtimeId);
             final var roomConnections = roomInstance.get().getAllConnections();
             return Multi.createFrom().iterable(roomConnections)
                     .onItem().transformToUniAndConcatenate(roomConnection -> {
                         final var webSocketConnection = roomConnection.getWebSocketConnection();
-                        return webSocketConnection.close(RoomWebSocketCloseReason.ROOM_WAS_REMOVED);
+                        if (webSocketConnection.isOpen()) {
+                            return webSocketConnection.close(RoomWebSocketCloseReason.ROOM_WAS_REMOVED);
+                        } else {
+                            return Uni.createFrom().voidItem();
+                        }
                     })
                     .collect().asList()
                     .replaceWith(new RemoveRoomResponse(Boolean.TRUE));

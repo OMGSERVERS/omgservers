@@ -42,10 +42,14 @@ class AddConnectionMethodImpl implements AddConnectionMethod {
 
         final var previousConnection = roomInstance.get().replaceConnection(roomConnection);
         if (previousConnection.isPresent()) {
-            return webSocketConnection.close(RoomWebSocketCloseReason.NEW_CONNECTION_WAS_OPENED)
-                    .invoke(voidItem -> log.info("Previous connection was found and closed, tokenId={}", usedTokenId));
-        } else {
-            return Uni.createFrom().voidItem();
+            final var previousWebSocketConnection = previousConnection.get().getWebSocketConnection();
+            if (previousWebSocketConnection.isOpen()) {
+                return previousWebSocketConnection.close(RoomWebSocketCloseReason.NEW_CONNECTION_WAS_OPENED)
+                        .invoke(voidItem -> log.info("Previous connection was found and closed, tokenId={}",
+                                usedTokenId));
+            }
         }
+
+        return Uni.createFrom().voidItem();
     }
 }

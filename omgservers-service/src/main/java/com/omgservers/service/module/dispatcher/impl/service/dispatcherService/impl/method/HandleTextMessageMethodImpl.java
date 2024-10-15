@@ -36,8 +36,12 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
                 case SERVER -> handleTextMessage(webSocketConnection, message);
             };
         } else {
-            return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
-                    .replaceWith(new HandleTextMessageResponse());
+            if (webSocketConnection.isOpen()) {
+                return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
+                        .replaceWith(new HandleTextMessageResponse());
+            } else {
+                return Uni.createFrom().item(new HandleTextMessageResponse());
+            }
         }
     }
 

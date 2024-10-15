@@ -1,8 +1,6 @@
 package com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherCloseReason;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleClosedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleFailedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleFailedConnectionResponse;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
@@ -37,9 +35,6 @@ class HandleFailedConnectionMethodImpl implements HandleFailedConnectionMethod {
         log.warn("Dispatcher connection failed, id={}, userRole={}, runtimeId={}, {}:{}",
                 webSocketConnection.id(), userRole, runtimeId, t.getClass().getSimpleName(), t.getMessage());
 
-        final var handleClosedConnectionRequest = new HandleClosedConnectionRequest(webSocketConnection,
-                DispatcherCloseReason.WEBSOCKET_CONNECTION_FAILED);
-        return handleClosedConnectionMethod.execute(handleClosedConnectionRequest)
-                .map(handleClosedConnectionResponse -> new HandleFailedConnectionResponse());
+        return Uni.createFrom().item(new HandleFailedConnectionResponse());
     }
 }

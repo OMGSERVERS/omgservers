@@ -5,6 +5,7 @@ import com.omgservers.service.module.dispatcher.impl.service.routerService.compo
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.RouteServerConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.RouteServerConnectionResponse;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.WebSocketConnector;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,6 +19,7 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
 
     final WebSocketConnector<RouterDispatcherClient> webSocketConnector;
     final RouterConnectionsContainer routerConnectionsContainer;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<RouteServerConnectionResponse> routeServerConnection(final RouteServerConnectionRequest request) {
@@ -27,7 +29,6 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
         log.info("Route server connection, id={}, serverUri={}",
                 serverConnection.id(), serverUri);
 
-        final var securityIdentity = request.getSecurityIdentity();
         final var rawToken = securityIdentity
                 .<String>getAttribute(ServiceSecurityAttributesEnum.RAW_TOKEN.getAttributeName());
         final var runtimeId = securityIdentity

@@ -1,6 +1,10 @@
 package com.omgservers.service.handler.impl.runtime;
 
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.schema.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyDto;
 import com.omgservers.schema.module.client.DeleteClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.DeleteClientRuntimeRefResponse;
@@ -15,10 +19,6 @@ import com.omgservers.schema.module.runtime.SyncRuntimeCommandResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
@@ -59,7 +59,7 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(runtimeAssignment -> {
                     final var clientId = runtimeAssignment.getClientId();
 
-                    log.info("Runtime assignment was deleted, runtimeAssignment={}/{}, clientId={}",
+                    log.debug("Runtime assignment was deleted, runtimeAssignment={}/{}, clientId={}",
                             runtimeId, runtimeAssignment.getId(), clientId);
 
                     return findAndDeleteClientRuntimeRef(clientId, runtimeId)
