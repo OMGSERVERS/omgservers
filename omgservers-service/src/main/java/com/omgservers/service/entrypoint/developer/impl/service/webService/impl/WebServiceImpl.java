@@ -1,5 +1,9 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl;
 
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -137,8 +141,20 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(
+            final CreateLobbyRequestDeveloperRequest request) {
+        return developerService.createLobbyRequest(request);
+    }
+
+    @Override
     public Uni<DeleteLobbyDeveloperResponse> deleteLobby(final DeleteLobbyDeveloperRequest request) {
         return developerService.deleteLobby(request);
+    }
+
+    @Override
+    public Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
+            final CreateMatchmakerRequestDeveloperRequest request) {
+        return developerService.createMatchmakerRequest(request);
     }
 
     @Override

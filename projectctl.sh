@@ -184,7 +184,7 @@ localtesting_ps() {
 
 localtesting_test() {
   OMGSERVERS_TESTER_ENVIRONMENT=LOCALTESTING \
-    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tests/pom.xml verify
+    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
 development_up() {
@@ -233,7 +233,7 @@ development_test() {
   development_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=DEVELOPMENT \
-    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tests/pom.xml verify
+    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
 integration_up() {
@@ -274,7 +274,7 @@ integration_test() {
   integration_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=INTEGRATION \
-      ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tests/pom.xml verify
+      ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
 standalone_up() {
@@ -315,7 +315,7 @@ standalone_test() {
   standalone_up
 
   OMGSERVERS_TESTER_ENVIRONMENT=STANDALONE \
-        ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f omgservers-tests/pom.xml verify
+        ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
 # Build

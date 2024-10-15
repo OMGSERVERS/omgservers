@@ -272,15 +272,21 @@ help() {
       echo "     - DELETED"
     fi
   fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createLobbyRequest" ]; then
+    echo " omgserversctl developer createLobbyRequest"
+  fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteLobby" ]; then
-    echo " omgserversctl developer deleteLobby <lobby_id>"
+    echo " omgserversctl developer deleteLobby <lobby>"
     if [ "$1" = "developer deleteLobby" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createMatchmakerRequest" ]; then
+    echo " omgserversctl developer createMatchmakerRequest <tenant> <deployment>"
+  fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteMatchmaker" ]; then
-    echo " omgserversctl developer deleteMatchmaker <matchmaker_id>"
+    echo " omgserversctl developer deleteMatchmaker <matchmaker>"
     if [ "$1" = "developer deleteMatchmaker" ]; then
       echo "   produces:"
       echo "     - DELETED"
@@ -1354,7 +1360,7 @@ developer_deleteProject() {
   internal_useEnvironment
 
   TENANT=$1
-  PROJECT=$1
+  PROJECT=$2
 
   if [ -z "${TENANT}" -o -z "${PROJECT}" ]; then
     help "developer deleteProject"
@@ -1523,7 +1529,7 @@ developer_deleteStage() {
   internal_useEnvironment
 
   TENANT=$1
-  STAGE=$1
+  STAGE=$2
 
   if [ -z "${TENANT}" -o -z "${STAGE}" ]; then
     help "developer deleteStage"
@@ -1984,6 +1990,41 @@ developer_deleteDeployment() {
   fi
 }
 
+developer_createLobbyRequest() {
+  internal_useEnvironment
+
+  TENANT=$1
+  DEPLOYMENT=$2
+
+  if [ -z "${TENANT}" ] || [ -z "${DEPLOYMENT}" ]; then
+    echo "Usage: omgserversctl developer createLobbyRequest <tenant> <deployment>"
+    exit 1
+  fi
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-lobby-request"
+  REQUEST="{\"tenant_id\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/create-lobby-request_${TENANT}_${DEPLOYMENT}.json)
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "Lobby request created successfully."
+}
+
 developer_deleteLobby() {
   internal_useEnvironment
 
@@ -2039,6 +2080,40 @@ developer_deleteLobby() {
   else
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Lobby was not deleted, LOBBY_ID=${LOBBY_ID}"
   fi
+}
+
+developer_createMatchmakerRequest() {
+  internal_useEnvironment
+
+  TENANT=$1
+  DEPLOYMENT=$2
+
+  if [ -z "${TENANT}" ] || [ -z "${DEPLOYMENT}" ]; then
+    echo "Usage: omgserversctl developer createMatchmakerRequest <tenant> <deployment>"
+    exit 1
+  fi
+
+  DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
+  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-matchmaker-request"
+  REQUEST="{\"tenant_id\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/create-matchmaker-request_${TENANT}_${DEPLOYMENT}.json)
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "Matchmaker request created successfully."
 }
 
 developer_deleteMatchmaker() {
@@ -2244,8 +2319,12 @@ elif [ "$1" = "developer" ]; then
     developer_getDeploymentDashboard $3 $4
   elif [ "$2" = "deleteDeployment" ]; then
     developer_deleteDeployment $3 $4
+  elif [ "$2" = "createLobbyRequest" ]; then
+      developer_createLobbyRequest $3 $4
   elif [ "$2" = "deleteLobby" ]; then
     developer_deleteLobby $3
+  elif [ "$2" = "createMatchmakerRequest" ]; then
+    developer_createMatchmakerRequest $3 $4
   elif [ "$2" = "deleteMatchmaker" ]; then
     developer_deleteMatchmaker $3
   else

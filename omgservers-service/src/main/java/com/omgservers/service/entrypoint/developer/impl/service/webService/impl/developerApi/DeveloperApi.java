@@ -1,5 +1,9 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl.developerApi;
 
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -138,8 +142,17 @@ public interface DeveloperApi {
             @NotNull DeleteTenantDeploymentDeveloperRequest request);
 
     @PUT
+    @Path("/create-lobby-request")
+    Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(@NotNull CreateLobbyRequestDeveloperRequest request);
+
+    @PUT
     @Path("/delete-lobby")
     Uni<DeleteLobbyDeveloperResponse> deleteLobby(@NotNull DeleteLobbyDeveloperRequest request);
+
+    @PUT
+    @Path("/create-matchmaker-request")
+    Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
+            @NotNull CreateMatchmakerRequestDeveloperRequest request);
 
     @PUT
     @Path("/delete-matchmaker")

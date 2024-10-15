@@ -10,8 +10,49 @@
     <artifactId>ctl-sidecontainer</artifactId>
 
     <properties>
+        <skipITs>true</skipITs>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>run-unit-tests</id>
+                        <phase>test</phase>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>src/test/bash/omgserversctl_ut.sh</argument>
+                            </arguments>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>run-integration-tests</id>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>src/test/bash/omgserversctl_it.sh</argument>
+                            </arguments>
+                            <skip>${skipITs}</skip>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,5 +1,9 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl;
 
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -35,6 +39,8 @@ import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDevel
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateLobbyRequestMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateMatchmakerRequestMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantProjectMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantStageMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantVersionMethod;
@@ -68,6 +74,7 @@ class DeveloperServiceImpl implements DeveloperService {
     final GetTenantVersionDashboardMethod getTenantVersionDashboardMethod;
     final GetTenantProjectDashboardMethod getTenantProjectDashboardMethod;
     final GetTenantStageDashboardMethod getTenantStageDashboardMethod;
+    final CreateMatchmakerRequestMethod createMatchmakerRequestMethod;
     final DeleteTenantDeploymentMethod deleteTenantDeploymentMethod;
     final CreateTenantVersionMethod createTenantVersionMethod;
     final CreateTenantProjectMethod createTenantProjectMethod;
@@ -76,6 +83,7 @@ class DeveloperServiceImpl implements DeveloperService {
     final DeployTenantVersionMethod deployTenantVersionMethod;
     final UploadFilesArchiveMethod uploadFilesArchiveMethod;
     final GetTenantDashboardMethod getTenantDashboardMethod;
+    final CreateLobbyRequestMethod createLobbyRequestMethod;
     final DeleteTenantStageMethod deleteTenantStageMethod;
     final CreateTenantStageMethod createTenantStageMethod;
     final DeleteMatchmakerMethod deleteMatchmakerMethod;
@@ -172,8 +180,20 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
+    public Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(
+            @Valid final CreateLobbyRequestDeveloperRequest request) {
+        return createLobbyRequestMethod.execute(request);
+    }
+
+    @Override
     public Uni<DeleteLobbyDeveloperResponse> deleteLobby(@Valid final DeleteLobbyDeveloperRequest request) {
         return deleteLobbyMethod.execute(request);
+    }
+
+    @Override
+    public Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
+            @Valid final CreateMatchmakerRequestDeveloperRequest request) {
+        return createMatchmakerRequestMethod.execute(request);
     }
 
     @Override

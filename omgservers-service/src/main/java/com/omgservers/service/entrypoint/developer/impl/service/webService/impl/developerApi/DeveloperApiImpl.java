@@ -1,5 +1,9 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl.developerApi;
 
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -132,7 +136,6 @@ class DeveloperApiImpl implements DeveloperApi {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantVersion);
     }
 
-
     @Override
     public Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(
             @NotNull final DeployTenantVersionDeveloperRequest request) {
@@ -152,8 +155,20 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
+    public Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(
+            @NotNull final CreateLobbyRequestDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createLobbyRequest);
+    }
+
+    @Override
     public Uni<DeleteLobbyDeveloperResponse> deleteLobby(@NotNull final DeleteLobbyDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteLobby);
+    }
+
+    @Override
+    public Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
+            @NotNull final CreateMatchmakerRequestDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::createMatchmakerRequest);
     }
 
     @Override

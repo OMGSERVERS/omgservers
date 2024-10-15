@@ -1,5 +1,9 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService;
 
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
@@ -74,7 +78,12 @@ public interface DeveloperService {
     Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
             @Valid DeleteTenantDeploymentDeveloperRequest request);
 
+    Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(@Valid CreateLobbyRequestDeveloperRequest request);
+
     Uni<DeleteLobbyDeveloperResponse> deleteLobby(@Valid DeleteLobbyDeveloperRequest request);
+
+    Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
+            @Valid CreateMatchmakerRequestDeveloperRequest request);
 
     Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(@Valid DeleteMatchmakerDeveloperRequest request);
 }
