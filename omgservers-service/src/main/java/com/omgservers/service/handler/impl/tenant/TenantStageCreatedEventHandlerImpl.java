@@ -36,7 +36,7 @@ public class TenantStageCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantStage(tenantId, id)
                 .flatMap(stage -> {
-                    log.info("Tenant stage was created, tenantStage={}/{}", tenantId, id);
+                    log.info("Stage was created, tenantStage={}/{}", tenantId, id);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

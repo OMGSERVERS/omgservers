@@ -17,6 +17,7 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
@@ -33,11 +34,13 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
     final UserModule userModule;
 
     final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             final CreateTenantProjectPermissionsSupportRequest request) {
-        log.debug("Create project permissions, request={}", request);
+        log.info("Create project permissions, request={}, principal={}", request,
+                securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();

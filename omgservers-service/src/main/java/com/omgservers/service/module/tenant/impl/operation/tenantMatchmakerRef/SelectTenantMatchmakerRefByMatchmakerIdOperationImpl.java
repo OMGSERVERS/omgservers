@@ -42,7 +42,7 @@ class SelectTenantMatchmakerRefByMatchmakerIdOperationImpl
                         tenantDeploymentId,
                         matchmakerId
                 ),
-                "Tenant matchmaker ref",
+                "Matchmaker ref",
                 tenantMatchmakerRefModelMapper::fromRow);
     }
 }

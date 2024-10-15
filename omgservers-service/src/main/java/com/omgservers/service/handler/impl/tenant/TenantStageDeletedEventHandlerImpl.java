@@ -43,7 +43,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantStage(tenantId, tenantStageId)
                 .flatMap(tenantStage -> {
-                    log.info("Tenant stage was deleted, tenantStage={}/{}", tenantId, tenantStageId);
+                    log.info("Stage was deleted, tenantStage={}/{}", tenantId, tenantStageId);
 
                     return deleteTenantStagePermissionsOperation.execute(tenantId, tenantStageId)
                             .flatMap(voidItem -> deleteTenantDeploymentsByTenantStageIdOperation

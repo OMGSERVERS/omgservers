@@ -2,19 +2,20 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
+import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
-import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
@@ -32,10 +33,13 @@ class DeleteTenantPermissionsMethodImpl implements DeleteTenantPermissionsMethod
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final SecurityIdentity securityIdentity;
+
     @Override
     public Uni<DeleteTenantPermissionsSupportResponse> execute(
             final DeleteTenantPermissionsSupportRequest request) {
-        log.debug("Delete tenant permissions, request={}", request);
+        log.info("Delete tenant permissions, request={}, principal={}", request,
+                securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();

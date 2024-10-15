@@ -29,7 +29,7 @@ class SyncTenantProjectMethodImpl implements SyncTenantProjectMethod {
 
     @Override
     public Uni<SyncTenantProjectResponse> execute(final SyncTenantProjectRequest request) {
-        log.debug("Sync tenant project, request={}", request);
+        log.debug("Sync project, request={}", request);
 
         final var project = request.getTenantProject();
         final var tenantId = project.getTenantId();

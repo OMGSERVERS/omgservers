@@ -22,7 +22,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
 
     @Override
     public Uni<DeleteTenantProjectResponse> execute(final DeleteTenantProjectRequest request) {
-        log.debug("Delete tenant project, request={}", request);
+        log.debug("Delete project, request={}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

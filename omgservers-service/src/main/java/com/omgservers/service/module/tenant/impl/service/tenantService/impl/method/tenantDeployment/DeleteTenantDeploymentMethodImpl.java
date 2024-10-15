@@ -22,7 +22,7 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
 
     @Override
     public Uni<DeleteTenantDeploymentResponse> execute(final DeleteTenantDeploymentRequest request) {
-        log.debug("Delete tenant deployment, request={}", request);
+        log.debug("Delete deployment, request={}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

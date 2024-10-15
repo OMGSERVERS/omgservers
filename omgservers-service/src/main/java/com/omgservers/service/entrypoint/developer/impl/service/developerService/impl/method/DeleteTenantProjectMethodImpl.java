@@ -30,9 +30,10 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
 
     @Override
     public Uni<DeleteTenantProjectDeveloperResponse> execute(final DeleteTenantProjectDeveloperRequest request) {
-        log.debug("Delete tenant project, request={}", request);
+        log.info("Delete project, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getId();

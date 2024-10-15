@@ -17,6 +17,7 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
@@ -33,11 +34,13 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
     final UserModule userModule;
 
     final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateTenantStagePermissionsSupportResponse> execute(
             final CreateTenantStagePermissionsSupportRequest request) {
-        log.debug("Create stage permissions, request={}", request);
+        log.info("Create stage permissions, request={}, principal={}", request,
+                securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();

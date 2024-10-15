@@ -43,7 +43,7 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
 
     @Override
     public Uni<DeployTenantVersionDeveloperResponse> execute(final DeployTenantVersionDeveloperRequest request) {
-        log.debug("Deploy tenant version, request={}", request);
+        log.info("Deploy version, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getStageId();

@@ -26,7 +26,7 @@ class ViewTenantDeploymentMethodImpl implements ViewTenantDeploymentMethod {
 
     @Override
     public Uni<ViewTenantDeploymentsResponse> execute(final ViewTenantDeploymentsRequest request) {
-        log.debug("View tenant deployments, request={}", request);
+        log.debug("View deployments, request={}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

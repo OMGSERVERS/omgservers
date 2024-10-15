@@ -43,7 +43,7 @@ class SelectTenantMatchmakerRequestByMatchmakerIdOperationImpl
                         tenantDeploymentId,
                         matchmakerId
                 ),
-                "Tenant matchmaker version",
+                "Matchmaker version",
                 tenantMatchmakerRequestModelMapper::fromRow);
     }
 }

@@ -31,7 +31,7 @@ class DeleteTenantDeploymentsByTenantStageIdOperationImpl implements DeleteTenan
                                 deleteTenantDeployment(tenantId, tenantDeployment.getId())
                                         .onFailure(ServerSideClientException.class)
                                         .recoverWithItem(t -> {
-                                            log.warn("Failed to delete tenant deployment, " +
+                                            log.warn("Failed to delete deployment, " +
                                                             "tenantStage={}/{}, " +
                                                             "tenantDeploymentId={}" +
                                                             "{}:{}",

@@ -47,7 +47,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantDeployment(tenantId, id)
                 .flatMap(tenantDeployment -> {
-                    log.info("Tenant deployment was created, tenantDeployment={}/{}, " +
+                    log.info("Deployment was created, tenantDeployment={}/{}, " +
                                     "tenantVersionId={}, " +
                                     "tenantStageId={}",
                             tenantId,

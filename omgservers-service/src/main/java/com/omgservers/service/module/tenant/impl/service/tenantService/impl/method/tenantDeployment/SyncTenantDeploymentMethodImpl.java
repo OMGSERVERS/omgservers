@@ -29,7 +29,7 @@ class SyncTenantDeploymentMethodImpl implements SyncTenantDeploymentMethod {
 
     @Override
     public Uni<SyncTenantDeploymentResponse> execute(final SyncTenantDeploymentRequest request) {
-        log.debug("Sync tenant deployment, request={}", request);
+        log.debug("Sync deployment, request={}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var tenantDeployment = request.getTenantDeployment();

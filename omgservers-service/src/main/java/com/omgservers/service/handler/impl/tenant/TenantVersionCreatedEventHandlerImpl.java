@@ -37,7 +37,7 @@ public class TenantVersionCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, id)
                 .flatMap(tenantVersion -> {
-                    log.info("Tenant version was created, " +
+                    log.info("Version was created, " +
                                     "tenantVersion={}/{}, tenantStageId={}, modes={}",
                             tenantId,
                             id,

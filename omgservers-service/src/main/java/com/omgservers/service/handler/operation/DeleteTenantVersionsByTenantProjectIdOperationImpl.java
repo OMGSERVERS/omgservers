@@ -31,7 +31,7 @@ class DeleteTenantVersionsByTenantProjectIdOperationImpl implements DeleteTenant
                                 deleteTenantVersion(tenantId, tenantVersionProjection.getId())
                                         .onFailure(ServerSideClientException.class)
                                         .recoverWithItem(t -> {
-                                            log.warn("Failed to delete tenant version, " +
+                                            log.warn("Failed to delete version, " +
                                                             "tenantProject={}/{}, " +
                                                             "tenantVersionId={}" +
                                                             "{}:{}",

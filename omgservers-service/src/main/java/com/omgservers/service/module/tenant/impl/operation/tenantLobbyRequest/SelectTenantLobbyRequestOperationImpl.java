@@ -35,7 +35,7 @@ class SelectTenantLobbyRequestOperationImpl implements SelectTenantLobbyRequestO
                         limit 1
                         """,
                 List.of(tenantId, id),
-                "Tenant lobby request",
+                "Lobby request",
                 tenantLobbyRequestModelMapper::fromRow);
     }
 }

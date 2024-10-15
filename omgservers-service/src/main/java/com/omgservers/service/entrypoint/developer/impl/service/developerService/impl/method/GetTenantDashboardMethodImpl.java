@@ -32,9 +32,10 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
     @Override
     public Uni<GetTenantDashboardDeveloperResponse> execute(
             final GetTenantDashboardDeveloperRequest request) {
-        log.debug("Get tenant dashboard, request={}", request);
+        log.info("Get tenant dashboard, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var permissionQualifier = TenantPermissionQualifierEnum.GETTING_DASHBOARD;

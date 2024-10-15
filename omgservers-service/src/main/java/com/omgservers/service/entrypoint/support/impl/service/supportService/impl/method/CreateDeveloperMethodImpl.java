@@ -2,9 +2,9 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
-import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -12,6 +12,7 @@ import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -30,10 +31,11 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
 
     final TenantPermissionModelFactory tenantPermissionModelFactory;
     final UserModelFactory userModelFactory;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(final CreateDeveloperSupportRequest request) {
-        log.debug("Create developer, request={}", request);
+        log.info("Create developer, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var password = generateSecureStringOperation.generateSecureString();
         return createUser(password)

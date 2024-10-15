@@ -18,6 +18,7 @@ import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
@@ -35,10 +36,13 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final SecurityIdentity securityIdentity;
+
     @Override
     public Uni<DeleteProjectPermissionsSupportResponse> execute(
             final DeleteProjectPermissionsSupportRequest request) {
-        log.debug("Delete project permissions, request={}", request);
+        log.info("Delete project permissions, request={}, principal={}", request,
+                securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();

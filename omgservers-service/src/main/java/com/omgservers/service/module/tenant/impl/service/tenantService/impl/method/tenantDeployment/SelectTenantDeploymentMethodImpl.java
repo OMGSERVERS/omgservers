@@ -25,7 +25,7 @@ class SelectTenantDeploymentMethodImpl implements SelectTenantDeploymentMethod {
 
     @Override
     public Uni<SelectTenantDeploymentResponse> execute(final SelectTenantDeploymentRequest request) {
-        log.debug("Select tenant deployment, request={}", request);
+        log.debug("Select deployment, request={}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

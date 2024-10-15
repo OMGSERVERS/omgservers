@@ -31,7 +31,7 @@ class DeleteTenantProjectsOperationImpl implements DeleteTenantProjectsOperation
                                 deleteProject(tenantId, tenantProject.getId())
                                         .onFailure(ServerSideClientException.class)
                                         .recoverWithItem(t -> {
-                                            log.warn("Failed to delete tenant project, " +
+                                            log.warn("Failed to delete project, " +
                                                             "tenantId={}, " +
                                                             "tenantProjectId={}" +
                                                             "{}:{}",

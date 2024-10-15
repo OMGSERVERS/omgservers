@@ -49,9 +49,11 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
     @Override
     public Uni<CreateTenantProjectDeveloperResponse> execute(final CreateTenantProjectDeveloperRequest request) {
-        log.debug("Create tenant project, request={}", request);
+        log.info("Create project, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
         final var tenantId = request.getTenantId();
 
         final var permissionQualifier = TenantPermissionQualifierEnum.PROJECT_MANAGEMENT;

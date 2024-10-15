@@ -5,13 +5,14 @@ import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryRespo
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.service.service.registry.dto.IssueTokenRequest;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
+import com.omgservers.service.service.registry.dto.IssueTokenRequest;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -30,9 +31,11 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
 
     final ParseBasicAuthorizationHeaderOperation parseBasicAuthorizationHeaderOperation;
 
+    final SecurityIdentity securityIdentity;
+
     @Override
     public Uni<BasicAuthRegistryResponse> basicAuth(final BasicAuthRegistryRequest request) {
-        log.debug("Basic auth, request={}", request);
+        log.info("Basic auth, request={}", request);
 
         final var authorizationHeader = request.getAuthorizationHeader();
         if (Objects.isNull(authorizationHeader)) {

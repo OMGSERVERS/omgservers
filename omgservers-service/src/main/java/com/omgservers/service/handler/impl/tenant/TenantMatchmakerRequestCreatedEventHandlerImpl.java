@@ -45,7 +45,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
                 .flatMap(tenantMatchmakerRequest -> {
                     final var tenantDeploymentId = tenantMatchmakerRequest.getDeploymentId();
                     final var matchmakerId = tenantMatchmakerRequest.getMatchmakerId();
-                    log.info("Tenant matchmaker request was created, id={}, tenantDeploymentId={}/{}, matchmakerId={}",
+                    log.info("Matchmaker request was created, id={}, tenantDeploymentId={}/{}, matchmakerId={}",
                             tenantMatchmakerRequest.getId(),
                             tenantId,
                             tenantDeploymentId,

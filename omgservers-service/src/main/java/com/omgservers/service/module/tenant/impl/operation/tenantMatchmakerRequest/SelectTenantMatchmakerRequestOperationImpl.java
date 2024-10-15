@@ -35,7 +35,7 @@ class SelectTenantMatchmakerRequestOperationImpl implements SelectTenantMatchmak
                         limit 1
                         """,
                 List.of(tenantId, id),
-                "Tenant matchmaker request",
+                "Matchmaker request",
                 tenantMatchmakerRequestModelMapper::fromRow);
     }
 }

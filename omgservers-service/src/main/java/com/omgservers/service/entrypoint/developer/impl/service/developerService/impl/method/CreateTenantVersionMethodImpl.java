@@ -33,9 +33,10 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
 
     @Override
     public Uni<CreateTenantVersionDeveloperResponse> execute(final CreateTenantVersionDeveloperRequest request) {
-        log.debug("Create tenant version, request={}", request);
+        log.info("Create version, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getProjectId();

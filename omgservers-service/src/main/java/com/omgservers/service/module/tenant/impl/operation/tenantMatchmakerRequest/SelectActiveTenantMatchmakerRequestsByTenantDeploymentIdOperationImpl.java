@@ -37,7 +37,7 @@ class SelectActiveTenantMatchmakerRequestsByTenantDeploymentIdOperationImpl
                         order by id asc
                         """,
                 List.of(tenantId, tenantDeploymentId),
-                "Tenant matchmaker request",
+                "Matchmaker request",
                 tenantMatchmakerRequestModelMapper::fromRow);
     }
 }

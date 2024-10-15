@@ -32,9 +32,11 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
     @Override
     public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
             final GetTenantProjectDashboardDeveloperRequest request) {
-        log.debug("Get tenant project dashboard, request={}", request);
+        log.info("Get tenant project dashboard, request={}, principal={}",
+                request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getProjectId();

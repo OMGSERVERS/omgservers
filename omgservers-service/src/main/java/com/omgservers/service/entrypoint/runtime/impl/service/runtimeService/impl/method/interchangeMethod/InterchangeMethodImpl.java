@@ -26,6 +26,8 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
     @Override
     public Uni<InterchangeRuntimeResponse> interchange(final InterchangeRuntimeRequest request) {
+        log.debug("Interchange, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
+
         final var runtimeId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName());
 

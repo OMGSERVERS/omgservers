@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.impl.service;
 
+import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.system.JobCreatedEventBodyModel;
-import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.service.service.job.dto.GetJobRequest;
-import com.omgservers.service.service.job.dto.GetJobResponse;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.service.job.dto.GetJobRequest;
+import com.omgservers.service.service.job.dto.GetJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -35,7 +35,7 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
 
         return getJob(jobId)
                 .flatMap(job -> {
-                    log.info("Job was created, jobId={}, qualifier={}", jobId, job.getQualifier());
+                    log.debug("Job was created, jobId={}, qualifier={}", jobId, job.getQualifier());
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

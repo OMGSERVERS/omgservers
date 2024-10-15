@@ -39,7 +39,7 @@ public class TenantImageCreatedEventHandlerImpl implements EventHandler {
                     final var tenantVersionId = tenantImage.getVersionId();
                     final var qualifier = tenantImage.getQualifier();
                     final var imageId = tenantImage.getImageId();
-                    log.info("Tenant image was created, id={}, tenantVersion={}/{}, qualifier={}, imageId={}",
+                    log.info("Image was created, id={}, tenantVersion={}/{}, qualifier={}, imageId={}",
                             tenantImage.getId(),
                             tenantId,
                             tenantVersionId,

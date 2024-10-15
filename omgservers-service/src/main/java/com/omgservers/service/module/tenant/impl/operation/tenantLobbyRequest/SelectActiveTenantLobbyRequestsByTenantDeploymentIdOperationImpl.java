@@ -37,7 +37,7 @@ class SelectActiveTenantLobbyRequestsByTenantDeploymentIdOperationImpl
                         order by id asc
                         """,
                 List.of(tenantId, tenantDeploymentId),
-                "Tenant lobby request",
+                "Lobby request",
                 tenantLobbyRequestModelMapper::fromRow);
     }
 }

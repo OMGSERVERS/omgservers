@@ -53,7 +53,7 @@ class SyncTenantLobbyRefMethodImpl implements SyncTenantLobbyRefMethod {
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "tenant deployment does not exist or was deleted, id=" +
+                                                            "deployment does not exist or was deleted, id=" +
                                                                     deploymentId);
                                                 }
                                             })

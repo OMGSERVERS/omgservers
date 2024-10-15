@@ -40,7 +40,7 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
                 .flatMap(tenantMatchmakerRef -> {
                     final var tenantDeploymentId = tenantMatchmakerRef.getDeploymentId();
                     final var matchmakerId = tenantMatchmakerRef.getMatchmakerId();
-                    log.info("Tenant matchmaker ref was deleted, id={}, tenantDeploymentId={}/{}, matchmakerId={}",
+                    log.debug("Matchmaker ref was deleted, id={}, tenantDeploymentId={}/{}, matchmakerId={}",
                             tenantMatchmakerRef.getId(),
                             tenantId,
                             tenantDeploymentId,

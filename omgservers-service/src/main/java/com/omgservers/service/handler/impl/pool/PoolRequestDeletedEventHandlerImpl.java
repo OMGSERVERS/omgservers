@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.impl.pool;
 
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolRequestDeletedEventBodyModel;
-import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import io.smallrye.mutiny.Uni;
@@ -36,7 +36,7 @@ public class PoolRequestDeletedEventHandlerImpl implements EventHandler {
 
         return getPoolRequest(poolId, id)
                 .flatMap(server -> {
-                    log.info("Pool request was deleted, id={}/{}", poolId, id);
+                    log.debug("Pool request was deleted, id={}/{}", poolId, id);
 
                     return Uni.createFrom().voidItem();
                 })

@@ -49,7 +49,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantProject(tenantId, id)
                 .flatMap(tenantProject -> {
-                    log.info("Tenant project was created, tenantProject={}/{}", tenantId, id);
+                    log.info("Project was created, tenantProject={}/{}", tenantId, id);
 
                     return syncBuilderPermission(tenantId, id, idempotencyKey)
                             .flatMap(permission -> syncServicePermission(tenantId, id, idempotencyKey));

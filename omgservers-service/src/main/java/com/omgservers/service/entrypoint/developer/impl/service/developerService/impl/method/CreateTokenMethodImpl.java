@@ -5,6 +5,7 @@ import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.module.user.UserModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -18,9 +19,11 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     final UserModule userModule;
 
+    final SecurityIdentity securityIdentity;
+
     @Override
     public Uni<CreateTokenDeveloperResponse> execute(final CreateTokenDeveloperRequest request) {
-        log.debug("Create token, request={}", request);
+        log.info("Create token, request={}", request);
 
         final var userId = request.getUserId();
         final var password = request.getPassword();

@@ -2,18 +2,19 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportResponse;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionRequest;
 import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
-import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
@@ -30,11 +31,13 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
     final UserModule userModule;
 
     final TenantPermissionModelFactory tenantPermissionModelFactory;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateTenantPermissionsSupportResponse> execute(
             final CreateTenantPermissionsSupportRequest request) {
-        log.debug("Create tenant permissions, request={}", request);
+        log.info("Create tenant permissions, request={}, principal={}", request,
+                securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();

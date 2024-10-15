@@ -36,7 +36,7 @@ public class PoolRequestCreatedEventHandlerImpl implements EventHandler {
 
         return getPoolRequest(poolId, id)
                 .flatMap(poolRequest -> {
-                    log.info("Pool request was created, id={}/{}", poolId, id);
+                    log.debug("Pool request was created, id={}/{}", poolId, id);
 
                     return Uni.createFrom().voidItem();
                 })

@@ -38,9 +38,11 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
 
     @Override
     public Uni<CreateTenantStageDeveloperResponse> execute(final CreateTenantStageDeveloperRequest request) {
-        log.debug("Create tenant stage, request={}", request);
+        log.info("Create tenant stage, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getProjectId();
 

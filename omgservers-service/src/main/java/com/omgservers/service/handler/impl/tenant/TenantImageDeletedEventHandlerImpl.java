@@ -38,7 +38,7 @@ public class TenantImageDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(tenantImage -> {
                     final var tenantVersionId = tenantImage.getVersionId();
                     final var qualifier = tenantImage.getQualifier();
-                    log.info("Tenant image was deleted, id={}, tenantVersion={}/{}, qualifier={}",
+                    log.info("Image was deleted, id={}, tenantVersion={}/{}, qualifier={}",
                             tenantImage.getId(),
                             tenantId,
                             tenantVersionId,

@@ -3,10 +3,11 @@ package com.omgservers.service.entrypoint.registry.impl.service.registryService.
 import com.omgservers.schema.entrypoint.registry.getToken.OAuth2RegistryRequest;
 import com.omgservers.schema.entrypoint.registry.getToken.OAuth2RegistryResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.service.registry.dto.IssueTokenRequest;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
+import com.omgservers.service.service.registry.dto.IssueTokenRequest;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.mutiny.Uni;
@@ -22,13 +23,15 @@ import java.util.Objects;
 class OAuth2MethodImpl implements OAuth2Method {
 
     final RegistryService registryService;
-    final JWTParser jwtParser;
 
     final ParseBasicAuthorizationHeaderOperation parseBasicAuthorizationHeaderOperation;
 
+    final SecurityIdentity securityIdentity;
+    final JWTParser jwtParser;
+
     @Override
     public Uni<OAuth2RegistryResponse> oAuth2(final OAuth2RegistryRequest request) {
-        log.debug("OAuth2, request={}", request);
+        log.info("OAuth2, request={}", request);
 
         final var grantType = request.getGrantType();
         if (grantType.equals("refresh_token")) {

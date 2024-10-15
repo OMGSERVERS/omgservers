@@ -35,9 +35,11 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
     @Override
     public Uni<GetTenantVersionDashboardDeveloperResponse> execute(
             final GetTenantVersionDashboardDeveloperRequest request) {
-        log.debug("Get tenant version dashboard, request={}", request);
+        log.info("Get tenant version dashboard, request={}, principal={}",
+                request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantVersionId = request.getVersionId();

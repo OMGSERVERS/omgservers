@@ -9,6 +9,7 @@ import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,11 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     final TenantProjectModelFactory tenantProjectModelFactory;
     final TenantStageModelFactory tenantStageModelFactory;
 
+    final SecurityIdentity securityIdentity;
+
     @Override
     public Uni<CreateTenantProjectSupportResponse> execute(final CreateTenantProjectSupportRequest request) {
-        log.debug("Create tenant project, request={}", request);
+        log.info("Create project, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var tenantId = request.getTenantId();
         return createTenantProject(tenantId)

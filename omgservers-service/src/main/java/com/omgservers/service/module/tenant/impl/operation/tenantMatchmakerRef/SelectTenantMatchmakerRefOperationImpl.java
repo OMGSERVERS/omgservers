@@ -35,7 +35,7 @@ class SelectTenantMatchmakerRefOperationImpl implements SelectTenantMatchmakerRe
                         limit 1
                         """,
                 List.of(tenantId, id),
-                "Tenant matchmaker ref",
+                "Matchmaker ref",
                 tenantMatchmakerRefModelMapper::fromRow);
     }
 }

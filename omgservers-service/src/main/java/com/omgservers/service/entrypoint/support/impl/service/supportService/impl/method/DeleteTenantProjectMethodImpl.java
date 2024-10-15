@@ -5,6 +5,7 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRespon
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
 import com.omgservers.service.module.tenant.TenantModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,11 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
 
     final TenantModule tenantModule;
 
+    final SecurityIdentity securityIdentity;
+
     @Override
     public Uni<DeleteTenantProjectSupportResponse> execute(final DeleteTenantProjectSupportRequest request) {
-        log.debug("Delete tenant project, request={}", request);
+        log.info("Delete project, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getProjectId();

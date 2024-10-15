@@ -35,9 +35,11 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
     @Override
     public Uni<GetTenantStageDashboardDeveloperResponse> execute(
             final GetTenantStageDashboardDeveloperRequest request) {
-        log.debug("Get tenant stage dashboard, request={}", request);
+        log.info("Get tenant stage dashboard, request={}, principal={}",
+                request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getStageId();

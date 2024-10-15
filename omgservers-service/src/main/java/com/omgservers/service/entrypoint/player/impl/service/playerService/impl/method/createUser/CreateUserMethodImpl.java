@@ -2,13 +2,14 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
-import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,10 +26,11 @@ class CreateUserMethodImpl implements CreateUserMethod {
     final GenerateSecureStringOperation generateSecureStringOperation;
 
     final UserModelFactory userModelFactory;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateUserPlayerResponse> createUser(final CreateUserPlayerRequest request) {
-        log.debug("Create user, request={}", request);
+        log.info("Create user, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var password = generateSecureStringOperation.generateSecureString();
         return createUser(password)

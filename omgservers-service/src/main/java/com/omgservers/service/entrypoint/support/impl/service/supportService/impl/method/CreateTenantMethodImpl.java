@@ -6,6 +6,7 @@ import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,14 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
 
     final TenantModule tenantModule;
 
-    final TenantModelFactory tenantModelFactory;
-
     final GenerateIdOperation generateIdOperation;
+
+    final TenantModelFactory tenantModelFactory;
+    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateTenantSupportResponse> execute(final CreateTenantSupportRequest request) {
-        log.debug("Create tenant, request={}", request);
+        log.info("Create tenant, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var tenant = tenantModelFactory.create();
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);

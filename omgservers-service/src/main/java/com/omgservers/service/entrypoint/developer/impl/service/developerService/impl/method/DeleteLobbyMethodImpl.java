@@ -38,7 +38,7 @@ class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
 
     @Override
     public Uni<DeleteLobbyDeveloperResponse> execute(final DeleteLobbyDeveloperRequest request) {
-        log.debug("Delete lobby, request={}", request);
+        log.info("Delete lobby, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());

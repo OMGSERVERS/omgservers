@@ -46,7 +46,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
 
     @Override
     public Uni<UploadFilesArchiveDeveloperResponse> execute(final UploadFilesArchiveDeveloperRequest request) {
-        log.debug("Upload files archive, request={}", request);
+        log.info("Upload files archive, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 

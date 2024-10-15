@@ -2,22 +2,23 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
-import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
+import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
 import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
-import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
@@ -35,10 +36,13 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final SecurityIdentity securityIdentity;
+
     @Override
     public Uni<DeleteTenantStagePermissionsSupportResponse> execute(
             final DeleteTenantStagePermissionsSupportRequest request) {
-        log.debug("Delete stage permissions, request={}", request);
+        log.info("Delete stage permissions, request={}, principal={}", request,
+                securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();
         final var tenantId = request.getTenantId();
