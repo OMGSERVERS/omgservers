@@ -10,21 +10,21 @@ import java.util.concurrent.ConcurrentHashMap;
 @ApplicationScoped
 public class DispatcherConnections {
 
-    final Map<WebSocketConnection, DispatcherConnection> connections;
+    final Map<WebSocketConnection, DispatcherConnection> indexByWebSocketConnection;
 
     public DispatcherConnections() {
-        connections = new ConcurrentHashMap<>();
+        indexByWebSocketConnection = new ConcurrentHashMap<>();
     }
 
     public void put(final DispatcherConnection dispatcherConnection) {
-        connections.put(dispatcherConnection.getWebSocketConnection(), dispatcherConnection);
+        indexByWebSocketConnection.put(dispatcherConnection.getWebSocketConnection(), dispatcherConnection);
     }
 
     public DispatcherConnection get(final WebSocketConnection webSocketConnection) {
-        return connections.get(webSocketConnection);
+        return indexByWebSocketConnection.get(webSocketConnection);
     }
 
     public DispatcherConnection remove(final WebSocketConnection webSocketConnection) {
-        return connections.remove(webSocketConnection);
+        return indexByWebSocketConnection.remove(webSocketConnection);
     }
 }

@@ -11,40 +11,40 @@ import java.util.Objects;
 @ApplicationScoped
 public class RoutedConnections {
 
-    final Map<DispatcherConnection, WebSocketClientConnection> clientConnections;
-    final Map<WebSocketClientConnection, DispatcherConnection> serverConnections;
+    final Map<DispatcherConnection, WebSocketClientConnection> indexByDispatcherConnection;
+    final Map<WebSocketClientConnection, DispatcherConnection> indexByWebSocketClientConnection;
 
     public RoutedConnections() {
-        clientConnections = new HashMap<>();
-        serverConnections = new HashMap<>();
+        indexByDispatcherConnection = new HashMap<>();
+        indexByWebSocketClientConnection = new HashMap<>();
     }
 
     public synchronized void put(final DispatcherConnection serverConnection,
                                  final WebSocketClientConnection clientConnection) {
-        serverConnections.put(clientConnection, serverConnection);
-        clientConnections.put(serverConnection, clientConnection);
+        indexByWebSocketClientConnection.put(clientConnection, serverConnection);
+        indexByDispatcherConnection.put(serverConnection, clientConnection);
     }
 
     public synchronized WebSocketClientConnection getClientConnection(final DispatcherConnection serverConnection) {
-        return clientConnections.get(serverConnection);
+        return indexByDispatcherConnection.get(serverConnection);
     }
 
     public synchronized DispatcherConnection getServerConnection(final WebSocketClientConnection clientConnection) {
-        return serverConnections.get(clientConnection);
+        return indexByWebSocketClientConnection.get(clientConnection);
     }
 
     public synchronized WebSocketClientConnection removeServerConnection(final DispatcherConnection serverConnection) {
-        final var clientConnection = clientConnections.remove(serverConnection);
+        final var clientConnection = indexByDispatcherConnection.remove(serverConnection);
         if (Objects.nonNull(clientConnection)) {
-            serverConnections.remove(clientConnection);
+            indexByWebSocketClientConnection.remove(clientConnection);
         }
         return clientConnection;
     }
 
     public synchronized DispatcherConnection removeClientConnection(final WebSocketClientConnection clientConnection) {
-        final var serverConnection = serverConnections.remove(clientConnection);
+        final var serverConnection = indexByWebSocketClientConnection.remove(clientConnection);
         if (Objects.nonNull(serverConnection)) {
-            clientConnections.remove(serverConnection);
+            indexByDispatcherConnection.remove(serverConnection);
         }
         return serverConnection;
     }

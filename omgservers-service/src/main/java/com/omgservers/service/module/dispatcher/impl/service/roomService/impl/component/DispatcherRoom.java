@@ -20,7 +20,7 @@ public class DispatcherRoom {
     @Getter
     final Long runtimeId;
 
-    final Map<Long, DispatcherConnection> connectionBySubject;
+    final Map<Long, DispatcherConnection> indexBySubject;
     final Set<DispatcherConnection> playerConnections;
 
     public DispatcherRoom(final DispatcherConnection runtimeConnection) {
@@ -28,12 +28,12 @@ public class DispatcherRoom {
         this.runtimeId = runtimeConnection.getRuntimeId();
 
         playerConnections = new HashSet<>();
-        connectionBySubject = new HashMap<>();
+        indexBySubject = new HashMap<>();
     }
 
     public synchronized DispatcherConnection putIfAbsent(final DispatcherConnection playerConnection) {
         final var subject = playerConnection.getSubject();
-        final var previousValue = connectionBySubject.putIfAbsent(subject, playerConnection);
+        final var previousValue = indexBySubject.putIfAbsent(subject, playerConnection);
         if (Objects.isNull(previousValue)) {
             playerConnections.add(playerConnection);
         }
@@ -49,7 +49,7 @@ public class DispatcherRoom {
         final var removed = playerConnections.remove(playerConnection);
         if (removed) {
             final var subject = playerConnection.getSubject();
-            connectionBySubject.remove(subject);
+            indexBySubject.remove(subject);
         }
 
         return removed;
@@ -57,7 +57,7 @@ public class DispatcherRoom {
 
     public synchronized List<DispatcherConnection> filterPlayerConnections(final List<Long> clients) {
         return clients.stream()
-                .map(connectionBySubject::get)
+                .map(indexBySubject::get)
                 .filter(Objects::nonNull)
                 .toList();
     }

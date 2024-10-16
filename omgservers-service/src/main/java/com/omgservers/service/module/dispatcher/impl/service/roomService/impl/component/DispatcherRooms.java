@@ -11,28 +11,28 @@ import java.util.Map;
 @ApplicationScoped
 public class DispatcherRooms {
 
-    final Map<Long, DispatcherRoom> rooms;
+    final Map<Long, DispatcherRoom> indexByRuntimeId;
 
     public DispatcherRooms() {
-        rooms = new HashMap<>();
+        indexByRuntimeId = new HashMap<>();
     }
 
     public synchronized DispatcherRoom putIfAbsent(final DispatcherRoom dispatcherRoom) {
         final var runtimeId = dispatcherRoom.getRuntimeId();
-        return rooms.putIfAbsent(runtimeId, dispatcherRoom);
+        return indexByRuntimeId.putIfAbsent(runtimeId, dispatcherRoom);
     }
 
     public synchronized DispatcherRoom getRoom(final Long runtimeId) {
-        return rooms.get(runtimeId);
+        return indexByRuntimeId.get(runtimeId);
     }
 
     public synchronized DispatcherRoom removeRoom(final Long runtimeId) {
-        return rooms.remove(runtimeId);
+        return indexByRuntimeId.remove(runtimeId);
     }
 
     public synchronized DispatcherRoom findRuntimeRoom(final DispatcherConnection runtimeConnection) {
         // TODO: Optimize this
-        return rooms.values().stream()
+        return indexByRuntimeId.values().stream()
                 .filter(dispatcherRoom -> dispatcherRoom.getRuntimeConnection().equals(runtimeConnection))
                 .findFirst()
                 .orElse(null);
@@ -40,7 +40,7 @@ public class DispatcherRooms {
 
     public synchronized DispatcherRoom findPlayerRoom(final DispatcherConnection playerConnection) {
         // TODO: Optimize this
-        return rooms.values().stream()
+        return indexByRuntimeId.values().stream()
                 .filter(dispatcherRoom -> dispatcherRoom.contains(playerConnection))
                 .findFirst()
                 .orElse(null);
