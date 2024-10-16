@@ -1,9 +1,9 @@
 package com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method;
 
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherCloseReason;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveRoomRequest;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveRoomResponse;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.component.RoomWebSocketCloseReason;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.component.RoomsContainer;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.component.DispatcherRooms;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
