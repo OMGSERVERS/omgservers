@@ -8,7 +8,7 @@ public enum ServiceSecurityAttributesEnum {
     RAW_TOKEN("raw_token"),
     RUNTIME_ID("runtime_id"),
     USER_ID("user_id"),
-    CLIENT_ID("client_id"),
+    SUBJECT("subject"),
     USER_ROLE("user_role");
 
     final String attributeName;

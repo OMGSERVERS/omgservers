@@ -1,20 +1,24 @@
 package com.omgservers.service.module.dispatcher.impl.service.roomService.impl;
 
-import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.AddConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.RoomService;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.AddPlayerConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.AddPlayerConnectionResponse;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.CreateRoomRequest;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.CreateRoomResponse;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.HandleBinaryMessageRequest;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.HandleTextMessageRequest;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemovePlayerConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemovePlayerConnectionResponse;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveRoomRequest;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveRoomResponse;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.AddConnectionMethod;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.TransferRoomBinaryMessageRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.TransferRoomBinaryMessageResponse;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.TransferRoomTextMessageRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.TransferRoomTextMessageResponse;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.AddPlayerConnectionMethod;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.CreateRoomMethod;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.TransferBinaryMessageMethod;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.TransferTextMessageMethod;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.RemoveConnectionMethod;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.RemovePlayerConnectionMethod;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.RemoveRoomMethod;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.RoomService;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.TransferRoomBinaryMessageMethod;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.impl.method.TransferRoomTextMessageMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -27,10 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RoomServiceImpl implements RoomService {
 
-    final TransferBinaryMessageMethod transferBinaryMessageMethod;
-    final TransferTextMessageMethod transferTextMessageMethod;
-    final RemoveConnectionMethod removeConnectionMethod;
-    final AddConnectionMethod addConnectionMethod;
+    final TransferRoomBinaryMessageMethod transferRoomBinaryMessageMethod;
+    final TransferRoomTextMessageMethod transferRoomTextMessageMethod;
+    final RemovePlayerConnectionMethod removePlayerConnectionMethod;
+    final AddPlayerConnectionMethod addPlayerConnectionMethod;
     final CreateRoomMethod createRoomMethod;
     final RemoveRoomMethod removeRoomMethod;
 
@@ -45,22 +49,24 @@ class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Uni<Void> addConnection(@Valid final AddConnectionRequest request) {
-        return addConnectionMethod.execute(request);
+    public Uni<AddPlayerConnectionResponse> addPlayerConnection(@Valid final AddPlayerConnectionRequest request) {
+        return addPlayerConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> removeConnection(@Valid final RemoveConnectionRequest request) {
-        return removeConnectionMethod.execute(request);
+    public Uni<RemovePlayerConnectionResponse> removePlayerConnection(@Valid final RemovePlayerConnectionRequest request) {
+        return removePlayerConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleTextMessage(@Valid final HandleTextMessageRequest request) {
-        return transferTextMessageMethod.execute(request);
+    public Uni<TransferRoomTextMessageResponse> transferRoomTextMessage(
+            @Valid final TransferRoomTextMessageRequest request) {
+        return transferRoomTextMessageMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleBinaryMessage(@Valid final HandleBinaryMessageRequest request) {
-        return transferBinaryMessageMethod.execute(request);
+    public Uni<TransferRoomBinaryMessageResponse> transferRoomBinaryMessage(
+            @Valid final TransferRoomBinaryMessageRequest request) {
+        return transferRoomBinaryMessageMethod.execute(request);
     }
 }

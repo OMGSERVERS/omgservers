@@ -10,12 +10,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 class RemoveRoomMethodImpl implements RemoveRoomMethod {
 
-    final RoomsContainer roomsContainer;
+    final DispatcherRooms dispatcherRooms;
 
     @Override
     public Uni<RemoveRoomResponse> execute(final RemoveRoomRequest request) {
@@ -23,23 +25,25 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
 
         final var runtimeId = request.getRuntimeId();
 
-        final var roomInstance = roomsContainer.removeRoom(runtimeId);
-        if (roomInstance.isPresent()) {
-            log.info("Room was removed, runtimeId={}", runtimeId);
-            final var roomConnections = roomInstance.get().getAllConnections();
-            return Multi.createFrom().iterable(roomConnections)
-                    .onItem().transformToUniAndConcatenate(roomConnection -> {
-                        final var webSocketConnection = roomConnection.getWebSocketConnection();
+        final var dispatcherRoom = dispatcherRooms.removeRoom(runtimeId);
+        if (Objects.nonNull(dispatcherRoom)) {
+            final var allPlayerConnections = dispatcherRoom.getAllPlayerConnections();
+
+            log.info("Room was removed, runtimeId={}, allPlayerConnections={}", runtimeId, allPlayerConnections.size());
+            return Multi.createFrom().iterable(allPlayerConnections)
+                    .onItem().transformToUniAndConcatenate(playerConnection -> {
+                        final var webSocketConnection = playerConnection.getWebSocketConnection();
                         if (webSocketConnection.isOpen()) {
-                            return webSocketConnection.close(RoomWebSocketCloseReason.ROOM_WAS_REMOVED);
+                            return webSocketConnection.close(DispatcherCloseReason.ROOM_REMOVED);
                         } else {
                             return Uni.createFrom().voidItem();
                         }
                     })
                     .collect().asList()
                     .replaceWith(new RemoveRoomResponse(Boolean.TRUE));
+        } else {
+            log.warn("Room was not found to remove, runtimeId={}", runtimeId);
+            return Uni.createFrom().item(new RemoveRoomResponse(Boolean.FALSE));
         }
-
-        return Uni.createFrom().item(new RemoveRoomResponse(Boolean.FALSE));
     }
 }

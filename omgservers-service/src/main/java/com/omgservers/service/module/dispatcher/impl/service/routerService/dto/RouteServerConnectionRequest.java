@@ -1,6 +1,6 @@
 package com.omgservers.service.module.dispatcher.impl.service.routerService.dto;
 
-import io.quarkus.websockets.next.WebSocketConnection;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnection;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.net.URI;
 public class RouteServerConnectionRequest {
 
     @NotNull
-    WebSocketConnection serverConnection;
+    DispatcherConnection serverConnection;
 
     @NotNull
     URI serverUri;

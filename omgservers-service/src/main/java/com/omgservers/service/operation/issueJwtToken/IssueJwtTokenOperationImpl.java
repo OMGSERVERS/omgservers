@@ -67,15 +67,15 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
     }
 
     @Override
-    public String issueWsJwtToken(final Long clientId,
+    public String issueWsJwtToken(final Long subject,
                                   final Long runtimeId,
                                   final UserRoleEnum role) {
         final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
-                .subject(clientId.toString())
+                .subject(subject.toString())
                 .claim(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName(), runtimeId.toString())
-                .claim(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName(), clientId.toString())
+                .claim(ServiceSecurityAttributesEnum.SUBJECT.getAttributeName(), subject.toString())
                 .claim(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName(), role.getName())
                 .expiresIn(WS_TOKEN_DURATION)
                 .groups(UserRoleEnum.WEBSOCKET.getName())

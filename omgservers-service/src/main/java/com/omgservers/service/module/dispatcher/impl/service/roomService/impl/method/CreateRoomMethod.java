@@ -6,8 +6,5 @@ import io.smallrye.mutiny.Uni;
 
 public interface CreateRoomMethod {
 
-    /**
-     * Create a new room for runtime if it doesn't exist
-     */
     Uni<CreateRoomResponse> execute(CreateRoomRequest request);
 }

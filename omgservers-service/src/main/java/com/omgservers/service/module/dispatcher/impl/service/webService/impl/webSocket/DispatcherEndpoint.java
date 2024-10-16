@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @AllArgsConstructor
-@RolesAllowed({UserRoleEnum.Names.WEBSOCKET})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 @WebSocket(path = "/omgservers/v1/module/dispatcher/connection")
 public class DispatcherEndpoint {
 

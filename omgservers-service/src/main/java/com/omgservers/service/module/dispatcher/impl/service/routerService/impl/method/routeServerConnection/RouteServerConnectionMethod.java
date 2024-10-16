@@ -6,5 +6,5 @@ import io.smallrye.mutiny.Uni;
 
 public interface RouteServerConnectionMethod {
 
-    Uni<RouteServerConnectionResponse> routeServerConnection(RouteServerConnectionRequest request);
+    Uni<RouteServerConnectionResponse> execute(RouteServerConnectionRequest request);
 }

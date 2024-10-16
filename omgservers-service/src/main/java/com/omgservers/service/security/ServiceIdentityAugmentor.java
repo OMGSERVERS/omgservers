@@ -31,9 +31,9 @@ public class ServiceIdentityAugmentor implements SecurityIdentityAugmentor {
                     .ifPresent(claim -> securityIdentityBuilder
                             .addAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName(),
                                     Long.valueOf(claim)));
-            jsonWebToken.<String>claim(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName())
+            jsonWebToken.<String>claim(ServiceSecurityAttributesEnum.SUBJECT.getAttributeName())
                     .ifPresent(claim -> securityIdentityBuilder
-                            .addAttribute(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName(),
+                            .addAttribute(ServiceSecurityAttributesEnum.SUBJECT.getAttributeName(),
                                     Long.valueOf(claim)));
             jsonWebToken.<String>claim(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName())
                     .ifPresent(claim -> securityIdentityBuilder

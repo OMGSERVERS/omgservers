@@ -8,19 +8,20 @@ import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
 import com.omgservers.service.module.dispatcher.DispatcherModule;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnectionTypeEnum;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnectionsContainer;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.ConnectionTypeEnum;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherCloseReason;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnection;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleOpenedConnectionRequest;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleOpenedConnectionResponse;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.components.DispatcherConnections;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.AddPlayerConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.AddPlayerConnectionResponse;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.CreateRoomRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.CreateRoomResponse;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.RouteServerConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.RouteServerConnectionResponse;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
-import io.quarkus.security.identity.SecurityIdentity;
-import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -38,64 +39,58 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
     final RuntimeModule runtimeModule;
     final PoolModule poolModule;
 
-    final CalculateShardOperation calculateShardOperation;
     final GetConfigOperation getConfigOperation;
 
-    final DispatcherConnectionsContainer dispatcherConnectionsContainer;
-    final SecurityIdentity securityIdentity;
+    final DispatcherConnections dispatcherConnections;
 
     @Override
-    public Uni<HandleOpenedConnectionResponse> execute(final HandleOpenedConnectionRequest request) {
+    public Uni<Void> execute(final HandleOpenedConnectionRequest request) {
         log.debug("Handle opened connection, request={}", request);
 
-        final var runtimeId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName());
-        final var userRole = securityIdentity
-                .<UserRoleEnum>getAttribute(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName());
-        final var clientId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName());
+        final var webSocketConnection = request.getWebSocketConnection();
+        final var runtimeId = request.getRuntimeId();
+        final var userRole = request.getUserRole();
+        final var subject = request.getSubject();
 
+        return getRuntimeServer(runtimeId)
+                .flatMap(poolServer -> switch (poolServer.getQualifier()) {
+                    case DOCKER_HOST -> {
+                        final var poolServerUri = poolServer.getConfig().getServerUri();
+                        final var thisServerUri = getConfigOperation
+                                .getServiceConfig().index().serverUri();
+                        if (poolServerUri.equals(thisServerUri)) {
+                            final var dispatcherConnection = new DispatcherConnection(webSocketConnection,
+                                    ConnectionTypeEnum.SERVER, runtimeId, userRole, subject);
+
+                            yield handleDispatcherConnection(dispatcherConnection)
+                                    .invoke(response -> dispatcherConnections.put(dispatcherConnection));
+                        } else {
+                            final var dispatcherConnection = new DispatcherConnection(webSocketConnection,
+                                    ConnectionTypeEnum.ROUTED, runtimeId, userRole, subject);
+
+                            yield routeDispatcherConnection(dispatcherConnection, poolServerUri)
+                                    .invoke(routed -> dispatcherConnections.put(dispatcherConnection));
+                        }
+                    }
+                })
+                .flatMap(result -> {
+                    if (!result) {
+                        return webSocketConnection.close(DispatcherCloseReason.ROOM_CONNECTION_FAILURE)
+                                .invoke(voidItem -> log.warn(
+                                        "Failed to transfer the dispatcher text message, id={}",
+                                        webSocketConnection.id()));
+                    } else {
+                        return Uni.createFrom().voidItem();
+                    }
+                });
+    }
+
+    Uni<PoolServerModel> getRuntimeServer(final Long runtimeId) {
         return findRuntimePoolServerContainerRef(runtimeId)
                 .flatMap(runtimePoolServerContainerRef -> {
                     final var poolId = runtimePoolServerContainerRef.getPoolId();
                     final var serverId = runtimePoolServerContainerRef.getServerId();
-                    return getPoolServer(poolId, serverId)
-                            .flatMap(poolServer -> {
-                                final var webSocketConnection = request.getWebSocketConnection();
-                                return switch (poolServer.getQualifier()) {
-                                    case DOCKER_HOST -> {
-                                        final var poolServerUri = poolServer.getConfig().getServerUri();
-                                        final var thisServerUri = getConfigOperation
-                                                .getServiceConfig().index().serverUri();
-                                        if (poolServerUri.equals(thisServerUri)) {
-                                            log.info("Dispatcher connection was established, " +
-                                                            "id={}, userRole={}, clientId={}, runtimeId={}",
-                                                    webSocketConnection.id(), userRole, clientId, runtimeId);
-
-                                            yield addConnection(securityIdentity, webSocketConnection, runtimeId)
-                                                    .invoke(response -> dispatcherConnectionsContainer.put(
-                                                            webSocketConnection,
-                                                            DispatcherConnectionTypeEnum.SERVER));
-                                        } else {
-                                            log.info("Dispatcher connection was routed, id={}, " +
-                                                            "userRole={}, " +
-                                                            "clientId={}, " +
-                                                            "runtimeId={}, " +
-                                                            "targetServer={}",
-                                                    webSocketConnection.id(),
-                                                    userRole,
-                                                    clientId,
-                                                    runtimeId,
-                                                    poolServerUri);
-
-                                            yield routeConnection(webSocketConnection, poolServerUri)
-                                                    .invoke(response -> dispatcherConnectionsContainer.put(
-                                                            webSocketConnection,
-                                                            DispatcherConnectionTypeEnum.ROUTED));
-                                        }
-                                    }
-                                };
-                            });
+                    return getRuntimeServer(poolId, serverId);
                 });
     }
 
@@ -105,47 +100,31 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
                 .map(FindRuntimePoolServerContainerRefResponse::getRuntimePoolServerContainerRef);
     }
 
-    Uni<PoolServerModel> getPoolServer(final Long poolId,
-                                       final Long serverId) {
+    Uni<PoolServerModel> getRuntimeServer(final Long poolId,
+                                          final Long serverId) {
         final var request = new GetPoolServerRequest(poolId, serverId);
         return poolModule.getPoolService().getPoolServer(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
-    Uni<HandleOpenedConnectionResponse> addConnection(final SecurityIdentity securityIdentity,
-                                                      final WebSocketConnection webSocketConnection,
-                                                      final Long runtimeId) {
-        final var clientId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.CLIENT_ID.getAttributeName());
-        final var tokenId = securityIdentity
-                .<String>getAttribute(ServiceSecurityAttributesEnum.TOKEN_ID.getAttributeName());
-        final var userRole = securityIdentity
-                .<UserRoleEnum>getAttribute(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName());
+    Uni<Boolean> handleDispatcherConnection(final DispatcherConnection dispatcherConnection) {
+        final var userRole = dispatcherConnection.getUserRole();
 
-        final Uni<Void> createRoomUni;
         if (userRole.equals(UserRoleEnum.RUNTIME)) {
-            final var createRoomRequest = new CreateRoomRequest(runtimeId);
-            createRoomUni = dispatcherModule.getRoomService().createRoom(createRoomRequest)
-                    .replaceWithVoid();
+            final var createRoomRequest = new CreateRoomRequest(dispatcherConnection);
+            return dispatcherModule.getRoomService().createRoom(createRoomRequest)
+                    .map(CreateRoomResponse::getCreated);
         } else {
-            createRoomUni = Uni.createFrom().voidItem();
+            final var request = new AddPlayerConnectionRequest(dispatcherConnection);
+            return dispatcherModule.getRoomService().addPlayerConnection(request)
+                    .map(AddPlayerConnectionResponse::getAdded);
         }
-
-        final var request =
-                new com.omgservers.service.module.dispatcher.impl.service.roomService.dto.AddConnectionRequest(
-                        webSocketConnection,
-                        runtimeId,
-                        tokenId,
-                        userRole,
-                        clientId);
-        return createRoomUni.flatMap(voidItem -> dispatcherModule.getRoomService().addConnection(request))
-                .replaceWith(new HandleOpenedConnectionResponse());
     }
 
-    Uni<HandleOpenedConnectionResponse> routeConnection(final WebSocketConnection webSocketConnection,
-                                                        final URI serverUri) {
-        final var request = new RouteServerConnectionRequest(webSocketConnection, serverUri);
+    Uni<Boolean> routeDispatcherConnection(final DispatcherConnection dispatcherConnection,
+                                           final URI serverUri) {
+        final var request = new RouteServerConnectionRequest(dispatcherConnection, serverUri);
         return dispatcherModule.getRouterService().routeServerConnection(request)
-                .map(routeServerConnectionResponse -> new HandleOpenedConnectionResponse());
+                .map(RouteServerConnectionResponse::getRouted);
     }
 }

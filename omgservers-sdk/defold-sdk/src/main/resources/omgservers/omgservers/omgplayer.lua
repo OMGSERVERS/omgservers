@@ -453,6 +453,7 @@ omgplayer = {
 			local ws_connection = websocket.connect(connection_url, params, function(_, _, data)
 				if data.event == websocket.EVENT_DISCONNECTED then
 					print(socket.gettime() .. " [OMGSERVER] Websocket disconnected")
+					pprint(data.message)
 
 				elseif data.event == websocket.EVENT_CONNECTED then
 					print(socket.gettime() .. " [OMGSERVER] Websocket connected")

@@ -2,21 +2,23 @@ package com.omgservers.service.module.dispatcher.impl.service.dispatcherService.
 
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.module.dispatcher.DispatcherModule;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherCloseReason;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnectionsContainer;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnection;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleClosedConnectionRequest;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleClosedConnectionResponse;
-import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.components.DispatcherConnections;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemovePlayerConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemovePlayerConnectionResponse;
 import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveRoomRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.RemoveRoomResponse;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseClientConnectionRequest;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
-import io.quarkus.security.identity.SecurityIdentity;
-import io.quarkus.websockets.next.WebSocketConnection;
+import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseClientConnectionResponse;
+import io.quarkus.websockets.next.CloseReason;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -25,59 +27,62 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
 
     final DispatcherModule dispatcherModule;
 
-    final DispatcherConnectionsContainer dispatcherConnectionsContainer;
-    final SecurityIdentity securityIdentity;
+    final DispatcherConnections dispatcherConnections;
 
     @Override
-    public Uni<HandleClosedConnectionResponse> execute(
-            final HandleClosedConnectionRequest request) {
+    public Uni<Void> execute(final HandleClosedConnectionRequest request) {
         log.debug("Handle closed connection, request={}", request);
 
-        final var userRole = securityIdentity
-                .<UserRoleEnum>getAttribute(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName());
-        final var runtimeId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName());
-
         final var webSocketConnection = request.getWebSocketConnection();
+        final var closeReason = request.getCloseReason();
 
-        final var webSocketType = dispatcherConnectionsContainer.getType(webSocketConnection);
-        if (webSocketType.isPresent()) {
-            return (switch (webSocketType.get()) {
-                case ROUTED -> closeRoutedConnection(webSocketConnection)
-                        .invoke(handleClosedConnectionResponse -> log.info("Routed connection was closed, " +
-                                "id={}, userRole={}, runtimeId={}", webSocketConnection.id(), userRole, runtimeId));
-                case SERVER -> removeRoomConnection(userRole, runtimeId, webSocketConnection)
-                        .invoke(handleClosedConnectionResponse -> log.info("Dispatcher connection was closed, " +
-                                "id={}, userRole={}, runtimeId={}", webSocketConnection.id(), userRole, runtimeId));
-            });
+        final var dispatcherConnection = dispatcherConnections.get(webSocketConnection);
+        if (Objects.nonNull(dispatcherConnection)) {
+            return (switch (dispatcherConnection.getConnectionType()) {
+                case ROUTED -> closeRoutedConnection(dispatcherConnection, closeReason)
+                        .invoke(closed -> {
+                            if (closed) {
+                                log.info("Routed connection was closed, dispatcherConnection={}, closeReason={}",
+                                        dispatcherConnection,
+                                        closeReason.toString());
+                            }
+                        });
+                case SERVER -> handleDispatcherConnection(dispatcherConnection)
+                        .invoke(result -> {
+                            if (result) {
+                                log.info("Room connection was closed, dispatcherConnection={}", dispatcherConnection);
+                            }
+                        });
+            })
+                    .invoke(closed -> dispatcherConnections.remove(webSocketConnection))
+                    .replaceWithVoid();
+        } else {
+            log.error("Corresponding dispatcher connection was not found to handle text message, closing web socket " +
+                    "id={}", webSocketConnection.id());
+            return Uni.createFrom().voidItem();
         }
-
-        return Uni.createFrom().item(new HandleClosedConnectionResponse());
     }
 
-    Uni<HandleClosedConnectionResponse> closeRoutedConnection(final WebSocketConnection serverConnection) {
-        final var request = new CloseClientConnectionRequest(serverConnection,
-                DispatcherCloseReason.ROUTED_CONNECTION_CLOSED);
+    Uni<Boolean> closeRoutedConnection(final DispatcherConnection serverConnection,
+                                       final CloseReason closeReason) {
+        final var request = new CloseClientConnectionRequest(serverConnection, closeReason);
         return dispatcherModule.getRouterService().closeClientConnection(request)
-                .replaceWith(new HandleClosedConnectionResponse());
+                .map(CloseClientConnectionResponse::getClosed);
     }
 
-    Uni<HandleClosedConnectionResponse> removeRoomConnection(final UserRoleEnum userRole,
-                                                             final Long runtimeId,
-                                                             final WebSocketConnection serverConnection) {
-        final Uni<HandleClosedConnectionResponse> uni;
+    Uni<Boolean> handleDispatcherConnection(final DispatcherConnection dispatcherConnection) {
+        final var userRole = dispatcherConnection.getUserRole();
 
         if (userRole.equals(UserRoleEnum.RUNTIME)) {
+            final var runtimeId = dispatcherConnection.getRuntimeId();
+
             final var request = new RemoveRoomRequest(runtimeId);
-            uni = dispatcherModule.getRoomService().removeRoom(request)
-                    .replaceWith(new HandleClosedConnectionResponse());
+            return dispatcherModule.getRoomService().removeRoom(request)
+                    .map(RemoveRoomResponse::getRemoved);
         } else {
-            final var request = new RemoveConnectionRequest(serverConnection);
-            uni = dispatcherModule.getRoomService().removeConnection(request)
-                    .replaceWith(new HandleClosedConnectionResponse());
+            final var request = new RemovePlayerConnectionRequest(dispatcherConnection);
+            return dispatcherModule.getRoomService().removePlayerConnection(request)
+                    .map(RemovePlayerConnectionResponse::getRemoved);
         }
-
-        return uni;
     }
-
 }

@@ -1,8 +1,8 @@
 package com.omgservers.service.module.dispatcher.impl.service.routerService.impl.method.closeServerConnection;
 
-import com.omgservers.service.module.dispatcher.impl.service.routerService.component.RouterConnectionsContainer;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseServerConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseServerConnectionResponse;
+import com.omgservers.service.module.dispatcher.impl.service.routerService.impl.component.RoutedConnections;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -13,19 +13,20 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CloseServerConnectionMethodImpl implements CloseServerConnectionMethod {
 
-    final RouterConnectionsContainer routerConnectionsContainer;
+    final RoutedConnections routedConnections;
 
     @Override
-    public Uni<CloseServerConnectionResponse> closeServerConnection(CloseServerConnectionRequest request) {
+    public Uni<CloseServerConnectionResponse> closeServerConnection(final CloseServerConnectionRequest request) {
         log.debug("Close server connection, request={}", request);
 
         final var clientConnection = request.getClientConnection();
         final var closeReason = request.getCloseReason();
 
-        final var serverConnection = routerConnectionsContainer.remove(clientConnection);
+        final var serverConnection = routedConnections.removeClientConnection(clientConnection);
 
-        if (serverConnection.isOpen()) {
-            return serverConnection.close(closeReason)
+        final var webSocketConnection = serverConnection.getWebSocketConnection();
+        if (webSocketConnection.isOpen()) {
+            return webSocketConnection.close(closeReason)
                     .replaceWith(new CloseServerConnectionResponse(Boolean.TRUE));
         } else {
             return Uni.createFrom().item(new CloseServerConnectionResponse(Boolean.FALSE));

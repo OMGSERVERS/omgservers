@@ -1,6 +1,6 @@
 package com.omgservers.service.module.dispatcher.impl.service.routerService.dto;
 
-import io.quarkus.websockets.next.WebSocketConnection;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnection;
 import io.vertx.core.buffer.Buffer;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class TransferServerBinaryMessageRequest {
 
     @NotNull
-    WebSocketConnection serverConnection;
+    DispatcherConnection serverConnection;
 
     @NotNull
     Buffer buffer;

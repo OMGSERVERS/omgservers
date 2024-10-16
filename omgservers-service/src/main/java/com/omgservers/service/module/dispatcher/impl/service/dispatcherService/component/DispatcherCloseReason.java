@@ -4,11 +4,15 @@ import io.netty.handler.codec.http.websocketx.WebSocketCloseStatus;
 import io.quarkus.websockets.next.CloseReason;
 
 public class DispatcherCloseReason {
-    public static final CloseReason ROUTED_CONNECTION_CLOSED =
+    public static final CloseReason ROOM_CONNECTION_FAILURE =
             new CloseReason(WebSocketCloseStatus.NORMAL_CLOSURE.code(),
-                    "Routed connection was closed");
+                    "Connection to the room failed");
 
-    public static final CloseReason WEBSOCKET_CONNECTION_FAILED =
-            new CloseReason(WebSocketCloseStatus.ABNORMAL_CLOSURE.code(),
-                    "WebSocket connection failed");
+    public static final CloseReason MESSAGE_TRANSFER_FAILURE =
+            new CloseReason(WebSocketCloseStatus.NORMAL_CLOSURE.code(),
+                    "Failed to transfer the message");
+
+    public static final CloseReason ROOM_REMOVED =
+            new CloseReason(WebSocketCloseStatus.NORMAL_CLOSURE.code(),
+                    "Room was removed");
 }

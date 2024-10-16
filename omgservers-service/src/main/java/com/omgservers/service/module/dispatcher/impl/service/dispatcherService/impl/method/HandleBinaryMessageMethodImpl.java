@@ -1,18 +1,23 @@
 package com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method;
 
 import com.omgservers.service.module.dispatcher.DispatcherModule;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnectionsContainer;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherCloseReason;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnection;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleBinaryMessageRequest;
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleBinaryMessageResponse;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.components.DispatcherConnections;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.TransferRoomBinaryMessageRequest;
+import com.omgservers.service.module.dispatcher.impl.service.roomService.dto.TransferRoomBinaryMessageResponse;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.TransferServerBinaryMessageRequest;
+import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.TransferServerBinaryMessageResponse;
 import io.quarkus.websockets.next.CloseReason;
-import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
 import io.vertx.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -21,41 +26,47 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
 
     final DispatcherModule dispatcherModule;
 
-    final DispatcherConnectionsContainer dispatcherConnectionsContainer;
+    final DispatcherConnections dispatcherConnections;
 
     @Override
-    public Uni<HandleBinaryMessageResponse> execute(
-            final HandleBinaryMessageRequest request) {
+    public Uni<Void> execute(final HandleBinaryMessageRequest request) {
         log.trace("Handle binary message, request={}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var buffer = request.getBuffer();
 
-        final var webSocketType = dispatcherConnectionsContainer.getType(webSocketConnection);
-        if (webSocketType.isPresent()) {
-            return switch (webSocketType.get()) {
-                case ROUTED -> routeBinaryMessage(webSocketConnection, buffer);
-                case SERVER -> handleBinaryMessage(webSocketConnection, buffer);
-            };
+        final var dispatcherConnection = dispatcherConnections.get(webSocketConnection);
+        if (Objects.nonNull(dispatcherConnection)) {
+            return (switch (dispatcherConnection.getConnectionType()) {
+                case ROUTED -> transferServerBinaryMessage(dispatcherConnection, buffer);
+                case SERVER -> transferRoomBinaryMessage(dispatcherConnection, buffer);
+            }).flatMap(result -> {
+                if (!result) {
+                    return webSocketConnection.close(DispatcherCloseReason.MESSAGE_TRANSFER_FAILURE)
+                            .invoke(voidItem -> log.warn("Failed to transfer the dispatcher binary message, id={}",
+                                    webSocketConnection.id()));
+                } else {
+                    return Uni.createFrom().voidItem();
+                }
+            });
         } else {
-            return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR)
-                    .replaceWith(new HandleBinaryMessageResponse());
+            log.error("Corresponding dispatcher connection was not found to handle text message, closing web socket " +
+                    "id={}", webSocketConnection.id());
+            return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR);
         }
     }
 
-    Uni<HandleBinaryMessageResponse> routeBinaryMessage(final WebSocketConnection webSocketConnection,
-                                                        final Buffer buffer) {
-        final var request = new TransferServerBinaryMessageRequest(webSocketConnection, buffer);
+    Uni<Boolean> transferServerBinaryMessage(final DispatcherConnection dispatcherConnection,
+                                             final Buffer buffer) {
+        final var request = new TransferServerBinaryMessageRequest(dispatcherConnection, buffer);
         return dispatcherModule.getRouterService().transferServerBinaryMessage(request)
-                .replaceWith(new HandleBinaryMessageResponse());
+                .map(TransferServerBinaryMessageResponse::getTransferred);
     }
 
-    Uni<HandleBinaryMessageResponse> handleBinaryMessage(final WebSocketConnection webSocketConnection,
-                                                         final Buffer buffer) {
-        final var request =
-                new com.omgservers.service.module.dispatcher.impl.service.roomService.dto.HandleBinaryMessageRequest(
-                        webSocketConnection, buffer);
-        return dispatcherModule.getRoomService().handleBinaryMessage(request)
-                .replaceWith(new HandleBinaryMessageResponse());
+    Uni<Boolean> transferRoomBinaryMessage(final DispatcherConnection dispatcherConnection,
+                                           final Buffer buffer) {
+        final var request = new TransferRoomBinaryMessageRequest(dispatcherConnection, buffer);
+        return dispatcherModule.getRoomService().transferRoomBinaryMessage(request)
+                .map(TransferRoomBinaryMessageResponse::getHandled);
     }
 }

@@ -1,5 +1,6 @@
 package com.omgservers.service.module.dispatcher.impl.service.webService.impl;
 
+import com.omgservers.service.module.dispatcher.impl.operation.GetDispatcherHeaderOperation;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.DispatcherService;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleBinaryMessageRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleClosedConnectionRequest;
@@ -24,10 +25,15 @@ class WebServiceImpl implements WebService {
 
     final DispatcherService dispatcherService;
 
+    final GetDispatcherHeaderOperation getDispatcherHeaderOperation;
+
     @WithSpan
     @Override
     public Uni<Void> onOpen(final WebSocketConnection webSocketConnection) {
-        final var request = new HandleOpenedConnectionRequest(webSocketConnection);
+        final var runtimeId = getDispatcherHeaderOperation.getRuntimeId(webSocketConnection);
+        final var userRole = getDispatcherHeaderOperation.getUserRole(webSocketConnection);
+        final var subject = getDispatcherHeaderOperation.getSubject(webSocketConnection);
+        final var request = new HandleOpenedConnectionRequest(webSocketConnection, runtimeId, userRole, subject);
         return dispatcherService.handleOpenedConnection(request)
                 .replaceWithVoid();
     }

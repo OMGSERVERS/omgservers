@@ -1,6 +1,7 @@
 package com.omgservers.service.module.dispatcher.impl.service.routerService.impl;
 
 import com.omgservers.service.module.dispatcher.impl.service.routerService.RouterService;
+import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseClientConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseClientConnectionResponse;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseServerConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseServerConnectionResponse;
@@ -21,7 +22,6 @@ import com.omgservers.service.module.dispatcher.impl.service.routerService.impl.
 import com.omgservers.service.module.dispatcher.impl.service.routerService.impl.method.transferClientTextMessage.TransferClientTextMessageMethod;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.impl.method.transferServerBinaryMessage.TransferServerBinaryMessageMethod;
 import com.omgservers.service.module.dispatcher.impl.service.routerService.impl.method.transferServerTextMessage.TransferServerTextMessageMethod;
-import com.omgservers.service.module.dispatcher.impl.service.routerService.dto.CloseClientConnectionRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -44,12 +44,12 @@ class RouterServiceImpl implements RouterService {
 
     @Override
     public Uni<RouteServerConnectionResponse> routeServerConnection(@Valid final RouteServerConnectionRequest request) {
-        return routeServerConnectionMethod.routeServerConnection(request);
+        return routeServerConnectionMethod.execute(request);
     }
 
     @Override
     public Uni<CloseClientConnectionResponse> closeClientConnection(@Valid final CloseClientConnectionRequest request) {
-        return closeClientConnectionMethod.closeClientConnection(request);
+        return closeClientConnectionMethod.execute(request);
     }
 
     @Override
