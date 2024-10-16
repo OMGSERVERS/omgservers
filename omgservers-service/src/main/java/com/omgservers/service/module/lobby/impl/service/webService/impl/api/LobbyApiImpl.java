@@ -1,5 +1,6 @@
 package com.omgservers.service.module.lobby.impl.service.webService.impl.api;
 
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
 import com.omgservers.schema.module.lobby.DeleteLobbyResponse;
 import com.omgservers.schema.module.lobby.DeleteLobbyRuntimeRefRequest;
@@ -14,7 +15,6 @@ import com.omgservers.schema.module.lobby.SyncLobbyRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyResponse;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.lobby.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class LobbyApiImpl implements LobbyApi {
 

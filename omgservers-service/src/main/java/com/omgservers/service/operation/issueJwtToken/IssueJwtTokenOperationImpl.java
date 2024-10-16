@@ -1,6 +1,5 @@
 package com.omgservers.service.operation.issueJwtToken;
 
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
@@ -33,7 +32,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
                 .audience(issuer)
                 .subject(subject)
                 .expiresIn(SERVICE_TOKEN_DURATION)
-                .groups(InternalRoleEnum.SERVICE.getName())
+                .groups(UserRoleEnum.SERVICE.getName())
                 .sign();
 
         return jwtToken;

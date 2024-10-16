@@ -1,6 +1,6 @@
 package com.omgservers.service.module.tenant.impl.service.webService.impl.api;
 
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.tenant.tenant.DeleteTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.DeleteTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
@@ -9,6 +9,8 @@ import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestRequest;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestResponse;
 import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestRequest;
 import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestResponse;
 import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
@@ -47,8 +49,6 @@ import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestRequest;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
@@ -156,7 +156,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 class TenantApiImpl implements TenantApi {
 
     final WebService webService;

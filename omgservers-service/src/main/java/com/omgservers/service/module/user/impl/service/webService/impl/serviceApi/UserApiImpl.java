@@ -1,5 +1,6 @@
 package com.omgservers.service.module.user.impl.service.webService.impl.serviceApi;
 
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.schema.module.user.DeletePlayerRequest;
@@ -24,7 +25,6 @@ import com.omgservers.schema.module.user.UpdatePlayerAttributesRequest;
 import com.omgservers.schema.module.user.UpdatePlayerAttributesResponse;
 import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.user.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 class UserApiImpl implements UserApi {
 
     final HandleApiRequestOperation handleApiRequestOperation;

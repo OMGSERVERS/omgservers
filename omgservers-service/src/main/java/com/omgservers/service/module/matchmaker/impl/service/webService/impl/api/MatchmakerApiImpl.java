@@ -1,5 +1,6 @@
 package com.omgservers.service.module.matchmaker.impl.service.webService.impl.api;
 
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
@@ -60,7 +61,6 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.matchmaker.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -72,7 +72,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerApiImpl implements MatchmakerApi {
 

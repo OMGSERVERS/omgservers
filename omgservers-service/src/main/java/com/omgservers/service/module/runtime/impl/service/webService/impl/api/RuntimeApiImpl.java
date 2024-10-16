@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.service.webService.impl.api;
 
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.CountRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.runtime.DeleteRuntimeAssignmentRequest;
@@ -60,7 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeApiImpl implements RuntimeApi {
 
@@ -155,7 +155,8 @@ public class RuntimeApiImpl implements RuntimeApi {
     @Override
     public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
             final UpdateRuntimeAssignmentLastActivityRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::updateRuntimeAssignmentLastActivity);
+        return handleApiRequestOperation.handleApiRequest(log, request,
+                webService::updateRuntimeAssignmentLastActivity);
     }
 
     @Override

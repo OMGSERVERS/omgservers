@@ -1,5 +1,6 @@
 package com.omgservers.service.module.root.impl.service.webService.impl.api;
 
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.root.root.DeleteRootRequest;
 import com.omgservers.schema.module.root.root.DeleteRootResponse;
 import com.omgservers.schema.module.root.root.GetRootRequest;
@@ -16,7 +17,6 @@ import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsRequest;
 import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.root.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RootApiImpl implements RootApi {
 

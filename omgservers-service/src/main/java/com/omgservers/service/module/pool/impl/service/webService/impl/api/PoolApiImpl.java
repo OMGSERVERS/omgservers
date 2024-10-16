@@ -1,5 +1,6 @@
 package com.omgservers.service.module.pool.impl.service.webService.impl.api;
 
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.docker.StartDockerContainerRequest;
 import com.omgservers.schema.module.docker.StartDockerContainerResponse;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
@@ -38,7 +39,6 @@ import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerConta
 import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerResponse;
 import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
 import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -50,7 +50,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolApiImpl implements PoolApi {
 

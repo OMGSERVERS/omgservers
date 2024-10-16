@@ -1,5 +1,6 @@
 package com.omgservers.service.module.client.impl.service.webService.impl.api;
 
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.client.DeleteClientMatchmakerRefRequest;
 import com.omgservers.schema.module.client.DeleteClientMatchmakerRefResponse;
 import com.omgservers.schema.module.client.DeleteClientMessagesRequest;
@@ -34,7 +35,6 @@ import com.omgservers.schema.module.client.ViewClientMessagesRequest;
 import com.omgservers.schema.module.client.ViewClientMessagesResponse;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsResponse;
-import com.omgservers.schema.model.internalRole.InternalRoleEnum;
 import com.omgservers.service.module.client.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-@RolesAllowed({InternalRoleEnum.Names.SERVICE})
+@RolesAllowed({UserRoleEnum.Names.SERVICE})
 class ClientApiImpl implements ClientApi {
 
     final WebService webService;
