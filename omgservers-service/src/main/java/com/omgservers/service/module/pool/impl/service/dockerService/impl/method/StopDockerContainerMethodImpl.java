@@ -1,5 +1,6 @@
 package com.omgservers.service.module.pool.impl.service.dockerService.impl.method;
 
+import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
 import com.omgservers.schema.module.docker.StopDockerContainerResponse;
@@ -9,6 +10,8 @@ import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.net.URI;
 
 @Slf4j
 @ApplicationScoped
@@ -31,20 +34,41 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerClient = getDockerDaemonClientOperation.getClient(dockerDaemonUri);
 
-                    try {
-                        dockerClient.stopContainerCmd(containerName).exec();
-                        log.info("The container has been stopped, containerName={}, dockerDaemonUri={}",
-                                containerName, dockerDaemonUri);
-                        // TODO: get final the container logs
-                        dockerClient.removeContainerCmd(containerName).exec();
-                        log.info("The container has been removed, containerName={}, dockerDaemonUri={}",
-                                containerName, dockerDaemonUri);
-                        return new StopDockerContainerResponse(Boolean.TRUE);
-                    } catch (DockerException e) {
-                        log.warn("Failed to stop docker container, containerName={}, dockerDaemonUri={}, {}:{}",
-                                containerName, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
-                        return new StopDockerContainerResponse(Boolean.FALSE);
-                    }
+                    stopDockerContainer(dockerDaemonUri, dockerClient, containerName);
+                    // TODO: get final the container logs
+                    removeDockerContainer(dockerDaemonUri, dockerClient, containerName);
+
+                    return new StopDockerContainerResponse(Boolean.TRUE);
                 });
+    }
+
+    Boolean stopDockerContainer(final URI dockerDaemonUri,
+                                final DockerClient dockerClient,
+                                final String containerName) {
+        try {
+            dockerClient.stopContainerCmd(containerName).exec();
+            log.info("The container has been stopped, containerName={}, dockerDaemonUri={}",
+                    containerName, dockerDaemonUri);
+            return Boolean.TRUE;
+        } catch (DockerException e) {
+            log.warn("Failed to stop docker container, containerName={}, dockerDaemonUri={}, {}:{}",
+                    containerName, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
+            return Boolean.FALSE;
+        }
+    }
+
+    Boolean removeDockerContainer(final URI dockerDaemonUri,
+                                  final DockerClient dockerClient,
+                                  final String containerName) {
+        try {
+            dockerClient.removeContainerCmd(containerName).exec();
+            log.info("The container has been removed, containerName={}, dockerDaemonUri={}",
+                    containerName, dockerDaemonUri);
+            return Boolean.TRUE;
+        } catch (DockerException e) {
+            log.warn("Failed to remove docker container, containerName={}, dockerDaemonUri={}, {}:{}",
+                    containerName, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
+            return Boolean.FALSE;
+        }
     }
 }
