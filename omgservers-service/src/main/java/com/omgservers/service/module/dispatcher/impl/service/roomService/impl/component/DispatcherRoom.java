@@ -2,6 +2,7 @@ package com.omgservers.service.module.dispatcher.impl.service.roomService.impl.c
 
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherConnection;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -12,15 +13,20 @@ import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
+@ToString
 public class DispatcherRoom {
 
     @Getter
+    @ToString.Exclude
     final DispatcherConnection runtimeConnection;
 
     @Getter
     final Long runtimeId;
 
+    @ToString.Exclude
     final Map<Long, DispatcherConnection> indexBySubject;
+
+    @ToString.Exclude
     final Set<DispatcherConnection> playerConnections;
 
     public DispatcherRoom(final DispatcherConnection runtimeConnection) {
