@@ -30,8 +30,7 @@ class TransferClientTextMessageMethodImpl implements TransferClientTextMessageMe
             return Uni.createFrom().item(new TransferClientTextMessageResponse(Boolean.FALSE));
         }
 
-        final var webSocketConnection = serverConnection.getWebSocketConnection();
-        return webSocketConnection.sendText(message)
+        return serverConnection.sendText(message)
                 .replaceWith(new TransferClientTextMessageResponse(Boolean.TRUE));
     }
 }

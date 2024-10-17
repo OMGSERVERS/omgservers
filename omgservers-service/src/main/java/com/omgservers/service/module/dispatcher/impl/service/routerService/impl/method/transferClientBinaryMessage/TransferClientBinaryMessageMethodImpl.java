@@ -21,17 +21,16 @@ class TransferClientBinaryMessageMethodImpl implements TransferClientBinaryMessa
     public Uni<TransferClientBinaryMessageResponse> transferClientBinaryMessage(
             final TransferClientBinaryMessageRequest request) {
         final var clientConnection = request.getClientConnection();
-        final var message = request.getMessage();
+        final var buffer = request.getBuffer();
 
         final var serverConnection = routedConnections.getServerConnection(clientConnection);
 
         if (Objects.isNull(serverConnection)) {
-            log.warn("Server connection was not found to transfer binary message, id={}", clientConnection);
+            log.warn("Server connection was not found to transfer binary buffer, id={}", clientConnection);
             return Uni.createFrom().item(new TransferClientBinaryMessageResponse(Boolean.FALSE));
         }
 
-        final var webSocketConnection = serverConnection.getWebSocketConnection();
-        return webSocketConnection.sendBinary(message)
+        return serverConnection.sendBuffer(buffer)
                 .replaceWith(new TransferClientBinaryMessageResponse(Boolean.TRUE));
     }
 }

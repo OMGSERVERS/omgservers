@@ -3,6 +3,7 @@ package com.omgservers.service.module.dispatcher.impl.service.dispatcherService.
 import com.omgservers.schema.model.user.UserRoleEnum;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
+import io.vertx.core.buffer.Buffer;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -56,6 +57,11 @@ public class DispatcherConnection {
 
     public Uni<Void> sendBytes(final byte[] bytes) {
         return webSocketConnection.sendBinary(bytes)
+                .invoke(voidItem -> lastUsage.set(Instant.now()));
+    }
+
+    public Uni<Void> sendBuffer(final Buffer buffer) {
+        return webSocketConnection.sendBinary(buffer)
                 .invoke(voidItem -> lastUsage.set(Instant.now()));
     }
 

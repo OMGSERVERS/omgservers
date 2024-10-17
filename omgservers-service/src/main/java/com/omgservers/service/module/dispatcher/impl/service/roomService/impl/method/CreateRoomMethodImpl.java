@@ -27,12 +27,10 @@ class CreateRoomMethodImpl implements CreateRoomMethod {
         final var dispatcherRoom = new DispatcherRoom(runtimeConnection);
 
         if (Objects.isNull(dispatcherRooms.putIfAbsent(dispatcherRoom))) {
-            log.info("Room was created, runtimeId={}, runtimeConnection={}",
-                    dispatcherRoom.getRuntimeId(), runtimeConnection);
+            log.info("Room was created, room={}, runtimeConnection={}", dispatcherRoom, runtimeConnection);
             return Uni.createFrom().item(new CreateRoomResponse(Boolean.TRUE));
         } else {
-            log.warn("Room was already created, runtimeId={}, runtimeConnection={}",
-                    dispatcherRoom.getRuntimeId(), runtimeConnection);
+            log.warn("Room was already created, room={}, runtimeConnection={}", dispatcherRoom, runtimeConnection);
             return Uni.createFrom().item(new CreateRoomResponse(Boolean.FALSE));
         }
     }

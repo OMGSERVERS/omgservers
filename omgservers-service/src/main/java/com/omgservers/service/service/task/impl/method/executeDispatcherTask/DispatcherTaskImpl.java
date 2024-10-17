@@ -7,6 +7,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -16,6 +18,8 @@ public class DispatcherTaskImpl {
 
     public Uni<Boolean> execute() {
         return dispatcherModule.getDispatcherService().handleExpiredConnections(new HandleExpiredConnectionsRequest())
+                .repeat().withDelay(Duration.ofSeconds(1)).indefinitely()
+                .collect().last()
                 .replaceWith(Boolean.TRUE);
     }
 }
