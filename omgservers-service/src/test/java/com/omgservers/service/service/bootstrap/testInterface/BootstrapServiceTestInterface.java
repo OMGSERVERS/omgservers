@@ -59,14 +59,4 @@ public class BootstrapServiceTestInterface {
         bootstrapService.bootstrapDockerHost()
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
-
-    public void bootstrapRelayJob() {
-        bootstrapService.bootstrapRelayJob()
-                .await().atMost(Duration.ofSeconds(TIMEOUT));
-    }
-
-    public void bootstrapSchedulerJob() {
-        bootstrapService.bootstrapSchedulerJob()
-                .await().atMost(Duration.ofSeconds(TIMEOUT));
-    }
 }

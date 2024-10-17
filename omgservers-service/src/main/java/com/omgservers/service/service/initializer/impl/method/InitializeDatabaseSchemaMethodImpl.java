@@ -47,7 +47,7 @@ class InitializeDatabaseSchemaMethodImpl implements InitializeDatabaseSchemaMeth
 
     public void migrateShardsSchema(final String location) {
         final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
-        final var migrationConcurrency = getConfigOperation.getServiceConfig().initialization().schema().concurrency();
+        final var migrationConcurrency = getConfigOperation.getServiceConfig().initialization().databaseSchema().concurrency();
         final var migrationTasks = IntStream.range(0, shardCount)
                 .mapToObj(shard -> migrateShard(location, shard)).toList();
         Uni.join().all(migrationTasks).usingConcurrencyOf(migrationConcurrency)

@@ -41,7 +41,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
                 case SERVER -> transferRoomTextMessage(dispatcherConnection, message);
             }).flatMap(result -> {
                 if (!result) {
-                    return webSocketConnection.close(DispatcherCloseReason.MESSAGE_TRANSFER_FAILURE)
+                    return webSocketConnection.close(DispatcherCloseReason.TRANSFER_FAILED)
                             .invoke(voidItem -> log.warn("Failed to transfer the dispatcher text message, id={}",
                                     webSocketConnection.id()));
                 } else {

@@ -75,7 +75,7 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
                 })
                 .flatMap(result -> {
                     if (!result) {
-                        return webSocketConnection.close(DispatcherCloseReason.DISPATCHER_CONNECTION_FAILURE)
+                        return webSocketConnection.close(DispatcherCloseReason.CONNECTING_FAILED)
                                 .invoke(voidItem -> log.warn("Failed to open dispatcher connection, id={}",
                                         webSocketConnection.id()));
                     } else {

@@ -4,6 +4,7 @@ import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.c
 import io.quarkus.websockets.next.WebSocketConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,6 +15,10 @@ public class DispatcherConnections {
 
     public DispatcherConnections() {
         indexByWebSocketConnection = new ConcurrentHashMap<>();
+    }
+
+    public List<DispatcherConnection> getAll() {
+        return indexByWebSocketConnection.values().stream().toList();
     }
 
     public void put(final DispatcherConnection dispatcherConnection) {

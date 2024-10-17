@@ -2,6 +2,7 @@ package com.omgservers.service.module.dispatcher.impl.service.dispatcherService;
 
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleBinaryMessageRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleClosedConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleExpiredConnectionsRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleFailedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleOpenedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleTextMessageRequest;
@@ -19,4 +20,6 @@ public interface DispatcherService {
     Uni<Void> handleTextMessage(@Valid HandleTextMessageRequest request);
 
     Uni<Void> handleBinaryMessage(@Valid HandleBinaryMessageRequest request);
+
+    Uni<Void> handleExpiredConnections(@Valid HandleExpiredConnectionsRequest request);
 }

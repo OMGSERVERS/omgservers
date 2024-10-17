@@ -8,9 +8,13 @@ public class DispatcherCloseReason {
             new CloseReason(WebSocketCloseStatus.PROTOCOL_ERROR.code(),
                     "Failed to open the dispatcher connection");
 
-    public static final CloseReason MESSAGE_TRANSFER_FAILURE =
-            new CloseReason(WebSocketCloseStatus.NORMAL_CLOSURE.code(),
+    public static final CloseReason TRANSFER_FAILED =
+            new CloseReason(WebSocketCloseStatus.PROTOCOL_ERROR.code(),
                     "Failed to transfer the message");
+
+    public static final CloseReason IDLE_TIMED_OUT =
+            new CloseReason(WebSocketCloseStatus.PROTOCOL_ERROR.code(),
+                    "Connection timed out due to inactivity.");
 
     public static final CloseReason ROOM_REMOVED =
             new CloseReason(WebSocketCloseStatus.ENDPOINT_UNAVAILABLE.code(),

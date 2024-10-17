@@ -22,6 +22,8 @@ public interface ServiceConfig {
 
     BootstrapConfig bootstrap();
 
+    DispatcherConfig dispatcher();
+
     ClientsConfig clients();
 
     DockerConfig docker();
@@ -68,16 +70,32 @@ public interface ServiceConfig {
         String x5c();
     }
 
-    interface BootstrapRelayJobConfig {
+    interface InitializationDatabaseSchemaConfig {
+        boolean enabled();
+
+        int concurrency();
+    }
+
+    interface InitializationRelayJobConfig {
         boolean enabled();
 
         String interval();
     }
 
-    interface BootstrapSchedulerJobConfig {
+    interface InitializationSchedulerJobConfig {
         boolean enabled();
 
         String interval();
+    }
+
+    interface InitializationDispatcherJobConfig {
+        boolean enabled();
+
+        String interval();
+    }
+
+    interface DispatcherConfig {
+        long idleTimeout();
     }
 
     interface ClientsConfig {
@@ -104,11 +122,13 @@ public interface ServiceConfig {
     }
 
     interface InitializationConfig {
-        BootstrapSchemaConfig schema();
+        InitializationDatabaseSchemaConfig databaseSchema();
 
-        BootstrapRelayJobConfig relayJob();
+        InitializationRelayJobConfig relayJob();
 
-        BootstrapSchedulerJobConfig schedulerJob();
+        InitializationSchedulerJobConfig schedulerJob();
+
+        InitializationDispatcherJobConfig dispatcherJob();
     }
 
     interface BootstrapConfig {
@@ -131,12 +151,6 @@ public interface ServiceConfig {
         BootstrapDefaultPoolConfig defaultPool();
 
         BootstrapDockerHostConfig dockerHost();
-    }
-
-    interface BootstrapSchemaConfig {
-        boolean enabled();
-
-        int concurrency();
     }
 
     interface BootstrapIndexConfig {

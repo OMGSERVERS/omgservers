@@ -3,11 +3,13 @@ package com.omgservers.service.module.dispatcher.impl.service.dispatcherService.
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.DispatcherService;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleBinaryMessageRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleClosedConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleExpiredConnectionsRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleFailedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleOpenedConnectionRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleTextMessageRequest;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method.HandleBinaryMessageMethod;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method.HandleClosedConnectionMethod;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method.HandleExpiredConnectionsMethod;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method.HandleFailedConnectionMethod;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method.HandleOpenedConnectionMethod;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method.HandleTextMessageMethod;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DispatcherServiceImpl implements DispatcherService {
 
+    final HandleExpiredConnectionsMethod handleExpiredConnectionsMethod;
     final HandleOpenedConnectionMethod handleOpenedConnectionMethod;
     final HandleClosedConnectionMethod handleClosedConnectionMethod;
     final HandleFailedConnectionMethod handleFailedConnectionMethod;
@@ -30,32 +33,32 @@ class DispatcherServiceImpl implements DispatcherService {
     final HandleTextMessageMethod handleTextMessageMethod;
 
     @Override
-    public Uni<Void> handleOpenedConnection(
-            @Valid final HandleOpenedConnectionRequest request) {
+    public Uni<Void> handleOpenedConnection(@Valid final HandleOpenedConnectionRequest request) {
         return handleOpenedConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleClosedConnection(
-            @Valid final HandleClosedConnectionRequest request) {
+    public Uni<Void> handleClosedConnection(@Valid final HandleClosedConnectionRequest request) {
         return handleClosedConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleFailedConnection(
-            @Valid final HandleFailedConnectionRequest request) {
+    public Uni<Void> handleFailedConnection(@Valid final HandleFailedConnectionRequest request) {
         return handleFailedConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleTextMessage(
-            @Valid final HandleTextMessageRequest request) {
+    public Uni<Void> handleTextMessage(@Valid final HandleTextMessageRequest request) {
         return handleTextMessageMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleBinaryMessage(
-            @Valid final HandleBinaryMessageRequest request) {
+    public Uni<Void> handleBinaryMessage(@Valid final HandleBinaryMessageRequest request) {
         return handleBinaryMessageMethod.execute(request);
+    }
+
+    @Override
+    public Uni<Void> handleExpiredConnections(@Valid final HandleExpiredConnectionsRequest request) {
+        return handleExpiredConnectionsMethod.execute(request);
     }
 }

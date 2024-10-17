@@ -1,12 +1,13 @@
 package com.omgservers.service.event;
 
-import com.omgservers.service.event.body.internal.ServiceBootstrapRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
+import com.omgservers.service.event.body.internal.FailedClientDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
+import com.omgservers.service.event.body.internal.ServiceBootstrapRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
@@ -162,6 +163,7 @@ public enum EventQualifierEnum {
     VERSION_BUILDING_FINISHED(VersionBuildingFinishedEventBodyModel.class, false),
     RUNTIME_DEPLOYMENT_REQUESTED(RuntimeDeploymentRequestedEventBodyModel.class, false),
     INACTIVE_CLIENT_DETECTED(InactiveClientDetectedEventBodyModel.class, false),
+    FAILED_CLIENT_DETECTED(FailedClientDetectedEventBodyModel.class, false),
     INACTIVE_RUNTIME_DETECTED(InactiveRuntimeDetectedEventBodyModel.class, false),
     LOBBY_ASSIGNMENT_REQUESTED(LobbyAssignmentRequestedEventBodyModel.class, false),
     MATCHMAKER_ASSIGNMENT_REQUESTED(MatchmakerAssignmentRequestedEventBodyModel.class, false);

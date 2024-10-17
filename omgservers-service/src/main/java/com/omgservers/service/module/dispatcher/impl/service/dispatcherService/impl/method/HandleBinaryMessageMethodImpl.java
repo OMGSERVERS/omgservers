@@ -42,7 +42,7 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
                 case SERVER -> transferRoomBinaryMessage(dispatcherConnection, buffer);
             }).flatMap(result -> {
                 if (!result) {
-                    return webSocketConnection.close(DispatcherCloseReason.MESSAGE_TRANSFER_FAILURE)
+                    return webSocketConnection.close(DispatcherCloseReason.TRANSFER_FAILED)
                             .invoke(voidItem -> log.warn("Failed to transfer the dispatcher binary message, id={}",
                                     webSocketConnection.id()));
                 } else {

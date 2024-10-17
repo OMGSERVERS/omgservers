@@ -6,8 +6,6 @@ import com.omgservers.service.service.bootstrap.impl.method.bootstrapBuilderUser
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapDefaultPool.BootstrapDefaultPoolMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapDockerHost.BootstrapDockerHostMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapRegistryUser.BootstrapRegistryUserMethod;
-import com.omgservers.service.service.initializer.impl.method.InitializeRelayJobMethod;
-import com.omgservers.service.service.initializer.impl.method.InitializeSchedulerJobMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapServerIndex.BootstrapServerIndexMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapServiceRoot.BootstrapServiceRootMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapServiceUser.BootstrapServiceUserMethod;
@@ -23,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class BootstrapServiceImpl implements BootstrapService {
 
-    final InitializeSchedulerJobMethod initializeSchedulerJobMethod;
     final BootstrapRegistryUserMethod bootstrapRegistryUserMethod;
     final BootstrapBuilderUserMethod bootstrapBuilderUserMethod;
     final BootstrapServiceUserMethod bootstrapServiceUserMethod;
@@ -33,7 +30,6 @@ class BootstrapServiceImpl implements BootstrapService {
     final BootstrapServiceRootMethod bootstrapServiceRootMethod;
     final BootstrapDockerHostMethod bootstrapDockerHostMethod;
     final BootstrapAdminUserMethod bootstrapAdminUserMethod;
-    final InitializeRelayJobMethod initializeRelayJobMethod;
 
     @Override
     public Uni<Void> bootstrapServerIndex() {
@@ -78,15 +74,5 @@ class BootstrapServiceImpl implements BootstrapService {
     @Override
     public Uni<Void> bootstrapDockerHost() {
         return bootstrapDockerHostMethod.execute();
-    }
-
-    @Override
-    public Uni<Void> bootstrapRelayJob() {
-        return initializeRelayJobMethod.execute();
-    }
-
-    @Override
-    public Uni<Void> bootstrapSchedulerJob() {
-        return initializeSchedulerJobMethod.execute();
     }
 }
