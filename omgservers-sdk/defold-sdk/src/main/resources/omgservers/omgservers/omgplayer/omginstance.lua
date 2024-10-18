@@ -5,8 +5,8 @@ local omgclient = require("omgservers.omgplayer.omgclient")
 local omgdispatcher = require("omgservers.omgplayer.omgdispatcher")
 local omgprocess = require("omgservers.omgplayer.omgprocess")
 
-local omgmethods
-omgmethods = {
+local omginstance
+omginstance = {
 	config = nil,
 	http = nil,
 	events = nil,
@@ -107,4 +107,4 @@ omgmethods = {
 	end,
 }
 
-return omgmethods
+return omginstance
