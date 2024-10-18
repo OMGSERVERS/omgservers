@@ -39,7 +39,7 @@ omgprocess = {
 			iteration_timer = 0,
 			empty_iterations = 0,
 			faster_iterations = true,
-			interchang_requested = false,
+			interchange_requested = false,
 			version_id = nil,
 			version_created = nil,
 			-- Methods
@@ -132,9 +132,9 @@ omgprocess = {
 				if instance.iteration_timer > current_interval then
 					instance.iteration_timer = 0
 
-					if not instance.interchang_requested then
-						instance.interchang_requested = true
-						client:interchange(function() instance.interchang_requested = false end)
+					if not instance.interchange_requested then
+						instance.interchange_requested = true
+						client:interchange(function() instance.interchange_requested = false end)
 					end
 
 					local incoming_messages = client:pull_incoming_messages()
