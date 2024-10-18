@@ -8,6 +8,9 @@ omgplayer = {
 	init = function(self, options)
 		omgmethods:init(options)
 	end,
+	reset = function(self)
+		omgmethods:reset()
+	end,
 	sign_up = function(self)
 		omgmethods:sign_up()
 	end,

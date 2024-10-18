@@ -73,6 +73,9 @@ omgprocess = {
 					local runtime_id = incoming_message.body.runtime_id
 					local runtime_qualifier = incoming_message.body.runtime_qualifier
 
+					-- Close the dispatcher connection if it exists.
+					dispatcher:disconnect()
+					
 					if runtime_qualifier == omgconstants.LOBBY then
 						state:set_lobby_id(runtime_id)
 
@@ -112,7 +115,7 @@ omgprocess = {
 					
 				elseif message_qualifier == omgconstants.DISCONNECTION_REASON_MESSAGE then
 					local reason = incoming_message.body.reason
-					events:failed("client was diconnected by the server, reason=" .. reason)
+					events:failed("client was disconnected by the server, reason=" .. reason)
 					
 				end
 			end,

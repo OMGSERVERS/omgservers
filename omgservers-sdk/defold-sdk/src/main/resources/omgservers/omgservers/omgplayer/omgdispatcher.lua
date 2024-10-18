@@ -45,7 +45,7 @@ omgdispatcher = {
 
 					elseif data.event == websocket.EVENT_CONNECTED then
 						if debug_logging then
-							print(socket.gettime() .. " [OMGSERVER] Connected to the dispatcher")
+							print(socket.gettime() .. " [OMGSERVER] Player was connected to the dispatcher")
 						end
 						
 						if callback then
@@ -61,6 +61,16 @@ omgdispatcher = {
 				end)
 
 				instance.connection = connection
+			end,
+			disconnect = function(instance)
+				if instance.connection then
+					websocket.disconnect(instance.connection)
+					instance.connection = nil
+				else
+					if debug_logging then
+						print(socket.gettime() .. " [OMGSERVER] The connection to the dispatcher was not established, so there was nothing to disconnect.")
+					end
+				end
 			end,
 			send_text_message = function(instance, message)
 				assert(instance.connection, "The dispatcher must be connected")

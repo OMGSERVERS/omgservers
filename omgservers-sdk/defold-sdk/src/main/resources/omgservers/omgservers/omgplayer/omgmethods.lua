@@ -17,10 +17,17 @@ omgmethods = {
 	init = function(self, options)
 		assert(self, "The self must not be nil.")
 		assert(options, "The options must not be nil.")
-		assert(not self.config, "The player was already initialized.")
 
 		self.config = omgconfig:create(options)
+		self:reset()
+	end,
+	reset = function(self)
+		assert(self, "The self must not be nil.")
 
+		if self.dispatcher then
+			self.dispatcher:disconnect()
+		end
+		
 		self.http = omghttp:create({
 			config = self.config,
 		})
