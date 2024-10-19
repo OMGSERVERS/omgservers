@@ -1,5 +1,4 @@
 local omgconstants = require("omgservers.omgplayer.omgconstants")
-local omgstate = require("omgservers.omgplayer.omgstate")
 
 local omgprocess
 omgprocess = {
@@ -8,6 +7,7 @@ omgprocess = {
 		options = {
 			config, -- omgconfig instance
 			events, -- omgevents instance
+			state, -- omgstate instance
 			client, -- omgclient intance
 			dispatcher, -- omgdispatcher instance
 		},
@@ -19,6 +19,8 @@ omgprocess = {
 		assert(options.config.type == "omgconfig", "The type of config must be omgconfig")
 		assert(options.events, "The value events must not be nil.")
 		assert(options.events.type == "omgevents", "The type of events must be omgevents")
+		assert(options.state, "The value state must not be nil.")
+		assert(options.state.type == "omgstate", "The type of state must be omgstate")
 		assert(options.client, "The value client must not be nil.")
 		assert(options.client.type == "omgclient", "The type of client must be omgclient")
 		assert(options.dispatcher, "The value dispatcher must not be nil.")
@@ -29,10 +31,9 @@ omgprocess = {
 
 		local config = options.config
 		local events = options.events
+		local state = options.state
 		local client = options.client
 		local dispatcher = options.dispatcher
-
-		local state = omgstate:create({})
 		
 		return {
 			type = "omgprocess",
@@ -40,8 +41,6 @@ omgprocess = {
 			empty_iterations = 0,
 			faster_iterations = true,
 			interchange_requested = false,
-			version_id = nil,
-			version_created = nil,
 			-- Methods
 			handle = function(instance, incoming_message)
 				local message_qualifier = incoming_message.qualifier
@@ -55,19 +54,13 @@ omgprocess = {
 				-- So we trigger greeted event only when MATCHMAKER_ASSIGNMENT_MESSAGE and RUNTIME_ASSIGNMENT_MESSAGE were received
 
 				if message_qualifier == omgconstants.SERVER_WELCOME_MESSAGE then
-					local tenant_version_id = incoming_message.body.tenant_version_id
-					local tenant_version_created = incoming_message.body.tenant_version_created
-					instance.version_id = tenant_version_id
-					instance.version_created = tenant_version_created
+					local version_id = incoming_message.body.tenant_version_id
+					local version_created = incoming_message.body.tenant_version_created
+					state:welcome(version_id, version_created)
 
 				elseif message_qualifier == omgconstants.MATCHMAKER_ASSIGNMENT_MESSAGE then
 					local matchmaker_id = incoming_message.body.matchmaker_id
-					state:set_matchmaker_id(matchmaker_id)
-
-					if not state.greeted and state.lobby_id then
-						state:greet()
-						events:greeted(instance.version_id, instance.version_created)
-					end
+					state:assign_matchmaker(matchmaker_id)
 
 				elseif message_qualifier == omgconstants.RUNTIME_ASSIGNMENT_MESSAGE then
 					local runtime_id = incoming_message.body.runtime_id
@@ -77,23 +70,13 @@ omgprocess = {
 					dispatcher:disconnect()
 					
 					if runtime_qualifier == omgconstants.LOBBY then
-						state:set_lobby_id(runtime_id)
-
-						if state.greeted then
-							events:assigned(runtime_qualifier, runtime_id)
-						else
-							if state.matchmaker_id then
-								state:greet()
-								events:greeted(instance.version_id, instance.version_created)
-							end
-						end
+						state:assign_lobby(runtime_id)
 
 					elseif runtime_qualifier == omgconstants.MATCH then
-						state:set_match_id(runtime_id)
-						events:assigned(runtime_qualifier, runtime_id)
+						state:assign_match(runtime_id)
 
 					else
-						events:failed("an unknown runtime qualifier was assigned, runtime_qualifier=" .. runtime_qualifier)
+						state:fail("an unknown runtime qualifier was assigned, runtime_qualifier=" .. runtime_qualifier)
 					end
 
 				elseif message_qualifier == omgconstants.SERVER_OUTGOING_MESSAGE then
@@ -110,12 +93,12 @@ omgprocess = {
 							events:connection_upgraded(upgrade_protocol)
 						end)
 					else
-						events:failed("unsupported connection upgrade protocol, protocol=" .. upgrade_protocol)
+						state:fail("unsupported connection upgrade protocol, protocol=" .. upgrade_protocol)
 					end
 					
 				elseif message_qualifier == omgconstants.DISCONNECTION_REASON_MESSAGE then
 					local reason = incoming_message.body.reason
-					events:failed("client was disconnected by the server, reason=" .. reason)
+					state:fail("client was disconnected by the server, reason=" .. reason)
 					
 				end
 			end,

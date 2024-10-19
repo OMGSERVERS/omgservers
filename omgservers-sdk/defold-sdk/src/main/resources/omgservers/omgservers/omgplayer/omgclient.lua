@@ -7,8 +7,8 @@ omgclient = {
 		self,
 		options = {
 			config, -- omgconfig instance
+			state, -- omgstate instance
 			http, -- omghttp instance
-			events, -- omgevents instance
 		},
 	]]--
 	create = function(self, options)
@@ -16,8 +16,8 @@ omgclient = {
 		assert(options, "The options must not be nil.")
 		assert(options.config, "The value config must not be nil.")
 		assert(options.config.type == "omgconfig", "The type of config must be omgconfig")
-		assert(options.events, "The value events must not be nil.")
-		assert(options.events.type == "omgevents", "The type of events must be omgevents")
+		assert(options.state, "The value state must not be nil.")
+		assert(options.state.type == "omgstate", "The type of state must be omgstate")
 		assert(options.http, "The value http must not be nil.")
 		assert(options.http.type == "omghttp", "The type of http must be omghttp")
 
@@ -28,7 +28,7 @@ omgclient = {
 		local stage_id = options.config.stage_id
 		local stage_secret = options.config.stage_secret
 
-		local events = options.events
+		local state = options.state
 		local http = options.http
 		
 		local create_user_url = service_url .. "/omgservers/v1/entrypoint/player/request/create-user"
@@ -70,7 +70,7 @@ omgclient = {
 						inlined_body = json.encode(response_body)
 					end
 					
-					events:failed("user was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("user was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 				end
 
 				local retries = 2
@@ -113,7 +113,7 @@ omgclient = {
 						inlined_body = json.encode(decoded_body)
 					end
 					
-					events:failed("token was not received, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("token was not received, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 				end
 
 				local retries = 2
@@ -151,7 +151,7 @@ omgclient = {
 						inlined_body = json.encode(response_body)
 					end
 					
-					events:failed("client was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("client was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 				end
 
 				local retries = 2
@@ -191,7 +191,7 @@ omgclient = {
 						inlined_body = json.encode(response_body)
 					end
 					
-					events:failed("interchange failed, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("interchange failed, response_status=" .. response_status .. ", response_body=" .. inlined_body)
 				end
 
 				local retries = 4

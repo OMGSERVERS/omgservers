@@ -5,6 +5,7 @@ omgdispatcher = {
 		options = {
 			config, -- omgconfig instance
 			events, -- omgevents instance
+			state, -- omgstate instance
 		},
 	]]--
 	create = function(self, options)
@@ -14,11 +15,14 @@ omgdispatcher = {
 		assert(options.config.type == "omgconfig", "The type of config must be omgconfig")
 		assert(options.events, "The value events must not be nil.")
 		assert(options.events.type == "omgevents", "The type of events must be omgevents")
+		assert(options.state, "The value state must not be nil.")
+		assert(options.state.type == "omgstate", "The type of state must be omgstate")
 
 		local debug_logging = options.config.debug_logging
 		local service_url = options.config.service_url
 	
 		local events = options.events
+		local state = options.state
 		
 		local dispatcher_url = service_url .. "/omgservers/v1/entrypoint/dispatcher/connection"
 
@@ -53,7 +57,7 @@ omgdispatcher = {
 						end
 
 					elseif data.event == websocket.EVENT_ERROR then
-						events:failed("dispatcher failed, message=" .. data.message)
+						state:fail("dispatcher failed, message=" .. data.message)
 
 					elseif data.event == websocket.EVENT_MESSAGE then
 						events:message_received(data.message)
