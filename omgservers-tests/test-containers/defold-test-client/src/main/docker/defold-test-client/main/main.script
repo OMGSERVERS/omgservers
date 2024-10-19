@@ -28,9 +28,9 @@ local function handle_event(self, event)
 		self.client_id = client_id
 		
 	elseif event_qualifier == omgplayer.constants.GREETED then
-		local tenant_version_id = event_body.tenant_version_id
-		local tenant_version_created = event_body.tenant_version_created
-		print(socket.gettime() .. " [GAMECLIENT] Client was greeted, tenant_version_id=" .. tenant_version_id .. ", tenant_version_created=" .. tenant_version_created)
+		local version_id = event_body.version_id
+		local version_created = event_body.version_created
+		print(socket.gettime() .. " [GAMECLIENT] Client was greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
 		
 	elseif event_qualifier == omgplayer.constants.ASSIGNED then
 		local runtime_qualifier = event_body.runtime_qualifier
