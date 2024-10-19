@@ -169,8 +169,7 @@ services:
       - gateway
     environment:
       - DELAY=16
-      - EXTERNAL_URL=http://service:8080
-      - INTERNAL_URL=http://service:8080
+      - SERVICE_URL=http://service:8080
       - ADMIN_USER_ID=223221505901723648
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - SUPPORT_USER_ID=231928170708729857

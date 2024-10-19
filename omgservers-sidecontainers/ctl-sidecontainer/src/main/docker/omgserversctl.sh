@@ -20,12 +20,11 @@ help() {
     echo " omgserversctl environment printVariable <variable>"
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useEnvironment" ]; then
-    echo " omgserversctl environment useEnvironment <name> <external_url> <internal_url>"
+    echo " omgserversctl environment useEnvironment <name> <service_url>"
     if [ "$1" = "environment useEnvironment" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
-      echo "     - EXTERNAL_URL"
-      echo "     - INTERNAL_URL"
+      echo "     - SERVICE_URL"
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment usePublic" ]; then
@@ -33,8 +32,7 @@ help() {
     if [ "$1" = "environment usePublic" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
-      echo "     - EXTERNAL_URL"
-      echo "     - INTERNAL_URL"
+      echo "     - SERVICE_URL"
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocal" ]; then
@@ -42,8 +40,7 @@ help() {
     if [ "$1" = "environment useLocal" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
-      echo "     - EXTERNAL_URL"
-      echo "     - INTERNAL_URL"
+      echo "     - SERVICE_URL"
     fi
   fi
   # Admin
@@ -328,27 +325,25 @@ environment_printVariable() {
 
 environment_useEnvironment() {
   ENVIRONMENT_NAME=$1
-  EXTERNAL_URL=$2
-  INTERNAL_URL=$3
+  SERVICE_URL=$2
 
-  if [ -z "${ENVIRONMENT_NAME}" -o -z "${EXTERNAL_URL}" -o -z "${INTERNAL_URL}" ]; then
+  if [ -z "${ENVIRONMENT_NAME}" -o -z "${SERVICE_URL}" ]; then
     help "environment useEnvironment"
     exit 1
   fi
 
   echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-  echo "export OMGSERVERSCTL_EXTERNAL_URL=${EXTERNAL_URL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-  echo "export OMGSERVERSCTL_INTERNAL_URL=${INTERNAL_URL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_SERVICE_URL=${SERVICE_URL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=${ENVIRONMENT_NAME}, EXTERNAL_URL=${EXTERNAL_URL}, INTERNAL_URL=${INTERNAL_URL}"
+  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=${ENVIRONMENT_NAME}, SERVICE_URL=${SERVICE_URL}"
 }
 
 environment_usePublic() {
-  environment_useEnvironment public https://api.omgservers.com https://api.omgservers.com
+  environment_useEnvironment public https://api.omgservers.com
 }
 
 environment_useLocal() {
-  environment_useEnvironment local http://localhost:8080 http://localhost:8080
+  environment_useEnvironment local http://localhost:8080
   admin_useCredentials 223221505901723648 admin
   support_useCredentials 231928170708729857 support
 }
@@ -407,7 +402,7 @@ admin_createToken() {
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, ADMIN_USER=${ADMIN_USER}"
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/admin/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/admin/request/create-token"
   REQUEST="{\"user_id\": \"${ADMIN_USER}\", \"password\": \"${ADMIN_PASSWORD}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -494,7 +489,7 @@ support_createToken() {
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, SUPPORT_USER=$SUPPORT_USER"
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-token"
   REQUEST="{\"user_id\": \"${SUPPORT_USER}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -537,7 +532,7 @@ support_createTenant() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-tenant"
   REQUEST="{}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -587,7 +582,7 @@ support_deleteTenant() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-tenant"
   REQUEST="{\"tenant_id\": \"${TENANT}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -641,7 +636,7 @@ support_createProject() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-project"
   REQUEST="{\"tenant_id\": ${TENANT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT}.json"
 
@@ -707,7 +702,7 @@ support_deleteProject() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-project"
   REQUEST="{\"tenant_id\": \"${TENANT}\", \"project_id\": ${PROJECT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT}_${PROJECT}.json"
 
@@ -755,7 +750,7 @@ support_createDeveloper() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-developer"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-developer"
   REQUEST="{}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -821,7 +816,7 @@ support_createTenantPermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-tenant-permissions"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-tenant-permissions"
   REQUEST="{\"tenant_id\": ${TENANT}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-permissions_${TENANT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -872,7 +867,7 @@ support_deleteTenantPermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-permissions"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-permissions"
   REQUEST="{\"tenant_id\": ${TENANT}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-permissions_${TENANT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -925,7 +920,7 @@ support_createProjectPermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-project-permissions"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-project-permissions"
   REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -978,7 +973,7 @@ support_deleteProjectPermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-project-permissions"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-project-permissions"
   REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1031,7 +1026,7 @@ support_createStagePermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/create-stage-permissions"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-stage-permissions"
   REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1084,7 +1079,7 @@ support_deleteStagePermission() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/support/request/delete-stage-permissions"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-stage-permissions"
   REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1165,7 +1160,7 @@ developer_createToken() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-token"
   REQUEST="{\"user_id\": \"${DEVELOPER_USER}\", \"password\": \"${DEVELOPER_PASSWORD}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-token_${DEVELOPER_USER}.json"
 
@@ -1217,7 +1212,7 @@ developer_getTenantDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard"
   REQUEST="{\"tenant_id\": ${TENANT}}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1262,7 +1257,7 @@ developer_createProject() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-project"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-project"
   REQUEST="{\"tenant_id\": ${TENANT}}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1330,7 +1325,7 @@ developer_getProjectDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-project-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-project-dashboard"
   REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1377,7 +1372,7 @@ developer_deleteProject() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-project"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-project"
   REQUEST="{\"tenant_id\": \"${TENANT}\", \"project_id\": \"${PROJECT}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-project_${TENANT}_${PROJECT}.json"
 
@@ -1436,7 +1431,7 @@ developer_createStage() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-stage"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-stage"
   REQUEST="{\"tenant_id\": ${TENANT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-stage_${TENANT}_${PROJECT}.json"
 
@@ -1498,7 +1493,7 @@ developer_getStageDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-stage-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-stage-dashboard"
   REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT}_${STAGE}.json"
 
@@ -1546,7 +1541,7 @@ developer_deleteStage() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-stage"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-stage"
   REQUEST="{\"tenant_id\": \"${TENANT}\", \"stage_id\": \"${STAGE}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-stage_${TENANT}_${STAGE}.json"
 
@@ -1619,7 +1614,7 @@ developer_createVersion() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-version"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-version"
   REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"config\": ${CONFIG}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT}_${STAGE}.json"
 
@@ -1685,7 +1680,7 @@ developer_uploadFilesArchive() {
 
   popd >> /dev/null
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/upload-files-archive"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/upload-files-archive"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1740,7 +1735,7 @@ developer_getVersionDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-version-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-version-dashboard"
   REQUEST="{\"tenant_id\": ${TENANT}, \"version_id\": ${VERSION}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT}_${VERSION}.json"
 
@@ -1788,7 +1783,7 @@ developer_deleteVersion() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-version"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-version"
   REQUEST="{\"tenant_id\": \"${TENANT}\", \"version_id\": \"${VERSION}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-tenant-version_${TENANT}_${VERSION}.json"
 
@@ -1849,7 +1844,7 @@ developer_deployVersion() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/deploy-version"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/deploy-version"
   REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"version_id\": ${VERSION}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT}_${STAGE}_${VERSION}.json"
 
@@ -1904,7 +1899,7 @@ developer_getDeploymentDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_EXTERNAL_URL}/omgservers/v1/entrypoint/developer/request/get-deployment-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-deployment-dashboard"
   REQUEST="{\"tenant_id\": ${TENANT}, \"deployment_id\": ${DEPLOYMENT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-deployment-dashboard_${TENANT}_${DEPLOYMENT}.json"
 
@@ -1952,7 +1947,7 @@ developer_deleteDeployment() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-deployment"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-deployment"
   REQUEST="{\"tenant_id\": \"${TENANT}\", \"id\": \"${DEPLOYMENT}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-deployment_${TENANT}_${DEPLOYMENT}.json"
 
@@ -2002,7 +1997,7 @@ developer_createLobbyRequest() {
   fi
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-lobby-request"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-lobby-request"
   REQUEST="{\"tenant_id\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2044,7 +2039,7 @@ developer_deleteLobby() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-lobby"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-lobby"
   REQUEST="{\"lobby_id\": \"${LOBBY_ID}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-lobby_${LOBBY_ID}.json"
 
@@ -2094,7 +2089,7 @@ developer_createMatchmakerRequest() {
   fi
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/create-matchmaker-request"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-matchmaker-request"
   REQUEST="{\"tenant_id\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2135,7 +2130,7 @@ developer_deleteMatchmaker() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_INTERNAL_URL}/omgservers/v1/entrypoint/developer/request/delete-matchmaker"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-matchmaker"
   REQUEST="{\"matchmaker_id\": \"${MATCHMAKER_ID}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-matchmaker_${MATCHMAKER_ID}.json"
 
