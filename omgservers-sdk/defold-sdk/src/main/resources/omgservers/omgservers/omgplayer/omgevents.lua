@@ -46,12 +46,12 @@ omgevents = {
 				}
 				instance:add_event(event)
 			end,
-			greeted = function(instance, tenant_version_id, tenant_version_created)
+			greeted = function(instance, version_id, version_created)
 				local event = {
 					qualifier = omgconstants.GREETED,
 					body = {
-						tenant_version_id = tenant_version_id,
-						tenant_version_created = tenant_version_created,
+						version_id = version_id,
+						version_created = version_created,
 					},
 				}
 				instance:add_event(event)

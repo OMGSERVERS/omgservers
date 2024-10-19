@@ -19,8 +19,8 @@ public class ServerWelcomeMessageBodyDto extends MessageBodyDto {
     Long tenantId;
 
     @NotNull
-    Long tenantVersionId;
+    Long versionId;
 
     @NotNull
-    Instant tenantVersionCreated;
+    Instant versionCreated;
 }
