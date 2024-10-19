@@ -11,10 +11,7 @@ local function handle_event(self, event)
 	local event_qualifier = event.qualifier
 	local event_body = event.body
 
-	if event_qualifier == omgplayer.constants.INITIALIZED then
-		omgplayer:sign_up()
-
-	elseif event_qualifier == omgplayer.constants.SIGNED_UP then
+	if event_qualifier == omgplayer.constants.SIGNED_UP then
 		local user_id = event_body.user_id
 		local password = event_body.password
 		print(socket.gettime() .. " [GAMECLIENT] User was created, user_id=" .. user_id)
@@ -72,6 +69,7 @@ function init(self)
 		debug_logging = true,
 	}
 	omgplayer:init(options)
+	omgplayer:sign_up()
 end
 
 function update(self, dt)

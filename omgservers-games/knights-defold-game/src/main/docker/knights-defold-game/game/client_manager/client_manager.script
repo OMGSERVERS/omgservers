@@ -4,10 +4,6 @@ local omgplayer = require("omgservers.omgplayer.omgplayer")
 
 local CORE_MANAGER = "core_manager#core_manager"
 
-local function initialized(self)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Client was initialized")
-end
-
 local function sign_up(self)
 	print(socket.gettime() .. " [CLIENT_MANAGER] Signing up was requested")
 	omgplayer:sign_up()
@@ -78,10 +74,7 @@ local function handle_client_event(self, event)
 	local event_qualifier = event.qualifier
 	local event_body = event.body
 
-	if event_qualifier == omgplayer.constants.INITIALIZED then
-		initialized(self)
-
-	elseif event_qualifier == omgplayer.constants.SIGNED_UP then
+	if event_qualifier == omgplayer.constants.SIGNED_UP then
 		local user_id = event_body.user_id 
 		local password = event_body.password
 		signed_up(self, user_id, password)
