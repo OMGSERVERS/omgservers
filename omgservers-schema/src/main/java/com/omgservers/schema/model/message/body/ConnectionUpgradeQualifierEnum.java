@@ -2,7 +2,7 @@ package com.omgservers.schema.model.message.body;
 
 public enum ConnectionUpgradeQualifierEnum {
     /**
-     * If websocket upgrade client connection takes place.
+     * Upgrade the player's connection with the help of the dispatcher service.
      */
-    WEBSOCKET;
+    DISPATCHER;
 }

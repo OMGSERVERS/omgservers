@@ -74,7 +74,7 @@ public class LobbyUpgradeConnectionIT extends BaseTestClass {
 
             assertEquals(testClient.getClientId(),
                     ((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getClientId());
-            assertEquals(ConnectionUpgradeQualifierEnum.WEBSOCKET,
+            assertEquals(ConnectionUpgradeQualifierEnum.DISPATCHER,
                     ((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getProtocol());
             assertNotNull(((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig());
             assertNotNull(((ConnectionUpgradeMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig()

@@ -85,7 +85,7 @@ omgprocess = {
 
 				elseif message_qualifier == omgconstants.CONNECTION_UPGRADE_MESSAGE then
 					local upgrade_protocol = incoming_message.body.protocol
-					if upgrade_protocol == omgconstants.WEBSOCKET_PROTOCOL then
+					if upgrade_protocol == omgconstants.DISPATCHER_PROTOCOL then
 						local web_socket_config = incoming_message.body.web_socket_config
 						local ws_token = web_socket_config.ws_token
 

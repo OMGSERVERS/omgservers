@@ -36,7 +36,7 @@ omgserver = {
 		STOP_MATCHMAKING = "STOP_MATCHMAKING",
 		UPGRADE_CONNECTION = "UPGRADE_CONNECTION",
 		-- Websockets protocol
-		WEBSOCKET_PROTOCOL = "WEBSOCKET",
+		DISPATCHER_PROTOCOL = "DISPATCHER",
 		BASE64_ENCODED = "B64",
 		PLAIN_TEXT = "TXT",
 	},
@@ -499,7 +499,7 @@ return {
 				qualifier = omgserver.constants.UPGRADE_CONNECTION,
 				body = {
 					client_id = client_id,
-					protocol = omgserver.constants.WEBSOCKET_PROTOCOL,
+					protocol = omgserver.constants.DISPATCHER_PROTOCOL,
 				},
 			})
 		end,

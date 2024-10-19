@@ -84,7 +84,7 @@ public class UpgradeConnectionOutgoingCommandExecutor implements OutgoingCommand
                 final var webSocketConfig = new ConnectionUpgradeMessageBodyDto.WebSocketConfig(wsToken);
                 final var messageBody = ConnectionUpgradeMessageBodyDto.builder()
                         .clientId(clientId)
-                        .protocol(ConnectionUpgradeQualifierEnum.WEBSOCKET)
+                        .protocol(ConnectionUpgradeQualifierEnum.DISPATCHER)
                         .webSocketConfig(webSocketConfig)
                         .build();
                 final var clientMessage = clientMessageModelFactory.create(clientId,
