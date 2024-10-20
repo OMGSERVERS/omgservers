@@ -67,7 +67,7 @@ public class MatchUpgradeConnectionIT extends BaseTestClass {
                                                 qualifier = "UPGRADE_CONNECTION",
                                                 body = {
                                                     client_id = command_body.client_id,
-                                                    protocol = "WEBSOCKET",
+                                                    protocol = "DISPATCHER",
                                                 }
                                             }
                                         }

@@ -82,7 +82,8 @@ end
 function init(self)
 	local options = {
 		handler = function(event) handle_server_event(self, event) end,
-		debug = true
+		debug = true,
+		trace = true,
 	}
 	omgserver:start(options)
 end

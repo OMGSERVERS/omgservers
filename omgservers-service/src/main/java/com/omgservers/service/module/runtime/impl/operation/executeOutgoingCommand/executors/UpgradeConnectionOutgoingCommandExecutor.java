@@ -79,7 +79,7 @@ public class UpgradeConnectionOutgoingCommandExecutor implements OutgoingCommand
                                 final Long clientId,
                                 final UpgradeConnectionQualifierEnum protocol) {
         return switch (protocol) {
-            case WEBSOCKET -> {
+            case DISPATCHER -> {
                 final var wsToken = issueJwtTokenOperation.issueWsJwtToken(clientId, runtimeId, UserRoleEnum.PLAYER);
                 final var webSocketConfig = new ConnectionUpgradeMessageBodyDto.WebSocketConfig(wsToken);
                 final var messageBody = ConnectionUpgradeMessageBodyDto.builder()
