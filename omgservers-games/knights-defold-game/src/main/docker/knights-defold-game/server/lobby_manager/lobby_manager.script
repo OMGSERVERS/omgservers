@@ -4,7 +4,7 @@ local profile_wrapper = require("server.runtime_utils.profile_wrapper")
 local global_counter = require("server.lobby_manager.global_counter")
 local server_messages = require("common.server_messages")
 local game_messages = require("common.game_messages")
-local omgserver = require("omgservers.omgserver")
+local omgserver = require("omgservers.omgserver.omgserver")
 
 local DEFAULT_GAME_MODE = "death-match"
 
@@ -32,7 +32,7 @@ local function handle_command_received_message(self, message)
 			local wrapped_profile = profile_wrapper:create(player_nickname)
 			profiles_container:add_profile(client_id, wrapped_profile)
 
-			omgserver.service_commands:set_profile(client_id, wrapped_profile.profile)
+			omgserver:set_profile(client_id, wrapped_profile.profile)
 		end
 		
 
@@ -53,7 +53,7 @@ local function handle_command_received_message(self, message)
 			local wrapped_profile = profiles_container:get_profile(client_id)
 			if wrapped_profile then
 				local server_message = server_messages:create_set_profile_message(wrapped_profile.profile)
-				omgserver.service_commands:respond_client(client_id, json.encode(server_message))
+				omgserver:respond_client(client_id, json.encode(server_message))
 			else
 				print(socket.gettime() .. " [LOBBY_MANAGER] Profile was not found while handling request_profile message, client_id=" .. client_id)
 			end
@@ -68,12 +68,12 @@ local function handle_command_received_message(self, message)
 			if new_nickname and current_nickname ~= new_nickname then
 				wrapped_profile:change_nickname(new_nickname)
 
-				omgserver.service_commands:set_profile(client_id, wrapped_profile.profile)
+				omgserver:set_profile(client_id, wrapped_profile.profile)
 				local set_profile_message = server_messages:create_set_profile_message(wrapped_profile.profile)
-				omgserver.service_commands:respond_client(client_id, json.encode(set_profile_message))
+				omgserver:respond_client(client_id, json.encode(set_profile_message))
 			end
 
-			omgserver.service_commands:request_matchmaking(client_id, DEFAULT_GAME_MODE)
+			omgserver:request_matchmaking(client_id, DEFAULT_GAME_MODE)
 		else
 			print(socket.gettime() .. " [LOBBY_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))
 		end

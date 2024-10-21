@@ -134,7 +134,6 @@ omgclient = {
 					local client_id = response_body.client_id
 					instance.client_id = client_id
 					instance.client_messages = omgmessages:create({})
-					instance.active = true
 
 					if debug_logging then
 						print(socket.gettime() .. " [OMGPLAYER] Server client was created, client_id=" .. client_id)

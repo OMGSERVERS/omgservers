@@ -32,8 +32,10 @@ omgconfig = {
 		local faster_interval = options.faster_interval or 0.5
 		local iterations_threshold = options.iterations_threshold or 12
 
-		assert(faster_interval < default_interval, "The fast interval must be less than the default.")
+		assert(default_interval > 0, "The default interval must be greater than zero.")
+		assert(faster_interval > 0, "The faster interval must be greater than zero.")
 		assert(iterations_threshold > 0, "The iteration threshold must be greater than zero.")
+		assert(faster_interval < default_interval, "The faster interval must be less than the default.")
 		
 		local instance = {
 			type = "omgconfig",

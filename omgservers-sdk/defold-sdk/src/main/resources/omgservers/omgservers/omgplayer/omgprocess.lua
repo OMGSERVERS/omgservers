@@ -103,6 +103,10 @@ omgprocess = {
 				end
 			end,
 			interchange = function(instance, dt)
+				if not client:fully_fledged() then
+					return
+				end
+				
 				local iteration_timer = instance.iteration_timer + dt
 
 				local current_interval
@@ -154,9 +158,7 @@ omgprocess = {
 				end
 			end,
 			update = function(instance, dt)
-				if client:fully_fledged() then
-					instance:interchange(dt)
-				end
+				instance:interchange(dt)
 				events:update()
 			end
 		}

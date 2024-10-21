@@ -1,5 +1,5 @@
 local runtime_messages = require("server.runtime_utils.runtime_messages")
-local omgserver = require("omgservers.omgserver")
+local omgserver = require("omgservers.omgserver.omgserver")
 
 local LOBBY_MANAGER = "lobby_manager#lobby_manager"
 local MATCH_MANAGER = "match_manager#match_manager"
@@ -50,8 +50,8 @@ local function handle_server_event(self, event)
 		server_started(self, runtime_qualifier)
 		
 	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED then
-		local command_qualifier = event_body.command_qualifier
-		local command_body = event_body.command_body
+		local command_qualifier = event_body.qualifier
+		local command_body = event_body.body
 		command_received(self, command_qualifier, command_body)
 		
 	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED then
@@ -64,10 +64,12 @@ end
 
 function init(self)
 	local options = {
-		handler = function(event) handle_server_event(self, event) end,
-		debug = true,
+		event_handler = function(event) handle_server_event(self, event) end,
+		debug_logging = true,
+		trace_logging = true,
 	}
-	omgserver:start(options)
+	omgserver:init(options)
+	omgserver:start()
 end
 
 function update(self, dt)
