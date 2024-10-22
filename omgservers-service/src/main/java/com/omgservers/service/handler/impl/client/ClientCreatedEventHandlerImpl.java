@@ -97,8 +97,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> handleEvent(final ClientModel client,
                              final TenantVersionModel tenantVersion,
                              final String idempotencyKey) {
-        log.info("Client was created, id={}, tenantVersion={}/{}",
-                client.getId(), tenantVersion.getTenantId(), tenantVersion.getId());
+        log.info("Created, {}", client);
         return syncWelcomeMessage(client, tenantVersion, idempotencyKey)
                 .flatMap(created -> requestLobbyAssignment(client, idempotencyKey))
                 .flatMap(created -> requestMatchmakerAssignment(client, idempotencyKey));

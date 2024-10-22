@@ -22,7 +22,7 @@ class ViewTenantStagesMethodImpl implements ViewTenantStagesMethod {
 
     @Override
     public Uni<ViewTenantStagesResponse> execute(final ViewTenantStagesRequest request) {
-        log.debug("View stages, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

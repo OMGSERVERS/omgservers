@@ -31,7 +31,7 @@ class OAuth2MethodImpl implements OAuth2Method {
 
     @Override
     public Uni<OAuth2RegistryResponse> oAuth2(final OAuth2RegistryRequest request) {
-        log.info("OAuth2, request={}", request);
+        log.info("Requested, {}", request);
 
         final var grantType = request.getGrantType();
         if (grantType.equals("refresh_token")) {

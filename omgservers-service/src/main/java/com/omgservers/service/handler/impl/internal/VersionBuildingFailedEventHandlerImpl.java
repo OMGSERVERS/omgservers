@@ -42,7 +42,7 @@ public class VersionBuildingFailedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(tenantVersion -> {
-                    log.info("Version building was failed, tenantVersion={}/{}", tenantId, tenantVersionId);
+                    log.info("Building failed, {}", tenantVersion);
 
                     return deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId, tenantVersionId);
                 })

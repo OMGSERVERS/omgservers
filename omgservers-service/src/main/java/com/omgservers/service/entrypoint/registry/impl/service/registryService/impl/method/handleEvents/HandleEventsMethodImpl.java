@@ -26,7 +26,7 @@ class HandleEventsMethodImpl implements HandleEventsMethod {
 
     @Override
     public Uni<Void> handleEvents(final HandleEventsRegistryRequest request) {
-        log.info("Handle events, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var events = request.getEvents();
         return Multi.createFrom().iterable(events)

@@ -23,7 +23,7 @@ class DeletePoolServerContainerMethodImpl implements DeletePoolServerContainerMe
     @Override
     public Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(
             final DeletePoolServerContainerRequest request) {
-        log.debug("Delete pool server container, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var poolId = request.getPoolId();
         final var serverId = request.getServerId();

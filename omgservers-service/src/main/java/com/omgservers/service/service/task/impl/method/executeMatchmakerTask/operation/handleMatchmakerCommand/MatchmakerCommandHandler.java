@@ -1,9 +1,9 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand;
 
-import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 
 public interface MatchmakerCommandHandler {
 
@@ -21,7 +21,7 @@ public interface MatchmakerCommandHandler {
      * @param changeOfState     container for state changes
      * @param matchmakerCommand matchmaker command to process by this handler
      */
-    void handle(MatchmakerStateModel currentState,
-                MatchmakerChangeOfStateModel changeOfState,
+    void handle(MatchmakerStateDto currentState,
+                MatchmakerChangeOfStateDto changeOfState,
                 MatchmakerCommandModel matchmakerCommand);
 }

@@ -22,7 +22,7 @@ class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
 
     @Override
     public Uni<DeleteLobbyResponse> deleteLobby(final DeleteLobbyRequest request) {
-        log.debug("Delete lobby, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var id = request.getId();
         return Uni.createFrom().voidItem()

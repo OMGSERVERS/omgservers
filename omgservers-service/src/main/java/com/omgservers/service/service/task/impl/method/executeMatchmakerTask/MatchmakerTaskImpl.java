@@ -1,5 +1,7 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask;
 
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerStateRequest;
@@ -7,8 +9,6 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
-import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleEndedMatches.HandleEndedMatchesOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
@@ -51,7 +51,7 @@ public class MatchmakerTaskImpl {
                 // Step 1. Getting current matchmaker state
                 .flatMap(matchmakerId -> getMatchmakerState(matchmakerId)
                         .flatMap(currentState -> {
-                            final var changeOfState = new MatchmakerChangeOfStateModel();
+                            final var changeOfState = new MatchmakerChangeOfStateDto();
                             // Step 2. Handling matchmaker commands
                             return handleMatchmakerCommands(currentState, changeOfState)
                                     // Step 3. Handling ended matched
@@ -90,21 +90,21 @@ public class MatchmakerTaskImpl {
                 .replaceWithVoid();
     }
 
-    Uni<MatchmakerStateModel> getMatchmakerState(final Long matchmakerId) {
+    Uni<MatchmakerStateDto> getMatchmakerState(final Long matchmakerId) {
         final var request = new GetMatchmakerStateRequest(matchmakerId);
         return matchmakerModule.getService().getMatchmakerState(request)
-                .map(GetMatchmakerStateResponse::getMatchmakerStateModel);
+                .map(GetMatchmakerStateResponse::getMatchmakerStateDto);
     }
 
     Uni<Boolean> updateMatchmakerState(final Long matchmakerId,
-                                       final MatchmakerChangeOfStateModel changeOfState) {
+                                       final MatchmakerChangeOfStateDto changeOfState) {
         final var request = new UpdateMatchmakerStateRequest(matchmakerId, changeOfState);
         return matchmakerModule.getService().updateMatchmakerState(request)
                 .map(UpdateMatchmakerStateResponse::getUpdated);
     }
 
-    Uni<Void> handleMatchmakerCommands(final MatchmakerStateModel currentState,
-                                       final MatchmakerChangeOfStateModel changeOfState) {
+    Uni<Void> handleMatchmakerCommands(final MatchmakerStateDto currentState,
+                                       final MatchmakerChangeOfStateDto changeOfState) {
         final var matchmakerCommands = currentState.getCommands();
         return Multi.createFrom().iterable(matchmakerCommands)
                 .onItem().transformToUniAndConcatenate(matchmakerCommand -> handleMatchmakerCommandOperation

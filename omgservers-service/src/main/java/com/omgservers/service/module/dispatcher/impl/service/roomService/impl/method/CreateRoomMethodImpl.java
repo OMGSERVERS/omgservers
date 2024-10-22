@@ -20,7 +20,7 @@ class CreateRoomMethodImpl implements CreateRoomMethod {
 
     @Override
     public Uni<CreateRoomResponse> execute(final CreateRoomRequest request) {
-        log.debug("Create room, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var runtimeConnection = request.getRuntimeConnection();
 

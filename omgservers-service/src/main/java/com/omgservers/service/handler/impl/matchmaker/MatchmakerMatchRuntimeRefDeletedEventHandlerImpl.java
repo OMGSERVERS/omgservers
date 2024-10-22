@@ -42,9 +42,7 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
 
         return getMatchmakerMatchRuntimeRef(matchmakerId, matchId, id)
                 .flatMap(matchmakerMatchRuntimeRef -> {
-                    final var runtimeId = matchmakerMatchRuntimeRef.getRuntimeId();
-                    log.debug("Matchmaker match runtime ref was deleted, matchmakerId={}, matchId={}, runtimeId={} ",
-                            matchmakerId, matchId, runtimeId);
+                    log.info("Deleted, {}", matchmakerMatchRuntimeRef);
 
                     return Uni.createFrom().voidItem();
                 });

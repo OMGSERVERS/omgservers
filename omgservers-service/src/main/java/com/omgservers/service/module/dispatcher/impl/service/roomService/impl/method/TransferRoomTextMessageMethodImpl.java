@@ -18,7 +18,7 @@ class TransferRoomTextMessageMethodImpl implements TransferRoomTextMessageMethod
 
     @Override
     public Uni<TransferRoomTextMessageResponse> execute(final TransferRoomTextMessageRequest request) {
-        log.debug("Handle text message, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var dispatcherConnection = request.getDispatcherConnection();
         final var message = request.getMessage();

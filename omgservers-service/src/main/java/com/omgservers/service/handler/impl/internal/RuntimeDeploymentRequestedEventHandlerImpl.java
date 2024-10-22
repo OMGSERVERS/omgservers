@@ -75,8 +75,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         final var runtimeId = body.getRuntimeId();
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Runtime deployment was requested, runtimeId={}, qualifier={}",
-                            runtimeId, runtime.getQualifier());
+                    log.info("Deployment was requested, {}", runtime);
 
                     final var tenantId = runtime.getTenantId();
                     final var deploymentId = runtime.getDeploymentId();

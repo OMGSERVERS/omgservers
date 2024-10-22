@@ -1,11 +1,11 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.matchmakerCommandHandler;
 
-import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
-import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.MatchmakerCommandHandler;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -23,8 +23,8 @@ class PrepareMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHand
     }
 
     @Override
-    public void handle(final MatchmakerStateModel currentState,
-                       final MatchmakerChangeOfStateModel changeOfState,
+    public void handle(final MatchmakerStateDto currentState,
+                       final MatchmakerChangeOfStateDto changeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
         final var body = (PrepareMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var matchId = body.getMatchId();

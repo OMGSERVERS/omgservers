@@ -22,7 +22,7 @@ class GetMatchmakerAssignmentMethodImpl implements GetMatchmakerAssignmentMethod
 
     @Override
     public Uni<GetMatchmakerAssignmentResponse> getMatchmakerAssignment(final GetMatchmakerAssignmentRequest request) {
-        log.debug("Get matchmaker assignment, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

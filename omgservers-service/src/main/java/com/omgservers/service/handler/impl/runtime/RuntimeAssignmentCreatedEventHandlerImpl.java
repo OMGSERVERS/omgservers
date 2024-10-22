@@ -66,11 +66,9 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
         return getRuntimeAssignment(runtimeId, id)
                 .flatMap(runtimeAssignment -> {
+                    log.info("Created, {}", runtimeAssignment);
+
                     final var clientId = runtimeAssignment.getClientId();
-
-                    log.debug("Runtime assignment was created, runtimeAssignment={}/{}, clientId={}",
-                            runtimeId, runtimeAssignment.getId(), clientId);
-
                     final var idempotencyKey = event.getId().toString();
 
                     return syncAddClientRuntimeCommand(runtimeAssignment, idempotencyKey)

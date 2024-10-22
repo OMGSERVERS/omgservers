@@ -47,10 +47,7 @@ public class TenantFilesArchiveCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantFilesArchive(tenantId, id)
                 .flatMap(tenantFilesArchive -> {
-                    log.info("Tenant files archive was created, tenantFilesArchive={}/{}, versionId={}",
-                            tenantId,
-                            tenantFilesArchive.getId(),
-                            tenantFilesArchive.getVersionId());
+                    log.info("Created, {}", tenantFilesArchive);
 
                     final var tenantVersionId = tenantFilesArchive.getVersionId();
 

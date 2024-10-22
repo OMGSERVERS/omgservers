@@ -1,5 +1,9 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigDto;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
@@ -9,10 +13,6 @@ import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchClientCreatedEventBodyModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigDto;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
@@ -51,11 +51,9 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
 
         return getMatchClient(matchmakerId, matchClientId)
                 .flatMap(matchClient -> {
+                    log.info("Created, {}", matchClient);
+
                     final var clientId = matchClient.getClientId();
-
-                    log.info("Matchmaker match client was created, id={}, match={}/{}, clientId={}",
-                            matchClient.getId(), matchmakerId, matchId, clientId);
-
                     return getMatch(matchmakerId, matchId)
                             .flatMap(match -> {
                                 final var runtimeId = match.getRuntimeId();

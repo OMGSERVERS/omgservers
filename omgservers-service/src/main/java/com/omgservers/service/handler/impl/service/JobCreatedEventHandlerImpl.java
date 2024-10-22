@@ -35,7 +35,7 @@ public class JobCreatedEventHandlerImpl implements EventHandler {
 
         return getJob(jobId)
                 .flatMap(job -> {
-                    log.debug("Job was created, jobId={}, qualifier={}", jobId, job.getQualifier());
+                    log.info("Created, {}", job);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

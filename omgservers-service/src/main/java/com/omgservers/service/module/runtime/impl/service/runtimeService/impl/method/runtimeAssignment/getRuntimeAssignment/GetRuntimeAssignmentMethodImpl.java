@@ -22,7 +22,7 @@ class GetRuntimeAssignmentMethodImpl implements GetRuntimeAssignmentMethod {
 
     @Override
     public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(final GetRuntimeAssignmentRequest request) {
-        log.debug("Get runtime assignment, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

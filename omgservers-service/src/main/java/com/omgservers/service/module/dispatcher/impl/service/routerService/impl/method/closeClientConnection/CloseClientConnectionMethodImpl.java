@@ -17,7 +17,7 @@ class CloseClientConnectionMethodImpl implements CloseClientConnectionMethod {
 
     @Override
     public Uni<CloseClientConnectionResponse> execute(final CloseClientConnectionRequest request) {
-        log.debug("Close client connection, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var serverConnection = request.getServerConnection();
         final var closeReason = request.getCloseReason();

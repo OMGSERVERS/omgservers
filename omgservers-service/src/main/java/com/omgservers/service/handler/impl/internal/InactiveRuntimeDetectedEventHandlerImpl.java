@@ -54,8 +54,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     final var runtimeQualifier = runtime.getQualifier();
-                    log.warn("Inactive runtime was detected, runtimeId={}, qualifier={}",
-                            runtimeId, runtimeQualifier);
+                    log.warn("Inactive runtime was detected, {}", runtime);
 
                     final var idempotencyKey = event.getId().toString();
 

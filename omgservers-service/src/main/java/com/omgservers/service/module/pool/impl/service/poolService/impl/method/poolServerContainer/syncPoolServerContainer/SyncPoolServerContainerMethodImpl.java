@@ -27,7 +27,7 @@ class SyncPoolServerContainerMethodImpl implements SyncPoolServerContainerMethod
     @Override
     public Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(
             final SyncPoolServerContainerRequest request) {
-        log.debug("Sync pool server container, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var poolServerContainer = request.getPoolServerContainer();

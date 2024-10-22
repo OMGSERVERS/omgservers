@@ -29,7 +29,7 @@ class ViewPoolServerContainersMethodImpl implements ViewPoolServerContainersMeth
     @Override
     public Uni<ViewPoolServerContainersResponse> viewPoolServerContainers(
             final ViewPoolServerContainersRequest request) {
-        log.debug("View pool server containers, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

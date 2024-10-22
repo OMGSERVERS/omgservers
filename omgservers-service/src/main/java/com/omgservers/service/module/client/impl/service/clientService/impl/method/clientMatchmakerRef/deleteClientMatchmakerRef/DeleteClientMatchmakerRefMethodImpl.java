@@ -22,7 +22,7 @@ class DeleteClientMatchmakerRefMethodImpl implements DeleteClientMatchmakerRefMe
 
     @Override
     public Uni<DeleteClientMatchmakerRefResponse> deleteClientMatchmakerRef(DeleteClientMatchmakerRefRequest request) {
-        log.debug("Delete client matchmaker ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var clientId = request.getClientId();
         final var id = request.getId();

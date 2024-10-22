@@ -1,12 +1,12 @@
 
 package com.omgservers.service.handler.impl.lobby;
 
+import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.schema.module.lobby.GetLobbyRuntimeRefRequest;
 import com.omgservers.schema.module.lobby.GetLobbyRuntimeRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.lobby.LobbyRuntimeRefDeletedEventBodyModel;
-import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
@@ -42,8 +42,7 @@ public class LobbyRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
         return getLobbyRuntimeRef(lobbyId, id)
                 .flatMap(lobbyRuntimeRef -> {
-                    final var runtimeId = lobbyRuntimeRef.getRuntimeId();
-                    log.debug("Lobby runtime ref was deleted, lobbyId={}, runtimeId={} ", lobbyId, runtimeId);
+                    log.info("Deleted, {}", lobbyRuntimeRef);
 
                     return Uni.createFrom().voidItem();
                 })

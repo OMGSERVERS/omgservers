@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
@@ -18,16 +19,19 @@ public class PoolServerModel {
     Long id;
 
     @NotBlank
+    @ToString.Exclude
     String idempotencyKey;
 
     @NotNull
     Long poolId;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant modified;
 
@@ -35,6 +39,7 @@ public class PoolServerModel {
     PoolServerQualifierEnum qualifier;
 
     @NotNull
+    @ToString.Exclude
     PoolServerConfigDto config;
 
     @NotNull

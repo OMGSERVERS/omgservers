@@ -36,15 +36,7 @@ public class TenantImageCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantImage(tenantId, id)
                 .flatMap(tenantImage -> {
-                    final var tenantVersionId = tenantImage.getVersionId();
-                    final var qualifier = tenantImage.getQualifier();
-                    final var imageId = tenantImage.getImageId();
-                    log.info("Image was created, id={}, tenantVersion={}/{}, qualifier={}, imageId={}",
-                            tenantImage.getId(),
-                            tenantId,
-                            tenantVersionId,
-                            qualifier,
-                            imageId);
+                    log.info("Created, {}", tenantImage);
 
                     return Uni.createFrom().voidItem();
                 })

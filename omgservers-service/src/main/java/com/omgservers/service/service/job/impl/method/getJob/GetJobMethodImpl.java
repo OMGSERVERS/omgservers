@@ -21,7 +21,7 @@ class GetJobMethodImpl implements GetJobMethod {
 
     @Override
     public Uni<GetJobResponse> getJob(final GetJobRequest request) {
-        log.debug("Get job, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectJobOperation

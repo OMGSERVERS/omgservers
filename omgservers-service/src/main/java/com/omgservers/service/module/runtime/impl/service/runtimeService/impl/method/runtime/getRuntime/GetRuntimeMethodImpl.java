@@ -22,7 +22,7 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
 
     @Override
     public Uni<GetRuntimeResponse> getRuntime(GetRuntimeRequest request) {
-        log.debug("Get runtime, request={}", request);
+        log.debug("Requested, {}", request);
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var id = request.getId();

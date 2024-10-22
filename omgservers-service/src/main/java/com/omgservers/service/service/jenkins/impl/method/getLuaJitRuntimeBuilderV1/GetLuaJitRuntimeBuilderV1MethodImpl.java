@@ -25,7 +25,7 @@ class GetLuaJitRuntimeBuilderV1MethodImpl implements GetLuaJitRuntimeBuilderV1Me
     @Override
     public Uni<GetLuaJitRuntimeBuilderV1Response> getLuaJitRuntimeBuilderV1(
             final GetLuaJitRuntimeBuilderV1Request request) {
-        log.debug("Get LuaJit runtime builder v1, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var builderUri = getConfigOperation.getServiceConfig().builder().uri();
         final var jenkinsClient = getJenkinsClientOperation.getClient(builderUri);

@@ -26,7 +26,7 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
 
     @Override
     public Uni<CreateTenantSupportResponse> execute(final CreateTenantSupportRequest request) {
-        log.info("Create tenant, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var tenant = tenantModelFactory.create();
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);

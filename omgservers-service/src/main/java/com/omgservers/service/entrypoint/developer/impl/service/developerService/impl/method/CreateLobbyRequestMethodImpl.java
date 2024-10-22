@@ -35,7 +35,7 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
 
     @Override
     public Uni<CreateLobbyRequestDeveloperResponse> execute(final CreateLobbyRequestDeveloperRequest request) {
-        log.info("Create lobby request, request={}", request);
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());

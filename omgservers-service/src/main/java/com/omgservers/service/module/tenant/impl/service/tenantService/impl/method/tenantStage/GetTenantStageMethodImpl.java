@@ -21,7 +21,7 @@ class GetTenantStageMethodImpl implements GetTenantStageMethod {
 
     @Override
     public Uni<GetTenantStageResponse> execute(final GetTenantStageRequest request) {
-        log.debug("Get stage, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

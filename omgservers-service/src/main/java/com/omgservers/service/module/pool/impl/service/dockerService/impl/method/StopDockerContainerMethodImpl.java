@@ -22,7 +22,7 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
 
     @Override
     public Uni<StopDockerContainerResponse> execute(final StopDockerContainerRequest request) {
-        log.debug("Stop docker container, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var poolServer = request.getPoolServer();
         final var poolServerContainer = request.getPoolServerContainer();

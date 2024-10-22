@@ -21,7 +21,7 @@ class SyncJobMethodImpl implements SyncJobMethod {
 
     @Override
     public Uni<SyncJobResponse> syncJob(final SyncJobRequest request) {
-        log.debug("Sync job, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var job = request.getJob();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

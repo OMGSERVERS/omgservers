@@ -22,7 +22,7 @@ class DeleteTenantLobbyRefMethodImpl implements DeleteTenantLobbyRefMethod {
 
     @Override
     public Uni<DeleteTenantLobbyRefResponse> execute(final DeleteTenantLobbyRefRequest request) {
-        log.debug("Delete tenant lobby ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

@@ -58,13 +58,7 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantDeployment(tenantId, tenantDeploymentId)
                 .flatMap(tenantDeployment -> {
-                    log.info("Deployment was deleted, tenantDeployment={}/{}, " +
-                                    "tenantStageId={}, " +
-                                    "tenantVersionId={}",
-                            tenantId,
-                            tenantDeploymentId,
-                            tenantDeployment.getStageId(),
-                            tenantDeployment.getVersionId());
+                    log.info("Deleted, {}", tenantDeployment);
 
                     return deleteTenantLobbyRequestsByTenantDeploymentIdOperation.execute(tenantId, tenantDeploymentId)
                             .flatMap(voidItem -> deleteTenantLobbiesByTenantDeploymentIdOperation

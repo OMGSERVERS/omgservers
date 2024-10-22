@@ -22,7 +22,7 @@ class SyncRootMethodImpl implements SyncRootMethod {
 
     @Override
     public Uni<SyncRootResponse> syncRoot(final SyncRootRequest request) {
-        log.debug("Sync root, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var root = request.getRoot();
         return checkShardOperation.checkShard(request.getRequestShardKey())

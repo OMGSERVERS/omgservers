@@ -57,9 +57,7 @@ public class PoolServerContainerCreatedEventHandlerImpl implements EventHandler 
 
         return getPoolServerContainer(poolId, serverId, id)
                 .flatMap(poolServerContainer -> {
-                    final var imageId = poolServerContainer.getConfig().getImageId();
-                    log.info("Pool server container was created, id={}/{}/{}, image={}", poolId, serverId, id, imageId);
-
+                    log.info("Created, {}", poolServerContainer);
                     return syncRuntimePoolServerContainerRef(poolServerContainer)
                             .flatMap(created -> getPoolServer(poolId, serverId)
                                     .flatMap(poolServer -> startDockerContainer(poolServer, poolServerContainer)));

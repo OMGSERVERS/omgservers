@@ -23,7 +23,7 @@ class DeleteTenantMatchmakerRefMethodImpl implements DeleteTenantMatchmakerRefMe
     @Override
     public Uni<DeleteTenantMatchmakerRefResponse> execute(
             final DeleteTenantMatchmakerRefRequest request) {
-        log.debug("Delete tenant matchmaker ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

@@ -22,7 +22,7 @@ class SyncMatchmakerMethodImpl implements SyncMatchmakerMethod {
 
     @Override
     public Uni<SyncMatchmakerResponse> syncMatchmaker(SyncMatchmakerRequest request) {
-        log.debug("Sync matchmaker, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var matchmaker = request.getMatchmaker();
         return Uni.createFrom().voidItem()

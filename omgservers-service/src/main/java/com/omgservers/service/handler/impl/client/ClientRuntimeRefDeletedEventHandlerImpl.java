@@ -43,10 +43,7 @@ public class ClientRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
         return getClientRuntimeRef(clientId, id)
                 .flatMap(clientRuntimeRef -> {
-                    final var runtimeId = clientRuntimeRef.getRuntimeId();
-
-                    log.debug("Client runtime ref was deleted, clientRuntimeRef={}/{}, runtimeId={}",
-                            clientId, id, runtimeId);
+                    log.info("Deleted, {}", clientRuntimeRef);
 
                     return Uni.createFrom().voidItem();
                 })

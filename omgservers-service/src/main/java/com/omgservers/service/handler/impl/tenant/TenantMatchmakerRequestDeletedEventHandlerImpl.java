@@ -38,10 +38,7 @@ public class TenantMatchmakerRequestDeletedEventHandlerImpl implements EventHand
 
         return getTenantMatchmakerRequest(tenantId, id)
                 .flatMap(tenantMatchmakerRequest -> {
-                    final var matchmakerId = tenantMatchmakerRequest.getMatchmakerId();
-
-                    log.debug("Matchmaker request was deleted, id={}/{}, matchmakerId={}",
-                            tenantId, id, matchmakerId);
+                    log.info("Deleted, {}", tenantMatchmakerRequest);
 
                     return Uni.createFrom().voidItem();
                 })

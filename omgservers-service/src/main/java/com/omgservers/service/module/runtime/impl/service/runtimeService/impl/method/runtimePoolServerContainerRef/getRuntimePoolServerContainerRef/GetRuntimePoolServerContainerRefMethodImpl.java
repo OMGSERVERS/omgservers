@@ -23,7 +23,7 @@ class GetRuntimePoolServerContainerRefMethodImpl implements GetRuntimePoolServer
     @Override
     public Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
             final GetRuntimePoolServerContainerRefRequest request) {
-        log.debug("Get runtime pool server container ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -47,10 +47,10 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
         return getClient(clientId)
                 .flatMap(client -> {
                     if (client.getDeleted()) {
-                        log.info("Client was already deleted, skip operation, clientId={}", clientId);
+                        log.info("Client was already deleted, skip operation, {}", client);
                         return Uni.createFrom().item(Boolean.FALSE);
                     } else {
-                        log.warn("Inactive client was detected, clientId={}", clientId);
+                        log.warn("Inactive client was detected, {}", client);
 
                         return syncDisconnectionMessage(clientId, event.getIdempotencyKey())
                                 .flatMap(created -> deleteClient(clientId));

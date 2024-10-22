@@ -22,7 +22,7 @@ class GetRootMethodImpl implements GetRootMethod {
 
     @Override
     public Uni<GetRootResponse> getRoot(final GetRootRequest request) {
-        log.debug("Get root, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

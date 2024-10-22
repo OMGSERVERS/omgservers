@@ -26,7 +26,7 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
 
     @Override
     public Uni<DeleteTenantStageResponse> execute(final DeleteTenantStageRequest request) {
-        log.debug("Delete stage, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

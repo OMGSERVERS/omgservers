@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
@@ -18,14 +19,17 @@ public class TenantModel {
     Long id;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant modified;
 
     @NotBlank
+    @ToString.Exclude
     String idempotencyKey;
 
     @NotNull

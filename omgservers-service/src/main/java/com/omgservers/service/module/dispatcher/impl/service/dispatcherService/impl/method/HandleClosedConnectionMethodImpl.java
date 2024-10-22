@@ -31,7 +31,7 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
 
     @Override
     public Uni<Void> execute(final HandleClosedConnectionRequest request) {
-        log.debug("Handle closed connection, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var closeReason = request.getCloseReason();

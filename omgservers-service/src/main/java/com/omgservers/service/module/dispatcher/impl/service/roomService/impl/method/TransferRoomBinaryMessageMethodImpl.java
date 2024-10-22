@@ -20,7 +20,7 @@ class TransferRoomBinaryMessageMethodImpl implements TransferRoomBinaryMessageMe
 
     @Override
     public Uni<TransferRoomBinaryMessageResponse> execute(final TransferRoomBinaryMessageRequest request) {
-        log.debug("Transfer binary message, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var dispatcherConnection = request.getDispatcherConnection();
         final var buffer = request.getBuffer();

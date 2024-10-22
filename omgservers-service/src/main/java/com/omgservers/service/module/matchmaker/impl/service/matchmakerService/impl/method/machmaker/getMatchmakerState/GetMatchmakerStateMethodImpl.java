@@ -1,8 +1,8 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.machmaker.getMatchmakerState;
 
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerStateResponse;
-import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.selectActiveMatchmakerMatchesByMatchmakerId.SelectActiveMatchmakerMatchesByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand.selectActiveMatchmakerCommandsByMatchmakerId.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchClient.selectMatchmakerMatchClientsByMatchmakerId.SelectMatchmakerMatchClientsByMatchmakerIdOperation;
@@ -29,7 +29,7 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
 
     @Override
     public Uni<GetMatchmakerStateResponse> getMatchmakerState(final GetMatchmakerStateRequest request) {
-        log.debug("Get matchmaker state, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
@@ -54,7 +54,7 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                                                                     sqlConnection,
                                                                     shard,
                                                                     matchmakerId)
-                                                            .map(clients -> new MatchmakerStateModel(
+                                                            .map(clients -> new MatchmakerStateDto(
                                                                     commands,
                                                                     requests,
                                                                     matches,

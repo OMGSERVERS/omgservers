@@ -25,7 +25,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
 
     @Override
     public Uni<DeleteClientResponse> deleteClient(final DeleteClientRequest request) {
-        log.debug("Delete client, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var id = request.getId();
         return Uni.createFrom().voidItem()

@@ -1,8 +1,5 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
-import com.omgservers.service.event.EventModel;
-import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientRequest;
@@ -13,6 +10,9 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsRequest
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsResponse;
 import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeResponse;
+import com.omgservers.service.event.EventModel;
+import com.omgservers.service.event.EventQualifierEnum;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -48,16 +48,9 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
         return getMatch(matchmakerId, matchId)
                 .flatMap(match -> {
-                    final var runtimeId = match.getRuntimeId();
-                    log.info("Match was deleted, " +
-                                    "match={}/{}, " +
-                                    "mode={}, " +
-                                    "runtimeId={}",
-                            matchmakerId,
-                            matchId,
-                            match.getConfig().getModeConfig().getName(),
-                            runtimeId);
+                    log.info("Deleted, {}", match);
 
+                    final var runtimeId = match.getRuntimeId();
                     return deleteRuntime(runtimeId)
                             .flatMap(voidItem -> deleteMatchClients(matchmakerId, matchId));
                 })

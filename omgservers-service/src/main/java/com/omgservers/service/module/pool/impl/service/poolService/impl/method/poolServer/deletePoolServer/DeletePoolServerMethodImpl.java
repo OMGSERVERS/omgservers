@@ -22,7 +22,7 @@ class DeletePoolServerMethodImpl implements DeletePoolServerMethod {
 
     @Override
     public Uni<DeletePoolServerResponse> deletePoolServer(final DeletePoolServerRequest request) {
-        log.debug("Delete pool server, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var poolId = request.getPoolId();
         final var id = request.getId();

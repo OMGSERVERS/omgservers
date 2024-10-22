@@ -26,14 +26,17 @@ public class TenantStageModel {
     Long projectId;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant modified;
 
     @NotBlank
+    @ToString.Exclude
     String idempotencyKey;
 
     @NotBlank

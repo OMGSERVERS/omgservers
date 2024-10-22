@@ -21,7 +21,7 @@ class FindJobMethodImpl implements FindJobMethod {
 
     @Override
     public Uni<FindJobResponse> findJob(final FindJobRequest request) {
-        log.debug("Find job, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var shard_key = request.getShardKey();
         final var entityId = request.getEntityId();

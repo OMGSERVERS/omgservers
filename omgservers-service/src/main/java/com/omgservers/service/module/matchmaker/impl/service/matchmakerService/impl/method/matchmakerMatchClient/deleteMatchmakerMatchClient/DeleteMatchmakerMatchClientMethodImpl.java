@@ -22,7 +22,7 @@ class DeleteMatchmakerMatchClientMethodImpl implements DeleteMatchmakerMatchClie
 
     @Override
     public Uni<DeleteMatchmakerMatchClientResponse> deleteMatchmakerMatchClient(DeleteMatchmakerMatchClientRequest request) {
-        log.debug("Delete match client, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();

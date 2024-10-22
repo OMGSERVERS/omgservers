@@ -33,7 +33,7 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
 
     @Override
     public Uni<GetTenantProjectDataResponse> execute(final GetTenantProjectDataRequest request) {
-        log.debug("Get tenant project data, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

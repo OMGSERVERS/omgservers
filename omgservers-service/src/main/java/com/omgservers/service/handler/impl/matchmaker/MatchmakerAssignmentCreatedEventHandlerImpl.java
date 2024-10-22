@@ -1,5 +1,7 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import com.omgservers.schema.module.client.SyncClientMatchmakerRefRequest;
 import com.omgservers.schema.module.client.SyncClientMatchmakerRefResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentRequest;
@@ -7,8 +9,6 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerAssignmentCreatedEventBodyModel;
-import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;
@@ -46,11 +46,9 @@ public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler
 
         return getMatchmakerAssignment(matchmakerId, id)
                 .flatMap(matchmakerAssignment -> {
+                    log.info("Created, {}", matchmakerAssignment);
+
                     final var clientId = matchmakerAssignment.getClientId();
-
-                    log.info("Matchmaker assignment was created, matchmakerAssignment={}/{}, clientId={}",
-                            matchmakerId, id, clientId);
-
                     final var idempotencyKey = event.getId().toString();
                     return syncClientMatchmakerRef(clientId, matchmakerId, idempotencyKey);
                 })

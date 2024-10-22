@@ -36,10 +36,7 @@ public class TenantFilesArchiveDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantFilesArchive(tenantId, id)
                 .flatMap(tenantFilesArchive -> {
-                    log.info("Tenant files archive was deleted, tenantFilesArchive={}/{}, versionId={}",
-                            tenantId,
-                            tenantFilesArchive.getId(),
-                            tenantFilesArchive.getVersionId());
+                    log.info("Deleted, {}", tenantFilesArchive);
 
                     return Uni.createFrom().voidItem();
                 })

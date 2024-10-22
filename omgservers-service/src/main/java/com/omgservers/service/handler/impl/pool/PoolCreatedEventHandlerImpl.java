@@ -53,7 +53,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
 
         return getPool(poolId)
                 .flatMap(pool -> {
-                    log.info("Pool was created, pool={}", poolId);
+                    log.info("Created, {}", pool);
 
                     final var idempotencyKey = event.getId().toString();
 

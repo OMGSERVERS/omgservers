@@ -53,7 +53,7 @@ public class PoolServerContainerDeletedEventHandlerImpl implements EventHandler 
 
         return getPoolServerContainer(poolId, serverId, id)
                 .flatMap(poolServerContainer -> {
-                    log.info("Pool server container was deleted, id={}/{}/{}", poolId, serverId, id);
+                    log.info("Deleted, {}", poolServerContainer);
 
                     return findAndDeleteRuntimePoolServerContainerRef(poolServerContainer)
                             .flatMap(voidItem -> getPoolServer(poolId, serverId)

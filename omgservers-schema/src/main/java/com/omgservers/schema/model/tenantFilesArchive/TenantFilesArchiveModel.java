@@ -19,6 +19,7 @@ public class TenantFilesArchiveModel {
     Long id;
 
     @NotBlank
+    @ToString.Exclude
     String idempotencyKey;
 
     @NotNull
@@ -28,10 +29,12 @@ public class TenantFilesArchiveModel {
     Long versionId;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant modified;
 

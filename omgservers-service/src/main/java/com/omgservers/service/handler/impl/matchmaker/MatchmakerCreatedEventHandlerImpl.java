@@ -53,13 +53,9 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
-                    log.info("Matchmaker was created, id={}, deploymentId={}/{}",
-                            matchmaker.getId(),
-                            matchmaker.getTenantId(),
-                            matchmaker.getDeploymentId());
+                    log.info("Created, {}", matchmaker);
 
                     final var idempotencyKey = event.getId().toString();
-
                     return syncTenantMatchmakerRef(matchmaker, idempotencyKey)
                             .flatMap(created -> syncMatchmakerJob(matchmakerId, idempotencyKey));
                 })

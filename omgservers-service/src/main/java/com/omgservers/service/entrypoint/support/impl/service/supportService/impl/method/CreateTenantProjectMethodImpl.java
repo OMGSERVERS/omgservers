@@ -29,7 +29,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
     @Override
     public Uni<CreateTenantProjectSupportResponse> execute(final CreateTenantProjectSupportRequest request) {
-        log.info("Create project, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var tenantId = request.getTenantId();
         return createTenantProject(tenantId)

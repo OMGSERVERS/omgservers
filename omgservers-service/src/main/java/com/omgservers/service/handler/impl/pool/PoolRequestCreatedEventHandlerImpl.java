@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.impl.pool;
 
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolRequestCreatedEventBodyModel;
-import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import io.smallrye.mutiny.Uni;
@@ -36,8 +36,7 @@ public class PoolRequestCreatedEventHandlerImpl implements EventHandler {
 
         return getPoolRequest(poolId, id)
                 .flatMap(poolRequest -> {
-                    log.debug("Pool request was created, id={}/{}", poolId, id);
-
+                    log.info("Created, {}", poolRequest);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

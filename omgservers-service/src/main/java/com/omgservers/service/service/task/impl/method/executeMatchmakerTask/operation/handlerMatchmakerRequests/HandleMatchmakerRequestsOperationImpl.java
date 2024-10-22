@@ -1,9 +1,9 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handlerMatchmakerRequests;
 
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
-import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
@@ -34,8 +34,8 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
 
     @Override
     public Uni<Void> handleMatchmakerRequests(final MatchmakerModel matchmaker,
-                                              final MatchmakerStateModel currentState,
-                                              final MatchmakerChangeOfStateModel changeOfState) {
+                                              final MatchmakerStateDto currentState,
+                                              final MatchmakerChangeOfStateDto changeOfState) {
         final var matchmakerId = matchmaker.getId();
         final var tenantId = matchmaker.getTenantId();
         final var tenantDeploymentId = matchmaker.getDeploymentId();
@@ -65,8 +65,8 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     }
 
     void executeMatchmaker(final Long matchmakerId,
-                           final MatchmakerStateModel currentState,
-                           final MatchmakerChangeOfStateModel changeOfState,
+                           final MatchmakerStateDto currentState,
+                           final MatchmakerChangeOfStateDto changeOfState,
                            final TenantVersionConfigDto versionConfig) {
         final var requests = currentState.getRequests();
 
@@ -76,8 +76,8 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     }
 
     void doMatchmaking(final Long matchmakerId,
-                       final MatchmakerStateModel currentState,
-                       final MatchmakerChangeOfStateModel changeOfState,
+                       final MatchmakerStateDto currentState,
+                       final MatchmakerChangeOfStateDto changeOfState,
                        final TenantVersionConfigDto versionConfig) {
 
         final var requests = currentState.getRequests().stream()

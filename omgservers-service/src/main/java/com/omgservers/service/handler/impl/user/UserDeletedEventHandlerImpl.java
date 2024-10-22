@@ -47,7 +47,7 @@ public class UserDeletedEventHandlerImpl implements EventHandler {
 
         return getUser(userId)
                 .flatMap(user -> {
-                    log.info("User was deleted, user={}", userId);
+                    log.info("Deleted, {}", user);
 
                     if (user.getRole().equals(UserRoleEnum.DEVELOPER)) {
                         return findAndDeleteRootUserRef(userId);

@@ -41,7 +41,7 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
     @Override
     public Uni<DeleteTenantStagePermissionsSupportResponse> execute(
             final DeleteTenantStagePermissionsSupportRequest request) {
-        log.info("Delete stage permissions, request={}, principal={}", request,
+        log.info("Requested, {}, principal={}", request,
                 securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();

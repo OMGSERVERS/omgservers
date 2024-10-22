@@ -84,9 +84,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Runtime was created, id={}, qualifier={}",
-                            runtime.getId(),
-                            runtime.getQualifier());
+                    log.info("Created, {}", runtime);
 
                     return syncRuntimeRef(runtime, idempotencyKey)
                             .flatMap(created -> requestRuntimeDeployment(runtimeId, idempotencyKey))

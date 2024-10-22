@@ -57,10 +57,9 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
         return getRuntimeAssignment(runtimeId, id)
                 .flatMap(runtimeAssignment -> {
-                    final var clientId = runtimeAssignment.getClientId();
+                    log.info("Deleted, {}", runtimeAssignment);
 
-                    log.debug("Runtime assignment was deleted, runtimeAssignment={}/{}, clientId={}",
-                            runtimeId, runtimeAssignment.getId(), clientId);
+                    final var clientId = runtimeAssignment.getClientId();
 
                     return findAndDeleteClientRuntimeRef(clientId, runtimeId)
                             .flatMap(voidItem -> getRuntime(runtimeId)

@@ -52,12 +52,9 @@ public class MatchmakerMatchClientDeletedEventHandlerImpl implements EventHandle
 
         return getMatchClient(matchmakerId, id)
                 .flatMap(matchClient -> {
-                    final var matchId = matchClient.getMatchId();
+                    log.info("Deleted, {}", matchClient);
+
                     final var clientId = matchClient.getClientId();
-
-                    log.info("Matchmaker match client was deleted, matchClient={}/{}, clientId={}, matchId={}",
-                            matchmakerId, id, clientId, matchId);
-
                     return getMatchmaker(matchmakerId)
                             .flatMap(matchmaker -> {
                                 if (matchmaker.getDeleted()) {

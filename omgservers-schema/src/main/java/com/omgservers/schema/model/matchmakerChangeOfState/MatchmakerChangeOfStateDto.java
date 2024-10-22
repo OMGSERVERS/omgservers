@@ -5,9 +5,6 @@ import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.schema.model.request.MatchmakerRequestModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +14,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class MatchmakerChangeOfStateModel {
+public class MatchmakerChangeOfStateDto {
 
     @NotNull
     Set<MatchmakerCommandModel> commandsToDelete;
@@ -40,7 +37,7 @@ public class MatchmakerChangeOfStateModel {
     @NotNull
     Set<MatchmakerMatchClientModel> clientsToDelete;
 
-    public MatchmakerChangeOfStateModel() {
+    public MatchmakerChangeOfStateDto() {
         commandsToDelete = new HashSet<>();
         requestsToDelete = new HashSet<>();
         matchesToSync = new HashSet<>();

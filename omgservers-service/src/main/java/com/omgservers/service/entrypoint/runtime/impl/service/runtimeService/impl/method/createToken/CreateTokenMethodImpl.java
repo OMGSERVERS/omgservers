@@ -29,7 +29,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     @Override
     public Uni<CreateTokenRuntimeResponse> createToken(final CreateTokenRuntimeRequest request) {
-        log.debug("Create token, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var password = request.getPassword();

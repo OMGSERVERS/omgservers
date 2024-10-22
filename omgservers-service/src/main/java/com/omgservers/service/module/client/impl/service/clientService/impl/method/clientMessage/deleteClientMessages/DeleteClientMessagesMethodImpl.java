@@ -23,7 +23,7 @@ class DeleteClientMessagesMethodImpl implements DeleteClientMessagesMethod {
     @Override
     public Uni<DeleteClientMessagesResponse> deleteClientMessages(
             final DeleteClientMessagesRequest request) {
-        log.debug("Delete client messages, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var clientId = request.getClientId();
         final var ids = request.getIds();

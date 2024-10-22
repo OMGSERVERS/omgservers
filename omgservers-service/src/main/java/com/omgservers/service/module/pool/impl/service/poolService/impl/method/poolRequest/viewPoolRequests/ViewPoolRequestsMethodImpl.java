@@ -24,7 +24,7 @@ class ViewPoolRequestsMethodImpl implements ViewPoolRequestsMethod {
     @Override
     public Uni<ViewPoolRequestsResponse> viewPoolRequests(
             final ViewPoolRequestsRequest request) {
-        log.debug("View pool requests, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

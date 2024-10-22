@@ -39,14 +39,7 @@ public class TenantBuildRequestDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantBuildRequest(tenantId, tenantBuildRequestId)
                 .flatMap(tenantBuildRequest -> {
-                    final var buildRequestVersionId = tenantBuildRequest.getVersionId();
-                    final var qualifier = tenantBuildRequest.getQualifier();
-                    log.info("Tenant build request was deleted, " +
-                                    "tenantBuildRequestId={}, tenantVersion={}/{}, qualifier={}",
-                            tenantBuildRequest.getId(),
-                            tenantId,
-                            buildRequestVersionId,
-                            qualifier);
+                    log.info("Deleted, {}", tenantBuildRequest);
 
                     return findAndDeleteJobOperation.execute(tenantId, tenantBuildRequestId);
                 })

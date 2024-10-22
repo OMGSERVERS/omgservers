@@ -23,7 +23,7 @@ class DeleteTenantLobbyRequestMethodImpl implements DeleteTenantLobbyRequestMeth
     @Override
     public Uni<DeleteTenantLobbyRequestResponse> execute(
             final DeleteTenantLobbyRequestRequest request) {
-        log.debug("Delete tenant lobby request, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

@@ -47,13 +47,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantDeployment(tenantId, id)
                 .flatMap(tenantDeployment -> {
-                    log.info("Deployment was created, tenantDeployment={}/{}, " +
-                                    "tenantVersionId={}, " +
-                                    "tenantStageId={}",
-                            tenantId,
-                            id,
-                            tenantDeployment.getVersionId(),
-                            tenantDeployment.getStageId());
+                    log.info("Created, {}", tenantDeployment);
 
                     // TODO: creating lobby/matchmaker requests only if developer requested it
                     return createTenantLobbyRequest(tenantId, id, idempotencyKey)

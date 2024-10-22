@@ -22,7 +22,7 @@ class DeleteMatchmakerMatchRuntimeRefMethodImpl implements DeleteMatchmakerMatch
 
     @Override
     public Uni<DeleteMatchmakerMatchRuntimeRefResponse> deleteMatchmakerMatchRuntimeRef(final DeleteMatchmakerMatchRuntimeRefRequest request) {
-        log.debug("Delete match runtime ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();

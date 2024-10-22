@@ -54,7 +54,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
         return getTenant(tenantId)
                 .flatMap(tenant -> {
-                    log.info("Tenant was created, tenant={}", tenantId);
+                    log.info("Created, {}", tenant);
 
                     final var idempotencyKey = event.getId().toString();
 

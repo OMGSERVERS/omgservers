@@ -62,7 +62,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
         return getLobby(lobbyId)
                 .flatMap(lobby -> {
-                    log.info("Lobby was created, id={}", lobbyId);
+                    log.info("Created, {}", lobby);
 
                     final var tenantId = lobby.getTenantId();
                     final var tenantDeploymentId = lobby.getDeploymentId();

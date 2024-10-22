@@ -21,7 +21,7 @@ class VerifyTenantStagePermissionExistsMethodImpl implements VerifyTenantStagePe
 
     @Override
     public Uni<VerifyTenantStagePermissionExistsResponse> execute(VerifyTenantStagePermissionExistsRequest request) {
-        log.debug("Has tenant stage permission, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

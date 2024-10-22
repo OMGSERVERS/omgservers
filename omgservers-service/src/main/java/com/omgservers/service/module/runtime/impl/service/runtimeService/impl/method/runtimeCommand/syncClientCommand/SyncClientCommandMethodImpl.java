@@ -29,7 +29,7 @@ class SyncClientCommandMethodImpl implements SyncClientCommandMethod {
 
     @Override
     public Uni<SyncClientCommandResponse> syncClientCommand(final SyncClientCommandRequest request) {
-        log.debug("Sync client command, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var runtimeCommand = request.getRuntimeCommand();

@@ -24,7 +24,7 @@ class FindMatchmakerAssignmentMethodImpl implements FindMatchmakerAssignmentMeth
     @Override
     public Uni<FindMatchmakerAssignmentResponse> findMatchmakerAssignment(
             final FindMatchmakerAssignmentRequest request) {
-        log.debug("Find matchmaker assignment, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

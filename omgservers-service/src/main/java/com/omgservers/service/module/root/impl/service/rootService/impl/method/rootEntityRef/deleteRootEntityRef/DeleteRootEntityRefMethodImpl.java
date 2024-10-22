@@ -23,7 +23,7 @@ class DeleteRootEntityRefMethodImpl implements DeleteRootEntityRefMethod {
     @Override
     public Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(
             final DeleteRootEntityRefRequest request) {
-        log.debug("Delete root entity ref request, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var rootId = request.getRootId();
         final var id = request.getId();

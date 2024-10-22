@@ -16,7 +16,7 @@ class ExecuteDispatcherTaskMethodImpl implements ExecuteDispatcherTaskMethod {
 
     @Override
     public Uni<ExecuteDispatcherTaskResponse> execute(final ExecuteDispatcherTaskRequest request) {
-        log.debug("Execute dispatcher task, request={}", request);
+        log.debug("Requested, {}", request);
 
         return dispatcherTask.execute()
                 .onFailure()

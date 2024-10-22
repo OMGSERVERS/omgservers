@@ -22,7 +22,7 @@ class DeleteLobbyRuntimeRefMethodImpl implements DeleteLobbyRuntimeRefMethod {
 
     @Override
     public Uni<DeleteLobbyRuntimeRefResponse> deleteLobbyRuntimeRef(final DeleteLobbyRuntimeRefRequest request) {
-        log.debug("Delete lobby runtime ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var lobbyId = request.getLobbyId();
         final var id = request.getId();

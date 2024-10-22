@@ -31,7 +31,7 @@ class SyncClientMatchmakerRefMethodImpl implements SyncClientMatchmakerRefMethod
 
     @Override
     public Uni<SyncClientMatchmakerRefResponse> syncClientMatchmakerRef(final SyncClientMatchmakerRefRequest request) {
-        log.debug("Sync client matchmaker ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var clientMatchmakerRef = request.getClientMatchmakerRef();
         final var clientId = clientMatchmakerRef.getClientId();

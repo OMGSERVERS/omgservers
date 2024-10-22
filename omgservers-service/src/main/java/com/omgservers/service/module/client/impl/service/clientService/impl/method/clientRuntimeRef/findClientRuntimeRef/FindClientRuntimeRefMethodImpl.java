@@ -22,7 +22,7 @@ class FindClientRuntimeRefMethodImpl implements FindClientRuntimeRefMethod {
 
     @Override
     public Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(final FindClientRuntimeRefRequest request) {
-        log.debug("Find client runtime ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

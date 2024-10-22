@@ -31,7 +31,7 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
 
     @Override
     public Uni<SyncTenantPermissionResponse> execute(final SyncTenantPermissionRequest request) {
-        log.debug("Sync tenant permission, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var permission = request.getTenantPermission();
         final var tenantId = permission.getTenantId();

@@ -16,7 +16,7 @@ public class ExecuteMatchmakerTaskMethodImpl implements ExecuteMatchmakerTaskMet
 
     @Override
     public Uni<ExecuteMatchmakerTaskResponse> executeMatchmakerTask(final ExecuteMatchmakerTaskRequest request) {
-        log.debug("Execute matchmaker task, request={}", request);
+        log.debug("Requested, {}", request);
         final var matchmakerId = request.getMatchmakerId();
 
         return matchmakerTask.executeTask(matchmakerId)

@@ -43,13 +43,7 @@ public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantLobbyRequest(tenantId, id)
                 .flatMap(tenantLobbyRequest -> {
-                    final var tenantDeploymentId = tenantLobbyRequest.getDeploymentId();
-                    final var lobbyId = tenantLobbyRequest.getLobbyId();
-                    log.info("Lobby request was created, id={}, tenantDeploymentId={}/{}, lobbyId={}",
-                            tenantLobbyRequest.getId(),
-                            tenantId,
-                            tenantDeploymentId,
-                            lobbyId);
+                    log.info("Created, {}", tenantLobbyRequest);
 
                     return syncLobby(tenantLobbyRequest, event.getIdempotencyKey());
                 })

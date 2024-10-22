@@ -42,7 +42,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     @Override
     public Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(final UpdateMatchmakerStateRequest request) {
-        log.debug("Update matchmaker state, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var changeOfState = request.getChangeOfState();
         return Uni.createFrom().voidItem()

@@ -38,13 +38,7 @@ public class TenantLobbyRequestDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantLobbyRequest(tenantId, id)
                 .flatMap(tenantLobbyRequest -> {
-                    final var deploymentId = tenantLobbyRequest.getDeploymentId();
-                    final var lobbyId = tenantLobbyRequest.getLobbyId();
-                    log.debug("Lobby request was deleted, id={}, deploymentId={}/{}, lobbyId={}",
-                            tenantLobbyRequest.getId(),
-                            tenantId,
-                            deploymentId,
-                            lobbyId);
+                    log.info("Deleted, {}", tenantLobbyRequest);
 
                     return Uni.createFrom().voidItem();
                 })

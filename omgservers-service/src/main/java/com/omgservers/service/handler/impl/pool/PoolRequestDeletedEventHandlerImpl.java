@@ -35,8 +35,8 @@ public class PoolRequestDeletedEventHandlerImpl implements EventHandler {
         final var id = body.getId();
 
         return getPoolRequest(poolId, id)
-                .flatMap(server -> {
-                    log.debug("Pool request was deleted, id={}/{}", poolId, id);
+                .flatMap(poolRequest -> {
+                    log.info("Deleted, {}", poolRequest);
 
                     return Uni.createFrom().voidItem();
                 })

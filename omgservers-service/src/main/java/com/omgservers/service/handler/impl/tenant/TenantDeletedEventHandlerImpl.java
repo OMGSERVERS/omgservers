@@ -55,7 +55,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
 
         return getTenant(tenantId)
                 .flatMap(tenant -> {
-                    log.info("Tenant was deleted, tenant={}", tenantId);
+                    log.info("Deleted, {}", tenant);
 
                     return deleteTenantPermissionsOperation.execute(tenantId)
                             .flatMap(voidItem -> deleteTenantProjectsOperation.execute(tenantId))

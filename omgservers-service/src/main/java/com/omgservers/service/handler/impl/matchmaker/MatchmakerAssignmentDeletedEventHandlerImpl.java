@@ -1,6 +1,7 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
+import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import com.omgservers.schema.module.client.DeleteClientMatchmakerRefRequest;
 import com.omgservers.schema.module.client.DeleteClientMatchmakerRefResponse;
 import com.omgservers.schema.module.client.FindClientMatchmakerRefRequest;
@@ -10,7 +11,6 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
-import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -47,11 +47,9 @@ public class MatchmakerAssignmentDeletedEventHandlerImpl implements EventHandler
 
         return getMatchmakerAssignment(matchmakerId, id)
                 .flatMap(matchmakerAssignment -> {
+                    log.info("Deleted, {}", matchmakerAssignment);
+
                     final var clientId = matchmakerAssignment.getClientId();
-
-                    log.info("Matchmaker assignment was deleted, matchmakerAssignment={}/{}, clientId={}",
-                            matchmakerId, id, clientId);
-
                     return findAndDeleteClientMatchmakerRef(clientId, matchmakerId);
                 })
                 .replaceWithVoid();

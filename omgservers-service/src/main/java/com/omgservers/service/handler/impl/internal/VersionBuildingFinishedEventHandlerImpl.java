@@ -43,8 +43,8 @@ public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
         final var tenantVersionId = body.getTenantVersionId();
 
         return getTenantVersion(tenantId, tenantVersionId)
-                .flatMap(version -> {
-                    log.info("Version building was finished, tenantVersion={}/{}", tenantId, tenantVersionId);
+                .flatMap(tenantVersion -> {
+                    log.info("Building finished, {}", tenantVersion);
 
                     return deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId, tenantVersionId);
                 })

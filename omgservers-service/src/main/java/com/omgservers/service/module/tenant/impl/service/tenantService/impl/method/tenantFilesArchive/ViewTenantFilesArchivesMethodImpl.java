@@ -30,7 +30,7 @@ class ViewTenantFilesArchivesMethodImpl implements ViewTenantFilesArchivesMethod
     @Override
     public Uni<ViewTenantFilesArchivesResponse> execute(
             final ViewTenantFilesArchivesRequest request) {
-        log.debug("View tenant files archive, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

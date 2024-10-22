@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
@@ -18,6 +19,7 @@ public class MatchmakerMatchRuntimeRefModel {
     Long id;
 
     @NotBlank
+    @ToString.Exclude
     String idempotencyKey;
 
     @NotNull
@@ -27,10 +29,12 @@ public class MatchmakerMatchRuntimeRefModel {
     Long matchId;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant modified;
 

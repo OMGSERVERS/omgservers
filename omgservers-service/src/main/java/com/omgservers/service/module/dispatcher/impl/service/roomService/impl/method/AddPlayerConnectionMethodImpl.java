@@ -21,7 +21,7 @@ class AddPlayerConnectionMethodImpl implements AddPlayerConnectionMethod {
 
     @Override
     public Uni<AddPlayerConnectionResponse> execute(final AddPlayerConnectionRequest request) {
-        log.debug("Add player connection, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var playerConnection = request.getPlayerConnection();
         final var runtimeId = playerConnection.getRuntimeId();

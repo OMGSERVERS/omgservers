@@ -46,7 +46,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
         return getUser(userId)
                 .flatMap(user -> {
-                    log.info("User was created, id={}, role={}", userId, user.getRole());
+                    log.info("Created, {}", user);
 
                     final var idempotencyKey = event.getId().toString();
                     return switch (user.getRole()) {

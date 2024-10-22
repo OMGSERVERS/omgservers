@@ -1,9 +1,9 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand;
 
-import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateModel;
+import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
-import com.omgservers.schema.model.matchmakerState.MatchmakerStateModel;
+import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -29,8 +29,8 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
     }
 
     @Override
-    public Uni<Void> handleMatchmakerCommand(final MatchmakerStateModel matchmakerStateModel,
-                                             final MatchmakerChangeOfStateModel changeOfState,
+    public Uni<Void> handleMatchmakerCommand(final MatchmakerStateDto matchmakerStateDto,
+                                             final MatchmakerChangeOfStateDto changeOfState,
                                              final MatchmakerCommandModel matchmakerCommand) {
         final var qualifier = matchmakerCommand.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
@@ -50,6 +50,6 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> matchmakerCommandHandlers.get(qualifier)
-                        .handle(matchmakerStateModel, changeOfState, matchmakerCommand));
+                        .handle(matchmakerStateDto, changeOfState, matchmakerCommand));
     }
 }

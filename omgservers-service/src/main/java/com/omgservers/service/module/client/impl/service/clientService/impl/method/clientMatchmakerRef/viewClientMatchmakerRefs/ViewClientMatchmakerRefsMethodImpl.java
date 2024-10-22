@@ -23,7 +23,7 @@ class ViewClientMatchmakerRefsMethodImpl implements ViewClientMatchmakerRefsMeth
     @Override
     public Uni<ViewClientMatchmakerRefsResponse> viewClientMatchmakerRefs(
             final ViewClientMatchmakerRefsRequest request) {
-        log.debug("View client matchmaker refs, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

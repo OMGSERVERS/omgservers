@@ -22,7 +22,7 @@ class GetTenantImageMethodImpl implements GetTenantImageMethod {
 
     @Override
     public Uni<GetTenantImageResponse> execute(final GetTenantImageRequest request) {
-        log.debug("Get tenant image, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

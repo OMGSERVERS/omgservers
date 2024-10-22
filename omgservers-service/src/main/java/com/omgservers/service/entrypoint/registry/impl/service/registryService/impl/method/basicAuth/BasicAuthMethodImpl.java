@@ -35,7 +35,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
 
     @Override
     public Uni<BasicAuthRegistryResponse> basicAuth(final BasicAuthRegistryRequest request) {
-        log.info("Basic auth, request={}", request);
+        log.info("Requested, {}", request);
 
         final var authorizationHeader = request.getAuthorizationHeader();
         if (Objects.isNull(authorizationHeader)) {

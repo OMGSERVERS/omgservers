@@ -25,7 +25,7 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
 
     @Override
     public Uni<SyncTenantResponse> syncTenant(final SyncTenantRequest request) {
-        log.debug("Sync tenant, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var tenant = request.getTenant();
         return Uni.createFrom().voidItem()

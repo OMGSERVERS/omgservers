@@ -43,11 +43,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(tenantVersion -> {
-                    final var tenantProjectId = tenantVersion.getProjectId();
-                    log.info("Version was deleted, tenantVersion={}/{}, tenantProjectId={}",
-                            tenantId,
-                            tenantVersionId,
-                            tenantProjectId);
+                    log.info("Deleted, {}", tenantVersion);
 
                     return deleteTenantFilesArchivesByTenantVersionIdOperation.execute(tenantId, tenantVersionId)
                             .flatMap(voidItem -> deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId,

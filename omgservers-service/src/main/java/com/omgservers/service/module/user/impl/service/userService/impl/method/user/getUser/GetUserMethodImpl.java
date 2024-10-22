@@ -22,7 +22,7 @@ class GetUserMethodImpl implements GetUserMethod {
 
     @Override
     public Uni<GetUserResponse> getUser(final GetUserRequest request) {
-        log.debug("Get tenant, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -24,7 +24,7 @@ class FindRuntimePoolServerContainerRefMethodImpl implements FindRuntimePoolServ
     @Override
     public Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
             final FindRuntimePoolServerContainerRefRequest request) {
-        log.debug("Find runtime pool server container ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

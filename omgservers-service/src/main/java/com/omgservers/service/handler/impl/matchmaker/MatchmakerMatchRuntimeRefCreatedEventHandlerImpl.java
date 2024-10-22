@@ -43,9 +43,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
 
         return getMatchmakerMatchRuntimeRef(matchmakerId, matchId, id)
                 .flatMap(matchmakerMatchRuntimeRef -> {
-                    final var runtimeId = matchmakerMatchRuntimeRef.getRuntimeId();
-                    log.debug("Matchmaker match runtime ref was created, matchmakerId={}, matchId={}, runtimeId={} ",
-                            matchmakerId, matchId, runtimeId);
+                    log.info("Created, {}", matchmakerMatchRuntimeRef);
 
                     final var idempotencyKey = event.getId().toString();
                     return syncPrepareMatchMatchmakerCommand(matchmakerId, matchId, idempotencyKey)

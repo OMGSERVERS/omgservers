@@ -22,7 +22,7 @@ class GetLobbyMethodImpl implements GetLobbyMethod {
 
     @Override
     public Uni<GetLobbyResponse> getLobby(final GetLobbyRequest request) {
-        log.debug("Get lobby, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

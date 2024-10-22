@@ -23,7 +23,7 @@ class ViewRootEntityRefsMethodImpl implements ViewRootEntityRefsMethod {
     @Override
     public Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(
             final ViewRootEntityRefsRequest request) {
-        log.debug("View root entity refs, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

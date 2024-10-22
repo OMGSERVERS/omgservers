@@ -35,7 +35,7 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
 
         return getJob(jobId)
                 .flatMap(job -> {
-                    log.debug("Job was deleted, jobId={}, qualifier={}", jobId, job.getQualifier());
+                    log.info("Deleted, {}", job);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

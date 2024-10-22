@@ -85,14 +85,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Runtime was deleted, " +
-                                    "id={}, " +
-                                    "type={}, " +
-                                    "deploymentId={}/{}",
-                            runtime.getId(),
-                            runtime.getQualifier(),
-                            runtime.getTenantId(),
-                            runtime.getDeploymentId());
+                    log.info("Deleted, {}", runtime);
 
                     // TODO: cleanup container user
                     return deleteRuntimeCommands(runtimeId)

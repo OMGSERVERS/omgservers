@@ -1,6 +1,5 @@
 package com.omgservers.service.handler.impl.tenant;
 
-import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
@@ -37,12 +36,7 @@ public class TenantVersionCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, id)
                 .flatMap(tenantVersion -> {
-                    log.info("Version was created, " +
-                                    "tenantVersion={}/{}, tenantStageId={}, modes={}",
-                            tenantId,
-                            id,
-                            tenantVersion.getProjectId(),
-                            tenantVersion.getConfig().getModes().stream().map(TenantVersionModeDto::getName).toList());
+                    log.info("Created, {}", tenantVersion);
 
                     return Uni.createFrom().voidItem();
                 })

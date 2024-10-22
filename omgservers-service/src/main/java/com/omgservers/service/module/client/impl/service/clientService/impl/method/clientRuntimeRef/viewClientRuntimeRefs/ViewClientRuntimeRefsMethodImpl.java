@@ -22,7 +22,7 @@ class ViewClientRuntimeRefsMethodImpl implements ViewClientRuntimeRefsMethod {
 
     @Override
     public Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(final ViewClientRuntimeRefsRequest request) {
-        log.debug("View client runtime refs, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -19,13 +19,16 @@ public class IndexModel {
     Long id;
 
     @NotBlank
+    @ToString.Exclude
     String idempotencyKey;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant created;
 
     @NotNull
+    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant modified;
 

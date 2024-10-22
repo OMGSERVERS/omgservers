@@ -29,7 +29,7 @@ class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMe
 
     @Override
     public Uni<SyncTenantStagePermissionResponse> execute(final SyncTenantStagePermissionRequest request) {
-        log.debug("Sync tenant stage permission, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var permission = request.getTenantStagePermission();

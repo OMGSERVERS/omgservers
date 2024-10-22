@@ -38,13 +38,7 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
         return getTenantMatchmakerRef(tenantId, id)
                 .flatMap(tenantMatchmakerRef -> {
-                    final var tenantDeploymentId = tenantMatchmakerRef.getDeploymentId();
-                    final var matchmakerId = tenantMatchmakerRef.getMatchmakerId();
-                    log.debug("Matchmaker ref was deleted, id={}, tenantDeploymentId={}/{}, matchmakerId={}",
-                            tenantMatchmakerRef.getId(),
-                            tenantId,
-                            tenantDeploymentId,
-                            matchmakerId);
+                    log.info("Deleted, {}", tenantMatchmakerRef);
 
                     return Uni.createFrom().voidItem();
                 })

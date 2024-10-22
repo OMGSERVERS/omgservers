@@ -29,7 +29,7 @@ class SyncTenantStageMethodImpl implements SyncTenantStageMethod {
 
     @Override
     public Uni<SyncTenantStageResponse> execute(final SyncTenantStageRequest request) {
-        log.debug("Sync tenant stage, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var tenantStage = request.getTenantStage();

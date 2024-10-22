@@ -16,7 +16,7 @@ public class ExecutePoolTaskMethodImpl implements ExecutePoolTaskMethod {
 
     @Override
     public Uni<ExecutePoolTaskResponse> executePoolTask(final ExecutePoolTaskRequest request) {
-        log.debug("Execute pool task, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var poolId = request.getPoolId();
 

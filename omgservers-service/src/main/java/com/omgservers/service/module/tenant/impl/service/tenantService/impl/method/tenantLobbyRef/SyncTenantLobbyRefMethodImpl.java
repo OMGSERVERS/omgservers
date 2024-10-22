@@ -29,7 +29,7 @@ class SyncTenantLobbyRefMethodImpl implements SyncTenantLobbyRefMethod {
 
     @Override
     public Uni<SyncTenantLobbyRefResponse> execute(final SyncTenantLobbyRefRequest request) {
-        log.debug("Sync tenant lobby ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var versionLobbyRef = request.getTenantLobbyRef();

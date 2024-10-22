@@ -22,7 +22,7 @@ class ViewMatchmakerRequestsMethodImpl implements ViewMatchmakerRequestsMethod {
 
     @Override
     public Uni<ViewMatchmakerRequestsResponse> viewMatchmakerRequests(ViewMatchmakerRequestsRequest request) {
-        log.debug("View requests, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

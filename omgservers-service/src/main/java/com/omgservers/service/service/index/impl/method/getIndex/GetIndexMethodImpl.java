@@ -20,7 +20,7 @@ class GetIndexMethodImpl implements GetIndexMethod {
 
     @Override
     public Uni<GetIndexResponse> getIndex(final GetIndexRequest request) {
-        log.debug("Get index, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> getIndexOperation

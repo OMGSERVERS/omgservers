@@ -23,7 +23,7 @@ class ViewTenantProjectPermissionsMethodImpl implements ViewTenantProjectPermiss
 
     @Override
     public Uni<ViewTenantProjectPermissionsResponse> execute(final ViewTenantProjectPermissionsRequest request) {
-        log.debug("View tenant project permission, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

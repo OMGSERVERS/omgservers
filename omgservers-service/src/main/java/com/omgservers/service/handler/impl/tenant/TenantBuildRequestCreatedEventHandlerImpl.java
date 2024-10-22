@@ -47,16 +47,7 @@ public class TenantBuildRequestCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantBuildRequest(tenantId, id)
                 .flatMap(tenantBuildRequest -> {
-                    final var buildRequestVersionId = tenantBuildRequest.getVersionId();
-                    final var qualifier = tenantBuildRequest.getQualifier();
-                    final var buildNumber = tenantBuildRequest.getBuildNumber();
-                    log.info("Tenant build request was created, " +
-                                    "id={}, tenantVersion={}/{}, qualifier={}, buildNumber={}",
-                            tenantBuildRequest.getId(),
-                            tenantId,
-                            buildRequestVersionId,
-                            qualifier,
-                            buildNumber);
+                    log.info("Created, {}", tenantBuildRequest);
 
                     final var tenantBuildRequestId = tenantBuildRequest.getId();
 

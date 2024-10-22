@@ -1,11 +1,11 @@
 package com.omgservers.service.handler.impl.root;
 
+import com.omgservers.schema.model.root.RootModel;
 import com.omgservers.schema.module.root.root.GetRootRequest;
 import com.omgservers.schema.module.root.root.GetRootResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
-import com.omgservers.schema.model.root.RootModel;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
@@ -40,7 +40,7 @@ public class RootCreatedEventHandlerImpl implements EventHandler {
 
         return getRoot(rootId)
                 .flatMap(root -> {
-                    log.info("Root was created, root={}", rootId);
+                    log.info("Created, {}", root);
 
                     return Uni.createFrom().voidItem();
                 })

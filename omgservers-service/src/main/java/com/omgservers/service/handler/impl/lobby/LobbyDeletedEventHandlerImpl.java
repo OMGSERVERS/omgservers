@@ -68,7 +68,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
         return getLobby(lobbyId)
                 .flatMap(lobby -> {
-                    log.info("Lobby was deleted, id={}", lobbyId);
+                    log.info("Deleted, {}", lobby);
 
                     final var runtimeId = lobby.getRuntimeId();
                     return deleteLobbyClients(runtimeId, idempotencyKey)

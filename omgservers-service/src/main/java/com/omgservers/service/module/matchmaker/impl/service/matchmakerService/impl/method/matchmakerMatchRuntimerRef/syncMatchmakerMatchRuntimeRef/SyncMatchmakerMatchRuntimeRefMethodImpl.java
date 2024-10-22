@@ -27,7 +27,7 @@ class SyncMatchmakerMatchRuntimeRefMethodImpl implements SyncMatchmakerMatchRunt
     @Override
     public Uni<SyncMatchmakerMatchRuntimeRefResponse> syncMatchmakerMatchRuntimeRef(
             final SyncMatchmakerMatchRuntimeRefRequest request) {
-        log.debug("Sync matchmaker match runtime ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var matchRuntimeRef = request.getMatchmakerMatchRuntimeRef();
         final var matchmakerId = matchRuntimeRef.getMatchmakerId();

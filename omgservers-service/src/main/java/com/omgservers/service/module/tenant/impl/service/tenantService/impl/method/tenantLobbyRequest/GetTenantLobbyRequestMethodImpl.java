@@ -22,7 +22,7 @@ class GetTenantLobbyRequestMethodImpl implements GetTenantLobbyRequestMethod {
 
     @Override
     public Uni<GetTenantLobbyRequestResponse> execute(final GetTenantLobbyRequestRequest request) {
-        log.debug("Get tenant lobby request, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

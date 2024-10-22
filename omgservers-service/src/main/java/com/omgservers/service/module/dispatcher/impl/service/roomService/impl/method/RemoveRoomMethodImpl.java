@@ -21,7 +21,7 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
 
     @Override
     public Uni<RemoveRoomResponse> execute(final RemoveRoomRequest request) {
-        log.debug("Remove room, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();
 

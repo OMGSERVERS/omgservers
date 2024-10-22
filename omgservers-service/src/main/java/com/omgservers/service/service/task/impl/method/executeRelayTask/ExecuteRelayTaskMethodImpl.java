@@ -16,7 +16,7 @@ public class ExecuteRelayTaskMethodImpl implements ExecuteRelayTaskMethod {
 
     @Override
     public Uni<ExecuteRelayTaskResponse> executeRelayTask(final ExecuteRelayTaskRequest request) {
-        log.debug("Execute relay task, request={}", request);
+        log.debug("Requested, {}", request);
 
         return relayTask.executeTask()
                 .onFailure()

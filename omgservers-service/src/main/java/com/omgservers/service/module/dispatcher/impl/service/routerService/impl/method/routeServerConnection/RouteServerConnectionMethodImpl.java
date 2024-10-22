@@ -22,7 +22,7 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
 
     @Override
     public Uni<RouteServerConnectionResponse> execute(final RouteServerConnectionRequest request) {
-        log.debug("Route server connection, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var serverConnection = request.getServerConnection();
         final var serverUri = request.getServerUri();

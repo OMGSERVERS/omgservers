@@ -38,9 +38,7 @@ public class LobbyRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
         return getLobbyRuntimeRef(lobbyId, id)
                 .flatMap(lobbyRuntimeRef -> {
-                    final var runtimeId = lobbyRuntimeRef.getRuntimeId();
-                    log.debug("Lobby runtime ref was created, lobbyId={}, runtimeId={} ", lobbyId, runtimeId);
-
+                    log.info("Created, {}", lobbyRuntimeRef);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

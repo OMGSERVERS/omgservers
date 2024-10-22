@@ -22,7 +22,7 @@ class FindRuntimePermissionMethodImpl implements FindRuntimePermissionMethod {
 
     @Override
     public Uni<FindRuntimePermissionResponse> findRuntimePermission(final FindRuntimePermissionRequest request) {
-        log.debug("Find runtime permission, request={}", request);
+        log.debug("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

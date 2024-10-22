@@ -22,7 +22,7 @@ class DeleteRootMethodImpl implements DeleteRootMethod {
 
     @Override
     public Uni<DeleteRootResponse> deleteRoot(final DeleteRootRequest request) {
-        log.debug("Delete root, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var id = request.getId();
         return Uni.createFrom().voidItem()

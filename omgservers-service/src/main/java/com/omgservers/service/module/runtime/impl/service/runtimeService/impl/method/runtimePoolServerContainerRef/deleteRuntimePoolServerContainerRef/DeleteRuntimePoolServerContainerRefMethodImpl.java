@@ -23,7 +23,7 @@ class DeleteRuntimePoolServerContainerRefMethodImpl implements DeleteRuntimePool
     @Override
     public Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
             final DeleteRuntimePoolServerContainerRefRequest request) {
-        log.debug("Delete runtime pool server container ref, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();

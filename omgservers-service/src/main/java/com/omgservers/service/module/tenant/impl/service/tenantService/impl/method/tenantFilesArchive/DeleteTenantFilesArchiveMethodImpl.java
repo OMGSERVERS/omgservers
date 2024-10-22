@@ -23,7 +23,7 @@ class DeleteTenantFilesArchiveMethodImpl implements DeleteTenantFilesArchiveMeth
     @Override
     public Uni<DeleteTenantFilesArchiveResponse> execute(
             final DeleteTenantFilesArchiveRequest request) {
-        log.debug("Delete tenant files archive, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

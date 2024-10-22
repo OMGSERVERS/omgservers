@@ -69,7 +69,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
-                    log.info("Matchmaker was deleted, id={}", matchmakerId);
+                    log.info("Deleted, {}", matchmaker);
 
                     return deleteMatchmakerCommands(matchmakerId)
                             .flatMap(voidItem -> deleteRequests(matchmakerId))

@@ -26,7 +26,7 @@ class SyncRuntimePermissionMethodImpl implements SyncRuntimePermissionMethod {
 
     @Override
     public Uni<SyncRuntimePermissionResponse> syncRuntimePermission(final SyncRuntimePermissionRequest request) {
-        log.debug("Sync runtime permission, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var runtimePermission = request.getRuntimePermission();

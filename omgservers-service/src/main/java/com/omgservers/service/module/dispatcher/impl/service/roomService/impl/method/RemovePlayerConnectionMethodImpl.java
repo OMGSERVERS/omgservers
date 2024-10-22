@@ -19,7 +19,7 @@ class RemovePlayerConnectionMethodImpl implements RemovePlayerConnectionMethod {
 
     @Override
     public Uni<RemovePlayerConnectionResponse> execute(final RemovePlayerConnectionRequest request) {
-        log.debug("Remove player connection, request={}", request);
+        log.debug("Requested, {}", request);
 
         final var playerConnection = request.getPlayerConnection();
 
