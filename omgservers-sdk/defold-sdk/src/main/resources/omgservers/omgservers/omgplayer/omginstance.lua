@@ -114,8 +114,6 @@ omginstance = {
 		assert(self, "The dt must not be nil.")
 		assert(type(dt) == "number", "The type of dt must be number")
 		assert(self.config, "The player must be initialized")
-		assert(not self.state.failed, "The player has failed, a reset is required")
-
 		self.process:update(dt)
 	end,
 }

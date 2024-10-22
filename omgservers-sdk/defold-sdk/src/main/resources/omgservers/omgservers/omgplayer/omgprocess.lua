@@ -106,6 +106,10 @@ omgprocess = {
 				if not client:fully_fledged() then
 					return
 				end
+
+				if state.failed then
+					return
+				end
 				
 				local iteration_timer = instance.iteration_timer + dt
 

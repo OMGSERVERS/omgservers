@@ -43,8 +43,11 @@ omgdispatcher = {
 				local connection = websocket.connect(connection_url, params, function(_, _, data)
 					if data.event == websocket.EVENT_DISCONNECTED then
 						if debug_logging then
-							print(socket.gettime() .. " [OMGSERVER] The connection to the dispatcher was disconnected")
-							pprint(data)
+							print(socket.gettime() .. " [OMGSERVER] The connection to the dispatcher was disconnected, message=" .. data.message .. ", code=" .. data.code)
+						end
+
+						if data.code > 0 then
+							state:fail("The connection to the dispatcher was disconnected, message=" .. data.message .. ", code=" .. data.code)
 						end
 
 					elseif data.event == websocket.EVENT_CONNECTED then
