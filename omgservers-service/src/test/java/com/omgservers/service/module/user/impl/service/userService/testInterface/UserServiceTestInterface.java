@@ -8,8 +8,6 @@ import com.omgservers.schema.module.user.DeleteUserRequest;
 import com.omgservers.schema.module.user.DeleteUserResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
-import com.omgservers.schema.module.user.GetPlayerAttributesRequest;
-import com.omgservers.schema.module.user.GetPlayerAttributesResponse;
 import com.omgservers.schema.module.user.GetPlayerProfileRequest;
 import com.omgservers.schema.module.user.GetPlayerProfileResponse;
 import com.omgservers.schema.module.user.GetPlayerRequest;
@@ -20,8 +18,6 @@ import com.omgservers.schema.module.user.SyncPlayerRequest;
 import com.omgservers.schema.module.user.SyncPlayerResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.module.user.SyncUserResponse;
-import com.omgservers.schema.module.user.UpdatePlayerAttributesRequest;
-import com.omgservers.schema.module.user.UpdatePlayerAttributesResponse;
 import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
 import com.omgservers.service.module.user.impl.service.userService.UserService;
@@ -64,11 +60,6 @@ public class UserServiceTestInterface {
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetPlayerAttributesResponse getPlayerAttributes(final GetPlayerAttributesRequest request) {
-        return userService.getPlayerAttributes(request)
-                .await().atMost(Duration.ofSeconds(TIMEOUT));
-    }
-
     public GetPlayerProfileResponse getPlayerProfile(final GetPlayerProfileRequest request) {
         return userService.getPlayerProfile(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
@@ -81,11 +72,6 @@ public class UserServiceTestInterface {
 
     public SyncPlayerResponse syncPlayer(final SyncPlayerRequest request) {
         return userService.syncPlayer(request)
-                .await().atMost(Duration.ofSeconds(TIMEOUT));
-    }
-
-    public UpdatePlayerAttributesResponse updatePlayerAttributes(final UpdatePlayerAttributesRequest request) {
-        return userService.updatePlayerAttributes(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 

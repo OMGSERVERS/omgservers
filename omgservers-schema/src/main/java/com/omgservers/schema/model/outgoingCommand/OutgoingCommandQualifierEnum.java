@@ -5,7 +5,6 @@ import com.omgservers.schema.model.outgoingCommand.body.KickClientOutgoingComman
 import com.omgservers.schema.model.outgoingCommand.body.MulticastMessageOutgoingCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.body.RespondClientOutgoingCommandBodyDto;
-import com.omgservers.schema.model.outgoingCommand.body.SetAttributesOutgoingCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyDto;
@@ -15,7 +14,6 @@ import lombok.Getter;
 public enum OutgoingCommandQualifierEnum {
 
     RESPOND_CLIENT(RespondClientOutgoingCommandBodyDto.class, false),
-    SET_ATTRIBUTES(SetAttributesOutgoingCommandBodyDto.class, true),
     SET_PROFILE(SetProfileOutgoingCommandBodyDto.class, true),
 
     MULTICAST_MESSAGE(MulticastMessageOutgoingCommandBodyDto.class, false),

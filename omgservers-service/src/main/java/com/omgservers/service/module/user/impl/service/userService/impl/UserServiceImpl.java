@@ -1,5 +1,6 @@
 package com.omgservers.service.module.user.impl.service.userService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.schema.module.user.DeletePlayerRequest;
@@ -8,8 +9,6 @@ import com.omgservers.schema.module.user.DeleteUserRequest;
 import com.omgservers.schema.module.user.DeleteUserResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
-import com.omgservers.schema.module.user.GetPlayerAttributesRequest;
-import com.omgservers.schema.module.user.GetPlayerAttributesResponse;
 import com.omgservers.schema.module.user.GetPlayerProfileRequest;
 import com.omgservers.schema.module.user.GetPlayerProfileResponse;
 import com.omgservers.schema.module.user.GetPlayerRequest;
@@ -20,11 +19,8 @@ import com.omgservers.schema.module.user.SyncPlayerRequest;
 import com.omgservers.schema.module.user.SyncPlayerResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.module.user.SyncUserResponse;
-import com.omgservers.schema.module.user.UpdatePlayerAttributesRequest;
-import com.omgservers.schema.module.user.UpdatePlayerAttributesResponse;
 import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
@@ -33,10 +29,8 @@ import com.omgservers.service.module.user.impl.service.userService.UserService;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.deletePlayer.DeletePlayerMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.findPlayer.FindPlayerMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayer.GetPlayerMethod;
-import com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayerAttributes.GetPlayerAttributesMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.getPlayerProfile.GetPlayerProfileMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.syncPlayer.SyncPlayerMethod;
-import com.omgservers.service.module.user.impl.service.userService.impl.method.player.updatePlayerAttributes.UpdatePlayerAttributesMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.player.updatePlayerProfile.UpdatePlayerProfileMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.user.createToken.CreateTokenMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.user.deleteUser.DeleteUserMethod;
@@ -56,8 +50,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class UserServiceImpl implements UserService {
 
-    final UpdatePlayerAttributesMethod updatePlayerAttributes;
-    final GetPlayerAttributesMethod getPlayerAttributesMethod;
     final UpdatePlayerProfileMethod updatePlayerProfileMethod;
     final GetPlayerProfileMethod getPlayerProfileMethod;
     final DeletePlayerMethod deletePlayerMethod;
@@ -130,14 +122,6 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Uni<GetPlayerAttributesResponse> getPlayerAttributes(@Valid final GetPlayerAttributesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getUserModuleClientOperation::getClient,
-                UserModuleClient::getPlayerAttributes,
-                getPlayerAttributesMethod::getPlayerAttributes);
-    }
-
-    @Override
     public Uni<GetPlayerProfileResponse> getPlayerProfile(@Valid final GetPlayerProfileRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
@@ -159,15 +143,6 @@ class UserServiceImpl implements UserService {
                 getUserModuleClientOperation::getClient,
                 UserModuleClient::syncPlayer,
                 syncPlayerMethod::syncPlayer);
-    }
-
-    @Override
-    public Uni<UpdatePlayerAttributesResponse> updatePlayerAttributes(
-            @Valid final UpdatePlayerAttributesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getUserModuleClientOperation::getClient,
-                UserModuleClient::updatePlayerAttributes,
-                updatePlayerAttributes::updatePlayerAttributes);
     }
 
     @Override

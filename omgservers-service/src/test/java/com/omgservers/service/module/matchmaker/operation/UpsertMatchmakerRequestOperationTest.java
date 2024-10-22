@@ -2,7 +2,6 @@ package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -45,7 +44,7 @@ class UpsertMatchmakerRequestOperationTest extends BaseTestClass {
                 userId(),
                 clientId(),
                 "mode",
-                MatchmakerRequestConfigDto.create(PlayerAttributesDto.create()));
+                MatchmakerRequestConfigDto.create());
 
         final var changeContext = upsertMatchmakerRequestOperation.upsertMatchmakerRequest(shard, matchmakerRequest);
         assertTrue(changeContext.getResult());
@@ -61,7 +60,7 @@ class UpsertMatchmakerRequestOperationTest extends BaseTestClass {
                 userId(),
                 clientId(),
                 "mode",
-                MatchmakerRequestConfigDto.create(PlayerAttributesDto.create()));
+                MatchmakerRequestConfigDto.create());
         upsertMatchmakerRequestOperation.upsertMatchmakerRequest(shard, matchmakerRequest);
 
         final var changeContext = upsertMatchmakerRequestOperation.upsertMatchmakerRequest(shard, matchmakerRequest);
@@ -75,7 +74,7 @@ class UpsertMatchmakerRequestOperationTest extends BaseTestClass {
                 userId(),
                 clientId(),
                 "mode",
-                MatchmakerRequestConfigDto.create(PlayerAttributesDto.create()));
+                MatchmakerRequestConfigDto.create());
         assertThrows(ServerSideBadRequestException.class, () ->
                 upsertMatchmakerRequestOperation.upsertMatchmakerRequest(shard, matchmakerRequest));
     }
@@ -90,14 +89,14 @@ class UpsertMatchmakerRequestOperationTest extends BaseTestClass {
                 userId(),
                 clientId(),
                 "mode",
-                MatchmakerRequestConfigDto.create(PlayerAttributesDto.create()));
+                MatchmakerRequestConfigDto.create());
         upsertMatchmakerRequestOperation.upsertMatchmakerRequest(shard, request1);
 
         final var request2 = matchmakerRequestModelFactory.create(matchmaker.getId(),
                 userId(),
                 clientId(),
                 "mode",
-                MatchmakerRequestConfigDto.create(PlayerAttributesDto.create()),
+                MatchmakerRequestConfigDto.create(),
                 request1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertMatchmakerRequestOperation.upsertMatchmakerRequest(shard, request2));

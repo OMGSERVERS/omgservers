@@ -1,6 +1,5 @@
 package com.omgservers.schema.model.runtimeCommand.body;
 
-import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandBodyDto;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandQualifierEnum;
 import jakarta.validation.constraints.NotNull;
@@ -20,9 +19,6 @@ public class AddClientRuntimeCommandBodyDto extends RuntimeCommandBodyDto {
 
     @NotNull
     Long clientId;
-
-    @NotNull
-    PlayerAttributesDto attributes;
 
     @NotNull
     Object profile;

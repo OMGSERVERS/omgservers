@@ -92,7 +92,6 @@ create table if not exists tab_user_player (
     modified timestamp with time zone not null,
     tenant_id bigint not null,
     stage_id bigint not null,
-    attributes json not null,
     profile json not null,
     deleted boolean not null
 );

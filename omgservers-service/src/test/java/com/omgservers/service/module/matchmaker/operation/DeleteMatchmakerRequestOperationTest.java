@@ -1,7 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.schema.model.player.PlayerAttributesDto;
 import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
@@ -45,7 +44,7 @@ class DeleteMatchmakerRequestOperationTest extends BaseTestClass {
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerRequestConfig = MatchmakerRequestConfigDto.create(PlayerAttributesDto.create());
+        final var matchmakerRequestConfig = MatchmakerRequestConfigDto.create();
         final var matchmakerRequest = matchmakerRequestModelFactory.create(matchmaker.getId(),
                 userId(),
                 clientId(),

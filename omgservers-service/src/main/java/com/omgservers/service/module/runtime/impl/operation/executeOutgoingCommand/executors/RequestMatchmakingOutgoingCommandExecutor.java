@@ -2,20 +2,17 @@ package com.omgservers.service.module.runtime.impl.operation.executeOutgoingComm
 
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
-import com.omgservers.schema.model.player.PlayerAttributesDto;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyDto;
+import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.ViewClientMatchmakerRefsRequest;
 import com.omgservers.schema.module.client.ViewClientMatchmakerRefsResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequestRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequestResponse;
-import com.omgservers.schema.module.user.GetPlayerAttributesRequest;
-import com.omgservers.schema.module.user.GetPlayerAttributesResponse;
-import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.RequestMatchmakingOutgoingCommandBodyDto;
-import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.matchmaker.MatchmakerRequestModelFactory;
@@ -95,12 +92,10 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
                                 final var userId = client.getUserId();
                                 final var playerId = client.getPlayerId();
 
-                                return getPlayerAttributes(userId, playerId)
-                                        .flatMap(attributes -> syncMatchmakerRequest(matchmakerId,
-                                                userId,
-                                                clientId,
-                                                mode,
-                                                attributes));
+                                return syncMatchmakerRequest(matchmakerId,
+                                        userId,
+                                        clientId,
+                                        mode);
                             });
                 })
                 .replaceWithVoid();
@@ -130,18 +125,11 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
                 .map(ViewClientMatchmakerRefsResponse::getClientMatchmakerRefs);
     }
 
-    Uni<PlayerAttributesDto> getPlayerAttributes(final Long userId, final Long playerId) {
-        final var request = new GetPlayerAttributesRequest(userId, playerId);
-        return userModule.getService().getPlayerAttributes(request)
-                .map(GetPlayerAttributesResponse::getAttributes);
-    }
-
     Uni<Boolean> syncMatchmakerRequest(final Long matchmakerId,
                                        final Long userId,
                                        final Long clientId,
-                                       final String mode,
-                                       final PlayerAttributesDto attributes) {
-        final var requestConfig = new MatchmakerRequestConfigDto(attributes);
+                                       final String mode) {
+        final var requestConfig = new MatchmakerRequestConfigDto();
         final var requestModel = matchmakerRequestModelFactory.create(matchmakerId,
                 userId,
                 clientId,

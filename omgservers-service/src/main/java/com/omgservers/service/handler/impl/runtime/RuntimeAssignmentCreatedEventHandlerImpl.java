@@ -99,7 +99,6 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
                     return getPlayer(userId, playerId)
                             .flatMap(player -> {
-                                final var attributes = player.getAttributes();
                                 final var profile = player.getProfile();
 
                                 final var runtimeId = runtimeAssignment.getRuntimeId();
@@ -109,7 +108,6 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
                                     final var runtimeCommandBody = new AddMatchClientRuntimeCommandBodyDto(userId,
                                             clientId,
                                             groupName,
-                                            attributes,
                                             profile);
                                     final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId,
                                             runtimeCommandBody,
@@ -118,7 +116,6 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
                                 } else {
                                     final var runtimeCommandBody = new AddClientRuntimeCommandBodyDto(userId,
                                             clientId,
-                                            attributes,
                                             profile);
                                     final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId,
                                             runtimeCommandBody,
