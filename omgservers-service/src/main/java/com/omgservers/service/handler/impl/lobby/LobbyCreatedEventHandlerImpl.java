@@ -120,7 +120,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var request = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getService().syncRuntimeWithIdempotency(request)
+        return runtimeModule.getService().executeWithIdempotency(request)
                 .map(SyncRuntimeResponse::getCreated);
     }
 

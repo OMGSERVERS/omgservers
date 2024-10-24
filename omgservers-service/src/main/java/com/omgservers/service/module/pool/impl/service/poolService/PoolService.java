@@ -1,15 +1,21 @@
 package com.omgservers.service.module.pool.impl.service.poolService;
 
-import com.omgservers.schema.module.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestResponse;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestRequest;
@@ -28,58 +34,78 @@ import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface PoolService {
 
-    Uni<GetPoolResponse> getPool(@Valid GetPoolRequest request);
+    /*
+    Pool
+     */
 
-    Uni<SyncPoolResponse> syncPool(@Valid SyncPoolRequest request);
+    Uni<GetPoolResponse> execute(@Valid GetPoolRequest request);
 
-    Uni<SyncPoolResponse> syncPoolWithIdempotency(@Valid SyncPoolRequest request);
+    Uni<SyncPoolResponse> execute(@Valid SyncPoolRequest request);
 
-    Uni<DeletePoolResponse> deletePool(@Valid DeletePoolRequest request);
+    Uni<SyncPoolResponse> executeWithIdempotency(@Valid SyncPoolRequest request);
 
-    Uni<GetPoolServerResponse> getPoolServer(@Valid GetPoolServerRequest request);
+    Uni<DeletePoolResponse> execute(@Valid DeletePoolRequest request);
 
-    Uni<ViewPoolServerResponse> viewPoolServers(@Valid ViewPoolServersRequest request);
+    /*
+    PoolServer
+     */
 
-    Uni<SyncPoolServerResponse> syncPoolServer(@Valid SyncPoolServerRequest request);
+    Uni<GetPoolServerResponse> execute(@Valid GetPoolServerRequest request);
 
-    Uni<SyncPoolServerResponse> syncPoolServerWithIdempotency(@Valid SyncPoolServerRequest request);
+    Uni<ViewPoolServerResponse> execute(@Valid ViewPoolServersRequest request);
 
-    Uni<DeletePoolServerResponse> deletePoolServer(@Valid DeletePoolServerRequest request);
+    Uni<SyncPoolServerResponse> execute(@Valid SyncPoolServerRequest request);
 
-    Uni<GetPoolRequestResponse> getPoolRequest(@Valid GetPoolRequestRequest request);
+    Uni<SyncPoolServerResponse> executeWithIdempotency(@Valid SyncPoolServerRequest request);
 
-    Uni<FindPoolRequestResponse> findPoolRequest(@Valid FindPoolRequestRequest request);
+    Uni<DeletePoolServerResponse> execute(@Valid DeletePoolServerRequest request);
 
-    Uni<ViewPoolRequestsResponse> viewPoolRequests(@Valid ViewPoolRequestsRequest request);
+    /*
+    PoolContainer
+     */
 
-    Uni<SyncPoolRequestResponse> syncPoolRequest(@Valid SyncPoolRequestRequest request);
+    Uni<GetPoolContainerResponse> execute(@Valid GetPoolContainerRequest request);
 
-    Uni<SyncPoolRequestResponse> syncPoolRequestWithIdempotency(@Valid SyncPoolRequestRequest request);
+    Uni<FindPoolContainerResponse> execute(@Valid FindPoolContainerRequest request);
 
-    Uni<DeletePoolRequestResponse> deletePoolRequest(@Valid DeletePoolRequestRequest request);
+    Uni<ViewPoolContainersResponse> execute(@Valid ViewPoolContainersRequest request);
 
-    Uni<GetPoolServerContainerResponse> getPoolServerContainer(@Valid GetPoolServerContainerRequest request);
+    Uni<SyncPoolContainerResponse> execute(@Valid SyncPoolContainerRequest request);
 
-    Uni<FindPoolServerContainerResponse> findPoolServerContainer(@Valid FindPoolServerContainerRequest request);
+    Uni<SyncPoolContainerResponse> executeWithIdempotency(@Valid SyncPoolContainerRequest request);
 
-    Uni<ViewPoolServerContainersResponse> viewPoolServerContainers(@Valid ViewPoolServerContainersRequest request);
+    Uni<DeletePoolContainerResponse> execute(@Valid DeletePoolContainerRequest request);
 
-    Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(@Valid SyncPoolServerContainerRequest request);
+    /*
+    PoolRequest
+     */
 
-    Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(@Valid DeletePoolServerContainerRequest request);
+    Uni<GetPoolRequestResponse> execute(@Valid GetPoolRequestRequest request);
+
+    Uni<FindPoolRequestResponse> execute(@Valid FindPoolRequestRequest request);
+
+    Uni<ViewPoolRequestsResponse> execute(@Valid ViewPoolRequestsRequest request);
+
+    Uni<SyncPoolRequestResponse> execute(@Valid SyncPoolRequestRequest request);
+
+    Uni<SyncPoolRequestResponse> executeWithIdempotency(@Valid SyncPoolRequestRequest request);
+
+    Uni<DeletePoolRequestResponse> execute(@Valid DeletePoolRequestRequest request);
+
+    /*
+    PoolState
+     */
+
+    Uni<GetPoolStateResponse> execute(@Valid GetPoolStateRequest request);
+
+    Uni<UpdatePoolStateResponse> execute(@Valid UpdatePoolStateRequest request);
 }

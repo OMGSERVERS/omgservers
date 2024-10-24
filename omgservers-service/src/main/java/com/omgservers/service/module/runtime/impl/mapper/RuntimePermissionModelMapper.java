@@ -15,7 +15,7 @@ public class RuntimePermissionModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public RuntimePermissionModel fromRow(final Row row) {
+    public RuntimePermissionModel execute(final Row row) {
         final var runtimePermission = new RuntimePermissionModel();
         runtimePermission.setId(row.getLong("id"));
         runtimePermission.setIdempotencyKey(row.getString("idempotency_key"));

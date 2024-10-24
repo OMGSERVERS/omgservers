@@ -1,7 +1,7 @@
 package com.omgservers.service.module.runtime.operation.testInterface;
 
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.upsertRuntimeCommand.UpsertRuntimeCommandOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,7 +26,7 @@ public class UpsertRuntimeCommandOperationTestInterface {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertRuntimeCommandOperation
-                                    .upsertRuntimeCommand(changeContext, sqlConnection, shard, runtimeCommand))
+                                    .execute(changeContext, sqlConnection, shard, runtimeCommand))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

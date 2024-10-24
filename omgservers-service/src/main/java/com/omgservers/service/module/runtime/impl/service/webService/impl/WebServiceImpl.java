@@ -40,14 +40,14 @@ import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefResponse;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.service.module.runtime.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -64,127 +64,127 @@ class WebServiceImpl implements WebService {
     final RuntimeService runtimeService;
 
     @Override
-    public Uni<SyncRuntimeResponse> syncLobbyRuntime(final SyncRuntimeRequest request) {
-        return runtimeService.syncRuntime(request);
+    public Uni<SyncRuntimeResponse> execute(final SyncRuntimeRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<GetRuntimeResponse> getRuntime(final GetRuntimeRequest request) {
-        return runtimeService.getRuntime(request);
+    public Uni<GetRuntimeResponse> execute(final GetRuntimeRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeResponse> deleteRuntime(final DeleteRuntimeRequest request) {
-        return runtimeService.deleteRuntime(request);
+    public Uni<DeleteRuntimeResponse> execute(final DeleteRuntimeRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<SyncRuntimePermissionResponse> syncRuntimePermission(final SyncRuntimePermissionRequest request) {
-        return runtimeService.syncRuntimePermission(request);
+    public Uni<SyncRuntimePermissionResponse> execute(final SyncRuntimePermissionRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(final ViewRuntimePermissionsRequest request) {
-        return runtimeService.viewRuntimePermissions(request);
+    public Uni<ViewRuntimePermissionsResponse> execute(final ViewRuntimePermissionsRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<FindRuntimePermissionResponse> findRuntimePermission(final FindRuntimePermissionRequest request) {
-        return runtimeService.findRuntimePermission(request);
+    public Uni<FindRuntimePermissionResponse> execute(final FindRuntimePermissionRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(final DeleteRuntimePermissionRequest request) {
-        return runtimeService.deleteRuntimePermission(request);
+    public Uni<DeleteRuntimePermissionResponse> execute(final DeleteRuntimePermissionRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
-        return runtimeService.syncRuntimeCommand(request);
+    public Uni<SyncRuntimeCommandResponse> execute(final SyncRuntimeCommandRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<SyncClientCommandResponse> syncClientCommand(final SyncClientCommandRequest request) {
-        return runtimeService.syncClientCommand(request);
+    public Uni<SyncClientCommandResponse> execute(final SyncClientCommandRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(final DeleteRuntimeCommandRequest request) {
-        return runtimeService.deleteRuntimeCommand(request);
+    public Uni<DeleteRuntimeCommandResponse> execute(final DeleteRuntimeCommandRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
-        return runtimeService.viewRuntimeCommands(request);
+    public Uni<ViewRuntimeCommandsResponse> execute(final ViewRuntimeCommandsRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(final DeleteRuntimeCommandsRequest request) {
-        return runtimeService.deleteRuntimeCommands(request);
+    public Uni<DeleteRuntimeCommandsResponse> execute(final DeleteRuntimeCommandsRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(final GetRuntimeAssignmentRequest request) {
-        return runtimeService.getRuntimeAssignment(request);
+    public Uni<GetRuntimeAssignmentResponse> execute(final GetRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(final FindRuntimeAssignmentRequest request) {
-        return runtimeService.findRuntimeAssignment(request);
+    public Uni<FindRuntimeAssignmentResponse> execute(final FindRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(final ViewRuntimeAssignmentsRequest request) {
-        return runtimeService.viewRuntimeAssignments(request);
+    public Uni<ViewRuntimeAssignmentsResponse> execute(final ViewRuntimeAssignmentsRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(final CountRuntimeAssignmentsRequest request) {
-        return runtimeService.countRuntimeAssignments(request);
+    public Uni<CountRuntimeAssignmentsResponse> execute(final CountRuntimeAssignmentsRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(final SyncRuntimeAssignmentRequest request) {
-        return runtimeService.syncRuntimeAssignment(request);
+    public Uni<SyncRuntimeAssignmentResponse> execute(final SyncRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
+    public Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(
             final UpdateRuntimeAssignmentLastActivityRequest request) {
-        return runtimeService.updateRuntimeAssignmentLastActivity(request);
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(final DeleteRuntimeAssignmentRequest request) {
-        return runtimeService.deleteRuntimeAssignment(request);
+    public Uni<DeleteRuntimeAssignmentResponse> execute(final DeleteRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
-            final GetRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.getRuntimePoolServerContainerRef(request);
+    public Uni<GetRuntimePoolContainerRefResponse> execute(
+            final GetRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
-            final FindRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.findRuntimePoolServerContainerRef(request);
+    public Uni<FindRuntimePoolContainerRefResponse> execute(
+            final FindRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
-            final SyncRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.syncRuntimePoolServerContainerRef(request);
+    public Uni<SyncRuntimePoolContainerRefResponse> execute(
+            final SyncRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
-            final DeleteRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.deleteRuntimePoolServerContainerRef(request);
+    public Uni<DeleteRuntimePoolContainerRefResponse> execute(
+            final DeleteRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<InterchangeResponse> interchange(final InterchangeRequest request) {
-        return runtimeService.interchange(request);
+    public Uni<InterchangeResponse> execute(final InterchangeRequest request) {
+        return runtimeService.execute(request);
     }
 }

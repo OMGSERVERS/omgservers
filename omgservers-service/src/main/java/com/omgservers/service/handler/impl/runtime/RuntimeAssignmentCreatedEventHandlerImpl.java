@@ -82,7 +82,7 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> getRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new GetRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getService().getRuntimeAssignment(request)
+        return runtimeModule.getService().execute(request)
                 .map(GetRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
@@ -138,7 +138,7 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var request = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getService().syncRuntimeCommand(request)
+        return runtimeModule.getService().execute(request)
                 .map(SyncRuntimeCommandResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

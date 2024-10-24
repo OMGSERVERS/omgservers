@@ -20,7 +20,7 @@ public class RuntimeModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public RuntimeModel fromRow(final Row row) {
+    public RuntimeModel execute(final Row row) {
         final var runtime = new RuntimeModel();
         runtime.setId(row.getLong("id"));
         runtime.setIdempotencyKey(row.getString("idempotency_key"));

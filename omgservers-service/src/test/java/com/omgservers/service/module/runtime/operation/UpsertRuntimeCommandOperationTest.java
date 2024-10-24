@@ -37,7 +37,7 @@ class UpsertRuntimeCommandOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenRuntimeCommand_whenUpsertRuntimeCommand_thenInserted() {
+    void givenRuntimeCommand_whenExecute_thenInserted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -52,7 +52,7 @@ class UpsertRuntimeCommandOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenRuntimeCommand_whenUpsertRuntimeCommand_thenUpdated() {
+    void givenRuntimeCommand_whenExecute_thenUpdated() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -69,7 +69,7 @@ class UpsertRuntimeCommandOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownId_whenUpsertRuntimeCommand_thenException() {
+    void givenUnknownId_whenExecute_thenException() {
         final var shard = 0;
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId(), new InitRuntimeCommandBodyDto());
         assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimeCommandOperation
@@ -77,7 +77,7 @@ class UpsertRuntimeCommandOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenRuntimeCommand_whenUpsertRuntimeCommand_thenIdempotencyViolation() {
+    void givenRuntimeCommand_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),

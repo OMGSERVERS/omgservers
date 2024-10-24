@@ -12,7 +12,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.hasRuntimeAssignment.HasRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.HasRuntimeAssignmentOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -50,7 +50,7 @@ public class SetProfileOutgoingCommandExecutor implements OutgoingCommandExecuto
 
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool.withTransaction(sqlConnection ->
-                        hasRuntimeAssignmentOperation.hasRuntimeAssignment(
+                        hasRuntimeAssignmentOperation.execute(
                                         sqlConnection,
                                         shardModel.shard(),
                                         runtimeId,

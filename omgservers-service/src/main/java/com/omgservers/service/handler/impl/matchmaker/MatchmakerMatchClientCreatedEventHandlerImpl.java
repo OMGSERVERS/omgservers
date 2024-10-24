@@ -88,7 +88,7 @@ public class MatchmakerMatchClientCreatedEventHandlerImpl implements EventHandle
                 runtimeAssignmentConfig,
                 idempotencyKey);
         final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
-        return runtimeModule.getService().syncRuntimeAssignment(request)
+        return runtimeModule.getService().execute(request)
                 .map(SyncRuntimeAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

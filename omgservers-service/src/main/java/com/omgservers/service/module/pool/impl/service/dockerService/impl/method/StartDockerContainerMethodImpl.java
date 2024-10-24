@@ -3,8 +3,8 @@ package com.omgservers.service.module.pool.impl.service.dockerService.impl.metho
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.LogConfig;
-import com.omgservers.schema.module.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
 import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -28,14 +28,14 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
         log.debug("Requested, {}", request);
 
         final var poolServer = request.getPoolServer();
-        final var poolServerContainer = request.getPoolServerContainer();
+        final var poolContainer = request.getPoolContainer();
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .map(voidItem -> {
-                    final var imageId = poolServerContainer.getConfig().getImageId();
-                    final var containerName = poolServerContainer.getContainerName();
-                    final var environment = poolServerContainer.getConfig().getEnvironment().entrySet().stream()
+                    final var imageId = poolContainer.getConfig().getImageId();
+                    final var containerName = poolContainer.getContainerName();
+                    final var environment = poolContainer.getConfig().getEnvironment().entrySet().stream()
                             .map(entry -> entry.getKey() + "=" + entry.getValue())
                             .toList();
 
@@ -46,10 +46,10 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
 
                     try {
                         // Convert milliseconds -> microseconds
-                        final var cpuQuotaInMicroseconds = poolServerContainer.getConfig()
+                        final var cpuQuotaInMicroseconds = poolContainer.getConfig()
                                 .getCpuLimitInMilliseconds() * 1000L;
                         // Convert megabytes -> bytes
-                        final var memoryLimitInBytes = poolServerContainer.getConfig()
+                        final var memoryLimitInBytes = poolContainer.getConfig()
                                 .getMemoryLimitInMegabytes() * 1024L * 1024L;
 
                         final var logConfig = new LogConfig();

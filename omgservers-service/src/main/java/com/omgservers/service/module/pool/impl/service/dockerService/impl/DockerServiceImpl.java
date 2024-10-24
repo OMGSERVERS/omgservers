@@ -1,10 +1,10 @@
 package com.omgservers.service.module.pool.impl.service.dockerService.impl;
 
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.module.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.docker.StopDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.service.module.pool.impl.operation.getPoolModuleClient.GetPoolModuleClientOperation;
 import com.omgservers.service.module.pool.impl.operation.getPoolModuleClient.PoolModuleClient;
 import com.omgservers.service.module.pool.impl.service.dockerService.DockerService;
@@ -34,21 +34,21 @@ public class DockerServiceImpl implements DockerService {
     final GetConfigOperation getConfigOperation;
 
     @Override
-    public Uni<StartDockerContainerResponse> startDockerContainer(@Valid final StartDockerContainerRequest request) {
+    public Uni<StartDockerContainerResponse> execute(@Valid final StartDockerContainerRequest request) {
         final var poolServer = request.getPoolServer();
         return handleRequest(poolServer,
                 request,
                 startDockerContainerMethod::execute,
-                PoolApi::startDockerContainer);
+                PoolApi::execute);
     }
 
     @Override
-    public Uni<StopDockerContainerResponse> stopDockerContainer(@Valid final StopDockerContainerRequest request) {
+    public Uni<StopDockerContainerResponse> execute(@Valid final StopDockerContainerRequest request) {
         final var poolServer = request.getPoolServer();
         return handleRequest(poolServer,
                 request,
                 stopDockerContainerMethod::execute,
-                PoolApi::stopDockerContainer);
+                PoolApi::execute);
     }
 
     <R, T> Uni<R> handleRequest(final PoolServerModel poolServer,

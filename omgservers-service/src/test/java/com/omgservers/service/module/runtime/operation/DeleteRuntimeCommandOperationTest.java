@@ -38,7 +38,7 @@ class DeleteRuntimeCommandOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenRuntimeCommand_whenDeleteRuntimeCommand_thenDeleted() {
+    void givenRuntimeCommand_whenExecute_thenDeleted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
@@ -54,7 +54,7 @@ class DeleteRuntimeCommandOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenDeleteRuntimeCommand_thenFalse() {
+    void givenUnknownIds_whenExecute_thenFalse() {
         final var shard = 0;
         final var runtimeId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();

@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class PoolModelMapper {
 
-    public PoolModel fromRow(final Row row) {
+    public PoolModel execute(final Row row) {
         final var pool = new PoolModel();
         pool.setId(row.getLong("id"));
         pool.setIdempotencyKey(row.getString("idempotency_key"));

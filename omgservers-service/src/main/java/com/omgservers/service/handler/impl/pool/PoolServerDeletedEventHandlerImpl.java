@@ -1,16 +1,16 @@
 package com.omgservers.service.handler.impl.pool;
 
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolServerDeletedEventBodyModel;
-import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolServerContainerModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
 import io.smallrye.mutiny.Multi;
@@ -46,28 +46,28 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(poolServer -> {
                     log.info("Deleted, {}", poolServer);
 
-                    return deletePoolServerContainers(poolId, id);
+                    return deletePoolContainers(poolId, id);
                 })
                 .replaceWithVoid();
     }
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().getPoolServer(request)
+        return poolModule.getPoolService().execute(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
-    Uni<Void> deletePoolServerContainers(final Long poolId, final Long serverId) {
-        return viewPoolServerContainers(poolId, serverId)
-                .flatMap(poolServerContainers -> Multi.createFrom().iterable(poolServerContainers)
-                        .onItem().transformToUniAndConcatenate(poolServerContainer ->
-                                deletePoolServerContainer(poolId, serverId, poolServerContainer.getId())
+    Uni<Void> deletePoolContainers(final Long poolId, final Long serverId) {
+        return viewPoolContainers(poolId, serverId)
+                .flatMap(poolContainers -> Multi.createFrom().iterable(poolContainers)
+                        .onItem().transformToUniAndConcatenate(poolContainer ->
+                                deletePoolContainer(poolId, serverId, poolContainer.getId())
                                         .onFailure()
                                         .recoverWithItem(t -> {
                                             log.warn("Delete pool server container failed, id={}/{}/{}, {}:{}",
                                                     poolId,
                                                     serverId,
-                                                    poolServerContainer.getId(),
+                                                    poolContainer.getId(),
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
                                             return null;
@@ -78,18 +78,18 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<PoolServerContainerModel>> viewPoolServerContainers(final Long poolId,
-                                                                 final Long serverId) {
-        final var request = new ViewPoolServerContainersRequest(poolId, serverId);
-        return poolModule.getPoolService().viewPoolServerContainers(request)
-                .map(ViewPoolServerContainersResponse::getPoolServerContainers);
+    Uni<List<PoolContainerModel>> viewPoolContainers(final Long poolId,
+                                                     final Long serverId) {
+        final var request = new ViewPoolContainersRequest(poolId, serverId);
+        return poolModule.getPoolService().execute(request)
+                .map(ViewPoolContainersResponse::getPoolContainers);
     }
 
-    Uni<Boolean> deletePoolServerContainer(final Long poolId,
-                                           final Long serverId,
-                                           final Long id) {
-        final var request = new DeletePoolServerContainerRequest(poolId, serverId, id);
-        return poolModule.getPoolService().deletePoolServerContainer(request)
-                .map(DeletePoolServerContainerResponse::getDeleted);
+    Uni<Boolean> deletePoolContainer(final Long poolId,
+                                     final Long serverId,
+                                     final Long id) {
+        final var request = new DeletePoolContainerRequest(poolId, serverId, id);
+        return poolModule.getPoolService().execute(request)
+                .map(DeletePoolContainerResponse::getDeleted);
     }
 }

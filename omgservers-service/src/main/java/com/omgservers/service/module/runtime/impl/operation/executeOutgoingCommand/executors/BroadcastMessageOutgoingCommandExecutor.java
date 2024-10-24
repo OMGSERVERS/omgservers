@@ -13,7 +13,7 @@ import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.selectActiveRuntimeAssignmentsByRuntimeId.SelectActiveRuntimeAssignmentsByRuntimeIdOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.SelectActiveRuntimeAssignmentsByRuntimeIdOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
@@ -56,7 +56,7 @@ public class BroadcastMessageOutgoingCommandExecutor implements OutgoingCommandE
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool.withTransaction(
                         sqlConnection -> selectActiveRuntimeAssignmentsByRuntimeIdOperation
-                                .selectActiveRuntimeAssignmentsByRuntimeId(sqlConnection,
+                                .execute(sqlConnection,
                                         shardModel.shard(),
                                         runtimeId)
                                 .map(this::createClientList)

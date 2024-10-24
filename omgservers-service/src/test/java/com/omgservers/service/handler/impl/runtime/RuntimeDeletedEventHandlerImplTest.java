@@ -43,7 +43,7 @@ class RuntimeDeletedEventHandlerImplTest extends BaseTestClass {
         final var runtimeId = lobbyRuntime.getId();
 
         final var deleteRuntimeRequest = new DeleteRuntimeRequest(runtimeId);
-        runtimeService.deleteRuntime(deleteRuntimeRequest);
+        runtimeService.execute(deleteRuntimeRequest);
 
         final var eventBody = new RuntimeDeletedEventBodyModel(runtimeId);
         final var eventModel = eventModelFactory.create(eventBody);

@@ -116,9 +116,9 @@ public interface ServiceConfig {
 
         String dockerNetwork();
 
-        int defaultCpuLimit();
+        long defaultCpuLimit();
 
-        int defaultMemoryLimit();
+        long defaultMemoryLimit();
     }
 
     interface InitializationConfig {

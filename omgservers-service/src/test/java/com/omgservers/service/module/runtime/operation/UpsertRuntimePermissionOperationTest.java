@@ -36,7 +36,7 @@ class UpsertRuntimePermissionOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenRuntimePermission_whenUpsertRuntimePermission_thenTrue() {
+    void givenRuntimePermission_whenExecute_thenTrue() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -53,7 +53,7 @@ class UpsertRuntimePermissionOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenRuntimePermission_whenUpsertRuntimePermission_thenFalse() {
+    void givenRuntimePermission_whenExecute_thenFalse() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -71,7 +71,7 @@ class UpsertRuntimePermissionOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownId_whenUpsertRuntimePermission_thenException() {
+    void givenUnknownId_whenExecute_thenException() {
         final var shard = 0;
         final var runtimePermission = runtimePermissionModelFactory.create(runtimeId(),
                 userId(),

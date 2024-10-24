@@ -45,7 +45,7 @@ public class PoolRequestDeletedEventHandlerImpl implements EventHandler {
 
     Uni<PoolRequestModel> getPoolRequest(final Long poolId, final Long id) {
         final var request = new GetPoolRequestRequest(poolId, id);
-        return poolModule.getPoolService().getPoolRequest(request)
+        return poolModule.getPoolService().execute(request)
                 .map(GetPoolRequestResponse::getPoolRequest);
     }
 }

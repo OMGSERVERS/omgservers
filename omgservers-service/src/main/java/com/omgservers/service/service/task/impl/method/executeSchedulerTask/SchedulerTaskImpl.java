@@ -37,23 +37,18 @@ public class SchedulerTaskImpl {
     }
 
     Uni<Void> executeJob(final JobModel job) {
-        return switch (job.getQualifier()) {
+        return (switch (job.getQualifier()) {
             case TENANT -> taskService
-                    .executeTenantTask(new ExecuteTenantTaskRequest(job.getEntityId()))
-                    .replaceWithVoid();
+                    .executeTenantTask(new ExecuteTenantTaskRequest(job.getEntityId()));
             case MATCHMAKER -> taskService
-                    .executeMatchmakerTask(new ExecuteMatchmakerTaskRequest(job.getEntityId()))
-                    .replaceWithVoid();
+                    .executeMatchmakerTask(new ExecuteMatchmakerTaskRequest(job.getEntityId()));
             case RUNTIME -> taskService
-                    .executeRuntimeTask(new ExecuteRuntimeTaskRequest(job.getEntityId()))
-                    .replaceWithVoid();
+                    .executeRuntimeTask(new ExecuteRuntimeTaskRequest(job.getEntityId()));
             case POOL -> taskService
-                    .executePoolTask(new ExecutePoolTaskRequest(job.getEntityId()))
-                    .replaceWithVoid();
+                    .executePoolTask(new ExecutePoolTaskRequest(job.getEntityId()));
             case BUILD_REQUEST -> taskService
                     .executeBuildRequestTask(new ExecuteBuildRequestTaskRequest(job.getShardKey(),
-                            job.getEntityId()))
-                    .replaceWithVoid();
-        };
+                            job.getEntityId()));
+        }).replaceWithVoid();
     }
 }

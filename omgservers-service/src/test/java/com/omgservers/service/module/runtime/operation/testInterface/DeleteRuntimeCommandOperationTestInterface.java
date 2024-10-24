@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.operation.testInterface;
 
-import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.deleteRuntimeCommand.DeleteRuntimeCommandOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.DeleteRuntimeCommandOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,7 +26,7 @@ public class DeleteRuntimeCommandOperationTestInterface {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deleteRuntimeCommandOperation
-                                    .deleteRuntimeCommand(changeContext, sqlConnection, shard, runtimeId, id))
+                                    .execute(changeContext, sqlConnection, shard, runtimeId, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

@@ -2,8 +2,8 @@ package com.omgservers.service.module.pool.impl.service.dockerService.impl.metho
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
-import com.omgservers.schema.module.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.docker.StopDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -25,12 +25,12 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
         log.debug("Requested, {}", request);
 
         final var poolServer = request.getPoolServer();
-        final var poolServerContainer = request.getPoolServerContainer();
+        final var poolContainer = request.getPoolContainer();
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .map(voidItem -> {
-                    final var containerName = poolServerContainer.getContainerName();
+                    final var containerName = poolContainer.getContainerName();
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerClient = getDockerDaemonClientOperation.getClient(dockerDaemonUri);
 

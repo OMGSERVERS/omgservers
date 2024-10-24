@@ -99,7 +99,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().getRuntime(request)
+        return runtimeModule.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -185,18 +185,18 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                  final String imageId) {
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
         final var poolRequestConfig = new PoolRequestConfigDto();
-        poolRequestConfig.setServerContainerConfig(new PoolRequestConfigDto.ServerContainerConfig());
-        poolRequestConfig.getServerContainerConfig().setImageId(imageId);
+        poolRequestConfig.setContainerConfig(new PoolRequestConfigDto.ContainerConfig());
+        poolRequestConfig.getContainerConfig().setImageId(imageId);
         // TODO: get limits from version config
         final var defaultCpuLimit = getConfigOperation.getServiceConfig().runtimes().defaultCpuLimit();
-        poolRequestConfig.getServerContainerConfig().setCpuLimitInMilliseconds(defaultCpuLimit);
+        poolRequestConfig.getContainerConfig().setCpuLimitInMilliseconds(defaultCpuLimit);
         final var defaultMemoryLimit = getConfigOperation.getServiceConfig().runtimes().defaultMemoryLimit();
-        poolRequestConfig.getServerContainerConfig().setMemoryLimitInMegabytes(defaultMemoryLimit);
+        poolRequestConfig.getContainerConfig().setMemoryLimitInMegabytes(defaultMemoryLimit);
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
-        poolRequestConfig.getServerContainerConfig().setEnvironment(environment);
+        poolRequestConfig.getContainerConfig().setEnvironment(environment);
 
         final var poolRequest = poolRequestModelFactory.create(defaultPoolId,
                 runtime.getId(),
@@ -208,7 +208,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<Boolean> syncPoolRequest(final PoolRequestModel poolRequest) {
         final var request = new SyncPoolRequestRequest(poolRequest);
-        return poolModule.getPoolService().syncPoolRequestWithIdempotency(request)
+        return poolModule.getPoolService().executeWithIdempotency(request)
                 .map(SyncPoolRequestResponse::getCreated);
     }
 }

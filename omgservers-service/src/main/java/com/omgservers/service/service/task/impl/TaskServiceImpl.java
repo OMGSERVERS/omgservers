@@ -82,7 +82,7 @@ class TaskServiceImpl implements TaskService {
 
     @Override
     public Uni<ExecutePoolTaskResponse> executePoolTask(@Valid final ExecutePoolTaskRequest request) {
-        return executePoolTaskMethod.executePoolTask(request);
+        return executePoolTaskMethod.execute(request);
     }
 
     @Override

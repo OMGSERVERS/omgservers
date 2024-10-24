@@ -38,14 +38,14 @@ import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefResponse;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -61,122 +61,122 @@ public class RuntimeServiceTestInterface {
 
     final RuntimeService runtimeService;
 
-    public GetRuntimeResponse getRuntime(final GetRuntimeRequest request) {
-        return runtimeService.getRuntime(request)
+    public GetRuntimeResponse execute(final GetRuntimeRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncRuntimeResponse syncRuntime(final SyncRuntimeRequest request) {
-        return runtimeService.syncRuntime(request)
+    public SyncRuntimeResponse execute(final SyncRuntimeRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteRuntimeResponse deleteRuntime(final DeleteRuntimeRequest request) {
-        return runtimeService.deleteRuntime(request)
+    public DeleteRuntimeResponse execute(final DeleteRuntimeRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncRuntimePermissionResponse syncRuntimePermission(final SyncRuntimePermissionRequest request) {
-        return runtimeService.syncRuntimePermission(request)
+    public SyncRuntimePermissionResponse execute(final SyncRuntimePermissionRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewRuntimePermissionsResponse viewRuntimePermissions(final ViewRuntimePermissionsRequest request) {
-        return runtimeService.viewRuntimePermissions(request)
+    public ViewRuntimePermissionsResponse execute(final ViewRuntimePermissionsRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindRuntimePermissionResponse findRuntimePermission(final FindRuntimePermissionRequest request) {
-        return runtimeService.findRuntimePermission(request)
+    public FindRuntimePermissionResponse execute(final FindRuntimePermissionRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteRuntimePermissionResponse deleteRuntimePermission(final DeleteRuntimePermissionRequest request) {
-        return runtimeService.deleteRuntimePermission(request)
+    public DeleteRuntimePermissionResponse execute(final DeleteRuntimePermissionRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewRuntimeCommandsResponse viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
-        return runtimeService.viewRuntimeCommands(request)
+    public ViewRuntimeCommandsResponse execute(final ViewRuntimeCommandsRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncRuntimeCommandResponse syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
-        return runtimeService.syncRuntimeCommand(request)
+    public SyncRuntimeCommandResponse execute(final SyncRuntimeCommandRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncClientCommandResponse syncClientCommand(final SyncClientCommandRequest request) {
-        return runtimeService.syncClientCommand(request)
+    public SyncClientCommandResponse execute(final SyncClientCommandRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteRuntimeCommandResponse deleteRuntimeCommand(final DeleteRuntimeCommandRequest request) {
-        return runtimeService.deleteRuntimeCommand(request)
+    public DeleteRuntimeCommandResponse execute(final DeleteRuntimeCommandRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteRuntimeCommandsResponse deleteRuntimeCommands(final DeleteRuntimeCommandsRequest request) {
-        return runtimeService.deleteRuntimeCommands(request)
+    public DeleteRuntimeCommandsResponse execute(final DeleteRuntimeCommandsRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetRuntimeAssignmentResponse getRuntimeAssignment(final GetRuntimeAssignmentRequest request) {
-        return runtimeService.getRuntimeAssignment(request)
+    public GetRuntimeAssignmentResponse execute(final GetRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindRuntimeAssignmentResponse findRuntimeAssignment(final FindRuntimeAssignmentRequest request) {
-        return runtimeService.findRuntimeAssignment(request)
+    public FindRuntimeAssignmentResponse execute(final FindRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewRuntimeAssignmentsResponse viewRuntimeAssignments(final ViewRuntimeAssignmentsRequest request) {
-        return runtimeService.viewRuntimeAssignments(request)
+    public ViewRuntimeAssignmentsResponse execute(final ViewRuntimeAssignmentsRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public CountRuntimeAssignmentsResponse countRuntimeAssignments(final CountRuntimeAssignmentsRequest request) {
-        return runtimeService.countRuntimeAssignments(request)
+    public CountRuntimeAssignmentsResponse execute(final CountRuntimeAssignmentsRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncRuntimeAssignmentResponse syncRuntimeAssignment(final SyncRuntimeAssignmentRequest request) {
-        return runtimeService.syncRuntimeAssignment(request)
+    public SyncRuntimeAssignmentResponse execute(final SyncRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteRuntimeAssignmentResponse deleteRuntimeAssignment(final DeleteRuntimeAssignmentRequest request) {
-        return runtimeService.deleteRuntimeAssignment(request)
+    public DeleteRuntimeAssignmentResponse execute(final DeleteRuntimeAssignmentRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetRuntimePoolServerContainerRefResponse getRuntimePoolServerContainerRef(
-            final GetRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.getRuntimePoolServerContainerRef(request)
+    public GetRuntimePoolContainerRefResponse execute(
+            final GetRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindRuntimePoolServerContainerRefResponse findRuntimePoolServerContainerRef(
-            final FindRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.findRuntimePoolServerContainerRef(request)
+    public FindRuntimePoolContainerRefResponse execute(
+            final FindRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncRuntimePoolServerContainerRefResponse syncRuntimePoolServerContainerRef(
-            final SyncRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.syncRuntimePoolServerContainerRef(request)
+    public SyncRuntimePoolContainerRefResponse execute(
+            final SyncRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteRuntimePoolServerContainerRefResponse deleteRuntimePoolServerContainerRef(
-            final DeleteRuntimePoolServerContainerRefRequest request) {
-        return runtimeService.deleteRuntimePoolServerContainerRef(request)
+    public DeleteRuntimePoolContainerRefResponse execute(
+            final DeleteRuntimePoolContainerRefRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public InterchangeResponse interchange(final InterchangeRequest request) {
-        return runtimeService.interchange(request)
+    public InterchangeResponse execute(final InterchangeRequest request) {
+        return runtimeService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

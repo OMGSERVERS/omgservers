@@ -6,6 +6,16 @@ import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestResponse;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestRequest;
@@ -24,16 +34,6 @@ import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
 import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -49,88 +49,88 @@ public class PoolServiceTestInterface {
 
     final PoolService poolService;
 
-    public GetPoolResponse getPool(final GetPoolRequest request) {
-        return poolService.getPool(request)
+    public GetPoolResponse execute(final GetPoolRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncPoolResponse syncPool(final SyncPoolRequest request) {
-        return poolService.syncPool(request)
+    public SyncPoolResponse execute(final SyncPoolRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeletePoolResponse deletePool(final DeletePoolRequest request) {
-        return poolService.deletePool(request)
+    public DeletePoolResponse execute(final DeletePoolRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetPoolServerResponse getPoolServer(final GetPoolServerRequest request) {
-        return poolService.getPoolServer(request)
+    public GetPoolServerResponse execute(final GetPoolServerRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewPoolServerResponse viewPoolServers(final ViewPoolServersRequest request) {
-        return poolService.viewPoolServers(request)
+    public ViewPoolServerResponse execute(final ViewPoolServersRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncPoolServerResponse syncPoolServer(final SyncPoolServerRequest request) {
-        return poolService.syncPoolServer(request)
+    public SyncPoolServerResponse execute(final SyncPoolServerRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeletePoolServerResponse deletePoolServer(final DeletePoolServerRequest request) {
-        return poolService.deletePoolServer(request)
+    public DeletePoolServerResponse execute(final DeletePoolServerRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetPoolRequestResponse getPoolRequest(final GetPoolRequestRequest request) {
-        return poolService.getPoolRequest(request)
+    public GetPoolRequestResponse execute(final GetPoolRequestRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindPoolRequestResponse findPoolRequest(final FindPoolRequestRequest request) {
-        return poolService.findPoolRequest(request)
+    public FindPoolRequestResponse execute(final FindPoolRequestRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewPoolRequestsResponse viewPoolRequests(final ViewPoolRequestsRequest request) {
-        return poolService.viewPoolRequests(request)
+    public ViewPoolRequestsResponse execute(final ViewPoolRequestsRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncPoolRequestResponse syncPoolRequest(final SyncPoolRequestRequest request) {
-        return poolService.syncPoolRequest(request)
+    public SyncPoolRequestResponse execute(final SyncPoolRequestRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeletePoolRequestResponse deletePoolRequest(final DeletePoolRequestRequest request) {
-        return poolService.deletePoolRequest(request)
+    public DeletePoolRequestResponse execute(final DeletePoolRequestRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetPoolServerContainerResponse getPoolServerContainer(final GetPoolServerContainerRequest request) {
-        return poolService.getPoolServerContainer(request)
+    public GetPoolContainerResponse execute(final GetPoolContainerRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindPoolServerContainerResponse findPoolServerContainer(final FindPoolServerContainerRequest request) {
-        return poolService.findPoolServerContainer(request)
+    public FindPoolContainerResponse execute(final FindPoolContainerRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewPoolServerContainersResponse viewPoolServerContainers(final ViewPoolServerContainersRequest request) {
-        return poolService.viewPoolServerContainers(request)
+    public ViewPoolContainersResponse execute(final ViewPoolContainersRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncPoolServerContainerResponse syncPoolServerContainer(final SyncPoolServerContainerRequest request) {
-        return poolService.syncPoolServerContainer(request)
+    public SyncPoolContainerResponse execute(final SyncPoolContainerRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeletePoolServerContainerResponse deletePoolServerContainer(final DeletePoolServerContainerRequest request) {
-        return poolService.deletePoolServerContainer(request)
+    public DeletePoolContainerResponse execute(final DeletePoolContainerRequest request) {
+        return poolService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

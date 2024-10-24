@@ -35,7 +35,7 @@ class PoolDeletedEventHandlerImplTest extends BaseTestClass {
         final var poolId = pool.getId();
 
         final var deletePoolRequest = new DeletePoolRequest(poolId);
-        poolService.deletePool(deletePoolRequest);
+        poolService.execute(deletePoolRequest);
 
         final var eventBody = new PoolDeletedEventBodyModel(poolId);
         final var eventModel = eventModelFactory.create(eventBody);

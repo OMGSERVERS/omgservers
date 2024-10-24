@@ -50,7 +50,7 @@ class BootstrapDockerHostMethodImpl implements BootstrapDockerHostMethod {
 
     Uni<PoolModel> getPool(final Long defaultPoolId) {
         final var request = new GetPoolRequest(defaultPoolId);
-        return poolModule.getPoolService().getPool(request)
+        return poolModule.getPoolService().execute(request)
                 .map(GetPoolResponse::getPool);
     }
 
@@ -75,7 +75,7 @@ class BootstrapDockerHostMethodImpl implements BootstrapDockerHostMethod {
                 idempotencyKey);
 
         final var request = new SyncPoolServerRequest(poolServer);
-        return poolModule.getPoolService().syncPoolServerWithIdempotency(request)
+        return poolModule.getPoolService().executeWithIdempotency(request)
                 .map(SyncPoolServerResponse::getCreated);
     }
 }

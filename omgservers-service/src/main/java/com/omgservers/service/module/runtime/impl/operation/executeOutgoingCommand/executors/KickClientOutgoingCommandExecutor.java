@@ -19,7 +19,7 @@ import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.hasRuntimeAssignment.HasRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.HasRuntimeAssignmentOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -58,7 +58,7 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool
                         .withTransaction(sqlConnection -> hasRuntimeAssignmentOperation
-                                .hasRuntimeAssignment(
+                                .execute(
                                         sqlConnection,
                                         shardModel.shard(),
                                         runtimeId,
@@ -102,7 +102,7 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().getRuntime(request)
+        return runtimeModule.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 

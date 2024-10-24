@@ -49,7 +49,7 @@ class RuntimeAssignmentDeletedEventHandlerImplTest extends BaseTestClass {
         final var id = runtimeAssignment.getId();
 
         final var deleteRuntimeAssignmentRequest = new DeleteRuntimeAssignmentRequest(runtimeId, id);
-        runtimeService.deleteRuntimeAssignment(deleteRuntimeAssignmentRequest);
+        runtimeService.execute(deleteRuntimeAssignmentRequest);
 
         final var eventBody = new RuntimeAssignmentDeletedEventBodyModel(runtimeId, id);
         final var eventModel = eventModelFactory.create(eventBody);

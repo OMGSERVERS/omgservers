@@ -81,13 +81,13 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> getRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new GetRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getService().getRuntimeAssignment(request)
+        return runtimeModule.getService().execute(request)
                 .map(GetRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<RuntimeModel> getRuntime(final Long runtimeId) {
         final var request = new GetRuntimeRequest(runtimeId);
-        return runtimeModule.getService().getRuntime(request)
+        return runtimeModule.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -101,7 +101,7 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var request = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getService().syncRuntimeCommand(request)
+        return runtimeModule.getService().execute(request)
                 .map(SyncRuntimeCommandResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

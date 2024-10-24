@@ -44,7 +44,7 @@ public class RuntimeTestDataFactory {
                 RuntimeQualifierEnum.LOBBY,
                 config);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        runtimeService.syncRuntime(syncRuntimeRequest);
+        runtimeService.execute(syncRuntimeRequest);
         return runtime;
     }
 
@@ -64,7 +64,7 @@ public class RuntimeTestDataFactory {
                 RuntimeQualifierEnum.MATCH,
                 config);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        runtimeService.syncRuntime(syncRuntimeRequest);
+        runtimeService.execute(syncRuntimeRequest);
         return runtime;
     }
 
@@ -75,7 +75,7 @@ public class RuntimeTestDataFactory {
 
         final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtimeId, clientId);
         final var syncRuntimeAssignmentRequest = new SyncRuntimeAssignmentRequest(runtimeAssignment);
-        runtimeService.syncRuntimeAssignment(syncRuntimeAssignmentRequest);
+        runtimeService.execute(syncRuntimeAssignmentRequest);
         return runtimeAssignment;
     }
 }

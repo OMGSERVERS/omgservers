@@ -28,7 +28,7 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void whenUpsertRuntime_thenInserted() {
+    void whenExecute_thenInserted() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -40,7 +40,7 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenLobby_whenUpsertRuntime_thenUpdated() {
+    void givenLobby_whenExecute_thenUpdated() {
         final var shard = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
@@ -54,7 +54,7 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenLobby_whenUpsertRuntime_thenIdempotencyViolation() {
+    void givenLobby_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var runtime1 = runtimeModelFactory.create(tenantId(),
                 versionId(),

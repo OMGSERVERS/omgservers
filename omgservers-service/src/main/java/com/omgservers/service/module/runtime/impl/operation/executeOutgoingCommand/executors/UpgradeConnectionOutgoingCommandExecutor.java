@@ -16,7 +16,7 @@ import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.hasRuntimeAssignment.HasRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.HasRuntimeAssignmentOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
 import io.smallrye.mutiny.Uni;
@@ -57,7 +57,7 @@ public class UpgradeConnectionOutgoingCommandExecutor implements OutgoingCommand
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool
                         .withTransaction(sqlConnection -> hasRuntimeAssignmentOperation
-                                .hasRuntimeAssignment(
+                                .execute(
                                         sqlConnection,
                                         shardModel.shard(),
                                         runtimeId,

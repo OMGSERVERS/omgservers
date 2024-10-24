@@ -18,22 +18,22 @@ public class PoolRequestConfigDto {
         return config;
     }
 
-    ServerContainerConfig serverContainerConfig;
+    ContainerConfig containerConfig;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ServerContainerConfig {
+    public static class ContainerConfig {
 
         @NotNull
         String imageId;
 
         @NotNull
-        Integer cpuLimitInMilliseconds;
+        Long cpuLimitInMilliseconds;
 
         @NotNull
-        Integer memoryLimitInMegabytes;
+        Long memoryLimitInMegabytes;
 
         @NotNull
         Map<String, String> environment;

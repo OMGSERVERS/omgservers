@@ -116,13 +116,13 @@ class InterchangeMethodImpl implements InterchangeMethod {
         final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId,
                 runtimeCommandBody);
         final var request = new SyncClientCommandRequest(clientId, runtimeCommand);
-        return runtimeModule.getService().syncClientCommandWithIdempotency(request)
+        return runtimeModule.getService().executeWithIdempotency(request)
                 .map(SyncClientCommandResponse::getCreated);
     }
 
     Uni<Boolean> updateRuntimeAssignmentLastActivity(final Long runtimeId, final Long clientId) {
         final var request = new UpdateRuntimeAssignmentLastActivityRequest(runtimeId, clientId);
-        return runtimeModule.getService().updateRuntimeAssignmentLastActivity(request)
+        return runtimeModule.getService().execute(request)
                 .map(UpdateRuntimeAssignmentLastActivityResponse::getUpdated);
     }
 

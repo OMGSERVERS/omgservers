@@ -40,73 +40,68 @@ import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface RuntimeService {
 
-    Uni<GetRuntimeResponse> getRuntime(@Valid GetRuntimeRequest request);
+    Uni<GetRuntimeResponse> execute(@Valid GetRuntimeRequest request);
 
-    Uni<SyncRuntimeResponse> syncRuntime(@Valid SyncRuntimeRequest request);
+    Uni<SyncRuntimeResponse> execute(@Valid SyncRuntimeRequest request);
 
-    Uni<SyncRuntimeResponse> syncRuntimeWithIdempotency(@Valid SyncRuntimeRequest request);
+    Uni<SyncRuntimeResponse> executeWithIdempotency(@Valid SyncRuntimeRequest request);
 
-    Uni<DeleteRuntimeResponse> deleteRuntime(@Valid DeleteRuntimeRequest request);
+    Uni<DeleteRuntimeResponse> execute(@Valid DeleteRuntimeRequest request);
 
-    Uni<SyncRuntimePermissionResponse> syncRuntimePermission(@Valid SyncRuntimePermissionRequest request);
+    Uni<SyncRuntimePermissionResponse> execute(@Valid SyncRuntimePermissionRequest request);
 
-    Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(@Valid ViewRuntimePermissionsRequest request);
+    Uni<ViewRuntimePermissionsResponse> execute(@Valid ViewRuntimePermissionsRequest request);
 
-    Uni<FindRuntimePermissionResponse> findRuntimePermission(@Valid FindRuntimePermissionRequest request);
+    Uni<FindRuntimePermissionResponse> execute(@Valid FindRuntimePermissionRequest request);
 
-    Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(@Valid DeleteRuntimePermissionRequest request);
+    Uni<DeleteRuntimePermissionResponse> execute(@Valid DeleteRuntimePermissionRequest request);
 
-    Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(@Valid ViewRuntimeCommandsRequest request);
+    Uni<ViewRuntimeCommandsResponse> execute(@Valid ViewRuntimeCommandsRequest request);
 
-    Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(@Valid SyncRuntimeCommandRequest request);
+    Uni<SyncRuntimeCommandResponse> execute(@Valid SyncRuntimeCommandRequest request);
 
-    Uni<SyncClientCommandResponse> syncClientCommand(@Valid SyncClientCommandRequest request);
+    Uni<SyncClientCommandResponse> execute(@Valid SyncClientCommandRequest request);
 
-    Uni<SyncClientCommandResponse> syncClientCommandWithIdempotency(@Valid SyncClientCommandRequest request);
+    Uni<SyncClientCommandResponse> executeWithIdempotency(@Valid SyncClientCommandRequest request);
 
-    Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid DeleteRuntimeCommandRequest request);
+    Uni<DeleteRuntimeCommandResponse> execute(@Valid DeleteRuntimeCommandRequest request);
 
-    Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(@Valid DeleteRuntimeCommandsRequest request);
+    Uni<DeleteRuntimeCommandsResponse> execute(@Valid DeleteRuntimeCommandsRequest request);
 
-    Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(@Valid GetRuntimeAssignmentRequest request);
+    Uni<GetRuntimeAssignmentResponse> execute(@Valid GetRuntimeAssignmentRequest request);
 
-    Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(@Valid FindRuntimeAssignmentRequest request);
+    Uni<FindRuntimeAssignmentResponse> execute(@Valid FindRuntimeAssignmentRequest request);
 
-    Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(@Valid ViewRuntimeAssignmentsRequest request);
+    Uni<ViewRuntimeAssignmentsResponse> execute(@Valid ViewRuntimeAssignmentsRequest request);
 
-    Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(@Valid CountRuntimeAssignmentsRequest request);
+    Uni<CountRuntimeAssignmentsResponse> execute(@Valid CountRuntimeAssignmentsRequest request);
 
-    Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(@Valid SyncRuntimeAssignmentRequest request);
+    Uni<SyncRuntimeAssignmentResponse> execute(@Valid SyncRuntimeAssignmentRequest request);
 
-    Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
-            @Valid UpdateRuntimeAssignmentLastActivityRequest request);
+    Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(@Valid UpdateRuntimeAssignmentLastActivityRequest request);
 
-    Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(@Valid DeleteRuntimeAssignmentRequest request);
+    Uni<DeleteRuntimeAssignmentResponse> execute(@Valid DeleteRuntimeAssignmentRequest request);
 
-    Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
-            @Valid GetRuntimePoolServerContainerRefRequest request);
+    Uni<GetRuntimePoolContainerRefResponse> execute(@Valid GetRuntimePoolContainerRefRequest request);
 
-    Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
-            @Valid FindRuntimePoolServerContainerRefRequest request);
+    Uni<FindRuntimePoolContainerRefResponse> execute(@Valid FindRuntimePoolContainerRefRequest request);
 
-    Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
-            @Valid SyncRuntimePoolServerContainerRefRequest request);
+    Uni<SyncRuntimePoolContainerRefResponse> execute(@Valid SyncRuntimePoolContainerRefRequest request);
 
-    Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
-            @Valid DeleteRuntimePoolServerContainerRefRequest request);
+    Uni<DeleteRuntimePoolContainerRefResponse> execute(@Valid DeleteRuntimePoolContainerRefRequest request);
 
-    Uni<InterchangeResponse> interchange(@Valid InterchangeRequest request);
+    Uni<InterchangeResponse> execute(@Valid InterchangeRequest request);
 }

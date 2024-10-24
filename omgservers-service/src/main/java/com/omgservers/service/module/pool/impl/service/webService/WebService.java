@@ -1,9 +1,9 @@
 package com.omgservers.service.module.pool.impl.service.webService;
 
-import com.omgservers.schema.module.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.docker.StopDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
@@ -28,55 +28,89 @@ import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
 
 public interface WebService {
 
-    Uni<GetPoolResponse> getPool(GetPoolRequest request);
+    /*
+    Pool
+     */
 
-    Uni<SyncPoolResponse> syncPool(SyncPoolRequest request);
+    Uni<GetPoolResponse> execute(GetPoolRequest request);
 
-    Uni<DeletePoolResponse> deletePool(DeletePoolRequest request);
+    Uni<SyncPoolResponse> execute(SyncPoolRequest request);
 
-    Uni<GetPoolServerResponse> getPoolServer(GetPoolServerRequest request);
+    Uni<DeletePoolResponse> execute(DeletePoolRequest request);
 
-    Uni<ViewPoolServerResponse> viewPoolServers(ViewPoolServersRequest request);
+    /*
+    PoolServer
+     */
 
-    Uni<SyncPoolServerResponse> syncPoolServer(SyncPoolServerRequest request);
+    Uni<GetPoolServerResponse> execute(GetPoolServerRequest request);
 
-    Uni<DeletePoolServerResponse> deletePoolServer(DeletePoolServerRequest request);
+    Uni<ViewPoolServerResponse> execute(ViewPoolServersRequest request);
 
-    Uni<GetPoolRequestResponse> getPoolRequest(GetPoolRequestRequest request);
+    Uni<SyncPoolServerResponse> execute(SyncPoolServerRequest request);
 
-    Uni<FindPoolRequestResponse> findPoolRequest(FindPoolRequestRequest request);
+    Uni<DeletePoolServerResponse> execute(DeletePoolServerRequest request);
 
-    Uni<ViewPoolRequestsResponse> viewPoolRequests(ViewPoolRequestsRequest request);
+    /*
+    PoolContainer
+     */
 
-    Uni<SyncPoolRequestResponse> syncPoolRequest(SyncPoolRequestRequest request);
+    Uni<GetPoolContainerResponse> execute(GetPoolContainerRequest request);
 
-    Uni<DeletePoolRequestResponse> deletePoolRequest(DeletePoolRequestRequest request);
+    Uni<FindPoolContainerResponse> execute(FindPoolContainerRequest request);
 
-    Uni<GetPoolServerContainerResponse> getPoolServerContainer(GetPoolServerContainerRequest request);
+    Uni<ViewPoolContainersResponse> execute(ViewPoolContainersRequest request);
 
-    Uni<FindPoolServerContainerResponse> findPoolServerContainer(FindPoolServerContainerRequest request);
+    Uni<SyncPoolContainerResponse> execute(SyncPoolContainerRequest request);
 
-    Uni<ViewPoolServerContainersResponse> viewPoolServerContainers(ViewPoolServerContainersRequest request);
+    Uni<DeletePoolContainerResponse> execute(DeletePoolContainerRequest request);
 
-    Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(SyncPoolServerContainerRequest request);
+    /*
+    PoolRequest
+     */
 
-    Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(DeletePoolServerContainerRequest request);
+    Uni<GetPoolRequestResponse> execute(GetPoolRequestRequest request);
 
-    Uni<StartDockerContainerResponse> startDockerContainer(StartDockerContainerRequest request);
+    Uni<FindPoolRequestResponse> execute(FindPoolRequestRequest request);
 
-    Uni<StopDockerContainerResponse> stopDockerContainer(StopDockerContainerRequest request);
+    Uni<ViewPoolRequestsResponse> execute(ViewPoolRequestsRequest request);
+
+    Uni<SyncPoolRequestResponse> execute(SyncPoolRequestRequest request);
+
+    Uni<DeletePoolRequestResponse> execute(DeletePoolRequestRequest request);
+
+    /*
+    PoolState
+     */
+
+    Uni<GetPoolStateResponse> execute(GetPoolStateRequest request);
+
+    Uni<UpdatePoolStateResponse> execute(UpdatePoolStateRequest request);
+
+    /*
+    Docker
+     */
+
+    Uni<StartDockerContainerResponse> execute(StartDockerContainerRequest request);
+
+    Uni<StopDockerContainerResponse> execute(StopDockerContainerRequest request);
 }

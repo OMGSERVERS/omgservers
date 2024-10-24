@@ -14,7 +14,7 @@ import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
-import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.hasRuntimeAssignment.HasRuntimeAssignmentOperation;
+import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.HasRuntimeAssignmentOperation;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -54,7 +54,7 @@ public class RespondClientOutgoingCommandExecutor implements OutgoingCommandExec
 
         return checkShardOperation.checkShard(runtimeId.toString())
                 .flatMap(shardModel -> pgPool.withTransaction(
-                        sqlConnection -> hasRuntimeAssignmentOperation.hasRuntimeAssignment(
+                        sqlConnection -> hasRuntimeAssignmentOperation.execute(
                                         sqlConnection,
                                         shardModel.shard(),
                                         runtimeId,

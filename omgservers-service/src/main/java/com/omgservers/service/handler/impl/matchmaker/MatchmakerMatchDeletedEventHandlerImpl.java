@@ -65,7 +65,7 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {
         final var request = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getService().deleteRuntime(request)
+        return runtimeModule.getService().execute(request)
                 .map(DeleteRuntimeResponse::getDeleted);
     }
 

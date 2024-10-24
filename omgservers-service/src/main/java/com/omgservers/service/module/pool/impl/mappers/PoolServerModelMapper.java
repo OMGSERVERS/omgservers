@@ -1,10 +1,10 @@
 package com.omgservers.service.module.pool.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ public class PoolServerModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public PoolServerModel fromRow(final Row row) {
+    public PoolServerModel execute(final Row row) {
         final var poolServer = new PoolServerModel();
         poolServer.setId(row.getLong("id"));
         poolServer.setIdempotencyKey(row.getString("idempotency_key"));

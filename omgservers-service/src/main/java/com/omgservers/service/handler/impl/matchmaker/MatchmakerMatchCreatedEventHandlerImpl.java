@@ -134,7 +134,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getService().syncRuntimeWithIdempotency(syncRuntimeRequest)
+        return runtimeModule.getService().executeWithIdempotency(syncRuntimeRequest)
                 .map(SyncRuntimeResponse::getCreated);
     }
 }

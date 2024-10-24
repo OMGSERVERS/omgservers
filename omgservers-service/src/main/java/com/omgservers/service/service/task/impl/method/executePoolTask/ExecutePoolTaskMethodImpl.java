@@ -15,12 +15,12 @@ public class ExecutePoolTaskMethodImpl implements ExecutePoolTaskMethod {
     final PoolTaskImpl poolTask;
 
     @Override
-    public Uni<ExecutePoolTaskResponse> executePoolTask(final ExecutePoolTaskRequest request) {
+    public Uni<ExecutePoolTaskResponse> execute(final ExecutePoolTaskRequest request) {
         log.debug("Requested, {}", request);
 
         final var poolId = request.getPoolId();
 
-        return poolTask.executeTask(poolId)
+        return poolTask.execute(poolId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, poolId={}, {}:{}",

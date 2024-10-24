@@ -1,12 +1,12 @@
 package com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method;
 
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.runtimePoolServerContainerRef.RuntimePoolServerContainerRefModel;
+import com.omgservers.schema.model.runtimePoolContainerRef.RuntimePoolContainerRefModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefResponse;
 import com.omgservers.service.module.dispatcher.DispatcherModule;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.ConnectionTypeEnum;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.component.DispatcherCloseReason;
@@ -85,24 +85,24 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
     }
 
     Uni<PoolServerModel> getRuntimeServer(final Long runtimeId) {
-        return findRuntimePoolServerContainerRef(runtimeId)
-                .flatMap(runtimePoolServerContainerRef -> {
-                    final var poolId = runtimePoolServerContainerRef.getPoolId();
-                    final var serverId = runtimePoolServerContainerRef.getServerId();
+        return findRuntimePoolContainerRef(runtimeId)
+                .flatMap(runtimePoolContainerRef -> {
+                    final var poolId = runtimePoolContainerRef.getPoolId();
+                    final var serverId = runtimePoolContainerRef.getServerId();
                     return getRuntimeServer(poolId, serverId);
                 });
     }
 
-    Uni<RuntimePoolServerContainerRefModel> findRuntimePoolServerContainerRef(final Long runtimeId) {
-        final var request = new FindRuntimePoolServerContainerRefRequest(runtimeId);
-        return runtimeModule.getService().findRuntimePoolServerContainerRef(request)
-                .map(FindRuntimePoolServerContainerRefResponse::getRuntimePoolServerContainerRef);
+    Uni<RuntimePoolContainerRefModel> findRuntimePoolContainerRef(final Long runtimeId) {
+        final var request = new FindRuntimePoolContainerRefRequest(runtimeId);
+        return runtimeModule.getService().execute(request)
+                .map(FindRuntimePoolContainerRefResponse::getRuntimePoolContainerRef);
     }
 
     Uni<PoolServerModel> getRuntimeServer(final Long poolId,
                                           final Long serverId) {
         final var request = new GetPoolServerRequest(poolId, serverId);
-        return poolModule.getPoolService().getPoolServer(request)
+        return poolModule.getPoolService().execute(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 

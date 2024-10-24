@@ -33,12 +33,12 @@ import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchRuntim
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerRequestCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerRequestDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.pool.PoolContainerCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.pool.PoolContainerDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolRequestCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolRequestDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.pool.PoolServerContainerCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.pool.PoolServerContainerDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolServerCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolServerDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
@@ -47,8 +47,8 @@ import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentCreated
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.runtime.RuntimePoolServerContainerRefDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.runtime.RuntimePoolContainerRefCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.runtime.RuntimePoolContainerRefDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantBuildRequestCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantBuildRequestDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
@@ -95,10 +95,10 @@ public enum EventQualifierEnum {
     POOL_DELETED(PoolDeletedEventBodyModel.class, true),
     POOL_SERVER_CREATED(PoolServerCreatedEventBodyModel.class, true),
     POOL_SERVER_DELETED(PoolServerDeletedEventBodyModel.class, true),
+    POOL_CONTAINER_CREATED(PoolContainerCreatedEventBodyModel.class, true),
+    POOL_CONTAINER_DELETED(PoolContainerDeletedEventBodyModel.class, true),
     POOL_REQUEST_CREATED(PoolRequestCreatedEventBodyModel.class, false),
     POOL_REQUEST_DELETED(PoolRequestDeletedEventBodyModel.class, false),
-    POOL_SERVER_CONTAINER_CREATED(PoolServerContainerCreatedEventBodyModel.class, true),
-    POOL_SERVER_CONTAINER_DELETED(PoolServerContainerDeletedEventBodyModel.class, true),
     TENANT_CREATED(TenantCreatedEventBodyModel.class, true),
     TENANT_DELETED(TenantDeletedEventBodyModel.class, true),
     TENANT_PROJECT_CREATED(TenantProjectCreatedEventBodyModel.class, true),
@@ -153,8 +153,8 @@ public enum EventQualifierEnum {
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_CREATED(RuntimeAssignmentCreatedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_DELETED(RuntimeAssignmentDeletedEventBodyModel.class, true),
-    RUNTIME_POOL_SERVER_CONTAINER_REF_CREATED(RuntimePoolServerContainerRefCreatedEventBodyModel.class, false),
-    RUNTIME_POOL_SERVER_CONTAINER_REF_DELETED(RuntimePoolServerContainerRefDeletedEventBodyModel.class, false),
+    RUNTIME_POOL_CONTAINER_REF_CREATED(RuntimePoolContainerRefCreatedEventBodyModel.class, false),
+    RUNTIME_POOL_CONTAINER_REF_DELETED(RuntimePoolContainerRefDeletedEventBodyModel.class, false),
     // Internal
     SERVICE_BOOTSTRAP_REQUESTED(ServiceBootstrapRequestedEventBodyModel.class, false),
     DOCKER_REGISTRY_EVENT_RECEIVED(DockerRegistryEventReceivedEventBodyModel.class, false),

@@ -41,14 +41,14 @@ import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefResponse;
 import com.omgservers.service.module.runtime.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -68,129 +68,129 @@ public class RuntimeApiImpl implements RuntimeApi {
     final WebService webService;
 
     @Override
-    public Uni<SyncRuntimeResponse> syncLobbyRuntime(final SyncRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncLobbyRuntime);
+    public Uni<SyncRuntimeResponse> execute(final SyncRuntimeRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetRuntimeResponse> getRuntime(final GetRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntime);
+    public Uni<GetRuntimeResponse> execute(final GetRuntimeRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimeResponse> deleteRuntime(final DeleteRuntimeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntime);
+    public Uni<DeleteRuntimeResponse> execute(final DeleteRuntimeRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncRuntimePermissionResponse> syncRuntimePermission(final SyncRuntimePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimePermission);
+    public Uni<SyncRuntimePermissionResponse> execute(final SyncRuntimePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindRuntimePermissionResponse> findRuntimePermission(final FindRuntimePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimePermission);
+    public Uni<FindRuntimePermissionResponse> execute(final FindRuntimePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(final ViewRuntimePermissionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimePermissions);
+    public Uni<ViewRuntimePermissionsResponse> execute(final ViewRuntimePermissionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(final DeleteRuntimePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimePermission);
+    public Uni<DeleteRuntimePermissionResponse> execute(final DeleteRuntimePermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(final ViewRuntimeCommandsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimeCommands);
+    public Uni<ViewRuntimeCommandsResponse> execute(final ViewRuntimeCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(final SyncRuntimeCommandRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeCommand);
+    public Uni<SyncRuntimeCommandResponse> execute(final SyncRuntimeCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncClientCommandResponse> syncClientCommand(final SyncClientCommandRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncClientCommand);
+    public Uni<SyncClientCommandResponse> execute(final SyncClientCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(final DeleteRuntimeCommandRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeCommand);
+    public Uni<DeleteRuntimeCommandResponse> execute(final DeleteRuntimeCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(final DeleteRuntimeCommandsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeCommands);
+    public Uni<DeleteRuntimeCommandsResponse> execute(final DeleteRuntimeCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(final GetRuntimeAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimeAssignment);
+    public Uni<GetRuntimeAssignmentResponse> execute(final GetRuntimeAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(final FindRuntimeAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimeAssignment);
+    public Uni<FindRuntimeAssignmentResponse> execute(final FindRuntimeAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(final ViewRuntimeAssignmentsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRuntimeAssignments);
+    public Uni<ViewRuntimeAssignmentsResponse> execute(final ViewRuntimeAssignmentsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(final CountRuntimeAssignmentsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::countRuntimeAssignments);
+    public Uni<CountRuntimeAssignmentsResponse> execute(final CountRuntimeAssignmentsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(final SyncRuntimeAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimeAssignment);
+    public Uni<SyncRuntimeAssignmentResponse> execute(final SyncRuntimeAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
+    public Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(
             final UpdateRuntimeAssignmentLastActivityRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request,
-                webService::updateRuntimeAssignmentLastActivity);
+                webService::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(final DeleteRuntimeAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRuntimeAssignment);
+    public Uni<DeleteRuntimeAssignmentResponse> execute(final DeleteRuntimeAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
-            final GetRuntimePoolServerContainerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRuntimePoolServerContainerRef);
+    public Uni<GetRuntimePoolContainerRefResponse> execute(
+            final GetRuntimePoolContainerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
-            final FindRuntimePoolServerContainerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRuntimePoolServerContainerRef);
+    public Uni<FindRuntimePoolContainerRefResponse> execute(
+            final FindRuntimePoolContainerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
-            final SyncRuntimePoolServerContainerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRuntimePoolServerContainerRef);
+    public Uni<SyncRuntimePoolContainerRefResponse> execute(
+            final SyncRuntimePoolContainerRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
-            final DeleteRuntimePoolServerContainerRefRequest request) {
+    public Uni<DeleteRuntimePoolContainerRefResponse> execute(
+            final DeleteRuntimePoolContainerRefRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request,
-                webService::deleteRuntimePoolServerContainerRef);
+                webService::execute);
     }
 
     @Override
-    public Uni<InterchangeResponse> interchange(final InterchangeRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::interchange);
+    public Uni<InterchangeResponse> execute(final InterchangeRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

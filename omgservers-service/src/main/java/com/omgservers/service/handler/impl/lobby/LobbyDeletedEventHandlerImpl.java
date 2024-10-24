@@ -99,7 +99,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignments(final Long runtimeId) {
         final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
-        return runtimeModule.getService().viewRuntimeAssignments(request)
+        return runtimeModule.getService().execute(request)
                 .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 
@@ -153,7 +153,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {
         final var request = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getService().deleteRuntime(request)
+        return runtimeModule.getService().execute(request)
                 .map(DeleteRuntimeResponse::getDeleted);
     }
 }

@@ -1,15 +1,25 @@
 package com.omgservers.service.module.pool.impl.service.webService.impl.api;
 
-import com.omgservers.schema.module.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.docker.StopDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestResponse;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestRequest;
@@ -28,16 +38,10 @@ import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -47,79 +51,111 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/omgservers/v1/module/pool/request")
 public interface PoolApi {
 
+    /*
+    Pool
+     */
+
     @PUT
     @Path("/get-pool")
-    Uni<GetPoolResponse> getPool(GetPoolRequest request);
+    Uni<GetPoolResponse> execute(GetPoolRequest request);
 
     @PUT
     @Path("/sync-pool")
-    Uni<SyncPoolResponse> syncPool(SyncPoolRequest request);
+    Uni<SyncPoolResponse> execute(SyncPoolRequest request);
 
     @PUT
     @Path("/delete-pool")
-    Uni<DeletePoolResponse> deletePool(DeletePoolRequest request);
+    Uni<DeletePoolResponse> execute(DeletePoolRequest request);
+
+    /*
+    PoolServer
+     */
 
     @PUT
     @Path("/get-pool-server")
-    Uni<GetPoolServerResponse> getPoolServer(GetPoolServerRequest request);
+    Uni<GetPoolServerResponse> execute(GetPoolServerRequest request);
 
     @PUT
     @Path("/view-pool-servers")
-    Uni<ViewPoolServerResponse> viewPoolServers(ViewPoolServersRequest request);
+    Uni<ViewPoolServerResponse> execute(ViewPoolServersRequest request);
 
     @PUT
     @Path("/sync-pool-server")
-    Uni<SyncPoolServerResponse> syncPoolServer(SyncPoolServerRequest request);
+    Uni<SyncPoolServerResponse> execute(SyncPoolServerRequest request);
 
     @PUT
     @Path("/delete-pool-server")
-    Uni<DeletePoolServerResponse> deletePoolServer(DeletePoolServerRequest request);
+    Uni<DeletePoolServerResponse> execute(DeletePoolServerRequest request);
 
-    @PUT
-    @Path("/get-pool-request")
-    Uni<GetPoolRequestResponse> getPoolRequest(GetPoolRequestRequest request);
-
-    @PUT
-    @Path("/find-pool-request")
-    Uni<FindPoolRequestResponse> findPoolRequest(FindPoolRequestRequest request);
-
-    @PUT
-    @Path("/view-pool-requests")
-    Uni<ViewPoolRequestsResponse> viewPoolRequests(ViewPoolRequestsRequest request);
-
-    @PUT
-    @Path("/sync-pool-request")
-    Uni<SyncPoolRequestResponse> syncPoolRequest(SyncPoolRequestRequest request);
-
-    @PUT
-    @Path("/delete-pool-request")
-    Uni<DeletePoolRequestResponse> deletePoolRequest(DeletePoolRequestRequest request);
+    /*
+    PoolContainer
+     */
 
     @PUT
     @Path("/get-pool-server-container")
-    Uni<GetPoolServerContainerResponse> getPoolServerContainer(GetPoolServerContainerRequest request);
+    Uni<GetPoolContainerResponse> execute(GetPoolContainerRequest request);
 
     @PUT
     @Path("/find-pool-server-container")
-    Uni<FindPoolServerContainerResponse> findPoolServerContainer(FindPoolServerContainerRequest request);
+    Uni<FindPoolContainerResponse> execute(FindPoolContainerRequest request);
 
     @PUT
     @Path("/view-pool-server-containers")
-    Uni<ViewPoolServerContainersResponse> viewPoolServerContainers(ViewPoolServerContainersRequest request);
+    Uni<ViewPoolContainersResponse> execute(ViewPoolContainersRequest request);
 
     @PUT
     @Path("/sync-pool-server-container")
-    Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(SyncPoolServerContainerRequest request);
+    Uni<SyncPoolContainerResponse> execute(SyncPoolContainerRequest request);
 
     @PUT
     @Path("/delete-pool-server-container")
-    Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(DeletePoolServerContainerRequest request);
+    Uni<DeletePoolContainerResponse> execute(DeletePoolContainerRequest request);
+
+    /*
+    PoolRequest
+     */
+
+    @PUT
+    @Path("/get-pool-request")
+    Uni<GetPoolRequestResponse> execute(GetPoolRequestRequest request);
+
+    @PUT
+    @Path("/find-pool-request")
+    Uni<FindPoolRequestResponse> execute(FindPoolRequestRequest request);
+
+    @PUT
+    @Path("/view-pool-requests")
+    Uni<ViewPoolRequestsResponse> execute(ViewPoolRequestsRequest request);
+
+    @PUT
+    @Path("/sync-pool-request")
+    Uni<SyncPoolRequestResponse> execute(SyncPoolRequestRequest request);
+
+    @PUT
+    @Path("/delete-pool-request")
+    Uni<DeletePoolRequestResponse> execute(DeletePoolRequestRequest request);
+
+    /*
+    PoolState
+     */
+
+    @PUT
+    @Path("/get-pool-state")
+    Uni<GetPoolStateResponse> execute(GetPoolStateRequest request);
+
+    @PUT
+    @Path("/update-pool-state")
+    Uni<UpdatePoolStateResponse> execute(UpdatePoolStateRequest request);
+
+    /*
+    Docker
+     */
 
     @PUT
     @Path("/start-docker-container")
-    Uni<StartDockerContainerResponse> startDockerContainer(StartDockerContainerRequest request);
+    Uni<StartDockerContainerResponse> execute(StartDockerContainerRequest request);
 
     @PUT
     @Path("/stop-docker-container")
-    Uni<StopDockerContainerResponse> stopDockerContainer(StopDockerContainerRequest request);
+    Uni<StopDockerContainerResponse> execute(StopDockerContainerRequest request);
 }

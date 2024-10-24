@@ -42,7 +42,7 @@ create table if not exists tab_pool_server (
     deleted boolean not null
 );
 
-create table if not exists tab_pool_server_container (
+create table if not exists tab_pool_container (
     id bigint primary key,
     idempotency_key text not null unique,
     pool_id bigint not null references tab_pool(id) on delete restrict on update restrict,
@@ -68,8 +68,8 @@ create table if not exists tab_pool_request (
 );
 
 create index if not exists idx_pool_server_pool_id on tab_pool_server(pool_id);
-create index if not exists idx_pool_server_container_pool_id on tab_pool_server_container(pool_id);
-create index if not exists idx_pool_server_container_server_id on tab_pool_server_container(server_id);
+create index if not exists idx_pool_container_pool_id on tab_pool_container(pool_id);
+create index if not exists idx_pool_container_server_id on tab_pool_container(server_id);
 create index if not exists idx_pool_request_pool_id on tab_pool_request(pool_id);
 
 -- user module
@@ -513,7 +513,7 @@ create table if not exists tab_runtime_assignment (
     deleted boolean not null
 );
 
-create table if not exists tab_runtime_pool_server_container_ref (
+create table if not exists tab_runtime_pool_container_ref (
     id bigint primary key,
     idempotency_key text not null unique,
     runtime_id bigint not null references tab_runtime(id) on delete restrict on update restrict,
@@ -529,4 +529,4 @@ create index if not exists idx_runtime_permission_runtime_id on tab_runtime_perm
 create unique index idx_runtime_permission_uniqueness on tab_runtime_permission(runtime_id, user_id, permission) where deleted = false;
 create index if not exists idx_runtime_command_runtime_id on tab_runtime_command(runtime_id);
 create index if not exists idx_runtime_assignment_runtime_id on tab_runtime_assignment(runtime_id);
-create index if not exists idx_runtime_pool_server_container_ref_runtime_id on tab_runtime_pool_server_container_ref(runtime_id);
+create index if not exists idx_runtime_pool_container_ref_runtime_id on tab_runtime_pool_container_ref(runtime_id);

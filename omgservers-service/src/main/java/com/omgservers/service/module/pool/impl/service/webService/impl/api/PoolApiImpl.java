@@ -1,16 +1,26 @@
 package com.omgservers.service.module.pool.impl.service.webService.impl.api;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.module.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.docker.StopDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestResponse;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestRequest;
@@ -29,16 +39,10 @@ import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.DeletePoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.FindPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.GetPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.SyncPoolServerContainerResponse;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersRequest;
-import com.omgservers.schema.module.pool.poolServerContainer.ViewPoolServerContainersResponse;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
+import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -57,108 +61,135 @@ public class PoolApiImpl implements PoolApi {
     final HandleApiRequestOperation handleApiRequestOperation;
     final WebService webService;
 
+    /*
+    Pool
+     */
+
     @Override
-    public Uni<GetPoolResponse> getPool(final GetPoolRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPool);
+    public Uni<GetPoolResponse> execute(final GetPoolRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncPoolResponse> syncPool(final SyncPoolRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncPool);
+    public Uni<SyncPoolResponse> execute(final SyncPoolRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeletePoolResponse> deletePool(final DeletePoolRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deletePool);
+    public Uni<DeletePoolResponse> execute(final DeletePoolRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    PoolServer
+     */
+
+    @Override
+    public Uni<GetPoolServerResponse> execute(final GetPoolServerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetPoolServerResponse> getPoolServer(final GetPoolServerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPoolServer);
+    public Uni<ViewPoolServerResponse> execute(final ViewPoolServersRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewPoolServerResponse> viewPoolServers(final ViewPoolServersRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewPoolServers);
+    public Uni<SyncPoolServerResponse> execute(final SyncPoolServerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncPoolServerResponse> syncPoolServer(final SyncPoolServerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncPoolServer);
+    public Uni<DeletePoolServerResponse> execute(final DeletePoolServerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    PoolContainer
+     */
+
+    @Override
+    public Uni<GetPoolContainerResponse> execute(final GetPoolContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeletePoolServerResponse> deletePoolServer(final DeletePoolServerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deletePoolServer);
+    public Uni<FindPoolContainerResponse> execute(final FindPoolContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetPoolRequestResponse> getPoolRequest(
-            final GetPoolRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPoolRequest);
+    public Uni<ViewPoolContainersResponse> execute(
+            final ViewPoolContainersRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindPoolRequestResponse> findPoolRequest(
-            final FindPoolRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findPoolRequest);
+    public Uni<SyncPoolContainerResponse> execute(
+            final SyncPoolContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewPoolRequestsResponse> viewPoolRequests(
-            final ViewPoolRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewPoolRequests);
+    public Uni<DeletePoolContainerResponse> execute(
+            final DeletePoolContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    PoolRequest
+     */
+
+    @Override
+    public Uni<GetPoolRequestResponse> execute(final GetPoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncPoolRequestResponse> syncPoolRequest(
-            final SyncPoolRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncPoolRequest);
+    public Uni<FindPoolRequestResponse> execute(final FindPoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeletePoolRequestResponse> deletePoolRequest(
-            final DeletePoolRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deletePoolRequest);
+    public Uni<ViewPoolRequestsResponse> execute(final ViewPoolRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetPoolServerContainerResponse> getPoolServerContainer(
-            final GetPoolServerContainerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPoolServerContainer);
+    public Uni<SyncPoolRequestResponse> execute(final SyncPoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindPoolServerContainerResponse> findPoolServerContainer(
-            final FindPoolServerContainerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findPoolServerContainer);
+    public Uni<DeletePoolRequestResponse> execute(final DeletePoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    PoolState
+     */
+
+    @Override
+    public Uni<GetPoolStateResponse> execute(final GetPoolStateRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewPoolServerContainersResponse> viewPoolServerContainers(
-            final ViewPoolServerContainersRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewPoolServerContainers);
+    public Uni<UpdatePoolStateResponse> execute(final UpdatePoolStateRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    Docker
+     */
+
+    @Override
+    public Uni<StartDockerContainerResponse> execute(final StartDockerContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncPoolServerContainerResponse> syncPoolServerContainer(
-            final SyncPoolServerContainerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncPoolServerContainer);
-    }
-
-    @Override
-    public Uni<DeletePoolServerContainerResponse> deletePoolServerContainer(
-            final DeletePoolServerContainerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deletePoolServerContainer);
-    }
-
-    @Override
-    public Uni<StartDockerContainerResponse> startDockerContainer(final StartDockerContainerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::startDockerContainer);
-    }
-
-    @Override
-    public Uni<StopDockerContainerResponse> stopDockerContainer(final StopDockerContainerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::stopDockerContainer);
+    public Uni<StopDockerContainerResponse> execute(final StopDockerContainerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

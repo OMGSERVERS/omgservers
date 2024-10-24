@@ -79,7 +79,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().getRuntime(request)
+        return runtimeModule.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -133,13 +133,13 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> findRuntimeAssignment(final Long runtimeId, final Long clientId) {
         final var request = new FindRuntimeAssignmentRequest(runtimeId, clientId);
-        return runtimeModule.getService().findRuntimeAssignment(request)
+        return runtimeModule.getService().execute(request)
                 .map(FindRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getService().deleteRuntimeAssignment(request)
+        return runtimeModule.getService().execute(request)
                 .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 }

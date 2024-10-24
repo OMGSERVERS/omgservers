@@ -41,43 +41,43 @@ import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimePermissionsResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.DeleteRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.FindRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.GetRuntimePoolServerContainerRefResponse;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefRequest;
-import com.omgservers.schema.module.runtime.poolServerContainerRef.SyncRuntimePoolServerContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.DeleteRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.FindRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolContainerRefResponse;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefRequest;
+import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefResponse;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.GetRuntimeModuleClientOperation;
 import com.omgservers.service.module.runtime.impl.operation.getRuntimeModuleClient.RuntimeModuleClient;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.RuntimeService;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.deleteRuntime.DeleteRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.getRuntime.GetRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.interchange.InterchangeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.syncRuntime.SyncRuntimeMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.countRuntimeAssignments.CountRuntimeAssignmentsMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.deleteRuntimeAssignment.DeleteRuntimeAssignmentMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.findRuntimeAssignment.FindRuntimeAssignmentMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.getRuntimeAssignment.GetRuntimeAssignmentMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.syncRuntimeAssignment.SyncRuntimeAssignmentMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.updateRuntimeAssignmentLastActivity.UpdateRuntimeAssignmentLastActivityMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.viewRuntimeAssignments.ViewRuntimeAssignmentsMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.deleteRuntimeCommand.DeleteRuntimeCommandMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.deleteRuntimeCommands.DeleteRuntimeCommandsMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.syncClientCommand.SyncClientCommandMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.syncRuntimeCommand.SyncRuntimeCommandMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.viewRuntimeCommands.ViewRuntimeCommandsMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.deleteRuntimePermission.DeleteRuntimePermissionMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.findRuntimePermission.FindRuntimePermissionMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.syncRuntimePermission.SyncRuntimePermissionMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.viewRuntimePermissions.ViewRuntimePermissionsMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolServerContainerRef.deleteRuntimePoolServerContainerRef.DeleteRuntimePoolServerContainerRefMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolServerContainerRef.findRuntimePoolServerContainerRef.FindRuntimePoolServerContainerRefMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolServerContainerRef.getRuntimePoolServerContainerRef.GetRuntimePoolServerContainerRefMethod;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolServerContainerRef.syncRuntimePoolServerContainerRef.SyncRuntimePoolServerContainerRefMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.DeleteRuntimeMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.GetRuntimeMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.InterchangeMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtime.SyncRuntimeMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.CountRuntimeAssignmentsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.DeleteRuntimeAssignmentMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.FindRuntimeAssignmentMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.GetRuntimeAssignmentMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.SyncRuntimeAssignmentMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.UpdateRuntimeAssignmentLastActivityMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeAssignment.ViewRuntimeAssignmentsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.DeleteRuntimeCommandMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.DeleteRuntimeCommandsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.SyncClientCommandMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.SyncRuntimeCommandMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand.ViewRuntimeCommandsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.DeleteRuntimePermissionMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.FindRuntimePermissionMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.SyncRuntimePermissionMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePermission.ViewRuntimePermissionsMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef.DeleteRuntimePoolContainerRefMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef.FindRuntimePoolContainerRefMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef.GetRuntimePoolContainerRefMethod;
+import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef.SyncRuntimePoolContainerRefMethod;
 import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -91,10 +91,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeServiceImpl implements RuntimeService {
 
-    final DeleteRuntimePoolServerContainerRefMethod deleteRuntimePoolServerContainerRefMethod;
-    final FindRuntimePoolServerContainerRefMethod findRuntimePoolServerContainerRefMethod;
-    final SyncRuntimePoolServerContainerRefMethod syncRuntimePoolServerContainerRefMethod;
-    final GetRuntimePoolServerContainerRefMethod getRuntimePoolServerContainerRefMethod;
+    final DeleteRuntimePoolContainerRefMethod deleteRuntimePoolContainerRefMethod;
+    final FindRuntimePoolContainerRefMethod findRuntimePoolContainerRefMethod;
+    final SyncRuntimePoolContainerRefMethod syncRuntimePoolContainerRefMethod;
+    final GetRuntimePoolContainerRefMethod getRuntimePoolContainerRefMethod;
     final UpdateRuntimeAssignmentLastActivityMethod updateRuntimeAssignmentLastActivity;
     final DeleteRuntimePermissionMethod deleteRuntimePermissionMethod;
     final DeleteRuntimeAssignmentMethod deleteRuntimeAssignmentMethod;
@@ -120,16 +120,16 @@ public class RuntimeServiceImpl implements RuntimeService {
     final HandleShardedRequestOperation handleShardedRequestOperation;
 
     @Override
-    public Uni<SyncRuntimeResponse> syncRuntime(@Valid final SyncRuntimeRequest request) {
+    public Uni<SyncRuntimeResponse> execute(@Valid final SyncRuntimeRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncLobbyRuntime,
-                syncRuntimeMethod::syncRuntime);
+                RuntimeModuleClient::execute,
+                syncRuntimeMethod::execute);
     }
 
     @Override
-    public Uni<SyncRuntimeResponse> syncRuntimeWithIdempotency(SyncRuntimeRequest request) {
-        return syncRuntime(request)
+    public Uni<SyncRuntimeResponse> executeWithIdempotency(SyncRuntimeRequest request) {
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -145,82 +145,82 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<GetRuntimeResponse> getRuntime(@Valid final GetRuntimeRequest request) {
+    public Uni<GetRuntimeResponse> execute(@Valid final GetRuntimeRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::getRuntime,
-                getRuntimeMethod::getRuntime);
+                RuntimeModuleClient::execute,
+                getRuntimeMethod::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimeResponse> deleteRuntime(@Valid final DeleteRuntimeRequest request) {
+    public Uni<DeleteRuntimeResponse> execute(@Valid final DeleteRuntimeRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::deleteRuntime,
-                deleteRuntimeMethod::deleteRuntime);
+                RuntimeModuleClient::execute,
+                deleteRuntimeMethod::execute);
     }
 
     @Override
-    public Uni<SyncRuntimePermissionResponse> syncRuntimePermission(@Valid final SyncRuntimePermissionRequest request) {
+    public Uni<SyncRuntimePermissionResponse> execute(@Valid final SyncRuntimePermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncRuntimePermission,
-                syncRuntimePermissionMethod::syncRuntimePermission);
+                RuntimeModuleClient::execute,
+                syncRuntimePermissionMethod::execute);
     }
 
     @Override
-    public Uni<ViewRuntimePermissionsResponse> viewRuntimePermissions(
+    public Uni<ViewRuntimePermissionsResponse> execute(
             @Valid final ViewRuntimePermissionsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::viewRuntimePermissions,
-                viewRuntimePermissionsMethod::viewRuntimePermissions);
+                RuntimeModuleClient::execute,
+                viewRuntimePermissionsMethod::execute);
     }
 
     @Override
-    public Uni<FindRuntimePermissionResponse> findRuntimePermission(@Valid final FindRuntimePermissionRequest request) {
+    public Uni<FindRuntimePermissionResponse> execute(@Valid final FindRuntimePermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::findRuntimePermission,
-                findRuntimePermissionMethod::findRuntimePermission);
+                RuntimeModuleClient::execute,
+                findRuntimePermissionMethod::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimePermissionResponse> deleteRuntimePermission(
+    public Uni<DeleteRuntimePermissionResponse> execute(
             @Valid final DeleteRuntimePermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::deleteRuntimePermission,
-                deleteRuntimePermissionMethod::deleteRuntimePermission);
+                RuntimeModuleClient::execute,
+                deleteRuntimePermissionMethod::execute);
     }
 
     @Override
-    public Uni<ViewRuntimeCommandsResponse> viewRuntimeCommands(@Valid final ViewRuntimeCommandsRequest request) {
+    public Uni<ViewRuntimeCommandsResponse> execute(@Valid final ViewRuntimeCommandsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::viewRuntimeCommands,
-                viewRuntimeCommandsMethod::viewRuntimeCommands);
+                RuntimeModuleClient::execute,
+                viewRuntimeCommandsMethod::execute);
     }
 
     @Override
-    public Uni<SyncRuntimeCommandResponse> syncRuntimeCommand(@Valid final SyncRuntimeCommandRequest request) {
+    public Uni<SyncRuntimeCommandResponse> execute(@Valid final SyncRuntimeCommandRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncRuntimeCommand,
-                syncRuntimeCommandMethod::syncRuntimeCommand);
+                RuntimeModuleClient::execute,
+                syncRuntimeCommandMethod::execute);
     }
 
     @Override
-    public Uni<SyncClientCommandResponse> syncClientCommand(@Valid final SyncClientCommandRequest request) {
+    public Uni<SyncClientCommandResponse> execute(@Valid final SyncClientCommandRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncClientCommand,
-                syncClientCommandMethod::syncClientCommand);
+                RuntimeModuleClient::execute,
+                syncClientCommandMethod::execute);
     }
 
     @Override
-    public Uni<SyncClientCommandResponse> syncClientCommandWithIdempotency(SyncClientCommandRequest request) {
-        return syncClientCommand(request)
+    public Uni<SyncClientCommandResponse> executeWithIdempotency(SyncClientCommandRequest request) {
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -236,122 +236,122 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandResponse> deleteRuntimeCommand(@Valid final DeleteRuntimeCommandRequest request) {
+    public Uni<DeleteRuntimeCommandResponse> execute(@Valid final DeleteRuntimeCommandRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::deleteRuntimeCommand,
-                deleteRuntimeCommandMethod::deleteRuntimeCommand);
+                RuntimeModuleClient::execute,
+                deleteRuntimeCommandMethod::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimeCommandsResponse> deleteRuntimeCommands(@Valid final DeleteRuntimeCommandsRequest request) {
+    public Uni<DeleteRuntimeCommandsResponse> execute(@Valid final DeleteRuntimeCommandsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::deleteRuntimeCommands,
-                deleteRuntimeCommandsMethod::deleteRuntimeCommands);
+                RuntimeModuleClient::execute,
+                deleteRuntimeCommandsMethod::execute);
     }
 
     @Override
-    public Uni<GetRuntimeAssignmentResponse> getRuntimeAssignment(@Valid final GetRuntimeAssignmentRequest request) {
+    public Uni<GetRuntimeAssignmentResponse> execute(@Valid final GetRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::getRuntimeAssignment,
-                getRuntimeAssignmentMethod::getRuntimeAssignment);
+                RuntimeModuleClient::execute,
+                getRuntimeAssignmentMethod::execute);
     }
 
     @Override
-    public Uni<FindRuntimeAssignmentResponse> findRuntimeAssignment(@Valid final FindRuntimeAssignmentRequest request) {
+    public Uni<FindRuntimeAssignmentResponse> execute(@Valid final FindRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::findRuntimeAssignment,
-                findRuntimeAssignmentMethod::findRuntimeAssignment);
+                RuntimeModuleClient::execute,
+                findRuntimeAssignmentMethod::execute);
     }
 
     @Override
-    public Uni<ViewRuntimeAssignmentsResponse> viewRuntimeAssignments(
+    public Uni<ViewRuntimeAssignmentsResponse> execute(
             @Valid final ViewRuntimeAssignmentsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::viewRuntimeAssignments,
-                viewRuntimeAssignmentsMethod::viewRuntimeAssignments);
+                RuntimeModuleClient::execute,
+                viewRuntimeAssignmentsMethod::execute);
     }
 
     @Override
-    public Uni<CountRuntimeAssignmentsResponse> countRuntimeAssignments(
+    public Uni<CountRuntimeAssignmentsResponse> execute(
             @Valid final CountRuntimeAssignmentsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::countRuntimeAssignments,
-                countRuntimeAssignmentsMethod::countRuntimeAssignments);
+                RuntimeModuleClient::execute,
+                countRuntimeAssignmentsMethod::execute);
     }
 
     @Override
-    public Uni<SyncRuntimeAssignmentResponse> syncRuntimeAssignment(@Valid final SyncRuntimeAssignmentRequest request) {
+    public Uni<SyncRuntimeAssignmentResponse> execute(@Valid final SyncRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncRuntimeAssignment,
-                syncRuntimeAssignmentMethod::syncRuntimeAssignment);
+                RuntimeModuleClient::execute,
+                syncRuntimeAssignmentMethod::execute);
     }
 
     @Override
-    public Uni<UpdateRuntimeAssignmentLastActivityResponse> updateRuntimeAssignmentLastActivity(
+    public Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(
             @Valid final UpdateRuntimeAssignmentLastActivityRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::updateRuntimeAssignmentLastActivity,
-                updateRuntimeAssignmentLastActivity::updateRuntimeAssignmentLastActivity);
+                RuntimeModuleClient::execute,
+                updateRuntimeAssignmentLastActivity::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimeAssignmentResponse> deleteRuntimeAssignment(
+    public Uni<DeleteRuntimeAssignmentResponse> execute(
             @Valid final DeleteRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::deleteRuntimeAssignment,
-                deleteRuntimeAssignmentMethod::deleteRuntimeAssignment);
+                RuntimeModuleClient::execute,
+                deleteRuntimeAssignmentMethod::execute);
     }
 
     @Override
-    public Uni<GetRuntimePoolServerContainerRefResponse> getRuntimePoolServerContainerRef(
-            @Valid final GetRuntimePoolServerContainerRefRequest request) {
+    public Uni<GetRuntimePoolContainerRefResponse> execute(
+            @Valid final GetRuntimePoolContainerRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::getRuntimePoolServerContainerRef,
-                getRuntimePoolServerContainerRefMethod::getRuntimePoolServerContainerRef);
+                RuntimeModuleClient::execute,
+                getRuntimePoolContainerRefMethod::execute);
     }
 
     @Override
-    public Uni<FindRuntimePoolServerContainerRefResponse> findRuntimePoolServerContainerRef(
-            @Valid final FindRuntimePoolServerContainerRefRequest request) {
+    public Uni<FindRuntimePoolContainerRefResponse> execute(
+            @Valid final FindRuntimePoolContainerRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::findRuntimePoolServerContainerRef,
-                findRuntimePoolServerContainerRefMethod::findRuntimePoolServerContainerRef);
+                RuntimeModuleClient::execute,
+                findRuntimePoolContainerRefMethod::execute);
     }
 
     @Override
-    public Uni<SyncRuntimePoolServerContainerRefResponse> syncRuntimePoolServerContainerRef(
-            @Valid final SyncRuntimePoolServerContainerRefRequest request) {
+    public Uni<SyncRuntimePoolContainerRefResponse> execute(
+            @Valid final SyncRuntimePoolContainerRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::syncRuntimePoolServerContainerRef,
-                syncRuntimePoolServerContainerRefMethod::syncRuntimePoolServerContainerRef);
+                RuntimeModuleClient::execute,
+                syncRuntimePoolContainerRefMethod::execute);
     }
 
     @Override
-    public Uni<DeleteRuntimePoolServerContainerRefResponse> deleteRuntimePoolServerContainerRef(
-            @Valid final DeleteRuntimePoolServerContainerRefRequest request) {
+    public Uni<DeleteRuntimePoolContainerRefResponse> execute(
+            @Valid final DeleteRuntimePoolContainerRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::deleteRuntimePoolServerContainerRef,
-                deleteRuntimePoolServerContainerRefMethod::deleteRuntimePoolServerContainerRef);
+                RuntimeModuleClient::execute,
+                deleteRuntimePoolContainerRefMethod::execute);
     }
 
     @Override
-    public Uni<InterchangeResponse> interchange(@Valid final InterchangeRequest request) {
+    public Uni<InterchangeResponse> execute(@Valid final InterchangeRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRuntimeModuleClientOperation::getClient,
-                RuntimeModuleClient::interchange,
-                interchangeMethod::interchange);
+                RuntimeModuleClient::execute,
+                interchangeMethod::execute);
     }
 }
