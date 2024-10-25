@@ -52,7 +52,7 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
                                                                      final Long matchId,
                                                                      final Long id) {
         final var request = new GetMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getService().getMatchmakerMatchRuntimeRef(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerMatchRuntimeRefResponse::getMatchmakerMatchRuntimeRef);
     }
 }

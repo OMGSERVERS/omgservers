@@ -4,7 +4,6 @@ import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfSta
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
-import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +28,9 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
     }
 
     @Override
-    public Uni<Void> handleMatchmakerCommand(final MatchmakerStateDto matchmakerStateDto,
-                                             final MatchmakerChangeOfStateDto changeOfState,
-                                             final MatchmakerCommandModel matchmakerCommand) {
+    public void execute(final MatchmakerStateDto matchmakerState,
+                        final MatchmakerChangeOfStateDto matchmakerChangeOfState,
+                        final MatchmakerCommandModel matchmakerCommand) {
         final var qualifier = matchmakerCommand.getQualifier();
         final var qualifierBodyClass = qualifier.getBodyClass();
         final var body = matchmakerCommand.getBody();
@@ -39,17 +38,18 @@ class HandleMatchmakerCommandOperationImpl implements HandleMatchmakerCommandOpe
         if (!qualifierBodyClass.isInstance(body)) {
             log.error("Qualifier and matchmaker command body do not match, qualifier={}, bodyClass={}, id={}",
                     matchmakerCommand.getQualifier(), body.getClass(), matchmakerCommand.getId());
-            return Uni.createFrom().voidItem();
+            return;
         }
 
         if (!matchmakerCommandHandlers.containsKey(qualifier)) {
             log.error("Matchmaker command handler was not found, qualifier={}, id={}",
                     matchmakerCommand.getQualifier(), matchmakerCommand.getId());
-            return Uni.createFrom().voidItem();
+            return;
         }
 
-        return Uni.createFrom().voidItem()
-                .invoke(voidItem -> matchmakerCommandHandlers.get(qualifier)
-                        .handle(matchmakerStateDto, changeOfState, matchmakerCommand));
+        matchmakerCommandHandlers.get(qualifier)
+                .handle(matchmakerState, matchmakerChangeOfState, matchmakerCommand);
+
+        matchmakerChangeOfState.getCommandsToDelete().add(matchmakerCommand);
     }
 }

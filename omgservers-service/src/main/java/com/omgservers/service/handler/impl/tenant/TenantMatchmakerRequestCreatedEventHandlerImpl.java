@@ -66,7 +66,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
                 deploymentId,
                 idempotencyKey);
         final var request = new SyncMatchmakerRequest(matchmaker);
-        return matchmakerModule.getService().syncMatchmakerWithIdempotency(request)
+        return matchmakerModule.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerResponse::getCreated);
     }
 }

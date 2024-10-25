@@ -67,7 +67,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().getMatchmaker(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
@@ -79,7 +79,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
     Uni<Boolean> deleteMatchmaker(final Long matchmakerId) {
         final var request = new DeleteMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().deleteMatchmaker(request)
+        return matchmakerModule.getService().execute(request)
                 .map(DeleteMatchmakerResponse::getDeleted);
     }
 }

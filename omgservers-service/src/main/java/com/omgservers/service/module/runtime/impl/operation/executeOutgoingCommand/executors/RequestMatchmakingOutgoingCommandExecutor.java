@@ -136,7 +136,7 @@ public class RequestMatchmakingOutgoingCommandExecutor implements OutgoingComman
                 mode,
                 requestConfig);
         final var request = new SyncMatchmakerRequestRequest(requestModel);
-        return matchmakerModule.getService().syncMatchmakerRequestWithIdempotency(request)
+        return matchmakerModule.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerRequestResponse::getCreated);
     }
 }

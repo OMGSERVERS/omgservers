@@ -35,7 +35,7 @@ class UpsertMatchmakerAssignmentOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenMatchmakerAssignment_whenUpsertMatchmakerAssignment_thenInserted() {
+    void givenMatchmakerAssignment_whenExecute_thenInserted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -49,7 +49,7 @@ class UpsertMatchmakerAssignmentOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenMatchmakerAssignment_whenUpsertMatchmakerAssignment_thenUpdated() {
+    void givenMatchmakerAssignment_whenExecute_thenUpdated() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -64,7 +64,7 @@ class UpsertMatchmakerAssignmentOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenUpsertMatchmakerAssignment_thenException() {
+    void givenUnknownIds_whenExecute_thenException() {
         final var shard = 0;
         final var matchmakerAssignment = matchmakerAssignmentModelFactory.create(matchmakerId(), clientId());
         assertThrows(ServerSideBadRequestException.class, () ->
@@ -72,7 +72,7 @@ class UpsertMatchmakerAssignmentOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenMatchmakerAssignment_whenUpsertMatchmakerAssignment_thenIdempotencyViolation() {
+    void givenMatchmakerAssignment_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);

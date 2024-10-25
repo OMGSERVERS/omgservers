@@ -25,7 +25,7 @@ public class SchedulerTaskImpl {
     final TaskService taskService;
     final JobService jobService;
 
-    public Uni<Boolean> executeTask() {
+    public Uni<Boolean> execute() {
         return jobService.viewJobs(new ViewJobsRequest())
                 .flatMap(response -> Multi.createFrom().iterable(response.getJobs())
                         .onItem().transformToUniAndMerge(this::executeJob)
@@ -39,15 +39,15 @@ public class SchedulerTaskImpl {
     Uni<Void> executeJob(final JobModel job) {
         return (switch (job.getQualifier()) {
             case TENANT -> taskService
-                    .executeTenantTask(new ExecuteTenantTaskRequest(job.getEntityId()));
+                    .execute(new ExecuteTenantTaskRequest(job.getEntityId()));
             case MATCHMAKER -> taskService
-                    .executeMatchmakerTask(new ExecuteMatchmakerTaskRequest(job.getEntityId()));
+                    .execute(new ExecuteMatchmakerTaskRequest(job.getEntityId()));
             case RUNTIME -> taskService
-                    .executeRuntimeTask(new ExecuteRuntimeTaskRequest(job.getEntityId()));
+                    .execute(new ExecuteRuntimeTaskRequest(job.getEntityId()));
             case POOL -> taskService
-                    .executePoolTask(new ExecutePoolTaskRequest(job.getEntityId()));
+                    .execute(new ExecutePoolTaskRequest(job.getEntityId()));
             case BUILD_REQUEST -> taskService
-                    .executeBuildRequestTask(new ExecuteBuildRequestTaskRequest(job.getShardKey(),
+                    .execute(new ExecuteBuildRequestTaskRequest(job.getShardKey(),
                             job.getEntityId()));
         }).replaceWithVoid();
     }

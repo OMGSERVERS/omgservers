@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation.testInterface;
 
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.upsertMatchmakerRequest.UpsertMatchmakerRequestOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.UpsertMatchmakerRequestOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,7 +26,7 @@ public class UpsertMatchmakerRequestOperationTestInterface {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertRequestOperation
-                                    .upsertMatchmakerRequest(changeContext, sqlConnection, shard, matchmakerRequest))
+                                    .execute(changeContext, sqlConnection, shard, matchmakerRequest))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

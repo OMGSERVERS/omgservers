@@ -26,7 +26,7 @@ public class StageTaskImpl {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
-    public Uni<Boolean> executeTask(final Long tenantId, final Long tenantStageId) {
+    public Uni<Boolean> execute(final Long tenantId, final Long tenantStageId) {
         return getTenantStage(tenantId, tenantStageId)
                 .flatMap(tenantStage -> handleTenantStage(tenantStage)
                         .replaceWith(Boolean.TRUE));

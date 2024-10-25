@@ -22,33 +22,26 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
     }
 
     @Override
-    public void handle(final MatchmakerStateDto currentState,
-                       final MatchmakerChangeOfStateDto changeOfState,
+    public void handle(final MatchmakerStateDto matchmakerState,
+                       final MatchmakerChangeOfStateDto matchmakerChangeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        log.debug("Handle matchmaker command, {}", matchmakerCommand);
+        log.debug("Handle, {}", matchmakerCommand);
 
         final var body = (KickClientMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var clientId = body.getClientId();
-        final var matchId = body.getMatchId();
+        final var matchmakerMatchId = body.getMatchmakerMatchId();
 
-        // Step 1. Finding client's match clients and adding for removing
+        // Find a client's matchmaker match assignments to delete
 
-        final var kickedMatchClients = currentState.getClients().stream()
+        final var matchmakerMatchAssignmentsToDelete = matchmakerState.getMatchmakerMatchAssignments().stream()
                 .filter(matchClient -> matchClient.getClientId().equals(clientId))
-                .filter(matchClient -> matchClient.getMatchId().equals(matchId))
+                .filter(matchClient -> matchClient.getMatchId().equals(matchmakerMatchId))
                 .toList();
 
-        changeOfState.getClientsToDelete().addAll(kickedMatchClients);
+        matchmakerChangeOfState.getMatchAssignmentsToDelete().addAll(matchmakerMatchAssignmentsToDelete);
 
-        log.info(
-                "Client was kicked from matchmaker, " +
-                        "clientId={}, " +
-                        "matchmakerId={}, " +
-                        "kickedMatchClients={}, " +
-                        "matchmakerCommandId={}",
-                clientId,
-                matchmakerCommand.getMatchmakerId(),
-                kickedMatchClients.size(),
-                matchmakerCommand.getId());
+
+        log.info("The client was queued to be removed from the match, clientId={}, matchId={}", clientId,
+                matchmakerMatchId);
     }
 }

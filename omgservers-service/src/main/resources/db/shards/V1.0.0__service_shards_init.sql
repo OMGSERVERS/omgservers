@@ -440,7 +440,7 @@ create table if not exists tab_matchmaker_match_runtime_ref (
     deleted boolean not null
 );
 
-create table if not exists tab_matchmaker_match_client (
+create table if not exists tab_matchmaker_match_assignment (
     id bigint primary key,
     idempotency_key text not null unique,
     matchmaker_id bigint not null references tab_matchmaker(id) on delete restrict on update restrict,
@@ -460,8 +460,8 @@ create index if not exists idx_matchmaker_request_matchmaker_id on tab_matchmake
 create index if not exists idx_matchmaker_match_matchmaker_id on tab_matchmaker_match(matchmaker_id);
 create index if not exists idx_matchmaker_match_runtime_ref_matchmaker_id on tab_matchmaker_match_runtime_ref(matchmaker_id);
 create index if not exists idx_matchmaker_match_runtime_ref_match_id on tab_matchmaker_match_runtime_ref(match_id);
-create index if not exists idx_matchmaker_match_client_matchmaker_id on tab_matchmaker_match_client(matchmaker_id);
-create index if not exists idx_matchmaker_match_client_match_id on tab_matchmaker_match_client(match_id);
+create index if not exists idx_matchmaker_match_assignment_matchmaker_id on tab_matchmaker_match_assignment(matchmaker_id);
+create index if not exists idx_matchmaker_match_assignment_match_id on tab_matchmaker_match_assignment(match_id);
 
 -- runtime module
 

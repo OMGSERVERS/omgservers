@@ -28,7 +28,7 @@ class DeleteMatchmakerOperationTest extends BaseTestClass {
     MatchmakerModelFactory matchmakerModelFactory;
 
     @Test
-    void givenMatchmaker_whenDeleteMatchmaker_thenDeleted() {
+    void givenMatchmaker_whenExecute_thenDeleted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -39,7 +39,7 @@ class DeleteMatchmakerOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownUuid_whenDeleteMatchmaker_thenSkip() {
+    void givenUnknownUuid_whenExecute_thenSkip() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 

@@ -1,18 +1,19 @@
 package com.omgservers.schema.model.matchmakerMatch;
 
 public enum MatchmakerMatchStatusEnum {
-    /**
-     * Match was only created and doesn't ready to accept clients.
-     */
-    CREATED,
 
     /**
-     * Match is ready to participate in matchmaking.
+     * The match was only created and is not yet ready to accept client entries.
      */
-    PREPARED,
+    PENDING,
 
     /**
-     * Match was excluded from matchmaking.
+     * The match is currently participating in matchmaking.
      */
-    EXCLUDED,
+    OPENED,
+
+    /**
+     * The match was closed to new client entries.
+     */
+    CLOSED,
 }

@@ -32,7 +32,7 @@ class InitializeRelayJobMethodImpl implements InitializeRelayJobMethod {
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                             .setAsyncTask(scheduledExecution -> {
                                 final var request = new ExecuteRelayTaskRequest();
-                                return taskService.executeRelayTask(request)
+                                return taskService.execute(request)
                                         .replaceWithVoid();
                             })
                             .schedule();

@@ -23,21 +23,21 @@ import jakarta.validation.Valid;
 
 public interface TaskService {
 
-    Uni<ExecuteSchedulerTaskResponse> executeSchedulerTask(@Valid ExecuteSchedulerTaskRequest request);
+    Uni<ExecuteSchedulerTaskResponse> execute(@Valid ExecuteSchedulerTaskRequest request);
 
-    Uni<ExecuteDispatcherTaskResponse> executeDispatcherTask(@Valid ExecuteDispatcherTaskRequest request);
+    Uni<ExecuteDispatcherTaskResponse> execute(@Valid ExecuteDispatcherTaskRequest request);
 
-    Uni<ExecuteTenantTaskResponse> executeTenantTask(@Valid ExecuteTenantTaskRequest request);
+    Uni<ExecuteTenantTaskResponse> execute(@Valid ExecuteTenantTaskRequest request);
 
-    Uni<ExecuteStageTaskResponse> executeStageTask(@Valid ExecuteStageTaskRequest request);
+    Uni<ExecuteStageTaskResponse> execute(@Valid ExecuteStageTaskRequest request);
 
-    Uni<ExecuteMatchmakerTaskResponse> executeMatchmakerTask(@Valid ExecuteMatchmakerTaskRequest request);
+    Uni<ExecuteMatchmakerTaskResponse> execute(@Valid ExecuteMatchmakerTaskRequest request);
 
-    Uni<ExecuteRuntimeTaskResponse> executeRuntimeTask(@Valid ExecuteRuntimeTaskRequest request);
+    Uni<ExecuteRuntimeTaskResponse> execute(@Valid ExecuteRuntimeTaskRequest request);
 
-    Uni<ExecutePoolTaskResponse> executePoolTask(@Valid ExecutePoolTaskRequest request);
+    Uni<ExecutePoolTaskResponse> execute(@Valid ExecutePoolTaskRequest request);
 
-    Uni<ExecuteRelayTaskResponse> executeRelayTask(@Valid ExecuteRelayTaskRequest request);
+    Uni<ExecuteRelayTaskResponse> execute(@Valid ExecuteRelayTaskRequest request);
 
-    Uni<ExecuteBuildRequestTaskResponse> executeBuildRequestTask(@Valid ExecuteBuildRequestTaskRequest request);
+    Uni<ExecuteBuildRequestTaskResponse> execute(@Valid ExecuteBuildRequestTaskRequest request);
 }

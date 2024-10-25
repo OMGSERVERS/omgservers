@@ -5,5 +5,5 @@ import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteTenantTaskMethod {
-    Uni<ExecuteTenantTaskResponse> executeTenantTask(ExecuteTenantTaskRequest request);
+    Uni<ExecuteTenantTaskResponse> execute(ExecuteTenantTaskRequest request);
 }

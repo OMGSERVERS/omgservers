@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientResponse;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsResponse;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsRequest;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsResponse;
 import com.omgservers.schema.module.runtime.DeleteRuntimeRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeResponse;
 import com.omgservers.service.event.EventModel;
@@ -52,14 +52,14 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
                     final var runtimeId = match.getRuntimeId();
                     return deleteRuntime(runtimeId)
-                            .flatMap(voidItem -> deleteMatchClients(matchmakerId, matchId));
+                            .flatMap(voidItem -> deleteMatchmakerMatchAssignments(matchmakerId, matchId));
                 })
                 .replaceWithVoid();
     }
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getService().getMatchmakerMatch(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
@@ -69,23 +69,18 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
                 .map(DeleteRuntimeResponse::getDeleted);
     }
 
-    Uni<Void> deleteMatchClients(final Long matchmakerId, final Long matchId) {
-        return viewMatchClients(matchmakerId, matchId)
-                .flatMap(matchClients -> Multi.createFrom().iterable(matchClients)
-                        .onItem().transformToUniAndConcatenate(matchClient ->
-                                deleteMatchClient(matchmakerId, matchClient.getId())
+    Uni<Void> deleteMatchmakerMatchAssignments(final Long matchmakerId, final Long matchmakerMatchId) {
+        return viewMatchmakerMatchAssignments(matchmakerId, matchmakerMatchId)
+                .flatMap(matchmakerMatchAssignments -> Multi.createFrom().iterable(matchmakerMatchAssignments)
+                        .onItem().transformToUniAndConcatenate(matchmakerMatchAssignment ->
+                                deleteMatchAssignment(matchmakerId, matchmakerMatchAssignment.getId())
                                         .onFailure()
-                                        .recoverWithItem(t -> {
-                                            log.warn("Delete match client failed, " +
-                                                            "match={}/{}, " +
-                                                            "matchClientId={}" +
-                                                            "{}:{}",
-                                                    matchmakerId,
-                                                    matchId,
-                                                    matchClient.getId(),
+                                        .recoverWithUni(t -> {
+                                            log.warn("Failed to delete, {}, {}:{}",
+                                                    matchmakerMatchAssignment,
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
-                                            return null;
+                                            return Uni.createFrom().item(Boolean.FALSE);
                                         })
                         )
                         .collect().asList()
@@ -93,15 +88,16 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
                 );
     }
 
-    Uni<List<MatchmakerMatchClientModel>> viewMatchClients(final Long matchmakerId, final Long matchId) {
-        final var request = new ViewMatchmakerMatchClientsRequest(matchmakerId, matchId);
-        return matchmakerModule.getService().viewMatchmakerMatchClients(request)
-                .map(ViewMatchmakerMatchClientsResponse::getMatchClients);
+    Uni<List<MatchmakerMatchAssignmentModel>> viewMatchmakerMatchAssignments(final Long matchmakerId,
+                                                                             final Long matchId) {
+        final var request = new ViewMatchmakerMatchAssignmentsRequest(matchmakerId, matchId);
+        return matchmakerModule.getService().execute(request)
+                .map(ViewMatchmakerMatchAssignmentsResponse::getMatchmakerMatchAssignments);
     }
 
-    Uni<Boolean> deleteMatchClient(final Long matchmakerId, final Long id) {
-        final var request = new DeleteMatchmakerMatchClientRequest(matchmakerId, id);
-        return matchmakerModule.getService().deleteMatchmakerMatchClient(request)
-                .map(DeleteMatchmakerMatchClientResponse::getDeleted);
+    Uni<Boolean> deleteMatchAssignment(final Long matchmakerId, final Long id) {
+        final var request = new DeleteMatchmakerMatchAssignmentRequest(matchmakerId, id);
+        return matchmakerModule.getService().execute(request)
+                .map(DeleteMatchmakerMatchAssignmentResponse::getDeleted);
     }
 }

@@ -2,13 +2,13 @@ package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigDto;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentConfigDto;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerMatchAssignmentModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
-import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerMatchClientOperationTestInterface;
-import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchClientOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.DeleteMatchmakerMatchAssignmentOperationTestInterface;
+import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchAssignmentOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerMatchOperationTestInterface;
 import com.omgservers.service.module.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
@@ -24,10 +24,10 @@ import java.util.UUID;
 class DeleteMatchmakerMatchRuntimeRefOperationTest extends BaseTestClass {
 
     @Inject
-    DeleteMatchmakerMatchClientOperationTestInterface deleteMatchClientOperation;
+    DeleteMatchmakerMatchAssignmentOperationTestInterface deleteMatchmakerMatchAssignmentOperation;
 
     @Inject
-    UpsertMatchmakerMatchClientOperationTestInterface upsertMatchmakerMatchClientOperation;
+    UpsertMatchmakerMatchAssignmentOperationTestInterface upsertMatchmakerMatchAssignmentOperation;
 
     @Inject
     UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;
@@ -45,40 +45,42 @@ class DeleteMatchmakerMatchRuntimeRefOperationTest extends BaseTestClass {
     MatchmakerMatchModelFactory matchmakerMatchModelFactory;
 
     @Inject
-    MatchmakerMatchClientModelFactory matchmakerMatchClientModelFactory;
+    MatchmakerMatchAssignmentModelFactory matchmakerMatchAssignmentModelFactory;
 
     @Test
-    void givenMatchClient_whenDeleteMatchmakerMatchClient_thenDeleted() {
+    void givenMatchmakerMatchAssignment_whenDeleteMatchmakerMatchAssignment_thenDeleted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
         final var matchmakerMatch = matchmakerMatchModelFactory
                 .create(matchmaker.getId(), new MatchmakerMatchConfigDto());
         upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
-        final var matchmakerMatchClient = matchmakerMatchClientModelFactory
+        final var matchmakerMatchAssignment = matchmakerMatchAssignmentModelFactory
                 .create(matchmaker.getId(),
                         matchmakerMatch.getId(),
                         userId(),
                         clientId(),
                         groupName(),
-                        new MatchmakerMatchClientConfigDto());
-        upsertMatchmakerMatchClientOperation.upsertMatchmakerMatchClient(shard, matchmakerMatchClient);
+                        new MatchmakerMatchAssignmentConfigDto());
+        upsertMatchmakerMatchAssignmentOperation.execute(shard, matchmakerMatchAssignment);
 
-        final var changeContext = deleteMatchClientOperation
-                .deleteMatchmakerMatchClient(shard, matchmaker.getId(), matchmakerMatchClient.getId());
+        final var changeContext = deleteMatchmakerMatchAssignmentOperation
+                .execute(shard, matchmaker.getId(), matchmakerMatchAssignment.getId());
         assertTrue(changeContext.getResult());
-        assertTrue(changeContext.contains(EventQualifierEnum.MATCHMAKER_MATCH_CLIENT_DELETED));
+        assertTrue(changeContext.contains(EventQualifierEnum.MATCHMAKER_MATCH_ASSIGNMENT_DELETED));
     }
 
     @Test
-    void givenUnknownIds_whenDeleteMatchmakerMatchClient_thenSkip() {
+    void givenUnknownIds_whenDeleteMatchmakerMatchAssignment_thenSkip() {
         final var shard = 0;
         final var matchmakerId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteMatchClientOperation.deleteMatchmakerMatchClient(shard, matchmakerId, id);
+        final var changeContext = deleteMatchmakerMatchAssignmentOperation.execute(shard,
+                matchmakerId,
+                id);
         assertFalse(changeContext.getResult());
-        assertFalse(changeContext.contains(EventQualifierEnum.MATCHMAKER_MATCH_CLIENT_DELETED));
+        assertFalse(changeContext.contains(EventQualifierEnum.MATCHMAKER_MATCH_ASSIGNMENT_DELETED));
     }
 
     Long userId() {

@@ -2,7 +2,7 @@ package com.omgservers.service.module.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyDto;
+import com.omgservers.schema.model.matchmakerCommand.body.CloseMatchMatchmakerCommandBodyDto;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
@@ -35,12 +35,12 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenMatchmakerCommand_whenUpsertMatchmakerCommand_thenInserted() {
+    void givenMatchmakerCommand_whenExecute_thenInserted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerCommandBody = new ExcludeMatchMatchmakerCommandBodyDto(matchId());
+        final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody);
 
@@ -49,12 +49,12 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenMatchmakerCommand_whenUpsertMatchmakerCommandAgain_thenUpdated() {
+    void givenMatchmakerCommand_whenExecuteAgain_thenUpdated() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerCommandBody = new ExcludeMatchMatchmakerCommandBodyDto(matchId());
+        final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody);
         upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand);
@@ -64,9 +64,9 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenUpsertMatchmakerCommand_thenException() {
+    void givenUnknownIds_whenExecute_thenException() {
         final var shard = 0;
-        final var matchmakerCommandBody = new ExcludeMatchMatchmakerCommandBodyDto(matchId());
+        final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmakerId(),
                 matchmakerCommandBody);
         assertThrows(ServerSideBadRequestException.class, () ->
@@ -74,17 +74,17 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenMatchmakerCommand_whenUpsertMatchmakerCommand_thenIdempotencyViolation() {
+    void givenMatchmakerCommand_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
-        final var matchmakerCommandBody1 = new ExcludeMatchMatchmakerCommandBodyDto(matchId());
+        final var matchmakerCommandBody1 = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand1 = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody1);
         upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand1);
 
-        final var matchmakerCommandBody2 = new ExcludeMatchMatchmakerCommandBodyDto(matchId());
+        final var matchmakerCommandBody2 = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand2 = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody2,
                 matchmakerCommand1.getIdempotencyKey());

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.matchmaker.operation.testInterface;
 
-import com.omgservers.service.module.matchmaker.impl.operation.matchmaker.deleteMatchmaker.DeleteMatchmakerOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmaker.DeleteMatchmakerOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -25,7 +25,7 @@ public class DeleteMatchmakerOperationTestInterface {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deleteMatchmakerOperation
-                                    .deleteMatchmaker(changeContext, sqlConnection, shard, id))
+                                    .execute(changeContext, sqlConnection, shard, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

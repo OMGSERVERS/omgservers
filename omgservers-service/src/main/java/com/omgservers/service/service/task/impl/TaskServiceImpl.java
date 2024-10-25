@@ -51,48 +51,47 @@ class TaskServiceImpl implements TaskService {
     final ExecutePoolTaskMethod executePoolTaskMethod;
 
     @Override
-    public Uni<ExecuteSchedulerTaskResponse> executeSchedulerTask(@Valid final ExecuteSchedulerTaskRequest request) {
-        return executeSchedulerTaskMethod.executeSchedulerTask(request);
+    public Uni<ExecuteSchedulerTaskResponse> execute(@Valid final ExecuteSchedulerTaskRequest request) {
+        return executeSchedulerTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecuteDispatcherTaskResponse> executeDispatcherTask(@Valid final ExecuteDispatcherTaskRequest request) {
+    public Uni<ExecuteDispatcherTaskResponse> execute(@Valid final ExecuteDispatcherTaskRequest request) {
         return executeDispatcherTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecuteTenantTaskResponse> executeTenantTask(@Valid final ExecuteTenantTaskRequest request) {
-        return executeTenantTaskMethod.executeTenantTask(request);
+    public Uni<ExecuteTenantTaskResponse> execute(@Valid final ExecuteTenantTaskRequest request) {
+        return executeTenantTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecuteStageTaskResponse> executeStageTask(@Valid final ExecuteStageTaskRequest request) {
-        return executeStageTaskMethod.executeStageTask(request);
+    public Uni<ExecuteStageTaskResponse> execute(@Valid final ExecuteStageTaskRequest request) {
+        return executeStageTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecuteMatchmakerTaskResponse> executeMatchmakerTask(@Valid final ExecuteMatchmakerTaskRequest request) {
-        return executeMatchmakerTaskMethod.executeMatchmakerTask(request);
+    public Uni<ExecuteMatchmakerTaskResponse> execute(@Valid final ExecuteMatchmakerTaskRequest request) {
+        return executeMatchmakerTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecuteRuntimeTaskResponse> executeRuntimeTask(@Valid final ExecuteRuntimeTaskRequest request) {
-        return executeRuntimeTaskMethod.executeRuntimeTask(request);
+    public Uni<ExecuteRuntimeTaskResponse> execute(@Valid final ExecuteRuntimeTaskRequest request) {
+        return executeRuntimeTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecutePoolTaskResponse> executePoolTask(@Valid final ExecutePoolTaskRequest request) {
+    public Uni<ExecutePoolTaskResponse> execute(@Valid final ExecutePoolTaskRequest request) {
         return executePoolTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecuteRelayTaskResponse> executeRelayTask(@Valid final ExecuteRelayTaskRequest request) {
-        return executeRelayTaskMethod.executeRelayTask(request);
+    public Uni<ExecuteRelayTaskResponse> execute(@Valid final ExecuteRelayTaskRequest request) {
+        return executeRelayTaskMethod.execute(request);
     }
 
     @Override
-    public Uni<ExecuteBuildRequestTaskResponse> executeBuildRequestTask(
-            @Valid final ExecuteBuildRequestTaskRequest request) {
+    public Uni<ExecuteBuildRequestTaskResponse> execute(@Valid final ExecuteBuildRequestTaskRequest request) {
         return executeBuildRequestTaskMethod.execute(request);
     }
 }

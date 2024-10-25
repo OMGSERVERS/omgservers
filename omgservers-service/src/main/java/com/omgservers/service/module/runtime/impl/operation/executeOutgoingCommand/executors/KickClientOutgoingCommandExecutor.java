@@ -118,7 +118,7 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
         final var commandBody = new KickClientMatchmakerCommandBodyDto(clientId, matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getService().syncMatchmakerCommand(request)
+        return matchmakerModule.getService().execute(request)
                 .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {

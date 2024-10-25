@@ -40,7 +40,7 @@ public class BuildRequestTaskImpl {
     final TenantImageModelFactory tenantImageModelFactory;
     final EventModelFactory eventModelFactory;
 
-    public Uni<Boolean> executeTask(final Long tenantId, final Long tenantBuildRequestId) {
+    public Uni<Boolean> execute(final Long tenantId, final Long tenantBuildRequestId) {
         return getTenantBuildRequest(tenantId, tenantBuildRequestId)
                 .flatMap(tenantBuildRequest -> handleTenantBuildRequest(tenantBuildRequest)
                         .replaceWith(Boolean.TRUE));

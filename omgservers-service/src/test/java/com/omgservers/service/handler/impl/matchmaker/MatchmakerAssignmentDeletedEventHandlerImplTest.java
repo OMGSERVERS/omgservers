@@ -48,7 +48,7 @@ class MatchmakerAssignmentDeletedEventHandlerImplTest extends BaseTestClass {
         final var id = matchmakerAssignment.getId();
 
         final var deleteMatchmakerAssignmentRequest = new DeleteMatchmakerAssignmentRequest(matchmakerId, id);
-        matchmakerService.deleteMatchmakerAssignment(deleteMatchmakerAssignmentRequest);
+        matchmakerService.execute(deleteMatchmakerAssignmentRequest);
 
         final var eventBody = new MatchmakerAssignmentDeletedEventBodyModel(matchmakerId, id);
         final var eventModel = eventModelFactory.create(eventBody);

@@ -15,12 +15,12 @@ public class ExecuteRuntimeTaskMethodImpl implements ExecuteRuntimeTaskMethod {
     final RuntimeTaskImpl runtimeTask;
 
     @Override
-    public Uni<ExecuteRuntimeTaskResponse> executeRuntimeTask(final ExecuteRuntimeTaskRequest request) {
+    public Uni<ExecuteRuntimeTaskResponse> execute(final ExecuteRuntimeTaskRequest request) {
         log.debug("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();
 
-        return runtimeTask.executeTask(runtimeId)
+        return runtimeTask.execute(runtimeId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, runtimeId={}, {}:{}",

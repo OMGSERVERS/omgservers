@@ -5,5 +5,5 @@ import com.omgservers.service.service.task.dto.ExecuteRelayTaskResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteRelayTaskMethod {
-    Uni<ExecuteRelayTaskResponse> executeRelayTask(ExecuteRelayTaskRequest request);
+    Uni<ExecuteRelayTaskResponse> execute(ExecuteRelayTaskRequest request);
 }

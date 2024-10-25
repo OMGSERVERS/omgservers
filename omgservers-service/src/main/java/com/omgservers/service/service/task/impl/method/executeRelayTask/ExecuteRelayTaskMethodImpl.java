@@ -15,10 +15,10 @@ public class ExecuteRelayTaskMethodImpl implements ExecuteRelayTaskMethod {
     final RelayTaskImpl relayTask;
 
     @Override
-    public Uni<ExecuteRelayTaskResponse> executeRelayTask(final ExecuteRelayTaskRequest request) {
+    public Uni<ExecuteRelayTaskResponse> execute(final ExecuteRelayTaskRequest request) {
         log.debug("Requested, {}", request);
 
-        return relayTask.executeTask()
+        return relayTask.execute()
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);

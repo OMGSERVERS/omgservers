@@ -49,7 +49,7 @@ public class MatchmakerMatchModelFactory {
         matchmakerMatch.setModified(now);
         matchmakerMatch.setRuntimeId(runtimeId);
         matchmakerMatch.setConfig(matchmakerMatchConfig);
-        matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.CREATED);
+        matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.PENDING);
         matchmakerMatch.setDeleted(Boolean.FALSE);
         return matchmakerMatch;
     }

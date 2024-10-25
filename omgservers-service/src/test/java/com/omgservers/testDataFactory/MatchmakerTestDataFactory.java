@@ -5,20 +5,20 @@ import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientConfigDto;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentConfigDto;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModeDto;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchClientRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;
-import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerMatchAssignmentModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchRuntimeRefModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
@@ -35,7 +35,7 @@ public class MatchmakerTestDataFactory {
     final MatchmakerServiceTestInterface matchmakerService;
 
     final MatchmakerMatchRuntimeRefModelFactory matchmakerMatchRuntimeRefModelFactory;
-    final MatchmakerMatchClientModelFactory matchmakerMatchClientModelFactory;
+    final MatchmakerMatchAssignmentModelFactory matchmakerMatchAssignmentModelFactory;
     final MatchmakerAssignmentModelFactory matchmakerAssignmentModelFactory;
     final MatchmakerMatchModelFactory matchmakerMatchModelFactory;
     final MatchmakerModelFactory matchmakerModelFactory;
@@ -47,7 +47,7 @@ public class MatchmakerTestDataFactory {
 
         final var matchmaker = matchmakerModelFactory.create(tenantId, tenantDeploymentId);
         final var syncMatchmakerRequest = new SyncMatchmakerRequest(matchmaker);
-        matchmakerService.syncMatchmaker(syncMatchmakerRequest);
+        matchmakerService.execute(syncMatchmakerRequest);
         return matchmaker;
     }
 
@@ -58,7 +58,7 @@ public class MatchmakerTestDataFactory {
 
         final var matchmakerAssignment = matchmakerAssignmentModelFactory.create(matchmakerId, clientId);
         final var syncMatchmakerAssignmentRequest = new SyncMatchmakerAssignmentRequest(matchmakerAssignment);
-        matchmakerService.syncMatchmakerAssignment(syncMatchmakerAssignmentRequest);
+        matchmakerService.execute(syncMatchmakerAssignmentRequest);
         return matchmakerAssignment;
     }
 
@@ -68,7 +68,7 @@ public class MatchmakerTestDataFactory {
         final var config = new MatchmakerMatchConfigDto(TenantVersionModeDto.create("mode", 2, 16));
         final var matchmakerMatch = matchmakerMatchModelFactory.create(matchmakerId, config);
         final var syncMatchmakerMatchRequest = new SyncMatchmakerMatchRequest(matchmakerMatch);
-        matchmakerService.syncMatchmakerMatch(syncMatchmakerMatchRequest);
+        matchmakerService.execute(syncMatchmakerMatchRequest);
         return matchmakerMatch;
     }
 
@@ -82,27 +82,27 @@ public class MatchmakerTestDataFactory {
                 runtimeId);
         final var syncMatchmakerMatchRuntimeRefRequest = new SyncMatchmakerMatchRuntimeRefRequest(
                 matchmakerMatchRuntimeRef);
-        matchmakerService.syncMatchmakerMatchRuntimeRef(syncMatchmakerMatchRuntimeRefRequest);
+        matchmakerService.execute(syncMatchmakerMatchRuntimeRefRequest);
         return matchmakerMatchRuntimeRef;
     }
 
-    public MatchmakerMatchClientModel createMatchmakerMatchClient(final MatchmakerMatchModel matchmakerMatch,
-                                                                  final ClientModel client) {
+    public MatchmakerMatchAssignmentModel createMatchmakerMatchAssignment(final MatchmakerMatchModel matchmakerMatch,
+                                                                          final ClientModel client) {
         final var matchmakerId = matchmakerMatch.getMatchmakerId();
         final var matchId = matchmakerMatch.getId();
 
         final var userId = client.getUserId();
         final var clientId = client.getId();
 
-        final var config = new MatchmakerMatchClientConfigDto();
-        final var matchmakerMatchClient = matchmakerMatchClientModelFactory.create(matchmakerId,
+        final var config = new MatchmakerMatchAssignmentConfigDto();
+        final var matchmakerMatchAssignment = matchmakerMatchAssignmentModelFactory.create(matchmakerId,
                 matchId,
                 userId,
                 clientId,
                 "players",
                 config);
-        final var syncMatchmakerMatchClientRequest = new SyncMatchmakerMatchClientRequest(matchmakerMatchClient);
-        matchmakerService.syncMatchmakerMatchClient(syncMatchmakerMatchClientRequest);
-        return matchmakerMatchClient;
+        final var request = new SyncMatchmakerMatchAssignmentRequest(matchmakerMatchAssignment);
+        matchmakerService.execute(request);
+        return matchmakerMatchAssignment;
     }
 }

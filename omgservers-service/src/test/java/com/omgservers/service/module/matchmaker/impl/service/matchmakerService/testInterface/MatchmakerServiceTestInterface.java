@@ -4,8 +4,8 @@ import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentRequest
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
@@ -16,14 +16,14 @@ import com.omgservers.schema.module.matchmaker.DeleteMatchmakerRequestResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
@@ -36,8 +36,8 @@ import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
@@ -54,8 +54,8 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsResponse;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsRequest;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
@@ -75,161 +75,153 @@ public class MatchmakerServiceTestInterface {
 
     final MatchmakerService matchmakerService;
 
-    public SyncMatchmakerResponse syncMatchmaker(final SyncMatchmakerRequest request) {
-        return matchmakerService.syncMatchmaker(request)
+    public SyncMatchmakerResponse execute(final SyncMatchmakerRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetMatchmakerResponse getMatchmaker(final GetMatchmakerRequest request) {
-        return matchmakerService.getMatchmaker(request)
+    public GetMatchmakerResponse execute(final GetMatchmakerRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteMatchmakerResponse deleteMatchmaker(final DeleteMatchmakerRequest request) {
-        return matchmakerService.deleteMatchmaker(request)
+    public DeleteMatchmakerResponse execute(final DeleteMatchmakerRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetMatchmakerAssignmentResponse getMatchmakerAssignment(final GetMatchmakerAssignmentRequest request) {
-        return matchmakerService.getMatchmakerAssignment(request)
+    public GetMatchmakerAssignmentResponse execute(final GetMatchmakerAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindMatchmakerAssignmentResponse findMatchmakerAssignment(final FindMatchmakerAssignmentRequest request) {
-        return matchmakerService.findMatchmakerAssignment(request)
+    public FindMatchmakerAssignmentResponse execute(final FindMatchmakerAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewMatchmakerAssignmentsResponse viewMatchmakerAssignments(final ViewMatchmakerAssignmentsRequest request) {
-        return matchmakerService.viewMatchmakerAssignments(request)
+    public ViewMatchmakerAssignmentsResponse execute(final ViewMatchmakerAssignmentsRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncMatchmakerAssignmentResponse syncMatchmakerAssignment(final SyncMatchmakerAssignmentRequest request) {
-        return matchmakerService.syncMatchmakerAssignment(request)
+    public SyncMatchmakerAssignmentResponse execute(final SyncMatchmakerAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteMatchmakerAssignmentResponse deleteMatchmakerAssignment(
-            final DeleteMatchmakerAssignmentRequest request) {
-        return matchmakerService.deleteMatchmakerAssignment(request)
+    public DeleteMatchmakerAssignmentResponse execute(final DeleteMatchmakerAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetMatchmakerStateResponse getMatchmakerState(final GetMatchmakerStateRequest request) {
-        return matchmakerService.getMatchmakerState(request)
+    public GetMatchmakerStateResponse execute(final GetMatchmakerStateRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public UpdateMatchmakerStateResponse updateMatchmakerState(final UpdateMatchmakerStateRequest request) {
-        return matchmakerService.updateMatchmakerState(request)
+    public UpdateMatchmakerStateResponse execute(final UpdateMatchmakerStateRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncMatchmakerCommandResponse syncMatchmakerCommand(final SyncMatchmakerCommandRequest request) {
-        return matchmakerService.syncMatchmakerCommand(request)
+    public SyncMatchmakerCommandResponse execute(final SyncMatchmakerCommandRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteMatchmakerCommandResponse deleteMatchmakerCommand(final DeleteMatchmakerCommandRequest request) {
-        return matchmakerService.deleteMatchmakerCommand(request)
+    public DeleteMatchmakerCommandResponse execute(final DeleteMatchmakerCommandRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewMatchmakerCommandsResponse viewMatchmakerCommands(final ViewMatchmakerCommandsRequest request) {
-        return matchmakerService.viewMatchmakerCommands(request)
+    public ViewMatchmakerCommandsResponse execute(final ViewMatchmakerCommandsRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncMatchmakerRequestResponse syncMatchmakerRequest(final SyncMatchmakerRequestRequest request) {
-        return matchmakerService.syncMatchmakerRequest(request)
+    public SyncMatchmakerRequestResponse execute(final SyncMatchmakerRequestRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteMatchmakerRequestResponse deleteMatchmakerRequest(final DeleteMatchmakerRequestRequest request) {
-        return matchmakerService.deleteMatchmakerRequest(request)
+    public DeleteMatchmakerRequestResponse execute(final DeleteMatchmakerRequestRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewMatchmakerRequestsResponse viewMatchmakerRequests(final ViewMatchmakerRequestsRequest request) {
-        return matchmakerService.viewMatchmakerRequests(request)
+    public ViewMatchmakerRequestsResponse execute(final ViewMatchmakerRequestsRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetMatchmakerMatchResponse getMatchmakerMatch(final GetMatchmakerMatchRequest request) {
-        return matchmakerService.getMatchmakerMatch(request)
+    public GetMatchmakerMatchResponse execute(final GetMatchmakerMatchRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public UpdateMatchmakerMatchStatusResponse updateMatchmakerMatchStatus(
-            final UpdateMatchmakerMatchStatusRequest request) {
-        return matchmakerService.updateMatchmakerMatchStatus(request)
+    public UpdateMatchmakerMatchStatusResponse execute(final UpdateMatchmakerMatchStatusRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewMatchmakerMatchesResponse viewMatchmakerMatches(final ViewMatchmakerMatchesRequest request) {
-        return matchmakerService.viewMatchmakerMatches(request)
+    public ViewMatchmakerMatchesResponse execute(final ViewMatchmakerMatchesRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncMatchmakerMatchResponse syncMatchmakerMatch(final SyncMatchmakerMatchRequest request) {
-        return matchmakerService.syncMatchmakerMatch(request)
+    public SyncMatchmakerMatchResponse execute(final SyncMatchmakerMatchRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteMatchmakerMatchResponse deleteMatchmakerMatch(final DeleteMatchmakerMatchRequest request) {
-        return matchmakerService.deleteMatchmakerMatch(request)
+    public DeleteMatchmakerMatchResponse execute(final DeleteMatchmakerMatchRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetMatchmakerMatchClientResponse getMatchmakerMatchClient(final GetMatchmakerMatchClientRequest request) {
-        return matchmakerService.getMatchmakerMatchClient(request)
+    public GetMatchmakerMatchAssignmentResponse execute(final GetMatchmakerMatchAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindMatchmakerMatchClientResponse findMatchmakerMatchClient(final FindMatchmakerMatchClientRequest request) {
-        return matchmakerService.findMatchmakerMatchClient(request)
+    public FindMatchmakerMatchAssignmentResponse execute(final FindMatchmakerMatchAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewMatchmakerMatchClientsResponse viewMatchmakerMatchClients(
-            final ViewMatchmakerMatchClientsRequest request) {
-        return matchmakerService.viewMatchmakerMatchClients(request)
+    public ViewMatchmakerMatchAssignmentsResponse execute(final ViewMatchmakerMatchAssignmentsRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncMatchmakerMatchClientResponse syncMatchmakerMatchClient(final SyncMatchmakerMatchClientRequest request) {
-        return matchmakerService.syncMatchmakerMatchClient(request)
+    public SyncMatchmakerMatchAssignmentResponse execute(final SyncMatchmakerMatchAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteMatchmakerMatchClientResponse deleteMatchmakerMatchClient(
-            final DeleteMatchmakerMatchClientRequest request) {
-        return matchmakerService.deleteMatchmakerMatchClient(request)
+    public DeleteMatchmakerMatchAssignmentResponse execute(final DeleteMatchmakerMatchAssignmentRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public GetMatchmakerMatchRuntimeRefResponse getMatchmakerMatchRuntimeRef(
-            final GetMatchmakerMatchRuntimeRefRequest request) {
-        return matchmakerService.getMatchmakerMatchRuntimeRef(request)
+    public GetMatchmakerMatchRuntimeRefResponse execute(final GetMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindMatchmakerMatchRuntimeRefResponse findMatchmakerMatchRuntimeRef(
-            final FindMatchmakerMatchRuntimeRefRequest request) {
-        return matchmakerService.findMatchmakerMatchRuntimeRef(request)
+    public FindMatchmakerMatchRuntimeRefResponse execute(final FindMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncMatchmakerMatchRuntimeRefResponse syncMatchmakerMatchRuntimeRef(
-            final SyncMatchmakerMatchRuntimeRefRequest request) {
-        return matchmakerService.syncMatchmakerMatchRuntimeRef(request)
+    public SyncMatchmakerMatchRuntimeRefResponse execute(final SyncMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteMatchmakerMatchRuntimeRefResponse deleteMatchmakerMatchRuntimeRef(
-            final DeleteMatchmakerMatchRuntimeRefRequest request) {
-        return matchmakerService.deleteMatchmakerMatchRuntimeRef(request)
+    public DeleteMatchmakerMatchRuntimeRefResponse execute(final DeleteMatchmakerMatchRuntimeRefRequest request) {
+        return matchmakerService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

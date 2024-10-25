@@ -57,7 +57,7 @@ public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler
 
     Uni<MatchmakerAssignmentModel> getMatchmakerAssignment(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerAssignmentRequest(matchmakerId, id);
-        return matchmakerModule.getService().getMatchmakerAssignment(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerAssignmentResponse::getMatchmakerAssignment);
     }
 

@@ -1,6 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
-import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyDto;
+import com.omgservers.schema.model.matchmakerCommand.body.CloseMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
@@ -70,10 +70,10 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
     }
 
     Uni<Boolean> syncExcludeMatchMatchmakerCommand(final Long matchmakerId, final Long matchId) {
-        final var commandBody = new ExcludeMatchMatchmakerCommandBodyDto(matchId);
+        final var commandBody = new CloseMatchMatchmakerCommandBodyDto(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getService().syncMatchmakerCommand(request)
+        return matchmakerModule.getService().execute(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

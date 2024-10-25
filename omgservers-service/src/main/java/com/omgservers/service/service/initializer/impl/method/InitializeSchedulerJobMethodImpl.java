@@ -34,7 +34,7 @@ class InitializeSchedulerJobMethodImpl implements InitializeSchedulerJobMethod {
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                             .setAsyncTask(scheduledExecution -> {
                                 final var request = new ExecuteSchedulerTaskRequest();
-                                return taskService.executeSchedulerTask(request)
+                                return taskService.execute(request)
                                         .replaceWithVoid();
                             })
                             .schedule();

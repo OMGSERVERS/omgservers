@@ -130,7 +130,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var matchRuntimeRef = matchmakerMatchRuntimeRefModelFactory
                         .create(matchmakerId, matchId, runtimeId, idempotencyKey);
                 final var request = new SyncMatchmakerMatchRuntimeRefRequest(matchRuntimeRef);
-                yield matchmakerModule.getService().syncMatchmakerMatchRuntimeRef(request)
+                yield matchmakerModule.getService().execute(request)
                         .map(SyncMatchmakerMatchRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
                         .recoverWithItem(Boolean.FALSE)

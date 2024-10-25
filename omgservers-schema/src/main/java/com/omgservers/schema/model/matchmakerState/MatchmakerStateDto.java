@@ -1,8 +1,10 @@
 package com.omgservers.schema.model.matchmakerState;
 
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,14 +19,20 @@ import java.util.List;
 public class MatchmakerStateDto {
 
     @NotNull
-    List<MatchmakerCommandModel> commands;
+    MatchmakerModel matchmaker;
 
     @NotNull
-    List<MatchmakerRequestModel> requests;
+    List<MatchmakerAssignmentModel> matchmakerAssignments;
 
     @NotNull
-    List<MatchmakerMatchModel> matches;
+    List<MatchmakerCommandModel> matchmakerCommands;
 
     @NotNull
-    List<MatchmakerMatchClientModel> clients;
+    List<MatchmakerRequestModel> matchmakerRequests;
+
+    @NotNull
+    List<MatchmakerMatchModel> matchmakerMatches;
+
+    @NotNull
+    List<MatchmakerMatchAssignmentModel> matchmakerMatchAssignments;
 }

@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
-import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyDto;
+import com.omgservers.schema.model.matchmakerCommand.body.OpenMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
@@ -55,17 +55,17 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
                                                                      final Long matchId,
                                                                      final Long id) {
         final var request = new GetMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getService().getMatchmakerMatchRuntimeRef(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerMatchRuntimeRefResponse::getMatchmakerMatchRuntimeRef);
     }
 
     Uni<Boolean> syncPrepareMatchMatchmakerCommand(final Long matchmakerId,
                                                    final Long matchId,
                                                    final String idempotencyKey) {
-        final var commandBody = new PrepareMatchMatchmakerCommandBodyDto(matchId);
+        final var commandBody = new OpenMatchMatchmakerCommandBodyDto(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody, idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getService().syncMatchmakerCommandWithIdempotency(request)
+        return matchmakerModule.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

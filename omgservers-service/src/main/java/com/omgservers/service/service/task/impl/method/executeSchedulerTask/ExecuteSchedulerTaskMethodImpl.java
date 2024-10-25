@@ -15,10 +15,10 @@ public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMetho
     final SchedulerTaskImpl schedulerTask;
 
     @Override
-    public Uni<ExecuteSchedulerTaskResponse> executeSchedulerTask(final ExecuteSchedulerTaskRequest request) {
+    public Uni<ExecuteSchedulerTaskResponse> execute(final ExecuteSchedulerTaskRequest request) {
         log.debug("Requested, {}", request);
 
-        return schedulerTask.executeTask()
+        return schedulerTask.execute()
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);

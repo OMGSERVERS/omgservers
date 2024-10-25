@@ -31,7 +31,7 @@ public class TenantTaskImpl {
 
     final TaskService taskService;
 
-    public Uni<Boolean> executeTask(final Long tenantId) {
+    public Uni<Boolean> execute(final Long tenantId) {
         return getTenant(tenantId)
                 .flatMap(tenant -> handleTenant(tenant)
                         .replaceWith(Boolean.TRUE));
@@ -80,7 +80,7 @@ public class TenantTaskImpl {
         final var tenantId = tenantStage.getTenantId();
         final var tenantStageId = tenantStage.getId();
         final var request = new ExecuteStageTaskRequest(tenantId, tenantStageId);
-        return taskService.executeStageTask(request)
+        return taskService.execute(request)
                 .replaceWithVoid();
     }
 }

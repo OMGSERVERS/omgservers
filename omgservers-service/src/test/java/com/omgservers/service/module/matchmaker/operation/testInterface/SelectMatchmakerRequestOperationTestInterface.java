@@ -1,7 +1,7 @@
 package com.omgservers.service.module.matchmaker.operation.testInterface;
 
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.selectMatchmakerRequest.SelectMatchmakerRequestOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.SelectMatchmakerRequestOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class SelectMatchmakerRequestOperationTestInterface {
                                                           final Long matchmakerId,
                                                           final Long id) {
         return pgPool.withTransaction(sqlConnection -> selectMatchmakerRequestOperation
-                        .selectMatchmakerRequest(sqlConnection, shard, matchmakerId, id))
+                        .execute(sqlConnection, shard, matchmakerId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

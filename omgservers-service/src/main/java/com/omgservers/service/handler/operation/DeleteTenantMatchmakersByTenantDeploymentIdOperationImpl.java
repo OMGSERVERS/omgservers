@@ -57,7 +57,7 @@ class DeleteTenantMatchmakersByTenantDeploymentIdOperationImpl
 
     Uni<Boolean> deleteMatchmaker(final Long matchmakerId) {
         final var request = new DeleteMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().deleteMatchmaker(request)
+        return matchmakerModule.getService().execute(request)
                 .map(DeleteMatchmakerResponse::getDeleted);
     }
 

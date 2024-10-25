@@ -22,7 +22,7 @@ public class RelayTaskImpl {
 
     final Scheduler scheduler;
 
-    public Uni<Boolean> executeTask() {
+    public Uni<Boolean> execute() {
         return Multi.createBy().repeating()
                 .uni(this::relayEvents)
                 .whilst(Boolean.TRUE::equals)

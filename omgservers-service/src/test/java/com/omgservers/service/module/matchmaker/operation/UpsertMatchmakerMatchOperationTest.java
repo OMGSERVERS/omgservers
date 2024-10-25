@@ -40,7 +40,7 @@ class UpsertMatchmakerMatchOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenMatchmakerMatch_whenUpsertMatchmakerMatch_thenInserted() {
+    void givenMatchmakerMatch_whenExecute_thenInserted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -56,7 +56,7 @@ class UpsertMatchmakerMatchOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenMatchmakerMatch_whenUpsertMatchmakerMatch_thenUpdated() {
+    void givenMatchmakerMatch_whenExecute_thenUpdated() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -74,7 +74,7 @@ class UpsertMatchmakerMatchOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenUpsertMatchmakerMatch_thenException() {
+    void givenUnknownIds_whenExecute_thenException() {
         final var shard = 0;
         final var modeConfig = TenantVersionModeDto.create(modeName(), 4, 8, new ArrayList<>() {{
             add(TenantVersionGroupDto.create("red", 1, 4));

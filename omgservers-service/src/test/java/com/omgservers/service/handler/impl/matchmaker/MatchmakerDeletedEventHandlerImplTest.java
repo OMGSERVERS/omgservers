@@ -42,7 +42,7 @@ class MatchmakerDeletedEventHandlerImplTest extends BaseTestClass {
         final var matchmakerId = matchmaker.getId();
 
         final var deleteMatchmakerRequest = new DeleteMatchmakerRequest(matchmakerId);
-        matchmakerService.deleteMatchmaker(deleteMatchmakerRequest);
+        matchmakerService.execute(deleteMatchmakerRequest);
 
         final var eventBody = new MatchmakerDeletedEventBodyModel(matchmakerId);
         final var eventModel = eventModelFactory.create(eventBody);

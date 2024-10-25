@@ -1,10 +1,10 @@
 package com.omgservers.schema.model.matchmakerCommand;
 
-import com.omgservers.schema.model.matchmakerCommand.body.DeleteClientMatchmakerCommandBodyDto;
+import com.omgservers.schema.model.matchmakerCommand.body.CloseMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerCommand.body.DeleteMatchMatchmakerCommandBodyDto;
-import com.omgservers.schema.model.matchmakerCommand.body.ExcludeMatchMatchmakerCommandBodyDto;
 import com.omgservers.schema.model.matchmakerCommand.body.KickClientMatchmakerCommandBodyDto;
-import com.omgservers.schema.model.matchmakerCommand.body.PrepareMatchMatchmakerCommandBodyDto;
+import com.omgservers.schema.model.matchmakerCommand.body.OpenMatchMatchmakerCommandBodyDto;
+import com.omgservers.schema.model.matchmakerCommand.body.RemoveClientMatchmakerCommandBodyDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,9 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum MatchmakerCommandQualifierEnum {
     KICK_CLIENT(KickClientMatchmakerCommandBodyDto.class),
-    DELETE_CLIENT(DeleteClientMatchmakerCommandBodyDto.class),
-    PREPARE_MATCH(PrepareMatchMatchmakerCommandBodyDto.class),
-    EXCLUDE_MATCH(ExcludeMatchMatchmakerCommandBodyDto.class),
+    REMOVE_CLIENT(RemoveClientMatchmakerCommandBodyDto.class),
+    OPEN_MATCH(OpenMatchMatchmakerCommandBodyDto.class),
+    CLOSE_MATCH(CloseMatchMatchmakerCommandBodyDto.class),
     DELETE_MATCH(DeleteMatchMatchmakerCommandBodyDto.class);
 
     final Class<? extends MatchmakerCommandBodyDto> bodyClass;

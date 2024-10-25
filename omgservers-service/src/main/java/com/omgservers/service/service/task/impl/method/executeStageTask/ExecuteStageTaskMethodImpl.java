@@ -15,13 +15,13 @@ public class ExecuteStageTaskMethodImpl implements ExecuteStageTaskMethod {
     final StageTaskImpl stageTask;
 
     @Override
-    public Uni<ExecuteStageTaskResponse> executeStageTask(final ExecuteStageTaskRequest request) {
+    public Uni<ExecuteStageTaskResponse> execute(final ExecuteStageTaskRequest request) {
         log.debug("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();
 
-        return stageTask.executeTask(tenantId, tenantStageId)
+        return stageTask.execute(tenantId, tenantStageId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, tenantStage={}:{}, {}:{}",

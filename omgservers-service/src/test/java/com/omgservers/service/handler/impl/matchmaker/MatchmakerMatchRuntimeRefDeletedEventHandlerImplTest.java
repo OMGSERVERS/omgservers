@@ -52,7 +52,7 @@ class MatchmakerMatchRuntimeRefDeletedEventHandlerImplTest extends BaseTestClass
         final var deleteMatchmakerMatchRuntimeRefRequest = new DeleteMatchmakerMatchRuntimeRefRequest(matchmakerId,
                 matchId,
                 id);
-        matchmakerService.deleteMatchmakerMatchRuntimeRef(deleteMatchmakerMatchRuntimeRefRequest);
+        matchmakerService.execute(deleteMatchmakerMatchRuntimeRefRequest);
 
         final var eventBody = new MatchmakerMatchRuntimeRefDeletedEventBodyModel(matchmakerId, matchId, id);
         final var eventModel = eventModelFactory.create(eventBody);

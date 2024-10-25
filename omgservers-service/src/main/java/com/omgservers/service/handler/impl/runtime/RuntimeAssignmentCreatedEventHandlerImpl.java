@@ -101,8 +101,8 @@ public class RuntimeAssignmentCreatedEventHandlerImpl implements EventHandler {
 
                                 final var runtimeId = runtimeAssignment.getRuntimeId();
 
-                                if (Objects.nonNull(runtimeAssignment.getConfig().getMatchClient())) {
-                                    final var groupName = runtimeAssignment.getConfig().getMatchClient().getGroupName();
+                                if (Objects.nonNull(runtimeAssignment.getConfig().getMatchmakerMatchAssignment())) {
+                                    final var groupName = runtimeAssignment.getConfig().getMatchmakerMatchAssignment().getGroupName();
                                     final var runtimeCommandBody = new AddMatchClientRuntimeCommandBodyDto(userId,
                                             clientId,
                                             groupName,

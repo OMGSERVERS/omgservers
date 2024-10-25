@@ -1,10 +1,10 @@
 package com.omgservers.service.module.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ public class MatchmakerMatchModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchmakerMatchModel fromRow(final Row row) {
+    public MatchmakerMatchModel execute(final Row row) {
         final var matchmakerMatch = new MatchmakerMatchModel();
         matchmakerMatch.setId(row.getLong("id"));
         matchmakerMatch.setIdempotencyKey(row.getString("idempotency_key"));

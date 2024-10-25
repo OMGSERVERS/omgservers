@@ -15,11 +15,12 @@ public class ExecuteMatchmakerTaskMethodImpl implements ExecuteMatchmakerTaskMet
     final MatchmakerTaskImpl matchmakerTask;
 
     @Override
-    public Uni<ExecuteMatchmakerTaskResponse> executeMatchmakerTask(final ExecuteMatchmakerTaskRequest request) {
+    public Uni<ExecuteMatchmakerTaskResponse> execute(final ExecuteMatchmakerTaskRequest request) {
         log.debug("Requested, {}", request);
+
         final var matchmakerId = request.getMatchmakerId();
 
-        return matchmakerTask.executeTask(matchmakerId)
+        return matchmakerTask.execute(matchmakerId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, matchmakerId={}, {}:{}",

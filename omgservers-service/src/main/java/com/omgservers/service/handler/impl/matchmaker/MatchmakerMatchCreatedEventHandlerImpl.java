@@ -20,7 +20,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRespons
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
-import com.omgservers.service.factory.matchmaker.MatchmakerMatchClientModelFactory;
+import com.omgservers.service.factory.matchmaker.MatchmakerMatchAssignmentModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
@@ -43,7 +43,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
 
-    final MatchmakerMatchClientModelFactory matchmakerMatchClientModelFactory;
+    final MatchmakerMatchAssignmentModelFactory matchmakerMatchAssignmentModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
     final EventModelFactory eventModelFactory;
 
@@ -89,13 +89,13 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().getMatchmaker(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getService().getMatchmakerMatch(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 

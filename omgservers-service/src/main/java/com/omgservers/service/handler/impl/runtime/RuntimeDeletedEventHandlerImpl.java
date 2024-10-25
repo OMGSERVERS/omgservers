@@ -223,7 +223,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     Uni<MatchmakerMatchRuntimeRefModel> findMatchRuntimeRef(final Long matchmakerId,
                                                             final Long matchId) {
         final var request = new FindMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId);
-        return matchmakerModule.getService().findMatchmakerMatchRuntimeRef(request)
+        return matchmakerModule.getService().execute(request)
                 .map(FindMatchmakerMatchRuntimeRefResponse::getMatchRuntimeRef);
     }
 
@@ -231,7 +231,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                                        final Long matchId,
                                        final Long id) {
         final var request = new DeleteMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getService().deleteMatchmakerMatchRuntimeRef(request)
+        return matchmakerModule.getService().execute(request)
                 .map(DeleteMatchmakerMatchRuntimeRefResponse::getDeleted);
     }
 

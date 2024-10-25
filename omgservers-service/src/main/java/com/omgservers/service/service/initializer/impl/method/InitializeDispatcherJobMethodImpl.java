@@ -34,7 +34,7 @@ class InitializeDispatcherJobMethodImpl implements InitializeDispatcherJobMethod
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                             .setAsyncTask(scheduledExecution -> {
                                 final var request = new ExecuteDispatcherTaskRequest();
-                                return taskService.executeDispatcherTask(request)
+                                return taskService.execute(request)
                                         .replaceWithVoid();
                             })
                             .schedule();

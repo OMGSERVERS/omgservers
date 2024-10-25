@@ -1,6 +1,6 @@
 package com.omgservers.schema.model.runtimeAssignment;
 
-import com.omgservers.schema.model.matchmakerMatchClient.MatchmakerMatchClientModel;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ public class RuntimeAssignmentConfigDto {
         return runtimeAssignmentConfig;
     }
 
-    MatchmakerMatchClientModel matchClient;
+    MatchmakerMatchAssignmentModel matchmakerMatchAssignment;
 }

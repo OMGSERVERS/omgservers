@@ -28,7 +28,7 @@ class SelectMatchmakerOperationTest extends BaseTestClass {
     MatchmakerModelFactory matchmakerModelFactory;
 
     @Test
-    void givenMatchmaker_whenSelectMatchmaker_thenSelected() {
+    void givenMatchmaker_whenExecute_thenSelected() {
         final var shard = 0;
         final var matchmaker1 = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker1);
@@ -38,7 +38,7 @@ class SelectMatchmakerOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownId_whenSelectMatchmaker_thenException() {
+    void givenUnknownId_whenExecute_thenException() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 

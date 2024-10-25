@@ -4,8 +4,8 @@ import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentRequest
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
@@ -16,14 +16,14 @@ import com.omgservers.schema.module.matchmaker.DeleteMatchmakerRequestResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
@@ -36,8 +36,8 @@ import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
@@ -54,8 +54,8 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsResponse;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsRequest;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
@@ -64,66 +64,95 @@ import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<SyncMatchmakerResponse> syncMatchmaker(SyncMatchmakerRequest request);
+    /*
+    Matchmaker
+     */
 
-    Uni<GetMatchmakerResponse> getMatchmaker(GetMatchmakerRequest request);
+    Uni<SyncMatchmakerResponse> execute(SyncMatchmakerRequest request);
 
-    Uni<DeleteMatchmakerResponse> deleteMatchmaker(DeleteMatchmakerRequest request);
+    Uni<GetMatchmakerResponse> execute(GetMatchmakerRequest request);
 
-    Uni<GetMatchmakerAssignmentResponse> getMatchmakerAssignment(GetMatchmakerAssignmentRequest request);
+    Uni<DeleteMatchmakerResponse> execute(DeleteMatchmakerRequest request);
 
-    Uni<FindMatchmakerAssignmentResponse> findMatchmakerAssignment(FindMatchmakerAssignmentRequest request);
+    /*
+    MatchmakerAssignment
+     */
 
-    Uni<ViewMatchmakerAssignmentsResponse> viewMatchmakerAssignments(ViewMatchmakerAssignmentsRequest request);
+    Uni<GetMatchmakerAssignmentResponse> execute(GetMatchmakerAssignmentRequest request);
 
-    Uni<SyncMatchmakerAssignmentResponse> syncMatchmakerAssignment(SyncMatchmakerAssignmentRequest request);
+    Uni<FindMatchmakerAssignmentResponse> execute(FindMatchmakerAssignmentRequest request);
 
-    Uni<DeleteMatchmakerAssignmentResponse> deleteMatchmakerAssignment(DeleteMatchmakerAssignmentRequest request);
+    Uni<ViewMatchmakerAssignmentsResponse> execute(ViewMatchmakerAssignmentsRequest request);
 
-    Uni<GetMatchmakerStateResponse> getMatchmakerState(GetMatchmakerStateRequest request);
+    Uni<SyncMatchmakerAssignmentResponse> execute(SyncMatchmakerAssignmentRequest request);
 
-    Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(UpdateMatchmakerStateRequest request);
+    Uni<DeleteMatchmakerAssignmentResponse> execute(DeleteMatchmakerAssignmentRequest request);
 
-    Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(SyncMatchmakerCommandRequest request);
+    /*
+    MatchmakerCommand
+     */
 
-    Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(DeleteMatchmakerCommandRequest request);
+    Uni<ViewMatchmakerCommandsResponse> execute(ViewMatchmakerCommandsRequest request);
 
-    Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(ViewMatchmakerCommandsRequest request);
+    Uni<SyncMatchmakerCommandResponse> execute(SyncMatchmakerCommandRequest request);
 
-    Uni<SyncMatchmakerRequestResponse> syncMatchmakerRequest(SyncMatchmakerRequestRequest request);
+    Uni<DeleteMatchmakerCommandResponse> execute(DeleteMatchmakerCommandRequest request);
 
-    Uni<DeleteMatchmakerRequestResponse> deleteMatchmakerRequest(DeleteMatchmakerRequestRequest request);
+    /*
+    MatchmakerRequest
+     */
 
-    Uni<ViewMatchmakerRequestsResponse> viewMatchmakerRequests(ViewMatchmakerRequestsRequest request);
+    Uni<ViewMatchmakerRequestsResponse> execute(ViewMatchmakerRequestsRequest request);
 
-    Uni<GetMatchmakerMatchResponse> getMatchmakerMatch(GetMatchmakerMatchRequest request);
+    Uni<SyncMatchmakerRequestResponse> execute(SyncMatchmakerRequestRequest request);
 
-    Uni<UpdateMatchmakerMatchStatusResponse> updateMatchmakerMatchStatus(UpdateMatchmakerMatchStatusRequest request);
+    Uni<DeleteMatchmakerRequestResponse> execute(DeleteMatchmakerRequestRequest request);
 
-    Uni<SyncMatchmakerMatchResponse> syncMatchmakerMatch(SyncMatchmakerMatchRequest request);
+    /*
+    MatchmakerMatch
+     */
 
-    Uni<DeleteMatchmakerMatchResponse> deleteMatchmakerMatch(DeleteMatchmakerMatchRequest request);
+    Uni<GetMatchmakerMatchResponse> execute(GetMatchmakerMatchRequest request);
 
-    Uni<ViewMatchmakerMatchesResponse> viewMatchmakerMatches(ViewMatchmakerMatchesRequest request);
+    Uni<ViewMatchmakerMatchesResponse> execute(ViewMatchmakerMatchesRequest request);
 
-    Uni<GetMatchmakerMatchClientResponse> getMatchmakerMatchClient(GetMatchmakerMatchClientRequest request);
+    Uni<SyncMatchmakerMatchResponse> execute(SyncMatchmakerMatchRequest request);
 
-    Uni<FindMatchmakerMatchClientResponse> findMatchmakerMatchClient(FindMatchmakerMatchClientRequest request);
+    Uni<UpdateMatchmakerMatchStatusResponse> execute(UpdateMatchmakerMatchStatusRequest request);
 
-    Uni<ViewMatchmakerMatchClientsResponse> viewMatchmakerMatchClients(ViewMatchmakerMatchClientsRequest request);
+    Uni<DeleteMatchmakerMatchResponse> execute(DeleteMatchmakerMatchRequest request);
 
-    Uni<SyncMatchmakerMatchClientResponse> syncMatchmakerMatchClient(SyncMatchmakerMatchClientRequest request);
+    /*
+    MatchmakerMatchAssignment
+     */
 
-    Uni<DeleteMatchmakerMatchClientResponse> deleteMatchmakerMatchClient(DeleteMatchmakerMatchClientRequest request);
+    Uni<GetMatchmakerMatchAssignmentResponse> execute(GetMatchmakerMatchAssignmentRequest request);
 
-    Uni<GetMatchmakerMatchRuntimeRefResponse> getMatchmakerMatchRuntimeRef(GetMatchmakerMatchRuntimeRefRequest request);
+    Uni<FindMatchmakerMatchAssignmentResponse> execute(FindMatchmakerMatchAssignmentRequest request);
 
-    Uni<FindMatchmakerMatchRuntimeRefResponse> findMatchmakerMatchRuntimeRef(
-            FindMatchmakerMatchRuntimeRefRequest request);
+    Uni<ViewMatchmakerMatchAssignmentsResponse> execute(ViewMatchmakerMatchAssignmentsRequest request);
 
-    Uni<SyncMatchmakerMatchRuntimeRefResponse> syncMatchmakerMatchRuntimeRef(
-            SyncMatchmakerMatchRuntimeRefRequest request);
+    Uni<SyncMatchmakerMatchAssignmentResponse> execute(SyncMatchmakerMatchAssignmentRequest request);
 
-    Uni<DeleteMatchmakerMatchRuntimeRefResponse> deleteMatchmakerMatchRuntimeRef(
-            DeleteMatchmakerMatchRuntimeRefRequest request);
+    Uni<DeleteMatchmakerMatchAssignmentResponse> execute(DeleteMatchmakerMatchAssignmentRequest request);
+
+    /*
+    MatchmakerMatchRuntimeRef
+     */
+
+    Uni<GetMatchmakerMatchRuntimeRefResponse> execute(GetMatchmakerMatchRuntimeRefRequest request);
+
+    Uni<FindMatchmakerMatchRuntimeRefResponse> execute(FindMatchmakerMatchRuntimeRefRequest request);
+
+    Uni<SyncMatchmakerMatchRuntimeRefResponse> execute(SyncMatchmakerMatchRuntimeRefRequest request);
+
+    Uni<DeleteMatchmakerMatchRuntimeRefResponse> execute(DeleteMatchmakerMatchRuntimeRefRequest request);
+
+    /*
+    MatchmakerState
+     */
+
+    Uni<GetMatchmakerStateResponse> execute(GetMatchmakerStateRequest request);
+
+    Uni<UpdateMatchmakerStateResponse> execute(UpdateMatchmakerStateRequest request);
 }

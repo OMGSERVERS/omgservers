@@ -5,8 +5,8 @@ import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentRequest
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
@@ -17,14 +17,14 @@ import com.omgservers.schema.module.matchmaker.DeleteMatchmakerRequestResponse;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
 import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
@@ -37,8 +37,8 @@ import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchClientRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchClientResponse;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchResponse;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
@@ -55,8 +55,8 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchClientsResponse;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsRequest;
+import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
@@ -79,167 +79,185 @@ public class MatchmakerApiImpl implements MatchmakerApi {
     final HandleApiRequestOperation handleApiRequestOperation;
     final WebService webService;
 
+    /*
+    Matchmaker
+     */
+
     @Override
-    public Uni<SyncMatchmakerResponse> syncMatchmaker(final SyncMatchmakerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmaker);
+    public Uni<SyncMatchmakerResponse> execute(final SyncMatchmakerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetMatchmakerResponse> getMatchmaker(final GetMatchmakerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmaker);
+    public Uni<GetMatchmakerResponse> execute(final GetMatchmakerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteMatchmakerResponse> deleteMatchmaker(final DeleteMatchmakerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmaker);
+    public Uni<DeleteMatchmakerResponse> execute(final DeleteMatchmakerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    MatchmakerAssignment
+     */
+
+    @Override
+    public Uni<GetMatchmakerAssignmentResponse> execute(final GetMatchmakerAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetMatchmakerAssignmentResponse> getMatchmakerAssignment(final GetMatchmakerAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerAssignment);
+    public Uni<FindMatchmakerAssignmentResponse> execute(final FindMatchmakerAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindMatchmakerAssignmentResponse> findMatchmakerAssignment(
-            final FindMatchmakerAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchmakerAssignment);
+    public Uni<ViewMatchmakerAssignmentsResponse> execute(final ViewMatchmakerAssignmentsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewMatchmakerAssignmentsResponse> viewMatchmakerAssignments(
-            final ViewMatchmakerAssignmentsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerAssignments);
+    public Uni<SyncMatchmakerAssignmentResponse> execute(final SyncMatchmakerAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncMatchmakerAssignmentResponse> syncMatchmakerAssignment(
-            final SyncMatchmakerAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerAssignment);
+    public Uni<DeleteMatchmakerAssignmentResponse> execute(final DeleteMatchmakerAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    MatchmakerCommand
+     */
+
+    @Override
+    public Uni<ViewMatchmakerCommandsResponse> execute(final ViewMatchmakerCommandsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteMatchmakerAssignmentResponse> deleteMatchmakerAssignment(
-            final DeleteMatchmakerAssignmentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerAssignment);
+    public Uni<SyncMatchmakerCommandResponse> execute(final SyncMatchmakerCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetMatchmakerStateResponse> getMatchmakerState(GetMatchmakerStateRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerState);
+    public Uni<DeleteMatchmakerCommandResponse> execute(final DeleteMatchmakerCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    MatchmakerRequest
+     */
+
+    @Override
+    public Uni<ViewMatchmakerRequestsResponse> execute(final ViewMatchmakerRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<UpdateMatchmakerStateResponse> updateMatchmakerState(final UpdateMatchmakerStateRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::updateMatchmakerState);
+    public Uni<SyncMatchmakerRequestResponse> execute(final SyncMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncMatchmakerCommandResponse> syncMatchmakerCommand(final SyncMatchmakerCommandRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerCommand);
+    public Uni<DeleteMatchmakerRequestResponse> execute(final DeleteMatchmakerRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    MatchmakerMatch
+     */
+
+    @Override
+    public Uni<GetMatchmakerMatchResponse> execute(final GetMatchmakerMatchRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteMatchmakerCommandResponse> deleteMatchmakerCommand(final DeleteMatchmakerCommandRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerCommand);
+    public Uni<ViewMatchmakerMatchesResponse> execute(final ViewMatchmakerMatchesRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewMatchmakerCommandsResponse> viewMatchmakerCommands(final ViewMatchmakerCommandsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerCommands);
+    public Uni<SyncMatchmakerMatchResponse> execute(final SyncMatchmakerMatchRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncMatchmakerRequestResponse> syncMatchmakerRequest(final SyncMatchmakerRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerRequest);
+    public Uni<UpdateMatchmakerMatchStatusResponse> execute(final UpdateMatchmakerMatchStatusRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteMatchmakerRequestResponse> deleteMatchmakerRequest(final DeleteMatchmakerRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerRequest);
+    public Uni<DeleteMatchmakerMatchResponse> execute(final DeleteMatchmakerMatchRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    MatchmakerMatchAssignment
+     */
+
+    @Override
+    public Uni<GetMatchmakerMatchAssignmentResponse> execute(final GetMatchmakerMatchAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewMatchmakerRequestsResponse> viewMatchmakerRequests(final ViewMatchmakerRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerRequests);
+    public Uni<FindMatchmakerMatchAssignmentResponse> execute(final FindMatchmakerMatchAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetMatchmakerMatchResponse> getMatchmakerMatch(final GetMatchmakerMatchRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerMatch);
+    public Uni<ViewMatchmakerMatchAssignmentsResponse> execute(final ViewMatchmakerMatchAssignmentsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<UpdateMatchmakerMatchStatusResponse> updateMatchmakerMatchStatus(
-            final UpdateMatchmakerMatchStatusRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::updateMatchmakerMatchStatus);
+    public Uni<SyncMatchmakerMatchAssignmentResponse> execute(final SyncMatchmakerMatchAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncMatchmakerMatchResponse> syncMatchmakerMatch(final SyncMatchmakerMatchRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerMatch);
+    public Uni<DeleteMatchmakerMatchAssignmentResponse> execute(final DeleteMatchmakerMatchAssignmentRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    MatchmakerMatchRuntimeRef
+     */
+
+    @Override
+    public Uni<GetMatchmakerMatchRuntimeRefResponse> execute(final GetMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteMatchmakerMatchResponse> deleteMatchmakerMatch(final DeleteMatchmakerMatchRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerMatch);
+    public Uni<FindMatchmakerMatchRuntimeRefResponse> execute(final FindMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewMatchmakerMatchesResponse> viewMatchmakerMatches(final ViewMatchmakerMatchesRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerMatches);
+    public Uni<SyncMatchmakerMatchRuntimeRefResponse> execute(final SyncMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetMatchmakerMatchClientResponse> getMatchmakerMatchClient(
-            final GetMatchmakerMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerMatchClient);
+    public Uni<DeleteMatchmakerMatchRuntimeRefResponse> execute(final DeleteMatchmakerMatchRuntimeRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    MatchmakerState
+     */
+
+    @Override
+    public Uni<GetMatchmakerStateResponse> execute(GetMatchmakerStateRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindMatchmakerMatchClientResponse> findMatchmakerMatchClient(
-            final FindMatchmakerMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchmakerMatchClient);
-    }
-
-    @Override
-    public Uni<ViewMatchmakerMatchClientsResponse> viewMatchmakerMatchClients(
-            ViewMatchmakerMatchClientsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewMatchmakerMatchClients);
-    }
-
-    @Override
-    public Uni<SyncMatchmakerMatchClientResponse> syncMatchmakerMatchClient(
-            final SyncMatchmakerMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerMatchClient);
-    }
-
-    @Override
-    public Uni<DeleteMatchmakerMatchClientResponse> deleteMatchmakerMatchClient(
-            final DeleteMatchmakerMatchClientRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerMatchClient);
-    }
-
-    @Override
-    public Uni<GetMatchmakerMatchRuntimeRefResponse> getMatchmakerMatchRuntimeRef(
-            final GetMatchmakerMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getMatchmakerMatchRuntimeRef);
-    }
-
-    @Override
-    public Uni<FindMatchmakerMatchRuntimeRefResponse> findMatchmakerMatchRuntimeRef(
-            final FindMatchmakerMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findMatchmakerMatchRuntimeRef);
-    }
-
-    @Override
-    public Uni<SyncMatchmakerMatchRuntimeRefResponse> syncMatchmakerMatchRuntimeRef(
-            final SyncMatchmakerMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncMatchmakerMatchRuntimeRef);
-    }
-
-    @Override
-    public Uni<DeleteMatchmakerMatchRuntimeRefResponse> deleteMatchmakerMatchRuntimeRef(
-            final DeleteMatchmakerMatchRuntimeRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmakerMatchRuntimeRef);
+    public Uni<UpdateMatchmakerStateResponse> execute(final UpdateMatchmakerStateRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

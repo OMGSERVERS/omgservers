@@ -5,5 +5,5 @@ import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteSchedulerTaskMethod {
-    Uni<ExecuteSchedulerTaskResponse> executeSchedulerTask(ExecuteSchedulerTaskRequest request);
+    Uni<ExecuteSchedulerTaskResponse> execute(ExecuteSchedulerTaskRequest request);
 }

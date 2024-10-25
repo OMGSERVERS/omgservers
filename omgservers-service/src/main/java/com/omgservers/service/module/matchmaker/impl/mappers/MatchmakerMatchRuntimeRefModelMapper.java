@@ -14,7 +14,7 @@ public class MatchmakerMatchRuntimeRefModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchmakerMatchRuntimeRefModel fromRow(final Row row) {
+    public MatchmakerMatchRuntimeRefModel execute(final Row row) {
         final var matchmakerMatchRuntimeRef = new MatchmakerMatchRuntimeRefModel();
         matchmakerMatchRuntimeRef.setId(row.getLong("id"));
         matchmakerMatchRuntimeRef.setIdempotencyKey(row.getString("idempotency_key"));

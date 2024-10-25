@@ -5,5 +5,5 @@ import com.omgservers.service.service.task.dto.ExecuteStageTaskResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteStageTaskMethod {
-    Uni<ExecuteStageTaskResponse> executeStageTask(ExecuteStageTaskRequest request);
+    Uni<ExecuteStageTaskResponse> execute(ExecuteStageTaskRequest request);
 }

@@ -22,7 +22,7 @@ public class ExecuteBuildRequestTaskMethodImpl implements ExecuteBuildRequestTas
         final var tenantId = request.getTenantId();
         final var buildRequestId = request.getTenantBuildRequestId();
 
-        return buildRequestTask.executeTask(tenantId, buildRequestId)
+        return buildRequestTask.execute(tenantId, buildRequestId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, tenant={}, {}:{}",

@@ -36,7 +36,7 @@ public class RuntimeTaskImpl {
 
     final EventModelFactory eventModelFactory;
 
-    public Uni<Boolean> executeTask(final Long runtimeId) {
+    public Uni<Boolean> execute(final Long runtimeId) {
         return getRuntime(runtimeId)
                 .flatMap(runtime -> handleRuntime(runtime)
                         .replaceWith(Boolean.TRUE));

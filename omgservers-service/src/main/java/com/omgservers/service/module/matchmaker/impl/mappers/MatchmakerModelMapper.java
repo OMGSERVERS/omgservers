@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class MatchmakerModelMapper {
 
-    public MatchmakerModel fromRow(final Row row) {
+    public MatchmakerModel execute(final Row row) {
         final var matchmaker = new MatchmakerModel();
         matchmaker.setId(row.getLong("id"));
         matchmaker.setIdempotencyKey(row.getString("idempotency_key"));

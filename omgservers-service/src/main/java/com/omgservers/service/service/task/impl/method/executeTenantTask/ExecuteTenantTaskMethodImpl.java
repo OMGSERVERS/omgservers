@@ -15,12 +15,12 @@ public class ExecuteTenantTaskMethodImpl implements ExecuteTenantTaskMethod {
     final TenantTaskImpl tenantTask;
 
     @Override
-    public Uni<ExecuteTenantTaskResponse> executeTenantTask(final ExecuteTenantTaskRequest request) {
+    public Uni<ExecuteTenantTaskResponse> execute(final ExecuteTenantTaskRequest request) {
         log.debug("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
 
-        return tenantTask.executeTask(tenantId)
+        return tenantTask.execute(tenantId)
                 .onFailure()
                 .recoverWithUni(t -> {
                     log.warn("Job task failed, tenant={}, {}:{}",

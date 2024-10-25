@@ -22,20 +22,23 @@ class DeleteMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandl
     }
 
     @Override
-    public void handle(final MatchmakerStateDto currentState,
-                       final MatchmakerChangeOfStateDto changeOfState,
+    public void handle(final MatchmakerStateDto matchmakerState,
+                       final MatchmakerChangeOfStateDto matchmakerChangeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        final var body = (DeleteMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
-        final var matchId = body.getMatchId();
+        log.debug("Handle, {}", matchmakerCommand);
 
-        final var deletedMatches = currentState.getMatches()
-                .stream().filter(match -> match.getId().equals(matchId))
+        final var body = (DeleteMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
+        final var matchmakerMatchId = body.getMatchmakerMatchId();
+
+        // Find the match to delete
+
+        final var matchmakerMatchesToDelete = matchmakerState.getMatchmakerMatches()
+                .stream().filter(matchmakerMatch -> matchmakerMatch.getId().equals(matchmakerMatchId))
                 .toList();
 
-        changeOfState.getMatchesToDelete().addAll(deletedMatches);
+        matchmakerChangeOfState.getMatchesToDelete().addAll(matchmakerMatchesToDelete);
 
-        log.info("Matchmaker match was marked to be deleted, match={}/{}",
-                matchmakerCommand.getMatchmakerId(),
-                matchId);
+
+        log.info("The match was queued for deletion, matchId={}", matchmakerMatchId);
     }
 }

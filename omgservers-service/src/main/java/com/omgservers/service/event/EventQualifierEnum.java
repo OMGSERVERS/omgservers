@@ -25,8 +25,8 @@ import com.omgservers.service.event.body.module.matchmaker.MatchmakerAssignmentC
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerAssignmentDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchClientCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchClientDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
@@ -139,16 +139,16 @@ public enum EventQualifierEnum {
     LOBBY_RUNTIME_REF_DELETED(LobbyRuntimeRefDeletedEventBodyModel.class, false),
     MATCHMAKER_CREATED(MatchmakerCreatedEventBodyModel.class, true),
     MATCHMAKER_DELETED(MatchmakerDeletedEventBodyModel.class, true),
-    MATCHMAKER_MATCH_CREATED(MatchmakerMatchCreatedEventBodyModel.class, true),
-    MATCHMAKER_MATCH_DELETED(MatchmakerMatchDeletedEventBodyModel.class, true),
-    MATCHMAKER_MATCH_CLIENT_CREATED(MatchmakerMatchClientCreatedEventBodyModel.class, true),
-    MATCHMAKER_MATCH_CLIENT_DELETED(MatchmakerMatchClientDeletedEventBodyModel.class, true),
-    MATCHMAKER_MATCH_RUNTIME_REF_CREATED(MatchmakerMatchRuntimeRefCreatedEventBodyModel.class, false),
-    MATCHMAKER_MATCH_RUNTIME_REF_DELETED(MatchmakerMatchRuntimeRefDeletedEventBodyModel.class, false),
     MATCHMAKER_REQUEST_CREATED(MatchmakerRequestCreatedEventBodyModel.class, true),
     MATCHMAKER_REQUEST_DELETED(MatchmakerRequestDeletedEventBodyModel.class, true),
     MATCHMAKER_ASSIGNMENT_CREATED(MatchmakerAssignmentCreatedEventBodyModel.class, true),
     MATCHMAKER_ASSIGNMENT_DELETED(MatchmakerAssignmentDeletedEventBodyModel.class, true),
+    MATCHMAKER_MATCH_CREATED(MatchmakerMatchCreatedEventBodyModel.class, true),
+    MATCHMAKER_MATCH_DELETED(MatchmakerMatchDeletedEventBodyModel.class, true),
+    MATCHMAKER_MATCH_ASSIGNMENT_CREATED(MatchmakerMatchAssignmentCreatedEventBodyModel.class, true),
+    MATCHMAKER_MATCH_ASSIGNMENT_DELETED(MatchmakerMatchAssignmentDeletedEventBodyModel.class, true),
+    MATCHMAKER_MATCH_RUNTIME_REF_CREATED(MatchmakerMatchRuntimeRefCreatedEventBodyModel.class, false),
+    MATCHMAKER_MATCH_RUNTIME_REF_DELETED(MatchmakerMatchRuntimeRefDeletedEventBodyModel.class, false),
     RUNTIME_CREATED(RuntimeCreatedEventBodyModel.class, true),
     RUNTIME_DELETED(RuntimeDeletedEventBodyModel.class, true),
     RUNTIME_ASSIGNMENT_CREATED(RuntimeAssignmentCreatedEventBodyModel.class, true),

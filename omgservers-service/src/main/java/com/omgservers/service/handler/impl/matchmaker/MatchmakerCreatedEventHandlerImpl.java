@@ -64,7 +64,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().getMatchmaker(request)
+        return matchmakerModule.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 

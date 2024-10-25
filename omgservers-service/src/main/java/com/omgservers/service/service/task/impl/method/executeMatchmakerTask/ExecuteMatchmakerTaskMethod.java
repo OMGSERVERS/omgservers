@@ -5,5 +5,5 @@ import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteMatchmakerTaskMethod {
-    Uni<ExecuteMatchmakerTaskResponse> executeMatchmakerTask(ExecuteMatchmakerTaskRequest request);
+    Uni<ExecuteMatchmakerTaskResponse> execute(ExecuteMatchmakerTaskRequest request);
 }

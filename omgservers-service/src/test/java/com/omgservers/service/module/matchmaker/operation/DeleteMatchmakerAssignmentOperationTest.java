@@ -36,7 +36,7 @@ class DeleteMatchmakerAssignmentOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenMatchmakerAssignment_whenDeleteMatchmakerAssignment_thenDeleted() {
+    void givenMatchmakerAssignment_whenExecute_thenDeleted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -52,7 +52,7 @@ class DeleteMatchmakerAssignmentOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenDeleteMatchmakerAssignment_thenSkipped() {
+    void givenUnknownIds_whenExecute_thenSkipped() {
         final var shard = 0;
 
         final var changeContext = deleteMatchmakerAssignmentOperation.deleteMatchmakerAssignment(shard,

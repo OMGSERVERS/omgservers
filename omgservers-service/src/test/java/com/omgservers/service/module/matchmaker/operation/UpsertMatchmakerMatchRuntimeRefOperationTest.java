@@ -48,7 +48,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenMatchmakerMatchRuntimeRef_whenUpsertMatchmakerMatchRuntimeRef_thenInserted() {
+    void givenMatchmakerMatchRuntimeRef_whenExecute_thenInserted() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -71,7 +71,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenMatchmakerMatchRuntimeRef_whenUpsertMatchmakerMatchRuntimeRef_thenUpdated() {
+    void givenMatchmakerMatchRuntimeRef_whenExecute_thenUpdated() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
@@ -95,7 +95,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenUpsertMatchmakerMatchRuntimeRef_thenException() {
+    void givenUnknownIds_whenExecute_thenException() {
         final var shard = 0;
         final var matchmakerMatchRuntimeRef = matchmakerMatchRuntimeRefModelFactory.create(matchmakerId(),
                 matchId(),
@@ -106,7 +106,7 @@ class UpsertMatchmakerMatchRuntimeRefOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenMatchmakerMatchRuntimeRef_whenUpsertMatchmakerMatchRuntimeRef_thenIdempotencyViolation() {
+    void givenMatchmakerMatchRuntimeRef_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);

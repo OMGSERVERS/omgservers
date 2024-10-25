@@ -111,7 +111,7 @@ public class MatchmakerAssignmentRequestedEventHandlerImpl implements EventHandl
                 clientId,
                 idempotencyKey);
         final var request = new SyncMatchmakerAssignmentRequest(matchmakerAssignment);
-        return matchmakerModule.getService().syncMatchmakerAssignment(request)
+        return matchmakerModule.getService().execute(request)
                 .map(SyncMatchmakerAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

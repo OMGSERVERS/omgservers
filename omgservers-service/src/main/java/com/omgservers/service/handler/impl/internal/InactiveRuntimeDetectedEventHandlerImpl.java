@@ -111,7 +111,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 commandBody,
                 idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getService().syncMatchmakerCommandWithIdempotency(request)
+        return matchmakerModule.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

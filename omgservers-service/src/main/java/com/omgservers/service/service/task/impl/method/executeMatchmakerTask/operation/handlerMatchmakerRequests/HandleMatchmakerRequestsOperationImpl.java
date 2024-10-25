@@ -1,26 +1,16 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handlerMatchmakerRequests;
 
-import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
-import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.doGreedyMatchmaking.DoGreedyMatchmakingOperation;
-import io.smallrye.mutiny.Uni;
+import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.executeGreedyMatchmaking.ExecuteGreedyMatchmakingOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 @Slf4j
 @ApplicationScoped
@@ -30,107 +20,47 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
     final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
 
-    final DoGreedyMatchmakingOperation doGreedyMatchmakingOperation;
+    final ExecuteGreedyMatchmakingOperation executeGreedyMatchmaking;
 
     @Override
-    public Uni<Void> handleMatchmakerRequests(final MatchmakerModel matchmaker,
-                                              final MatchmakerStateDto currentState,
-                                              final MatchmakerChangeOfStateDto changeOfState) {
-        final var matchmakerId = matchmaker.getId();
-        final var tenantId = matchmaker.getTenantId();
-        final var tenantDeploymentId = matchmaker.getDeploymentId();
-        // TODO cache version config and reuse each of iteration
-        return getTenantDeployment(tenantId, tenantDeploymentId)
-                .flatMap(tenantDeployment -> {
-                    final var tenantVersionId = tenantDeployment.getVersionId();
-                    return getTenantVersionConfig(tenantId, tenantVersionId)
-                            .invoke(versionConfig -> executeMatchmaker(matchmakerId,
-                                    currentState,
-                                    changeOfState,
-                                    versionConfig));
-                })
-                .replaceWithVoid();
-    }
-
-    Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
-        final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
-                .map(GetTenantDeploymentResponse::getTenantDeployment);
-    }
-
-    Uni<TenantVersionConfigDto> getTenantVersionConfig(final Long tenantId, final Long tenantVersionId) {
-        final var request = new GetTenantVersionConfigRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().getTenantVersionConfig(request)
-                .map(GetTenantVersionConfigResponse::getTenantVersionConfig);
-    }
-
-    void executeMatchmaker(final Long matchmakerId,
-                           final MatchmakerStateDto currentState,
-                           final MatchmakerChangeOfStateDto changeOfState,
-                           final TenantVersionConfigDto versionConfig) {
-        final var requests = currentState.getRequests();
-
-        if (!requests.isEmpty()) {
-            doMatchmaking(matchmakerId, currentState, changeOfState, versionConfig);
+    public void execute(final MatchmakerStateDto matchmakerState,
+                        final MatchmakerChangeOfStateDto matchmakerChangeOfState,
+                        final TenantVersionConfigDto tenantVersionConfig) {
+        // Skip the operation if there are no matchmaking requests
+        final var matchmakerRequests = matchmakerState.getMatchmakerRequests();
+        if (matchmakerRequests.isEmpty()) {
+            return;
         }
-    }
 
-    void doMatchmaking(final Long matchmakerId,
-                       final MatchmakerStateDto currentState,
-                       final MatchmakerChangeOfStateDto changeOfState,
-                       final TenantVersionConfigDto versionConfig) {
+        final var matchmakerIndex = new MatchmakerIndex(matchmakerState);
 
-        final var requests = currentState.getRequests().stream()
-                .collect(Collectors.groupingBy(MatchmakerRequestModel::getMode));
+        // Perform matchmaking for each mode.
+        matchmakerIndex.requestsIndexByMode.forEach((modeName, modeRequests) -> {
+            final var modeMatches = matchmakerIndex
+                    .getMatchesIndexByMode()
+                    .getOrDefault(modeName, new ArrayList<>());
 
-        final var matches = currentState.getMatches().stream()
-                // Use only prepared matches for matchmaking
-                .filter(match -> match.getStatus().equals(MatchmakerMatchStatusEnum.PREPARED))
-                .collect(Collectors.groupingBy(match -> match.getConfig().getModeConfig().getName()));
+            final var modeAssignments = matchmakerIndex
+                    .getMatchAssignmentsIndexByMode()
+                    .getOrDefault(modeName, new ArrayList<>());
 
-        final var clients = currentState.getClients().stream()
-                .collect(Collectors.groupingBy(client -> client.getConfig().getRequest().getMode()));
-
-        final var createdMatches = currentState.getMatches().stream()
-                .filter(match -> match.getStatus().equals(MatchmakerMatchStatusEnum.CREATED))
-                .collect(Collectors.groupingBy(match -> match.getConfig().getModeConfig().getName()));
-
-        // Do matchmaking for each mode
-        requests.forEach((modeName, modeRequests) -> {
-            final var modeMatches = matches.getOrDefault(modeName, new ArrayList<>());
-            final var modeClients = clients.getOrDefault(modeName, new ArrayList<>());
-
-            final var modeConfigOptional = versionConfig.getModes().stream()
-                    .filter(mode -> mode.getName().equals(modeName)).findFirst();
-            if (modeConfigOptional.isPresent()) {
-                final var modeConfig = modeConfigOptional.get();
-
-                final var greedyMatchmakingResult = doGreedyMatchmakingOperation.doGreedyMatchmaking(
-                        matchmakerId,
-                        modeConfig,
-                        modeRequests,
-                        modeMatches,
-                        modeClients);
-
-                changeOfState.getRequestsToDelete()
-                        .addAll(greedyMatchmakingResult.matchedRequests());
-
-                final var currentCount = createdMatches.getOrDefault(modeName, new ArrayList<>()).size();
-                final var requiredCount = greedyMatchmakingResult.createdMatches().size();
-                if (requiredCount > currentCount) {
-                    for (int i = 0; i < requiredCount - currentCount; i++) {
-                        final var createdMatch = greedyMatchmakingResult.createdMatches().get(i);
-                        changeOfState.getMatchesToSync().add(createdMatch);
-                    }
-                }
-
-                changeOfState.getClientsToSync()
-                        .addAll(greedyMatchmakingResult.createdClients());
-            } else {
-                log.warn("Matchmaker requests with unknown mode were found, mode={}, requests={}",
+            final var modeConfigOptional = tenantVersionConfig.getModes().stream()
+                    .filter(mode -> mode.getName().equals(modeName))
+                    .findFirst();
+            if (modeConfigOptional.isEmpty()) {
+                log.warn("An unknown mode was requested for matchmaking, mode={}, matchmakerRequests={}",
                         modeName, modeRequests.size());
-                changeOfState.getRequestsToDelete().addAll(modeRequests);
+                matchmakerChangeOfState.getRequestsToDelete().addAll(modeRequests);
+                return;
             }
+            final var modeConfig = modeConfigOptional.get();
+
+            executeGreedyMatchmaking.execute(matchmakerState,
+                    matchmakerChangeOfState,
+                    modeConfig,
+                    modeMatches,
+                    modeAssignments,
+                    modeRequests);
         });
     }
 }

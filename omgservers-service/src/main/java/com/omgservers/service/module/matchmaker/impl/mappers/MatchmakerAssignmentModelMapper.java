@@ -14,7 +14,7 @@ public class MatchmakerAssignmentModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public MatchmakerAssignmentModel fromRow(final Row row) {
+    public MatchmakerAssignmentModel execute(final Row row) {
         final var matchmakerAssignment = new MatchmakerAssignmentModel();
         matchmakerAssignment.setId(row.getLong("id"));
         matchmakerAssignment.setIdempotencyKey(row.getString("idempotency_key"));
