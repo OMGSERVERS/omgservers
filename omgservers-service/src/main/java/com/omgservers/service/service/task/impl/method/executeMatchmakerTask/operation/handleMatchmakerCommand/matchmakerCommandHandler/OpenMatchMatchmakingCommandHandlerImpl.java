@@ -38,7 +38,8 @@ class OpenMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandler
 
         matchmakerChangeOfState.getMatchesToUpdateStatus().addAll(matchesToUpdateStatus);
 
-
-        log.info("The match was queued to be opened, matchId={}", matchmakerMatchId);
+        if (!matchesToUpdateStatus.isEmpty()) {
+            log.info("The match was queued to be opened, matchId={}", matchmakerMatchId);
+        }
     }
 }

@@ -38,7 +38,8 @@ class DeleteMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandl
 
         matchmakerChangeOfState.getMatchesToDelete().addAll(matchmakerMatchesToDelete);
 
-
-        log.info("The match was queued for deletion, matchId={}", matchmakerMatchId);
+        if (!matchmakerMatchesToDelete.isEmpty()) {
+            log.info("The match was queued for deletion, matchId={}", matchmakerMatchId);
+        }
     }
 }

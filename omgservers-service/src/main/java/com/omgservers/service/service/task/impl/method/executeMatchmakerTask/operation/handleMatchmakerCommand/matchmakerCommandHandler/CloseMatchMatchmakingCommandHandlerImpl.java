@@ -38,7 +38,8 @@ class CloseMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandle
 
         matchmakerChangeOfState.getMatchesToUpdateStatus().addAll(matchesToUpdateStatus);
 
-
-        log.info("The match was queued for closure, matchId={}", matchmakerMatchId);
+        if (!matchesToUpdateStatus.isEmpty()) {
+            log.info("The match was queued for closure, matchId={}", matchmakerMatchId);
+        }
     }
 }

@@ -37,6 +37,7 @@ class ExecuteGreedyMatchmakingOperationImpl implements ExecuteGreedyMatchmakingO
         final var matchmaker = matchmakerState.getMatchmaker();
 
         final var greedyMatchmaker = new GreedyMatchmaker(modeConfig);
+        // In matchmaking, both PENDING and OPEN matches participate
         matchmakerMatches.forEach(greedyMatchmaker::addMatchmakerMatch);
         matchmakerMatchAssignments.forEach(greedyMatchmaker::addMatchmakerMatchAssignment);
 
@@ -47,18 +48,21 @@ class ExecuteGreedyMatchmakingOperationImpl implements ExecuteGreedyMatchmakingO
                 greedyMatchmaker.addMatchmakerMatch(matchmakerMatch);
 
                 if (!matchRequest(greedyMatchmaker, matchmakerRequest)) {
-                    // It wasn't matched with new empty match
+                    log.info("Failed to process the matchmaker request, " +
+                                    "it wasn't matched event with a new empty match {}",
+                            matchmakerRequest);
                     matchmakerChangeOfState.getRequestsToDelete().add(matchmakerRequest);
                 }
             }
         });
 
-        greedyMatchmaker.getReadyMatches().stream()
+        final var newlyCreatedMatches = greedyMatchmaker.getReadyMatches().stream()
                 .map(GreedyMatch::getMatchmakerMatch)
                 .filter(Predicate.not(matchmakerMatches::contains))
-                .forEach(matchmakerMatch -> matchmakerChangeOfState.getMatchesToSync().add(matchmakerMatch));
+                .toList();
+        matchmakerChangeOfState.getMatchesToSync().addAll(newlyCreatedMatches);
 
-        // Queue match assignments to be created exclusively for open matches.
+        // Queue match assignments to be created exclusively for OPENED matches
         greedyMatchmaker.getReadyMatches().stream()
                 .filter(greedyMatch -> greedyMatch.getMatchmakerMatch().getStatus()
                         .equals(MatchmakerMatchStatusEnum.OPENED))

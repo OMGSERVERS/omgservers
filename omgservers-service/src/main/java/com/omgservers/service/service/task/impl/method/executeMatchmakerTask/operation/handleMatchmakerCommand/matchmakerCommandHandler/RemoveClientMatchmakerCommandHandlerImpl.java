@@ -38,6 +38,10 @@ class RemoveClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
 
         matchmakerChangeOfState.getAssignmentsToDelete().addAll(matchmakerAssignmentsToDelete);
 
+        if (!matchmakerAssignmentsToDelete.isEmpty()) {
+            log.info("The client was queued for removal from the matchmaker, clientId={}", clientId);
+        }
+
         // Find a client's matchmaking requests to delete
 
         final var matchmakerRequestsToDelete = matchmakerState.getMatchmakerRequests()
@@ -53,8 +57,5 @@ class RemoveClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
                 .toList();
 
         matchmakerChangeOfState.getMatchAssignmentsToDelete().addAll(matchmakerMatchAssignmentsToDelete);
-
-
-        log.info("The client was queued for removal from the matchmaker, clientId={}", clientId);
     }
 }
