@@ -42,6 +42,9 @@ internal_help() {
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ps" ]; then
     echo " projectctl.sh localtesting ps"
   fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting reset" ]; then
+    echo " projectctl.sh localtesting reset"
+  fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting test" ]; then
     echo " projectctl.sh localtesting test"
   fi
@@ -180,6 +183,16 @@ localtesting_up() {
 
 localtesting_ps() {
   docker compose -p localtesting ps
+}
+
+localtesting_reset() {
+  read -p 'Continue (y/n)? : ' ANSWER
+  if [ "${ANSWER}" == "y" ]; then
+    docker compose -p localtesting down -v
+    localtesting_up
+  else
+    echo "Operation was cancelled"
+  fi
 }
 
 localtesting_test() {
@@ -349,6 +362,8 @@ elif [ "$1" = "localtesting" ]; then
     localtesting_up
   elif [ "$2" = "ps" ]; then
     localtesting_ps
+  elif [ "$2" = "reset" ]; then
+    localtesting_reset
   elif [ "$2" = "test" ]; then
     localtesting_test
   else
