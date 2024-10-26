@@ -25,7 +25,8 @@ public class GreedyMatchmaker {
     public GreedyMatchmaker(final TenantVersionModeDto config) {
         this.config = config;
 
-        greedyMatchesSortedSet = new TreeSet<>(Comparator.comparingInt(GreedyMatch::getSize));
+        greedyMatchesSortedSet = new TreeSet<>(Comparator.comparing(GreedyMatch::getSize)
+                .thenComparingLong(GreedyMatch::getId));
         greedyMatchIndexById = new HashMap<>();
     }
 

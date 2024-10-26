@@ -37,7 +37,8 @@ public class GreedyMatch {
 
         matchmakerMatchAssignments = new ArrayList<>();
 
-        greedyGroupsSortedSet = new TreeSet<>(Comparator.comparingInt(GreedyGroup::getSize));
+        greedyGroupsSortedSet = new TreeSet<>(Comparator.comparingInt(GreedyGroup::getSize)
+                .thenComparing(GreedyGroup::getName));
 
         greedyGroupIndexByName = new HashMap<>();
         config.getGroups().forEach(groupConfig -> {
@@ -82,5 +83,9 @@ public class GreedyMatch {
 
     int getSize() {
         return matchmakerMatchAssignments.size();
+    }
+
+    Long getId() {
+        return matchmakerMatch.getId();
     }
 }

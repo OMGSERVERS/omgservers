@@ -44,4 +44,8 @@ public class GreedyGroup {
     int getSize() {
         return matchmakerMatchAssignment.size();
     }
+
+    String getName() {
+        return config.getName();
+    }
 }
