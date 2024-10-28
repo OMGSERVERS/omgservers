@@ -1,9 +1,5 @@
 package com.omgservers.service.module.pool.impl.service.webService.impl;
 
-import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
@@ -42,7 +38,6 @@ import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
-import com.omgservers.service.module.pool.impl.service.dockerService.DockerService;
 import com.omgservers.service.module.pool.impl.service.poolService.PoolService;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -56,7 +51,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class WebServiceImpl implements WebService {
 
-    final DockerService dockerService;
     final PoolService poolService;
 
     /*
@@ -166,25 +160,11 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<GetPoolStateResponse> execute(GetPoolStateRequest request) {
-        return null;
+        return poolService.execute(request);
     }
 
     @Override
     public Uni<UpdatePoolStateResponse> execute(UpdatePoolStateRequest request) {
-        return null;
-    }
-
-    /*
-    Docker
-     */
-
-    @Override
-    public Uni<StartDockerContainerResponse> execute(final StartDockerContainerRequest request) {
-        return dockerService.execute(request);
-    }
-
-    @Override
-    public Uni<StopDockerContainerResponse> execute(final StopDockerContainerRequest request) {
-        return dockerService.execute(request);
+        return poolService.execute(request);
     }
 }

@@ -1,9 +1,5 @@
 package com.omgservers.service.module.pool.impl.service.webService.impl.api;
 
-import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
@@ -146,16 +142,4 @@ public interface PoolApi {
     @PUT
     @Path("/update-pool-state")
     Uni<UpdatePoolStateResponse> execute(UpdatePoolStateRequest request);
-
-    /*
-    Docker
-     */
-
-    @PUT
-    @Path("/start-docker-container")
-    Uni<StartDockerContainerResponse> execute(StartDockerContainerRequest request);
-
-    @PUT
-    @Path("/stop-docker-container")
-    Uni<StopDockerContainerResponse> execute(StopDockerContainerRequest request);
 }

@@ -51,7 +51,6 @@ class LobbyServiceImpl implements LobbyService {
 
     final GetLobbyModuleClientOperation getMatchServiceApiClientOperation;
     final HandleShardedRequestOperation handleShardedRequestOperation;
-    final CalculateShardOperation calculateShardOperation;
 
     @Override
     public Uni<GetLobbyResponse> getLobby(@Valid final GetLobbyRequest request) {

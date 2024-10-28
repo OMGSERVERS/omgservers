@@ -1,15 +1,21 @@
 package com.omgservers.service.module.pool.impl.service.webService;
 
-import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
 import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
+import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
+import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.DeletePoolRequestResponse;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestRequest;
@@ -28,23 +34,11 @@ import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
-import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
-import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
-import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
-import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerResponse;
-import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
-import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
-import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
-import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
-import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
-import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
 
 public interface WebService {
 
@@ -105,12 +99,4 @@ public interface WebService {
     Uni<GetPoolStateResponse> execute(GetPoolStateRequest request);
 
     Uni<UpdatePoolStateResponse> execute(UpdatePoolStateRequest request);
-
-    /*
-    Docker
-     */
-
-    Uni<StartDockerContainerResponse> execute(StartDockerContainerRequest request);
-
-    Uni<StopDockerContainerResponse> execute(StopDockerContainerRequest request);
 }

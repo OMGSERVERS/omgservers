@@ -1,11 +1,11 @@
-package com.omgservers.service.module.pool.impl.service.dockerService.impl.method;
+package com.omgservers.service.module.docker.impl.service.dockerService.impl.method;
 
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.LogConfig;
-import com.omgservers.schema.module.pool.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StartDockerContainerResponse;
-import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
+import com.omgservers.schema.module.docker.StartDockerContainerRequest;
+import com.omgservers.schema.module.docker.StartDockerContainerResponse;
+import com.omgservers.service.module.docker.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;

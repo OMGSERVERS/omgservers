@@ -3,8 +3,8 @@ package com.omgservers.service.handler.impl.pool;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
 import com.omgservers.schema.model.runtimePoolContainerRef.RuntimePoolContainerRefModel;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.pool.docker.StopDockerContainerResponse;
+import com.omgservers.schema.module.docker.StopDockerContainerRequest;
+import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
@@ -18,8 +18,8 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolContainerDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.docker.DockerModule;
 import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.pool.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,9 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
 
     final RuntimeModule runtimeModule;
+    final DockerModule dockerModule;
     final PoolModule poolModule;
-
-    final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -103,7 +102,7 @@ public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
     Uni<Boolean> stopDockerContainer(final PoolServerModel poolServer,
                                      final PoolContainerModel poolContainer) {
         final var request = new StopDockerContainerRequest(poolServer, poolContainer);
-        return poolModule.getDockerService().execute(request)
+        return dockerModule.getDockerService().execute(request)
                 .map(StopDockerContainerResponse::getStopped);
     }
 }

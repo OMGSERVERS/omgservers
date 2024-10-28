@@ -1,4 +1,4 @@
-package com.omgservers.schema.module.pool.docker;
+package com.omgservers.schema.module.docker;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
