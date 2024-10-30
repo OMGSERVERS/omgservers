@@ -1,0 +1,38 @@
+script: "/game/lobby_screen/lobby_screen.gui_script"
+fonts {
+  name: "default"
+  font: "/game/game_fonts/font.font"
+}
+nodes {
+  position {
+    x: 320.0
+    y: 240.0
+  }
+  size {
+    x: 640.0
+    y: 480.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "background"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 640.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "Lobby screen"
+  font: "default"
+  id: "state"
+  parent: "background"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

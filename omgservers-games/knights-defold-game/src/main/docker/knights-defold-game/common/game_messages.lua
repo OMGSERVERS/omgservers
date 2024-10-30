@@ -1,36 +1,34 @@
 local game_messages
 game_messages = {
-	constants = {
-		REQUEST_PROFILE = "request_profile",
-		REQUEST_MATCHMAKING = "request_matchmaking",
-		REQUEST_STATE = "request_state",
-		REQUEST_SPAWN = "request_spawn",
-		MOVE_PLAYER = "move_player",
-	},
+	REQUEST_PROFILE = "request_profile",
+	REQUEST_MATCHMAKING = "request_matchmaking",
+	REQUEST_STATE = "request_state",
+	REQUEST_SPAWN = "request_spawn",
+	MOVE_PLAYER = "move_player",
 	-- Methods
-	create_request_profile_message = function(self)
+	request_profile = function(self)
 		return {
-			qualifier = game_messages.constants.REQUEST_PROFILE,
+			qualifier = game_messages.REQUEST_PROFILE,
 		}
 	end,
-	create_request_matchmaking_message = function(self)
+	request_matchmaking = function(self)
 		return {
-			qualifier = game_messages.constants.REQUEST_MATCHMAKING,
+			qualifier = game_messages.REQUEST_MATCHMAKING,
 		}
 	end,
-	create_request_state_message = function(self)
+	request_state = function(self)
 		return {
-			qualifier = game_messages.constants.REQUEST_STATE,
+			qualifier = game_messages.REQUEST_STATE,
 		}
 	end,
-	create_request_spawn_message = function(self)
+	request_spawn = function(self)
 		return {
-			qualifier = game_messages.constants.REQUEST_SPAWN,
+			qualifier = game_messages.REQUEST_SPAWN,
 		}
 	end,
-	create_move_player_message = function(self, x, y)
+	move_player = function(self, x, y)
 		return {
-			qualifier = game_messages.constants.MOVE_PLAYER,
+			qualifier = game_messages.MOVE_PLAYER,
 			x = x,
 			y = y,
 		}

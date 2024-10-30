@@ -20,3 +20,9 @@ embedded_components {
   data: "prototype: \"/game/match_screen/match_screen.collection\"\n"
   ""
 }
+embedded_components {
+  id: "wait_factory"
+  type: "collectionfactory"
+  data: "prototype: \"/game/wait_screen/wait_screen.collection\"\n"
+  ""
+}

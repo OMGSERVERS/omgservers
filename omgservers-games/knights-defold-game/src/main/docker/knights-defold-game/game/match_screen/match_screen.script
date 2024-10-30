@@ -1,18 +1,18 @@
-local counter_messages = require("game.match_screen.counter_gui.counter_messages")
-local pointer_messages = require("game.match_screen.pointer_entity.pointer_messages")
-local player_messages = require("game.match_screen.player_entity.player_messages")
-local client_messages = require("game.client_manager.client_messages")
-local match_messages = require("game.match_screen.match_messages")
-local core_state = require("game.core_manager.core_state")
+local client_manager = require("game.client_manager.client_manager")
+local match_pointer = require("game.match_pointer.match_pointer")
+local match_messages = require("game.match_screen.match_screen")
+local match_player = require("game.match_player.match_player")
+local core_manager = require("game.core_manager.core_manager")
+local match_gui = require("game.match_gui.match_gui")
 local game_messages = require("common.game_messages")
 local match_events = require("common.match_events")
 local camera = require("orthographic.camera")
 
 local CLIENT_MANAGER = "/client_manager#client_manager"
-local PLAYER_SPAWNER = "spawner#player"
-local POINTER = "pointer/container"
+local PLAYER_SPAWNER = "match_spawner#player_factory"
 local CAMERA_SCRIPT = "camera#script"
-local COUNTER_GUI = "counter_gui"
+local MATCH_POINTER = "match_pointer/container"
+local MATCH_GUI = "match_gui"
 
 local function create_client(self, client_id, nickname)
 	self.clients[client_id] = {
@@ -21,15 +21,14 @@ local function create_client(self, client_id, nickname)
 
 	print(socket.gettime() .. " [MATCH_SCREEN] Client was created, client_id=" .. client_id .. ", nickname=" .. nickname)
 
-	if client_id == core_state.state.client_id then
+	if client_id == core_manager.get_client_id() then
 		-- Send initial spawn request
-		local game_message = game_messages:create_request_spawn_message()
-		local client_message = client_messages:create_send_message_message(json.encode(game_message))
-		msg.post(CLIENT_MANAGER, client_messages.constants.SEND_MESSAGE, client_message)
+		local game_message = game_messages:request_spawn()
+		client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
 	end
 end
 
-local function spawn_player(self, client_id, in_attack, x, y)
+local function spawn_player(self, client_id, x, y)
 	local client = self.clients[client_id]
 	if client then
 		local z = -y
@@ -39,13 +38,12 @@ local function spawn_player(self, client_id, in_attack, x, y)
 
 		print(socket.gettime() .. " [MATCH_SCREEN] Player was spawned, client_id=" .. client_id .. ", x=" .. x .. ", y=" .. y .. ", z=" .. z)
 
-		local player_id = collection_ids[hash("/player")]
+		local player_id = collection_ids[hash("/match_player")]
 		self.players[client_id] = player_id
 
-		local controllable = client_id == core_state.state.client_id
+		local controllable = client_id == core_manager.get_client_id()
 		local nickname = client.nickname
-		local player_message = player_messages:create_set_state_message(controllable, nickname, in_attack)
-		msg.post(player_id, player_messages.constants.SET_STATE, player_message)
+		match_player:set_state(player_id, controllable, nickname)
 
 		if controllable then
 			print(socket.gettime() .. " [MATCH_SCREEN] Set camera, target=" .. player_id)
@@ -53,8 +51,7 @@ local function spawn_player(self, client_id, in_attack, x, y)
 				lerp = 1,
 			})
 
-			local pointer_message = pointer_messages:create_enable_pointer_message(x, y)
-			msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
+			match_pointer:enable_pointer(MATCH_POINTER, x, y)
 		end
 	else
 		print(socket.gettime() .. " [MATCH_SCREEN] Client was not found to spawn player, client_id=" .. client_id)
@@ -66,13 +63,11 @@ local function kill_player(self, client_id)
 	if player_id then
 		
 		-- If it's controllable player -> disable pointer before killing
-		if client_id == core_state.state.client_id then
-			local pointer_message = pointer_messages:create_disable_pointer_message()
-			msg.post(POINTER, pointer_messages.constants.DISABLE_POINTER, pointer_message)
+		if client_id == core_manager.get_client_id() then
+			match_pointer:disable_pointer(MATCH_POINTER)
 		end
 		
-		local player_message = player_messages:create_go_death_message()
-		msg.post(player_id, player_messages.constants.GO_DEATH, player_message)
+		match_player:go_death(player_id)
 		
 		self.players[client_id] = nil
 
@@ -97,13 +92,11 @@ end
 local function move_player(self, client_id, x, y)
 	local player_id = self.players[client_id]
 	if player_id then
-		local player_message = player_messages:create_move_to_message(x, y)
-		msg.post(player_id, player_messages.constants.MOVE_TO, player_message)
+		match_player:move_to(player_id, x, y)
 
 		-- If it's controllable player -> reset pointer position to the default
-		if client_id == core_state.state.client_id then
-			local pointer_message = pointer_messages:create_enable_pointer_message(x, y)
-			msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
+		if client_id == core_manager.get_client_id() then
+			match_pointer:enable_pointer(MATCH_POINTER, x, y)
 		end
 	else
 		print(socket.gettime() .. " [MATCH_SCREEN] Player was not found to move, client_id=" .. client_id)
@@ -122,11 +115,10 @@ local function set_state(self, settings, dangling_players, spawned_players)
 	
 	for client_id, player in pairs(spawned_players) do
 		local nickname = player.nickname
-		local in_attack = player.in_attack
 		local x = player.x
 		local y = player.y
 		create_client(self, client_id, nickname)
-		spawn_player(self, client_id, in_attack, x, y)
+		spawn_player(self, client_id, x, y)
 	end
 end
 
@@ -136,46 +128,43 @@ local function apply_events(self, events)
 	
 	-- Reset counter
 	local counter_value = self.settings.waiting_duration
-	local counter_message = counter_messages:create_reset_counter_message(counter_value)
-	msg.post(COUNTER_GUI, counter_messages.constants.RESET_COUNTER, counter_message)
+	match_gui:reset_counter(MATCH_GUI, counter_value)
 
 	for _, event in ipairs(events) do
 		local event_qualifier = event.qualifier
 
-		if event_qualifier == match_events.constants.PLAYER_CREATED then
+		if event_qualifier == match_events.PLAYER_CREATED then
 			local client_id = event.client_id
 			local nickname = event.nickname
 			create_client(self, client_id, nickname)
 
-		elseif event_qualifier == match_events.constants.PLAYER_SPAWNED then
+		elseif event_qualifier == match_events.PLAYER_SPAWNED then
 			local client_id = event.client_id
-			local in_attack = event.in_attack
 			local x = event.x
 			local y = event.y
-			spawn_player(self, client_id, in_attack, x, y)
+			spawn_player(self, client_id, x, y)
 
-		elseif event_qualifier == match_events.constants.PLAYER_DELETED then
+		elseif event_qualifier == match_events.PLAYER_DELETED then
 			local client_id = event.client_id
 			delete_player(self, client_id)
 
-		elseif event_qualifier == match_events.constants.PLAYER_MOVED then
+		elseif event_qualifier == match_events.PLAYER_MOVED then
 			local client_id = event.client_id
 			local x = event.x
 			local y = event.y
 			move_player(self, client_id, x, y)
 
-		elseif event_qualifier == match_events.constants.PLAYER_KILLED then
+		elseif event_qualifier == match_events.PLAYER_KILLED then
 			local killed_client_id = event.killed_client_id
 			local by_client_id = event.by_client_id
 
 			timer.delay(0.5, false, function()
-				if killed_client_id == core_state.state.client_id then
+				if killed_client_id == core_manager.get_client_id() then
 					camera.unfollow(nil)
 					
 					-- Send spawn request
-					local game_message = game_messages:create_request_spawn_message()
-					local client_message = client_messages:create_send_message_message(json.encode(game_message))
-					msg.post(CLIENT_MANAGER, client_messages.constants.SEND_MESSAGE, client_message)
+					local game_message = game_messages:request_spawn()
+					client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
 				end
 
 				kill_player(self, killed_client_id)
@@ -186,30 +175,27 @@ end
 
 local function request_move(self)
 	-- Hide counter
-	local counter_message = counter_messages:create_hide_counter_message()
-	msg.post(COUNTER_GUI, counter_messages.constants.HIDE_COUNTER, counter_message)
+	match_gui:hide_counter(MATCH_GUI)
 	
 	if self.point then
 		print(socket.gettime() .. " [MATCH_SCREEN] Move plyaer, x=" .. self.point.x .. ", y=" .. self.point.y)
 		
 		-- Move player
-		local game_message = game_messages:create_move_player_message(self.point.x, self.point.y)
-		local client_message = client_messages:create_send_message_message(json.encode(game_message))
-		msg.post(CLIENT_MANAGER, client_messages.constants.SEND_MESSAGE, client_message)
+		local game_message = game_messages:move_player(self.point.x, self.point.y)
+		client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
 
 		self.point = nil
 	end
 end
 
 local function pointed(self, x, y)
-	local client_id = core_state.state.client_id
+	local client_id = core_manager.get_client_id()
 	local player_id = self.players[client_id]
 	if player_id then
 		local bounded_x = math.max(32, math.min(512 - 32, x))
 		local bounded_y = math.max(32, math.min(512 - 32, y))
 		
-		local pointer_message = pointer_messages:create_enable_pointer_message(bounded_x, bounded_y)
-		msg.post(POINTER, pointer_messages.constants.ENABLE_POINTER, pointer_message)
+		match_pointer:enable_pointer(MATCH_POINTER, bounded_x, bounded_y)
 
 		self.point = {
 			x = bounded_x,
@@ -241,17 +227,17 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(match_messages.constants.SET_STATE) then
+	if message_id == hash(match_messages.SET_STATE) then
 		local settings = message.settings
 		local dangling_players = message.dangling_players
 		local spawned_players = message.spawned_players
 		set_state(self, settings, dangling_players, spawned_players)
 
-	elseif message_id == hash(match_messages.constants.APPLY_EVENTS) then
+	elseif message_id == hash(match_messages.APPLY_EVENTS) then
 		local events = message.events
 		apply_events(self, events)
 
-	elseif message_id == hash(match_messages.constants.REQUEST_MOVE) then 
+	elseif message_id == hash(match_messages.REQUEST_MOVE) then 
 		request_move(self)
 		
 	end

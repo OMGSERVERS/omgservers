@@ -3,8 +3,8 @@ scale_along_z: 0
 embedded_instances {
   id: "auth_screen"
   data: "components {\n"
-  "  id: \"auth_gui\"\n"
-  "  component: \"/game/auth_screen/auth_gui.gui\"\n"
+  "  id: \"auth_screen\"\n"
+  "  component: \"/game/auth_screen/auth_screen.gui\"\n"
   "}\n"
   ""
 }

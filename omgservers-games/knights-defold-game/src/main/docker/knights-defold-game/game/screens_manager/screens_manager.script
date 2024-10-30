@@ -1,10 +1,11 @@
-local screens_messages = require("game.screens_manager.screens_messages")
-local match_messages = require("game.match_screen.match_messages")
-local core_messages = require("game.core_manager.core_messages")
+local screens_messages = require("game.screens_manager.screens_manager")
+local match_screen = require("game.match_screen.match_screen")
+local core_manager = require("game.core_manager.core_manager")
 
 local AUTH_FACTORY = "#auth_factory"
 local LOBBY_FACTORY = "#lobby_factory"
 local MATCH_FACTORY = "#match_factory"
+local WAIT_FACTORY = "#wait_factory"
 
 local CORE_MANAGER = "core_manager#core_manager"
 
@@ -18,7 +19,7 @@ local function remove_current_screen(self)
 	end
 end
 
-local function auth_screen_requested(self, message)
+local function create_auth_screen(self, message)
 	print(socket.gettime() .. " [SCREENS_MANAGER] Create auth screen")
 
 	remove_current_screen(self)
@@ -29,11 +30,10 @@ local function auth_screen_requested(self, message)
 	self.current_screen_ids = collection_ids
 
 	local collection_id = collection_ids["/auth_screen"]
-	local core_message = core_messages:create_screen_created_message(core_messages.constants.AUTH_SCREEN, collection_id)
-	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
+	core_manager:screen_created(CORE_MANAGER, core_manager.AUTH_SCREEN, collection_id)
 end
 
-local function lobby_screen_requested(self, message)
+local function create_lobby_screen(self, message)
 	print(socket.gettime() .. " [SCREENS_MANAGER] Create lobby screen")
 
 	remove_current_screen(self)
@@ -44,11 +44,10 @@ local function lobby_screen_requested(self, message)
 	self.current_screen_ids = collection_ids
 
 	local collection_id = collection_ids["/lobby_screen"]
-	local core_message = core_messages:create_screen_created_message(core_messages.constants.LOBBY_SCREEN, collection_id)
-	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
+	core_manager:screen_created(CORE_MANAGER, core_manager.LOBBY_SCREEN, collection_id)
 end
 
-local function match_screen_requested(self, settings, dangling_players, spawned_players)
+local function create_match_screen(self, settings, dangling_players, spawned_players)
 	print(socket.gettime() .. " [SCREENS_MANAGER] Create match screen")
 
 	remove_current_screen(self)
@@ -60,24 +59,39 @@ local function match_screen_requested(self, settings, dangling_players, spawned_
 	
 	local collection_id = collection_ids["/match_screen"]
 
-	local match_message = match_messages:create_set_state_message(settings, dangling_players, spawned_players)
-	msg.post(collection_id, match_messages.constants.SET_STATE, match_message)
-	
-	local core_message = core_messages:create_screen_created_message(core_messages.constants.MATCH_SCREEN, collection_id)
-	msg.post(CORE_MANAGER, core_messages.constants.SCREEN_CREATED, core_message)
+	match_screen:set_state(collection_id, settings, dangling_players, spawned_players)
+	core_manager:screen_created(CORE_MANAGER, core_manager.MATCH_SCREEN, collection_id)
+end
+
+local function create_wait_screen(self)
+	print(socket.gettime() .. " [SCREENS_MANAGER] Create wait screen")
+
+	remove_current_screen(self)
+
+	local collection_ids = collectionfactory.create(WAIT_FACTORY)
+	pprint(collection_ids)
+
+	self.current_screen_ids = collection_ids
+
+	local collection_id = collection_ids["/wait_screen"]
+	core_manager:screen_created(CORE_MANAGER, core_manager.WAIT_SCREEN, collection_id)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(screens_messages.constants.AUTH_SCREEN_REQUESTED) then
-		auth_screen_requested(self)
+	if message_id == hash(screens_messages.CREATE_AUTH_SCREEN) then
+		create_auth_screen(self)
 		
-	elseif message_id == hash(screens_messages.constants.LOBBY_SCREEN_REQUESTED) then
-		lobby_screen_requested(self)
+	elseif message_id == hash(screens_messages.CREATE_LOBBY_SCREEN) then
+		create_lobby_screen(self)
 		
-	elseif message_id == hash(screens_messages.constants.MATCH_SCREEN_REQUESTED) then
+	elseif message_id == hash(screens_messages.CREATE_MATCH_SCREEN) then
 		local settings = message.settings
 		local dangling_players = message.dangling_players
 		local spawned_players = message.spawned_players
-		match_screen_requested(self, settings, dangling_players, spawned_players)
+		create_match_screen(self, settings, dangling_players, spawned_players)
+
+	elseif message_id == hash(screens_messages.CREATE_WAIT_SCREEN) then
+		create_wait_screen(self)
+		
 	end
 end

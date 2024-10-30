@@ -1,58 +1,51 @@
-local client_messages = require("game.client_manager.client_messages")
-local core_messages = require("game.core_manager.core_messages")
+local client_manager = require("game.client_manager.client_manager")
+local core_manager = require("game.core_manager.core_manager")
 local omgplayer = require("omgservers.omgplayer.omgplayer")
 
 local CORE_MANAGER = "core_manager#core_manager"
 
 local function sign_up(self)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Signing up was requested")
+	print(socket.gettime() .. " [CLIENT] Signing up")
 	omgplayer:sign_up()
 end
 
 local function signed_up(self, user_id, password)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Signed up, user_id=" .. user_id)
-	local core_message = core_messages:create_signed_up_message(user_id, password)
-	msg.post(CORE_MANAGER, core_messages.constants.SIGNED_UP, core_message)
+	print(socket.gettime() .. " [CLIENT] Signed up, user_id=" .. user_id)
+	core_manager:signed_up(CORE_MANAGER, user_id, password)
 end
 
 local function sign_in(self, user_id, password)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Signing in was requested, user_id=" .. user_id)
+	print(socket.gettime() .. " [CLIENT] Signing in, user_id=" .. user_id)
 	omgplayer:sign_in(user_id, password)
 end
 
 local function signed_in(self, client_id)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Signed in, client_id=" .. client_id)
-	local core_message = core_messages:create_signed_in_message(client_id)
-	msg.post(CORE_MANAGER, core_messages.constants.SIGNED_IN, core_message)
+	print(socket.gettime() .. " [CLIENT] Signed in, client_id=" .. client_id)
+	core_manager:signed_in(CORE_MANAGER, client_id)
 end
 
 local function greeted(self, version_id, version_created)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
-	local core_message = core_messages:create_user_greeted_message(version_id, version_created)
-	msg.post(CORE_MANAGER, core_messages.constants.USER_GREETED, core_message)
+	print(socket.gettime() .. " [CLIENT] Greeted, version_id=" .. version_id .. ", version_created=" .. version_created)
+	core_manager:user_greeted(CORE_MANAGER, version_id, version_created)
 end
 
 local function assigned(self, runtime_qualifier, runtime_id)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Assigned, runtime_qualifier=" .. runtime_qualifier .. ", runtime_id=" .. runtime_id)
-	local core_message = core_messages:create_runtime_assigned_message(runtime_qualifier, runtime_id)
-	msg.post(CORE_MANAGER, core_messages.constants.RUNTIME_ASSIGNED, core_message)
+	print(socket.gettime() .. " [CLIENT] Assigned, runtime_qualifier=" .. runtime_qualifier .. ", runtime_id=" .. runtime_id)
+	core_manager:runtime_assigned(CORE_MANAGER, runtime_qualifier, runtime_id)
 end
 
 local function message_received(self, decoded_message)
-	local core_message = core_messages:create_message_received_message(decoded_message)
-	msg.post(CORE_MANAGER, core_messages.constants.MESSAGE_RECEIVED, core_message)
+	core_manager:message_received(CORE_MANAGER, decoded_message)
 end
 
 local function connection_upgraded(self)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Connection was upgraded")
-	local core_message = core_messages:create_connection_upgraded_message()
-	msg.post(CORE_MANAGER, core_messages.constants.CONNECTION_UPGRADED, core_message)
+	print(socket.gettime() .. " [CLIENT] Connection was upgraded")
+	core_manager:connection_upgraded(CORE_MANAGER)
 end
 
 local function failed(self, reason)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Client failed, reason=" .. reason)
-	local core_message = core_messages:create_client_failed_message(reason)
-	msg.post(CORE_MANAGER, core_messages.constants.CLIENT_FAILED, core_message)
+	print(socket.gettime() .. " [CLIENT] Client failed, reason=" .. reason)
+	core_manager:client_failed(CORE_MANAGER, reason)
 end
 
 local function send_command(self, message)
@@ -64,12 +57,12 @@ local function send_message(self, message)
 end
 
 local function reconnect(self, message)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Reconnectining was requested")
+	print(socket.gettime() .. " [CLIENT] Reconnectining")
 end
 
 
 local function handle_client_event(self, event)
-	print(socket.gettime() .. " [CLIENT_MANAGER] Client event was received, event=" .. json.encode(event))
+	print(socket.gettime() .. " [CLIENT] Client event was received, event=" .. json.encode(event))
 
 	local event_qualifier = event.qualifier
 	local event_body = event.body
@@ -110,7 +103,7 @@ end
 function init(self)
 	if sys.get_engine_info().is_debug then
 		local localtesting = require("game.localtesting")
-		print(socket.gettime() .. " [CLIENT_MANAGER] Using localtesting configuration, " .. json.encode(localtesting))
+		print(socket.gettime() .. " [CLIENT] Using localtesting configuration, " .. json.encode(localtesting))
 
 		local options = {
 			tenant_id = localtesting.tenant,
@@ -124,7 +117,7 @@ function init(self)
 
 		omgplayer:init(options)
 	else
-		error("[CLIENT_MANAGER] Only localtesting is supported")
+		error("[CLIENT] Only localtesting is supported")
 	end
 end
 
@@ -133,21 +126,21 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(client_messages.constants.SIGN_UP) then
+	if message_id == hash(client_manager.SIGN_UP) then
 		sign_up(self)
 
-	elseif message_id == hash(client_messages.constants.SIGN_IN) then
+	elseif message_id == hash(client_manager.SIGN_IN) then
 		local user_id = message.user_id
 		local password = message.password
 		sign_in(self, user_id, password)
 
-	elseif message_id == hash(client_messages.constants.SEND_COMMAND) then
+	elseif message_id == hash(client_manager.SEND_COMMAND) then
 		send_command(self, message.message)
 
-	elseif message_id == hash(client_messages.constants.SEND_MESSAGE) then
+	elseif message_id == hash(client_manager.SEND_MESSAGE) then
 		send_message(self, message.message)
 
-	elseif message_id == hash(client_messages.constants.RECONNECT) then
+	elseif message_id == hash(client_manager.RECONNECT) then
 		reconnect(self)
 
 	end

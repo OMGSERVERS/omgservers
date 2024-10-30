@@ -4,11 +4,11 @@ instances {
   prototype: "/server/server_manager/server_manager.go"
 }
 instances {
-  id: "lobby_manager"
-  prototype: "/server/lobby_manager/lobby_manager.go"
+  id: "lobby_runtime"
+  prototype: "/server/lobby_runtime/lobby_runtime.go"
 }
 instances {
-  id: "match_manager"
-  prototype: "/server/match_manager/match_manager.go"
+  id: "match_runtime"
+  prototype: "/server/match_runtime/match_runtime.go"
 }
 scale_along_z: 0

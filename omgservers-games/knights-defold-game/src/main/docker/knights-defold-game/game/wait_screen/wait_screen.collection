@@ -1,0 +1,10 @@
+name: "auth"
+scale_along_z: 0
+embedded_instances {
+  id: "wait_screen"
+  data: "components {\n"
+  "  id: \"wait_screen\"\n"
+  "  component: \"/game/wait_screen/wait_screen.gui\"\n"
+  "}\n"
+  ""
+}

@@ -3,8 +3,8 @@ scale_along_z: 0
 embedded_instances {
   id: "lobby_screen"
   data: "components {\n"
-  "  id: \"lobby_gui\"\n"
-  "  component: \"/game/lobby_screen/lobby_gui.gui\"\n"
+  "  id: \"lobby_screen\"\n"
+  "  component: \"/game/lobby_screen/lobby_screen.gui\"\n"
   "}\n"
   ""
 }

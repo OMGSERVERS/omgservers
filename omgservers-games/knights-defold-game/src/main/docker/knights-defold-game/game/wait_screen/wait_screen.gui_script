@@ -1,0 +1,23 @@
+local wait_screen = require("game.wait_screen.wait_screen")
+
+local function set_state_text(text)
+	local state_node = gui.get_node("state")
+	gui.set_text(state_node, text)
+end
+
+local function set_state(self, state_text)
+	self.state_text = state_text
+	set_state_text(self.state_text)
+end
+
+function update(self, dt)
+	local dots = math.fmod(math.floor(socket.gettime() * 3), 4)
+	set_state_text(self.state_text .. string.rep(".", dots))
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(wait_screen.SET_STATE) then
+		local state_text = message.state_text
+		set_state(self, state_text)
+	end
+end

@@ -1,0 +1,22 @@
+script: "/game/match_gui/match_gui.gui_script"
+fonts {
+  name: "font"
+  font: "/game/game_fonts/font_x2.font"
+}
+nodes {
+  position {
+    x: 320.0
+    y: 460.0
+  }
+  size {
+    x: 640.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "counter"
+  font: "font"
+  id: "counter"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

@@ -1,0 +1,43 @@
+local match_pointer = require("game.match_pointer.match_pointer")
+
+local CONTAINER_GO = "container"
+local ICON_SPRITE = "icon#sprite"
+local ICON_GO = "icon"
+
+local function place_pointer(self, x, y)
+	local z = -y
+	local position = vmath.vector3(x, y, z)
+	go.set_position(position, CONTAINER_GO)
+
+	go.set_scale(1, ICON_GO)
+	go.animate(ICON_GO, "scale.x", go.PLAYBACK_LOOP_PINGPONG, 1.1 ,go.EASING_LINEAR, 1)
+	go.animate(ICON_GO, "scale.y", go.PLAYBACK_LOOP_PINGPONG, 1.1 ,go.EASING_LINEAR, 1)
+	go.animate(ICON_GO, "scale.z", go.PLAYBACK_LOOP_PINGPONG, 1.1 ,go.EASING_LINEAR, 1)
+end
+
+function init(self)
+	msg.post(ICON_SPRITE, "disable")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(match_pointer.ENABLE_POINTER) then
+		msg.post(ICON_SPRITE, "enable")
+
+		local x = message.x
+		local y = message.y
+		sprite.play_flipbook(ICON_SPRITE, hash("pointer_1"))
+		place_pointer(self, x, y)
+
+		print(socket.gettime() .. " [POINTER] Pointer was enabled, x=" .. x .. ", y=" .. y)
+
+	elseif message_id == hash(match_pointer.DISABLE_POINTER) then
+		print(socket.gettime() .. " [POINTER] Pointer was disabled")
+		msg.post(ICON_SPRITE, "disable")
+		
+	elseif message_id == hash(match_pointer.SWITCH_POINTER) then
+		local x = message.x
+		local y = message.y
+		sprite.play_flipbook(ICON_SPRITE, hash("pointer_2"))
+		place_pointer(self, x, y)
+	end
+end

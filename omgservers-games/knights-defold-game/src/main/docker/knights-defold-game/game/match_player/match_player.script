@@ -1,0 +1,123 @@
+local match_player = require("game.match_player.match_player")
+
+local NICKNAME = "#nickname"
+local SHADOW_SPRITE = "#shadow"
+
+local WEAPON_HIDDEN_LEFT = "weapon_hidden_left"
+local WEAPON_HIDDEN_RIGHT = "weapon_hidden_right"
+local WEAPON_LEFT_HAND = "weapon_left_hand"
+local WEAPON_RIGHT_HAND = "weapon_right_hand"
+
+local SKIN = "skin"
+local SKIN_SPRITE = "skin#sprite"
+
+local function disable_weapons(self)
+	msg.post(WEAPON_HIDDEN_LEFT, "disable")
+	msg.post(WEAPON_HIDDEN_RIGHT, "disable")
+	msg.post(WEAPON_LEFT_HAND, "disable")
+	msg.post(WEAPON_RIGHT_HAND, "disable")
+end
+
+local function set_left_hand_weapon(self, angle_rad)
+	msg.post(WEAPON_LEFT_HAND, "enable")
+	go.set_rotation(vmath.quat_rotation_z(angle_rad), WEAPON_LEFT_HAND)
+end
+
+local function set_right_hand_weapon(self, angle_rad)
+	msg.post(WEAPON_RIGHT_HAND, "enable")
+	go.set_rotation(vmath.quat_rotation_z(angle_rad), WEAPON_RIGHT_HAND)
+end
+
+local function setup_weapons(self, flip, attack_angle_rad)
+	disable_weapons(self)
+
+	if flip then
+		set_left_hand_weapon(self, attack_angle_rad)
+	else
+		set_right_hand_weapon(self, attack_angle_rad)
+	end
+end
+
+local function reset_pose(self, flip, attack_x, attack_y)
+	self.hflip = flip
+	sprite.set_hflip(SKIN, flip)
+	
+	local position = go.get_position()
+	local attack_angle_rad
+	if attack_x and attack_y then
+		attack_angle_rad = math.atan2(attack_y - position.y, attack_x - position.x) - math.pi * 0.5
+	else
+		if flip then
+			attack_angle_rad = 0.2
+		else
+			attack_angle_rad = -0.2
+		end
+	end
+
+	setup_weapons(self, flip, attack_angle_rad)
+end
+
+local function play_breathing(self, callback)
+	go.animate(SKIN, "scale.x", go.PLAYBACK_LOOP_PINGPONG, 1.1, go.EASING_LINEAR, 1, 0, callback)
+	go.animate(SKIN, "scale.y", go.PLAYBACK_LOOP_PINGPONG, 1.1, go.EASING_LINEAR, 1, 0, callback)
+end
+
+local function play_death(self, callback)
+	disable_weapons(self)
+	go.animate(SKIN_SPRITE, "tint.w", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.5, 0, callback)
+	go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, go.get_position().y + 16, go.EASING_LINEAR, 0.5)
+end
+
+local function set_state(self, controllable, nickname)
+	self.controllable = controllable
+	self.nickname = nickname
+
+	print(socket.gettime() .. " [PLAYER] Set player state, controllable=" .. tostring(controllable) .. ", nickname=" .. nickname)
+
+	reset_pose(self, false)
+	play_breathing(self)
+	label.set_text(NICKNAME, nickname)
+	go.set(SHADOW_SPRITE, "tint.w", 0.5)
+end
+
+local function move_to(self, x, y)
+	local z = -y
+	local to_position = vmath.vector3(x, y, z)
+
+	local from_position = go.get_position(".")
+	local flip = x < from_position.x
+	reset_pose(self, flip, x, y)
+
+	local movement_delta = to_position - from_position
+	local movement_distance = vmath.length(movement_delta)
+	-- t = S / v
+	local movement_time = movement_distance / 320
+	
+	go.animate(".", "position",  go.PLAYBACK_ONCE_FORWARD, to_position, go.EASING_INSINE, movement_time, 0, function()
+		reset_pose(self, flip)
+	end)
+end
+
+local function go_death(self)
+	msg.post(NICKNAME, "disable")
+	msg.post(SHADOW_SPRITE, "disable")
+	play_death(self, function()
+		go.delete(true)
+	end)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash(match_player.SET_STATE) then
+		local controllable = message.controllable
+		local nickname = message.nickname
+		set_state(self, controllable, nickname)
+		
+	elseif message_id == hash(match_player.MOVE_TO) then
+		local x = message.x
+		local y = message.y
+		move_to(self, x, y)
+		
+	elseif message_id == hash(match_player.GO_DEATH) then
+		go_death(self)
+	end
+end
