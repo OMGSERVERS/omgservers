@@ -16,7 +16,7 @@
   :code {
     :find {
       :replacement "match_player"
-      :term "player_id"
+      :term "runtime_messages"
     }
   }
   :run {
@@ -29,22 +29,6 @@
   }
   :workflow {
     :recent-files [
-      [
-        "/server/match_runtime/simulation.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/simulator.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/collision_factory.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/events_container.lua"
-        :code
-      ]
       [
         "/server/match_runtime/match_runtime.go"
         :scene
@@ -122,10 +106,6 @@
         :code
       ]
       [
-        "/game/client_manager/client_manager.lua"
-        :code
-      ]
-      [
         "/game/match_screen/match_screen.collection"
         :scene
       ]
@@ -150,11 +130,31 @@
         :code
       ]
       [
-        "/server/match_runtime/match_runtime.script"
+        "/game/screens_manager/screens_manager.script"
         :code
       ]
       [
-        "/game/screens_manager/screens_manager.script"
+        "/game/client_manager/client_manager.go"
+        :scene
+      ]
+      [
+        "/game/auth_screen/auth_screen.collection"
+        :scene
+      ]
+      [
+        "/game/auth_screen/auth_screen.lua"
+        :code
+      ]
+      [
+        "/game/client_manager/client_manager.lua"
+        :code
+      ]
+      [
+        "/server/runtime_utils/runtime_messages.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_runtime.script"
         :code
       ]
     ]

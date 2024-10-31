@@ -1,4 +1,4 @@
-package com.omgservers.service.module.docker.impl.service.dockerService.impl.method.test;
+package com.omgservers.service.module.docker.impl.service.dockerService.impl.method;
 
 import com.omgservers.schema.module.docker.PingDockerHostRequest;
 import com.omgservers.schema.module.docker.PingDockerHostResponse;
