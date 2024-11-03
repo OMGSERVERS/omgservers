@@ -26,7 +26,7 @@ embedded_instances {
   "}\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/game/match_tiles/tiles.tilesource\\\"\\n"
+  "  texture: \\\"/game/game_assets/tiles.tilesource\\\"\\n"
   "}\\n"
   "\"\n"
   "}\n"

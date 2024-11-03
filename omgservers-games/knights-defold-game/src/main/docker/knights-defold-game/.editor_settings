@@ -15,54 +15,22 @@
   }
   :code {
     :find {
-      :replacement "match_player"
-      :term "runtime_messages"
+      :replacement ":get_client_id()"
+      :term "leave"
     }
   }
   :run {
-    :instance-count 1
+    :instance-count 2
   }
   :search-in-files {
     :exts ""
     :include-libraries false
-    :term ":set_state"
+    :term "print(socket.gettime() .. \" [CORE_MANAGER] Leave was requested at \" .. os.date())"
   }
   :workflow {
     :recent-files [
       [
-        "/server/match_runtime/match_runtime.go"
-        :scene
-      ]
-      [
-        "/server/lobby_runtime/global_counter.lua"
-        :code
-      ]
-      [
-        "/server/lobby_runtime/lobby_runtime.script"
-        :code
-      ]
-      [
-        "/server/match_runtime/simulation_factory.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/simulation_service.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/player_factory.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/players_container.lua"
-        :code
-      ]
-      [
-        "/omgservers/omgplayer/omginstance.lua"
-        :code
-      ]
-      [
-        "/omgservers/omgplayer/omgplayer.lua"
+        "/omgservers/omgplayer/omgconfig.lua"
         :code
       ]
       [
@@ -70,59 +38,39 @@
         :code
       ]
       [
-        "/game/core_manager/core_state.lua"
+        "/omgservers/omgplayer/omgprocess.lua"
         :code
       ]
       [
-        "/game/core_manager/core_manager.lua"
-        :code
-      ]
-      [
-        "/game/client_manager/client_manager.script"
-        :code
-      ]
-      [
-        "/game/lobby_screen/lobby_screen.gui_script"
-        :code
-      ]
-      [
-        "/game/lobby_screen/lobby_screen.lua"
-        :code
-      ]
-      [
-        "/game/core_manager/core_manager.script"
-        :code
-      ]
-      [
-        "/game/wait_screen/wait_screen.collection"
+        "/orthographic/camera.go"
         :scene
+      ]
+      [
+        "/orthographic/camera.script"
+        :code
+      ]
+      [
+        "/orthographic/camera.lua"
+        :code
       ]
       [
         "/game/screens_manager/screens_manager.go"
         :scene
       ]
       [
-        "/omgservers/omgplayer/omgclient.lua"
+        "/game/screens_manager/screens_manager.script"
         :code
       ]
       [
-        "/game/match_screen/match_screen.collection"
-        :scene
+        "/game/match_screen/camera.script"
+        :code
       ]
       [
         "/game/match_player/match_player.collection"
         :scene
       ]
       [
-        "/game/match_spawner/match_spawner.go"
-        :scene
-      ]
-      [
-        "/game/match_screen/match_screen.script"
-        :code
-      ]
-      [
-        "/game/match_screen/match_screen.lua"
+        "/game/match_player/match_player.script"
         :code
       ]
       [
@@ -130,32 +78,84 @@
         :code
       ]
       [
-        "/game/screens_manager/screens_manager.script"
-        :code
-      ]
-      [
-        "/game/client_manager/client_manager.go"
+        "/game/match_gui/match_gui.gui"
         :scene
       ]
       [
-        "/game/auth_screen/auth_screen.collection"
+        "/game/core_manager/core_manager.lua"
+        :code
+      ]
+      [
+        "/builtins/render/default.display_profiles"
+        :cljfx-form-view
+      ]
+      [
+        "/builtins/render/default.render"
+        :cljfx-form-view
+      ]
+      [
+        "/builtins/render/default.render_script"
+        :code
+      ]
+      [
+        "/game/match_camera/match_camera.script"
+        :code
+      ]
+      [
+        "/game/match_camera/match_camera.go"
         :scene
       ]
       [
-        "/game/auth_screen/auth_screen.lua"
+        "/game/match_gui/match_gui.gui_script"
         :code
       ]
       [
-        "/game/client_manager/client_manager.lua"
+        "/game/match_gui/match_gui.go"
+        :scene
+      ]
+      [
+        "/server/match_runtime/match_settings.lua"
         :code
       ]
       [
-        "/server/runtime_utils/runtime_messages.lua"
+        "/game/game_assets/tiles.tilesource"
+        :scene
+      ]
+      [
+        "/game/game_assets/match_gui.atlas"
+        :scene
+      ]
+      [
+        "/game/match_background/tilemap.tilemap"
+        :scene
+      ]
+      [
+        "/game/match_background/match_background.collection"
+        :scene
+      ]
+      [
+        "/game.project"
+        :cljfx-form-view
+      ]
+      [
+        "/game/match_pointer/match_pointer.collection"
+        :scene
+      ]
+      [
+        "/game/core_manager/core_manager.script"
         :code
       ]
       [
-        "/server/match_runtime/match_runtime.script"
+        "/game/match_screen/match_screen.lua"
         :code
+      ]
+      [
+        "/game/match_screen/match_screen.script"
+        :code
+      ]
+      [
+        "/game/match_screen/match_screen.collection"
+        :scene
       ]
     ]
   }

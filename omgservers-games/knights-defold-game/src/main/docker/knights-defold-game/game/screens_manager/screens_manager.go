@@ -21,8 +21,8 @@ embedded_components {
   ""
 }
 embedded_components {
-  id: "wait_factory"
+  id: "leave_factory"
   type: "collectionfactory"
-  data: "prototype: \"/game/wait_screen/wait_screen.collection\"\n"
+  data: "prototype: \"/game/leave_screen/leave_screen.collection\"\n"
   ""
 }

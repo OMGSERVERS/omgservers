@@ -1,0 +1,10 @@
+name: "auth"
+scale_along_z: 0
+embedded_instances {
+  id: "leave_screen"
+  data: "components {\n"
+  "  id: \"leave_screen\"\n"
+  "  component: \"/game/leave_screen/leave_screen.gui\"\n"
+  "}\n"
+  ""
+}

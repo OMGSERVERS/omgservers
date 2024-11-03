@@ -3,20 +3,66 @@ fonts {
   name: "font"
   font: "/game/game_fonts/font_x2.font"
 }
+textures {
+  name: "match_gui"
+  texture: "/game/game_assets/match_gui.atlas"
+}
 nodes {
   position {
     x: 320.0
-    y: 460.0
+    y: 240.0
   }
   size {
     x: 640.0
+    y: 480.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 216.0
+  }
+  size {
+    x: 160.0
     y: 40.0
   }
   type: TYPE_TEXT
   text: "counter"
   font: "font"
   id: "counter"
+  parent: "root"
   inherit_alpha: true
+}
+nodes {
+  position {
+    x: 300.0
+    y: 220.0
+  }
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  type: TYPE_BOX
+  id: "leave_button"
+  parent: "root"
+  inherit_alpha: true
+  alpha: 0.0
+}
+nodes {
+  scale {
+    x: 2.0
+    y: 2.0
+  }
+  type: TYPE_BOX
+  texture: "match_gui/leave_button"
+  id: "icon"
+  parent: "leave_button"
+  size_mode: SIZE_MODE_AUTO
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

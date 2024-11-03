@@ -6,12 +6,11 @@ local core_manager = require("game.core_manager.core_manager")
 local match_gui = require("game.match_gui.match_gui")
 local game_messages = require("common.game_messages")
 local match_events = require("common.match_events")
-local camera = require("orthographic.camera")
 
 local CLIENT_MANAGER = "/client_manager#client_manager"
 local PLAYER_SPAWNER = "match_spawner#player_factory"
-local CAMERA_SCRIPT = "camera#script"
 local MATCH_POINTER = "match_pointer/container"
+local MATCH_CAMERA = "match_camera"
 local MATCH_GUI = "match_gui"
 
 local function create_client(self, client_id, nickname)
@@ -21,7 +20,7 @@ local function create_client(self, client_id, nickname)
 
 	print(socket.gettime() .. " [MATCH_SCREEN] Client was created, client_id=" .. client_id .. ", nickname=" .. nickname)
 
-	if client_id == core_manager.get_client_id() then
+	if client_id == core_manager:get_client_id() then
 		-- Send initial spawn request
 		local game_message = game_messages:request_spawn()
 		client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
@@ -41,16 +40,12 @@ local function spawn_player(self, client_id, x, y)
 		local player_id = collection_ids[hash("/match_player")]
 		self.players[client_id] = player_id
 
-		local controllable = client_id == core_manager.get_client_id()
+		local controllable = client_id == core_manager:get_client_id()
 		local nickname = client.nickname
 		match_player:set_state(player_id, controllable, nickname)
 
 		if controllable then
 			print(socket.gettime() .. " [MATCH_SCREEN] Set camera, target=" .. player_id)
-			camera.follow(nil, player_id, {
-				lerp = 1,
-			})
-
 			match_pointer:enable_pointer(MATCH_POINTER, x, y)
 		end
 	else
@@ -63,7 +58,7 @@ local function kill_player(self, client_id)
 	if player_id then
 		
 		-- If it's controllable player -> disable pointer before killing
-		if client_id == core_manager.get_client_id() then
+		if client_id == core_manager:get_client_id() then
 			match_pointer:disable_pointer(MATCH_POINTER)
 		end
 		
@@ -95,7 +90,7 @@ local function move_player(self, client_id, x, y)
 		match_player:move_to(player_id, x, y)
 
 		-- If it's controllable player -> reset pointer position to the default
-		if client_id == core_manager.get_client_id() then
+		if client_id == core_manager:get_client_id() then
 			match_pointer:enable_pointer(MATCH_POINTER, x, y)
 		end
 	else
@@ -159,8 +154,8 @@ local function apply_events(self, events)
 			local by_client_id = event.by_client_id
 
 			timer.delay(0.5, false, function()
-				if killed_client_id == core_manager.get_client_id() then
-					camera.unfollow(nil)
+				if killed_client_id == core_manager:get_client_id() then
+					-- camera.unfollow(nil)
 					
 					-- Send spawn request
 					local game_message = game_messages:request_spawn()
@@ -188,8 +183,32 @@ local function request_move(self)
 	end
 end
 
-local function pointed(self, x, y)
-	local client_id = core_manager.get_client_id()
+local function screen_to_world(x, y, z)
+	local camera = "match_camera#camera"
+	local projection = go.get(camera, "projection")
+	local view = go.get(camera, "view")
+	local w, h = window.get_size()
+	-- The window.get_size() function will return the scaled window size,
+	-- ie taking into account display scaling (Retina screens on macOS for
+	-- instance). We need to adjust for display scaling in our calculation.
+	w = w / (w / 640)
+	h = h / (h / 480)
+
+	-- https://defold.com/manuals/camera/#converting-mouse-to-world-coordinates
+	local inv = vmath.inv(projection * view)
+	x = (2 * x / w) - 1
+	y = (2 * y / h) - 1
+	z = (2 * z) - 1
+	local x1 = x * inv.m00 + y * inv.m01 + z * inv.m02 + inv.m03
+	local y1 = x * inv.m10 + y * inv.m11 + z * inv.m12 + inv.m13
+	local z1 = x * inv.m20 + y * inv.m21 + z * inv.m22 + inv.m23
+	return x1, y1, z1
+end
+
+local function pointed(self, pointed_x, pointed_y)
+	local x, y = screen_to_world(pointed_x, pointed_y, 0)
+	
+	local client_id = core_manager:get_client_id()
 	local player_id = self.players[client_id]
 	if player_id then
 		local bounded_x = math.max(32, math.min(512 - 32, x))
@@ -210,20 +229,21 @@ end
 function init(self)
 	self.players = {}
 	self.clients = {}
-
-	go.set(CAMERA_SCRIPT, "near_z", -1024)
-	go.set(CAMERA_SCRIPT, "far_z", 1024)
-	go.set(CAMERA_SCRIPT, "projection", camera.PROJECTOR.FIXED_ZOOM)
-	go.set(CAMERA_SCRIPT, "zoom", 3)
-
-	go.set(CAMERA_SCRIPT, "bounds_left", 0)
-	go.set(CAMERA_SCRIPT, "bounds_right", 512)
-	go.set(CAMERA_SCRIPT, "bounds_top", 512)
-	go.set(CAMERA_SCRIPT, "bounds_bottom", 0)
-
-	msg.post(".", "acquire_input_focus")
 	
 	print(socket.gettime() .. " [MATCH_SCREEN] Initialized")
+end
+
+function update(self, dt)
+	local client_id = core_manager:get_client_id()
+	local player_id = self.players[client_id]
+	if player_id then
+		local player_position = go.get_position(player_id)
+		local camera_x = math.min(512 - 160, math.max(160, player_position.x))
+		local camera_y = math.min(512 - 120, math.max(120, player_position.y))
+		local camera_position = vmath.vector3(camera_x, camera_y, 0)
+		
+		go.set_position(camera_position, MATCH_CAMERA)
+	end
 end
 
 function on_message(self, message_id, message, sender)
@@ -237,21 +257,13 @@ function on_message(self, message_id, message, sender)
 		local events = message.events
 		apply_events(self, events)
 
-	elseif message_id == hash(match_messages.REQUEST_MOVE) then 
+	elseif message_id == hash(match_messages.REQUEST_MOVE) then
 		request_move(self)
-		
-	end
-end
 
-function on_input(self, action_id, action)
-	if action_id == hash("point") then
-		if action.pressed then
-			--
-		elseif action.released then
-			local world_position = camera.screen_to_world(nil, vmath.vector3(action.x, action.y, 0))
-			local x = world_position.x
-			local y = world_position.y
-			pointed(self, x, y)
-		end
+	elseif message_id == hash(match_messages.POINTED) then
+		local x = message.x
+		local y = message.y
+		pointed(self, x, y)
+		
 	end
 end

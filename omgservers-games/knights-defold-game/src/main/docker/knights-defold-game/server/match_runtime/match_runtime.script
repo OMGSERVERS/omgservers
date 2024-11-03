@@ -85,6 +85,11 @@ local function request_spawn(self, client_id)
 	print(socket.gettime() .. " [MATCH_RUNTIME] Spawn request was set, client_id=" .. client_id)
 end
 
+local function request_leave(self, client_id)
+	omgserver:kick_client(client_id)
+	print(socket.gettime() .. " [MATCH_RUNTIME] Kick client was requested, client_id=" .. client_id)
+end
+
 local function move_player(self, client_id, x, y)
 	if self.match_state == QUEUEING_STATE then
 		local player_instance = players_container:get_player(client_id)
@@ -222,6 +227,9 @@ function on_message(self, message_id, message, sender)
 			
 		elseif message_qualifier == game_messages.REQUEST_SPAWN then
 			request_spawn(self, client_id)
+
+		elseif message_qualifier == game_messages.REQUEST_LEAVE then
+			request_leave(self, client_id)
 
 		elseif message_qualifier == game_messages.MOVE_PLAYER then
 			local x = game_message.x

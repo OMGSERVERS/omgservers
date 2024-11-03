@@ -73,7 +73,7 @@ local function set_state(self, controllable, nickname)
 	self.nickname = nickname
 
 	print(socket.gettime() .. " [PLAYER] Set player state, controllable=" .. tostring(controllable) .. ", nickname=" .. nickname)
-
+		
 	reset_pose(self, false)
 	play_breathing(self)
 	label.set_text(NICKNAME, nickname)

@@ -1,4 +1,4 @@
-script: "/game/wait_screen/wait_screen.gui_script"
+script: "/game/leave_screen/leave_screen.gui_script"
 fonts {
   name: "default"
   font: "/game/game_fonts/font.font"
@@ -28,7 +28,7 @@ nodes {
     y: 40.0
   }
   type: TYPE_TEXT
-  text: "Wait screen"
+  text: "Leave screen"
   font: "default"
   id: "state"
   parent: "background"

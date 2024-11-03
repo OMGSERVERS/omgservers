@@ -112,7 +112,7 @@ function init(self)
 			event_handler = function(event) handle_client_event(self, event) end,
 			service_url = "http://localhost:8080",
 			debug_logging = true,
-			trace_logging = true,
+			trace_logging = false,
 		}
 
 		omgplayer:init(options)

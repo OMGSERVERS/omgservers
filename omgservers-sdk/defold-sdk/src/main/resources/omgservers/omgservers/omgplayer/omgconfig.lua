@@ -28,9 +28,9 @@ omgconfig = {
 		local service_url = options.service_url or "https://api.omgservers.com"
 		local debug_logging = options.debug_logging or false
 		local trace_logging = options.trace_logging or false
-		local default_interval = options.default_interval or 2
+		local default_interval = options.default_interval or 1
 		local faster_interval = options.faster_interval or 0.5
-		local iterations_threshold = options.iterations_threshold or 12
+		local iterations_threshold = options.iterations_threshold or 4
 
 		assert(default_interval > 0, "The default interval must be greater than zero.")
 		assert(faster_interval > 0, "The faster interval must be greater than zero.")

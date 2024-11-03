@@ -4,6 +4,7 @@ game_messages = {
 	REQUEST_MATCHMAKING = "request_matchmaking",
 	REQUEST_STATE = "request_state",
 	REQUEST_SPAWN = "request_spawn",
+	REQUEST_LEAVE = "request_leave",
 	MOVE_PLAYER = "move_player",
 	-- Methods
 	request_profile = function(self)
@@ -33,6 +34,11 @@ game_messages = {
 			y = y,
 		}
 	end,
+	request_leave = function(self)
+		return {
+			qualifier = game_messages.REQUEST_LEAVE,
+		}
+	end
 }
 
 return game_messages

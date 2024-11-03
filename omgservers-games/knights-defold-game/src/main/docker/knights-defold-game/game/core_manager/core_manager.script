@@ -3,6 +3,7 @@ local client_manager = require("game.client_manager.client_manager")
 local match_screen = require("game.match_screen.match_screen")
 local lobby_screen = require("game.lobby_screen.lobby_screen")
 local core_manager = require("game.core_manager.core_manager")
+local leave_screen = require("game.leave_screen.leave_screen")
 local auth_screen = require("game.auth_screen.auth_screen")
 local omgplayer = require("omgservers.omgplayer.omgplayer")
 local core_state = require("game.core_manager.core_state")
@@ -48,7 +49,9 @@ local function signed_in(self, client_id)
 end
 
 local function lobby_assigned(self, runtime_qualifier, runtime_id)
-	-- This event is not triggered
+	print(socket.gettime() .. " [CORE_MANAGER] Lobby was assigned at " .. os.date())
+	-- Show lobby screen
+	screens_manager:create_lobby_screen(SCREENS_MANAGER)
 end
 
 local function greeted(self, version_id, version_created)
@@ -100,6 +103,13 @@ local function connection_upgraded(self)
 	client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
 end
 
+local function leave_requested(self)
+	print(socket.gettime() .. " [CORE_MANAGER] Leave was requested at " .. os.date())
+	
+	-- Show leave screen
+	screens_manager:create_leave_screen(SCREENS_MANAGER)
+end
+
 local function set_state(self, settings, dangling_players, spawned_players)
 	print(socket.gettime() .. " [CORE_MANAGER] State was received at " .. os.date())
 	
@@ -119,11 +129,17 @@ local function match_screen_created(self, collection_id)
 	core_state:change_game_state(core_state.IN_MATCH)
 end
 
-local function wait_screen_created(self, collection_id)
-	print(socket.gettime() .. " [CORE_MANAGER] Wait screen was created at " .. os.date())
+local function leave_screen_created(self, collection_id)
+	print(socket.gettime() .. " [CORE_MANAGER] Leave screen was created at " .. os.date())
 
+	-- Leave request
+	local game_message = game_messages:request_leave()
+	client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
+	
 	self.screen_collection_id = collection_id
-	core_state:change_game_state(core_state.IN_WAIT)
+	core_state:change_game_state(core_state.LEAVING)
+
+	leave_screen:set_state(self.screen_collection_id, "Leaving")
 end
 
 local function apply_events(self, events)
@@ -153,8 +169,8 @@ function on_message(self, message_id, message, sender)
 			lobby_screen_created(self, collection_id)
 		elseif screen_qualifier == core_manager.MATCH_SCREEN then
 			match_screen_created(self, collection_id)
-		elseif screen_qualifier == core_manager.WAIT_SCREEN then
-			wait_screen_created(self, collection_id)
+		elseif screen_qualifier == core_manager.LEAVE_SCREEN then
+			leave_screen_created(self, collection_id)
 		else
 			error("[CORE_MANAGER] Unknown screen qualifier was received, screen_qualifier=" .. tostring(screen_qualifier))
 		end
@@ -209,6 +225,9 @@ function on_message(self, message_id, message, sender)
 		
 	elseif message_id == hash(core_manager.CONNECTION_UPGRADED) then
 		connection_upgraded(self)
+
+	elseif message_id == hash(core_manager.LEAVE_REQUESTED) then
+		leave_requested(self)
 		
 	elseif message_id == hash(core_manager.CLIENT_FAILED) then
 		local reason = message.reason

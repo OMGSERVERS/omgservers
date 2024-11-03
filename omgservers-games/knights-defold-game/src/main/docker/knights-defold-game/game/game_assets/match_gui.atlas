@@ -1,0 +1,4 @@
+images {
+  image: "/game/game_assets/leave_button.png"
+}
+extrude_borders: 2
