@@ -5,34 +5,9 @@ local druid = require("druid.druid")
 
 local CORE_MANAGER = "/core_manager#core_manager"
 local MATCH_SCREEN = "match_screen"
-local COUNTER = "counter"
-
-local function set_counter_value(self, value)
-	local counter_node = gui.get_node(COUNTER)
-	gui.set_text(counter_node, value)
-end
 
 local function leave_button(self)
 	core_manager:leaving_requested(CORE_MANAGER)
-end
-
-local function reset_counter(self, value)
-	print(socket.gettime() .. " [MATCH_GUI] Reset counter, value=" .. value)
-
-	-- Use 0 as an valid value to show 
-	self.counter_value = value - 1
-
-	local counter_node = gui.get_node(COUNTER)
-	gui.set_enabled(counter_node, true)
-	
-	set_counter_value(self, self.counter_value)
-end
-
-local function hide_counter(self)
-	print(socket.gettime() .. " [MATCH_GUI] Hide counter")
-	
-	local counter_node = gui.get_node(COUNTER)
-	gui.set_enabled(counter_node, false)
 end
 
 function init(self)
@@ -40,9 +15,6 @@ function init(self)
 	self.button = self.druid:new_button("leave_button", leave_button)
 	
 	print(socket.gettime() .. " [MATCH_GUI] Initialized")
-	
-	self.counter_value = 0
-	hide_counter(self)
 end
 
 function final(self)
@@ -51,22 +23,10 @@ end
 
 function update(self, dt)
 	self.druid:update(dt)
-	
-	self.counter_value = math.max(0, self.counter_value - dt)
-	set_counter_value(self, math.ceil(self.counter_value))
 end
 
 function on_message(self, message_id, message, sender)
 	self.druid:on_message(message_id, message, sender)
-
-	if message_id == hash(match_gui.RESET_COUNTER) then
-		local value = message.value
-		reset_counter(self, value)
-
-	elseif message_id == hash(match_gui.HIDE_COUNTER) then
-		hide_counter(self)
-		
-	end
 end
 
 function on_input(self, action_id, action)
@@ -76,12 +36,6 @@ function on_input(self, action_id, action)
 			if action.released then
 				match_screen:pointed(MATCH_SCREEN, action.x, action.y)
 				return true
-				
-				-- local world_position = camera.screen_to_world(nil, vmath.vector3(action.x, action.y, 0))
-				-- local x = world_position.x
-				-- local y = world_position.y
-				-- match_screen:pointed(MATCH_SCREEN, x, y)
-				-- return true
 			end
 		end
 	else

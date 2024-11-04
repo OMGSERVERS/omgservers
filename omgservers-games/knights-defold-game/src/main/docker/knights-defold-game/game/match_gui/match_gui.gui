@@ -25,21 +25,6 @@ nodes {
 }
 nodes {
   position {
-    y: 216.0
-  }
-  size {
-    x: 160.0
-    y: 40.0
-  }
-  type: TYPE_TEXT
-  text: "counter"
-  font: "font"
-  id: "counter"
-  parent: "root"
-  inherit_alpha: true
-}
-nodes {
-  position {
     x: 300.0
     y: 220.0
   }

@@ -88,11 +88,6 @@ local function move_player(self, client_id, x, y)
 	local player_id = self.players[client_id]
 	if player_id then
 		match_player:move_to(player_id, x, y)
-
-		-- If it's controllable player -> reset pointer position to the default
-		if client_id == core_manager:get_client_id() then
-			match_pointer:enable_pointer(MATCH_POINTER, x, y)
-		end
 	else
 		print(socket.gettime() .. " [MATCH_SCREEN] Player was not found to move, client_id=" .. client_id)
 	end
@@ -120,10 +115,6 @@ end
 local function apply_events(self, events)
 	print(socket.gettime() .. " [MATCH_SCREEN] Apply events")
 	pprint(events)
-	
-	-- Reset counter
-	local counter_value = self.settings.waiting_duration
-	match_gui:reset_counter(MATCH_GUI, counter_value)
 
 	for _, event in ipairs(events) do
 		local event_qualifier = event.qualifier
@@ -168,21 +159,6 @@ local function apply_events(self, events)
 	end
 end
 
-local function request_move(self)
-	-- Hide counter
-	match_gui:hide_counter(MATCH_GUI)
-	
-	if self.point then
-		print(socket.gettime() .. " [MATCH_SCREEN] Move plyaer, x=" .. self.point.x .. ", y=" .. self.point.y)
-		
-		-- Move player
-		local game_message = game_messages:move_player(self.point.x, self.point.y)
-		client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
-
-		self.point = nil
-	end
-end
-
 local function screen_to_world(x, y, z)
 	local camera = "match_camera#camera"
 	local projection = go.get(camera, "projection")
@@ -216,11 +192,11 @@ local function pointed(self, pointed_x, pointed_y)
 		
 		match_pointer:enable_pointer(MATCH_POINTER, bounded_x, bounded_y)
 
-		self.point = {
-			x = bounded_x,
-			y = bounded_y,
-		}
-		print(socket.gettime() .. " [MATCH_SCREEN] Point was set, x=" .. bounded_x .. ", y=" .. bounded_y)
+		print(socket.gettime() .. " [MATCH_SCREEN] Move player, x=" .. bounded_x .. ", y=" .. bounded_y)
+
+		-- Move player
+		local game_message = game_messages:move_player(bounded_x, bounded_y)
+		client_manager:send_message(CLIENT_MANAGER, json.encode(game_message))
 	else
 		print(socket.gettime() .. " [MATCH_SCREEN] Player was not found to point, client_id=" .. client_id)
 	end
@@ -265,9 +241,6 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash(match_messages.APPLY_EVENTS) then
 		local events = message.events
 		apply_events(self, events)
-
-	elseif message_id == hash(match_messages.REQUEST_MOVE) then
-		request_move(self)
 
 	elseif message_id == hash(match_messages.POINTED) then
 		local x = message.x

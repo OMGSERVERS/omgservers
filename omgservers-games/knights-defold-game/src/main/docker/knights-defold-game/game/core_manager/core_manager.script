@@ -129,8 +129,8 @@ local function leaving_requested(self)
 	screens_manager:create_leaving_screen(SCREENS_MANAGER)
 end
 
-local function set_state(self, settings, dangling_players, spawned_players)
-	print(socket.gettime() .. " [CORE_MANAGER] State was received at " .. os.date())
+local function set_state(self, step, settings, dangling_players, spawned_players)
+	print(socket.gettime() .. " [CORE_MANAGER] State was received at " .. os.date() .. ", step=" .. step)
 	
 	if core_state.game_state == core_state.GETTING_STATE then
 		-- Show match screen
@@ -163,10 +163,6 @@ end
 
 local function apply_events(self, events)
 	match_screen:apply_events(self.screen_collection_id, events)
-end
-
-local function request_move(self)
-	match_screen:request_move(self.screen_collection_id)
 end
 
 local function client_failed(self, reason)
@@ -228,17 +224,15 @@ function on_message(self, message_id, message, sender)
 			set_profile(self, profile)
 
 		elseif message_qualifier == server_messages.SET_STATE then
+			local step = message.step
 			local settings = message.settings
 			local dangling_players = message.dangling_players
 			local spawned_players = message.spawned_players
-			set_state(self, settings, dangling_players, spawned_players)
+			set_state(self, step, settings, dangling_players, spawned_players)
 
 		elseif message_qualifier == server_messages.APPLY_EVENTS then
 			local events = message.events
 			apply_events(self, events)
-
-		elseif message_qualifier == server_messages.REQUEST_MOVE then
-			request_move(self)
 			
 		else
 			error("[CORE_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))

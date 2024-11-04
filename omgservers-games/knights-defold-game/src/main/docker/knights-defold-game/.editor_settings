@@ -16,7 +16,7 @@
   :code {
     :find {
       :replacement "instance_id"
-      :term "instance_id"
+      :term "waiting_"
     }
   }
   :run {
@@ -25,46 +25,10 @@
   :search-in-files {
     :exts ""
     :include-libraries false
-    :term ":get_client_id"
+    :term "waiting_dur"
   }
   :workflow {
     :recent-files [
-      [
-        "/server/runtime_utils/profiles_container.lua"
-        :code
-      ]
-      [
-        "/game/leaving_screen/leaving_screen.collection"
-        :scene
-      ]
-      [
-        "/game/leaving_screen/leaving_screen.gui"
-        :scene
-      ]
-      [
-        "/game/screens_manager/screens_manager.script"
-        :code
-      ]
-      [
-        "/game/screens_manager/screens_manager.lua"
-        :code
-      ]
-      [
-        "/game/joining_screen/joining_screen.lua"
-        :code
-      ]
-      [
-        "/game/joining_screen/joining_screen.collection"
-        :scene
-      ]
-      [
-        "/game/joining_screen/joining_screen.gui"
-        :scene
-      ]
-      [
-        "/game/leaving_screen/leaving_screen.gui_script"
-        :code
-      ]
       [
         "/omgservers/omgplayer/omginstance.lua"
         :code
@@ -102,10 +66,6 @@
         :code
       ]
       [
-        "/game/match_gui/match_gui.gui_script"
-        :code
-      ]
-      [
         "/game/lobby_screen/lobby_screen.gui_script"
         :code
       ]
@@ -118,10 +78,6 @@
         :cljfx-form-view
       ]
       [
-        "/server/match_runtime/match_runtime.script"
-        :code
-      ]
-      [
         "/server/123.script"
         :code
       ]
@@ -130,7 +86,19 @@
         :scene
       ]
       [
-        "/game/core_manager/core_manager.script"
+        "/game/core_manager/component_state.lua"
+        :code
+      ]
+      [
+        "/game/core_manager/core_manager.lua"
+        :code
+      ]
+      [
+        "/game/auth_screen/auth_screen.gui_script"
+        :code
+      ]
+      [
+        "/game/auth_screen/auth_screen.lua"
         :code
       ]
       [
@@ -138,15 +106,7 @@
         :code
       ]
       [
-        "/game/core_manager/component_state.lua"
-        :code
-      ]
-      [
-        "/game/match_screen/match_screen.script"
-        :code
-      ]
-      [
-        "/game/core_manager/core_manager.lua"
+        "/server/match_runtime/simulation_service.lua"
         :code
       ]
       [
@@ -155,6 +115,46 @@
       ]
       [
         "/game/client_manager/client_manager.lua"
+        :code
+      ]
+      [
+        "/common/server_messages.lua"
+        :code
+      ]
+      [
+        "/game/match_gui/match_gui.go"
+        :scene
+      ]
+      [
+        "/game/match_gui/match_gui.lua"
+        :code
+      ]
+      [
+        "/game/match_gui/match_gui.gui"
+        :scene
+      ]
+      [
+        "/game/match_gui/match_gui.gui_script"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_runtime.script"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_settings.lua"
+        :code
+      ]
+      [
+        "/game/core_manager/core_manager.script"
+        :code
+      ]
+      [
+        "/game/match_screen/match_screen.script"
+        :code
+      ]
+      [
+        "/game/match_screen/match_screen.lua"
         :code
       ]
     ]

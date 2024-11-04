@@ -13,14 +13,12 @@ local game_messages = require("common.game_messages")
 local match_events = require("common.match_events")
 
 local NIL_STATE = "nil"
-local WAITING_STATE = "waiting"
-local QUEUEING_STATE = "queueing"
 local SIMULATION_STATE = "simulation"
 
 local function init_runtime(self, version_config)
 	self.version_config = version_config
 	self.spawn_requests = {}
-	self.match_state = WAITING_STATE
+	self.match_state = SIMULATION_STATE
 end
 
 local function add_match_client(self, client_id, profile)
@@ -63,13 +61,14 @@ local function request_state(self, client_id)
 
 				local state = self.simulated_state
 
-				-- Send match settings and state
+				-- Send match data
+				local step = self.match_step
 				local settings = {
-					waiting_duration = match_settings.constants.WAITING_DURATION,
+					simulation_interval = match_settings.constants.SIMULATION_INTERVAL,
 				}
 				local dangling_players = state.dangling_players
 				local spawned_players = state.spawned_players
-				local server_message = server_messages:set_state(settings, dangling_players, spawned_players)
+				local server_message = server_messages:set_state(step, settings, dangling_players, spawned_players)
 				omgserver:respond_text_message(client_id, json.encode(server_message))
 			end
 		else
@@ -91,45 +90,27 @@ local function request_leave(self, client_id)
 end
 
 local function move_player(self, client_id, x, y)
-	if self.match_state == QUEUEING_STATE then
-		local player_instance = players_container:get_player(client_id)
-		if player_instance then
-			-- Was spawned and still alive
-			if player_instance.position and not player_instance.was_killed then
+	local player_instance = players_container:get_player(client_id)
+	if player_instance then
+		-- Was spawned and still alive
+		if player_instance.position and not player_instance.was_killed then
 
-				local target_position = vector_factory:create(x, y)
-				player_instance:set_movement(target_position)
+			local target_position = vector_factory:create(x, y)
+			player_instance:set_movement(target_position)
 
-				print(socket.gettime() .. " [MATCH_RUNTIME] Movement was created, client_id=" .. client_id .. ", x=" .. math.floor(x) .. ", y=" .. math.floor(y))
-			else
-				print(socket.gettime() .. " [MATCH_RUNTIME] Player was not spawn or was already killed to move, client_id=" .. client_id)
-			end
+			print(socket.gettime() .. " [MATCH_RUNTIME] Movement was created, client_id=" .. client_id .. ", x=" .. math.floor(x) .. ", y=" .. math.floor(y))
 		else
-			print(socket.gettime() .. " [MATCH_RUNTIME] Player was not found to move, client_id=" .. client_id)
+			print(socket.gettime() .. " [MATCH_RUNTIME] Player was not spawn or was already killed to move, client_id=" .. client_id)
 		end
 	else
-		print(socket.gettime() .. " [MATCH_RUNTIME] Match is not in QUEUEING state to handle movement message, client_id=" .. client_id)
+		print(socket.gettime() .. " [MATCH_RUNTIME] Player was not found to move, client_id=" .. client_id)
 	end
 end
 
-local function waiting_state(self)
-	print(socket.gettime() .. " [MATCH_RUNTIME] Changed to the WAITING")
+local function simulate(self)
+	self.match_step = self.match_step + 1
 	
-end
-
-local function queueing_state(self)
-	print(socket.gettime() .. " [MATCH_RUNTIME] Changed to the QUEUEING")
-
-	-- Request players move
-	local client_ids = players_container:get_client_ids()
-	if #client_ids > 0 then
-		local server_message = server_messages:request_move()
-		omgserver:multicast_text_message(client_ids, json.encode(server_message))
-	end
-end
-
-local function simulation_state(self)
-	print(socket.gettime() .. " [MATCH_RUNTIME] Changed to the SIMULATION")
+	print(socket.gettime() .. " [MATCH_RUNTIME] Simulated, step=" .. self.match_step)
 
 	simulation_service:simulate()
 	
@@ -166,34 +147,19 @@ end
 
 function init(self)
 	self.match_state = NIL_STATE
-	self.timer = 0
+	self.match_step = 0
+	self.match_timer = 0
 end
 
 function update(self, dt)
 	if self.match_state == NIL_STATE then
-		-- Match runtime was not initialized
+		-- Match runtime was not initialized yet
 	else
-		self.timer = self.timer + dt
+		self.match_timer = self.match_timer + dt
 
-		if self.match_state == WAITING_STATE then
-			if self.timer > match_settings.constants.WAITING_DURATION then
-				self.match_state = QUEUEING_STATE
-				queueing_state(self)
-				
-				self.timer = self.timer - match_settings.constants.WAITING_DURATION
-			end
-
-		elseif self.match_state == QUEUEING_STATE then
-			if self.timer > match_settings.constants.QUEUEING_DURATION then
-				self.match_state = SIMULATION_STATE
-				simulation_state(self)
-				self.timer = self.timer - match_settings.constants.QUEUEING_DURATION
-			end
-
-		elseif self.match_state == SIMULATION_STATE then
-			self.match_state = WAITING_STATE
-			waiting_state(self)
-			self.timer = 0
+		if self.match_timer >= match_settings.constants.SIMULATION_INTERVAL then
+			simulate(self)
+			self.match_timer = 0
 		end
 	end
 end
