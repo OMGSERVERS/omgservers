@@ -1,11 +1,11 @@
 script: "/game/match_gui/match_gui.gui_script"
 fonts {
   name: "font"
-  font: "/game/game_fonts/font_x2.font"
+  font: "/game/game_assets/font_x2.font"
 }
 textures {
-  name: "match_gui"
-  texture: "/game/game_assets/match_gui.atlas"
+  name: "game_gui"
+  texture: "/game/game_assets/game_gui.atlas"
 }
 nodes {
   position {
@@ -59,7 +59,7 @@ nodes {
     y: 2.0
   }
   type: TYPE_BOX
-  texture: "match_gui/leave_button"
+  texture: "game_gui/leave_button"
   id: "icon"
   parent: "leave_button"
   size_mode: SIZE_MODE_AUTO

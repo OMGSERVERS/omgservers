@@ -1,11 +1,9 @@
 local lobby_screen
 lobby_screen = {
-	SET_STATE = "set_state",
+	SET_PROFILE = "set_profile",
 	-- Methods
-	set_state = function(self, receiver, state_text)
-		msg.post(receiver, lobby_screen.SET_STATE, {
-			state_text = state_text,
-		})
+	set_profile = function(self, recipient, profile)
+		msg.post(recipient, lobby_screen.SET_PROFILE, profile)
 	end,
 }
 

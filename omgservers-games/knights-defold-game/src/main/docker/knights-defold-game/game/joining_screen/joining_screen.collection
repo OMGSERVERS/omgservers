@@ -1,0 +1,10 @@
+name: "auth"
+scale_along_z: 0
+embedded_instances {
+  id: "joining_screen"
+  data: "components {\n"
+  "  id: \"joining_screen\"\n"
+  "  component: \"/game/joining_screen/joining_screen.gui\"\n"
+  "}\n"
+  ""
+}

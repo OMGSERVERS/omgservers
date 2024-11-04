@@ -13,7 +13,7 @@ local function set_counter_value(self, value)
 end
 
 local function leave_button(self)
-	core_manager:leave_requested(CORE_MANAGER)
+	core_manager:leaving_requested(CORE_MANAGER)
 end
 
 local function reset_counter(self, value)

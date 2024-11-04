@@ -12,9 +12,10 @@ game_messages = {
 			qualifier = game_messages.REQUEST_PROFILE,
 		}
 	end,
-	request_matchmaking = function(self)
+	request_matchmaking = function(self, nickname)
 		return {
 			qualifier = game_messages.REQUEST_MATCHMAKING,
+			nickname = nickname,
 		}
 	end,
 	request_state = function(self)

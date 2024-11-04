@@ -233,6 +233,15 @@ function init(self)
 	print(socket.gettime() .. " [MATCH_SCREEN] Initialized")
 end
 
+function final(self)
+	for client_id, player_id in pairs(self.players) do
+		go.delete(player_id)
+		print(socket.gettime() .. " [MATCH_SCREEN] Player was deleted, id=" .. player_id)
+	end
+
+	print(socket.gettime() .. " [MATCH_SCREEN] Finalized")
+end
+
 function update(self, dt)
 	local client_id = core_manager:get_client_id()
 	local player_id = self.players[client_id]

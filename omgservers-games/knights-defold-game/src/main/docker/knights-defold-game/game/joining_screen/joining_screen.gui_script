@@ -1,7 +1,7 @@
-local leave_screen = require("game.leave_screen.leave_screen")
+local joining_screen = require("game.joining_screen.joining_screen")
 
 local function set_state_text(text)
-	local state_node = gui.get_node("state")
+	local state_node = gui.get_node("joining_state_text")
 	gui.set_text(state_node, text)
 end
 
@@ -16,7 +16,7 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(leave_screen.SET_STATE) then
+	if message_id == hash(joining_screen.SET_STATE) then
 		local state_text = message.state_text
 		set_state(self, state_text)
 	end

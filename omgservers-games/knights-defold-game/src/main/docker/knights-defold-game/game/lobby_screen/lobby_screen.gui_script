@@ -1,23 +1,71 @@
+local core_manager = require("game.core_manager.core_manager")
 local lobby_screen = require("game.lobby_screen.lobby_screen")
+local input = require("druid.extended.input")
+local druid = require("druid.druid")
+druid.register("input", input)
 
-local function set_state_text(text)
-	local state_node = gui.get_node("state")
-	gui.set_text(state_node, text)
+local CORE_MANAGER = "/core_manager#core_manager"
+
+local function request_joining(self)
+	local nickname_input_text = self.nickname_input:get_text()
+	if nickname_input_text == "" then
+		self.nickname_input:set_text(self.profile.data.nickname)
+	else
+		core_manager:joining_requested(CORE_MANAGER, nickname_input_text)
+	end
 end
 
-local function set_state(self, state_text)
-	self.state_text = state_text
-	set_state_text(self.state_text)
+local function join_button(self)
+	request_joining(self)
+end
+
+local function set_profile(self, profile)
+	pprint(profile)
+	self.profile = profile
+	self.nickname_input:set_text(profile.data.nickname)
+end
+
+function init(self)
+	self.druid = druid.new(self)
+
+	local first_input = true
+	self.nickname_input = self.druid:new_input("nickname_input_field", "nickname_input_text")
+	self.nickname_input.max_length = 12
+	self.nickname_input.on_input_select:subscribe(function(_, _)
+		if first_input then
+			self.nickname_input:set_text("")
+			first_input = false
+		end
+	end)
+
+	self.join_button = self.druid:new_button("join_button", join_button)
+
+	print(socket.gettime() .. " [LOBBY_SCREEN] Initialized")
+end
+
+function final(self)
+	self.druid:final()
 end
 
 function update(self, dt)
-	local dots = math.fmod(math.floor(socket.gettime() * 3), 4)
-	set_state_text(self.state_text .. string.rep(".", dots))
+	self.druid:update(dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash(lobby_screen.SET_STATE) then
-		local state_text = message.state_text
-		set_state(self, state_text)
+	self.druid:on_message(message_id, message, sender)
+
+	if message_id == hash(lobby_screen.SET_PROFILE) then
+		local profile = message
+		set_profile(self, profile)
 	end
+end
+
+function on_input(self, action_id, action)
+	local result = self.druid:on_input(action_id, action)
+
+	if action_id == hash("key_enter") and action.pressed then
+		request_joining(self)
+	end
+	
+	return result
 end

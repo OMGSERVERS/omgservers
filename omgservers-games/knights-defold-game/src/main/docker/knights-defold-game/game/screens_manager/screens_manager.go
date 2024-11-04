@@ -21,8 +21,14 @@ embedded_components {
   ""
 }
 embedded_components {
-  id: "leave_factory"
+  id: "leaving_factory"
   type: "collectionfactory"
-  data: "prototype: \"/game/leave_screen/leave_screen.collection\"\n"
+  data: "prototype: \"/game/leaving_screen/leaving_screen.collection\"\n"
+  ""
+}
+embedded_components {
+  id: "joining_factory"
+  type: "collectionfactory"
+  data: "prototype: \"/game/joining_screen/joining_screen.collection\"\n"
   ""
 }

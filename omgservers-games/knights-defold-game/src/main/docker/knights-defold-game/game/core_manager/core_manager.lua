@@ -10,13 +10,15 @@ core_manager = {
 	RUNTIME_ASSIGNED = "runtime_assigned",
 	MESSAGE_RECEIVED = "message_received",
 	CONNECTION_UPGRADED = "connection_upgraded",
-	LEAVE_REQUESTED = "leave_requested",
+	JOINING_REQUESTED = "joining_requested",
+	LEAVING_REQUESTED = "leaving_requested",
 	CLIENT_FAILED = "client_failed",
 	-- Screen qualifiers
 	AUTH_SCREEN = "auth_screen",
 	LOBBY_SCREEN = "lobby_screen",
+	JOINING_SCREEN = "joining_screen",
 	MATCH_SCREEN = "match_screen",
-	LEAVE_SCREEN = "leave_screen",
+	LEAVING_SCREEN = "leaving_screen",
 	-- Methods
 	get_client_id = function(self)
 		return core_state.client_id
@@ -62,8 +64,13 @@ core_manager = {
 		msg.post(receiver, core_manager.CONNECTION_UPGRADED, {
 		})
 	end,
-	leave_requested = function(self, receiver)
-		msg.post(receiver, core_manager.LEAVE_REQUESTED, {
+	joining_requested = function(self, receiver, nickname)
+		msg.post(receiver, core_manager.JOINING_REQUESTED, {
+			nickname = nickname,
+		})
+	end,
+	leaving_requested = function(self, receiver)
+		msg.post(receiver, core_manager.LEAVING_REQUESTED, {
 		})
 	end,
 	client_failed = function(self, receiver, reason)

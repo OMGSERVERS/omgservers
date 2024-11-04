@@ -60,11 +60,14 @@ local function command_received(self, message)
 
 		-- Request matchmaking
 		elseif message_qualifier == game_messages.REQUEST_MATCHMAKING then
-			local new_nickname = message.nickname
+			local new_nickname = command_message.nickname
 
 			local wrapped_profile = profiles_container:get_profile(client_id)
 			local current_nickname = wrapped_profile.profile.data.nickname
 
+			print(new_nickname)
+			print(current_nickname)
+			
 			if new_nickname and current_nickname ~= new_nickname then
 				wrapped_profile:change_nickname(new_nickname)
 

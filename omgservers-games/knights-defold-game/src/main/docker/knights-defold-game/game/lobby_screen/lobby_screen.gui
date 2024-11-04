@@ -1,13 +1,29 @@
 script: "/game/lobby_screen/lobby_screen.gui_script"
 fonts {
   name: "default"
-  font: "/game/game_fonts/font.font"
+  font: "/game/game_assets/font.font"
+}
+textures {
+  name: "game_gui"
+  texture: "/game/game_assets/game_gui.atlas"
 }
 nodes {
   position {
     x: 320.0
     y: 240.0
   }
+  size {
+    x: 640.0
+    y: 480.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
   size {
     x: 640.0
     y: 480.0
@@ -19,20 +35,99 @@ nodes {
   }
   type: TYPE_BOX
   id: "background"
-  inherit_alpha: true
+  parent: "root"
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   size {
-    x: 640.0
+    x: 128.0
     y: 40.0
   }
+  type: TYPE_BOX
+  id: "nickname_input"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  slice9 {
+    x: 4.0
+    y: 4.0
+    z: 4.0
+    w: 4.0
+  }
+  alpha: 0.0
+}
+nodes {
+  position {
+    y: 12.0
+  }
+  size {
+    x: 128.0
+    y: 16.0
+  }
   type: TYPE_TEXT
-  text: "Lobby screen"
+  text: "Player nickname:"
   font: "default"
-  id: "state"
-  parent: "background"
-  inherit_alpha: true
+  id: "nickname_input_label"
+  parent: "nickname_input"
+}
+nodes {
+  position {
+    y: -8.0
+  }
+  size {
+    x: 128.0
+    y: 24.0
+  }
+  type: TYPE_BOX
+  texture: "game_gui/border"
+  id: "nickname_input_field"
+  parent: "nickname_input"
+  slice9 {
+    x: 4.0
+    y: 4.0
+    z: 4.0
+    w: 4.0
+  }
+}
+nodes {
+  size {
+    x: 120.0
+    y: 16.0
+  }
+  color {
+    x: 0.949
+    y: 0.949
+    z: 0.949
+  }
+  type: TYPE_TEXT
+  text: "nickname"
+  font: "default"
+  id: "nickname_input_text"
+  parent: "nickname_input_field"
+}
+nodes {
+  position {
+    y: -44.0
+  }
+  size {
+    x: 64.0
+    y: 16.0
+  }
+  type: TYPE_BOX
+  id: "join_button"
+  parent: "root"
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 64.0
+    y: 16.0
+  }
+  type: TYPE_TEXT
+  text: "[JOIN]"
+  font: "default"
+  id: "join_button_label"
+  parent: "join_button"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

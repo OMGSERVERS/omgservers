@@ -3,6 +3,7 @@ core_state = {
 	IN_AUTH = "in_auth",
 	GETTING_PROFILE = "getting_profile",
 	IN_LOBBY = "in_lobby",
+	JOINING = "joining",
 	GETTING_STATE = "getting_state",
 	IN_MATCH = "in_match",
 	GAME_FAILED = "game_failed",
@@ -24,6 +25,13 @@ core_state = {
 		self.profile = profile
 		print(socket.gettime() .. " [CORE_STATE] Profile was set")
 	end,
+	change_nickname = function(self, nickname)
+		self.profile.data.nickname = nickname
+		print(socket.gettime() .. " [CORE_STATE] Nickname was changed, nickname=" .. nickname)
+	end,
+	get_nickname = function(self)
+		return self.profile.data.nickname
+	end
 }
 
 return core_state

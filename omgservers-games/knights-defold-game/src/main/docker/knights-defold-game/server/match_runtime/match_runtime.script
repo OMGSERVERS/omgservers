@@ -171,7 +171,7 @@ end
 
 function update(self, dt)
 	if self.match_state == NIL_STATE then
-		-- Match manger was not initialized
+		-- Match runtime was not initialized
 	else
 		self.timer = self.timer + dt
 

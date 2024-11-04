@@ -43,7 +43,7 @@ embedded_instances {
   "  z: 1.0\\n"
   "}\\n"
   "text: \\\"nickname\\\"\\n"
-  "font: \\\"/game/game_fonts/font.font\\\"\\n"
+  "font: \\\"/game/game_assets/font.font\\\"\\n"
   "material: \\\"/builtins/fonts/label-df.material\\\"\\n"
   "\"\n"
   "  position {\n"

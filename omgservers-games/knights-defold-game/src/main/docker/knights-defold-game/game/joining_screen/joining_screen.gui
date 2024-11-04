@@ -1,0 +1,61 @@
+script: "/game/joining_screen/joining_screen.gui_script"
+fonts {
+  name: "default"
+  font: "/game/game_assets/font.font"
+}
+nodes {
+  position {
+    x: 320.0
+    y: 240.0
+  }
+  size {
+    x: 640.0
+    y: 480.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 640.0
+    y: 480.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "background"
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 640.0
+    y: 40.0
+  }
+  type: TYPE_BOX
+  id: "joining_state"
+  parent: "root"
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 640.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "Joining screen"
+  font: "default"
+  id: "joining_state_text"
+  parent: "joining_state"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
