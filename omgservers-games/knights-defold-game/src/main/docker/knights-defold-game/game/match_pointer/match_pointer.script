@@ -25,7 +25,7 @@ function on_message(self, message_id, message, sender)
 
 		local x = message.x
 		local y = message.y
-		sprite.play_flipbook(ICON_SPRITE, hash("pointer_1"))
+		sprite.play_flipbook(ICON_SPRITE, hash("pointer_2"))
 		place_pointer(self, x, y)
 
 		print(socket.gettime() .. " [POINTER] Pointer was enabled, x=" .. x .. ", y=" .. y)

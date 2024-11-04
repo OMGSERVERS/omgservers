@@ -7,7 +7,7 @@ import com.omgservers.service.module.matchmaker.impl.operation.matchmaker.Select
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerAssignment.SelectActiveMatchmakerAssignmentsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.SelectActiveMatchmakerMatchesByMatchmakerIdOperation;
-import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchAssignment.SelectMatchmakerMatchAssignmentsByMatchmakerIdOperation;
+import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchAssignment.SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.SelectActiveMatchmakerRequestsByMatchmakerIdOperation;
 import com.omgservers.service.operation.checkShard.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
@@ -26,8 +26,8 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
     final SelectActiveMatchmakerMatchesByMatchmakerIdOperation selectActiveMatchmakerMatchesByMatchmakerIdOperation;
     final SelectActiveMatchmakerAssignmentsByMatchmakerIdOperation
             selectActiveMatchmakerAssignmentsByMatchmakerIdOperation;
-    final SelectMatchmakerMatchAssignmentsByMatchmakerIdOperation
-            selectMatchmakerMatchAssignmentsByMatchmakerIdOperation;
+    final SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation
+            selectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation;
     final SelectMatchmakerOperation selectMatchmakerOperation;
     final CheckShardOperation checkShardOperation;
 
@@ -66,7 +66,7 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                                                                                             matchmakerId)
                                                                                     .flatMap(
                                                                                             matchmakerMatches ->
-                                                                                                    selectMatchmakerMatchAssignmentsByMatchmakerIdOperation
+                                                                                                    selectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation
                                                                                                             .execute(
                                                                                                                     sqlConnection,
                                                                                                                     shard,

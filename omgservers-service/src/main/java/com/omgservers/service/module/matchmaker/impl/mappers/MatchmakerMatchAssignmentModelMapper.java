@@ -36,7 +36,7 @@ public class MatchmakerMatchAssignmentModelMapper {
                     .readValue(row.getString("config"), MatchmakerMatchAssignmentConfigDto.class));
         } catch (IOException e) {
             throw new ServerSideConflictException(ExceptionQualifierEnum.DB_DATA_CORRUPTED,
-                    "matchmaker match client config can't be parsed, matchmakerMatchAssignment=" +
+                    "Matchmaker match assignment config can't be parsed, matchmakerMatchAssignment=" +
                             matchmakerMatchAssignment, e);
         }
         return matchmakerMatchAssignment;

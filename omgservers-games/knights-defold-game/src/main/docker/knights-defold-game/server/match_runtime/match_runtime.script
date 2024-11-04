@@ -86,7 +86,7 @@ end
 
 local function request_leave(self, client_id)
 	omgserver:kick_client(client_id)
-	print(socket.gettime() .. " [MATCH_RUNTIME] Kick client was requested, client_id=" .. client_id)
+	print(socket.gettime() .. " [MATCH_RUNTIME] The client was requested to be kicked, client_id=" .. client_id)
 end
 
 local function move_player(self, client_id, x, y)
@@ -110,7 +110,7 @@ end
 local function simulate(self)
 	self.match_step = self.match_step + 1
 	
-	print(socket.gettime() .. " [MATCH_RUNTIME] Simulated, step=" .. self.match_step)
+	print(socket.gettime() .. " [MATCH_RUNTIME] Simulated, step=" .. self.match_step .. ", timer=" .. self.match_timer)
 
 	simulation_service:simulate()
 	
@@ -149,6 +149,8 @@ function init(self)
 	self.match_state = NIL_STATE
 	self.match_step = 0
 	self.match_timer = 0
+	self.stopping = false
+	self.step_timer = 0
 end
 
 function update(self, dt)
@@ -156,10 +158,18 @@ function update(self, dt)
 		-- Match runtime was not initialized yet
 	else
 		self.match_timer = self.match_timer + dt
+		if self.match_timer >= match_settings.constants.MATCH_LIFETIME then
+			if not self.stopping then
+				omgserver:stop_matchmaking("finishing")
+				self.stopping = true
+				print(socket.gettime() .. " [MATCH_RUNTIME] The matchmaking was requested to be stopped, timer=" .. self.match_timer)
+			end
+		end
 
-		if self.match_timer >= match_settings.constants.SIMULATION_INTERVAL then
+		self.step_timer = self.step_timer + dt
+		if self.step_timer >= match_settings.constants.SIMULATION_INTERVAL then
 			simulate(self)
-			self.match_timer = 0
+			self.step_timer = 0
 		end
 	end
 end

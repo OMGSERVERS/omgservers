@@ -15,8 +15,8 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectMatchmakerMatchAssignmentsByMatchmakerIdOperationImpl
-        implements SelectMatchmakerMatchAssignmentsByMatchmakerIdOperation {
+class SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperationImpl
+        implements SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation {
 
     final SelectListOperation selectListOperation;
 
@@ -34,11 +34,11 @@ class SelectMatchmakerMatchAssignmentsByMatchmakerIdOperationImpl
                             id, idempotency_key, matchmaker_id, match_id, created, modified, user_id, client_id, 
                             group_name, config, deleted
                         from $schema.tab_matchmaker_match_assignment
-                        where matchmaker_id = $1
+                        where matchmaker_id = $1 and deleted = false
                         order by id asc
                         """,
                 Collections.singletonList(matchmakerId),
-                "Matchmaker match client",
+                "Matchmaker match assignment",
                 matchmakerMatchAssignmentModelMapper::execute);
     }
 }

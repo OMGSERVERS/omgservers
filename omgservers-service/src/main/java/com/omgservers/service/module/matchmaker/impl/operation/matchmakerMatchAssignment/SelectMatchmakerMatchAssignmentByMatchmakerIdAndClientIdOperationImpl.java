@@ -33,12 +33,12 @@ class SelectMatchmakerMatchAssignmentByMatchmakerIdAndClientIdOperationImpl
                         select id, idempotency_key, matchmaker_id, match_id, created, modified, user_id, client_id, 
                             group_name, config, deleted
                         from $schema.tab_matchmaker_match_assignment
-                        where matchmaker_id = $1 and client_id = $2
+                        where matchmaker_id = $1 and client_id = $2 and deleted = false
                         order by id desc
                         limit 1
                         """,
                 List.of(matchmakerId, clientId),
-                "Matchmaker match client",
+                "Matchmaker match assignment",
                 matchmakerMatchAssignmentModelMapper::execute);
     }
 }

@@ -1,6 +1,7 @@
 local match_settings
 match_settings = {
 	constants = {
+		MATCH_LIFETIME = 60,
 		MATCH_WIDTH = 512,
 		MATCH_HEIGHT = 512,
 		MATCH_BORDER = 32,

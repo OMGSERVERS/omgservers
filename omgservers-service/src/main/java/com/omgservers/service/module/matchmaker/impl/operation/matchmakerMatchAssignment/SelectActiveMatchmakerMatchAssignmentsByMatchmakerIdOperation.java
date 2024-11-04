@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.util.List;
 
-public interface SelectMatchmakerMatchAssignmentsByMatchmakerIdOperation {
+public interface SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation {
     Uni<List<MatchmakerMatchAssignmentModel>> execute(SqlConnection sqlConnection,
                                                       int shard,
                                                       Long matchmakerId);

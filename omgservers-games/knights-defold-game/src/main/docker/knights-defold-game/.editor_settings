@@ -16,7 +16,7 @@
   :code {
     :find {
       :replacement "instance_id"
-      :term "waiting_"
+      :term "pointer_1"
     }
   }
   :run {
@@ -29,22 +29,6 @@
   }
   :workflow {
     :recent-files [
-      [
-        "/omgservers/omgplayer/omginstance.lua"
-        :code
-      ]
-      [
-        "/game/lobby_screen/lobby_screen.gui"
-        :scene
-      ]
-      [
-        "/server/runtime_utils/profile_wrapper.lua"
-        :code
-      ]
-      [
-        "/server/lobby_runtime/lobby_runtime.script"
-        :code
-      ]
       [
         "/server/server_manager/server_manager.script"
         :code
@@ -138,14 +122,6 @@
         :code
       ]
       [
-        "/server/match_runtime/match_runtime.script"
-        :code
-      ]
-      [
-        "/server/match_runtime/match_settings.lua"
-        :code
-      ]
-      [
         "/game/core_manager/core_manager.script"
         :code
       ]
@@ -155,6 +131,30 @@
       ]
       [
         "/game/match_screen/match_screen.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgserver/omginstance.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgserver/omgserver.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_settings.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_runtime.script"
+        :code
+      ]
+      [
+        "/game/match_pointer/match_pointer.collection"
+        :scene
+      ]
+      [
+        "/game/match_pointer/match_pointer.script"
         :code
       ]
     ]
