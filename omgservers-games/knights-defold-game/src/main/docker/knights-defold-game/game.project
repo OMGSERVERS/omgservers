@@ -28,3 +28,6 @@ scale_mode = fit
 [input]
 game_binding = /builtins/input/all.input_bindingc
 
+[websocket]
+debug = 1
+socket_timeout = 10000000

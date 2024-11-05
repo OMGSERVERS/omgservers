@@ -9,6 +9,7 @@ import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateResponse;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.getTenantVersionConfig.GetTenantVersionConfigOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleClosedMatches.HandleClosedMatchesOperation;
+import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleEmptyMatchesOperation.HandleEmptyMatchesOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommand.HandleMatchmakerCommandOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleMatchmakerCommands.HandleMatchmakerCommandsOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handlerMatchmakerRequests.HandleMatchmakerRequestsOperation;
@@ -31,6 +32,7 @@ public class MatchmakerTaskImpl {
     final HandleMatchmakerCommandOperation handleMatchmakerCommandOperation;
     final GetTenantVersionConfigOperation getTenantVersionConfigOperation;
     final HandleClosedMatchesOperation handleClosedMatchesOperation;
+    final HandleEmptyMatchesOperation handleEmptyMatchesOperation;
 
     public Uni<Boolean> execute(final Long matchmakerId) {
         // TODO: Using a caching approach
@@ -44,6 +46,7 @@ public class MatchmakerTaskImpl {
 
                                 handleMatchmakerCommandsOperation.execute(matchmakerState, matchmakerChangeOfState);
                                 handleClosedMatchesOperation.execute(matchmakerState, matchmakerChangeOfState);
+                                handleEmptyMatchesOperation.execute(matchmakerState, matchmakerChangeOfState);
                                 handleMatchmakerRequestsOperation.execute(matchmakerState,
                                         matchmakerChangeOfState,
                                         tenantVersionConfig);

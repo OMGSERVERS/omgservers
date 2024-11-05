@@ -1,7 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handlerMatchmakerRequests;
 
 import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchStatusEnum;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.schema.model.request.MatchmakerRequestModel;
@@ -23,8 +22,7 @@ public class MatchmakerIndex {
                 .collect(Collectors.groupingBy(MatchmakerRequestModel::getMode));
 
         matchesIndexByMode = matchmakerState.getMatchmakerMatches().stream()
-                // Exclude CLOSED matches from the index; only PENDING and OPEN matches participate in the process
-                .filter(matchmakerMatch -> !matchmakerMatch.getStatus().equals(MatchmakerMatchStatusEnum.CLOSED))
+                .filter(MatchmakerMatchModel::forMatchmaking)
                 .collect(Collectors.groupingBy(matchmakerMatch ->
                         matchmakerMatch.getConfig().getModeConfig().getName()));
 

@@ -16,4 +16,9 @@ public enum MatchmakerMatchStatusEnum {
      * The match was closed to new client entries.
      */
     CLOSED,
+
+    /**
+     * The match is empty and ready for deletion.
+     */
+    EMPTY,
 }

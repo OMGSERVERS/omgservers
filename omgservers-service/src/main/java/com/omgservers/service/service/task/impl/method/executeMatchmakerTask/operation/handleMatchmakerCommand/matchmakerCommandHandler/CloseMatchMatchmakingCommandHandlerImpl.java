@@ -12,6 +12,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -33,7 +35,10 @@ class CloseMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandle
 
         final var matchesToUpdateStatus = matchmakerState.getMatchmakerMatches()
                 .stream().filter(matchmakerMatch -> matchmakerMatch.getId().equals(matchmakerMatchId))
-                .peek(matchmakerMatch -> matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.CLOSED))
+                .peek(matchmakerMatch -> {
+                    matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.CLOSED);
+                    matchmakerMatch.setModified(Instant.now());
+                })
                 .toList();
 
         matchmakerChangeOfState.getMatchesToUpdateStatus().addAll(matchesToUpdateStatus);

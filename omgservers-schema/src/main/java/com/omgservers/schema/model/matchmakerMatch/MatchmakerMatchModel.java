@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.matchmakerMatch;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -48,4 +49,10 @@ public class MatchmakerMatchModel {
 
     @NotNull
     Boolean deleted;
+
+    @JsonIgnore
+    public Boolean forMatchmaking() {
+        return status.equals(MatchmakerMatchStatusEnum.PENDING) ||
+                status.equals(MatchmakerMatchStatusEnum.OPENED);
+    }
 }

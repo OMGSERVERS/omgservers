@@ -7,6 +7,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
@@ -16,9 +18,9 @@ class HandleClosedMatchesOperationImpl implements HandleClosedMatchesOperation {
     public void execute(final MatchmakerStateDto matchmakerState,
                         final MatchmakerChangeOfStateDto matchmakerChangeOfState) {
 
-        // Find all closed and empty matches for deletion.
+        // Detecting closed matches that are empty
 
-        final var matchesToDelete = matchmakerState.getMatchmakerMatches().stream()
+        final var matchesToUpdateStatus = matchmakerState.getMatchmakerMatches().stream()
                 .filter(matchmakerMatch -> matchmakerMatch.getStatus().equals(MatchmakerMatchStatusEnum.CLOSED))
                 .filter(matchmakerMatch -> {
                     final var matchmakerMatchId = matchmakerMatch.getId();
@@ -26,12 +28,16 @@ class HandleClosedMatchesOperationImpl implements HandleClosedMatchesOperation {
                             .noneMatch(matchmakerMatchAssignment -> matchmakerMatchAssignment.getMatchId()
                                     .equals(matchmakerMatchId));
                 })
+                .peek(matchmakerMatch -> {
+                    matchmakerMatch.setStatus(MatchmakerMatchStatusEnum.EMPTY);
+                    matchmakerMatch.setModified(Instant.now());
+                })
                 .toList();
 
-        matchmakerChangeOfState.getMatchesToDelete().addAll(matchesToDelete);
+        matchmakerChangeOfState.getMatchesToUpdateStatus().addAll(matchesToUpdateStatus);
 
-        if (!matchesToDelete.isEmpty()) {
-            log.info("Closed and empty matches were queued for deletion, count={}", matchesToDelete.size());
+        if (!matchesToUpdateStatus.isEmpty()) {
+            log.info("Empty matches were queued to change their status, count={}", matchesToUpdateStatus.size());
         }
     }
 }

@@ -50,7 +50,8 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
                 case SERVER -> handleDispatcherConnection(dispatcherConnection)
                         .invoke(result -> {
                             if (result) {
-                                log.info("Room connection was closed, dispatcherConnection={}", dispatcherConnection);
+                                log.info("Room connection was closed, dispatcherConnection={}, closeReason={}",
+                                        dispatcherConnection, closeReason);
                             }
                         });
             })
