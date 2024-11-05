@@ -5,6 +5,7 @@ screens_manager = {
 	CREATE_MATCH_SCREEN = "create_match_screen",
 	CREATE_JOINING_SCREEN = "create_joining_screen",
 	CREATE_LEAVING_SCREEN = "create_leaving_screen",
+	CREATE_OPS_SCREEN = "create_ops_screen",
 	-- Methods
 	create_auth_screen = function(self, receiver)
 		msg.post(receiver, screens_manager.CREATE_AUTH_SCREEN, {
@@ -28,6 +29,11 @@ screens_manager = {
 	end,
 	create_leaving_screen = function(self, receiver)
 		msg.post(receiver, screens_manager.CREATE_LEAVING_SCREEN, {
+		})
+	end,
+	create_ops_screen = function(self, receiver, reason)
+		msg.post(receiver, screens_manager.CREATE_OPS_SCREEN, {
+			reason = reason
 		})
 	end,
 }

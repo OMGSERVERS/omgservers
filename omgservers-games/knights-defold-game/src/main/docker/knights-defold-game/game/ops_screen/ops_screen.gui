@@ -1,4 +1,4 @@
-script: "/game/lobby_screen/lobby_screen.gui_script"
+script: "/game/ops_screen/ops_screen.gui_script"
 fonts {
   name: "default"
   font: "/game/game_assets/font.font"
@@ -6,10 +6,6 @@ fonts {
 fonts {
   name: "font_x2"
   font: "/game/game_assets/font_x2.font"
-}
-textures {
-  name: "game_gui"
-  texture: "/game/game_assets/game_gui.atlas"
 }
 nodes {
   position {
@@ -44,80 +40,52 @@ nodes {
 }
 nodes {
   size {
-    x: 256.0
+    x: 640.0
+    y: 40.0
+  }
+  type: TYPE_BOX
+  id: "ops_state"
+  parent: "root"
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -52.0
+  }
+  size {
+    x: 640.0
+    y: 40.0
+  }
+  type: TYPE_TEXT
+  text: "Ops screen"
+  font: "default"
+  id: "ops_state_text"
+  parent: "ops_state"
+}
+nodes {
+  size {
+    x: 640.0
     y: 64.0
   }
-  type: TYPE_BOX
-  id: "nickname_input"
-  adjust_mode: ADJUST_MODE_STRETCH
-  parent: "root"
-  slice9 {
-    x: 4.0
-    y: 4.0
-    z: 4.0
-    w: 4.0
-  }
-  alpha: 0.0
-}
-nodes {
-  position {
-    y: 16.0
-  }
-  size {
-    x: 256.0
-    y: 32.0
-  }
   type: TYPE_TEXT
-  text: "Player nickname:"
+  text: "Oops, something went wrong. \n"
+  "Sorry for the inconvenience. \n"
+  "Please try again."
   font: "font_x2"
-  id: "nickname_input_label"
-  parent: "nickname_input"
+  id: "ops_state_label"
+  parent: "ops_state"
 }
 nodes {
   position {
-    y: -16.0
-  }
-  size {
-    x: 136.0
-    y: 32.0
-  }
-  type: TYPE_BOX
-  texture: "game_gui/border"
-  id: "nickname_input_field"
-  parent: "nickname_input"
-  slice9 {
-    x: 4.0
-    y: 4.0
-    z: 4.0
-    w: 4.0
-  }
-}
-nodes {
-  size {
-    x: 128.0
-    y: 32.0
-  }
-  color {
-    x: 0.949
-    y: 0.949
-    z: 0.949
-  }
-  type: TYPE_TEXT
-  text: "nickname"
-  font: "font_x2"
-  id: "nickname_input_text"
-  parent: "nickname_input_field"
-}
-nodes {
-  position {
-    y: -64.0
+    y: -89.0
   }
   size {
     x: 128.0
     y: 32.0
   }
   type: TYPE_BOX
-  id: "join_button"
+  id: "reset_button"
   parent: "root"
   alpha: 0.0
   size_mode: SIZE_MODE_AUTO
@@ -128,10 +96,10 @@ nodes {
     y: 32.0
   }
   type: TYPE_TEXT
-  text: "[JOIN]"
+  text: "[RESET]"
   font: "font_x2"
-  id: "join_button_label"
-  parent: "join_button"
+  id: "reset_button_label"
+  parent: "reset_button"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

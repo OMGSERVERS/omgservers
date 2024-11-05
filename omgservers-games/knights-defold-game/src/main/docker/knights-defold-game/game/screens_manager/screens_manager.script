@@ -1,6 +1,7 @@
 local screens_messages = require("game.screens_manager.screens_manager")
 local match_screen = require("game.match_screen.match_screen")
 local lobby_screen = require("game.lobby_screen.lobby_screen")
+local ops_screen = require("game.ops_screen.ops_screen")
 local core_manager = require("game.core_manager.core_manager")
 
 local AUTH_FACTORY = "#auth_factory"
@@ -8,6 +9,7 @@ local LOBBY_FACTORY = "#lobby_factory"
 local MATCH_FACTORY = "#match_factory"
 local JOINING_FACTORY = "#joining_factory"
 local LEAVING_FACTORY = "#leaving_factory"
+local OPS_FACTORY = "#ops_factory"
 
 local CORE_MANAGER = "core_manager#core_manager"
 
@@ -22,7 +24,7 @@ local function remove_current_screen(self)
 end
 
 local function create_game_screen(self, factory_id, collection_id, screen_id)
-	print(socket.gettime() .. " [SCREENS_MANAGER] Create " .. screen_id)
+	print(socket.gettime() .. " [SCREENS_MANAGER] Creating " .. screen_id)
 
 	remove_current_screen(self)
 
@@ -58,6 +60,11 @@ local function create_leaving_screen(self)
 	create_game_screen(self, LEAVING_FACTORY, "/leaving_screen", core_manager.LEAVING_SCREEN)
 end
 
+local function create_ops_screen(self, reason)
+	local new_instance_id = create_game_screen(self, OPS_FACTORY, "/ops_screen", core_manager.OPS_SCREEN)
+	ops_screen:set_state(new_instance_id, reason)
+end
+
 function on_message(self, message_id, message, sender)
 	if message_id == hash(screens_messages.CREATE_AUTH_SCREEN) then
 		create_auth_screen(self)
@@ -77,6 +84,10 @@ function on_message(self, message_id, message, sender)
 		
 	elseif message_id == hash(screens_messages.CREATE_LEAVING_SCREEN) then
 		create_leaving_screen(self)
+
+	elseif message_id == hash(screens_messages.CREATE_OPS_SCREEN) then
+		local reason = message.reason
+		create_ops_screen(self, reason)
 		
 	end
 end

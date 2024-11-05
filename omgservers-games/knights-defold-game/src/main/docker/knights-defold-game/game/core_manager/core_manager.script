@@ -3,7 +3,6 @@ local client_manager = require("game.client_manager.client_manager")
 local leaving_screen = require("game.leaving_screen.leaving_screen")
 local joining_screen = require("game.joining_screen.joining_screen")
 local match_screen = require("game.match_screen.match_screen")
-local lobby_screen = require("game.lobby_screen.lobby_screen")
 local core_manager = require("game.core_manager.core_manager")
 local auth_screen = require("game.auth_screen.auth_screen")
 local omgplayer = require("omgservers.omgplayer.omgplayer")
@@ -22,6 +21,14 @@ local function game_started(self)
 
 	-- Show auth screen
 	screens_manager:create_auth_screen(SCREENS_MANAGER)
+end
+
+local function game_failed(self, reason)
+	print(socket.gettime() .. " [CORE_MANAGER] Game failed at " .. os.date() .. ", reason=" ..reason)
+	core_state:change_game_state(core_state.GAME_FAILED)
+
+	-- Show ops screen
+	screens_manager:create_ops_screen(SCREENS_MANAGER, reason)
 end
 
 local function auth_screen_created(self, collection_id)
@@ -129,6 +136,13 @@ local function leaving_requested(self)
 	screens_manager:create_leaving_screen(SCREENS_MANAGER)
 end
 
+local function reset_requested(self)
+	print(socket.gettime() .. " [CORE_MANAGER] Reset was requested at " .. os.date())
+	omgplayer:reset()
+	core_state:reset()
+	game_started(self)
+end
+
 local function set_state(self, step, settings, dangling_players, spawned_players)
 	print(socket.gettime() .. " [CORE_MANAGER] State was received at " .. os.date() .. ", step=" .. step)
 	
@@ -161,18 +175,21 @@ local function leaving_screen_created(self, collection_id)
 	leaving_screen:set_state(self.screen_collection_id, "Leaving")
 end
 
-local function apply_events(self, events)
-	match_screen:apply_events(self.screen_collection_id, events)
+local function ops_screen_created(self, collection_id)
+	print(socket.gettime() .. " [CORE_MANAGER] Ops screen was created at " .. os.date())
 end
 
-local function client_failed(self, reason)
-	print(socket.gettime() .. " [CORE_MANAGER] Client failed at " .. os.date() .. ", reason=" ..reason)
-	core_state:change_game_state(core_state.GAME_FAILED)
+local function apply_events(self, events)
+	match_screen:apply_events(self.screen_collection_id, events)
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash(core_manager.GAME_STARTED) then
 		game_started(self)
+		
+	elseif message_id == hash(core_manager.GAME_FAILED) then
+		local reason = message.reason
+		game_failed(self, reason)
 		
 	elseif message_id == hash(core_manager.SCREEN_CREATED) then
 		local screen_qualifier = message.screen_qualifier
@@ -188,6 +205,8 @@ function on_message(self, message_id, message, sender)
 			match_screen_created(self, collection_id)
 		elseif screen_qualifier == core_manager.LEAVING_SCREEN then
 			leaving_screen_created(self, collection_id)
+		elseif screen_qualifier == core_manager.OPS_SCREEN then
+			ops_screen_created(self, collection_id)
 		else
 			error("[CORE_MANAGER] Unknown screen qualifier was received, screen_qualifier=" .. tostring(screen_qualifier))
 		end
@@ -247,10 +266,9 @@ function on_message(self, message_id, message, sender)
 		
 	elseif message_id == hash(core_manager.LEAVING_REQUESTED) then
 		leaving_requested(self)
-		
-	elseif message_id == hash(core_manager.CLIENT_FAILED) then
-		local reason = message.reason
-		client_failed(self, reason)
+
+	elseif message_id == hash(core_manager.RESET_REQUESTED) then
+		reset_requested(self)
 		
 	end
 end

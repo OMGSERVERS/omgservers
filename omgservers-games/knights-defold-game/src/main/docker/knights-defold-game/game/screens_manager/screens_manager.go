@@ -32,3 +32,9 @@ embedded_components {
   data: "prototype: \"/game/joining_screen/joining_screen.collection\"\n"
   ""
 }
+embedded_components {
+  id: "ops_factory"
+  type: "collectionfactory"
+  data: "prototype: \"/game/ops_screen/ops_screen.collection\"\n"
+  ""
+}

@@ -3,6 +3,10 @@ fonts {
   name: "default"
   font: "/game/game_assets/font.font"
 }
+fonts {
+  name: "font_x2"
+  font: "/game/game_assets/font_x2.font"
+}
 nodes {
   position {
     x: 320.0
@@ -52,7 +56,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "Leaving screen"
-  font: "default"
+  font: "font_x2"
   id: "leaving_state_text"
   parent: "leaving_state"
 }

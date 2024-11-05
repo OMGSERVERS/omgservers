@@ -3,6 +3,7 @@ local core_state = require("game.core_manager.core_state")
 local core_manager
 core_manager = {
 	GAME_STARTED = "game_started",
+	GAME_FAILED = "game_failed",
 	SCREEN_CREATED = "screen_created",
 	SIGNED_UP = "signed_up",
 	SIGNED_IN = "signed_in",
@@ -12,13 +13,14 @@ core_manager = {
 	CONNECTION_UPGRADED = "connection_upgraded",
 	JOINING_REQUESTED = "joining_requested",
 	LEAVING_REQUESTED = "leaving_requested",
-	CLIENT_FAILED = "client_failed",
+	RESET_REQUESTED = "reset_requested",
 	-- Screen qualifiers
 	AUTH_SCREEN = "auth_screen",
 	LOBBY_SCREEN = "lobby_screen",
 	JOINING_SCREEN = "joining_screen",
 	MATCH_SCREEN = "match_screen",
 	LEAVING_SCREEN = "leaving_screen",
+	OPS_SCREEN = "ops_screen",
 	-- Methods
 	get_client_id = function(self)
 		return core_state.client_id
@@ -73,8 +75,12 @@ core_manager = {
 		msg.post(receiver, core_manager.LEAVING_REQUESTED, {
 		})
 	end,
-	client_failed = function(self, receiver, reason)
-		msg.post(receiver, core_manager.CLIENT_FAILED, {
+	reset_requested = function(self, receiver)
+		msg.post(receiver, core_manager.RESET_REQUESTED, {
+		})
+	end,
+	game_failed = function(self, receiver, reason)
+		msg.post(receiver, core_manager.GAME_FAILED, {
 			reason = reason
 		})
 	end,

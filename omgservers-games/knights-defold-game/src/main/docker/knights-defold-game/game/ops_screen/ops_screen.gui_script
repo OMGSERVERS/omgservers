@@ -1,0 +1,47 @@
+local core_manager = require("game.core_manager.core_manager")
+local ops_screen = require("game.ops_screen.ops_screen")
+local druid = require("druid.druid")
+
+local CORE_MANAGER = "/core_manager#core_manager"
+
+local function reset_button(self)
+	core_manager:reset_requested(CORE_MANAGER)
+end
+
+local function set_state_text(text)
+	local state_node = gui.get_node("ops_state_text")
+	gui.set_text(state_node, text)
+end
+
+local function set_state(self, state_text)
+	self.state_text = state_text
+	set_state_text(self.state_text)
+end
+
+function init(self)
+	self.druid = druid.new(self)
+	self.reset_button = self.druid:new_button("reset_button", reset_button)
+
+	print(socket.gettime() .. " [OPS_SCREEN] Initialized")
+end
+
+function final(self)
+	self.druid:final()
+end
+
+function update(self, dt)
+	self.druid:update(dt)
+end
+
+function on_message(self, message_id, message, sender)
+	self.druid:on_message(message_id, message, sender)
+	
+	if message_id == hash(ops_screen.SET_STATE) then
+		local state_text = message.state_text
+		set_state(self, state_text)
+	end
+end
+
+function on_input(self, action_id, action)
+	return self.druid:on_input(action_id, action)
+end

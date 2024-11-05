@@ -3,11 +3,27 @@ fonts {
   name: "default"
   font: "/game/game_assets/font.font"
 }
+fonts {
+  name: "font_x2"
+  font: "/game/game_assets/font_x2.font"
+}
 nodes {
   position {
     x: 320.0
     y: 240.0
   }
+  size {
+    x: 640.0
+    y: 480.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
   size {
     x: 640.0
     y: 480.0
@@ -19,7 +35,18 @@ nodes {
   }
   type: TYPE_BOX
   id: "background"
-  inherit_alpha: true
+  parent: "root"
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 640.0
+    y: 40.0
+  }
+  type: TYPE_BOX
+  id: "auth_state"
+  parent: "root"
+  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -29,10 +56,9 @@ nodes {
   }
   type: TYPE_TEXT
   text: "Auth screen"
-  font: "default"
-  id: "state"
-  parent: "background"
-  inherit_alpha: true
+  font: "font_x2"
+  id: "auth_state_text"
+  parent: "auth_state"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

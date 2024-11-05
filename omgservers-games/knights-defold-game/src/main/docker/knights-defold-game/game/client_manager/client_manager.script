@@ -45,7 +45,7 @@ end
 
 local function failed(self, reason)
 	print(socket.gettime() .. " [CLIENT] Client failed, reason=" .. reason)
-	core_manager:client_failed(CORE_MANAGER, reason)
+	core_manager:game_failed(CORE_MANAGER, reason)
 end
 
 local function send_command(self, message)

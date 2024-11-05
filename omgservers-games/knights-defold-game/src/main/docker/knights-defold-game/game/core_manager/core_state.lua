@@ -12,6 +12,11 @@ core_state = {
 	client_id = nil,
 	profile = nil,
 	-- Methods
+	reset = function(self)
+		self.game_state = nil
+		self.client_id = nil
+		self.profile = nil
+	end,
 	change_game_state = function(self, next_state)
 		local current_state = self.game_state
 		self.game_state = next_state

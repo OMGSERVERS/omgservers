@@ -1,0 +1,10 @@
+name: "ops"
+scale_along_z: 0
+embedded_instances {
+  id: "ops_screen"
+  data: "components {\n"
+  "  id: \"ops_screen\"\n"
+  "  component: \"/game/ops_screen/ops_screen.gui\"\n"
+  "}\n"
+  ""
+}
