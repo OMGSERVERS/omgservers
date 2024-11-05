@@ -29,6 +29,7 @@ omgdispatcher = {
 		return {
 			type = "omgdispatcher",
 			connection = nil,
+			self_disconnection = false,
 			-- Methods
 			connect = function(instance, ws_token, callback)
 				local connection_url = dispatcher_url .. "?ws_token=" .. ws_token
@@ -40,16 +41,14 @@ omgdispatcher = {
 					print(socket.gettime() .. " [OMGPLAYER] Connect to the dispatcher, url=" .. connection_url)
 				end
 
+				instance.self_disconnection = false
 				local connection = websocket.connect(connection_url, params, function(_, _, data)
 					if data.event == websocket.EVENT_DISCONNECTED then
 						if debug_logging then
 							print(socket.gettime() .. " [OMGPLAYER] The connection to the dispatcher was disconnected, message=" .. data.message .. ", code=" .. data.code)
 						end
 
-						local code = data.code
-						-- RFC-6455
-						local is_valid = code < 0 or 1000 <= code and code <= 1003 or 1007 <= code and code <= 1014 or 3000 <= code;
-						if is_valid then
+						if not instance.self_disconnection then
 							state:fail("The connection to the dispatcher was disconnected, message=" .. data.message .. ", code=" .. data.code)
 						end
 
@@ -57,7 +56,7 @@ omgdispatcher = {
 						if debug_logging then
 							print(socket.gettime() .. " [OMGPLAYER] Player was connected to the dispatcher")
 						end
-						
+
 						if callback then
 							callback()
 						end
@@ -74,8 +73,10 @@ omgdispatcher = {
 			end,
 			disconnect = function(instance)
 				if instance.connection then
+					print(socket.gettime() .. " [OMGPLAYER] Close the dispatcher connection")
 					websocket.disconnect(instance.connection)
 					instance.connection = nil
+					instance.self_disconnection = true
 				else
 					if debug_logging then
 						print(socket.gettime() .. " [OMGPLAYER] The connection to the dispatcher was not established, so there was nothing to disconnect.")
