@@ -1,7 +1,11 @@
 script: "/game/match_gui/match_gui.gui_script"
 fonts {
-  name: "font"
+  name: "font_x2"
   font: "/game/game_assets/font_x2.font"
+}
+fonts {
+  name: "font"
+  font: "/game/game_assets/font.font"
 }
 textures {
   name: "game_gui"

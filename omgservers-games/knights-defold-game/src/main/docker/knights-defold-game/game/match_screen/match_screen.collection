@@ -16,6 +16,10 @@ instances {
     z: 512.0
   }
 }
+instances {
+  id: "match_log"
+  prototype: "/game/match_log/match_log.go"
+}
 collection_instances {
   id: "match_background"
   collection: "/game/match_background/match_background.collection"
