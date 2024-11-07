@@ -49,6 +49,8 @@ local function spawn_player(self, client_id, x, y)
 		if controllable then
 			print(socket.gettime() .. " [MATCH_SCREEN] Set camera, target=" .. player_id)
 			match_pointer:enable_pointer(MATCH_POINTER, x, y)
+
+			match_gui:disable_spawn_countdown(MATCH_GUI)
 		end
 	else
 		print(socket.gettime() .. " [MATCH_SCREEN] Client was not found to spawn player, client_id=" .. client_id)
@@ -126,7 +128,7 @@ local function apply_events(self, events)
 			local nickname = event.nickname
 			match_log:player_joined(MATCH_LOG, nickname)
 			create_client(self, client_id, nickname)
-
+			
 		elseif event_qualifier == match_events.PLAYER_SPAWNED then
 			local client_id = event.client_id
 			local x = event.x
@@ -164,6 +166,12 @@ local function apply_events(self, events)
 			end)
 		end
 	end
+end
+
+local function set_spawn_countdown(self, time_to_spawn)
+	print(socket.gettime() .. " [MATCH_SCREEN] Set spawn countdown, time_to_spawn=" .. time_to_spawn)
+	
+	match_gui:enable_spawn_countdown(MATCH_GUI, math.max(0, time_to_spawn))
 end
 
 local function screen_to_world(x, y, z)
@@ -248,6 +256,10 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash(match_messages.APPLY_EVENTS) then
 		local events = message.events
 		apply_events(self, events)
+
+	elseif message_id == hash(match_messages.SET_SPAWN_COUNTDOWN) then
+		local time_to_spawn = message.time_to_spawn
+		set_spawn_countdown(self, time_to_spawn)
 
 	elseif message_id == hash(match_messages.POINTED) then
 		local x = message.x

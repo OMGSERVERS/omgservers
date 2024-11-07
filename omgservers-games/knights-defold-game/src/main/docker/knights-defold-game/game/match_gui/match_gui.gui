@@ -53,5 +53,30 @@ nodes {
   parent: "leave_button"
   size_mode: SIZE_MODE_AUTO
 }
+nodes {
+  position {
+    z: -1.0
+  }
+  size {
+    x: 256.0
+    y: 32.0
+  }
+  type: TYPE_BOX
+  id: "spawn_countdown"
+  parent: "root"
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 256.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "Spawn in  X seconds"
+  font: "font_x2"
+  id: "spawn_countdown_text"
+  parent: "spawn_countdown"
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

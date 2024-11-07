@@ -183,6 +183,10 @@ local function apply_events(self, events)
 	match_screen:apply_events(self.screen_collection_id, events)
 end
 
+local function set_spawn_countdown(self, time_to_spawn)
+	match_screen:set_spawn_countdown(self.screen_collection_id, time_to_spawn)
+end
+
 function on_message(self, message_id, message, sender)
 	if message_id == hash(core_manager.GAME_STARTED) then
 		game_started(self)
@@ -252,6 +256,10 @@ function on_message(self, message_id, message, sender)
 		elseif message_qualifier == server_messages.APPLY_EVENTS then
 			local events = message.events
 			apply_events(self, events)
+
+		elseif message_qualifier == server_messages.SET_SPAWN_COUNTDOWN then
+			local time_to_spawn = message.time_to_spawn
+			set_spawn_countdown(self, time_to_spawn)
 			
 		else
 			error("[CORE_MANAGER] Unknown message qualifier was received, message_qualifier=" .. tostring(message_qualifier))

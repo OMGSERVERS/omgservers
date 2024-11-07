@@ -3,6 +3,7 @@ server_messages = {
 	SET_PROFILE = "set_profile",
 	SET_STATE = "set_state",
 	APPLY_EVENTS = "apply_events",
+	SET_SPAWN_COUNTDOWN = "set_spawn_countdown",
 	-- Methods
 	set_profile = function(self, profile)
 		return {
@@ -25,6 +26,12 @@ server_messages = {
 			events = events,
 		}
 	end,
+	set_spawn_countdown = function(self, time_to_spawn)
+		return {
+			qualifier = server_messages.SET_SPAWN_COUNTDOWN,
+			time_to_spawn = time_to_spawn,
+		}
+	end
 }
 
 return server_messages

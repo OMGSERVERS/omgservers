@@ -2,6 +2,7 @@ local match_screen
 match_screen = {
 	SET_STATE = "set_state",
 	APPLY_EVENTS = "apply_events",
+	SET_SPAWN_COUNTDOWN = "set_spawn_countdown",
 	POINTED = "pointed",
 	-- Methods
 	set_state = function(self, recipient, settings, dangling_players, spawned_players)
@@ -14,6 +15,11 @@ match_screen = {
 	apply_events = function(self, recipient, events)
 		msg.post(recipient, match_screen.APPLY_EVENTS, {
 			events = events,
+		})
+	end,
+	set_spawn_countdown = function(self, recipient, time_to_spawn)
+		msg.post(recipient, match_screen.SET_SPAWN_COUNTDOWN, {
+			time_to_spawn = time_to_spawn,
 		})
 	end,
 	pointed = function(self, recipient, x, y)

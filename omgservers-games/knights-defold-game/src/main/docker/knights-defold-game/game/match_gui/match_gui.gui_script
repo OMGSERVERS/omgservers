@@ -10,9 +10,26 @@ local function leave_button(self)
 	core_manager:leaving_requested(CORE_MANAGER)
 end
 
+local function update_spawn_countdown(self, time_to_spawn)
+	gui.set_text(self.spawn_countdown_node, "Spawn in " .. math.floor(time_to_spawn) .. " sec.")
+end
+
+local function enable_spawn_countdown(self, time_to_spawn)
+	gui.set_enabled(self.spawn_countdown_node, true)
+	update_spawn_countdown(self, time_to_spawn)
+	self.time_to_spawn = time_to_spawn
+end
+
+local function disable_spawn_countdown(self)
+	gui.set_enabled(self.spawn_countdown_node, false)
+end
+
 function init(self)
 	self.druid = druid.new(self)
 	self.button = self.druid:new_button("leave_button", leave_button)
+
+	self.spawn_countdown_node = gui.get_node("spawn_countdown_text")
+	disable_spawn_countdown(self)
 	
 	print(socket.gettime() .. " [MATCH_GUI] Initialized")
 end
@@ -23,10 +40,23 @@ end
 
 function update(self, dt)
 	self.druid:update(dt)
+
+	if gui.is_enabled(self.spawn_countdown_node) then
+		self.time_to_spawn = math.max(0, self.time_to_spawn - dt)
+		update_spawn_countdown(self, self.time_to_spawn)
+	end
 end
 
 function on_message(self, message_id, message, sender)
 	self.druid:on_message(message_id, message, sender)
+
+	if message_id == hash(match_gui.ENABLE_SPAWN_COUNTDOWN) then
+		local time_to_spawn = message.time_to_spawn
+		enable_spawn_countdown(self, time_to_spawn)
+
+	elseif message_id == hash(match_gui.DISABLE_SPAWN_COUNTDOWN) then
+		disable_spawn_countdown(self)
+	end
 end
 
 function on_input(self, action_id, action)

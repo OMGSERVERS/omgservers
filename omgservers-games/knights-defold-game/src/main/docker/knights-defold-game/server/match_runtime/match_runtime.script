@@ -80,8 +80,21 @@ local function request_state(self, client_id)
 end
 
 local function request_spawn(self, client_id)
-	self.spawn_requests[client_id] = true
-	print(socket.gettime() .. " [MATCH_RUNTIME] Spawn request was set, client_id=" .. client_id)
+	if not self.spawn_requests[client_id] then
+		local spawn_steps = match_settings.constants.SPAWN_STEPS
+		local simulation_interval = match_settings.constants.SIMULATION_INTERVAL
+		-- time to finish current step
+		local step_delay = math.max(0, simulation_interval - self.step_timer)
+		local total_delay = step_delay + spawn_steps * simulation_interval
+		
+		self.spawn_requests[client_id] = self.match_timer + total_delay
+		print(socket.gettime() .. " [MATCH_RUNTIME] Spawn request was set, client_id=" .. client_id)
+
+		local server_message = server_messages:set_spawn_countdown(total_delay)
+		omgserver:respond_text_message(client_id, json.encode(server_message))
+	else
+		print(socket.gettime() .. " [MATCH_RUNTIME] Spawn request was already received, client_id=" .. client_id)
+	end
 end
 
 local function request_leave(self, client_id)
@@ -115,24 +128,26 @@ local function simulate(self)
 	simulation_service:simulate()
 	
 	-- Handle spawn requests
-	local self_spawn_requests = self.spawn_requests
-	for client_id, _ in pairs(self_spawn_requests) do
-		local player_instance = players_container:get_player(client_id)
-		if player_instance then
-			local spawn_x = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_WIDTH - match_settings.constants.MATCH_BORDER * 2)
-			local spawn_y = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_HEIGHT - match_settings.constants.MATCH_BORDER * 2)
-			local spawn_position = vector_factory:create(spawn_x, spawn_y)
-			player_instance:spawn_player(spawn_position)
+	for client_id, spawn_time in pairs(self.spawn_requests) do
+		if self.match_timer >= spawn_time then
+			local player_instance = players_container:get_player(client_id)
+			if player_instance then
+				local spawn_x = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_WIDTH - match_settings.constants.MATCH_BORDER * 2)
+				local spawn_y = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_HEIGHT - match_settings.constants.MATCH_BORDER * 2)
+				local spawn_position = vector_factory:create(spawn_x, spawn_y)
+				player_instance:spawn_player(spawn_position)
 
-			local match_event = match_events:player_spawned(client_id, spawn_position.x, spawn_position.y)
-			events_container:add_event(match_event)
+				local match_event = match_events:player_spawned(client_id, spawn_position.x, spawn_position.y)
+				events_container:add_event(match_event)
 
-			print(socket.gettime() .. " [MATCH_RUNTIME] Player was spawned, client_id=" .. client_id .. ", x=" .. spawn_position.x .. ", y=" .. spawn_position.y)
-		else
-			print(socket.gettime() .. " [MATCH_RUNTIME] Player was not found to spawn, client_id=" .. client_id)
+				print(socket.gettime() .. " [MATCH_RUNTIME] Player was spawned, client_id=" .. client_id .. ", x=" .. spawn_position.x .. ", y=" .. spawn_position.y)
+			else
+				print(socket.gettime() .. " [MATCH_RUNTIME] Player was not found to spawn, client_id=" .. client_id)
+			end
+
+			self.spawn_requests[client_id] = nil
 		end
 	end
-	self.spawn_requests = {}
 
 	local all_events = events_container:pull_events()
 	local client_ids = players_container:get_client_ids()
