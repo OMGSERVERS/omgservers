@@ -16,11 +16,11 @@
   :code {
     :find {
       :replacement "set_spawn_countdown"
-      :term "constants.SPAWN_"
+      :term "response_handler"
     }
   }
   :run {
-    :instance-count 2
+    :instance-count 1
   }
   :search-in-files {
     :exts ""
@@ -29,22 +29,6 @@
   }
   :workflow {
     :recent-files [
-      [
-        "/game/leaving_screen/leaving_screen.gui"
-        :scene
-      ]
-      [
-        "/game/leaving_screen/leaving_screen.collection"
-        :scene
-      ]
-      [
-        "/game/joining_screen/joining_screen.gui"
-        :scene
-      ]
-      [
-        "/game/ops_screen/ops_screen.gui"
-        :scene
-      ]
       [
         "/game/lobby_screen/lobby_screen.gui"
         :scene
@@ -87,10 +71,6 @@
       ]
       [
         "/game/match_player/match_player.script"
-        :code
-      ]
-      [
-        "/omgservers/omgplayer/omghttp.lua"
         :code
       ]
       [
@@ -142,20 +122,40 @@
         :code
       ]
       [
-        "/game/match_log/match_log.gui"
+        "/game/match_gui/match_gui.gui"
         :scene
-      ]
-      [
-        "/server/match_runtime/match_runtime.script"
-        :code
       ]
       [
         "/server/match_runtime/match_settings.lua"
         :code
       ]
       [
-        "/game/match_gui/match_gui.gui"
+        "/server/match_runtime/match_runtime.script"
+        :code
+      ]
+      [
+        "/game/match_log/match_log.gui"
         :scene
+      ]
+      [
+        "/omgservers/omgplayer/omghttp.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgplayer/omgclient.lua"
+        :code
+      ]
+      [
+        "/game/ops_screen/ops_screen.gui"
+        :scene
+      ]
+      [
+        "/game/ops_screen/ops_screen.gui_script"
+        :code
+      ]
+      [
+        "/game/client_manager/client_manager.script"
+        :code
       ]
     ]
   }

@@ -64,13 +64,13 @@ omgclient = {
 					end
 				end
 				
-				local failure_handler = function(response_status, response_body)
+				local failure_handler = function(response_status, decoded_body, encoding_error)
 					local inlined_body
-					if response_body then
-						inlined_body = json.encode(response_body)
+					if decoded_body then
+						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("user was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("user was not created, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
 				end
 
 				local retries = 2
@@ -107,13 +107,13 @@ omgclient = {
 					end
 				end
 				
-				local failure_handler = function(response_status, decoded_body)
+				local failure_handler = function(response_status, decoded_body, encoding_error)
 					local inlined_body
 					if decoded_body then
 						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("token was not received, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("token was not received, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
 				end
 
 				local retries = 2
@@ -144,13 +144,13 @@ omgclient = {
 					end
 				end
 				
-				local failure_handler = function(response_status, response_body)
+				local failure_handler = function(response_status, decoded_body, encoding_error)
 					local inlined_body
-					if response_body then
-						inlined_body = json.encode(response_body)
+					if decoded_body then
+						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("client was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("client was not created, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
 				end
 
 				local retries = 2
@@ -184,13 +184,13 @@ omgclient = {
 					end
 				end
 				
-				local failure_handler = function(response_status, response_body)
+				local failure_handler = function(response_status, decoded_body, encoding_error)
 					local inlined_body
-					if response_body then
-						inlined_body = json.encode(response_body)
+					if decoded_body then
+						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("interchange failed, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					state:fail("interchange failed, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
 				end
 
 				local retries = 4

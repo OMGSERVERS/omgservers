@@ -58,13 +58,13 @@ omgclient = {
 					end
 				end
 
-				local failure_handler = function(response_status, response_body)
+				local failure_handler = function(response_status, decoded_body, decoding_error)
 					local inlined_body
-					if response_body then
-						inlined_body = json.encode(response_body)
+					if decoded_body then
+						inlined_body = json.encode(decoded_body)
 					end
 
-					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "token was not created, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "token was not created, response_status=" .. response_status .. ", decoded_body=" .. inlined_body .. ", decoding_error=" .. decoding_error)
 				end
 
 				local api_token = nil
@@ -99,13 +99,13 @@ omgclient = {
 					end
 				end
 
-				local failure_handler = function(response_status, response_body)
+				local failure_handler = function(response_status, decoded_body, decoding_error)
 					local inlined_body
-					if response_body then
-						inlined_body = json.encode(response_body)
+					if decoded_body then
+						inlined_body = json.encode(decoded_body)
 					end
 
-					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "interchange failed, response_status=" .. response_status .. ", response_body=" .. inlined_body)
+					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "interchange failed, response_status=" .. response_status .. ", decoded_body=" .. inlined_body .. ", decoding_error=" .. decoding_error)
 				end
 
 				local api_token = instance.api_token

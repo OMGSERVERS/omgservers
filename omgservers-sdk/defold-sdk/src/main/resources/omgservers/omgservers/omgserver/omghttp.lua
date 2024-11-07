@@ -20,6 +20,14 @@ omghttp = {
 		return {
 			type = "omghttp",
 			-- Methods
+			decode_response = function(instance, response_body)
+				local status, result = pcall(json.decode, response_body)
+				if status then
+					return result
+				else
+					return nil, result
+				end
+			end,
 			build_handler = function(instance, response_handler, failure_handler)
 				return function(_, id, response)
 					local response_status = response.status
@@ -29,15 +37,15 @@ omghttp = {
 						print(socket.gettime() .. " [OMGSERVER] Response, status=" .. response_status .. ", body=" .. response_body)
 					end
 
-					local decoded_body
-					if response_body then
-						decoded_body = json.decode(response_body)
-					end
-					
-					if response_status < 300 then
-						response_handler(response_status, decoded_body)
+					local decoded_body, decoding_error = instance:decode_response(response_body)
+					if decoding_error then
+						failure_handler(response_status, nil, decoding_error)
 					else
-						failure_handler(response_status, decoded_body)
+						if response_status >= 200 and response_status < 300 then
+							response_handler(response_status, decoded_body)
+						else
+							failure_handler(response_status, decoded_body)
+						end
 					end
 				end
 			end,

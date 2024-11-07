@@ -13,10 +13,20 @@ omghttp = {
 		assert(options.config.type == "omgconfig", "The type of config must be omgconfig")
 
 		local trace_logging = options.config.trace_logging
+
+		local state = options.state
 		
 		return {
 			type = "omghttp",
 			-- Methods
+			decode_response = function(instance, response_body)
+				local status, result = pcall(json.decode, response_body)
+				if status then
+					return result
+				else
+					return nil, result
+				end
+			end,
 			build_final_handler = function(instance, response_handler, failure_handler)
 				return function(_, id, response)
 					local response_status = response.status
@@ -26,15 +36,15 @@ omghttp = {
 						print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
 					end
 
-					local decoded_body
-					if response_body then
-						decoded_body = json.decode(response_body)
-					end
-
-					if response_status < 300 then
-						response_handler(response_status, decoded_body)
+					local decoded_body, decoding_error = instance:decode_response(response_body)
+					if decoding_error then
+						failure_handler(response_status, nil, decoding_error)
 					else
-						failure_handler(response_status, decoded_body)
+						if response_status >= 200 and response_status < 300 then
+							response_handler(response_status, decoded_body)
+						else
+							failure_handler(response_status, decoded_body)
+						end
 					end
 				end
 			end,
@@ -47,22 +57,22 @@ omghttp = {
 						print(socket.gettime() .. " [OMGPLAYER] Response, status=" .. response_status .. ", body=" .. response_body)
 					end
 
-					local decoded_body
-					if response_body then
-						decoded_body = json.decode(response_body)
-					end
-
-					if response_status < 300 then
-						response_handler(response_status, decoded_body)
+					local decoded_body, decoding_error = instance:decode_response(response_body)
+					if decoding_error then
+						failure_handler(response_status, nil, decoding_error)
 					else
-						local handler
-						if retries > 0 then
-							handler = instance:build_retriable_handler(url, method, request_headers, request_body, response_handler, failure_handler, retries - 1)
+						if response_status >= 200 and response_status < 300 then
+							response_handler(response_status, decoded_body)
 						else
-							handler = instance:build_final_handler(response_handler, failure_handler)
-						end
+							local handler
+							if retries > 0 then
+								handler = instance:build_retriable_handler(url, method, request_headers, request_body, response_handler, failure_handler, retries - 1)
+							else
+								handler = instance:build_final_handler(response_handler, failure_handler)
+							end
 
-						http.request(url, method, handler, request_headers, request_body)
+							http.request(url, method, handler, request_headers, request_body)
+						end
 					end
 				end
 			end,
