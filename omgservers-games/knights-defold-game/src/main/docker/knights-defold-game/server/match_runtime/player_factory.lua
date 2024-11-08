@@ -6,36 +6,36 @@ player = {
 	create = function(self, client_id, nickname)
 		return {
 			client_id = client_id,
-			newly_created = true,
 			nickname = nickname,
+			score = 0,
 			position = nil,
 			movement = nil,
 			was_killed = false,
 			-- Methods
-			spawn_player = function(player_instance, position)
-				player_instance.position = position:clone()
-				player_instance.was_killed = false
+			spawn_player = function(instance, position)
+				instance.position = position:clone()
+				instance.was_killed = false
 			end,
-			set_movement = function(player_instance, target_position)
-				player_instance.movement = movement_factory:create(player_instance.client_id, player_instance.position, target_position)
+			set_movement = function(instance, target_position)
+				instance.movement = movement_factory:create(instance.client_id, instance.position, target_position)
 			end,
-			finish_movement = function(player_instance)
-				if player_instance.movement then
-					local final_position = player_instance.movement.to_position
-					player_instance.position = final_position:clone()
+			finish_movement = function(instance)
+				if instance.movement then
+					local final_position = instance.movement.to_position
+					instance.position = final_position:clone()
 				end
-				player_instance.movement = nil
+				instance.movement = nil
 			end,
-			interrupt_movement = function(player_instance, final_position)
-				if player_instance.movement then
-					player_instance.movement = movement_factory:create(player_instance.client_id, player_instance.position, final_position)
+			interrupt_movement = function(instance, final_position)
+				if instance.movement then
+					instance.movement = movement_factory:create(instance.client_id, instance.position, final_position)
 				end
 			end,
-			kill_player = function(player_instance)
-				player_instance.was_killed = true
+			kill_player = function(instance)
+				instance.was_killed = true
 			end,
-			reset_player = function(player_instance)
-				player_instance.newly_created = false
+			increase_score = function(instance)
+				instance.score = instance.score + 1
 			end,
 		}
 	end,

@@ -96,12 +96,14 @@ players_container = {
 			if position then
 				spawned_players[client_id] = {
 					nickname = player.nickname,
+					score = player.score,
 					x = position.x,
 					y = position.y,
 				}
 			else
 				dangling_players[client_id] = {
 					nickname = player.nickname,
+					score = player.score,
 				}
 			end
 		end

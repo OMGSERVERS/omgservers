@@ -20,6 +20,10 @@ instances {
   id: "match_log"
   prototype: "/game/match_log/match_log.go"
 }
+instances {
+  id: "match_top"
+  prototype: "/game/match_top/match_top.go"
+}
 collection_instances {
   id: "match_background"
   collection: "/game/match_background/match_background.collection"

@@ -1,7 +1,7 @@
 local match_log = require("game.match_log.match_log")
 
-local MAX_LOGS_COUNT = 8
-local SCROLL_DOWN_DELAY = 8
+local MAX_NODE_INDEX = 8
+local SCROLL_DOWN_DELAY = 3
 
 local function get_log_node(self, index)
 	return gui.get_node("match_log_" .. index .. "_text")
@@ -21,7 +21,7 @@ local function disable_log(self, index)
 end
 
 local function disable_all_logs(self)
-	for index = 1, MAX_LOGS_COUNT do
+	for index = 1, MAX_NODE_INDEX do
 		disable_log(self, index)
 	end
 end
@@ -31,7 +31,7 @@ local function scroll_down(self)
 	
 	disable_log(self, 1)
 	
-	for index = 2, MAX_LOGS_COUNT do
+	for index = 2, MAX_NODE_INDEX do
 		local this_node = get_log_node(self, index)
 		if gui.is_enabled(this_node) then
 			disable_log(self, index)
@@ -45,7 +45,7 @@ local function scroll_down(self)
 end
 
 local function add_log(self, text)
-	if self.empty_log_index > MAX_LOGS_COUNT then
+	if self.empty_log_index > MAX_NODE_INDEX then
 		scroll_down(self)
 	end
 	
@@ -75,11 +75,11 @@ local function player_killed(self, killed, killer)
 	add_log(self, "Player " .. killer .. " killed " .. killed)
 end
 
-function init(self)
-	print(socket.gettime() .. " [MATCH_LOG] Initialized")
+function init(self)	
 	disable_all_logs(self)
 	self.empty_log_index = 1
 	self.timer = 0
+	print(socket.gettime() .. " [MATCH_LOG] Initialized")
 end
 
 function update(self, dt)

@@ -5,6 +5,7 @@ local match_player = require("game.match_player.match_player")
 local core_manager = require("game.core_manager.core_manager")
 local match_gui = require("game.match_gui.match_gui")
 local match_log = require("game.match_log.match_log")
+local match_top = require("game.match_top.match_top")
 local game_messages = require("common.game_messages")
 local match_events = require("common.match_events")
 
@@ -14,13 +15,17 @@ local MATCH_POINTER = "match_pointer/container"
 local MATCH_CAMERA = "match_camera"
 local MATCH_GUI = "match_gui"
 local MATCH_LOG = "match_log"
+local MATCH_TOP = "match_top"
 
-local function create_client(self, client_id, nickname)
+local function create_client(self, client_id, nickname, score)
 	self.clients[client_id] = {
-		nickname = nickname
+		nickname = nickname,
+		score = score,
 	}
 
 	print(socket.gettime() .. " [MATCH_SCREEN] Client was created, client_id=" .. client_id .. ", nickname=" .. nickname)
+
+	match_top:add_player(MATCH_TOP, client_id, nickname, score)
 	
 	if client_id == core_manager:get_client_id() then
 		-- Send initial spawn request
@@ -84,7 +89,8 @@ local function delete_player(self, client_id)
 	if player_id then
 		-- kill if player stil exists
 		kill_player(self, client_id)
-		
+
+		match_top:delete_player(MATCH_TOP, client_id)
 	end
 end
 
@@ -104,14 +110,16 @@ local function set_state(self, settings, dangling_players, spawned_players)
 	
 	for client_id, player in pairs(dangling_players) do
 		local nickname = player.nickname
-		create_client(self, client_id, nickname)
+		local score = player.score
+		create_client(self, client_id, nickname, score)
 	end
 	
 	for client_id, player in pairs(spawned_players) do
 		local nickname = player.nickname
+		local score = player.score
 		local x = player.x
 		local y = player.y
-		create_client(self, client_id, nickname)
+		create_client(self, client_id, nickname, score)
 		spawn_player(self, client_id, x, y)
 	end
 end
@@ -127,7 +135,7 @@ local function apply_events(self, events)
 			local client_id = event.client_id
 			local nickname = event.nickname
 			match_log:player_joined(MATCH_LOG, nickname)
-			create_client(self, client_id, nickname)
+			create_client(self, client_id, nickname, 0)
 			
 		elseif event_qualifier == match_events.PLAYER_SPAWNED then
 			local client_id = event.client_id
@@ -163,6 +171,7 @@ local function apply_events(self, events)
 				kill_player(self, killed_client_id)
 
 				match_log:player_killed(MATCH_LOG, self.clients[killed_client_id].nickname, self.clients[by_client_id].nickname)
+				match_top:increase_score(MATCH_TOP, by_client_id)
 			end)
 		end
 	end

@@ -80,6 +80,7 @@ simulation_service = {
 						print(socket.gettime() .. " [SIMULATOR] Player1 kills player2, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
 						killers[client_1] = true
 						-- hit player_2 by player_1
+						player_1:increase_score()
 						player_2:kill_player()
 						local match_event = match_events:player_killed(client_2, client_1)
 						events_container:add_event(match_event)
@@ -91,6 +92,7 @@ simulation_service = {
 						killers[client_2] = true
 						-- hit player_1 by player_2
 						player_1:kill_player()
+						player_2:increase_score()
 						local match_event = match_events:player_killed(client_1, client_2)
 						events_container:add_event(match_event)
 
@@ -100,7 +102,9 @@ simulation_service = {
 						killers[client_1] = true
 						killers[client_2] = true
 						player_1:kill_player()
+						player_1:increase_score()
 						player_2:kill_player()
+						player_2:increase_score()
 						local match_event_1 = match_events:player_killed(client_1, client_2)
 						events_container:add_event(match_event_1)
 						local match_event_2 = match_events:player_killed(client_2, client_1)

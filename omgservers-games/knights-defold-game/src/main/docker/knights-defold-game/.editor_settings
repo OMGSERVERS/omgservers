@@ -15,127 +15,23 @@
   }
   :code {
     :find {
-      :replacement "set_spawn_countdown"
-      :term "response_handler"
+      :replacement "match_top"
+      :term "create_client"
     }
   }
   :run {
-    :instance-count 1
+    :instance-count 2
   }
   :search-in-files {
     :exts ""
     :include-libraries false
-    :term " -1"
+    :term ":add_player"
   }
   :workflow {
     :recent-files [
       [
-        "/game/lobby_screen/lobby_screen.gui"
-        :scene
-      ]
-      [
-        "/omgservers/omgplayer/omginstance.lua"
-        :code
-      ]
-      [
-        "/game.project"
-        :text
-      ]
-      [
-        "/server/server_manager/server_manager.script"
-        :code
-      ]
-      [
-        "/omgservers/omgplayer/omgprocess.lua"
-        :code
-      ]
-      [
-        "/omgservers/omgplayer/omgdispatcher.lua"
-        :code
-      ]
-      [
-        "/game/match_gui/match_gui.go"
-        :scene
-      ]
-      [
-        "/game/match_player/match_player.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/simulation_service.lua"
-        :code
-      ]
-      [
-        "/game/match_log/match_log.go"
-        :scene
-      ]
-      [
-        "/game/match_player/match_player.script"
-        :code
-      ]
-      [
-        "/server/match_runtime/simulation_factory.lua"
-        :code
-      ]
-      [
-        "/game/auth_screen/auth_screen.gui_script"
-        :code
-      ]
-      [
-        "/game/match_screen/match_screen.collection"
-        :scene
-      ]
-      [
-        "/game/match_log/match_log.gui_script"
-        :code
-      ]
-      [
-        "/common/server_messages.lua"
-        :code
-      ]
-      [
-        "/game/match_log/match_log.lua"
-        :code
-      ]
-      [
-        "/game/match_gui/match_gui.lua"
-        :code
-      ]
-      [
-        "/game/match_screen/match_screen.lua"
-        :code
-      ]
-      [
-        "/common/match_events.lua"
-        :code
-      ]
-      [
         "/game/core_manager/core_manager.script"
         :code
-      ]
-      [
-        "/game/match_gui/match_gui.gui_script"
-        :code
-      ]
-      [
-        "/game/match_screen/match_screen.script"
-        :code
-      ]
-      [
-        "/game/match_gui/match_gui.gui"
-        :scene
-      ]
-      [
-        "/server/match_runtime/match_settings.lua"
-        :code
-      ]
-      [
-        "/server/match_runtime/match_runtime.script"
-        :code
-      ]
-      [
-        "/game/match_log/match_log.gui"
-        :scene
       ]
       [
         "/omgservers/omgplayer/omghttp.lua"
@@ -155,6 +51,110 @@
       ]
       [
         "/game/client_manager/client_manager.script"
+        :code
+      ]
+      [
+        "/game/match_top/match_log.lua"
+        :code
+      ]
+      [
+        "/game/match_top/match_log.gui_script"
+        :code
+      ]
+      [
+        "/game/match_top/match_log.gui"
+        :scene
+      ]
+      [
+        "/game/match_top/match_log.go"
+        :scene
+      ]
+      [
+        "/game/match_screen/match_screen.collection"
+        :scene
+      ]
+      [
+        "/game/match_gui/match_gui.lua"
+        :code
+      ]
+      [
+        "/game/match_gui/match_gui.gui"
+        :scene
+      ]
+      [
+        "/game/match_gui/match_gui.gui_script"
+        :code
+      ]
+      [
+        "/omgservers/omgplayer/omgmessages.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/simulation_service.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_top.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/player_factory.lua"
+        :code
+      ]
+      [
+        "/game/match_log/match_log.gui"
+        :scene
+      ]
+      [
+        "/game/match_top/match_top.gui"
+        :scene
+      ]
+      [
+        "/game/match_top/match_top.go"
+        :scene
+      ]
+      [
+        "/common/match_events.lua"
+        :code
+      ]
+      [
+        "/common/server_messages.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_runtime.script"
+        :code
+      ]
+      [
+        "/game/match_screen/match_screen.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/players_container.lua"
+        :code
+      ]
+      [
+        "/game/match_log/match_log.gui_script"
+        :code
+      ]
+      [
+        "/game/match_log/match_log.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_settings.lua"
+        :code
+      ]
+      [
+        "/game/match_screen/match_screen.script"
+        :code
+      ]
+      [
+        "/game/match_top/match_top.gui_script"
+        :code
+      ]
+      [
+        "/game/match_top/match_top.lua"
         :code
       ]
     ]
