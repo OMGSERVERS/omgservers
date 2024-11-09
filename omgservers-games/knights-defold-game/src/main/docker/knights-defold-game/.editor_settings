@@ -16,7 +16,7 @@
   :code {
     :find {
       :replacement "match_top"
-      :term "create_client"
+      :term "mistake_1"
     }
   }
   :run {
@@ -25,22 +25,10 @@
   :search-in-files {
     :exts ""
     :include-libraries false
-    :term ":add_player"
+    :term "collision_factory"
   }
   :workflow {
     :recent-files [
-      [
-        "/game/core_manager/core_manager.script"
-        :code
-      ]
-      [
-        "/omgservers/omgplayer/omghttp.lua"
-        :code
-      ]
-      [
-        "/omgservers/omgplayer/omgclient.lua"
-        :code
-      ]
       [
         "/game/ops_screen/ops_screen.gui"
         :scene
@@ -90,10 +78,6 @@
         :code
       ]
       [
-        "/server/match_runtime/simulation_service.lua"
-        :code
-      ]
-      [
         "/server/match_runtime/match_top.lua"
         :code
       ]
@@ -103,10 +87,6 @@
       ]
       [
         "/game/match_log/match_log.gui"
-        :scene
-      ]
-      [
-        "/game/match_top/match_top.gui"
         :scene
       ]
       [
@@ -142,10 +122,6 @@
         :code
       ]
       [
-        "/server/match_runtime/match_settings.lua"
-        :code
-      ]
-      [
         "/game/match_screen/match_screen.script"
         :code
       ]
@@ -155,6 +131,30 @@
       ]
       [
         "/game/match_top/match_top.lua"
+        :code
+      ]
+      [
+        "/game/match_top/match_top.gui"
+        :scene
+      ]
+      [
+        "/server/match_runtime/movement_factory.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/simulation_service.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/collision_factory.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/simulation_factory.lua"
+        :code
+      ]
+      [
+        "/server/match_runtime/match_settings.lua"
         :code
       ]
     ]

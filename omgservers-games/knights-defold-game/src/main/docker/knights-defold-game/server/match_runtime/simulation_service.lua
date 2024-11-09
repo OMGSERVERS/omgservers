@@ -28,6 +28,7 @@ simulation_service = {
 				if player_movement then
 					local simulated_position = player_movement:simulate_movement(simulation_distance)
 					simulation_instance:add_simulated_position(client_id, simulated_position)
+					simulation_instance:add_target_position(client_id, player_movement.to_position)
 				end
 			end
 
@@ -59,23 +60,25 @@ simulation_service = {
 					local movement_1 = player_1.movement
 					local killer_1 = killers[client_1]
 					local distance_1 = collision.distance_1 >= collision.distance_2 + simulation_step
+					local mistake_1 = collision.mistake_1 <= collision.mistake_2
 
 					local movement_2 = player_2.movement
 					local killer_2 = killers[client_2]
 					local distance_2 = collision.distance_2 >= collision.distance_1 + simulation_step
-
+					local mistake_2 = collision.mistake_2 < collision.mistake_1
 					
 					-- Player 1 moved, but player 2 already killed somebody else -> player 1 is winner
 					local winner_1_type_1 = movement_1 and not killer_1 and killer_2
-					-- Player 1 moved while moved longer path than player 2 -> player 1 is winner
+					-- Player 1 moved + didn't kill anybody yet + made path longer than player 2
 					local winner_1_type_2 = movement_1 and not killer_1 and distance_1
+					-- Player 1 moved + didn't kill anybody yet + have predicted way of player 2 more accurate
+					local winner_1_type_3 = movement_1 and not killer_1 and mistake_1
 
 					local winner_2_type_1 = movement_2 and not killer_2 and killer_1
 					local winner_2_type_2 = movement_2 and not killer_2 and distance_2
+					local winner_2_type_3 = movement_2 and not killer_2 and mistake_2
 
-					local mutual_kill_type_1 = movement_1 and movement_2 and not killer_1 and not killer_2
-
-					if winner_1_type_1 or winner_1_type_2 then
+					if winner_1_type_1 or winner_1_type_2 or winner_1_type_3 then
 						-- Player 1 is winner
 						print(socket.gettime() .. " [SIMULATOR] Player1 kills player2, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
 						killers[client_1] = true
@@ -85,8 +88,7 @@ simulation_service = {
 						local match_event = match_events:player_killed(client_2, client_1)
 						events_container:add_event(match_event)
 						
-						
-					elseif winner_2_type_1 or winner_2_type_2 then
+					elseif winner_2_type_1 or winner_2_type_2 or winner_2_type_3 then
 						-- Player 2 is winner
 						print(socket.gettime() .. " [SIMULATOR] Player2 kills player1, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
 						killers[client_2] = true
@@ -95,20 +97,7 @@ simulation_service = {
 						player_2:increase_score()
 						local match_event = match_events:player_killed(client_1, client_2)
 						events_container:add_event(match_event)
-
-					elseif mutual_kill_type_1 then
-						-- Mutual kill
-						print(socket.gettime() .. " [SIMULATOR] Mutual kill, step_index=" .. step_index .. ", client_1=" .. client_1 .. ", client_2=" .. client_2)
-						killers[client_1] = true
-						killers[client_2] = true
-						player_1:kill_player()
-						player_1:increase_score()
-						player_2:kill_player()
-						player_2:increase_score()
-						local match_event_1 = match_events:player_killed(client_1, client_2)
-						events_container:add_event(match_event_1)
-						local match_event_2 = match_events:player_killed(client_2, client_1)
-						events_container:add_event(match_event_2)
+						
 					end
 				end
 			end
