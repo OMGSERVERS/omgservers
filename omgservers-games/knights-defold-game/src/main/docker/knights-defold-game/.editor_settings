@@ -20,7 +20,7 @@
     }
   }
   :run {
-    :instance-count 1
+    :instance-count 2
   }
   :search-in-files {
     :exts ""
@@ -118,10 +118,6 @@
         :code
       ]
       [
-        "/server/match_runtime/match_settings.lua"
-        :code
-      ]
-      [
         "/game/match_screen/match_screen.script"
         :code
       ]
@@ -156,6 +152,10 @@
       [
         "/game/match_log/match_log.go"
         :scene
+      ]
+      [
+        "/server/match_runtime/match_settings.lua"
+        :code
       ]
     ]
   }
