@@ -16,11 +16,15 @@ nodes {
     x: 256.0
     y: 120.0
   }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "root"
   pivot: PIVOT_SW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
   alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
@@ -29,11 +33,15 @@ nodes {
     x: 256.0
     y: 24.0
   }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "match_log_1"
   pivot: PIVOT_SW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -60,11 +68,15 @@ nodes {
     x: 256.0
     y: 24.0
   }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "match_log_2"
   pivot: PIVOT_SW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -91,11 +103,15 @@ nodes {
     x: 256.0
     y: 24.0
   }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "match_log_3"
   pivot: PIVOT_SW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -122,11 +138,15 @@ nodes {
     x: 256.0
     y: 24.0
   }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "match_log_4"
   pivot: PIVOT_SW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -153,11 +173,15 @@ nodes {
     x: 256.0
     y: 24.0
   }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
   type: TYPE_BOX
   id: "match_log_5"
   pivot: PIVOT_SW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {

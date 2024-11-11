@@ -6,22 +6,29 @@ local function get_top_node(self, index)
 	if self.top_nodes[index] then
 		return self.top_nodes[index]
 	else
-		local gui_node = gui.get_node("match_top_" .. index .. "_text")
-		self.top_nodes[index] = gui_node
-		return gui_node
+		local background_node = gui.get_node("match_top_" .. index)
+		local text_node = gui.get_node("match_top_" .. index .. "_text")
+		local top_node = {
+			background = background_node,
+			text = text_node
+		}
+		self.top_nodes[index] = top_node
+		return top_node
 	end
 end
 
 local function set_top_node(self, index, text)
 	local top_node = get_top_node(self, index)
-	gui.set_enabled(top_node, true)
-	gui.set_text(top_node, text)
+	gui.set_enabled(top_node.background, true)
+	gui.set_enabled(top_node.text, true)
+	gui.set_text(top_node.text, text)
 	print(socket.gettime() .. " [MATCH_TOP] Set top node, index=" .. index .. ", text=" .. text)
 end
 
 local function disable_top_node(self, index)
 	local top_node = get_top_node(self, index)
-	gui.set_enabled(top_node, false)
+	gui.set_enabled(top_node.background, false)
+	gui.set_enabled(top_node.text, false)
 	print(socket.gettime() .. " [MATCH_TOP] Disable top node, index=" .. index)
 end
 

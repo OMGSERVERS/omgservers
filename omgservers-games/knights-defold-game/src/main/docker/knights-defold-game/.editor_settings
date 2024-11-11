@@ -16,29 +16,21 @@
   :code {
     :find {
       :replacement "match_top"
-      :term "256"
+      :term "spawn_countdown_node"
     }
   }
   :run {
-    :instance-count 4
+    :instance-count 1
   }
   :search-in-files {
     :exts ""
     :include-libraries false
-    :term ".MATCH_BORDER"
+    :term "match_top_1_t"
   }
   :workflow {
     :recent-files [
       [
-        "/server/match_runtime/players_container.lua"
-        :code
-      ]
-      [
         "/game/match_log/match_log.lua"
-        :code
-      ]
-      [
-        "/game/match_top/match_top.gui_script"
         :code
       ]
       [
@@ -98,10 +90,6 @@
         :scene
       ]
       [
-        "/game/match_gui/match_gui.gui_script"
-        :code
-      ]
-      [
         "/game/match_pointer/match_pointer.script"
         :code
       ]
@@ -110,24 +98,8 @@
         :scene
       ]
       [
-        "/game/match_log/match_log.gui"
-        :scene
-      ]
-      [
-        "/game/match_top/match_top.gui"
-        :scene
-      ]
-      [
-        "/game/match_log/match_log.gui_script"
-        :code
-      ]
-      [
         "/game/match_pointer/match_pointer.lua"
         :code
-      ]
-      [
-        "/game/match_gui/match_gui.gui"
-        :scene
       ]
       [
         "/game/match_screen/match_screen.collection"
@@ -155,6 +127,34 @@
       ]
       [
         "/game/match_player/match_player.collection"
+        :scene
+      ]
+      [
+        "/game/match_log/match_log.gui"
+        :scene
+      ]
+      [
+        "/game/match_log/match_log.gui_script"
+        :code
+      ]
+      [
+        "/game/match_gui/match_gui.gui_script"
+        :code
+      ]
+      [
+        "/game/match_gui/match_gui.gui"
+        :scene
+      ]
+      [
+        "/game/match_top/match_top.gui_script"
+        :code
+      ]
+      [
+        "/game/match_top/match_top.gui"
+        :scene
+      ]
+      [
+        "/game/match_log/match_log.go"
         :scene
       ]
     ]

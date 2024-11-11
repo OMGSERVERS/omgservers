@@ -16,27 +16,35 @@ nodes {
     y: 480.0
   }
   size {
-    x: 256.0
+    x: 144.0
     y: 120.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "root"
   pivot: PIVOT_NW
   adjust_mode: ADJUST_MODE_STRETCH
-  inherit_alpha: true
   alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
   size {
-    x: 256.0
+    x: 144.0
     y: 24.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "match_top_1"
   pivot: PIVOT_NW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -45,7 +53,7 @@ nodes {
     y: -12.0
   }
   size {
-    x: 248.0
+    x: 136.0
     y: 24.0
   }
   type: TYPE_TEXT
@@ -61,14 +69,18 @@ nodes {
     y: -24.0
   }
   size {
-    x: 256.0
+    x: 144.0
     y: 24.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "match_top_2"
   pivot: PIVOT_NW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -77,7 +89,7 @@ nodes {
     y: -12.0
   }
   size {
-    x: 248.0
+    x: 136.0
     y: 24.0
   }
   type: TYPE_TEXT
@@ -92,14 +104,18 @@ nodes {
     y: -48.0
   }
   size {
-    x: 256.0
+    x: 144.0
     y: 24.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "match_top_3"
   pivot: PIVOT_NW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -108,7 +124,7 @@ nodes {
     y: -12.0
   }
   size {
-    x: 248.0
+    x: 136.0
     y: 24.0
   }
   type: TYPE_TEXT
@@ -123,14 +139,18 @@ nodes {
     y: -72.0
   }
   size {
-    x: 256.0
+    x: 144.0
     y: 24.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "match_top_4"
   pivot: PIVOT_NW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -139,7 +159,7 @@ nodes {
     y: -12.0
   }
   size {
-    x: 248.0
+    x: 136.0
     y: 24.0
   }
   type: TYPE_TEXT
@@ -154,14 +174,18 @@ nodes {
     y: -96.0
   }
   size {
-    x: 256.0
+    x: 144.0
     y: 24.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
   }
   type: TYPE_BOX
   id: "match_top_5"
   pivot: PIVOT_NW
   parent: "root"
-  alpha: 0.0
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
@@ -170,7 +194,7 @@ nodes {
     y: -12.0
   }
   size {
-    x: 248.0
+    x: 136.0
     y: 24.0
   }
   type: TYPE_TEXT

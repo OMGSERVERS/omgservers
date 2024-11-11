@@ -4,19 +4,32 @@ local MAX_NODE_INDEX = 5
 local SCROLL_DOWN_DELAY = 3
 
 local function get_log_node(self, index)
-	return gui.get_node("match_log_" .. index .. "_text")
+	if self.log_nodes[index] then
+		return self.log_nodes[index]
+	else
+		local background_node = gui.get_node("match_log_" .. index)
+		local text_node = gui.get_node("match_log_" .. index .. "_text")
+		local log_node = {
+			background = background_node,
+			text = text_node
+		}
+		self.log_nodes[index] = log_node
+		return log_node
+	end
 end
 
 local function set_log_node(self, index, text)
 	local log_node = get_log_node(self, index)
-	gui.set_enabled(log_node, true)
-	gui.set_text(log_node, text)
+	gui.set_enabled(log_node.background, true)
+	gui.set_enabled(log_node.text, true)
+	gui.set_text(log_node.text, text)
 	print(socket.gettime() .. " [MATCH_LOG] Set log node, index=" .. index .. ", text=" .. text)
 end
 
 local function disable_log(self, index)
 	local log_node = get_log_node(self, index)
-	gui.set_enabled(log_node, false)
+	gui.set_enabled(log_node.background, false)
+	gui.set_enabled(log_node.text, false)
 	print(socket.gettime() .. " [MATCH_LOG] Disable log node, index=" .. index)
 end
 
@@ -33,10 +46,10 @@ local function scroll_down(self)
 	
 	for index = 2, MAX_NODE_INDEX do
 		local this_node = get_log_node(self, index)
-		if gui.is_enabled(this_node) then
+		if gui.is_enabled(this_node.text) then
 			disable_log(self, index)
 			
-			local this_text = gui.get_text(this_node)
+			local this_text = gui.get_text(this_node.text)
 			set_log_node(self, index - 1, this_text)
 		end
 	end
@@ -76,6 +89,7 @@ local function player_killed(self, killed, killer)
 end
 
 function init(self)	
+	self.log_nodes = {}
 	disable_all_logs(self)
 	self.empty_log_index = 1
 	self.timer = 0
