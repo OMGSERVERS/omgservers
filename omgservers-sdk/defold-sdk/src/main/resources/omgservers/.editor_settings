@@ -16,13 +16,13 @@
   :code {
     :find {
       :replacement "[OMGPLAYER]"
-      :term "request_server"
+      :term "encoding_error"
     }
   }
   :search-in-files {
     :exts ""
     :include-libraries false
-    :term "instance:decode_response"
+    :term "512"
   }
   :workflow {
     :recent-files [
@@ -143,15 +143,15 @@
         :code
       ]
       [
+        "/omgservers/omgserver/omghttp.lua"
+        :code
+      ]
+      [
         "/omgservers/omgplayer/omgclient.lua"
         :code
       ]
       [
         "/omgservers/omgplayer/omghttp.lua"
-        :code
-      ]
-      [
-        "/omgservers/omgserver/omghttp.lua"
         :code
       ]
     ]

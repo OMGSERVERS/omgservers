@@ -14,7 +14,7 @@ textures {
 nodes {
   size {
     x: 256.0
-    y: 128.0
+    y: 120.0
   }
   type: TYPE_BOX
   id: "root"
@@ -27,7 +27,7 @@ nodes {
 nodes {
   size {
     x: 256.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_BOX
   id: "match_log_1"
@@ -39,26 +39,26 @@ nodes {
 nodes {
   position {
     x: 8.0
-    y: 8.0
+    y: 12.0
   }
   size {
     x: 248.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_TEXT
   text: "Match log 1"
-  font: "font"
+  font: "font_x2"
   id: "match_log_1_text"
   pivot: PIVOT_W
   parent: "match_log_1"
 }
 nodes {
   position {
-    y: 16.0
+    y: 24.0
   }
   size {
     x: 256.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_BOX
   id: "match_log_2"
@@ -70,26 +70,26 @@ nodes {
 nodes {
   position {
     x: 8.0
-    y: 8.0
+    y: 12.0
   }
   size {
     x: 248.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_TEXT
   text: "Match log 2"
-  font: "font"
+  font: "font_x2"
   id: "match_log_2_text"
   pivot: PIVOT_W
   parent: "match_log_2"
 }
 nodes {
   position {
-    y: 32.0
+    y: 48.0
   }
   size {
     x: 256.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_BOX
   id: "match_log_3"
@@ -101,26 +101,26 @@ nodes {
 nodes {
   position {
     x: 8.0
-    y: 8.0
+    y: 12.0
   }
   size {
     x: 248.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_TEXT
   text: "Match log 3"
-  font: "font"
+  font: "font_x2"
   id: "match_log_3_text"
   pivot: PIVOT_W
   parent: "match_log_3"
 }
 nodes {
   position {
-    y: 48.0
+    y: 72.0
   }
   size {
     x: 256.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_BOX
   id: "match_log_4"
@@ -132,26 +132,26 @@ nodes {
 nodes {
   position {
     x: 8.0
-    y: 8.0
+    y: 12.0
   }
   size {
     x: 248.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_TEXT
   text: "Match log 4"
-  font: "font"
+  font: "font_x2"
   id: "match_log_4_text"
   pivot: PIVOT_W
   parent: "match_log_4"
 }
 nodes {
   position {
-    y: 64.0
+    y: 96.0
   }
   size {
     x: 256.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_BOX
   id: "match_log_5"
@@ -163,111 +163,18 @@ nodes {
 nodes {
   position {
     x: 8.0
-    y: 8.0
+    y: 12.0
   }
   size {
     x: 248.0
-    y: 16.0
+    y: 24.0
   }
   type: TYPE_TEXT
   text: "Match log 5"
-  font: "font"
+  font: "font_x2"
   id: "match_log_5_text"
   pivot: PIVOT_W
   parent: "match_log_5"
-}
-nodes {
-  position {
-    y: 80.0
-  }
-  size {
-    x: 256.0
-    y: 16.0
-  }
-  type: TYPE_BOX
-  id: "match_log_6"
-  pivot: PIVOT_SW
-  parent: "root"
-  alpha: 0.0
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 8.0
-    y: 8.0
-  }
-  size {
-    x: 248.0
-    y: 16.0
-  }
-  type: TYPE_TEXT
-  text: "Match log 6"
-  font: "font"
-  id: "match_log_6_text"
-  pivot: PIVOT_W
-  parent: "match_log_6"
-}
-nodes {
-  position {
-    y: 96.0
-  }
-  size {
-    x: 256.0
-    y: 16.0
-  }
-  type: TYPE_BOX
-  id: "match_log_7"
-  pivot: PIVOT_SW
-  parent: "root"
-  alpha: 0.0
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 8.0
-    y: 8.0
-  }
-  size {
-    x: 248.0
-    y: 16.0
-  }
-  type: TYPE_TEXT
-  text: "Match log 7"
-  font: "font"
-  id: "match_log_7_text"
-  pivot: PIVOT_W
-  parent: "match_log_7"
-}
-nodes {
-  position {
-    y: 112.0
-  }
-  size {
-    x: 256.0
-    y: 16.0
-  }
-  type: TYPE_BOX
-  id: "match_log_8"
-  pivot: PIVOT_SW
-  parent: "root"
-  alpha: 0.0
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  position {
-    x: 8.0
-    y: 8.0
-  }
-  size {
-    x: 248.0
-    y: 16.0
-  }
-  type: TYPE_TEXT
-  text: "Match log 8"
-  font: "font"
-  id: "match_log_8_text"
-  pivot: PIVOT_W
-  parent: "match_log_8"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

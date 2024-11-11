@@ -132,8 +132,8 @@ local function simulate(self)
 		if self.match_timer >= spawn_time then
 			local player_instance = players_container:get_player(client_id)
 			if player_instance then
-				local spawn_x = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_WIDTH - match_settings.constants.MATCH_BORDER * 2)
-				local spawn_y = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_HEIGHT - match_settings.constants.MATCH_BORDER * 2)
+				local spawn_x = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_WIDTH - match_settings.constants.MATCH_BORDER)
+				local spawn_y = math.random(match_settings.constants.MATCH_BORDER, match_settings.constants.MATCH_HEIGHT - match_settings.constants.MATCH_BORDER)
 				local spawn_position = vector_factory:create(spawn_x, spawn_y)
 				player_instance:spawn_player(spawn_position)
 

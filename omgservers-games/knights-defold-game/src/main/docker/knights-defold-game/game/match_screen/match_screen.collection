@@ -11,8 +11,8 @@ instances {
   id: "match_camera"
   prototype: "/game/match_camera/match_camera.go"
   position {
-    x: 240.0
-    y: 240.0
+    x: 128.0
+    y: 128.0
     z: 512.0
   }
 }

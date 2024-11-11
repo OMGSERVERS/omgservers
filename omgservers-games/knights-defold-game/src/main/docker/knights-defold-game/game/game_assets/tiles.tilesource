@@ -1,64 +1,29 @@
-image: "/game/game_assets/tilemap_packed.png"
+image: "/game/game_assets/tiles.png"
 tile_width: 16
 tile_height: 16
 animations {
-  id: "highlighter"
-  start_tile: 62
-  end_tile: 62
-}
-animations {
-  id: "knight_1"
-  start_tile: 99
-  end_tile: 99
-}
-animations {
-  id: "knight_2"
-  start_tile: 98
-  end_tile: 98
-}
-animations {
-  id: "knight_3"
-  start_tile: 97
-  end_tile: 97
+  id: "player"
+  start_tile: 7
+  end_tile: 7
 }
 animations {
   id: "pointer_1"
-  start_tile: 61
-  end_tile: 61
+  start_tile: 1
+  end_tile: 1
 }
 animations {
   id: "pointer_2"
-  start_tile: 63
-  end_tile: 63
+  start_tile: 2
+  end_tile: 2
 }
 animations {
   id: "shadow"
-  start_tile: 62
-  end_tile: 62
+  start_tile: 6
+  end_tile: 6
 }
 animations {
-  id: "shield_1"
-  start_tile: 102
-  end_tile: 102
+  id: "weapon"
+  start_tile: 11
+  end_tile: 11
 }
-animations {
-  id: "shield_2"
-  start_tile: 103
-  end_tile: 103
-}
-animations {
-  id: "weapon_1"
-  start_tile: 107
-  end_tile: 107
-}
-animations {
-  id: "weapon_2"
-  start_tile: 118
-  end_tile: 118
-}
-animations {
-  id: "weapon_3"
-  start_tile: 119
-  end_tile: 119
-}
-extrude_borders: 1
+extrude_borders: 2

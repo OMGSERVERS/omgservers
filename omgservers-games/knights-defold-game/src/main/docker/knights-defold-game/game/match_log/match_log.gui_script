@@ -1,6 +1,6 @@
 local match_log = require("game.match_log.match_log")
 
-local MAX_NODE_INDEX = 8
+local MAX_NODE_INDEX = 5
 local SCROLL_DOWN_DELAY = 3
 
 local function get_log_node(self, index)

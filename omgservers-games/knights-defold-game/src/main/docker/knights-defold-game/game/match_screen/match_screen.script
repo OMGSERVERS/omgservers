@@ -53,7 +53,6 @@ local function spawn_player(self, client_id, x, y)
 
 		if controllable then
 			print(socket.gettime() .. " [MATCH_SCREEN] Set camera, target=" .. player_id)
-			match_pointer:enable_pointer(MATCH_POINTER, x, y)
 
 			match_gui:disable_spawn_countdown(MATCH_GUI)
 		end
@@ -98,6 +97,10 @@ local function move_player(self, client_id, x, y)
 	local player_id = self.players[client_id]
 	if player_id then
 		match_player:move_to(player_id, x, y)
+
+		if client_id == core_manager:get_client_id() then
+			match_pointer:disable_pointer(MATCH_POINTER)
+		end
 	else
 		print(socket.gettime() .. " [MATCH_SCREEN] Player was not found to move, client_id=" .. client_id)
 	end
@@ -211,8 +214,8 @@ local function pointed(self, pointed_x, pointed_y)
 	local client_id = core_manager:get_client_id()
 	local player_id = self.players[client_id]
 	if player_id then
-		local bounded_x = math.max(32, math.min(512 - 32, x))
-		local bounded_y = math.max(32, math.min(512 - 32, y))
+		local bounded_x = math.max(24, math.min(256 - 24, x))
+		local bounded_y = math.max(24, math.min(256 - 24, y))
 		
 		match_pointer:enable_pointer(MATCH_POINTER, bounded_x, bounded_y)
 
@@ -247,8 +250,8 @@ function update(self, dt)
 	local player_id = self.players[client_id]
 	if player_id then
 		local player_position = go.get_position(player_id)
-		local camera_x = math.min(512 - 160, math.max(160, player_position.x))
-		local camera_y = math.min(512 - 120, math.max(120, player_position.y))
+		local camera_x = player_position.x
+		local camera_y = player_position.y
 		local camera_position = vmath.vector3(camera_x, camera_y, 0)
 		
 		go.set_position(camera_position, MATCH_CAMERA)

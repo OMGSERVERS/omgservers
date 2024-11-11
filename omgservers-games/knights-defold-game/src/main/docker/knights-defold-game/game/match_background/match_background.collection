@@ -4,7 +4,7 @@ embedded_instances {
   id: "match_background"
   data: "components {\n"
   "  id: \"tilemap\"\n"
-  "  component: \"/game/match_background/tilemap.tilemap\"\n"
+  "  component: \"/game/match_background/match_background.tilemap\"\n"
   "}\n"
   ""
 }

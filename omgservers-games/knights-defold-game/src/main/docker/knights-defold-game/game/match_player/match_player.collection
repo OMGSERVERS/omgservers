@@ -8,29 +8,11 @@ embedded_instances {
   "  component: \"/game/match_player/match_player.script\"\n"
   "}\n"
   "embedded_components {\n"
-  "  id: \"shadow\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"shadow\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "size {\\n"
-  "  x: 22.0\\n"
-  "  y: 7.0\\n"
-  "}\\n"
-  "textures {\\n"
-  "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/game/game_assets/tiles.tilesource\\\"\\n"
-  "}\\n"
-  "\"\n"
-  "  position {\n"
-  "    z: -2.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
   "  id: \"nickname\"\n"
   "  type: \"label\"\n"
   "  data: \"size {\\n"
   "  x: 128.0\\n"
-  "  y: 32.0\\n"
+  "  y: 16.0\\n"
   "}\\n"
   "outline {\\n"
   "  x: 1.0\\n"
@@ -55,14 +37,12 @@ embedded_instances {
 }
 embedded_instances {
   id: "skin"
-  children: "weapon_hidden_left"
-  children: "weapon_hidden_right"
   children: "weapon_left_hand"
   children: "weapon_right_hand"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"knight_1\\\"\\n"
+  "  data: \"default_animation: \\\"player\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "size {\\n"
   "  x: 16.0\\n"
@@ -80,42 +60,11 @@ embedded_instances {
   ""
 }
 embedded_instances {
-  id: "weapon_hidden_left"
-  data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"weapon_1\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "size {\\n"
-  "  x: 16.0\\n"
-  "  y: 16.0\\n"
-  "}\\n"
-  "textures {\\n"
-  "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/game/game_assets/tiles.tilesource\\\"\\n"
-  "}\\n"
-  "\"\n"
-  "  position {\n"
-  "    y: 6.0\n"
-  "  }\n"
-  "}\n"
-  ""
-  position {
-    x: -8.0
-    y: 11.0
-    z: -1.0
-  }
-  rotation {
-    z: -0.92436427
-    w: 0.38151112
-  }
-}
-embedded_instances {
   id: "weapon_left_hand"
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"weapon_1\\\"\\n"
+  "  data: \"default_animation: \\\"weapon\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "size {\\n"
   "  x: 16.0\\n"
@@ -146,7 +95,7 @@ embedded_instances {
   data: "embedded_components {\n"
   "  id: \"sprite\"\n"
   "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"weapon_1\\\"\\n"
+  "  data: \"default_animation: \\\"weapon\\\"\\n"
   "material: \\\"/builtins/materials/sprite.material\\\"\\n"
   "size {\\n"
   "  x: 16.0\\n"
@@ -170,36 +119,5 @@ embedded_instances {
   rotation {
     z: -0.25881904
     w: 0.9659258
-  }
-}
-embedded_instances {
-  id: "weapon_hidden_right"
-  data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"weapon_1\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "size {\\n"
-  "  x: 16.0\\n"
-  "  y: 16.0\\n"
-  "}\\n"
-  "textures {\\n"
-  "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/game/game_assets/tiles.tilesource\\\"\\n"
-  "}\\n"
-  "\"\n"
-  "  position {\n"
-  "    y: 6.0\n"
-  "  }\n"
-  "}\n"
-  ""
-  position {
-    x: 8.0
-    y: 11.0
-    z: -1.0
-  }
-  rotation {
-    z: 0.9238795
-    w: 0.38268343
   }
 }
