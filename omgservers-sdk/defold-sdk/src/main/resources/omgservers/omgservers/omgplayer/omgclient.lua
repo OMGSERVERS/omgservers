@@ -70,7 +70,7 @@ omgclient = {
 						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("user was not created, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
+					state:fail("user was not created, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. tostring(encoding_error))
 				end
 
 				local retries = 2
@@ -113,7 +113,7 @@ omgclient = {
 						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("token was not received, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
+					state:fail("token was not received, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. tostring(encoding_error))
 				end
 
 				local retries = 2
@@ -150,7 +150,7 @@ omgclient = {
 						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("client was not created, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
+					state:fail("client was not created, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. tostring(encoding_error))
 				end
 
 				local retries = 2
@@ -190,7 +190,7 @@ omgclient = {
 						inlined_body = json.encode(decoded_body)
 					end
 					
-					state:fail("interchange failed, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. encoding_error)
+					state:fail("interchange failed, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. tostring(encoding_error))
 				end
 
 				local retries = 4
