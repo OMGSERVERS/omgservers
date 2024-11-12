@@ -70,22 +70,22 @@ end
 
 local function player_joined(self, nickname)
 	print(socket.gettime() .. " [MATCH_LOG] Player joined, nickname=" .. nickname)
-	add_log(self, "Player " .. nickname .. " joined")
+	add_log(self, nickname .. " joined")
 end
 
 local function player_spawned(self, nickname)
 	print(socket.gettime() .. " [MATCH_LOG] Player spawned, nickname=" .. nickname)
-	add_log(self, "Player " .. nickname .. " spawned")
+	add_log(self, nickname .. " spawned")
 end
 
 local function player_leaved(self, nickname)
 	print(socket.gettime() .. " [MATCH_LOG] Player leaved, nickname=" .. nickname)
-	add_log(self, "Player " .. nickname .. " leaved")
+	add_log(self, nickname .. " leaved")
 end
 
 local function player_killed(self, killed, killer)
 	print(socket.gettime() .. " [MATCH_LOG] Player " .. killed .. " was killed by " .. killer)
-	add_log(self, "Player " .. killer .. " killed " .. killed)
+	add_log(self, killer .. " killed " .. killed)
 end
 
 function init(self)	
