@@ -50,7 +50,7 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
                 }
             });
         } else {
-            log.error("Corresponding dispatcher connection was not found to handle text message, closing web socket " +
+            log.error("Corresponding dispatcher connection was not found to handle binary message, closing web socket " +
                     "id={}", webSocketConnection.id());
             return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR);
         }

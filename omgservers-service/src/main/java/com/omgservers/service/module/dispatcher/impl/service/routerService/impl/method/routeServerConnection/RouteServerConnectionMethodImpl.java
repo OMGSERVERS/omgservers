@@ -41,9 +41,8 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
                 .addHeader("Authorization", "Bearer " + serviceJwtToken)
                 .connect()
                 .invoke(clientConnection -> {
-                    log.info("Server connection was routed, " +
-                                    "clientConnectionId={}, serverUri={}, serverConnection={}",
-                            clientConnection.id(), serverUri, serverConnection);
+                    log.info("Server connection was routed, serverConnection={}, serverUri={}, clientConnectionId={}",
+                            serverConnection, serverUri, clientConnection.id());
                     routedConnections.put(serverConnection, clientConnection);
                 })
                 .replaceWith(new RouteServerConnectionResponse(Boolean.TRUE));

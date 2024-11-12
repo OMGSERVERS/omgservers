@@ -1,8 +1,9 @@
 package com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.method;
 
-import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.components.DispatcherConnections;
 import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.dto.HandleFailedConnectionRequest;
+import com.omgservers.service.module.dispatcher.impl.service.dispatcherService.impl.components.DispatcherConnections;
 import io.smallrye.mutiny.Uni;
+import io.vertx.core.http.HttpClosedException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,10 +38,10 @@ class HandleFailedConnectionMethodImpl implements HandleFailedConnectionMethod {
                     t.getClass().getSimpleName(),
                     t.getMessage());
         } else {
-            log.error("WebSocket connection failed, and the corresponding dispatcher connection was not found, " +
-                            "id={}, {}:{}", webSocketConnection.id(),
-                    t.getClass().getSimpleName(),
-                    t.getMessage());
+            if (!t.getClass().equals(HttpClosedException.class)) {
+                log.error("WebSocket connection failed, and the corresponding dispatcher connection was not found, " +
+                        "id={}, {}:{}", webSocketConnection.id(), t.getClass().getSimpleName(), t.getMessage());
+            }
         }
 
         return Uni.createFrom().voidItem();

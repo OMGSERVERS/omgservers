@@ -58,7 +58,7 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
                     .invoke(closed -> dispatcherConnections.remove(webSocketConnection))
                     .replaceWithVoid();
         } else {
-            log.error("Corresponding dispatcher connection was not found to handle text message, closing web socket " +
+            log.error("Corresponding dispatcher connection was not found to handle closed connection, skip operation " +
                     "id={}", webSocketConnection.id());
             return Uni.createFrom().voidItem();
         }
