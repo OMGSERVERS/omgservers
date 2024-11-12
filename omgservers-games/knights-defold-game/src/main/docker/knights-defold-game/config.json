@@ -3,12 +3,12 @@
     {
       "name": "death-match",
       "min_players": 1,
-      "max_players": 128,
+      "max_players": 8,
       "groups": [
         {
           "name": "players",
           "min_players": 1,
-          "max_players": 128
+          "max_players": 8
         }
       ]
     }
