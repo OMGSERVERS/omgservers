@@ -64,7 +64,7 @@ omgclient = {
 						inlined_body = json.encode(decoded_body)
 					end
 
-					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "token was not created, response_status=" .. response_status .. ", decoded_body=" .. inlined_body .. ", decoding_error=" .. decoding_error)
+					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "token was not created, response_status=" .. response_status .. ", decoded_body=" .. inlined_body .. ", decoding_error=" .. tostring(decoding_error))
 				end
 
 				local api_token = nil
@@ -105,7 +105,7 @@ omgclient = {
 						inlined_body = json.encode(decoded_body)
 					end
 
-					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "interchange failed, response_status=" .. response_status .. ", decoded_body=" .. inlined_body .. ", decoding_error=" .. decoding_error)
+					omgsystem:terminate_server(omgconstants.API_EXIT_CODE, "interchange failed, response_status=" .. response_status .. ", decoded_body=" .. inlined_body .. ", decoding_error=" .. tostring(decoding_error))
 				end
 
 				local api_token = instance.api_token
@@ -198,13 +198,12 @@ omgclient = {
 				}
 				instance.commands:add_outgoing_command(command)
 			end,
-			stop_matchmaking = function(instance, reason)
+			stop_matchmaking = function(instance)
 				assert(instance.commands, "The client must be fully fledged.")
 				
 				local command = {
 					qualifier = omgconstants.STOP_MATCHMAKING,
 					body = {
-						reason = reason,
 					},
 				}
 				instance.commands:add_outgoing_command(command)

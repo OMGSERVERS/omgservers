@@ -111,8 +111,6 @@ omginstance = {
 	end,
 	update = function(self, dt)
 		assert(self, "The self must not be nil.")
-		assert(self, "The dt must not be nil.")
-		assert(type(dt) == "number", "The type of dt must be number")
 		assert(self.config, "The player must be initialized")
 		self.process:update(dt)
 	end,

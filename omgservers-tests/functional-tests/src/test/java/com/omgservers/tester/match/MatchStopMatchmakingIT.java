@@ -66,7 +66,6 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
                                             {
                                                 qualifier = "STOP_MATCHMAKING",
                                                 body = {
-                                                    reason = "finished"
                                                 }
                                             },
                                             {

@@ -36,8 +36,8 @@ omgserver = {
 	request_matchmaking = function(self, client_id, mode)
 		omginstance:request_matchmaking(client_id, mode)
 	end,
-	stop_matchmaking = function(self, reason)
-		omginstance:stop_matchmaking(reason)
+	stop_matchmaking = function(self)
+		omginstance:stop_matchmaking()
 	end,
 	upgrade_connection = function(self, client_id)
 		omginstance:upgrade_connection(client_id)

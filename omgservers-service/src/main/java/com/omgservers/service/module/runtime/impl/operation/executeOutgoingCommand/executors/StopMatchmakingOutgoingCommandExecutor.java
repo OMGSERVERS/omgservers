@@ -42,22 +42,20 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
         log.debug("Execute stop matchmaking outgoing command, outgoingCommand={}", outgoingCommand);
 
         final var commandBody = (StopMatchmakingOutgoingCommandBodyDto) outgoingCommand.getBody();
-        final var reason = commandBody.getReason();
 
         return checkShardOperation.checkShard(runtimeId.toString())
-                .flatMap(shard -> doStopMatchmaking(runtimeId, reason)
+                .flatMap(shard -> doStopMatchmaking(runtimeId)
                         .replaceWithVoid());
     }
 
-    Uni<Boolean> doStopMatchmaking(final Long runtimeId,
-                                   final String reason) {
+    Uni<Boolean> doStopMatchmaking(final Long runtimeId) {
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
                     final var matchmakerId = runtime.getConfig().getMatchConfig().getMatchmakerId();
                     final var matchId = runtime.getConfig().getMatchConfig().getMatchId();
 
-                    log.info("Do stop matchmaking, runtimeId={}, match={}/{}, reason={}",
-                            runtimeId, matchmakerId, matchId, reason);
+                    log.info("Do stop matchmaking, runtimeId={}, match={}/{}",
+                            runtimeId, matchmakerId, matchId);
 
                     return syncExcludeMatchMatchmakerCommand(matchmakerId, matchId);
                 });

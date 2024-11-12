@@ -175,7 +175,7 @@ function update(self, dt)
 		self.match_timer = self.match_timer + dt
 		if self.match_timer >= match_settings.constants.MATCH_LIFETIME then
 			if not self.stopping then
-				omgserver:stop_matchmaking("finishing")
+				omgserver:stop_matchmaking()
 				self.stopping = true
 				print(socket.gettime() .. " [MATCH_RUNTIME] The matchmaking was requested to be stopped, timer=" .. self.match_timer)
 			end

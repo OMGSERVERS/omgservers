@@ -68,8 +68,6 @@ omginstance = {
 	end,
 	update = function(self, dt)
 		assert(self, "The self must not be nil.")
-		assert(self, "The dt must not be nil.")
-		assert(type(dt) == "number", "The type of dt must be number")
 		assert(self.config, "The server must be initialized.")
 
 		if self.started then
@@ -112,10 +110,10 @@ omginstance = {
 		assert(self.started, "The server must be started.")
 		self.client:request_matchmaking(client_id, mode)
 	end,
-	stop_matchmaking = function(self, reason)
+	stop_matchmaking = function(self)
 		assert(self.config, "The server must be initialized.")
 		assert(self.started, "The server must be started.")
-		self.client:stop_matchmaking(reason)
+		self.client:stop_matchmaking()
 	end,
 	upgrade_connection = function(self, client_id)
 		assert(self.config, "The server must be initialized.")
