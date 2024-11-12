@@ -33,6 +33,7 @@ import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -42,6 +43,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -57,6 +59,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
     final UserModule userModule;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
+    final CalculateShardOperation calculateShardOperation;
     final GetConfigOperation getConfigOperation;
 
     final PoolRequestModelFactory poolRequestModelFactory;
@@ -90,7 +93,12 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                             final var idempotencyKey = event.getId().toString();
                                             final var imageId = tenantImage.getImageId();
                                             return createUser(userId, password, idempotencyKey)
-                                                    .flatMap(user -> syncPoolRequest(runtime, password, imageId));
+                                                    .flatMap(user -> calculateShardOperation
+                                                            .calculateShard(runtimeId.toString())
+                                                            .flatMap(shard -> syncPoolRequest(runtime,
+                                                                    password,
+                                                                    imageId,
+                                                                    shard.serverUri())));
                                         });
                             });
                 })
@@ -182,7 +190,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<Boolean> syncPoolRequest(final RuntimeModel runtime,
                                  final String password,
-                                 final String imageId) {
+                                 final String imageId,
+                                 final URI serverUri) {
         final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
         final var poolRequestConfig = new PoolRequestConfigDto();
         poolRequestConfig.setContainerConfig(new PoolRequestConfigDto.ContainerConfig());
@@ -196,6 +205,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
+        environment.put("OMGSERVERS_SERVICE_URL", serverUri.toString());
         poolRequestConfig.getContainerConfig().setEnvironment(environment);
 
         final var poolRequest = poolRequestModelFactory.create(defaultPoolId,

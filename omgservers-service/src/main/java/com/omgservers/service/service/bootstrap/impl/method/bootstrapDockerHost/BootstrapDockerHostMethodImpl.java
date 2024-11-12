@@ -59,8 +59,6 @@ class BootstrapDockerHostMethodImpl implements BootstrapDockerHostMethod {
         final var serverUri = getConfigOperation.getServiceConfig().index().serverUri();
 
         final var poolServerConfig = PoolServerConfigDto.create();
-        poolServerConfig.setServerUri(serverUri);
-        poolServerConfig.setServiceUri(dockerHostConfig.serviceUri());
         poolServerConfig.setDockerHostConfig(new PoolServerConfigDto.DockerHostConfig(
                 dockerHostConfig.dockerDaemonUri(),
                 dockerHostConfig.cpuCount(),

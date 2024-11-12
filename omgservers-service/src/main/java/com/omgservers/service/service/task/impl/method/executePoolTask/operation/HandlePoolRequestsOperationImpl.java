@@ -55,7 +55,6 @@ class HandlePoolRequestsOperationImpl implements HandlePoolRequestsOperation {
         config.setMemoryLimitInMegabytes(poolRequest.getConfig()
                 .getContainerConfig().getMemoryLimitInMegabytes());
         config.setEnvironment(poolRequest.getConfig().getContainerConfig().getEnvironment());
-        config.getEnvironment().put("OMGSERVERS_SERVICE_URL", poolServer.getConfig().getServiceUri().toString());
         final var idempotencyKey = poolRequest.getId().toString();
         final var poolContainer = poolContainerModelFactory.create(poolId,
                 poolServerId,
