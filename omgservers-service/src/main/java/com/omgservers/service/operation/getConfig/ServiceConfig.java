@@ -149,8 +149,6 @@ public interface ServiceConfig {
         BootstrapRootConfig root();
 
         BootstrapDefaultPoolConfig defaultPool();
-
-        BootstrapDockerHostConfig dockerHost();
     }
 
     interface BootstrapIndexConfig {
@@ -173,12 +171,11 @@ public interface ServiceConfig {
 
     interface BootstrapDefaultPoolConfig {
         boolean enabled();
+
+        List<BootstrapDockerHostConfig> dockerHosts();
     }
 
     interface BootstrapDockerHostConfig {
-        boolean enabled();
-
-        URI serviceUri();
 
         URI dockerDaemonUri();
 

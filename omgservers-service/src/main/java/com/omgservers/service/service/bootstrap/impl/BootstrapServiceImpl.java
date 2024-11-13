@@ -4,7 +4,6 @@ import com.omgservers.service.service.bootstrap.BootstrapService;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapAdminUser.BootstrapAdminUserMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapBuilderUser.BootstrapBuilderUserMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapDefaultPool.BootstrapDefaultPoolMethod;
-import com.omgservers.service.service.bootstrap.impl.method.bootstrapDockerHost.BootstrapDockerHostMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapRegistryUser.BootstrapRegistryUserMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapServerIndex.BootstrapServerIndexMethod;
 import com.omgservers.service.service.bootstrap.impl.method.bootstrapServiceRoot.BootstrapServiceRootMethod;
@@ -28,7 +27,6 @@ class BootstrapServiceImpl implements BootstrapService {
     final BootstrapDefaultPoolMethod bootstrapDefaultPoolMethod;
     final BootstrapSupportUserMethod bootstrapSupportUserMethod;
     final BootstrapServiceRootMethod bootstrapServiceRootMethod;
-    final BootstrapDockerHostMethod bootstrapDockerHostMethod;
     final BootstrapAdminUserMethod bootstrapAdminUserMethod;
 
     @Override
@@ -69,10 +67,5 @@ class BootstrapServiceImpl implements BootstrapService {
     @Override
     public Uni<Void> bootstrapDefaultPool() {
         return bootstrapDefaultPoolMethod.execute();
-    }
-
-    @Override
-    public Uni<Void> bootstrapDockerHost() {
-        return bootstrapDockerHostMethod.execute();
     }
 }

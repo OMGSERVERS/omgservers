@@ -36,7 +36,7 @@ class BootstrapSupportUserMethodImpl implements BootstrapSupportUserMethod {
                 .invoke(user -> log.info("Support user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
-                    final var idempotencyKey = "bootstrap/support";
+                    final var idempotencyKey = "bootstrap/supportUser";
                     final var password = getConfigOperation.getServiceConfig().bootstrap().supportUser().password();
                     final var passwordHash = BcryptUtil.bcryptHash(password);
                     final var user = userModelFactory.create(userId,

@@ -43,7 +43,6 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
                 .flatMap(voidItem -> initializeBuilderUser())
                 .flatMap(voidItem -> initializeServiceUser())
                 .flatMap(voidItem -> initializeDefaultPool())
-                .flatMap(voidItem -> initializeDockerHost())
                 .onFailure().transform(
                         t -> new ServerSideInternalException(ExceptionQualifierEnum.BOOTSTRAP_FAILED,
                                 t.getMessage(),
@@ -126,16 +125,6 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
                     .invoke(voidItem -> log.info("Default pool was initialized"));
         } else {
             log.info("Bootstrap of default pool is not enabled, skip operation");
-            return Uni.createFrom().voidItem();
-        }
-    }
-
-    Uni<Void> initializeDockerHost() {
-        if (getConfigOperation.getServiceConfig().bootstrap().dockerHost().enabled()) {
-            return bootstrapService.bootstrapDockerHost()
-                    .invoke(voidItem -> log.info("Docker host was initialized"));
-        } else {
-            log.info("Bootstrap of docker host is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

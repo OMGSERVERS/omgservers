@@ -54,9 +54,4 @@ public class BootstrapServiceTestInterface {
         bootstrapService.bootstrapDefaultPool()
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
-
-    public void bootstrapDockerHost() {
-        bootstrapService.bootstrapDockerHost()
-                .await().atMost(Duration.ofSeconds(TIMEOUT));
-    }
 }
