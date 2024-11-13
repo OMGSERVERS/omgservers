@@ -46,8 +46,8 @@ public class DispatcherModuleClient {
 
     @OnBinaryMessage
     public Uni<Void> onBinaryMessage(final WebSocketClientConnection clientConnection,
-                                     final Buffer message) {
-        final var request = new TransferClientBinaryMessageRequest(clientConnection, message);
+                                     final Buffer buffer) {
+        final var request = new TransferClientBinaryMessageRequest(clientConnection, buffer);
         return dispatcherModule.getRouterService().transferClientBinaryMessage(request)
                 .replaceWithVoid();
     }

@@ -8,6 +8,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -24,12 +26,14 @@ class CloseServerConnectionMethodImpl implements CloseServerConnectionMethod {
 
         final var serverConnection = routedConnections.removeClientConnection(clientConnection);
 
-        final var webSocketConnection = serverConnection.getWebSocketConnection();
-        if (webSocketConnection.isOpen()) {
-            return webSocketConnection.close(closeReason)
-                    .replaceWith(new CloseServerConnectionResponse(Boolean.TRUE));
-        } else {
-            return Uni.createFrom().item(new CloseServerConnectionResponse(Boolean.FALSE));
+        if (Objects.nonNull(serverConnection)) {
+            final var webSocketConnection = serverConnection.getWebSocketConnection();
+            if (webSocketConnection.isOpen()) {
+                return webSocketConnection.close(closeReason)
+                        .replaceWith(new CloseServerConnectionResponse(Boolean.TRUE));
+            }
         }
+
+        return Uni.createFrom().item(new CloseServerConnectionResponse(Boolean.FALSE));
     }
 }
