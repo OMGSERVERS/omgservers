@@ -66,6 +66,7 @@ public class MatchStopMatchmakingIT extends BaseTestClass {
                                             {
                                                 qualifier = "STOP_MATCHMAKING",
                                                 body = {
+                                                    workaround = true
                                                 }
                                             },
                                             {

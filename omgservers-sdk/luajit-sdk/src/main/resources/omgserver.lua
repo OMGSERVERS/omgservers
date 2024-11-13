@@ -10,7 +10,7 @@ local base64 = require("base64")
 
 local settings = {
     debug = true,
-    trace = false,
+    trace = true,
     iterate_delay = 0.25,
 }
 
