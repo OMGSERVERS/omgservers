@@ -43,14 +43,14 @@ class HandleBinaryMessageMethodImpl implements HandleBinaryMessageMethod {
             }).flatMap(result -> {
                 if (!result) {
                     return webSocketConnection.close(DispatcherCloseReason.TRANSFER_FAILED)
-                            .invoke(voidItem -> log.warn("Failed to transfer the dispatcher binary message, id={}",
+                            .invoke(voidItem -> log.warn("Failed to transfer binary message, id={}",
                                     webSocketConnection.id()));
                 } else {
                     return Uni.createFrom().voidItem();
                 }
             });
         } else {
-            log.error("Corresponding dispatcher connection was not found to handle binary message, closing web socket " +
+            log.error("Corresponding dispatcher connection was not found to handle binary message, closing websocket " +
                     "id={}", webSocketConnection.id());
             return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR);
         }

@@ -1,0 +1,75 @@
+{
+  :bundle {
+    :build-report false
+    :contentless false
+    :debug-symbols false
+    :liveupdate false
+    :macos {
+      :architecture {
+        :arm64-macos true
+        :x86_64-macos true
+      }
+    }
+    :texture-compression "enabled"
+    :variant "headless"
+  }
+  :code {
+    :find {
+      :replacement "between_messages"
+      :term "handle_message"
+    }
+  }
+  :search-in-files {
+    :exts ""
+    :include-libraries false
+    :term "core_state.IN_MATCH"
+  }
+  :workflow {
+    :recent-files [
+      [
+        "/game.project"
+        :cljfx-form-view
+      ]
+      [
+        "/omgservers/omgplayer.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgserver.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgplayer/omgstate.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgplayer/omgplayer.lua"
+        :code
+      ]
+      [
+        "/main/main.collection"
+        :scene
+      ]
+      [
+        "/omgservers/omgserver/omgconstants.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgserver/omgserver.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgserver/omginstance.lua"
+        :code
+      ]
+      [
+        "/omgservers/omgserver/omgdispatcher.lua"
+        :code
+      ]
+      [
+        "/main/main.script"
+        :code
+      ]
+    ]
+  }
+}

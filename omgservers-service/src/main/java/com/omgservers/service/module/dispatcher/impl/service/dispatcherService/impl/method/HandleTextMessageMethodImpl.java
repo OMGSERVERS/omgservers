@@ -42,14 +42,14 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
             }).flatMap(result -> {
                 if (!result) {
                     return webSocketConnection.close(DispatcherCloseReason.TRANSFER_FAILED)
-                            .invoke(voidItem -> log.warn("Failed to transfer the dispatcher text message, id={}",
+                            .invoke(voidItem -> log.warn("Failed to transfer text message, id={}",
                                     webSocketConnection.id()));
                 } else {
                     return Uni.createFrom().voidItem();
                 }
             });
         } else {
-            log.error("Corresponding dispatcher connection was not found to handle text message, closing web socket " +
+            log.error("Corresponding dispatcher connection was not found to handle text message, closing websocket " +
                     "id={}", webSocketConnection.id());
             return webSocketConnection.close(CloseReason.INTERNAL_SERVER_ERROR);
         }

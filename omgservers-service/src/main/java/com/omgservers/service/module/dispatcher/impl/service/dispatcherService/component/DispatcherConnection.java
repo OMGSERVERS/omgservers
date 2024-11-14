@@ -6,10 +6,12 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.core.buffer.Buffer;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Slf4j
 @ToString
 public class DispatcherConnection {
 
@@ -52,7 +54,10 @@ public class DispatcherConnection {
 
     public Uni<Void> sendText(final String message) {
         return webSocketConnection.sendText(message)
-                .invoke(voidItem -> lastUsage.set(Instant.now()));
+                .invoke(voidItem -> {
+                    log.trace("Sent, {}, dispatcherConnection={}", message, this);
+                    lastUsage.set(Instant.now());
+                });
     }
 
     public Uni<Void> sendBytes(final byte[] bytes) {
