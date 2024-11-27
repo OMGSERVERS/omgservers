@@ -9,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,6 +45,9 @@ class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperati
             final var httpClient = new ZerodepDockerHttpClient.Builder()
                     .dockerHost(config.getDockerHost())
                     .sslConfig(config.getSSLConfig())
+                    // TODO: move out to the configuration
+                    .connectionTimeout(Duration.ofSeconds(16))
+                    .responseTimeout(Duration.ofSeconds(32))
                     .build();
 
             final var dockerClient = DockerClientImpl.getInstance(config, httpClient);
