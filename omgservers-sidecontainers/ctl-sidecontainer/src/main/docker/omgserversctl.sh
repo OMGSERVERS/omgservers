@@ -13,6 +13,9 @@ help() {
     echo " omgserversctl logs"
   fi
   # Environment
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment reset" ]; then
+    echo " omgserversctl environment reset"
+  fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printCurrent" ]; then
     echo " omgserversctl environment printCurrent"
   fi
@@ -60,6 +63,13 @@ help() {
     if [ "$1" = "admin createToken" ]; then
       echo "   produces:"
       echo "     - ADMIN_TOKEN"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin pingDockerHost" ]; then
+    echo " omgserversctl admin pingDockerHost <docker_daemon_uri>"
+    if [ "$1" = "admin pingDockerHost" ]; then
+      echo "   produces:"
+      echo "     - SUCCESSFUL"
     fi
   fi
   # Support
@@ -122,7 +132,7 @@ help() {
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantPermission" ]; then
     echo " omgserversctl support createTenantPermission <tenant> <user> <permission>"
     if [ "$1" = "support createTenantPermission" ]; then
-      echo "   tenant_permission:"
+      echo "   permission:"
       echo "     - PROJECT_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
     fi
@@ -130,7 +140,7 @@ help() {
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantPermission" ]; then
     echo " omgserversctl support deleteTenantPermission <tenant> <user> <permission>"
     if [ "$1" = "support deleteTenantPermission" ]; then
-      echo "   tenant_permission:"
+      echo "   permission:"
       echo "     - PROJECT_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
     fi
@@ -138,7 +148,7 @@ help() {
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
     echo " omgserversctl support createProjectPermission <tenant> <project> <user> <permission>"
     if [ "$1" = "support createProjectPermission" ]; then
-      echo "   tenant_project_permission:"
+      echo "   permission:"
       echo "     - STAGE_MANAGEMENT"
       echo "     - VERSION_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
@@ -147,7 +157,7 @@ help() {
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
     echo " omgserversctl support deleteProjectPermission <tenant> <project> <user> <permission>"
     if [ "$1" = "support deleteProjectPermission" ]; then
-      echo "   tenant_project_permission:"
+      echo "   permission:"
       echo "     - STAGE_MANAGEMENT"
       echo "     - VERSION_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
@@ -156,7 +166,7 @@ help() {
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
     echo " omgserversctl support createStagePermission <tenant> <stage> <user> <permission>"
     if [ "$1" = "support createStagePermission" ]; then
-      echo "   tenant_stage_permission:"
+      echo "   permission:"
       echo "     - DEPLOYMENT_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
     fi
@@ -164,7 +174,7 @@ help() {
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
     echo " omgserversctl support deleteStagePermission <tenant> <stage> <user> <permission>"
     if [ "$1" = "support deleteStagePermission" ]; then
-      echo "   tenant_stage_permission:"
+      echo "   permission:"
       echo "     - DEPLOYMENT_MANAGEMENT"
       echo "     - GETTING_DASHBOARD"
     fi
@@ -297,6 +307,10 @@ logs() {
 
 # ENVIRONMENT
 
+environment_reset() {
+  rm -rf ${OMGSERVERSCTL_DIRECTORY}/environment
+}
+
 environment_printCurrent() {
   internal_useEnvironment
 
@@ -362,7 +376,7 @@ admin_useCredentials() {
   fi
 
   echo "export OMGSERVERSCTL_ADMIN_USER=${ADMIN_USER}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-  echo "export OMGSERVERSCTL_ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_ADMIN_PASSWORD='${ADMIN_PASSWORD}'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin credentials were set, ADMIN_USER=${ADMIN_USER}"
 
@@ -435,6 +449,66 @@ admin_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
 }
 
+admin_pingDockerHost() {
+  internal_useEnvironment
+
+  DOCKER_DAEMON_URI=$1
+
+  if [ -z "${DOCKER_DAEMON_URI}" ]; then
+    help "admin pingDockerHost"
+    exit 1
+  fi
+
+  ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
+
+  if [ -z "${ADMIN_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/admin/request/ping-docker-host"
+  REQUEST="{\"docker_daemon_uri\": \"${DOCKER_DAEMON_URI}\"}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/admin-ping-docker-host.json)
+
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-ping-docker-host.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  SUCCESSFUL=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-ping-docker-host.json | jq -r .successful)
+  if [ -z "${SUCCESSFUL}" -o "${SUCCESSFUL}" == "null" ]; then
+    echo "ERROR: SUCCESSFUL was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_SUCCESSFUL=${SUCCESSFUL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  FROM_SERVER=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-ping-docker-host.json | jq -r .from_server)
+  if [ -z "${FROM_SERVER}" -o "${FROM_SERVER}" == "null" ]; then
+    echo "ERROR: FROM_SERVER was not received"
+    exit 1
+  fi
+
+  if [ "${SUCCESSFUL}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Docker host was pinged, FROM_SERVER=${FROM_SERVER}, DOCKER_DAEMON_URI=${DOCKER_DAEMON_URI}"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Docker host was not pinged, FROM_SERVER=${FROM_SERVER}, DOCKER_DAEMON_URI=${DOCKER_DAEMON_URI}"
+  fi
+}
+
 # SUPPORT
 
 support_useCredentials() {
@@ -449,7 +523,7 @@ support_useCredentials() {
   fi
 
   echo "export OMGSERVERSCTL_SUPPORT_USER=${SUPPORT_USER}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-  echo "export OMGSERVERSCTL_SUPPORT_PASSWORD=${SUPPORT_PASSWORD}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_SUPPORT_PASSWORD='${SUPPORT_PASSWORD}'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support credentials were set, SUPPORT_USER=${SUPPORT_USER}"
 
@@ -785,7 +859,7 @@ support_createDeveloper() {
     echo "ERROR: PASSWORD was not received"
     exit 1
   fi
-  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$PASSWORD" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD='$PASSWORD'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, DEVELOPER_USER=${USER}, DEVELOPER_PASSWORD=${PASSWORD}"
 
@@ -1121,7 +1195,7 @@ developer_useCredentials() {
   fi
 
   echo "export OMGSERVERSCTL_DEVELOPER_USER=$DEVELOPER_USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD=$DEVELOPER_PASSWORD" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD='$DEVELOPER_PASSWORD'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER=$DEVELOPER_USER"
 
@@ -2218,7 +2292,9 @@ fi
 
 # Env
 if [ "$1" = "environment" ]; then
-  if [ "$2" = "printCurrent" ]; then
+  if [ "$2" = "reset" ]; then
+    environment_reset
+  elif [ "$2" = "printCurrent" ]; then
     environment_printCurrent
   elif [ "$2" = "printVariable" ]; then
     environment_printVariable $3
@@ -2242,6 +2318,8 @@ if [ "$1" = "admin" ]; then
     admin_printCurrent
   elif [ "$2" = "createToken" ]; then
     admin_createToken
+  elif [ "$2" = "pingDockerHost" ]; then
+    admin_pingDockerHost $3
   else
     help "admin"
   fi

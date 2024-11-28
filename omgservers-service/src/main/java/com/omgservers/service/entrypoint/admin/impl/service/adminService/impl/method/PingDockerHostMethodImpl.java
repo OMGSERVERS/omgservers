@@ -3,6 +3,7 @@ package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.m
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
 import com.omgservers.service.operation.GetDockerDaemonClientOperation;
+import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 class PingDockerHostMethodImpl implements PingDockerHostMethod {
 
     final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
+    final GetConfigOperation getConfigOperation;
 
     @Override
     public Uni<PingDockerHostAdminResponse> execute(final PingDockerHostAdminRequest request) {
@@ -31,6 +33,7 @@ class PingDockerHostMethodImpl implements PingDockerHostMethod {
                     final var response = dockerDaemonClient.pingCmd().exec();
                     log.info("The Docker host was pinged, uri={}", dockerDaemonUri);
                 })
-                .replaceWith(new PingDockerHostAdminResponse(Boolean.TRUE));
+                .replaceWith(new PingDockerHostAdminResponse(Boolean.TRUE,
+                        getConfigOperation.getServiceConfig().index().serverUri()));
     }
 }
