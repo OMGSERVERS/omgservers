@@ -4,5 +4,5 @@ import com.omgservers.service.module.docker.impl.service.dockerService.DockerSer
 
 public interface DockerModule {
 
-    DockerService getDockerService();
+    DockerService getService();
 }

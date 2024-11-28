@@ -1,4 +1,4 @@
-package com.omgservers.service.module.docker.impl.service.dockerService.impl.operation;
+package com.omgservers.service.operation;
 
 import com.github.dockerjava.api.DockerClient;
 

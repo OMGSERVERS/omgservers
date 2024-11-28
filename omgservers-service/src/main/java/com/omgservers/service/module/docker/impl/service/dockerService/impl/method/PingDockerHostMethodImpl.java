@@ -2,7 +2,7 @@ package com.omgservers.service.module.docker.impl.service.dockerService.impl.met
 
 import com.omgservers.schema.module.docker.PingDockerHostRequest;
 import com.omgservers.schema.module.docker.PingDockerHostResponse;
-import com.omgservers.service.module.docker.impl.service.dockerService.impl.operation.GetDockerDaemonClientOperation;
+import com.omgservers.service.operation.GetDockerDaemonClientOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;

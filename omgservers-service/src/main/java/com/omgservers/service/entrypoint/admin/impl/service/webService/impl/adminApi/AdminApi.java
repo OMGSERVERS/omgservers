@@ -2,6 +2,8 @@ package com.omgservers.service.entrypoint.admin.impl.service.webService.impl.adm
 
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
+import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
+import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
@@ -14,5 +16,9 @@ public interface AdminApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenAdminResponse> createToken(@NotNull CreateTokenAdminRequest request);
+    Uni<CreateTokenAdminResponse> execute(@NotNull CreateTokenAdminRequest request);
+
+    @PUT
+    @Path("/ping-docker-host")
+    Uni<PingDockerHostAdminResponse> execute(@NotNull PingDockerHostAdminRequest request);
 }

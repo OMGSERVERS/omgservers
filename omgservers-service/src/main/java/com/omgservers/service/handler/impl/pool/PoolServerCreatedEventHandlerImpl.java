@@ -48,7 +48,7 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
                     log.info("Created, {}", poolServer);
 
                     final var pingDockerHostRequest = new PingDockerHostRequest(poolServer);
-                    return dockerModule.getDockerService().execute(pingDockerHostRequest)
+                    return dockerModule.getService().execute(pingDockerHostRequest)
                             .map(PingDockerHostResponse::getSuccessful)
                             .invoke(successful -> {
                                 if (successful) {

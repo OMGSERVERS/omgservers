@@ -1,4 +1,4 @@
-package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.method.createToken;
+package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.method;
 
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
@@ -19,7 +19,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final UserModule userModule;
 
     @Override
-    public Uni<CreateTokenAdminResponse> createToken(final CreateTokenAdminRequest request) {
+    public Uni<CreateTokenAdminResponse> execute(final CreateTokenAdminRequest request) {
         log.debug("Requested, {}", request);
 
         final var userId = request.getUserId();

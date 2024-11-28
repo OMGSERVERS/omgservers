@@ -106,7 +106,7 @@ public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> startDockerContainer(final PoolServerModel poolServer,
                                       final PoolContainerModel poolContainer) {
         final var request = new StartDockerContainerRequest(poolServer, poolContainer);
-        return dockerModule.getDockerService().execute(request)
+        return dockerModule.getService().execute(request)
                 .map(StartDockerContainerResponse::getStarted);
     }
 }

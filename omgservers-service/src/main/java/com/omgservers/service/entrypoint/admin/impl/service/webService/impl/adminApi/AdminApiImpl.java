@@ -2,6 +2,8 @@ package com.omgservers.service.entrypoint.admin.impl.service.webService.impl.adm
 
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
+import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
+import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.admin.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -25,7 +27,13 @@ public class AdminApiImpl implements AdminApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenAdminResponse> createToken(@NotNull final CreateTokenAdminRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
+    public Uni<CreateTokenAdminResponse> execute(@NotNull final CreateTokenAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    @RolesAllowed({UserRoleEnum.Names.ADMIN})
+    public Uni<PingDockerHostAdminResponse> execute(final PingDockerHostAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

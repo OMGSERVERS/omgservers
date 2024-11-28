@@ -102,7 +102,7 @@ public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
     Uni<Boolean> stopDockerContainer(final PoolServerModel poolServer,
                                      final PoolContainerModel poolContainer) {
         final var request = new StopDockerContainerRequest(poolServer, poolContainer);
-        return dockerModule.getDockerService().execute(request)
+        return dockerModule.getService().execute(request)
                 .map(StopDockerContainerResponse::getStopped);
     }
 }
