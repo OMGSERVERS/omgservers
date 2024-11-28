@@ -1,9 +1,9 @@
 package com.omgservers.service.operation.parseBasicAuthorizationHeader;
 
-import com.omgservers.service.operation.parseBasicAuthorizationHeader.dto.BasicCredentialsDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
+import com.omgservers.service.operation.parseBasicAuthorizationHeader.dto.BasicCredentialsDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,14 +28,17 @@ class ParseBasicAuthorizationHeaderOperationImpl implements ParseBasicAuthorizat
         }
         try {
             final var credentials = new String(Base64.getDecoder().decode(headerParts[1]));
-            final var usernamePassword = credentials.split(":");
-            if (usernamePassword.length != 2) {
+
+            final int firstColonIndex = credentials.indexOf(':');
+
+            if (firstColonIndex == -1) {
                 throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_ARGUMENT,
                         "wrong credentials structure");
             }
 
-            final var userId = Long.valueOf(usernamePassword[0]);
-            final var password = usernamePassword[1];
+            final var userId = Long.valueOf(credentials.substring(0, firstColonIndex));
+
+            final var password = credentials.substring(firstColonIndex + 1);
             if (password.isEmpty()) {
                 throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_ARGUMENT,
                         "password is empty");
