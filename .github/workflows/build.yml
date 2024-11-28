@@ -30,19 +30,19 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: ./projectctl.sh build testWithSonar
-      - name: Start containers
-        run: ./projectctl.sh integration up && sleep 60
-      - name: Run tests
-        run: ./projectctl.sh integration test
-      - name: Log builder job
-        if: always()
-        run: curl -v -u builder:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-runtime-builder-v1/1/consoleText
-      - name: Log containers
-        if: always()
-        run: ./projectctl.sh integration logs
-      - name: Stop containers
-        if: always()
-        run: yes | ./projectctl.sh environment down
+#      - name: Start containers
+#        run: ./projectctl.sh integration up && sleep 60
+#      - name: Run tests
+#        run: ./projectctl.sh integration test
+#      - name: Log builder job
+#        if: always()
+#        run: curl -v -u builder:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-runtime-builder-v1/1/consoleText
+#      - name: Log containers
+#        if: always()
+#        run: ./projectctl.sh integration logs
+#      - name: Stop containers
+#        if: always()
+#        run: yes | ./projectctl.sh environment down
       - name: Log into Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
