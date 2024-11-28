@@ -1,5 +1,7 @@
 package com.omgservers.service.entrypoint.admin.impl.service.webService.impl.adminApi;
 
+import com.omgservers.schema.entrypoint.admin.CalculateShardAdminRequest;
+import com.omgservers.schema.entrypoint.admin.CalculateShardAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
@@ -17,6 +19,10 @@ public interface AdminApi {
     @PUT
     @Path("/create-token")
     Uni<CreateTokenAdminResponse> execute(@NotNull CreateTokenAdminRequest request);
+
+    @PUT
+    @Path("/calculate-shard")
+    Uni<CalculateShardAdminResponse> execute(@NotNull CalculateShardAdminRequest request);
 
     @PUT
     @Path("/ping-docker-host")

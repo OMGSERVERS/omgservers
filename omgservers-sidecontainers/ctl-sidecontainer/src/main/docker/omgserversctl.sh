@@ -65,6 +65,14 @@ help() {
       echo "     - ADMIN_TOKEN"
     fi
   fi
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin calculateShard" ]; then
+    echo " omgserversctl admin calculateShard <shard_key>"
+    if [ "$1" = "admin calculateShard" ]; then
+      echo "   produces:"
+      echo "     - SHARD_INDEX"
+      echo "     - SERVER_URI"
+    fi
+  fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin pingDockerHost" ]; then
     echo " omgserversctl admin pingDockerHost <docker_daemon_uri>"
     if [ "$1" = "admin pingDockerHost" ]; then
@@ -447,6 +455,63 @@ admin_createToken() {
   echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
+}
+
+admin_calculateShard() {
+  internal_useEnvironment
+
+  SHARD_KEY=$1
+
+  if [ -z "${SHARD_KEY}" ]; then
+    help "admin calculateShard"
+    exit 1
+  fi
+
+  ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
+
+  if [ -z "${ADMIN_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/admin/request/calculate-shard"
+  REQUEST="{\"shard_key\": \"${SHARD_KEY}\"}"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${OMGSERVERSCTL_DIRECTORY}/temp/admin-calculate_shard_${SHARD_KEY}.json)
+
+  cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-calculate_shard_${SHARD_KEY}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  SHARD_INDEX=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-calculate_shard_${SHARD_KEY}.json | jq -r .shard_index)
+  if [ -z "${SHARD_INDEX}" -o "${SHARD_INDEX}" == "null" ]; then
+    echo "ERROR: SHARD_INDEX was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_SHARD_INDEX=${SHARD_INDEX}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  SERVER_URI=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-calculate_shard_${SHARD_KEY}.json | jq -r .server_uri)
+  if [ -z "${SERVER_URI}" -o "${SERVER_URI}" == "null" ]; then
+    echo "ERROR: SERVER_URI was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_SERVER_URI=${SERVER_URI}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Shard was calculated, SHARD_INDEX=${SHARD_INDEX}, SERVER_URI=${SERVER_URI}"
 }
 
 admin_pingDockerHost() {
@@ -2318,6 +2383,8 @@ if [ "$1" = "admin" ]; then
     admin_printCurrent
   elif [ "$2" = "createToken" ]; then
     admin_createToken
+  elif [ "$2" = "calculateShard" ]; then
+    admin_calculateShard $3
   elif [ "$2" = "pingDockerHost" ]; then
     admin_pingDockerHost $3
   else

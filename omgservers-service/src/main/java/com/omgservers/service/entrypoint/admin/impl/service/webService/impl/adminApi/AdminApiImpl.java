@@ -1,5 +1,7 @@
 package com.omgservers.service.entrypoint.admin.impl.service.webService.impl.adminApi;
 
+import com.omgservers.schema.entrypoint.admin.CalculateShardAdminRequest;
+import com.omgservers.schema.entrypoint.admin.CalculateShardAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
@@ -28,6 +30,12 @@ public class AdminApiImpl implements AdminApi {
     @Override
     @PermitAll
     public Uni<CreateTokenAdminResponse> execute(@NotNull final CreateTokenAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    @RolesAllowed({UserRoleEnum.Names.ADMIN})
+    public Uni<CalculateShardAdminResponse> execute(final CalculateShardAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 

@@ -1,5 +1,7 @@
 package com.omgservers.service.entrypoint.admin.impl.service.webService.impl;
 
+import com.omgservers.schema.entrypoint.admin.CalculateShardAdminRequest;
+import com.omgservers.schema.entrypoint.admin.CalculateShardAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
@@ -20,6 +22,11 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<CreateTokenAdminResponse> execute(final CreateTokenAdminRequest request) {
+        return adminService.execute(request);
+    }
+
+    @Override
+    public Uni<CalculateShardAdminResponse> execute(final CalculateShardAdminRequest request) {
         return adminService.execute(request);
     }
 
