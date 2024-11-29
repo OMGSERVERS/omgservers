@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @ApplicationScoped
@@ -73,6 +74,23 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                             imageUri = registryURI.getHost() + "/" + imageId;
                         }
 
+                        log.info("Pull image, imageUri={}", imageUri);
+
+                        final boolean pullCompleted;
+                        try {
+                            pullCompleted = dockerDaemonClient.pullImageCmd(imageUri).start()
+                                    .awaitCompletion(1, TimeUnit.MINUTES);
+                        } catch (InterruptedException e) {
+                            log.error("Failed to pull docker image, {}:{}", e.getClass().getSimpleName(),
+                                    e.getMessage());
+                            return new StartDockerContainerResponse(Boolean.FALSE);
+                        }
+
+                        if (!pullCompleted) {
+                            log.error("Failed to pull docker image, waiting time elapsed");
+                            return new StartDockerContainerResponse(Boolean.FALSE);
+                        }
+
                         log.info("Create container, imageUri={}", imageUri);
 
                         final var createContainerResponse = dockerDaemonClient
@@ -81,6 +99,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                                 .withEnv(environment)
                                 .withHostConfig(hostConfig)
                                 .exec();
+
                         log.info("Docker container was created, " +
                                         "containerName={}, dockerNetwork={}, cpuQuota={}, memoryLimit={}, response={}",
                                 containerName,
