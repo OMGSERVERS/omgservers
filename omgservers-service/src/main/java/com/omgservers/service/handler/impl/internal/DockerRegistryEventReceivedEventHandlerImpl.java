@@ -22,8 +22,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.URI;
-
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -72,9 +70,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         try {
             final var tenantId = dockerRepository.getTenantId();
             final var tenantVersionId = Long.valueOf(tag);
-            final var registryHost = getRegistryHost(event);
-            final var imageId = registryHost + "/" +
-                    buildDockerImageIdOperation.buildDockerImageId(dockerRepository, tenantVersionId);
+            final var imageId = buildDockerImageIdOperation.buildDockerImageId(dockerRepository, tenantVersionId);
 
             return syncTenantImage(tenantId,
                     tenantVersionId,
@@ -107,21 +103,5 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         final var request = new SyncTenantImageRequest(tenantImage);
         return tenantModule.getService().syncTenantImageWithIdempotency(request)
                 .map(SyncTenantImageResponse::getCreated);
-    }
-
-    String getRegistryHost(final DockerRegistryEventDto event) {
-        try {
-            final var uri = URI.create(event.getTarget().getUrl());
-            final var port = uri.getPort();
-            final var host = uri.getHost();
-            if (port == -1) {
-                return host;
-            } else {
-                return host + ":" + port;
-            }
-        } catch (Exception e) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT,
-                    "target url couldn't be parsed");
-        }
     }
 }

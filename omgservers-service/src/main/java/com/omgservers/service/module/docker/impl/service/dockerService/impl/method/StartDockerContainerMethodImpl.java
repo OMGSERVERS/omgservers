@@ -33,6 +33,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .map(voidItem -> {
+                    final var registryURI = getConfigOperation.getServiceConfig().registry().uri();
                     final var imageId = poolContainer.getConfig().getImageId();
                     final var containerName = poolContainer.getContainerName();
                     final var environment = poolContainer.getConfig().getEnvironment().entrySet().stream()
@@ -65,7 +66,17 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                                 .withCpuQuota(cpuQuotaInMicroseconds)
                                 .withMemory(memoryLimitInBytes);
 
-                        final var createContainerResponse = dockerDaemonClient.createContainerCmd(imageId)
+                        final String imageUri;
+                        if (registryURI.getPort() != -1) {
+                            imageUri = registryURI.getHost() + ":" + registryURI.getPort() + "/" + imageId;
+                        } else {
+                            imageUri = registryURI.getHost() + "/" + imageId;
+                        }
+
+                        log.info("Create container, imageUri={}", imageUri);
+
+                        final var createContainerResponse = dockerDaemonClient
+                                .createContainerCmd(imageUri)
                                 .withName(containerName)
                                 .withEnv(environment)
                                 .withHostConfig(hostConfig)
