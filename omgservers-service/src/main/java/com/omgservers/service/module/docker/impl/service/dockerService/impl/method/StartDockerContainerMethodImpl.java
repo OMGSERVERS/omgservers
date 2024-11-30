@@ -74,24 +74,38 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                             imageUri = registryURI.getHost() + "/" + imageId;
                         }
 
-                        log.info("Pull image, imageUri={}", imageUri);
+                        log.info("Pull image, imageUri={}, dockerDaemonUri={}", imageUri, dockerDaemonUri);
 
                         final boolean pullCompleted;
                         try {
                             pullCompleted = dockerDaemonClient.pullImageCmd(imageUri).start()
                                     .awaitCompletion(1, TimeUnit.MINUTES);
                         } catch (InterruptedException e) {
-                            log.error("Failed to pull docker image, {}:{}", e.getClass().getSimpleName(),
+                            log.error("Failed to pull docker image, dockerDaemonUri={}, {}:{}", dockerDaemonUri,
+                                    e.getClass().getSimpleName(),
                                     e.getMessage());
                             return new StartDockerContainerResponse(Boolean.FALSE);
                         }
 
                         if (!pullCompleted) {
-                            log.error("Failed to pull docker image, waiting time elapsed");
+                            log.error("Failed to pull docker image, waiting time elapsed, {}", dockerDaemonUri);
                             return new StartDockerContainerResponse(Boolean.FALSE);
                         }
 
-                        log.info("Create container, imageUri={}", imageUri);
+                        log.info("The image pull has finished, imageUri={}, dockerDaemonUri={}",
+                                imageUri, dockerDaemonUri);
+
+                        try {
+                            dockerDaemonClient.removeContainerCmd(containerName).exec();
+                            log.info("Container was removed before creation a new one, " +
+                                    "containerName={}, dockerDaemonUri={}", containerName, dockerDaemonUri);
+                        } catch (DockerException e) {
+                            log.info("Container was not removed before creation a new one, " +
+                                            "containerName={}, dockerDaemonUri={}, {}",
+                                    containerName, dockerDaemonUri, e.getMessage());
+                        }
+
+                        log.info("Create container, imageUri={}, dockerDaemonUri={}", imageUri, dockerDaemonUri);
 
                         final var createContainerResponse = dockerDaemonClient
                                 .createContainerCmd(imageUri)
@@ -101,11 +115,12 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                                 .exec();
 
                         log.info("Docker container was created, " +
-                                        "containerName={}, dockerNetwork={}, cpuQuota={}, memoryLimit={}, response={}",
+                                        "containerName={}, dockerNetwork={}, cpuQuota={}, memoryLimit={}, dockerDaemonUri={}, response={}",
                                 containerName,
                                 dockerNetwork,
                                 cpuQuotaInMicroseconds,
                                 memoryLimitInBytes,
+                                dockerDaemonUri,
                                 createContainerResponse);
 
                         final var inspectContainerResponse = dockerDaemonClient.inspectContainerCmd(containerName)
