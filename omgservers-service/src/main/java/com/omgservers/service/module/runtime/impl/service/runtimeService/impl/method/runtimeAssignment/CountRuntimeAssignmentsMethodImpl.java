@@ -22,7 +22,7 @@ class CountRuntimeAssignmentsMethodImpl implements CountRuntimeAssignmentsMethod
 
     @Override
     public Uni<CountRuntimeAssignmentsResponse> execute(final CountRuntimeAssignmentsRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

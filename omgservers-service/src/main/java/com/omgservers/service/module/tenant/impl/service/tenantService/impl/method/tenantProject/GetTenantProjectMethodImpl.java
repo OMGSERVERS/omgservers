@@ -22,7 +22,7 @@ GetTenantProjectMethodImpl implements GetTenantProjectMethod {
 
     @Override
     public Uni<GetTenantProjectResponse> execute(final GetTenantProjectRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -27,7 +27,7 @@ class SyncRuntimePoolContainerRefMethodImpl implements SyncRuntimePoolContainerR
     @Override
     public Uni<SyncRuntimePoolContainerRefResponse> execute(
             final SyncRuntimePoolContainerRefRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var runtimeServerContainerRef = request.getRuntimePoolContainerRef();

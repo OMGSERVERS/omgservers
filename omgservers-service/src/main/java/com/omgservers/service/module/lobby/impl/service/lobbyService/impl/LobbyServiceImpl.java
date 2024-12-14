@@ -75,7 +75,7 @@ class LobbyServiceImpl implements LobbyService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getLobby(), t.getMessage());
+                            log.debug("Idempotency was violated, object={}, {}", request.getLobby(), t.getMessage());
                             return Uni.createFrom().item(new SyncLobbyResponse(Boolean.FALSE));
                         }
                     }

@@ -28,7 +28,7 @@ public class TenantImageDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantImageDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -36,7 +36,7 @@ public class TenantImageDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantImage(tenantId, id)
                 .flatMap(tenantImage -> {
-                    log.info("Deleted, {}", tenantImage);
+                    log.debug("Deleted, {}", tenantImage);
 
                     // TODO: clean up docker registry
                     return Uni.createFrom().voidItem();

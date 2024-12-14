@@ -35,7 +35,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
 
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(final CreateDeveloperSupportRequest request) {
-        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var password = generateSecureStringOperation.generateSecureString();
         return createUser(password)

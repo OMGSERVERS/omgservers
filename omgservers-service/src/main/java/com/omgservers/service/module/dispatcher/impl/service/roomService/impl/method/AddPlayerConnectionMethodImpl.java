@@ -21,7 +21,7 @@ class AddPlayerConnectionMethodImpl implements AddPlayerConnectionMethod {
 
     @Override
     public Uni<AddPlayerConnectionResponse> execute(final AddPlayerConnectionRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var playerConnection = request.getPlayerConnection();
         final var runtimeId = playerConnection.getRuntimeId();
@@ -44,10 +44,11 @@ class AddPlayerConnectionMethodImpl implements AddPlayerConnectionMethod {
         }
 
         if (Objects.isNull(playerRoom.putIfAbsent(playerConnection))) {
-            log.info("Player connection was added to the room, playerConnection={}", playerConnection);
+            log.info("Room connection of player {} for runtime {} was added",
+                    playerConnection.getSubject(), playerConnection.getRuntimeId());
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.TRUE));
         } else {
-            log.warn("Player connection duplication detected, playerConnection={}", playerConnection);
+            log.debug("Player connection duplication detected, playerConnection={}", playerConnection);
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.FALSE));
         }
     }

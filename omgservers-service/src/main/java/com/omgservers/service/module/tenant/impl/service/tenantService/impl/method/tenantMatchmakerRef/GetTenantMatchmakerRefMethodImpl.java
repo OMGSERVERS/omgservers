@@ -22,7 +22,7 @@ class GetTenantMatchmakerRefMethodImpl implements GetTenantMatchmakerRefMethod {
 
     @Override
     public Uni<GetTenantMatchmakerRefResponse> execute(final GetTenantMatchmakerRefRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

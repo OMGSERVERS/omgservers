@@ -39,7 +39,7 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
 
     @Override
     public Uni<UpdatePoolStateResponse> execute(final UpdatePoolStateRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var poolChangeOfState = request.getPoolChangeOfState();
         return checkShardOperation.checkShard(request.getRequestShardKey())

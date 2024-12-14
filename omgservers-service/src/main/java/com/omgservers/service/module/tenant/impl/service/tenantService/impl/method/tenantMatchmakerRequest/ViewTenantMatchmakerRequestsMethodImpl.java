@@ -24,7 +24,7 @@ class ViewTenantMatchmakerRequestsMethodImpl implements ViewTenantMatchmakerRequ
     @Override
     public Uni<ViewTenantMatchmakerRequestsResponse> execute(
             final ViewTenantMatchmakerRequestsRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

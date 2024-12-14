@@ -28,6 +28,8 @@ class CloseMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandle
     public void handle(final MatchmakerStateDto matchmakerState,
                        final MatchmakerChangeOfStateDto matchmakerChangeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
+        log.trace("Handle command, {}", matchmakerCommand);
+
         final var body = (CloseMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var matchmakerMatchId = body.getMatchmakerMatchId();
 
@@ -44,7 +46,7 @@ class CloseMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandle
         matchmakerChangeOfState.getMatchesToUpdateStatus().addAll(matchesToUpdateStatus);
 
         if (!matchesToUpdateStatus.isEmpty()) {
-            log.info("The match was queued for closure, matchId={}", matchmakerMatchId);
+            log.debug("The match was queued for closure, matchId={}", matchmakerMatchId);
         }
     }
 }

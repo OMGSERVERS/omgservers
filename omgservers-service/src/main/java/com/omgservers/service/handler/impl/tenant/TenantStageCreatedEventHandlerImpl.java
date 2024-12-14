@@ -28,7 +28,7 @@ public class TenantStageCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantStageCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -36,7 +36,7 @@ public class TenantStageCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantStage(tenantId, id)
                 .flatMap(tenantStage -> {
-                    log.info("Created, {}", tenantStage);
+                    log.debug("Created, {}", tenantStage);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

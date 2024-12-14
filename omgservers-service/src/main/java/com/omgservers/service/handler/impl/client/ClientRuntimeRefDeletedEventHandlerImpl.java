@@ -35,7 +35,7 @@ public class ClientRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (ClientRuntimeRefDeletedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
@@ -43,7 +43,7 @@ public class ClientRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
         return getClientRuntimeRef(clientId, id)
                 .flatMap(clientRuntimeRef -> {
-                    log.info("Deleted, {}", clientRuntimeRef);
+                    log.debug("Deleted, {}", clientRuntimeRef);
 
                     return Uni.createFrom().voidItem();
                 })

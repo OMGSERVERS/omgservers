@@ -23,7 +23,7 @@ class DeleteTenantBuildRequestMethodImpl implements DeleteTenantBuildRequestMeth
     @Override
     public Uni<DeleteTenantBuildRequestResponse> execute(
             final DeleteTenantBuildRequestRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

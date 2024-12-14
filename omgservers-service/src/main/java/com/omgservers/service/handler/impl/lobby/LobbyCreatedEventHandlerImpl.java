@@ -53,7 +53,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (LobbyCreatedEventBodyModel) event.getBody();
         final var lobbyId = body.getId();
@@ -62,7 +62,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
         return getLobby(lobbyId)
                 .flatMap(lobby -> {
-                    log.info("Created, {}", lobby);
+                    log.debug("Created, {}", lobby);
 
                     final var tenantId = lobby.getTenantId();
                     final var tenantDeploymentId = lobby.getDeploymentId();

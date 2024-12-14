@@ -33,7 +33,7 @@ class BootstrapBuilderUserMethodImpl implements BootstrapBuilderUserMethod {
 
         final var userId = getConfigOperation.getServiceConfig().defaults().builderUserId();
         return getUser(userId)
-                .invoke(user -> log.info("Builder user was already create, skip operation, userId={}", userId))
+                .invoke(user -> log.debug("Builder user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/builderUser";

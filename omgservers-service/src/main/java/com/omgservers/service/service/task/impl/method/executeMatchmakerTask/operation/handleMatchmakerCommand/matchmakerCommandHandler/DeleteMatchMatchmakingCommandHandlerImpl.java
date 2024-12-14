@@ -25,7 +25,7 @@ class DeleteMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandl
     public void handle(final MatchmakerStateDto matchmakerState,
                        final MatchmakerChangeOfStateDto matchmakerChangeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        log.debug("Handle, {}", matchmakerCommand);
+        log.trace("Handle command, {}", matchmakerCommand);
 
         final var body = (DeleteMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var matchmakerMatchId = body.getMatchmakerMatchId();
@@ -39,7 +39,7 @@ class DeleteMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandl
         matchmakerChangeOfState.getMatchesToDelete().addAll(matchmakerMatchesToDelete);
 
         if (!matchmakerMatchesToDelete.isEmpty()) {
-            log.info("The match was queued for deletion, matchId={}", matchmakerMatchId);
+            log.debug("The match was queued for deletion, matchId={}", matchmakerMatchId);
         }
     }
 }

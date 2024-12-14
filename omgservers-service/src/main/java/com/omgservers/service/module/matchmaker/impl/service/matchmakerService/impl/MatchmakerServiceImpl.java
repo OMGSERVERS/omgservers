@@ -172,7 +172,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}",
+                            log.debug("Idempotency was violated, object={}, {}",
                                     request.getMatchmaker(), t.getMessage());
                             return Uni.createFrom().item(new SyncMatchmakerResponse(Boolean.FALSE));
                         }
@@ -262,7 +262,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}",
+                            log.debug("Idempotency was violated, object={}, {}",
                                     request.getMatchmakerCommand(), t.getMessage());
                             return Uni.createFrom().item(new SyncMatchmakerCommandResponse(Boolean.FALSE));
                         }
@@ -316,7 +316,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}",
+                            log.debug("Idempotency was violated, object={}, {}",
                                     request.getMatchmakerRequest(), t.getMessage());
                             return Uni.createFrom().item(new SyncMatchmakerRequestResponse(Boolean.FALSE));
                         }

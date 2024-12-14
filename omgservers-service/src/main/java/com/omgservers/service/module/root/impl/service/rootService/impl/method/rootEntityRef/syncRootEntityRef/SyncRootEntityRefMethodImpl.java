@@ -27,7 +27,7 @@ class SyncRootEntityRefMethodImpl implements SyncRootEntityRefMethod {
     @Override
     public Uni<SyncRootEntityRefResponse> syncRootEntityRef(
             final SyncRootEntityRefRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var rootEntityRef = request.getRootEntityRef();

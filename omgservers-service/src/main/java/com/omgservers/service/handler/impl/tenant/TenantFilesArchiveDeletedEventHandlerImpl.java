@@ -28,7 +28,7 @@ public class TenantFilesArchiveDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantFilesArchiveDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -36,7 +36,7 @@ public class TenantFilesArchiveDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantFilesArchive(tenantId, id)
                 .flatMap(tenantFilesArchive -> {
-                    log.info("Deleted, {}", tenantFilesArchive);
+                    log.debug("Deleted, {}", tenantFilesArchive);
 
                     return Uni.createFrom().voidItem();
                 })

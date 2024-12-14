@@ -25,7 +25,7 @@ class GetDockerModuleClientOperationImpl implements GetDockerModuleClientOperati
                     .baseUri(uri)
                     .build(DockerModuleClient.class);
 
-            log.info("Module client was created, uri={}", uri);
+            log.debug("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }

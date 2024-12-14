@@ -57,7 +57,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (ClientDeletedEventBodyModel) event.getBody();
         final var clientId = body.getId();
@@ -66,7 +66,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
         return getClient(clientId)
                 .flatMap(client -> {
-                    log.info("Deleted, {}", client);
+                    log.debug("Deleted, {}", client);
 
                     // Remain client messages because users can come back to get disconnection reason
                     return handleClientMatchmakerRefs(clientId, idempotencyKey)

@@ -25,7 +25,7 @@ class GetJenkinsClientOperationImpl implements GetJenkinsClientOperation {
                     .baseUri(uri)
                     .build(JenkinsClient.class);
 
-            log.info("Jenkins client was created, uri={}", uri);
+            log.debug("Jenkins client to the {} was created", uri);
 
             cache.put(uri, client);
         }

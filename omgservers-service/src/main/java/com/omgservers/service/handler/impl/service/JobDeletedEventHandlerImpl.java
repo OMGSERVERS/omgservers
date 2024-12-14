@@ -28,14 +28,14 @@ public class JobDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (JobDeletedEventBodyModel) event.getBody();
         final var jobId = body.getId();
 
         return getJob(jobId)
                 .flatMap(job -> {
-                    log.info("Deleted, {}", job);
+                    log.debug("Deleted, {}", job);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

@@ -39,14 +39,14 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (UserCreatedEventBodyModel) event.getBody();
         final var userId = body.getId();
 
         return getUser(userId)
                 .flatMap(user -> {
-                    log.info("Created, {}", user);
+                    log.debug("Created, {}", user);
 
                     final var idempotencyKey = event.getId().toString();
                     return switch (user.getRole()) {

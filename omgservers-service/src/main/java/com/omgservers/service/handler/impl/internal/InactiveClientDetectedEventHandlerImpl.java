@@ -39,7 +39,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (InactiveClientDetectedEventBodyModel) event.getBody();
         final var clientId = body.getId();
@@ -47,10 +47,11 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
         return getClient(clientId)
                 .flatMap(client -> {
                     if (client.getDeleted()) {
-                        log.info("Client was already deleted, skip operation, {}", client);
+                        log.debug("Client was already deleted, skip operation, {}", client);
                         return Uni.createFrom().item(Boolean.FALSE);
                     } else {
-                        log.warn("Inactive client was detected, {}", client);
+                        log.info("Client {} of deployment {} was marked inactive after no activity",
+                                client.getId(), client.getDeploymentId());
 
                         return syncDisconnectionMessage(clientId, event.getIdempotencyKey())
                                 .flatMap(created -> deleteClient(clientId));

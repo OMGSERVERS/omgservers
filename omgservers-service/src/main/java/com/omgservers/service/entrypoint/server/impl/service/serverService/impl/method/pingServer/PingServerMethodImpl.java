@@ -16,7 +16,7 @@ class PingServerMethodImpl implements PingServerMethod {
 
     @Override
     public Uni<PingServerServerResponse> pingServer() {
-        log.info("Ping server, principal={}", securityIdentity.getPrincipal().getName());
+        log.debug("Ping server, principal={}", securityIdentity.getPrincipal().getName());
 
         return Uni.createFrom().item(new PingServerServerResponse("PONG"));
     }

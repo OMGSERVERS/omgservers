@@ -21,7 +21,7 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
 
     @Override
     public Uni<RemoveRoomResponse> execute(final RemoveRoomRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();
 
@@ -29,7 +29,8 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
         if (Objects.nonNull(dispatcherRoom)) {
             final var allPlayerConnections = dispatcherRoom.getAllPlayerConnections();
 
-            log.info("Room was removed, runtimeId={}, allPlayerConnections={}", runtimeId, allPlayerConnections.size());
+            log.info("Room for runtime {} was removed. {} players are still connected.",
+                    runtimeId, allPlayerConnections.size());
             return Multi.createFrom().iterable(allPlayerConnections)
                     .onItem().transformToUniAndConcatenate(playerConnection -> {
                         final var webSocketConnection = playerConnection.getWebSocketConnection();
@@ -42,7 +43,7 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
                     .collect().asList()
                     .replaceWith(new RemoveRoomResponse(Boolean.TRUE));
         } else {
-            log.warn("Room was not found to remove, runtimeId={}", runtimeId);
+            log.debug("Room was not found to remove, runtimeId={}", runtimeId);
             return Uni.createFrom().item(new RemoveRoomResponse(Boolean.FALSE));
         }
     }

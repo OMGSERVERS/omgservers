@@ -21,7 +21,7 @@ class FindPlayerMethodImpl implements FindPlayerMethod {
 
     @Override
     public Uni<FindPlayerResponse> findPlayer(final FindPlayerRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

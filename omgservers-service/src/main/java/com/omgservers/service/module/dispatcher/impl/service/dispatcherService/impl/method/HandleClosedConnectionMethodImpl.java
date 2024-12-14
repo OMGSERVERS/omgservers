@@ -31,7 +31,7 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
 
     @Override
     public Uni<Void> execute(final HandleClosedConnectionRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var closeReason = request.getCloseReason();
@@ -42,7 +42,7 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
                 case ROUTED -> closeRoutedConnection(dispatcherConnection, closeReason)
                         .invoke(closed -> {
                             if (closed) {
-                                log.info("Routed connection was closed, dispatcherConnection={}, closeReason={}",
+                                log.debug("Routed connection was closed, dispatcherConnection={}, closeReason={}",
                                         dispatcherConnection,
                                         closeReason.toString());
                             }
@@ -50,8 +50,8 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
                 case SERVER -> handleDispatcherConnection(dispatcherConnection)
                         .invoke(result -> {
                             if (result) {
-                                log.info("Room connection was closed, dispatcherConnection={}, closeReason={}",
-                                        dispatcherConnection, closeReason);
+                                log.info("Room connection for runtime {} was closed, closeReason={}",
+                                        dispatcherConnection.getRuntimeId(), closeReason);
                             }
                         });
             })

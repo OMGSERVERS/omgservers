@@ -37,7 +37,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantDeploymentCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -47,7 +47,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantDeployment(tenantId, id)
                 .flatMap(tenantDeployment -> {
-                    log.info("Created, {}", tenantDeployment);
+                    log.debug("Created, {}", tenantDeployment);
 
                     // TODO: creating lobby/matchmaker requests only if developer requested it
                     return createTenantLobbyRequest(tenantId, id, idempotencyKey)

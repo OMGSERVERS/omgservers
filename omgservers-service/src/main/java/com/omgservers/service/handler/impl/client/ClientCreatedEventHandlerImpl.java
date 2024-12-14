@@ -55,7 +55,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (ClientCreatedEventBodyModel) event.getBody();
         final var clientId = body.getId();
@@ -66,6 +66,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(client -> {
                     final var tenantId = client.getTenantId();
                     final var deploymentId = client.getDeploymentId();
+
                     return getTenantDeployment(tenantId, deploymentId)
                             .flatMap(tenantDeployment -> {
                                 final var deploymentVersionId = tenantDeployment.getVersionId();
@@ -97,7 +98,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> handleEvent(final ClientModel client,
                              final TenantVersionModel tenantVersion,
                              final String idempotencyKey) {
-        log.info("Created, {}", client);
+        log.debug("Created, {}", client);
         return syncWelcomeMessage(client, tenantVersion, idempotencyKey)
                 .flatMap(created -> requestLobbyAssignment(client, idempotencyKey))
                 .flatMap(created -> requestMatchmakerAssignment(client, idempotencyKey));

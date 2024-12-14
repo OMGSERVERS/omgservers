@@ -24,7 +24,7 @@ class FindPoolContainerMethodImpl implements FindPoolContainerMethod {
     @Override
     public Uni<FindPoolContainerResponse> execute(
             final FindPoolContainerRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

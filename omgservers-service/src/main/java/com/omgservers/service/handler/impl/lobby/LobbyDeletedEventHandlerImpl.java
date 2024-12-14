@@ -59,7 +59,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (LobbyDeletedEventBodyModel) event.getBody();
         final var lobbyId = body.getId();
@@ -68,7 +68,7 @@ public class LobbyDeletedEventHandlerImpl implements EventHandler {
 
         return getLobby(lobbyId)
                 .flatMap(lobby -> {
-                    log.info("Deleted, {}", lobby);
+                    log.debug("Deleted, {}", lobby);
 
                     final var runtimeId = lobby.getRuntimeId();
                     return deleteLobbyClients(runtimeId, idempotencyKey)

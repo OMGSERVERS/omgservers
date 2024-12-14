@@ -38,12 +38,10 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
         log.debug("Bootstrap default pool");
 
         return createDefaultPool()
-                .invoke(defaultPool -> log.info("Default pool was created, {}", defaultPool))
+                .invoke(defaultPool -> log.info("Default pool {} was created", defaultPool.getId()))
                 .flatMap(defaultPool -> {
                     final var dockerHosts = getConfigOperation.getServiceConfig()
                             .bootstrap().defaultPool().dockerHosts();
-
-                    log.info("Bootstrap docker hosts, {}", dockerHosts);
 
                     final var defaultPoolId = defaultPool.getId();
                     final var serverCounter = new AtomicInteger();
@@ -87,7 +85,8 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 .map(SyncPoolServerResponse::getCreated)
                 .invoke(created -> {
                     if (created) {
-                        log.info("Pool server was created, {}", poolServer);
+                        log.info("Pool server {} of pool {} was created",
+                                poolServer.getPoolId(), poolServer.getPoolId());
                     }
                 });
     }

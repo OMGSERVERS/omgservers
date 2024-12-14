@@ -22,7 +22,7 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
 
     @Override
     public Uni<DeleteDeveloperSupportResponse> execute(final DeleteDeveloperSupportRequest request) {
-        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();
         final var deleteUserRequest = new DeleteUserRequest(userId);

@@ -29,7 +29,7 @@ class SyncTenantVersionMethodImpl implements SyncTenantVersionMethod {
 
     @Override
     public Uni<SyncTenantVersionResponse> execute(final SyncTenantVersionRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var tenantVersion = request.getTenantVersion();

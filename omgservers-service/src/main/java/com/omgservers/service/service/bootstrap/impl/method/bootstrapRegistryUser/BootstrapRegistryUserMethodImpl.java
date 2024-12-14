@@ -33,7 +33,7 @@ class BootstrapRegistryUserMethodImpl implements BootstrapRegistryUserMethod {
 
         final var userId = getConfigOperation.getServiceConfig().defaults().registryUserId();
         return getUser(userId)
-                .invoke(user -> log.info("Registry user was already create, skip operation, userId={}", userId))
+                .invoke(user -> log.debug("Registry user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/registryUser";

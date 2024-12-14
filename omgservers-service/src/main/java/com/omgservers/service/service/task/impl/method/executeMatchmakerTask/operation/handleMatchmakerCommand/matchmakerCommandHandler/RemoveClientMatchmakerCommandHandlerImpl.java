@@ -25,7 +25,7 @@ class RemoveClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
     public void handle(final MatchmakerStateDto matchmakerState,
                        final MatchmakerChangeOfStateDto matchmakerChangeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        log.debug("Handle, {}", matchmakerCommand);
+        log.trace("Handle command, {}", matchmakerCommand);
 
         final var body = (RemoveClientMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var clientId = body.getId();
@@ -39,7 +39,7 @@ class RemoveClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandl
         matchmakerChangeOfState.getAssignmentsToDelete().addAll(matchmakerAssignmentsToDelete);
 
         if (!matchmakerAssignmentsToDelete.isEmpty()) {
-            log.info("The client was queued for removal from the matchmaker, clientId={}", clientId);
+            log.debug("The client was queued for removal from the matchmaker, clientId={}", clientId);
         }
 
         // Find a client's matchmaking requests to delete

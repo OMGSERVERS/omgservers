@@ -62,14 +62,14 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (MatchmakerDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getId();
 
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
-                    log.info("Deleted, {}", matchmaker);
+                    log.debug("Deleted, {}", matchmaker);
 
                     return deleteMatchmakerCommands(matchmakerId)
                             .flatMap(voidItem -> deleteRequests(matchmakerId))

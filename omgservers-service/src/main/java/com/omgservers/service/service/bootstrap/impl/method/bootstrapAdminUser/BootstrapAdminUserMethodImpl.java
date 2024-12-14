@@ -33,7 +33,7 @@ class BootstrapAdminUserMethodImpl implements BootstrapAdminUserMethod {
 
         final var userId = getConfigOperation.getServiceConfig().defaults().adminUserId();
         return getUser(userId)
-                .invoke(root -> log.info("Admin user was already create, skip operation, userId={}", userId))
+                .invoke(root -> log.debug("Admin user was already created, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/adminUser";

@@ -33,7 +33,7 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (MatchmakerMatchRuntimeRefDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
@@ -42,7 +42,7 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
 
         return getMatchmakerMatchRuntimeRef(matchmakerId, matchId, id)
                 .flatMap(matchmakerMatchRuntimeRef -> {
-                    log.info("Deleted, {}", matchmakerMatchRuntimeRef);
+                    log.debug("Deleted, {}", matchmakerMatchRuntimeRef);
 
                     return Uni.createFrom().voidItem();
                 });

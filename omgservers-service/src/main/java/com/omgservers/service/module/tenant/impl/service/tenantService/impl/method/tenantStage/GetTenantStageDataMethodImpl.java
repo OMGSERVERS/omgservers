@@ -30,7 +30,7 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
 
     @Override
     public Uni<GetTenantStageDataResponse> execute(final GetTenantStageDataRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

@@ -31,7 +31,7 @@ public class TenantBuildRequestDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantBuildRequestDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -39,7 +39,7 @@ public class TenantBuildRequestDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantBuildRequest(tenantId, tenantBuildRequestId)
                 .flatMap(tenantBuildRequest -> {
-                    log.info("Deleted, {}", tenantBuildRequest);
+                    log.debug("Deleted, {}", tenantBuildRequest);
 
                     return findAndDeleteJobOperation.execute(tenantId, tenantBuildRequestId);
                 })

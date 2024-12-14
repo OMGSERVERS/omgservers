@@ -44,7 +44,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (DockerRegistryEventReceivedEventBodyModel) event.getBody();
         final var dockerRegistryEvent = body.getEvent();
@@ -55,7 +55,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
         return switch (action) {
             case PUSH_ACTION -> handlePushAction(dockerRegistryEvent, idempotencyKey);
             default -> {
-                log.info("Received uninteresting action, skip handling, action={}", action);
+                log.debug("Received uninteresting action, skip handling, action={}", action);
                 yield Uni.createFrom().voidItem();
             }
         };

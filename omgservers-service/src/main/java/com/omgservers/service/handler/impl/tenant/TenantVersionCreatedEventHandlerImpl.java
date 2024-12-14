@@ -28,7 +28,7 @@ public class TenantVersionCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantVersionCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -36,7 +36,7 @@ public class TenantVersionCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, id)
                 .flatMap(tenantVersion -> {
-                    log.info("Created, {}", tenantVersion);
+                    log.debug("Created, {}", tenantVersion);
 
                     return Uni.createFrom().voidItem();
                 })

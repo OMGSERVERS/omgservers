@@ -35,7 +35,7 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (ClientMatchmakerRefCreatedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
@@ -45,7 +45,7 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
 
         return getClientMatchmakerRef(clientId, id)
                 .flatMap(clientMatchmakerRef -> {
-                    log.info("Created, {}", clientMatchmakerRef);
+                    log.debug("Created, {}", clientMatchmakerRef);
 
                     final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
                     return syncMatchmakerAssignmentMessage(clientId, matchmakerId, idempotencyKey);

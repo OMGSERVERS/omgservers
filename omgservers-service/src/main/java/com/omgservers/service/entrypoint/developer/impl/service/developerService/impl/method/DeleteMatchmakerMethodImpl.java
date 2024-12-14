@@ -38,7 +38,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
     @Override
     public Uni<DeleteMatchmakerDeveloperResponse> execute(final DeleteMatchmakerDeveloperRequest request) {
-        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());

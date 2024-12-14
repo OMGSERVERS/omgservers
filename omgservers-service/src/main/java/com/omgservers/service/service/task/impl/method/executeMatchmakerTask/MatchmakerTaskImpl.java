@@ -54,7 +54,7 @@ public class MatchmakerTaskImpl {
                                 return updateMatchmakerState(matchmakerId, matchmakerChangeOfState)
                                         .invoke(updated -> {
                                             if (matchmakerChangeOfState.isNotEmpty()) {
-                                                log.info("Matchmaker task was executed, matchmakerId={}, {}",
+                                                log.debug("Matchmaker task was executed, matchmakerId={}, {}",
                                                         matchmakerId,
                                                         matchmakerChangeOfState);
                                             }

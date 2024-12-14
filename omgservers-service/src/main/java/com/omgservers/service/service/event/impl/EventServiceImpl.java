@@ -41,7 +41,7 @@ class EventServiceImpl implements EventService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getEvent(), t.getMessage());
+                            log.debug("Idempotency was violated, object={}, {}", request.getEvent(), t.getMessage());
                             return Uni.createFrom().item(new SyncEventResponse(Boolean.FALSE));
                         }
                     }

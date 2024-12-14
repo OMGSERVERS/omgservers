@@ -39,7 +39,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantProjectCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -49,7 +49,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantProject(tenantId, id)
                 .flatMap(tenantProject -> {
-                    log.info("Created, {}", tenantProject);
+                    log.debug("Created, {}", tenantProject);
 
                     return syncBuilderPermission(tenantId, id, idempotencyKey)
                             .flatMap(permission -> syncServicePermission(tenantId, id, idempotencyKey));

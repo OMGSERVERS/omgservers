@@ -46,14 +46,14 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getId();
 
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
-                    log.info("Created, {}", matchmaker);
+                    log.debug("Created, {}", matchmaker);
 
                     final var idempotencyKey = event.getId().toString();
                     return syncTenantMatchmakerRef(matchmaker, idempotencyKey)

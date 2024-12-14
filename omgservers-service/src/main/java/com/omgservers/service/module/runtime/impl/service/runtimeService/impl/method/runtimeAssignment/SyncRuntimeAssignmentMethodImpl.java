@@ -26,7 +26,7 @@ class SyncRuntimeAssignmentMethodImpl implements SyncRuntimeAssignmentMethod {
 
     @Override
     public Uni<SyncRuntimeAssignmentResponse> execute(final SyncRuntimeAssignmentRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var runtimeAssignment = request.getRuntimeAssignment();

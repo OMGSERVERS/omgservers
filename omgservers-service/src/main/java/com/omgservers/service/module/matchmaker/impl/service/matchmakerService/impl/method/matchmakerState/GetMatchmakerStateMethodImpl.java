@@ -35,7 +35,7 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
 
     @Override
     public Uni<GetMatchmakerStateResponse> execute(final GetMatchmakerStateRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

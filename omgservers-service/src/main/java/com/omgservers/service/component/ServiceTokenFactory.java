@@ -16,7 +16,7 @@ public class ServiceTokenFactory {
     public ServiceTokenFactory(final GetConfigOperation getConfigOperation,
                                final IssueJwtTokenOperation issueJwtTokenOperation) {
         serviceJwtToken = new AtomicReference<>(issueJwtTokenOperation.issueServiceJwtToken());
-        log.info("Service JWT token was issued");
+        log.debug("Service JWT token was issued");
     }
 
     //TODO: refresh token every now and again

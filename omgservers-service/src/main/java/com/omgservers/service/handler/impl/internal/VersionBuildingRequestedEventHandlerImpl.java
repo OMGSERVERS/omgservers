@@ -42,7 +42,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (VersionBuildingRequestedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -55,7 +55,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                     final var versionProjectId = tenantVersion.getProjectId();
                     return findTenantFilesArchive(tenantId, tenantVersionId)
                             .flatMap(tenantFilesArchive -> {
-                                log.info("Building was requested, {}", tenantFilesArchive);
+                                log.info("Building of version {} was requested", tenantVersionId);
 
                                 return buildLuaJitRuntime(versionProjectId, tenantFilesArchive, idempotencyKey);
                             });

@@ -21,7 +21,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> illegalArgumentException(final IllegalArgumentException e,
                                                                          final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -32,7 +32,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> constraintViolationException(final ConstraintViolationException e,
                                                                              final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -44,7 +44,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> webApplicationException(final WebApplicationException e,
                                                                         final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -59,7 +59,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> notSupportedException(final NotSupportedException e,
                                                                       final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -70,7 +70,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> badRequestException(final ServerSideBadRequestException e,
                                                                     final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -81,7 +81,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> unauthorizedServerException(final ServerSideUnauthorizedException e,
                                                                             final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -92,7 +92,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> forbiddenServerException(final ServerSideForbiddenException e,
                                                                          final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -103,7 +103,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> notFoundException(final ServerSideNotFoundException e,
                                                                   final UriInfo uriInfo) {
-        log.info("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Client side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -114,7 +114,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> conflictException(final ServerSideConflictException e,
                                                                   final UriInfo uriInfo) {
-        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -125,7 +125,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> goneException(final ServerSideGoneException e,
                                                               final UriInfo uriInfo) {
-        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.debug("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -136,7 +136,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> internalException(final ServerSideInternalException e,
                                                                   final UriInfo uriInfo) {
-        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.error("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 
@@ -147,7 +147,7 @@ public class ServerSideExceptionMapper {
     @ServerExceptionMapper
     public RestResponse<ExceptionErrorResponse> throwable(final Throwable e,
                                                           final UriInfo uriInfo) {
-        log.info("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
+        log.error("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
                 e.getMessage());
 

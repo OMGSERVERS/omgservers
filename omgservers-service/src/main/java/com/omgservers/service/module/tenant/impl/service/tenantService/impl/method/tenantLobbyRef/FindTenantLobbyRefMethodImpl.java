@@ -21,7 +21,7 @@ class FindTenantLobbyRefMethodImpl implements FindTenantLobbyRefMethod {
 
     @Override
     public Uni<FindTenantLobbyRefResponse> execute(final FindTenantLobbyRefRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

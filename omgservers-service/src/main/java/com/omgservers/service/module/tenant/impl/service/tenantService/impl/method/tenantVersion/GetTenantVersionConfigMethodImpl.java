@@ -22,7 +22,7 @@ class GetTenantVersionConfigMethodImpl implements GetTenantVersionConfigMethod {
 
     @Override
     public Uni<GetTenantVersionConfigResponse> execute(GetTenantVersionConfigRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

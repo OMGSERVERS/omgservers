@@ -21,7 +21,7 @@ class GetPlayerProfileMethodImpl implements GetPlayerProfileMethod {
 
     @Override
     public Uni<GetPlayerProfileResponse> getPlayerProfile(final GetPlayerProfileRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

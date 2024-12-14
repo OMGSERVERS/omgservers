@@ -48,7 +48,7 @@ public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (PoolContainerCreatedEventBodyModel) event.getBody();
         final var poolId = body.getPoolId();
@@ -57,7 +57,7 @@ public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
 
         return getPoolContainer(poolId, serverId, id)
                 .flatMap(poolContainer -> {
-                    log.info("Created, {}", poolContainer);
+                    log.debug("Created, {}", poolContainer);
                     return createRuntimePoolContainerRef(poolContainer)
                             .flatMap(created -> getPoolServer(poolId, serverId)
                                     .flatMap(poolServer -> startDockerContainer(poolServer, poolContainer)));
@@ -87,7 +87,7 @@ public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}",
+                            log.debug("Idempotency was violated, object={}, {}",
                                     runtimePoolContainerRef, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }

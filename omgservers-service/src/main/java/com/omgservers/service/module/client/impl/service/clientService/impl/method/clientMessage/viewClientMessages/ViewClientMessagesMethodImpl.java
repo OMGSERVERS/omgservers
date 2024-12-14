@@ -22,7 +22,7 @@ class ViewClientMessagesMethodImpl implements ViewClientMessagesMethod {
 
     @Override
     public Uni<ViewClientMessagesResponse> viewClientMessages(final ViewClientMessagesRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

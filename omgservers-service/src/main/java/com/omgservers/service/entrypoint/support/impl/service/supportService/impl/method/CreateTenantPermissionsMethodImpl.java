@@ -36,7 +36,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
     @Override
     public Uni<CreateTenantPermissionsSupportResponse> execute(
             final CreateTenantPermissionsSupportRequest request) {
-        log.info("Requested, {}, principal={}", request,
+        log.debug("Requested, {}, principal={}", request,
                 securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();

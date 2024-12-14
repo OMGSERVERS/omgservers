@@ -28,14 +28,14 @@ public class RootDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (RootDeletedEventBodyModel) event.getBody();
         final var rootId = body.getId();
 
         return getRoot(rootId)
                 .flatMap(root -> {
-                    log.info("Deleted, {}", root);
+                    log.debug("Deleted, {}", root);
 
                     return Uni.createFrom().voidItem();
                 })

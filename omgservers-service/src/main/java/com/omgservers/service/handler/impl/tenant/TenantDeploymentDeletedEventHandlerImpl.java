@@ -50,7 +50,7 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantDeploymentDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -58,7 +58,7 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantDeployment(tenantId, tenantDeploymentId)
                 .flatMap(tenantDeployment -> {
-                    log.info("Deleted, {}", tenantDeployment);
+                    log.debug("Deleted, {}", tenantDeployment);
 
                     return deleteTenantLobbyRequestsByTenantDeploymentIdOperation.execute(tenantId, tenantDeploymentId)
                             .flatMap(voidItem -> deleteTenantLobbiesByTenantDeploymentIdOperation

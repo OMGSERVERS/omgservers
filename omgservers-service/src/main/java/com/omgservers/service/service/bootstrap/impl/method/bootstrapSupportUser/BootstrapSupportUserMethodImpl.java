@@ -1,11 +1,11 @@
 package com.omgservers.service.service.bootstrap.impl.method.bootstrapSupportUser;
 
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.module.user.SyncUserResponse;
-import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.UserModule;
@@ -33,7 +33,7 @@ class BootstrapSupportUserMethodImpl implements BootstrapSupportUserMethod {
 
         final var userId = getConfigOperation.getServiceConfig().defaults().supportUserId();
         return getUser(userId)
-                .invoke(user -> log.info("Support user was already create, skip operation, userId={}", userId))
+                .invoke(user -> log.debug("Support user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/supportUser";

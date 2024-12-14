@@ -1,14 +1,14 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
 import com.omgservers.schema.model.matchmakerCommand.body.CloseMatchMatchmakerCommandBodyDto;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.schema.module.runtime.GetRuntimeRequest;
-import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
 import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.schema.model.outgoingCommand.body.StopMatchmakingOutgoingCommandBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
+import com.omgservers.schema.module.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
@@ -54,7 +54,7 @@ public class StopMatchmakingOutgoingCommandExecutor implements OutgoingCommandEx
                     final var matchmakerId = runtime.getConfig().getMatchConfig().getMatchmakerId();
                     final var matchId = runtime.getConfig().getMatchConfig().getMatchId();
 
-                    log.info("Do stop matchmaking, runtimeId={}, match={}/{}",
+                    log.debug("Do stop matchmaking, runtimeId={}, match={}/{}",
                             runtimeId, matchmakerId, matchId);
 
                     return syncExcludeMatchMatchmakerCommand(matchmakerId, matchId);

@@ -35,7 +35,7 @@ public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantLobbyRequestCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -43,7 +43,7 @@ public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantLobbyRequest(tenantId, id)
                 .flatMap(tenantLobbyRequest -> {
-                    log.info("Created, {}", tenantLobbyRequest);
+                    log.debug("Created, {}", tenantLobbyRequest);
 
                     return syncLobby(tenantLobbyRequest, event.getIdempotencyKey());
                 })

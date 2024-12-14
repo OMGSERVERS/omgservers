@@ -470,7 +470,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantProjectPermission(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantProjectPermission(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantProjectPermissionResponse(Boolean.FALSE));
                         }
@@ -572,7 +572,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantStagePermission(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantStagePermission(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantStagePermissionResponse(Boolean.FALSE));
                         }
@@ -731,7 +731,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantBuildRequest(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantBuildRequest(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantBuildRequestResponse(Boolean.FALSE));
                         }
@@ -794,7 +794,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantImage(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantImage(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantImageResponse(Boolean.FALSE));
                         }
@@ -914,7 +914,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantLobbyRequest(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantLobbyRequest(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantLobbyRequestResponse(Boolean.FALSE));
                         }
@@ -976,7 +976,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantLobbyRef(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantLobbyRef(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantLobbyRefResponse(Boolean.FALSE));
                         }
@@ -1042,7 +1042,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantMatchmakerRequest(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantMatchmakerRequest(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantMatchmakerRequestResponse(Boolean.FALSE));
                         }
@@ -1109,7 +1109,7 @@ public class TenantServiceImpl implements TenantService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getTenantMatchmakerRef(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantMatchmakerRef(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncTenantMatchmakerRefResponse(Boolean.FALSE));
                         }

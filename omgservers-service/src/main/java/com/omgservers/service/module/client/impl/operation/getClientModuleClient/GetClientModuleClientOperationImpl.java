@@ -24,7 +24,7 @@ class GetClientModuleClientOperationImpl implements GetClientModuleClientOperati
             final var client = RestClientBuilder.newBuilder()
                     .baseUri(uri)
                     .build(ClientModuleClient.class);
-            log.info("Module client was created, uri={}", uri);
+            log.debug("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }

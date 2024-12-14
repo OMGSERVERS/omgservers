@@ -16,7 +16,7 @@ class ExecuteDispatcherTaskMethodImpl implements ExecuteDispatcherTaskMethod {
 
     @Override
     public Uni<ExecuteDispatcherTaskResponse> execute(final ExecuteDispatcherTaskRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return dispatcherTask.execute()
                 .onFailure()
@@ -24,7 +24,7 @@ class ExecuteDispatcherTaskMethodImpl implements ExecuteDispatcherTaskMethod {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
-                .invoke(result -> log.info("Task finished, result={}", result))
+                .invoke(result -> log.debug("Task finished, result={}", result))
                 .map(ExecuteDispatcherTaskResponse::new);
     }
 }

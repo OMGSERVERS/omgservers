@@ -23,7 +23,7 @@ class GetPoolContainerMethodImpl implements GetPoolContainerMethod {
     @Override
     public Uni<GetPoolContainerResponse> execute(
             final GetPoolContainerRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

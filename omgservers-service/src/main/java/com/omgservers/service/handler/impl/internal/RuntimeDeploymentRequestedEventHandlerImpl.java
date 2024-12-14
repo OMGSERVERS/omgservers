@@ -72,13 +72,13 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (RuntimeDeploymentRequestedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Deployment was requested, {}", runtime);
+                    log.info("Deployment of runtime {} was requested", runtimeId);
 
                     final var tenantId = runtime.getTenantId();
                     final var deploymentId = runtime.getDeploymentId();
@@ -174,7 +174,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", user, t.getMessage());
+                            log.debug("Idempotency was violated, object={}, {}", user, t.getMessage());
 
                             // User was already created
                             final var getUserRequest = new GetUserRequest(id);

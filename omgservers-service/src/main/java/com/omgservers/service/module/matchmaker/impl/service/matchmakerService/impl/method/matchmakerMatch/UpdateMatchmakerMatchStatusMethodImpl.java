@@ -23,7 +23,7 @@ class UpdateMatchmakerMatchStatusMethodImpl implements UpdateMatchmakerMatchStat
     @Override
     public Uni<UpdateMatchmakerMatchStatusResponse> execute(
             final UpdateMatchmakerMatchStatusRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();

@@ -60,7 +60,7 @@ public class InitializerServiceImpl implements InitializerService {
             return initializeDatabaseSchemaMethod.execute()
                     .invoke(voidItem -> log.info("The database schema was initialized"));
         } else {
-            log.info("Database schema initialization is not enabled, skipping this step");
+            log.debug("Database schema initialization is not enabled, skipping this step");
             return Uni.createFrom().voidItem();
         }
     }
@@ -70,7 +70,7 @@ public class InitializerServiceImpl implements InitializerService {
             return initializeRelayJobMethod.execute()
                     .invoke(voidItem -> log.info("The relay job was initialized"));
         } else {
-            log.info("Relay job initialization is not enabled, skipping this step.");
+            log.debug("Relay job initialization is not enabled, skipping this step.");
             return Uni.createFrom().voidItem();
         }
     }
@@ -80,7 +80,7 @@ public class InitializerServiceImpl implements InitializerService {
             return initializeSchedulerJobMethod.execute()
                     .invoke(voidItem -> log.info("The scheduler job was initialized."));
         } else {
-            log.info("Scheduler job initialization is not enabled, skipping this step");
+            log.debug("Scheduler job initialization is not enabled, skipping this step");
             return Uni.createFrom().voidItem();
         }
     }
@@ -90,7 +90,7 @@ public class InitializerServiceImpl implements InitializerService {
             return initializeDispatcherJobMethod.execute()
                     .invoke(voidItem -> log.info("The dispatcher job was initialized."));
         } else {
-            log.info("Dispatcher job initialization is not enabled, skipping this step");
+            log.debug("Dispatcher job initialization is not enabled, skipping this step");
             return Uni.createFrom().voidItem();
         }
     }

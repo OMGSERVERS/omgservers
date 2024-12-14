@@ -33,7 +33,7 @@ class BootstrapServiceUserMethodImpl implements BootstrapServiceUserMethod {
 
         final var userId = getConfigOperation.getServiceConfig().defaults().serviceUserId();
         return getUser(userId)
-                .invoke(user -> log.info("Service user was already create, skip operation, userId={}", userId))
+                .invoke(user -> log.debug("Service user was already create, skip operation, userId={}", userId))
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var idempotencyKey = "bootstrap/serviceUser";

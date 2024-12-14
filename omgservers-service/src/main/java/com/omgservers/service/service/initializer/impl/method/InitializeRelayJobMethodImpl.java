@@ -37,7 +37,7 @@ class InitializeRelayJobMethodImpl implements InitializeRelayJobMethod {
                             })
                             .schedule();
 
-                    log.info("Relay job was scheduled, {}", trigger);
+                    log.debug("Relay job was scheduled, {}", trigger);
                 });
     }
 }

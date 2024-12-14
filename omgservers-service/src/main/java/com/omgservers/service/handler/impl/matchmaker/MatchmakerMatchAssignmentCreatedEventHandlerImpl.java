@@ -42,7 +42,7 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (MatchmakerMatchAssignmentCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
@@ -51,7 +51,7 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
 
         return getMatchmakerMatchAssignment(matchmakerId, matchmakerMatchAssignmentId)
                 .flatMap(matchmakerMatchAssignment -> {
-                    log.info("Created, {}", matchmakerMatchAssignment);
+                    log.debug("Created, {}", matchmakerMatchAssignment);
 
                     final var clientId = matchmakerMatchAssignment.getClientId();
                     return getMatch(matchmakerId, matchId)
@@ -95,7 +95,7 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", runtimeAssignment, t.getMessage());
+                            log.debug("Idempotency was violated, object={}, {}", runtimeAssignment, t.getMessage());
                             return Uni.createFrom().item(Boolean.FALSE);
                         }
                     }

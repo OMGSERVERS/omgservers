@@ -30,7 +30,7 @@ class SyncTenantMatchmakerRefMethodImpl implements SyncTenantMatchmakerRefMethod
     @Override
     public Uni<SyncTenantMatchmakerRefResponse> execute(
             final SyncTenantMatchmakerRefRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var versionMatchmakerRef = request.getTenantMatchmakerRef();

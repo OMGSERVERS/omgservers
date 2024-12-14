@@ -39,7 +39,7 @@ public class TenantBuildRequestCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantBuildRequestCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -47,7 +47,7 @@ public class TenantBuildRequestCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantBuildRequest(tenantId, id)
                 .flatMap(tenantBuildRequest -> {
-                    log.info("Created, {}", tenantBuildRequest);
+                    log.debug("Created, {}", tenantBuildRequest);
 
                     final var tenantBuildRequestId = tenantBuildRequest.getId();
 

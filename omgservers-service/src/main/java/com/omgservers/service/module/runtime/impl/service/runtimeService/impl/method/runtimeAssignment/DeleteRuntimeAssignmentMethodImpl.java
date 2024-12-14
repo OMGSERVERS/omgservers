@@ -22,7 +22,7 @@ class DeleteRuntimeAssignmentMethodImpl implements DeleteRuntimeAssignmentMethod
 
     @Override
     public Uni<DeleteRuntimeAssignmentResponse> execute(final DeleteRuntimeAssignmentRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();

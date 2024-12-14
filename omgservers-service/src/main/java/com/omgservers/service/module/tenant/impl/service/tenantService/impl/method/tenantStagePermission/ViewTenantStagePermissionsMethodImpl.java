@@ -23,7 +23,7 @@ class ViewTenantStagePermissionsMethodImpl implements ViewTenantStagePermissions
 
     @Override
     public Uni<ViewTenantStagePermissionsResponse> execute(final ViewTenantStagePermissionsRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

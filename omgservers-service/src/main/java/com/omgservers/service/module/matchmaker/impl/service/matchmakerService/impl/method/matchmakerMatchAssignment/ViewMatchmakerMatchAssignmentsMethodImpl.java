@@ -24,7 +24,7 @@ class ViewMatchmakerMatchAssignmentsMethodImpl implements ViewMatchmakerMatchAss
     @Override
     public Uni<ViewMatchmakerMatchAssignmentsResponse> execute(
             final ViewMatchmakerMatchAssignmentsRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

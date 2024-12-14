@@ -22,7 +22,7 @@ class ViewRuntimePermissionsMethodImpl implements ViewRuntimePermissionsMethod {
 
     @Override
     public Uni<ViewRuntimePermissionsResponse> execute(final ViewRuntimePermissionsRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

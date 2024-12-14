@@ -38,7 +38,7 @@ class DeleteTenantPermissionsMethodImpl implements DeleteTenantPermissionsMethod
     @Override
     public Uni<DeleteTenantPermissionsSupportResponse> execute(
             final DeleteTenantPermissionsSupportRequest request) {
-        log.info("Requested, {}, principal={}", request,
+        log.debug("Requested, {}, principal={}", request,
                 securityIdentity.getPrincipal().getName());
 
         final var userId = request.getUserId();

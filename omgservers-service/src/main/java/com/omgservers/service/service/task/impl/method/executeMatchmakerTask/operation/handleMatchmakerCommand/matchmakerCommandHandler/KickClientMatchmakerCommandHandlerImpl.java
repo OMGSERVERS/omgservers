@@ -25,7 +25,7 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
     public void handle(final MatchmakerStateDto matchmakerState,
                        final MatchmakerChangeOfStateDto matchmakerChangeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
-        log.debug("Handle, {}", matchmakerCommand);
+        log.trace("Handle command, {}", matchmakerCommand);
 
         final var body = (KickClientMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var clientId = body.getClientId();
@@ -41,7 +41,7 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
         matchmakerChangeOfState.getMatchAssignmentsToDelete().addAll(matchmakerMatchAssignmentsToDelete);
 
         if (!matchmakerMatchAssignmentsToDelete.isEmpty()) {
-            log.info("The client was queued to be removed from the match, clientId={}, matchId={}", clientId,
+            log.debug("The client was queued to be removed from the match, clientId={}, matchId={}", clientId,
                     matchmakerMatchId);
         }
     }

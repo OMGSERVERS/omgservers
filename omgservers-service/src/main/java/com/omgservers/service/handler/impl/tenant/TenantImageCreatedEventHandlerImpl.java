@@ -28,7 +28,7 @@ public class TenantImageCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantImageCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -36,7 +36,7 @@ public class TenantImageCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantImage(tenantId, id)
                 .flatMap(tenantImage -> {
-                    log.info("Created, {}", tenantImage);
+                    log.debug("Created, {}", tenantImage);
 
                     return Uni.createFrom().voidItem();
                 })

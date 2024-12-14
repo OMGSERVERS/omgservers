@@ -19,7 +19,7 @@ class RemovePlayerConnectionMethodImpl implements RemovePlayerConnectionMethod {
 
     @Override
     public Uni<RemovePlayerConnectionResponse> execute(final RemovePlayerConnectionRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var playerConnection = request.getPlayerConnection();
 
@@ -27,14 +27,15 @@ class RemovePlayerConnectionMethodImpl implements RemovePlayerConnectionMethod {
         if (Objects.nonNull(playerRoom)) {
             final var removed = playerRoom.remove(playerConnection);
             if (removed) {
-                log.info("Player connection was removed, playerConnection={}", playerConnection);
+                log.info("Room connection of player {} for runtime {} was removed",
+                        playerConnection.getSubject(), playerConnection.getRuntimeId());
                 return Uni.createFrom().item(new RemovePlayerConnectionResponse(Boolean.TRUE));
             } else {
-                log.warn("Player connection was not found to remove, playerConnection={}", playerConnection);
+                log.debug("Player connection was not found to remove, playerConnection={}", playerConnection);
                 return Uni.createFrom().item(new RemovePlayerConnectionResponse(Boolean.FALSE));
             }
         } else {
-            log.info("Room was not found to remove player connection, playerConnection={}", playerConnection);
+            log.debug("Room was not found to remove player connection, playerConnection={}", playerConnection);
             return Uni.createFrom().item(new RemovePlayerConnectionResponse(Boolean.FALSE));
         }
     }

@@ -36,7 +36,7 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantLobbyRefCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -46,7 +46,7 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(tenantLobbyRef -> {
                     final var deploymentId = tenantLobbyRef.getDeploymentId();
                     final var lobbyId = tenantLobbyRef.getLobbyId();
-                    log.info("Created, {}", tenantLobbyRef);
+                    log.debug("Created, {}", tenantLobbyRef);
 
                     // TODO: update lobby state status
                     return findAndDeleteTenantLobbyRequest(tenantId, deploymentId, lobbyId);

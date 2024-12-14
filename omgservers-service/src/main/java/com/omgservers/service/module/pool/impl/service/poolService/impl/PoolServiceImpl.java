@@ -128,7 +128,7 @@ class PoolServiceImpl implements PoolService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getPool(), t.getMessage());
+                            log.debug("Idempotency was violated, object={}, {}", request.getPool(), t.getMessage());
                             return Uni.createFrom().item(new SyncPoolResponse(Boolean.FALSE));
                         }
                     }
@@ -180,7 +180,7 @@ class PoolServiceImpl implements PoolService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getPoolServer(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getPoolServer(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncPoolServerResponse(Boolean.FALSE));
                         }
@@ -241,7 +241,7 @@ class PoolServiceImpl implements PoolService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getPoolContainer(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getPoolContainer(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncPoolContainerResponse(Boolean.FALSE));
                         }
@@ -302,7 +302,7 @@ class PoolServiceImpl implements PoolService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getPoolRequest(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getPoolRequest(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncPoolRequestResponse(Boolean.FALSE));
                         }

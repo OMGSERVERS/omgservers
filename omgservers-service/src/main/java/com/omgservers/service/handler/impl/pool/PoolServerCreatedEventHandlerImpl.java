@@ -37,24 +37,24 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (PoolServerCreatedEventBodyModel) event.getBody();
         final var poolId = body.getPoolId();
-        final var id = body.getId();
+        final var poolServerId = body.getId();
 
-        return getPoolServer(poolId, id)
+        return getPoolServer(poolId, poolServerId)
                 .flatMap(poolServer -> {
-                    log.info("Created, {}", poolServer);
+                    log.debug("Created, {}", poolServer);
 
                     final var pingDockerHostRequest = new PingDockerHostRequest(poolServer);
                     return dockerModule.getService().execute(pingDockerHostRequest)
                             .map(PingDockerHostResponse::getSuccessful)
                             .invoke(successful -> {
                                 if (successful) {
-                                    log.info("Pool server was created and successfully pinged, {}", poolServer);
+                                    log.info("Pool server {} was created and successfully pinged", poolServerId);
                                 } else {
-                                    log.error("Pool server was created but couldn't be reached, {}", poolServer);
+                                    log.error("Pool server {} was created, but couldn't be reached", poolServerId);
                                 }
                             });
                 })

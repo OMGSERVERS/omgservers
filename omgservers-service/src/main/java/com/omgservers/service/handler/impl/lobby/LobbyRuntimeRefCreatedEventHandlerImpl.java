@@ -30,7 +30,7 @@ public class LobbyRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (LobbyRuntimeRefCreatedEventBodyModel) event.getBody();
         final var lobbyId = body.getLobbyId();
@@ -38,7 +38,7 @@ public class LobbyRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
         return getLobbyRuntimeRef(lobbyId, id)
                 .flatMap(lobbyRuntimeRef -> {
-                    log.info("Created, {}", lobbyRuntimeRef);
+                    log.debug("Created, {}", lobbyRuntimeRef);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

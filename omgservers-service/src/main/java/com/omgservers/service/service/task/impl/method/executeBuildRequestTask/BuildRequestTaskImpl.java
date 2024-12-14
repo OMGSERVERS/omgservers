@@ -58,7 +58,7 @@ public class BuildRequestTaskImpl {
             case JENKINS_LUAJIT_RUNTIME_BUILDER_V1 -> checkJenkinsBuildRequest(tenantBuildRequest)
                     .flatMap(result -> switch (result) {
                         case IN_PROGRESS -> {
-                            log.info("Build job is still in progress, tenantBuildRequest={}/{}",
+                            log.debug("Build job is still in progress, tenantBuildRequest={}/{}",
                                     tenantBuildRequest.getTenantId(), tenantBuildRequest.getId());
                             yield Uni.createFrom().voidItem();
                         }
@@ -76,7 +76,7 @@ public class BuildRequestTaskImpl {
         final var qualifier = tenantBuildRequest.getQualifier();
         final var buildNumber = tenantBuildRequest.getBuildNumber();
         final var idempotencyKey = tenantBuildRequest.getId().toString();
-        log.info("Checking jenkins build request, " +
+        log.debug("Checking jenkins build request, " +
                         "tenantBuildRequest={}/{}, tenantVersionId={}, qualifier={}, buildNumber={}",
                 tenantId,
                 tenantBuildRequest.getId(),
@@ -86,8 +86,7 @@ public class BuildRequestTaskImpl {
 
         return getLuaJitRuntimeBuilderV1Request(buildNumber)
                 .flatMap(imageId -> {
-                    log.info("Jenkins build job was finished, qualifier={}, buildNumber={}, imageId={}",
-                            qualifier, buildNumber, imageId);
+                    log.info("Jenkins job {} was finished", buildNumber);
                     return syncTenantImage(tenantBuildRequest, imageId, idempotencyKey);
                 })
                 .map(created -> JenkinsRequestResultEnum.FINISHED)
@@ -99,7 +98,7 @@ public class BuildRequestTaskImpl {
                         }
                     }
 
-                    log.warn("Jenkins build job failed, {}", t.getMessage());
+                    log.warn("Jenkins job {} failed, {}", buildNumber, t.getMessage());
                     return Uni.createFrom().item(JenkinsRequestResultEnum.FAILED);
                 });
     }

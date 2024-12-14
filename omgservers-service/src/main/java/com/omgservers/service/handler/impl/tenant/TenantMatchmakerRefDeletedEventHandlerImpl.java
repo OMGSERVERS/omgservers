@@ -30,7 +30,7 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantMatchmakerRefDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -38,7 +38,7 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
         return getTenantMatchmakerRef(tenantId, id)
                 .flatMap(tenantMatchmakerRef -> {
-                    log.info("Deleted, {}", tenantMatchmakerRef);
+                    log.debug("Deleted, {}", tenantMatchmakerRef);
 
                     return Uni.createFrom().voidItem();
                 })

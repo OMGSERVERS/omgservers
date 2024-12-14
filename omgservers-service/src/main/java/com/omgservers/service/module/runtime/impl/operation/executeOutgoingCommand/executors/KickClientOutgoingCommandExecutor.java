@@ -81,14 +81,14 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
         return getRuntime(runtimeId)
                 .flatMap(runtime -> switch (runtime.getQualifier()) {
                     case LOBBY -> {
-                        log.info("Do kick client from the lobby, clientId={}, runtimeId={}",
+                        log.debug("Do kick client from the lobby, clientId={}, runtimeId={}",
                                 clientId, runtimeId);
 
                         yield deleteClient(clientId)
                                 .replaceWithVoid();
                     }
                     case MATCH -> {
-                        log.info("Do kick client from the match, clientId={}, runtimeId={}",
+                        log.debug("Do kick client from the match, clientId={}, runtimeId={}",
                                 clientId, runtimeId);
 
                         final var matchmakerId = runtime.getConfig().getMatchConfig().getMatchmakerId();
@@ -122,8 +122,7 @@ public class KickClientOutgoingCommandExecutor implements OutgoingCommandExecuto
                 .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
-                    log.info("Matchmaker was not found, KickClientMatchmakerCommand won't be created, " +
-                            "matchmakerId={}, clientId={}", matchmakerId, clientId);
+                    log.debug("Matchmaker was not found, matchmakerId={}, clientId={}", matchmakerId, clientId);
                     return Uni.createFrom().item(Boolean.FALSE);
                 });
     }

@@ -25,7 +25,7 @@ class GetPoolModuleClientOperationImpl implements GetPoolModuleClientOperation {
                     .baseUri(uri)
                     .build(PoolModuleClient.class);
 
-            log.info("Module client was created, uri={}", uri);
+            log.debug("Module client was created, uri={}", uri);
 
             cache.put(uri, client);
         }

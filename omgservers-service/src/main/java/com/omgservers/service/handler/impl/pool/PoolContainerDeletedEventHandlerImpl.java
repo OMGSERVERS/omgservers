@@ -43,7 +43,7 @@ public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (PoolContainerDeletedEventBodyModel) event.getBody();
         final var poolId = body.getPoolId();
@@ -52,7 +52,7 @@ public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
 
         return getPoolContainer(poolId, serverId, id)
                 .flatMap(poolContainer -> {
-                    log.info("Deleted, {}", poolContainer);
+                    log.debug("Deleted, {}", poolContainer);
 
                     return findAndDeleteRuntimePoolContainerRef(poolContainer)
                             .flatMap(voidItem -> getPoolServer(poolId, serverId)

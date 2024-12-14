@@ -47,14 +47,14 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getId();
 
         return getTenant(tenantId)
                 .flatMap(tenant -> {
-                    log.info("Created, {}", tenant);
+                    log.debug("Created, {}", tenant);
 
                     final var idempotencyKey = event.getId().toString();
 

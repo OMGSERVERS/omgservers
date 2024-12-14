@@ -25,7 +25,7 @@ class RunLuaJitRuntimeBuilderV1MethodImpl implements RunLuaJitRuntimeBuilderV1Me
     @Override
     public Uni<RunLuaJitRuntimeBuilderV1Response> runLuaJitRuntimeBuilderV1(
             final RunLuaJitRuntimeBuilderV1Request request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var builderUri = getConfigOperation.getServiceConfig().builder().uri();
         final var jenkinsClient = getJenkinsClientOperation.getClient(builderUri);
@@ -38,7 +38,7 @@ class RunLuaJitRuntimeBuilderV1MethodImpl implements RunLuaJitRuntimeBuilderV1Me
         return jenkinsClient.runLuaJitRuntimeBuilderV1(groupId, containerName, versionId, base64Archive)
                 .map(response -> {
                     final var locationHeader = response.getHeaderString("Location");
-                    log.info("Got jenkins response, locationHeader={}", locationHeader);
+                    log.debug("Got jenkins response, locationHeader={}", locationHeader);
                     final var itemNumber = parseItemNumber(locationHeader);
                     return itemNumber;
                 })
@@ -46,7 +46,7 @@ class RunLuaJitRuntimeBuilderV1MethodImpl implements RunLuaJitRuntimeBuilderV1Me
                 .onItem().delayIt().by(Duration.ofSeconds(1))
                 .flatMap(itemNumber -> jenkinsClient.getQueueItem(itemNumber)
                         .map(response -> {
-                            log.info("Got queue item, response={}", response);
+                            log.debug("Got queue item, response={}", response);
 
                             final var cancelled = response.getCancelled();
                             if (Objects.nonNull(cancelled) && cancelled.equals(Boolean.TRUE)) {
@@ -66,6 +66,8 @@ class RunLuaJitRuntimeBuilderV1MethodImpl implements RunLuaJitRuntimeBuilderV1Me
                                         ExceptionQualifierEnum.JENKINS_REQUEST_FAILED,
                                         "Build number was not found");
                             }
+
+                            log.info("LuaJit jenkins jobs {} started", buildNumber);
 
                             return buildNumber;
                         }))

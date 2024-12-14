@@ -16,7 +16,7 @@ public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMetho
 
     @Override
     public Uni<ExecuteSchedulerTaskResponse> execute(final ExecuteSchedulerTaskRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return schedulerTask.execute()
                 .onFailure()
@@ -24,7 +24,7 @@ public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMetho
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
-                .invoke(result -> log.info("Task finished, result={}", result))
+                .invoke(result -> log.debug("Task finished, result={}", result))
                 .map(ExecuteSchedulerTaskResponse::new);
     }
 }

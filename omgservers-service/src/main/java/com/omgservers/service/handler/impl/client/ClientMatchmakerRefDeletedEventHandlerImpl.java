@@ -28,7 +28,7 @@ public class ClientMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (ClientMatchmakerRefDeletedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
@@ -36,7 +36,7 @@ public class ClientMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
         return getClientMatchmakerRef(clientId, id)
                 .flatMap(clientMatchmakerRef -> {
-                    log.info("Deleted, {}", clientMatchmakerRef);
+                    log.debug("Deleted, {}", clientMatchmakerRef);
 
                     return Uni.createFrom().voidItem();
                 })

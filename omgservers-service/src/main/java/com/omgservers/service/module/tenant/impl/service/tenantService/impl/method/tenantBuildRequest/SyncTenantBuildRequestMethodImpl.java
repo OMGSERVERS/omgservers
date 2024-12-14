@@ -30,7 +30,7 @@ class SyncTenantBuildRequestMethodImpl implements SyncTenantBuildRequestMethod {
     @Override
     public Uni<SyncTenantBuildRequestResponse> execute(
             final SyncTenantBuildRequestRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var tenantBuildRequest = request.getTenantBuildRequest();

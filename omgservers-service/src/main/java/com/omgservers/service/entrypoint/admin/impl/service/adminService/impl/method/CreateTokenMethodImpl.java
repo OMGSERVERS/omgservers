@@ -20,7 +20,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     @Override
     public Uni<CreateTokenAdminResponse> execute(final CreateTokenAdminRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var userId = request.getUserId();
         final var password = request.getPassword();

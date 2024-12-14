@@ -75,7 +75,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (RuntimeCreatedEventBodyModel) event.getBody();
         final var runtimeId = body.getId();
@@ -84,7 +84,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
         return getRuntime(runtimeId)
                 .flatMap(runtime -> {
-                    log.info("Created, {}", runtime);
+                    log.debug("Created, {}", runtime);
 
                     return syncRuntimeRef(runtime, idempotencyKey)
                             .flatMap(created -> requestRuntimeDeployment(runtimeId, idempotencyKey))
@@ -114,7 +114,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                         .recoverWithUni(t -> {
                             if (t instanceof final ServerSideBaseException exception) {
                                 if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                                    log.warn("Idempotency was violated, object={}, {}", lobbyRuntimeRef,
+                                    log.debug("Idempotency was violated, object={}, {}", lobbyRuntimeRef,
                                             t.getMessage());
                                     return Uni.createFrom().item(Boolean.FALSE);
                                 }
@@ -138,7 +138,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                         .recoverWithUni(t -> {
                             if (t instanceof final ServerSideBaseException exception) {
                                 if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                                    log.warn("Idempotency was violated, object={}, {}", matchRuntimeRef,
+                                    log.debug("Idempotency was violated, object={}, {}", matchRuntimeRef,
                                             t.getMessage());
                                     return Uni.createFrom().item(Boolean.FALSE);
                                 }

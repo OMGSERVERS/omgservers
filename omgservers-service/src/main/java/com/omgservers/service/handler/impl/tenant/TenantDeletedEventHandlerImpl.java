@@ -48,14 +48,14 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getId();
 
         return getTenant(tenantId)
                 .flatMap(tenant -> {
-                    log.info("Deleted, {}", tenant);
+                    log.debug("Deleted, {}", tenant);
 
                     return deleteTenantPermissionsOperation.execute(tenantId)
                             .flatMap(voidItem -> deleteTenantProjectsOperation.execute(tenantId))

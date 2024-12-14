@@ -35,7 +35,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantMatchmakerRequestCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -43,7 +43,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
 
         return getTenantMatchmakerRequest(tenantId, id)
                 .flatMap(tenantMatchmakerRequest -> {
-                    log.info("Created, {}", tenantMatchmakerRequest);
+                    log.debug("Created, {}", tenantMatchmakerRequest);
 
                     return syncMatchmaker(tenantMatchmakerRequest, event.getIdempotencyKey());
                 })

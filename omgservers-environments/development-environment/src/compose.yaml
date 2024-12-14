@@ -75,6 +75,7 @@ services:
       - database
       - queues
     environment:
+      - OMGSERVERS_OTEL_DISABLED=true
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
       - OMGSERVERS_QUEUES_HOST=queues

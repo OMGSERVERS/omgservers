@@ -34,7 +34,7 @@ public class VersionBuildingFailedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (VersionBuildingFailedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -42,7 +42,7 @@ public class VersionBuildingFailedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(tenantVersion -> {
-                    log.info("Building failed, {}", tenantVersion);
+                    log.info("Building of version {} failed", tenantVersionId);
 
                     return deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId, tenantVersionId);
                 })

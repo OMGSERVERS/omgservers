@@ -39,7 +39,7 @@ class InitializeDispatcherJobMethodImpl implements InitializeDispatcherJobMethod
                             })
                             .schedule();
 
-                    log.info("Dispatcher job was scheduled, {}", trigger);
+                    log.debug("Dispatcher job was scheduled, {}", trigger);
                 });
     }
 }

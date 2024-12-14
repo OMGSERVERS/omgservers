@@ -34,7 +34,7 @@ class TransferWebSocketMessageOperationImpl implements TransferWebSocketMessageO
             case RUNTIME -> {
                 final var runtimeRoom = dispatcherRooms.findRuntimeRoom(dispatcherConnection);
                 if (Objects.isNull(runtimeRoom)) {
-                    log.info("Room was not found to transfer runtime message, dispatcherConnection={}",
+                    log.debug("Room was not found to transfer runtime message, dispatcherConnection={}",
                             dispatcherConnection);
                     yield Uni.createFrom().item(Boolean.FALSE);
                 }
@@ -44,7 +44,7 @@ class TransferWebSocketMessageOperationImpl implements TransferWebSocketMessageO
             case PLAYER -> {
                 final var playerRoom = dispatcherRooms.findPlayerRoom(dispatcherConnection);
                 if (Objects.isNull(playerRoom)) {
-                    log.info("Room was not found to transfer player message, dispatcherConnection={}",
+                    log.debug("Room was not found to transfer player message, dispatcherConnection={}",
                             dispatcherConnection);
                     yield Uni.createFrom().item(Boolean.FALSE);
                 }

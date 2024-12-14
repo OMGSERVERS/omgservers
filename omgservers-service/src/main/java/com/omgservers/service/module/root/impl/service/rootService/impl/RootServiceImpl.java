@@ -80,7 +80,7 @@ class RootServiceImpl implements RootService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getRoot(), t.getMessage());
+                            log.debug("Idempotency was violated, object={}, {}", request.getRoot(), t.getMessage());
                             return Uni.createFrom().item(new SyncRootResponse(Boolean.FALSE));
                         }
                     }
@@ -137,7 +137,7 @@ class RootServiceImpl implements RootService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}",
+                            log.debug("Idempotency was violated, object={}, {}",
                                     request.getRootEntityRef(), t.getMessage());
                             return Uni.createFrom().item(new SyncRootEntityRefResponse(Boolean.FALSE));
                         }

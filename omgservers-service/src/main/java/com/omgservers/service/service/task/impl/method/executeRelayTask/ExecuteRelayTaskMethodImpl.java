@@ -16,7 +16,7 @@ public class ExecuteRelayTaskMethodImpl implements ExecuteRelayTaskMethod {
 
     @Override
     public Uni<ExecuteRelayTaskResponse> execute(final ExecuteRelayTaskRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return relayTask.execute()
                 .onFailure()
@@ -24,7 +24,7 @@ public class ExecuteRelayTaskMethodImpl implements ExecuteRelayTaskMethod {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
-                .invoke(result -> log.info("Task finished, result={}", result))
+                .invoke(result -> log.debug("Task finished, result={}", result))
                 .map(ExecuteRelayTaskResponse::new);
     }
 }

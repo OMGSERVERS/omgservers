@@ -33,14 +33,14 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
 
     @Override
     public Uni<RouteServerConnectionResponse> execute(final RouteServerConnectionRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var serverConnection = request.getServerConnection();
         final var serverUri = request.getServerUri();
 
         return createClientWebSocket(serverConnection, serverUri)
                 .invoke(clientConnection -> {
-                    log.info("Server connection was routed, serverConnection={}, serverUri={}, clientConnectionId={}",
+                    log.debug("Server connection was routed, serverConnection={}, serverUri={}, clientConnectionId={}",
                             serverConnection, request.getServerUri(), clientConnection.id());
                     routedConnections.put(serverConnection, clientConnection);
                 })
@@ -76,7 +76,7 @@ class RouteServerConnectionMethodImpl implements RouteServerConnectionMethod {
                 .subscribe().with(
                         response -> {
                             if (response.getClosed()) {
-                                log.info("Server connection was closed, closeReason={}", closeReason);
+                                log.debug("Server connection was closed, closeReason={}", closeReason);
                             }
                         },
                         failure -> {

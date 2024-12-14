@@ -30,7 +30,7 @@ public class TenantLobbyRefDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantLobbyRefDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -38,7 +38,7 @@ public class TenantLobbyRefDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantLobbyRef(tenantId, id)
                 .flatMap(tenantLobbyRef -> {
-                    log.info("Deleted, {}", tenantLobbyRef);
+                    log.debug("Deleted, {}", tenantLobbyRef);
 
                     return Uni.createFrom().voidItem();
                 })

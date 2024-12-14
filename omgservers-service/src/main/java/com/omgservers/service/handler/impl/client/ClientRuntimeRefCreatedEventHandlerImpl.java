@@ -51,7 +51,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (ClientRuntimeRefCreatedEventBodyModel) event.getBody();
         final var clientId = body.getClientId();
@@ -61,7 +61,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
         return getClientRuntimeRef(clientId, id)
                 .flatMap(clientRuntimeRef -> {
-                    log.info("Created, {}", clientRuntimeRef);
+                    log.debug("Created, {}", clientRuntimeRef);
 
                     final var runtimeId = clientRuntimeRef.getRuntimeId();
                     return getRuntime(runtimeId)

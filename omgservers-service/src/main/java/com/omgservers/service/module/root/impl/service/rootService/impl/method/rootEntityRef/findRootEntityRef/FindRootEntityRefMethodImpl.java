@@ -23,7 +23,7 @@ class FindRootEntityRefMethodImpl implements FindRootEntityRefMethod {
     @Override
     public Uni<FindRootEntityRefResponse> findRootEntityRef(
             final FindRootEntityRefRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

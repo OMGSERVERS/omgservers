@@ -64,7 +64,7 @@ class JobServiceImpl implements JobService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getJob(), t.getMessage());
+                            log.debug("Idempotency was violated, object={}, {}", request.getJob(), t.getMessage());
                             return Uni.createFrom().item(new SyncJobResponse(Boolean.FALSE));
                         }
                     }

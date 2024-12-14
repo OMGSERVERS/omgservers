@@ -33,7 +33,7 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
 
     @Override
     public Uni<DeleteTenantVersionDeveloperResponse> execute(final DeleteTenantVersionDeveloperRequest request) {
-        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());

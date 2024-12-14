@@ -35,7 +35,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantVersionDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -43,7 +43,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(tenantVersion -> {
-                    log.info("Deleted, {}", tenantVersion);
+                    log.debug("Deleted, {}", tenantVersion);
 
                     return deleteTenantFilesArchivesByTenantVersionIdOperation.execute(tenantId, tenantVersionId)
                             .flatMap(voidItem -> deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId,

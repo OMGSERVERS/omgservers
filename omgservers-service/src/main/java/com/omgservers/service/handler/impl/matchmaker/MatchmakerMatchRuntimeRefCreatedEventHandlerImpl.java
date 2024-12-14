@@ -34,7 +34,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (MatchmakerMatchRuntimeRefCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
@@ -43,7 +43,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
 
         return getMatchmakerMatchRuntimeRef(matchmakerId, matchId, id)
                 .flatMap(matchmakerMatchRuntimeRef -> {
-                    log.info("Created, {}", matchmakerMatchRuntimeRef);
+                    log.debug("Created, {}", matchmakerMatchRuntimeRef);
 
                     final var idempotencyKey = event.getId().toString();
                     return syncPrepareMatchMatchmakerCommand(matchmakerId, matchId, idempotencyKey)

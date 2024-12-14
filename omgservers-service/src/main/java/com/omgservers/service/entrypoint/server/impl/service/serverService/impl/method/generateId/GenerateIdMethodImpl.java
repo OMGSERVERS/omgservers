@@ -19,7 +19,7 @@ class GenerateIdMethodImpl implements GenerateIdMethod {
 
     @Override
     public Uni<GenerateIdServerResponse> getId() {
-        log.info("Generate id, principal={}", securityIdentity.getPrincipal().getName());
+        log.debug("Generate id, principal={}", securityIdentity.getPrincipal().getName());
 
         return Uni.createFrom().item(new GenerateIdServerResponse(generateIdOperation.generateId()));
     }

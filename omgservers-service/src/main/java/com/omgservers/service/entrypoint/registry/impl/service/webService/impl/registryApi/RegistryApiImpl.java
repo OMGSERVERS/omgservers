@@ -37,7 +37,7 @@ public class RegistryApiImpl implements RegistryApi {
     @Override
     @PermitAll
     public Uni<Void> handleEvents(@NotNull JsonNode jsonNode) {
-        log.info("Registry events were received, {}", jsonNode.toString());
+        log.debug("Registry events were received, {}", jsonNode.toString());
 
         try {
             final var request = objectMapper.treeToValue(jsonNode, HandleEventsRegistryRequest.class);

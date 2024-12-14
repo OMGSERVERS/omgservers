@@ -40,14 +40,14 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (PoolDeletedEventBodyModel) event.getBody();
         final var poolId = body.getId();
 
         return getPool(poolId)
                 .flatMap(pool -> {
-                    log.info("Deleted, {}", pool);
+                    log.debug("Deleted, {}", pool);
 
                     return findAndDeleteJob(poolId);
                 })

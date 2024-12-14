@@ -32,7 +32,7 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
     @Override
     public Uni<GetTenantDashboardDeveloperResponse> execute(
             final GetTenantDashboardDeveloperRequest request) {
-        log.info("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());

@@ -26,6 +26,8 @@ class OpenMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandler
     public void handle(final MatchmakerStateDto matchmakerState,
                        final MatchmakerChangeOfStateDto matchmakerChangeOfState,
                        final MatchmakerCommandModel matchmakerCommand) {
+        log.trace("Handle command, {}", matchmakerCommand);
+
         final var body = (OpenMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
         final var matchmakerMatchId = body.getMatchId();
 
@@ -39,7 +41,7 @@ class OpenMatchMatchmakingCommandHandlerImpl implements MatchmakerCommandHandler
         matchmakerChangeOfState.getMatchesToUpdateStatus().addAll(matchesToUpdateStatus);
 
         if (!matchesToUpdateStatus.isEmpty()) {
-            log.info("The match was queued to be opened, matchId={}", matchmakerMatchId);
+            log.debug("The match was queued to be opened, matchId={}", matchmakerMatchId);
         }
     }
 }

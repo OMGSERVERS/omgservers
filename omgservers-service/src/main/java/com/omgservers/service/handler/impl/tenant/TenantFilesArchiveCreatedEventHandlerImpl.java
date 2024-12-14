@@ -37,7 +37,7 @@ public class TenantFilesArchiveCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantFilesArchiveCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -47,7 +47,7 @@ public class TenantFilesArchiveCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantFilesArchive(tenantId, id)
                 .flatMap(tenantFilesArchive -> {
-                    log.info("Created, {}", tenantFilesArchive);
+                    log.debug("Created, {}", tenantFilesArchive);
 
                     final var tenantVersionId = tenantFilesArchive.getVersionId();
 

@@ -26,7 +26,7 @@ class UpdateRuntimeAssignmentLastActivityMethodImpl implements UpdateRuntimeAssi
     @Override
     public Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(
             final UpdateRuntimeAssignmentLastActivityRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

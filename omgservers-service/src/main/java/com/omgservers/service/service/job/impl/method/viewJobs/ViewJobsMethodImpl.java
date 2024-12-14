@@ -21,7 +21,7 @@ class ViewJobsMethodImpl implements ViewJobsMethod {
 
     @Override
     public Uni<ViewJobsResponse> viewJobs(final ViewJobsRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return pgPool.withTransaction(selectJobsOperation::selectJobs)
                 .map(ViewJobsResponse::new);

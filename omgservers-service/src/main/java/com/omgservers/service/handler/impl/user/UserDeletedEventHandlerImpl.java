@@ -40,14 +40,14 @@ public class UserDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (UserDeletedEventBodyModel) event.getBody();
         final var userId = body.getId();
 
         return getUser(userId)
                 .flatMap(user -> {
-                    log.info("Deleted, {}", user);
+                    log.debug("Deleted, {}", user);
 
                     if (user.getRole().equals(UserRoleEnum.DEVELOPER)) {
                         return findAndDeleteRootUserRef(userId);

@@ -35,7 +35,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (TenantStageDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
@@ -43,7 +43,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
         return getTenantStage(tenantId, tenantStageId)
                 .flatMap(tenantStage -> {
-                    log.info("Deleted, {}", tenantStage);
+                    log.debug("Deleted, {}", tenantStage);
 
                     return deleteTenantStagePermissionsOperation.execute(tenantId, tenantStageId)
                             .flatMap(voidItem -> deleteTenantDeploymentsByTenantStageIdOperation

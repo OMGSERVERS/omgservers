@@ -23,7 +23,7 @@ class DeleteRuntimePoolContainerRefMethodImpl implements DeleteRuntimePoolContai
     @Override
     public Uni<DeleteRuntimePoolContainerRefResponse> execute(
             final DeleteRuntimePoolContainerRefRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();

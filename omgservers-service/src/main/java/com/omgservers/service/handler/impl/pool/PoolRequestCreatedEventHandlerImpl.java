@@ -28,7 +28,7 @@ public class PoolRequestCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (PoolRequestCreatedEventBodyModel) event.getBody();
         final var poolId = body.getPoolId();
@@ -36,7 +36,7 @@ public class PoolRequestCreatedEventHandlerImpl implements EventHandler {
 
         return getPoolRequest(poolId, id)
                 .flatMap(poolRequest -> {
-                    log.info("Created, {}", poolRequest);
+                    log.debug("Created, {}", poolRequest);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();

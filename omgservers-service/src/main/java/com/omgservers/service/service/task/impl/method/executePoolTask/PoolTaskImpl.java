@@ -33,7 +33,7 @@ public class PoolTaskImpl {
                     return updatePoolState(poolId, poolChangeOfState)
                             .invoke(updated -> {
                                 if (poolChangeOfState.isNotEmpty()) {
-                                    log.info("Pool task was executed, poolId={}, {}", poolId,
+                                    log.debug("Pool task was executed, poolId={}, {}", poolId,
                                             poolChangeOfState);
                                 }
                             });

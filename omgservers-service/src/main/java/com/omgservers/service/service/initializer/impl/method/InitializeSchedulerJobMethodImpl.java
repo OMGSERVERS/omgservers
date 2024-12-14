@@ -39,7 +39,7 @@ class InitializeSchedulerJobMethodImpl implements InitializeSchedulerJobMethod {
                             })
                             .schedule();
 
-                    log.info("Scheduler job was scheduled, {}", trigger);
+                    log.debug("Scheduler job was scheduled, {}", trigger);
                 });
     }
 }

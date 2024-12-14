@@ -28,7 +28,7 @@ class ViewTenantBuildRequestsMethodImpl implements ViewTenantBuildRequestsMethod
     @Override
     public Uni<ViewTenantBuildRequestsResponse> execute(
             final ViewTenantBuildRequestsRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

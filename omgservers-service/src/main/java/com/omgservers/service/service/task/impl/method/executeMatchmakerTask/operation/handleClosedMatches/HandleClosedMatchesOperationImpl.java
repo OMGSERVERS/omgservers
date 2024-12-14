@@ -37,7 +37,7 @@ class HandleClosedMatchesOperationImpl implements HandleClosedMatchesOperation {
         matchmakerChangeOfState.getMatchesToUpdateStatus().addAll(matchesToUpdateStatus);
 
         if (!matchesToUpdateStatus.isEmpty()) {
-            log.info("Empty matches were queued to change their status, count={}", matchesToUpdateStatus.size());
+            log.debug("Empty matches were queued to change their status, count={}", matchesToUpdateStatus.size());
         }
     }
 }

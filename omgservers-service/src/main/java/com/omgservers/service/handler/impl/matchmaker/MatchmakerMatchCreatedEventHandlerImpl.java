@@ -56,7 +56,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.debug("Handle event, {}", event);
+        log.trace("Handle event, {}", event);
 
         final var body = (MatchmakerMatchCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
@@ -65,7 +65,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> getMatch(matchmakerId, matchId)
                         .flatMap(match -> {
-                            log.info("Created, {}", match);
+                            log.debug("Created, {}", match);
 
                             final var tenantId = matchmaker.getTenantId();
                             final var tenantDeploymentId = matchmaker.getDeploymentId();

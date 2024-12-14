@@ -23,7 +23,7 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
 
     @Override
     public Uni<DeleteRuntimeResponse> execute(DeleteRuntimeRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var id = request.getId();
         return Uni.createFrom().voidItem()

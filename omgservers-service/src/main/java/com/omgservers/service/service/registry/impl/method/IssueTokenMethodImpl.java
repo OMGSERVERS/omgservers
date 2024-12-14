@@ -33,7 +33,7 @@ class IssueTokenMethodImpl implements IssueTokenMethod {
 
     @Override
     public Uni<IssueTokenResponse> issueToken(final IssueTokenRequest request) {
-        log.debug("Requested, {}", request);
+        log.trace("Requested, {}", request);
 
         final var userId = request.getUserId();
 
@@ -66,7 +66,7 @@ class IssueTokenMethodImpl implements IssueTokenMethod {
                     }
 
                     final var tokenAccess = accessToken.getClaim("access");
-                    log.info("Docker registry client access token was issued, userId={}, access={}, offlineToken={}",
+                    log.debug("Docker registry client access token was issued, userId={}, access={}, offlineToken={}",
                             userId, tokenAccess, offlineToken);
 
                     return response;

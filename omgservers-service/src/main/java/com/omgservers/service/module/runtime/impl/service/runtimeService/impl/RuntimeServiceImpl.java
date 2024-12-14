@@ -134,7 +134,7 @@ public class RuntimeServiceImpl implements RuntimeService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getRuntime(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getRuntime(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncRuntimeResponse(Boolean.FALSE));
                         }
@@ -225,7 +225,7 @@ public class RuntimeServiceImpl implements RuntimeService {
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.warn("Idempotency was violated, object={}, {}", request.getRuntimeCommand(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getRuntimeCommand(),
                                     t.getMessage());
                             return Uni.createFrom().item(new SyncClientCommandResponse(Boolean.FALSE));
                         }
