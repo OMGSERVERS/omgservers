@@ -8,6 +8,7 @@ import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
+import org.jboss.logmanager.MDC;
 import org.slf4j.Logger;
 
 import java.net.URI;
@@ -27,14 +28,16 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                                                                         final BiFunction<C, T, Uni<? extends R>> route,
                                                                         final Function<T, Uni<? extends R>> handle) {
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    if (shard.locked()) {
+                .flatMap(shardModel -> {
+                    MDC.put("shard", String.valueOf(shardModel.shard()));
+
+                    if (shardModel.locked()) {
                         throw new ServerSideInternalException(ExceptionQualifierEnum.SHARD_LOCKED,
-                                "shard is locked, shard=" + shard.shard());
+                                "shardModel is locked, shardModel=" + shardModel.shard());
                     }
 
-                    if (shard.foreign()) {
-                        var serverUri = shard.serverUri();
+                    if (shardModel.foreign()) {
+                        var serverUri = shardModel.serverUri();
                         final var client = api.apply(serverUri);
                         log.trace("Route request, targetServer={}, request={}", serverUri, request);
                         return route.apply(client, request);
