@@ -9,6 +9,7 @@ import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,6 +32,9 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     public Uni<CreateTenantProjectSupportResponse> execute(final CreateTenantProjectSupportRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
         final var tenantId = request.getTenantId();
         return createTenantProject(tenantId)
                 .flatMap(tenantProject -> {
@@ -39,6 +43,10 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                             .map(tenantStage -> {
                                 final var tenantStageId = tenantStage.getId();
                                 final var tenantStageSecret = tenantStage.getSecret();
+
+                                log.info("New project {} was created in tenant {} by user {}",
+                                        tenantProjectId, tenantId, userId);
+
                                 return new CreateTenantProjectSupportResponse(tenantProjectId,
                                         tenantStageId,
                                         tenantStageSecret);

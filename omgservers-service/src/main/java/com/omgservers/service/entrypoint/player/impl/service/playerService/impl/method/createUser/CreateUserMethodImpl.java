@@ -34,6 +34,7 @@ class CreateUserMethodImpl implements CreateUserMethod {
 
         final var password = generateSecureStringOperation.generateSecureString();
         return createUser(password)
+                .invoke(user -> log.info("New player user {} was created", user.getId()))
                 .map(user -> new CreateUserPlayerResponse(user.getId(), password));
     }
 

@@ -44,7 +44,7 @@ public class VersionBuildingFinishedEventHandlerImpl implements EventHandler {
 
         return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(tenantVersion -> {
-                    log.info("Building of version {} finished", tenantVersionId);
+                    log.debug("Building of version {} finished", tenantVersionId);
 
                     return deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId, tenantVersionId);
                 })

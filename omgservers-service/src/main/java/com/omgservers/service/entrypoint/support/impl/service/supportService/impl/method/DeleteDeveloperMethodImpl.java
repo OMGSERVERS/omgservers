@@ -5,6 +5,7 @@ import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
 import com.omgservers.schema.module.user.DeleteUserRequest;
 import com.omgservers.schema.module.user.DeleteUserResponse;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,10 +25,18 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
     public Uni<DeleteDeveloperSupportResponse> execute(final DeleteDeveloperSupportRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = request.getUserId();
-        final var deleteUserRequest = new DeleteUserRequest(userId);
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
+        final var developerUserId = request.getUserId();
+        final var deleteUserRequest = new DeleteUserRequest(developerUserId);
         return userModule.getService().deleteUser(deleteUserRequest)
                 .map(DeleteUserResponse::getDeleted)
+                .invoke(deleted -> {
+                    if (deleted) {
+                        log.info("Developer user {} was deleted by user {}", developerUserId, userId);
+                    }
+                })
                 .map(DeleteDeveloperSupportResponse::new);
     }
 }

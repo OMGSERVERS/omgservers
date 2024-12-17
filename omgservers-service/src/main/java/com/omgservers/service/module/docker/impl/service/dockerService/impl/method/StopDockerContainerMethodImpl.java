@@ -38,6 +38,9 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                     // TODO: get final the container logs
                     removeDockerContainer(dockerDaemonUri, dockerClient, containerName);
 
+                    log.info("The docker container {} was stopped on the server {}",
+                            containerName, dockerDaemonUri);
+
                     return new StopDockerContainerResponse(Boolean.TRUE);
                 });
     }
@@ -47,7 +50,7 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                                 final String containerName) {
         try {
             dockerClient.stopContainerCmd(containerName).exec();
-            log.info("The container has been stopped, containerName={}, dockerDaemonUri={}",
+            log.debug("The container has been stopped, containerName={}, dockerDaemonUri={}",
                     containerName, dockerDaemonUri);
             return Boolean.TRUE;
         } catch (DockerException e) {
@@ -62,7 +65,7 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                                   final String containerName) {
         try {
             dockerClient.removeContainerCmd(containerName).exec();
-            log.info("The container has been removed, containerName={}, dockerDaemonUri={}",
+            log.debug("The container has been removed, containerName={}, dockerDaemonUri={}",
                     containerName, dockerDaemonUri);
             return Boolean.TRUE;
         } catch (DockerException e) {

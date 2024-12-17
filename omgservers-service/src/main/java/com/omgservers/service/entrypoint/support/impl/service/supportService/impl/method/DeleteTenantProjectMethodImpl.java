@@ -5,6 +5,7 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRespon
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,11 +25,19 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     public Uni<DeleteTenantProjectSupportResponse> execute(final DeleteTenantProjectSupportRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getProjectId();
         final var deleteTenantRequest = new DeleteTenantProjectRequest(tenantId, tenantProjectId);
         return tenantModule.getService().deleteTenantProject(deleteTenantRequest)
                 .map(DeleteTenantProjectResponse::getDeleted)
+                .invoke(deleted -> {
+                    if (deleted) {
+                        log.info("Project {} was deleted in tenant {} by user {}", tenantProjectId, tenantId, userId);
+                    }
+                })
                 .map(DeleteTenantProjectSupportResponse::new);
     }
 }

@@ -53,6 +53,10 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
                         .map(tenantStage -> {
                             final var tenantStageId = tenantStage.getId();
                             final var tenantStageSecret = tenantStage.getSecret();
+
+                            log.info("New stage {} was created in tenant {} by user {}",
+                                    tenantStageId, tenantId, userId);
+
                             return new CreateTenantStageDeveloperResponse(tenantStageId, tenantStageSecret);
                         }));
     }

@@ -52,6 +52,12 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
                                     userId,
                                     permissionQualifier)
                             .flatMap(voidItem -> deleteTenantDeployment(tenantId, tenantDeploymentId))
+                            .invoke(deleted -> {
+                                if (deleted) {
+                                    log.info("Deployment {} was deleted in tenant {} by user {}",
+                                            tenantDeploymentId, tenantId, userId);
+                                }
+                            })
                             .map(DeleteTenantDeploymentDeveloperResponse::new);
                 });
     }

@@ -11,6 +11,7 @@ import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -37,12 +38,18 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
     public Uni<CreateDeveloperSupportResponse> execute(final CreateDeveloperSupportRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
         final var password = generateSecureStringOperation.generateSecureString();
-        return createUser(password)
+        return createDeveloperUser(password)
+                .invoke(developerUser -> {
+                    log.info("New developer user {} was created by {}", developerUser.getId(), userId);
+                })
                 .map(user -> new CreateDeveloperSupportResponse(user.getId(), password));
     }
 
-    Uni<UserModel> createUser(final String password) {
+    Uni<UserModel> createDeveloperUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
         final var syncUserShardedRequest = new SyncUserRequest(user);

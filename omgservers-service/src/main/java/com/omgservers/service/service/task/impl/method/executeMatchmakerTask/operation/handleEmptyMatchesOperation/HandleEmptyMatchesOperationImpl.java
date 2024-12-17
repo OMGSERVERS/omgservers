@@ -38,7 +38,7 @@ class HandleEmptyMatchesOperationImpl implements HandleEmptyMatchesOperation {
         matchmakerChangeOfState.getMatchesToDelete().addAll(matchesToDelete);
 
         if (!matchesToDelete.isEmpty()) {
-            log.info("Empty matches were queued for deletion, count={}", matchesToDelete.size());
+            log.debug("Empty matches were queued for deletion, count={}", matchesToDelete.size());
         }
     }
 }

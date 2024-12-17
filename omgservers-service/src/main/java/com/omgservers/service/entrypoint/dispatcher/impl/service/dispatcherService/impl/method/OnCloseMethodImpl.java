@@ -24,6 +24,8 @@ class OnCloseMethodImpl implements OnCloseMethod {
         final var handleClosedConnectionRequest = new HandleClosedConnectionRequest(webSocketConnection,
                 closeReason);
         return dispatcherModule.getDispatcherService().handleClosedConnection(handleClosedConnectionRequest)
+                .invoke(voidItem -> log.info("Dispatcher connection {} was closed with reason {}",
+                        webSocketConnection.id(), closeReason))
                 .replaceWithVoid();
     }
 }

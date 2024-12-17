@@ -52,6 +52,12 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
                                     userId,
                                     permissionQualifier)
                             .flatMap(voidItem -> deleteTenantStage(tenantId, tenantStageId))
+                            .invoke(deleted -> {
+                                if (deleted) {
+                                    log.info("Stage {} was deleted in tenant {} by user {}",
+                                            tenantStageId, tenantId, userId);
+                                }
+                            })
                             .map(DeleteTenantStageDeveloperResponse::new);
                 });
     }

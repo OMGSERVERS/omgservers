@@ -52,9 +52,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeServerIndex() {
         if (getConfigOperation.getServiceConfig().bootstrap().index().enabled()) {
             return bootstrapService.bootstrapServerIndex()
-                    .invoke(voidItem -> log.info("Server index was initialized"));
+                    .invoke(voidItem -> log.debug("Server index was initialized"));
         } else {
-            log.info("Bootstrap of server index is not enabled, skip operation");
+            log.debug("Bootstrap of server index is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -62,9 +62,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeServiceRoot() {
         if (getConfigOperation.getServiceConfig().bootstrap().root().enabled()) {
             return bootstrapService.bootstrapServiceRoot()
-                    .invoke(voidItem -> log.info("Service root was initialized"));
+                    .invoke(voidItem -> log.debug("Service root was initialized"));
         } else {
-            log.info("Bootstrap of service root is not enabled, skip operation");
+            log.debug("Bootstrap of service root is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -72,9 +72,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeAdminUser() {
         if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapAdminUser()
-                    .invoke(voidItem -> log.info("Admin user was initialized"));
+                    .invoke(voidItem -> log.debug("Admin user was initialized"));
         } else {
-            log.info("Bootstrap of default user is not enabled, skip operation");
+            log.debug("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -82,9 +82,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeSupportUser() {
         if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapSupportUser()
-                    .invoke(voidItem -> log.info("Support user was initialized"));
+                    .invoke(voidItem -> log.debug("Support user was initialized"));
         } else {
-            log.info("Bootstrap of default user is not enabled, skip operation");
+            log.debug("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -92,9 +92,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeRegistryUser() {
         if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapRegistryUser()
-                    .invoke(voidItem -> log.info("Registry user was initialized"));
+                    .invoke(voidItem -> log.debug("Registry user was initialized"));
         } else {
-            log.info("Bootstrap of default user is not enabled, skip operation");
+            log.debug("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -102,9 +102,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeBuilderUser() {
         if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapBuilderUser()
-                    .invoke(voidItem -> log.info("Builder user was initialized"));
+                    .invoke(voidItem -> log.debug("Builder user was initialized"));
         } else {
-            log.info("Bootstrap of default user is not enabled, skip operation");
+            log.debug("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -112,9 +112,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeServiceUser() {
         if (getConfigOperation.getServiceConfig().bootstrap().defaultUsers().enabled()) {
             return bootstrapService.bootstrapServiceUser()
-                    .invoke(voidItem -> log.info("Service user was initialized"));
+                    .invoke(voidItem -> log.debug("Service user was initialized"));
         } else {
-            log.info("Bootstrap of default user is not enabled, skip operation");
+            log.debug("Bootstrap of default user is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }
@@ -122,9 +122,9 @@ public class ServiceBootstrapRequestedEventHandlerImpl implements EventHandler {
     Uni<Void> initializeDefaultPool() {
         if (getConfigOperation.getServiceConfig().bootstrap().defaultPool().enabled()) {
             return bootstrapService.bootstrapDefaultPool()
-                    .invoke(voidItem -> log.info("Default pool was initialized"));
+                    .invoke(voidItem -> log.debug("Default pool was initialized"));
         } else {
-            log.info("Bootstrap of default pool is not enabled, skip operation");
+            log.debug("Bootstrap of default pool is not enabled, skip operation");
             return Uni.createFrom().voidItem();
         }
     }

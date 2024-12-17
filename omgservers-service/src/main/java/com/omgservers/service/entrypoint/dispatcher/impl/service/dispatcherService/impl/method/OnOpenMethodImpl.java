@@ -30,6 +30,8 @@ class OnOpenMethodImpl implements OnOpenMethod {
         final var handleOpenedConnectionRequest = new HandleOpenedConnectionRequest(webSocketConnection,
                 runtimeId, userRole, subject);
         return dispatcherModule.getDispatcherService().handleOpenedConnection(handleOpenedConnectionRequest)
+                .invoke(voidItem -> log.info("Dispatcher connection {} to runtime {} was opened by {} with role {}",
+                        webSocketConnection.id(), runtimeId, subject, userRole))
                 .replaceWithVoid();
     }
 }

@@ -53,7 +53,8 @@ class CreateClientMethodImpl implements CreateClientMethod {
     public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId =
+                securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getStageId();
@@ -68,6 +69,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                             .replaceWith(client.getId()));
                         })
                 )
+                .invoke(clientId -> log.info("New client {} was created by user {}", clientId, userId))
                 .map(CreateClientPlayerResponse::new);
     }
 

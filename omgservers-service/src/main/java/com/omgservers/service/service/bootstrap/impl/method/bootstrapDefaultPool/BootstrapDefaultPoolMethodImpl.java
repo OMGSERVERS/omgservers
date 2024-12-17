@@ -38,7 +38,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
         log.debug("Bootstrap default pool");
 
         return createDefaultPool()
-                .invoke(defaultPool -> log.info("Default pool {} was created", defaultPool.getId()))
+                .invoke(defaultPool -> log.debug("Default pool {} was created", defaultPool.getId()))
                 .flatMap(defaultPool -> {
                     final var dockerHosts = getConfigOperation.getServiceConfig()
                             .bootstrap().defaultPool().dockerHosts();
@@ -85,7 +85,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 .map(SyncPoolServerResponse::getCreated)
                 .invoke(created -> {
                     if (created) {
-                        log.info("Pool server {} of pool {} was created",
+                        log.debug("Pool server {} of pool {} was created",
                                 poolServer.getPoolId(), poolServer.getPoolId());
                     }
                 });

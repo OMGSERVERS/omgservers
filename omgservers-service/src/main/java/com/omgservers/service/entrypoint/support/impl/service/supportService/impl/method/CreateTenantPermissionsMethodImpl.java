@@ -14,6 +14,7 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -39,19 +40,28 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
         log.debug("Requested, {}, principal={}", request,
                 securityIdentity.getPrincipal().getName());
 
-        final var userId = request.getUserId();
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
+        final var forUserId = request.getUserId();
         final var tenantId = request.getTenantId();
-        return getUser(userId)
+        return getUser(forUserId)
                 .flatMap(user -> getTenant(tenantId)
                         .flatMap(tenant -> {
                             final var permissionsToCreate = request.getPermissionsToCreate();
                             return Multi.createFrom().iterable(permissionsToCreate)
                                     .onItem().transformToUniAndConcatenate(permission ->
-                                            createTenantPermission(tenantId, userId, permission)
+                                            createTenantPermission(tenantId, forUserId, permission)
                                                     .map(created -> Tuple2.of(permission, created)))
                                     .collect().asList();
                         }))
                 .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
+                .invoke(createdPermissions -> {
+                    if (createdPermissions.size() > 0) {
+                        log.info("The {} tenant permissions in tenant {} for user {} were created by user {}",
+                                createdPermissions.size(), tenantId, forUserId, userId);
+                    }
+                })
                 .map(CreateTenantPermissionsSupportResponse::new);
     }
 

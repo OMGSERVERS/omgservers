@@ -74,7 +74,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                             imageUri = registryURI.getHost() + "/" + imageId;
                         }
 
-                        log.info("Pull image, imageUri={}, dockerDaemonUri={}", imageUri, dockerDaemonUri);
+                        log.debug("Pull image, imageUri={}, dockerDaemonUri={}", imageUri, dockerDaemonUri);
 
                         final boolean pullCompleted;
                         try {
@@ -92,20 +92,20 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                             return new StartDockerContainerResponse(Boolean.FALSE);
                         }
 
-                        log.info("The image pull has finished, imageUri={}, dockerDaemonUri={}",
+                        log.debug("The image pull has finished, imageUri={}, dockerDaemonUri={}",
                                 imageUri, dockerDaemonUri);
 
                         try {
                             dockerDaemonClient.removeContainerCmd(containerName).exec();
-                            log.info("Container was removed before creation a new one, " +
+                            log.debug("Container was removed before creation a new one, " +
                                     "containerName={}, dockerDaemonUri={}", containerName, dockerDaemonUri);
                         } catch (DockerException e) {
-                            log.info("Container was not removed before creation a new one, " +
+                            log.debug("Container was not removed before creation a new one, " +
                                             "containerName={}, dockerDaemonUri={}, {}",
                                     containerName, dockerDaemonUri, e.getMessage());
                         }
 
-                        log.info("Create container, imageUri={}, dockerDaemonUri={}", imageUri, dockerDaemonUri);
+                        log.debug("Create container, imageUri={}, dockerDaemonUri={}", imageUri, dockerDaemonUri);
 
                         final var createContainerResponse = dockerDaemonClient
                                 .createContainerCmd(imageUri)
@@ -114,7 +114,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                                 .withHostConfig(hostConfig)
                                 .exec();
 
-                        log.info("Docker container was created, " +
+                        log.debug("Docker container was created, " +
                                         "containerName={}, dockerNetwork={}, cpuQuota={}, memoryLimit={}, dockerDaemonUri={}, response={}",
                                 containerName,
                                 dockerNetwork,
@@ -125,12 +125,14 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
 
                         final var inspectContainerResponse = dockerDaemonClient.inspectContainerCmd(containerName)
                                 .exec();
-                        log.info("Docker container was inspected, response={}", inspectContainerResponse);
+                        log.debug("Docker container was inspected, response={}", inspectContainerResponse);
 
                         final var startContainerResponse = dockerDaemonClient.startContainerCmd(containerName)
                                 .exec();
 
-                        log.info("Docker container was started, response={}", startContainerResponse);
+                        log.info("The docker container {} was started on the server {}",
+                                containerName, dockerDaemonUri);
+
                         return new StartDockerContainerResponse(Boolean.TRUE);
 
                     } catch (DockerException e) {

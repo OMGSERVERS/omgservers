@@ -57,7 +57,13 @@ public class RuntimeTaskImpl {
         final var inactiveInterval = getConfigOperation.getServiceConfig().runtimes().inactiveInterval();
         final var now = Instant.now();
         if (runtime.getLastActivity().plusSeconds(inactiveInterval).isBefore(now)) {
+
             return createInactiveRuntimeDetectedEvent(runtime.getId())
+                    .invoke(created -> {
+                        if (created) {
+                            log.info("Runtime {} was detected as inactive", runtime.getId());
+                        }
+                    })
                     .replaceWithVoid();
         } else {
             return Uni.createFrom().voidItem();

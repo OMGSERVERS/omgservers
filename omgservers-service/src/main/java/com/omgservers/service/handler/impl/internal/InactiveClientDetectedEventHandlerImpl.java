@@ -50,7 +50,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
                         log.debug("Client was already deleted, skip operation, {}", client);
                         return Uni.createFrom().item(Boolean.FALSE);
                     } else {
-                        log.info("Client {} of deployment {} was marked inactive after no activity",
+                        log.debug("Client {} of deployment {} was marked inactive after no activity",
                                 client.getId(), client.getDeploymentId());
 
                         return syncDisconnectionMessage(clientId, event.getIdempotencyKey())

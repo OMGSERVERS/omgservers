@@ -58,7 +58,7 @@ public class InitializerServiceImpl implements InitializerService {
     Uni<Void> initializeDatabaseSchema() {
         if (getConfigOperation.getServiceConfig().initialization().databaseSchema().enabled()) {
             return initializeDatabaseSchemaMethod.execute()
-                    .invoke(voidItem -> log.info("The database schema was initialized"));
+                    .invoke(voidItem -> log.debug("The database schema was initialized"));
         } else {
             log.debug("Database schema initialization is not enabled, skipping this step");
             return Uni.createFrom().voidItem();
@@ -68,7 +68,7 @@ public class InitializerServiceImpl implements InitializerService {
     Uni<Void> initializeRelayJob() {
         if (getConfigOperation.getServiceConfig().initialization().relayJob().enabled()) {
             return initializeRelayJobMethod.execute()
-                    .invoke(voidItem -> log.info("The relay job was initialized"));
+                    .invoke(voidItem -> log.debug("The relay job was initialized"));
         } else {
             log.debug("Relay job initialization is not enabled, skipping this step.");
             return Uni.createFrom().voidItem();
@@ -78,7 +78,7 @@ public class InitializerServiceImpl implements InitializerService {
     Uni<Void> initializeSchedulerJob() {
         if (getConfigOperation.getServiceConfig().initialization().schedulerJob().enabled()) {
             return initializeSchedulerJobMethod.execute()
-                    .invoke(voidItem -> log.info("The scheduler job was initialized."));
+                    .invoke(voidItem -> log.debug("The scheduler job was initialized."));
         } else {
             log.debug("Scheduler job initialization is not enabled, skipping this step");
             return Uni.createFrom().voidItem();
@@ -88,7 +88,7 @@ public class InitializerServiceImpl implements InitializerService {
     Uni<Void> initializeDispatcherJob() {
         if (getConfigOperation.getServiceConfig().initialization().dispatcherJob().enabled()) {
             return initializeDispatcherJobMethod.execute()
-                    .invoke(voidItem -> log.info("The dispatcher job was initialized."));
+                    .invoke(voidItem -> log.debug("The dispatcher job was initialized."));
         } else {
             log.debug("Dispatcher job initialization is not enabled, skipping this step");
             return Uni.createFrom().voidItem();

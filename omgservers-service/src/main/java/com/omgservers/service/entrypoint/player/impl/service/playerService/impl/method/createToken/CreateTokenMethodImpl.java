@@ -31,6 +31,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
         final var password = request.getPassword();
 
         return createToken(userId, password)
+                .invoke(token -> log.info("A token was issued for player user {}", userId))
                 .map(CreateTokenPlayerResponse::new);
     }
 

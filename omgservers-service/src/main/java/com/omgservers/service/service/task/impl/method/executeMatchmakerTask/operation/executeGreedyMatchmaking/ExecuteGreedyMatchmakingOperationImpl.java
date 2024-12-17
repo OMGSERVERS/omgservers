@@ -48,7 +48,7 @@ class ExecuteGreedyMatchmakingOperationImpl implements ExecuteGreedyMatchmakingO
                 greedyMatchmaker.addMatchmakerMatch(matchmakerMatch);
 
                 if (!matchRequest(greedyMatchmaker, matchmakerRequest)) {
-                    log.info("Failed to process the matchmaker request, " +
+                    log.debug("Failed to process the matchmaker request, " +
                                     "it wasn't matched event with a new empty match {}",
                             matchmakerRequest);
                     matchmakerChangeOfState.getRequestsToDelete().add(matchmakerRequest);

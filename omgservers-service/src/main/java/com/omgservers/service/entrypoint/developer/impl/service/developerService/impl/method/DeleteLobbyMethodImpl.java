@@ -60,6 +60,12 @@ class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
                                                 userId,
                                                 permissionQualifier)
                                         .flatMap(voidItem -> deleteLobby(lobbyId))
+                                        .invoke(deleted -> {
+                                            if (deleted) {
+                                                log.info("Lobby {} was deleted in deployment {} by user {}",
+                                                        tenantId, tenantDeploymentId, userId);
+                                            }
+                                        })
                                         .map(DeleteLobbyDeveloperResponse::new);
                             });
                 });

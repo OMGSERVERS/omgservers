@@ -55,6 +55,8 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
                                     permissionQualifier)
                             .flatMap(voidItem -> createTenantLobbyRequest(tenantId, deploymentId));
                 })
+                .invoke(voidItem -> log.info("A new lobby was requested for deployment {} in tenant {} by user {}",
+                        deploymentId, tenantId, userId))
                 .replaceWith(new CreateLobbyRequestDeveloperResponse());
     }
 

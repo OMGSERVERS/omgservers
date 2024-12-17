@@ -50,7 +50,16 @@ public class StageTaskImpl {
                         // TODO: delete only deployments without clients
                         return Multi.createFrom().iterable(previouslyCreatedDeployments)
                                 .onItem().transformToUniAndConcatenate(this::deletePreviouslyCreatedDeployment)
-                                .collect().asList().replaceWithVoid();
+                                .collect().asList()
+                                .invoke(results -> {
+                                    final var deleted = results.stream().filter(Boolean.TRUE::equals).count();
+                                    if (deleted > 0) {
+                                        log.info("The {} previously created deployments " +
+                                                        "in stage {} of tenant {} were deleted",
+                                                deleted, tenantStageId, tenantId);
+                                    }
+                                })
+                                .replaceWithVoid();
                     } else {
                         return Uni.createFrom().voidItem();
                     }

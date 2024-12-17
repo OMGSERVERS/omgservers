@@ -18,6 +18,7 @@ import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -44,11 +45,14 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
         log.debug("Requested, {}, principal={}", request,
                 securityIdentity.getPrincipal().getName());
 
-        final var userId = request.getUserId();
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
+        final var forUserId = request.getUserId();
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getProjectId();
 
-        return getUser(userId)
+        return getUser(forUserId)
                 .flatMap(user -> getTenant(tenantId)
                         .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))
                         .flatMap(project -> viewTenantProjectPermissions(tenantId, tenantProjectId)
@@ -56,7 +60,7 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
                                     final var requestPermissionToDelete = request.getPermissionsToDelete();
 
                                     final var userPermissionsToDelete = projectPermissions.stream()
-                                            .filter(permission -> permission.getUserId().equals(userId))
+                                            .filter(permission -> permission.getUserId().equals(forUserId))
                                             .filter(permission -> requestPermissionToDelete.contains(
                                                     permission.getPermission()))
                                             .toList();
@@ -69,6 +73,12 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
                                             .collect().asList();
                                 })))
                 .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
+                .invoke(deletedPermissions -> {
+                    if (deletedPermissions.size() > 0) {
+                        log.info("The {} project permissions in tenant {} for user {} were deleted by user {}",
+                                deletedPermissions.size(), tenantId, forUserId, userId);
+                    }
+                })
                 .map(DeleteProjectPermissionsSupportResponse::new);
     }
 

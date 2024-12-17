@@ -18,6 +18,7 @@ import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -44,11 +45,14 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
         log.debug("Requested, {}, principal={}", request,
                 securityIdentity.getPrincipal().getName());
 
-        final var userId = request.getUserId();
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
+        final var forUserId = request.getUserId();
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getStageId();
 
-        return getUser(userId)
+        return getUser(forUserId)
                 .flatMap(user -> getTenant(tenantId)
                         .flatMap(tenant -> getTenantStage(tenantId, tenantStageId))
                         .flatMap(stage -> viewTenantStagePermissions(tenantId, tenantStageId)
@@ -56,7 +60,7 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
                                     final var requestPermissionToDelete = request.getPermissionsToDelete();
 
                                     final var userPermissionsToDelete = stagePermissions.stream()
-                                            .filter(permission -> permission.getUserId().equals(userId))
+                                            .filter(permission -> permission.getUserId().equals(forUserId))
                                             .filter(permission -> requestPermissionToDelete.contains(
                                                     permission.getPermission()))
                                             .toList();
@@ -69,6 +73,12 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
                                             .collect().asList();
                                 })))
                 .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
+                .invoke(deletedPermissions -> {
+                    if (deletedPermissions.size() > 0) {
+                        log.info("The {} stage permissions in tenant {} for user {} were deleted by user {}",
+                                deletedPermissions.size(), tenantId, forUserId, userId);
+                    }
+                })
                 .map(DeleteTenantStagePermissionsSupportResponse::new);
     }
 

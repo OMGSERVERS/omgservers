@@ -60,6 +60,12 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
                                                 userId,
                                                 permissionQualifier)
                                         .flatMap(voidItem -> deleteMatchmaker(matchmakerId))
+                                        .invoke(deleted -> {
+                                            if (deleted) {
+                                                log.info("Matchmaker {} was deleted in deployment {} by user {}",
+                                                        tenantId, tenantDeploymentId, userId);
+                                            }
+                                        })
                                         .map(DeleteMatchmakerDeveloperResponse::new);
                             });
                 });

@@ -44,7 +44,7 @@ class AddPlayerConnectionMethodImpl implements AddPlayerConnectionMethod {
         }
 
         if (Objects.isNull(playerRoom.putIfAbsent(playerConnection))) {
-            log.info("Room connection of player {} for runtime {} was added",
+            log.debug("Room connection of player {} for runtime {} was added",
                     playerConnection.getSubject(), playerConnection.getRuntimeId());
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.TRUE));
         } else {

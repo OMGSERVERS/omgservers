@@ -6,6 +6,7 @@ import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,9 +29,17 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
     public Uni<CreateTenantSupportResponse> execute(final CreateTenantSupportRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
         final var tenant = tenantModelFactory.create();
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);
         return tenantModule.getService().syncTenant(syncTenantInternalRequest)
+                .invoke(response -> {
+                    if (response.getCreated()) {
+                        log.info("New tenant {} was created by user {}", tenant.getId(), userId);
+                    }
+                })
                 .replaceWith(new CreateTenantSupportResponse(tenant.getId()));
     }
 }

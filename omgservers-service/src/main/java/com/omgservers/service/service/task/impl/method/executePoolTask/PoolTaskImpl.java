@@ -36,6 +36,13 @@ public class PoolTaskImpl {
                                     log.debug("Pool task was executed, poolId={}, {}", poolId,
                                             poolChangeOfState);
                                 }
+
+                                final var containersToSync = poolChangeOfState
+                                        .getContainersToSync();
+                                if (!containersToSync.isEmpty()) {
+                                    log.info("The {} container(s) were scheduled to run in pool {}",
+                                            containersToSync.size(), poolId);
+                                }
                             });
                 })
                 .replaceWith(Boolean.TRUE);

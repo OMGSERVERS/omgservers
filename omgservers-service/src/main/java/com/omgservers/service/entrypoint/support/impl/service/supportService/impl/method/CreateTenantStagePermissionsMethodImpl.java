@@ -17,6 +17,7 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -42,21 +43,30 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
         log.debug("Requested, {}, principal={}", request,
                 securityIdentity.getPrincipal().getName());
 
-        final var userId = request.getUserId();
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+
+        final var forUserId = request.getUserId();
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getStageId();
-        return getUser(userId)
+        return getUser(forUserId)
                 .flatMap(user -> getTenant(tenantId)
                         .flatMap(project -> getTenantStage(tenantId, tenantStageId))
                         .flatMap(stage -> {
                             final var permissionsToCreate = request.getPermissionsToCreate();
                             return Multi.createFrom().iterable(permissionsToCreate)
                                     .onItem().transformToUniAndConcatenate(permission ->
-                                            createStagePermission(tenantId, tenantStageId, userId, permission)
+                                            createStagePermission(tenantId, tenantStageId, forUserId, permission)
                                                     .map(created -> Tuple2.of(permission, created)))
                                     .collect().asList();
                         }))
                 .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
+                .invoke(createdPermissions -> {
+                    if (createdPermissions.size() > 0) {
+                        log.info("The {} stage permissions in tenant {} for user {} were created by user {}",
+                                createdPermissions.size(), tenantId, forUserId, userId);
+                    }
+                })
                 .map(CreateTenantStagePermissionsSupportResponse::new);
     }
 
