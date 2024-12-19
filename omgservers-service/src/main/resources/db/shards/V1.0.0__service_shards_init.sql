@@ -1,3 +1,16 @@
+-- alias module
+
+create table if not exists tab_alias (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    shard_key bigint not null,
+    alias_value text not null,
+    entity_id bigint not null,
+    deleted boolean not null
+);
+
 -- root module
 
 create table if not exists tab_root (
