@@ -22,9 +22,8 @@ class GetIndexMethodImpl implements GetIndexMethod {
     public Uni<GetIndexResponse> getIndex(final GetIndexRequest request) {
         log.trace("Requested, {}", request);
 
-        final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> getIndexOperation
-                        .getIndex(sqlConnection, id))
+                        .getIndex(sqlConnection))
                 .map(GetIndexResponse::new);
     }
 }

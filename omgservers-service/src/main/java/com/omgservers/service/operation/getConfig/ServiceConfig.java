@@ -10,8 +10,6 @@ import java.util.List;
 @ConfigMapping(prefix = "omgservers")
 public interface ServiceConfig {
 
-    DefaultsConfig defaults();
-
     GeneratorConfig generator();
 
     IndexConfig index();
@@ -33,24 +31,6 @@ public interface ServiceConfig {
     BuilderConfig builder();
 
     RegistryConfig registry();
-
-    interface DefaultsConfig {
-        long indexId();
-
-        long rootId();
-
-        long poolId();
-
-        long adminUserId();
-
-        long supportUserId();
-
-        long registryUserId();
-
-        long builderUserId();
-
-        long serviceUserId();
-    }
 
     interface GeneratorConfig {
         long datacenterId();
@@ -74,6 +54,12 @@ public interface ServiceConfig {
         boolean enabled();
 
         int concurrency();
+    }
+
+    interface InitializationServerIndexConfig {
+        boolean enabled();
+
+        List<URI> servers();
     }
 
     interface InitializationRelayJobConfig {
@@ -124,17 +110,20 @@ public interface ServiceConfig {
     interface InitializationConfig {
         InitializationDatabaseSchemaConfig databaseSchema();
 
+        InitializationServerIndexConfig serverIndex();
+
         InitializationRelayJobConfig relayJob();
 
         InitializationSchedulerJobConfig schedulerJob();
 
         InitializationDispatcherJobConfig dispatcherJob();
+
+        InitializationDispatcherJobConfig bootstrapJob();
     }
 
     interface BootstrapConfig {
-        BootstrapIndexConfig index();
 
-        BootstrapDefaultUsersConfig defaultUsers();
+        boolean enabled();
 
         BootstrapUserPasswordConfig adminUser();
 
@@ -146,27 +135,13 @@ public interface ServiceConfig {
 
         BootstrapUserPasswordConfig serviceUser();
 
-        BootstrapRootConfig root();
-
         BootstrapDefaultPoolConfig defaultPool();
     }
 
-    interface BootstrapIndexConfig {
-        boolean enabled();
-
-        List<URI> servers();
-    }
-
-    interface BootstrapDefaultUsersConfig {
-        boolean enabled();
-    }
-
     interface BootstrapUserPasswordConfig {
-        String password();
-    }
+        String alias();
 
-    interface BootstrapRootConfig {
-        boolean enabled();
+        String password();
     }
 
     interface BootstrapDefaultPoolConfig {

@@ -11,6 +11,8 @@ create table if not exists tab_alias (
     deleted boolean not null
 );
 
+create unique index idx_alias_uniqueness on tab_alias(shard_key, alias_value) where deleted = false;
+
 -- root module
 
 create table if not exists tab_root (

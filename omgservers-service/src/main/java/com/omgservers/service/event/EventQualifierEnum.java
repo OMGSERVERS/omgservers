@@ -7,7 +7,6 @@ import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBo
 import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
-import com.omgservers.service.event.body.internal.ServiceBootstrapRequestedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFailedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingFinishedEventBodyModel;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
@@ -156,7 +155,6 @@ public enum EventQualifierEnum {
     RUNTIME_POOL_CONTAINER_REF_CREATED(RuntimePoolContainerRefCreatedEventBodyModel.class, false),
     RUNTIME_POOL_CONTAINER_REF_DELETED(RuntimePoolContainerRefDeletedEventBodyModel.class, false),
     // Internal
-    SERVICE_BOOTSTRAP_REQUESTED(ServiceBootstrapRequestedEventBodyModel.class, false),
     DOCKER_REGISTRY_EVENT_RECEIVED(DockerRegistryEventReceivedEventBodyModel.class, false),
     VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class, false),
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class, false),

@@ -2,11 +2,11 @@ package com.omgservers.service.operation.getServers;
 
 import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.schema.model.index.IndexServerDto;
-import com.omgservers.service.service.index.dto.GetIndexRequest;
-import com.omgservers.service.service.index.dto.GetIndexResponse;
 import com.omgservers.service.operation.calculateCrc16.CalculateCrc16Operation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.index.IndexService;
+import com.omgservers.service.service.index.dto.GetIndexRequest;
+import com.omgservers.service.service.index.dto.GetIndexResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -27,15 +27,14 @@ class GetServersOperationImpl implements GetServersOperation {
 
     @Override
     public Uni<List<URI>> getServers() {
-        final var indexId = getConfigOperation.getServiceConfig().defaults().indexId();
-        return getIndex(indexId)
+        return getIndex()
                 .map(index -> index.getConfig().getServers().stream()
                         .map(IndexServerDto::getUri)
                         .toList());
     }
 
-    Uni<IndexModel> getIndex(final Long indexId) {
-        final var request = new GetIndexRequest(indexId);
+    Uni<IndexModel> getIndex() {
+        final var request = new GetIndexRequest();
         return indexService.getIndex(request)
                 .map(GetIndexResponse::getIndex);
     }

@@ -17,6 +17,14 @@ public class AliasModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public AliasModel create(final Long shardKey,
+                             final String aliasValue) {
+        final var id = generateIdOperation.generateId();
+        final var entityId = generateIdOperation.generateId();
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, shardKey, aliasValue, entityId, idempotencyKey);
+    }
+
+    public AliasModel create(final Long shardKey,
                              final String aliasValue,
                              final Long entityId) {
         final var id = generateIdOperation.generateId();

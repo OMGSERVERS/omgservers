@@ -1,16 +1,21 @@
 package com.omgservers.service.handler.impl.user;
 
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.module.alias.FindAliasRequest;
+import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -25,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserCreatedEventHandlerImpl implements EventHandler {
 
+    final AliasModule aliasModule;
     final UserModule userModule;
     final RootModule rootModule;
 
@@ -77,12 +83,22 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> syncRootUserRef(final Long tenantId,
                                  final String idempotencyKey,
                                  final RootEntityRefQualifierEnum refQualifier) {
-        final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
-        final var rootEntityRef = rootEntityRefModelFactory.create(idempotencyKey, rootId,
-                refQualifier,
-                tenantId);
-        final var request = new SyncRootEntityRefRequest(rootEntityRef);
-        return rootModule.getService().syncRootEntityRefWithIdempotency(request)
-                .map(SyncRootEntityRefResponse::getCreated);
+        return findRootEntityAlias()
+                .flatMap(alias -> {
+                    final var rootId = alias.getEntityId();
+                    final var rootEntityRef = rootEntityRefModelFactory.create(idempotencyKey, rootId,
+                            refQualifier,
+                            tenantId);
+                    final var request = new SyncRootEntityRefRequest(rootEntityRef);
+                    return rootModule.getService().syncRootEntityRefWithIdempotency(request)
+                            .map(SyncRootEntityRefResponse::getCreated);
+                });
+    }
+
+    Uni<AliasModel> findRootEntityAlias() {
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
+        return aliasModule.getService().execute(request)
+                .map(FindAliasResponse::getAlias);
     }
 }

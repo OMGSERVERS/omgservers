@@ -1,10 +1,8 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.service.event.body.internal.ServiceBootstrapRequestedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.handler.impl.internal.testInterface.ServiceBootstrapRequestedEventHandlerImplTestInterface;
 import com.omgservers.service.handler.impl.tenant.testInterface.TenantCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,9 +18,6 @@ class TenantCreatedEventHandlerImplTest extends BaseTestClass {
     TenantCreatedEventHandlerImplTestInterface tenantCreatedEventHandler;
 
     @Inject
-    ServiceBootstrapRequestedEventHandlerImplTestInterface serviceBootstrapRequestedEventHandler;
-
-    @Inject
     EventModelFactory eventModelFactory;
 
     @Inject
@@ -30,9 +25,6 @@ class TenantCreatedEventHandlerImplTest extends BaseTestClass {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        serviceBootstrapRequestedEventHandler.handle(eventModelFactory
-                .create(new ServiceBootstrapRequestedEventBodyModel()));
-
         final var testData = testDataFactory.createDefaultTestData();
         final var tenantId = testData.getTenant().getId();
 

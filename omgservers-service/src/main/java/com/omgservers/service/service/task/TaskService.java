@@ -1,5 +1,7 @@
 package com.omgservers.service.service.task;
 
+import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteDispatcherTaskRequest;
@@ -40,4 +42,6 @@ public interface TaskService {
     Uni<ExecuteRelayTaskResponse> execute(@Valid ExecuteRelayTaskRequest request);
 
     Uni<ExecuteBuildRequestTaskResponse> execute(@Valid ExecuteBuildRequestTaskRequest request);
+
+    Uni<ExecuteBootstrapTaskResponse> execute(@Valid ExecuteBootstrapTaskRequest request);
 }

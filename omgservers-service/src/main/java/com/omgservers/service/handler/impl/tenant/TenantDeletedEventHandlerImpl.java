@@ -1,13 +1,17 @@
 package com.omgservers.service.handler.impl.tenant;
 
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.schema.model.tenant.TenantModel;
+import com.omgservers.schema.module.alias.FindAliasRequest;
+import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
@@ -16,6 +20,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.handler.operation.DeleteTenantPermissionsOperation;
 import com.omgservers.service.handler.operation.DeleteTenantProjectsOperation;
 import com.omgservers.service.handler.operation.FindAndDeleteJobOperation;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -32,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TenantDeletedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
+    final AliasModule aliasModule;
     final RootModule rootModule;
 
     final JobService jobService;
@@ -72,13 +78,23 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Void> findAndDeleteRootTenantRef(final Long tenantId) {
-        final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
-        return findRootEntityRef(rootId, tenantId)
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(rootEntityRef ->
-                        deleteRootEntityRef(rootId, rootEntityRef.getId()))
-                .replaceWithVoid();
+        return findRootEntityAlias()
+                .flatMap(alias -> {
+                    final var rootId = alias.getEntityId();
+                    return findRootEntityRef(rootId, tenantId)
+                            .onFailure(ServerSideNotFoundException.class)
+                            .recoverWithNull()
+                            .onItem().ifNotNull().transformToUni(rootEntityRef ->
+                                    deleteRootEntityRef(rootId, rootEntityRef.getId()))
+                            .replaceWithVoid();
+                });
+    }
+
+    Uni<AliasModel> findRootEntityAlias() {
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
+        return aliasModule.getService().execute(request)
+                .map(FindAliasResponse::getAlias);
     }
 
     Uni<RootEntityRefModel> findRootEntityRef(final Long rootId,

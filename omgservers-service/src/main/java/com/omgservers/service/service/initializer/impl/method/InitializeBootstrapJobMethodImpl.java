@@ -2,7 +2,7 @@ package com.omgservers.service.service.initializer.impl.method;
 
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.task.TaskService;
-import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Uni;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class InitializeSchedulerJobMethodImpl implements InitializeSchedulerJobMethod {
+class InitializeBootstrapJobMethodImpl implements InitializeBootstrapJobMethod {
 
     final TaskService taskService;
 
@@ -23,23 +23,23 @@ class InitializeSchedulerJobMethodImpl implements InitializeSchedulerJobMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Initialize scheduler job");
+        log.debug("Initialize bootstrap job");
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
                     final var interval = getConfigOperation.getServiceConfig().initialization()
-                            .schedulerJob().interval();
-                    final var trigger = scheduler.newJob("scheduler")
+                            .bootstrapJob().interval();
+                    final var trigger = scheduler.newJob("bootstrap")
                             .setInterval(interval)
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                             .setAsyncTask(scheduledExecution -> {
-                                final var request = new ExecuteSchedulerTaskRequest();
+                                final var request = new ExecuteBootstrapTaskRequest();
                                 return taskService.execute(request)
                                         .replaceWithVoid();
                             })
                             .schedule();
 
-                    log.debug("Scheduler job was scheduled, {}", trigger);
+                    log.debug("Bootstrap job was scheduled, {}", trigger);
                 });
     }
 }

@@ -22,7 +22,7 @@ class InitializeRelayJobMethodImpl implements InitializeRelayJobMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Initialization of relay job");
+        log.debug("Initialize relay job");
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {

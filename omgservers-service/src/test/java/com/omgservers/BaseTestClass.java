@@ -1,8 +1,6 @@
 package com.omgservers;
 
-import com.omgservers.service.event.body.internal.ServiceBootstrapRequestedEventBodyModel;
-import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.handler.impl.internal.testInterface.ServiceBootstrapRequestedEventHandlerImplTestInterface;
+import com.omgservers.service.service.task.impl.method.executeBootstrapTask.BootstrapTaskImpl;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 public class BaseTestClass extends Assertions {
 
     @Inject
-    ServiceBootstrapRequestedEventHandlerImplTestInterface serviceBootstrapRequestedEventHandler;
-
-    @Inject
-    EventModelFactory eventModelFactory;
+    BootstrapTaskImpl bootstrapTask;
 
     @BeforeEach
     void beforeEach() {
-        serviceBootstrapRequestedEventHandler.handle(eventModelFactory
-                .create(new ServiceBootstrapRequestedEventBodyModel()));
+        bootstrapTask.execute()
+                .await().indefinitely();
     }
 }

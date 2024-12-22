@@ -1,10 +1,10 @@
-package com.omgservers.service.service.bootstrap.impl.method.bootstrapServerIndex;
+package com.omgservers.service.service.initializer.impl.method;
 
 import com.omgservers.schema.model.index.IndexConfigDto;
-import com.omgservers.service.service.index.dto.SyncIndexRequest;
 import com.omgservers.service.factory.system.IndexModelFactory;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.index.IndexService;
+import com.omgservers.service.service.index.dto.SyncIndexRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class BootstrapServerIndexMethodImpl implements BootstrapServerIndexMethod {
+class InitializeServerIndexMethodImpl implements InitializeServerIndexMethod {
 
     final IndexService indexService;
 
@@ -22,14 +22,13 @@ class BootstrapServerIndexMethodImpl implements BootstrapServerIndexMethod {
     final IndexModelFactory indexModelFactory;
 
     @Override
-    public Uni<Void> bootstrapServerIndex() {
-        log.debug("Bootstrap server index");
+    public Uni<Void> execute() {
+        log.debug("Initialize server index");
 
-        final var indexId = getConfigOperation.getServiceConfig().defaults().indexId();
-        final var servers = getConfigOperation.getServiceConfig().bootstrap().index().servers();
+        final var servers = getConfigOperation.getServiceConfig().initialization().serverIndex().servers();
         final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
         final var indexConfig = IndexConfigDto.create(servers, shardCount);
-        final var index = indexModelFactory.create(indexId, indexConfig, "bootstrap/index");
+        final var index = indexModelFactory.create(indexConfig, "index");
 
         final var request = new SyncIndexRequest(index);
         return indexService.syncIndexWithIdempotency(request)

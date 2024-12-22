@@ -20,6 +20,7 @@ import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.module.pool.impl.service.poolService.testInterface.PoolServiceTestInterface;
+import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -42,8 +43,10 @@ public class PoolTestDataFactory {
     final PoolServerModelFactory poolServerModelFactory;
     final PoolModelFactory poolModelFactory;
 
+    final GenerateIdOperation generateIdOperation;
+
     public PoolModel createDefaultPool() {
-        final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
+        final var defaultPoolId = generateIdOperation.generateId();
 
         try {
             final var getPoolRequest = new GetPoolRequest(defaultPoolId);

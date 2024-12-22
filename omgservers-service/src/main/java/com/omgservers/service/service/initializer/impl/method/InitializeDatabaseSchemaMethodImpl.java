@@ -25,7 +25,7 @@ class InitializeDatabaseSchemaMethodImpl implements InitializeDatabaseSchemaMeth
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Initialization of database schema");
+        log.debug("Initialize database schema");
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())

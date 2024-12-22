@@ -23,7 +23,7 @@ class InitializeDispatcherJobMethodImpl implements InitializeDispatcherJobMethod
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Dispatcher job initialization");
+        log.debug("Initialize dispatcher job");
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {

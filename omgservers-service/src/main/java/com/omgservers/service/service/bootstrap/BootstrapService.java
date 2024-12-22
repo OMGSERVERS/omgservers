@@ -1,22 +1,19 @@
 package com.omgservers.service.service.bootstrap;
 
+import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolRequest;
+import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolResponse;
+import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserRequest;
+import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserResponse;
+import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityRequest;
+import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityResponse;
 import io.smallrye.mutiny.Uni;
+import jakarta.validation.Valid;
 
 public interface BootstrapService {
 
-    Uni<Void> bootstrapServerIndex();
+    Uni<BootstrapRootEntityResponse> execute(@Valid BootstrapRootEntityRequest request);
 
-    Uni<Void> bootstrapServiceRoot();
+    Uni<BootstrapDefaultUserResponse> execute(@Valid BootstrapDefaultUserRequest request);
 
-    Uni<Void> bootstrapAdminUser();
-
-    Uni<Void> bootstrapSupportUser();
-
-    Uni<Void> bootstrapRegistryUser();
-
-    Uni<Void> bootstrapBuilderUser();
-
-    Uni<Void> bootstrapServiceUser();
-
-    Uni<Void> bootstrapDefaultPool();
+    Uni<BootstrapDefaultPoolResponse> execute(@Valid BootstrapDefaultPoolRequest request);
 }

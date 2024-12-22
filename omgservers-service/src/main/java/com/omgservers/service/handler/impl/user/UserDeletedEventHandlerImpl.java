@@ -1,19 +1,24 @@
 package com.omgservers.service.handler.impl.user;
 
+import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
+import com.omgservers.schema.model.user.UserModel;
+import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.module.alias.FindAliasRequest;
+import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.user.UserDeletedEventBodyModel;
-import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
-import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
@@ -28,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserDeletedEventHandlerImpl implements EventHandler {
 
+    final AliasModule aliasModule;
     final UserModule userModule;
     final RootModule rootModule;
 
@@ -65,13 +71,23 @@ public class UserDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Void> findAndDeleteRootUserRef(final Long tenantId) {
-        final var rootId = getConfigOperation.getServiceConfig().defaults().rootId();
-        return findRootEntityRef(rootId, tenantId)
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(rootEntityRef ->
-                        deleteRootEntityRef(rootId, rootEntityRef.getId()))
-                .replaceWithVoid();
+        return findRootEntityAlias()
+                .flatMap(alias -> {
+                    final var rootId = alias.getEntityId();
+                    return findRootEntityRef(rootId, tenantId)
+                            .onFailure(ServerSideNotFoundException.class)
+                            .recoverWithNull()
+                            .onItem().ifNotNull().transformToUni(rootEntityRef ->
+                                    deleteRootEntityRef(rootId, rootEntityRef.getId()))
+                            .replaceWithVoid();
+                });
+    }
+
+    Uni<AliasModel> findRootEntityAlias() {
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
+        return aliasModule.getService().execute(request)
+                .map(FindAliasResponse::getAlias);
     }
 
     Uni<RootEntityRefModel> findRootEntityRef(final Long rootId,

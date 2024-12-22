@@ -1,5 +1,6 @@
 package com.omgservers.service.handler.impl.internal;
 
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
@@ -9,6 +10,8 @@ import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.module.alias.FindAliasRequest;
+import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
@@ -21,6 +24,7 @@ import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.module.user.SyncUserResponse;
+import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
@@ -29,6 +33,7 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
@@ -55,6 +60,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     final RuntimeModule runtimeModule;
     final TenantModule tenantModule;
+    final AliasModule aliasModule;
     final PoolModule poolModule;
     final UserModule userModule;
 
@@ -192,7 +198,6 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                  final String password,
                                  final String imageId,
                                  final URI serverUri) {
-        final var defaultPoolId = getConfigOperation.getServiceConfig().defaults().poolId();
         final var poolRequestConfig = new PoolRequestConfigDto();
         poolRequestConfig.setContainerConfig(new PoolRequestConfigDto.ContainerConfig());
         poolRequestConfig.getContainerConfig().setImageId(imageId);
@@ -208,12 +213,24 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         environment.put("OMGSERVERS_SERVICE_URL", serverUri.toString());
         poolRequestConfig.getContainerConfig().setEnvironment(environment);
 
-        final var poolRequest = poolRequestModelFactory.create(defaultPoolId,
-                runtime.getId(),
-                runtime.getQualifier(),
-                poolRequestConfig);
+        return findDefaultPoolAlias()
+                .flatMap(alias -> {
+                    final var defaultPoolId = alias.getEntityId();
 
-        return syncPoolRequest(poolRequest);
+                    final var poolRequest = poolRequestModelFactory.create(defaultPoolId,
+                            runtime.getId(),
+                            runtime.getQualifier(),
+                            poolRequestConfig);
+
+                    return syncPoolRequest(poolRequest);
+                });
+    }
+
+    Uni<AliasModel> findDefaultPoolAlias() {
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
+        return aliasModule.getService().execute(request)
+                .map(FindAliasResponse::getAlias);
     }
 
     Uni<Boolean> syncPoolRequest(final PoolRequestModel poolRequest) {

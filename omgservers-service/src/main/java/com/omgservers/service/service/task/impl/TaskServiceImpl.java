@@ -1,6 +1,8 @@
 package com.omgservers.service.service.task.impl;
 
 import com.omgservers.service.service.task.TaskService;
+import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteDispatcherTaskRequest;
@@ -19,6 +21,7 @@ import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
+import com.omgservers.service.service.task.impl.method.executeBootstrapTask.ExecuteBootstrapTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeBuildRequestTask.ExecuteBuildRequestTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeDispatcherTask.ExecuteDispatcherTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
@@ -43,6 +46,7 @@ class TaskServiceImpl implements TaskService {
     final ExecuteBuildRequestTaskMethod executeBuildRequestTaskMethod;
     final ExecuteMatchmakerTaskMethod executeMatchmakerTaskMethod;
     final ExecuteDispatcherTaskMethod executeDispatcherTaskMethod;
+    final ExecuteBootstrapTaskMethod executeBootstrapTaskMethod;
     final ExecuteSchedulerTaskMethod executeSchedulerTaskMethod;
     final ExecuteRuntimeTaskMethod executeRuntimeTaskMethod;
     final ExecuteTenantTaskMethod executeTenantTaskMethod;
@@ -93,5 +97,10 @@ class TaskServiceImpl implements TaskService {
     @Override
     public Uni<ExecuteBuildRequestTaskResponse> execute(@Valid final ExecuteBuildRequestTaskRequest request) {
         return executeBuildRequestTaskMethod.execute(request);
+    }
+
+    @Override
+    public Uni<ExecuteBootstrapTaskResponse> execute(@Valid final ExecuteBootstrapTaskRequest request) {
+        return executeBootstrapTaskMethod.execute(request);
     }
 }

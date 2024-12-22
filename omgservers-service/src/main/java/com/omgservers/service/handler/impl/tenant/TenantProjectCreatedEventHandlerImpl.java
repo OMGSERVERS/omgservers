@@ -1,17 +1,22 @@
 package com.omgservers.service.handler.impl.tenant;
 
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
+import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
+import com.omgservers.schema.module.alias.FindAliasRequest;
+import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
+import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -26,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
     final TenantModule tenantModule;
+    final AliasModule aliasModule;
 
     final GetConfigOperation getConfigOperation;
 
@@ -66,30 +72,42 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
     Uni<TenantProjectPermissionModel> syncBuilderPermission(final Long tenantId,
                                                             final Long tenantStageId,
                                                             final String idempotencyKey) {
-        final var builderUserId = getConfigOperation.getServiceConfig().defaults().builderUserId();
-        final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
-        final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
-                tenantStageId,
-                builderUserId,
-                permission,
-                idempotencyKey + "/" + builderUserId + "/" + permission);
-        final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-        return tenantModule.getService().syncTenantProjectPermissionWithIdempotency(request)
-                .replaceWith(projectPermission);
+        return findDefaultUserAlias(getConfigOperation.getServiceConfig().bootstrap().builderUser().alias())
+                .flatMap(userAlias -> {
+                    final var builderUserId = userAlias.getEntityId();
+                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
+                    final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
+                            tenantStageId,
+                            builderUserId,
+                            permission,
+                            idempotencyKey + "/" + builderUserId + "/" + permission);
+                    final var request = new SyncTenantProjectPermissionRequest(projectPermission);
+                    return tenantModule.getService().syncTenantProjectPermissionWithIdempotency(request)
+                            .replaceWith(projectPermission);
+                });
     }
 
     Uni<TenantProjectPermissionModel> syncServicePermission(final Long tenantId,
                                                             final Long tenantStageId,
                                                             final String idempotencyKey) {
-        final var serviceUserId = getConfigOperation.getServiceConfig().defaults().serviceUserId();
-        final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
-        final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
-                tenantStageId,
-                serviceUserId,
-                permission,
-                idempotencyKey + "/" + serviceUserId + "/" + permission);
-        final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-        return tenantModule.getService().syncTenantProjectPermissionWithIdempotency(request)
-                .replaceWith(projectPermission);
+        return findDefaultUserAlias(getConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
+                .flatMap(userAlias -> {
+                    final var serviceUserId = userAlias.getEntityId();
+                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
+                    final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
+                            tenantStageId,
+                            serviceUserId,
+                            permission,
+                            idempotencyKey + "/" + serviceUserId + "/" + permission);
+                    final var request = new SyncTenantProjectPermissionRequest(projectPermission);
+                    return tenantModule.getService().syncTenantProjectPermissionWithIdempotency(request)
+                            .replaceWith(projectPermission);
+                });
+    }
+
+    Uni<AliasModel> findDefaultUserAlias(final String alias) {
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY, alias);
+        return aliasModule.getService().execute(request)
+                .map(FindAliasResponse::getAlias);
     }
 }

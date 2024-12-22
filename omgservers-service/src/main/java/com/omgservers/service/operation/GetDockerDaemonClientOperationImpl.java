@@ -37,8 +37,7 @@ class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperati
                     .withDockerTlsVerify(tlsVerify)
                     .withDockerCertPath(certPath)
                     .withRegistryUrl(getConfigOperation.getServiceConfig().registry().uri().toString())
-                    .withRegistryUsername(String.valueOf(getConfigOperation.getServiceConfig()
-                            .defaults().serviceUserId()))
+                    .withRegistryUsername(getConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
                     .withRegistryPassword(getConfigOperation.getServiceConfig().bootstrap().serviceUser().password())
                     .build();
 
