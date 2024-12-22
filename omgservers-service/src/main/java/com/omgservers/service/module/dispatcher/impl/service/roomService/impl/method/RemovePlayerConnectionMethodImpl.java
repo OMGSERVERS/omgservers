@@ -27,7 +27,7 @@ class RemovePlayerConnectionMethodImpl implements RemovePlayerConnectionMethod {
         if (Objects.nonNull(playerRoom)) {
             final var removed = playerRoom.remove(playerConnection);
             if (removed) {
-                log.debug("Room connection of player {} for runtime {} was removed",
+                log.debug("Room connection of player \"{}\" for runtime \"{}\" was removed",
                         playerConnection.getSubject(), playerConnection.getRuntimeId());
                 return Uni.createFrom().item(new RemovePlayerConnectionResponse(Boolean.TRUE));
             } else {

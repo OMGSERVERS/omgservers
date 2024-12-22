@@ -70,7 +70,7 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                                         .map(tenantDeployment -> {
                                             final var tenantDeploymentId = tenantDeployment.getId();
 
-                                            log.info("New deployment {} was created in tenant {} by user {}",
+                                            log.info("The new deployment \"{}\" was created in tenant \"{}\" by the user {}",
                                                     tenantDeploymentId, tenantId, userId);
 
                                             return new DeployTenantVersionDeveloperResponse(tenantDeploymentId);

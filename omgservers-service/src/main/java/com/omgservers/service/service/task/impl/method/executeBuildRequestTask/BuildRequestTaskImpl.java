@@ -86,7 +86,7 @@ public class BuildRequestTaskImpl {
 
         return getLuaJitRuntimeBuilderV1Request(buildNumber)
                 .flatMap(imageId -> {
-                    log.debug("Jenkins job {} was finished", buildNumber);
+                    log.debug("Jenkins job \"{}\" was finished", buildNumber);
                     return syncTenantImage(tenantBuildRequest, imageId, idempotencyKey);
                 })
                 .map(created -> JenkinsRequestResultEnum.FINISHED)
@@ -98,7 +98,7 @@ public class BuildRequestTaskImpl {
                         }
                     }
 
-                    log.warn("Jenkins job {} failed, {}", buildNumber, t.getMessage());
+                    log.warn("Jenkins job \"{}\" failed, {}", buildNumber, t.getMessage());
                     return Uni.createFrom().item(JenkinsRequestResultEnum.FAILED);
                 });
     }

@@ -29,7 +29,7 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
         if (Objects.nonNull(dispatcherRoom)) {
             final var allPlayerConnections = dispatcherRoom.getAllPlayerConnections();
 
-            log.debug("Room for runtime {} was removed. {} players are still connected.",
+            log.debug("Room for runtime \"{}\" was removed. \"{}\" players are still connected.",
                     runtimeId, allPlayerConnections.size());
             return Multi.createFrom().iterable(allPlayerConnections)
                     .onItem().transformToUniAndConcatenate(playerConnection -> {

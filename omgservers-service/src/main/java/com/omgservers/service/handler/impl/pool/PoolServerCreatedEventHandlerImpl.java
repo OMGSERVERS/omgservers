@@ -52,9 +52,9 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
                             .map(PingDockerHostResponse::getSuccessful)
                             .invoke(successful -> {
                                 if (successful) {
-                                    log.debug("Pool server {} was created and successfully pinged", poolServerId);
+                                    log.debug("Pool server \"{}\" was created and successfully pinged", poolServerId);
                                 } else {
-                                    log.error("Pool server {} was created, but couldn't be reached", poolServerId);
+                                    log.error("Pool server \"{}\" was created, but couldn't be reached", poolServerId);
                                 }
                             });
                 })

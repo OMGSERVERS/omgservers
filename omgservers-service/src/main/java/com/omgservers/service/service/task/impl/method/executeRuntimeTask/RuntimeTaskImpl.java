@@ -61,7 +61,7 @@ public class RuntimeTaskImpl {
             return createInactiveRuntimeDetectedEvent(runtime.getId())
                     .invoke(created -> {
                         if (created) {
-                            log.info("Runtime {} was detected as inactive", runtime.getId());
+                            log.info("Runtime \"{}\" was detected as inactive", runtime.getId());
                         }
                     })
                     .replaceWithVoid();

@@ -58,7 +58,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
                 .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
                 .invoke(createdPermissions -> {
                     if (createdPermissions.size() > 0) {
-                        log.info("The {} tenant permissions in tenant {} for user {} were created by user {}",
+                        log.info("The \"{}\" tenant permissions in tenant \"{}\" for user \"{}\" were created by the user {}",
                                 createdPermissions.size(), tenantId, forUserId, userId);
                     }
                 })

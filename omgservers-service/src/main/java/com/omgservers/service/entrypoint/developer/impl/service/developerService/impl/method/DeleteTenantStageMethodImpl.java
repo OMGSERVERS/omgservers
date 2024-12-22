@@ -54,7 +54,7 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
                             .flatMap(voidItem -> deleteTenantStage(tenantId, tenantStageId))
                             .invoke(deleted -> {
                                 if (deleted) {
-                                    log.info("Stage {} was deleted in tenant {} by user {}",
+                                    log.info("Stage \"{}\" was deleted in tenant \"{}\" by the user {}",
                                             tenantStageId, tenantId, userId);
                                 }
                             })

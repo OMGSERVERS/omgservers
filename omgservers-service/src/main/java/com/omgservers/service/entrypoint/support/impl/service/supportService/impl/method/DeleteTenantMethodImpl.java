@@ -39,7 +39,7 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
                     final var deleted = deleteTenantResponse.getDeleted();
 
                     if (deleted) {
-                        log.info("Tenant {} was deleted by user {}", tenantId, userId);
+                        log.info("The tenant \"{}\" was deleted by the user {}", tenantId, userId);
                     }
 
                     return new DeleteTenantSupportResponse(deleted);

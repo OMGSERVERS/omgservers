@@ -34,7 +34,7 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
                 .map(DeleteUserResponse::getDeleted)
                 .invoke(deleted -> {
                     if (deleted) {
-                        log.info("Developer user {} was deleted by user {}", developerUserId, userId);
+                        log.info("The developer user \"{}\" was deleted by the user {}", developerUserId, userId);
                     }
                 })
                 .map(DeleteDeveloperSupportResponse::new);

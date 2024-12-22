@@ -62,7 +62,7 @@ public class MatchmakerTaskImpl {
                                             final var matchesToSync = matchmakerChangeOfState
                                                     .getMatchesToSync();
                                             if (!matchesToSync.isEmpty()) {
-                                                log.info("The {} matches/s were created by matchmaker {}",
+                                                log.info("The \"{}\" matches/s were created by matchmaker {}",
                                                         matchesToSync.size(), matchmakerId);
                                             }
                                         });

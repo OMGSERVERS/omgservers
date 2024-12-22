@@ -54,8 +54,8 @@ public class StageTaskImpl {
                                 .invoke(results -> {
                                     final var deleted = results.stream().filter(Boolean.TRUE::equals).count();
                                     if (deleted > 0) {
-                                        log.info("The {} previously created deployments " +
-                                                        "in stage {} of tenant {} were deleted",
+                                        log.info("The \"{}\" previously created deployments " +
+                                                        "in stage \"{}\" of tenant \"{}\" were deleted",
                                                 deleted, tenantStageId, tenantId);
                                     }
                                 })

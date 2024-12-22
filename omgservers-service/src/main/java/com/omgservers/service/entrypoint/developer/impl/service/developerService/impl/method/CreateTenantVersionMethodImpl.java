@@ -47,7 +47,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
         return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId, permissionQualifier)
                 .flatMap(voidItem -> createTenantVersion(tenantId, tenantProjectId, tenantVersionConfig))
                 .map(TenantVersionModel::getId)
-                .invoke(tenantVersionId -> log.info("New version {} was created in tenant {} by user {}",
+                .invoke(tenantVersionId -> log.info("The new version \"{}\" was created in tenant \"{}\" by the user {}",
                         tenantVersionId, tenantId, userId))
                 .map(CreateTenantVersionDeveloperResponse::new);
     }

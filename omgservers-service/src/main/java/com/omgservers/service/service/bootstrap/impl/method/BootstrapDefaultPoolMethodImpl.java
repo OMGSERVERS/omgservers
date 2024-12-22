@@ -56,7 +56,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 .recoverWithUni(t -> createDefaultPool()
                         .flatMap(defaultPool -> createDefaultPoolServers(defaultPool.getId())
                                 .flatMap(voidIteam -> createDefaultPoolAlias(defaultPool.getId())
-                                        .invoke(alias -> log.info("Default pool {} was created", defaultPool.getId()))))
+                                        .invoke(alias -> log.info("The default pool \"{}\" was created", defaultPool.getId()))))
                         .replaceWith(Boolean.TRUE))
                 .map(BootstrapDefaultPoolResponse::new);
     }

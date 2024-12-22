@@ -69,7 +69,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                             .replaceWith(client.getId()));
                         })
                 )
-                .invoke(clientId -> log.info("New client {} was created by user {}", clientId, userId))
+                .invoke(clientId -> log.info("The new client \"{}\" was created by the user {}", clientId, userId))
                 .map(CreateClientPlayerResponse::new);
     }
 

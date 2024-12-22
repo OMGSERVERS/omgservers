@@ -54,7 +54,7 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
                             .flatMap(voidItem -> deleteTenantDeployment(tenantId, tenantDeploymentId))
                             .invoke(deleted -> {
                                 if (deleted) {
-                                    log.info("Deployment {} was deleted in tenant {} by user {}",
+                                    log.info("Deployment \"{}\" was deleted in tenant \"{}\" by the user {}",
                                             tenantDeploymentId, tenantId, userId);
                                 }
                             })

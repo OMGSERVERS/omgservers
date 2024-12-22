@@ -40,7 +40,7 @@ public class PoolTaskImpl {
                                 final var containersToSync = poolChangeOfState
                                         .getContainersToSync();
                                 if (!containersToSync.isEmpty()) {
-                                    log.info("The {} container(s) were scheduled to run in pool {}",
+                                    log.info("The \"{}\" container(s) were scheduled to run in pool {}",
                                             containersToSync.size(), poolId);
                                 }
                             });

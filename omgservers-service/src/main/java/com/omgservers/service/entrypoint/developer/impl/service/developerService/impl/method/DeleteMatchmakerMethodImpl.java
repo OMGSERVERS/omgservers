@@ -62,7 +62,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
                                         .flatMap(voidItem -> deleteMatchmaker(matchmakerId))
                                         .invoke(deleted -> {
                                             if (deleted) {
-                                                log.info("Matchmaker {} was deleted in deployment {} by user {}",
+                                                log.info("Matchmaker \"{}\" was deleted in deployment \"{}\" by the user {}",
                                                         tenantId, tenantDeploymentId, userId);
                                             }
                                         })

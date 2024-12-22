@@ -70,7 +70,7 @@ class DeleteTenantPermissionsMethodImpl implements DeleteTenantPermissionsMethod
                 .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
                 .invoke(deletedPermissions -> {
                     if (deletedPermissions.size() > 0) {
-                        log.info("The {} tenant permissions in tenant {} for user {} were deleted by user {}",
+                        log.info("The \"{}\" tenant permissions in tenant \"{}\" for user \"{}\" were deleted by the user {}",
                                 deletedPermissions.size(), tenantId, forUserId, userId);
                     }
                 })

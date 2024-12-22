@@ -65,7 +65,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                                     final var tenantStageId = tenantStage.getId();
                                     final var tenantStageSecret = tenantStage.getSecret();
 
-                                    log.info("Project {} was created in tenant {} by user {}",
+                                    log.info("Project \"{}\" was created in tenant \"{}\" by the user {}",
                                             tenantProjectId, tenantId, userId);
 
                                     return new CreateTenantProjectDeveloperResponse(tenantProjectId,

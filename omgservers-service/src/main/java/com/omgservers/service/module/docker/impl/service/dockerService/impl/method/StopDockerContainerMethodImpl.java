@@ -38,7 +38,7 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                     // TODO: get final the container logs
                     removeDockerContainer(dockerDaemonUri, dockerClient, containerName);
 
-                    log.info("The docker container {} was stopped on the server {}",
+                    log.info("The docker container \"{}\" was stopped on the server {}",
                             containerName, dockerDaemonUri);
 
                     return new StopDockerContainerResponse(Boolean.TRUE);

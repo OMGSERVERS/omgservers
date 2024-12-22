@@ -130,7 +130,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                         final var startContainerResponse = dockerDaemonClient.startContainerCmd(containerName)
                                 .exec();
 
-                        log.info("The docker container {} was started on the server {}",
+                        log.info("The docker container \"{}\" was started on the server {}",
                                 containerName, dockerDaemonUri);
 
                         return new StartDockerContainerResponse(Boolean.TRUE);

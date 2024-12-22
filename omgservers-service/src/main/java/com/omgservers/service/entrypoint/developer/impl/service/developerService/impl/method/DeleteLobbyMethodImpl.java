@@ -62,7 +62,7 @@ class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
                                         .flatMap(voidItem -> deleteLobby(lobbyId))
                                         .invoke(deleted -> {
                                             if (deleted) {
-                                                log.info("Lobby {} was deleted in deployment {} by user {}",
+                                                log.info("Lobby \"{}\" was deleted in deployment \"{}\" by the user {}",
                                                         tenantId, tenantDeploymentId, userId);
                                             }
                                         })

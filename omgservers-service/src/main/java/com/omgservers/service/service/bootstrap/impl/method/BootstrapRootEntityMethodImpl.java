@@ -44,7 +44,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> createRoot()
                         .flatMap(root -> createRootAlias(root.getId())
-                                .invoke(alias -> log.info("Root entity {} was created", root.getId())))
+                                .invoke(alias -> log.info("Root entity \"{}\" was created", root.getId())))
                         .replaceWith(Boolean.TRUE))
                 .map(BootstrapRootEntityResponse::new);
     }

@@ -67,7 +67,7 @@ class RunLuaJitRuntimeBuilderV1MethodImpl implements RunLuaJitRuntimeBuilderV1Me
                                         "Build number was not found");
                             }
 
-                            log.debug("LuaJit jenkins jobs {} started", buildNumber);
+                            log.debug("LuaJit jenkins jobs \"{}\" started", buildNumber);
 
                             return buildNumber;
                         }))

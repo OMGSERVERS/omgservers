@@ -55,7 +55,7 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
                                     userId,
                                     permissionQualifier)
                             .invoke(voidItem -> log.info(
-                                    "A new matchmaker was requested for deployment {} in tenant {} by user {}",
+                                    "A new matchmaker was requested for deployment \"{}\" in tenant \"{}\" by the user {}",
                                     deploymentId, tenantId, userId))
                             .flatMap(voidItem -> createTenantMatchmakerRequest(tenantId, deploymentId));
                 })

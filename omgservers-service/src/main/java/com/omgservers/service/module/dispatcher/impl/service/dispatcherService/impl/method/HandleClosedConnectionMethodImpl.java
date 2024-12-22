@@ -50,7 +50,7 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
                 case SERVER -> handleDispatcherConnection(dispatcherConnection)
                         .invoke(result -> {
                             if (result) {
-                                log.debug("Room connection for runtime {} was closed, closeReason={}",
+                                log.debug("Room connection for runtime \"{}\" was closed, closeReason={}",
                                         dispatcherConnection.getRuntimeId(), closeReason);
                             }
                         });

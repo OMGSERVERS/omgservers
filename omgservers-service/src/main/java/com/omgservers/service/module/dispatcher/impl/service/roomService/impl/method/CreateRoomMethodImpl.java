@@ -27,7 +27,7 @@ class CreateRoomMethodImpl implements CreateRoomMethod {
         final var dispatcherRoom = new DispatcherRoom(runtimeConnection);
 
         if (Objects.isNull(dispatcherRooms.putIfAbsent(dispatcherRoom))) {
-            log.debug("Room for runtime {} was created", dispatcherRoom.getRuntimeId());
+            log.debug("Room for runtime \"{}\" was created", dispatcherRoom.getRuntimeId());
             return Uni.createFrom().item(new CreateRoomResponse(Boolean.TRUE));
         } else {
             log.debug("Room was already created, room={}, runtimeConnection={}", dispatcherRoom, runtimeConnection);

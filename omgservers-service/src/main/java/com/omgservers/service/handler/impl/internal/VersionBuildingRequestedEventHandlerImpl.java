@@ -55,7 +55,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                     final var versionProjectId = tenantVersion.getProjectId();
                     return findTenantFilesArchive(tenantId, tenantVersionId)
                             .flatMap(tenantFilesArchive -> {
-                                log.debug("Building of version {} was requested", tenantVersionId);
+                                log.debug("Building of version \"{}\" was requested", tenantVersionId);
 
                                 return buildLuaJitRuntime(versionProjectId, tenantFilesArchive, idempotencyKey);
                             });
