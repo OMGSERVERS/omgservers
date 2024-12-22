@@ -21,7 +21,7 @@ public class AdminApiTester {
     final ObjectMapper objectMapper;
 
     public String createAdminToken() throws JsonProcessingException {
-        final var userId = getConfigOperation.getConfig().admin().userId();
+        final var alias = getConfigOperation.getConfig().admin().alias();
         final var password = getConfigOperation.getConfig().admin().password();
 
         final var responseSpecification = RestAssured
@@ -29,7 +29,7 @@ public class AdminApiTester {
                 .filter(new LoggingFilter("Admin"))
                 .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateTokenAdminRequest(userId, password)))
+                .body(objectMapper.writeValueAsString(new CreateTokenAdminRequest(alias, password)))
                 .when().put("/omgservers/v1/entrypoint/admin/request/create-token");
         responseSpecification.then().statusCode(200);
 

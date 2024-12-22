@@ -30,13 +30,13 @@ public interface TesterConfig {
     }
 
     interface AdminConfig {
-        long userId();
+        String alias();
 
         String password();
     }
 
     interface SupportConfig {
-        long userId();
+        String alias();
 
         String password();
     }

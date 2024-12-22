@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class BasicCredentialsDto {
 
     @NotBlank
-    Long userId;
+    String user;
 
     @NotBlank
     String password;

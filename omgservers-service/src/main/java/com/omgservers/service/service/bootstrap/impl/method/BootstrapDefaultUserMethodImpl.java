@@ -50,7 +50,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
                     final var role = request.getRole();
                     return createUser(password, role)
                             .flatMap(user -> createUserAlias(user.getId(), userAlias)
-                                    .invoke(alias -> log.info("Default user {} under alias {} was created",
+                                    .invoke(alias -> log.info("The default user {} under the alias {} was created",
                                             user.getId(), userAlias)))
                             .replaceWith(Boolean.TRUE);
                 })

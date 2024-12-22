@@ -425,7 +425,7 @@ admin_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, ADMIN_USER=${ADMIN_USER}"
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/admin/request/create-token"
-  REQUEST="{\"user_id\": \"${ADMIN_USER}\", \"password\": \"${ADMIN_PASSWORD}\"}"
+  REQUEST="{\"user\": \"${ADMIN_USER}\", \"password\": \"${ADMIN_PASSWORD}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -629,7 +629,7 @@ support_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, SUPPORT_USER=$SUPPORT_USER"
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-token"
-  REQUEST="{\"user_id\": \"${SUPPORT_USER}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
+  REQUEST="{\"user\": \"${SUPPORT_USER}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs

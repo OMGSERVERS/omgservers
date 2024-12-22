@@ -13,8 +13,11 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CreateTokenSupportRequest {
 
+    /**
+     * User id or user alias.
+     */
     @NotNull
-    Long userId;
+    String user;
 
     @NotBlank
     @Size(max = 64)

@@ -2,12 +2,17 @@ package com.omgservers.service.entrypoint.registry.impl.service.registryService.
 
 import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryRequest;
 import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryResponse;
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.alias.FindAliasRequest;
+import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
@@ -25,6 +30,7 @@ import java.util.Objects;
 @AllArgsConstructor
 class BasicAuthMethodImpl implements BasicAuthMethod {
 
+    final AliasModule aliasModule;
     final UserModule userModule;
 
     final RegistryService registryService;
@@ -46,30 +52,47 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
             final var userCredentials = parseBasicAuthorizationHeaderOperation
                     .parseBasicAuthorizationHeader(authorizationHeader);
 
-            final var userId = userCredentials.getUserId();
+            final var user = userCredentials.getUser();
             final var password = userCredentials.getPassword();
 
-            return createToken(userId, password)
-                    .flatMap(rawToken -> {
-                        final var offlineToken = Objects.nonNull(request.getOfflineToken()) ?
-                                request.getOfflineToken() : Boolean.FALSE;
-                        final var scope = request.getScope();
-                        final var issueTokenRequest = new IssueTokenRequest(userId, offlineToken, scope);
-                        return registryService.issueToken(issueTokenRequest)
-                                .map(getTokenResponse -> {
-                                    final var response = new BasicAuthRegistryResponse();
-                                    response.setToken(getTokenResponse.getAccessToken());
-                                    response.setAccessToken(getTokenResponse.getAccessToken());
-                                    response.setExpiresIn(getTokenResponse.getExpiresIn());
-                                    response.setIssuedAt(getTokenResponse.getIssuedAt());
-                                    // If server returns refresh token, docker registry uses OAuth2 refresh_token grant type
-                                    response.setRefreshToken(getTokenResponse.getRefreshToken());
-                                    return response;
-                                });
-                    });
+            return getIdByUser(user)
+                    .flatMap(userId -> createToken(userId, password)
+                            .flatMap(rawToken -> {
+                                final var offlineToken = Objects.nonNull(request.getOfflineToken()) ?
+                                        request.getOfflineToken() : Boolean.FALSE;
+                                final var scope = request.getScope();
+                                final var issueTokenRequest = new IssueTokenRequest(userId, offlineToken, scope);
+                                return registryService.issueToken(issueTokenRequest)
+                                        .map(getTokenResponse -> {
+                                            final var response = new BasicAuthRegistryResponse();
+                                            response.setToken(getTokenResponse.getAccessToken());
+                                            response.setAccessToken(getTokenResponse.getAccessToken());
+                                            response.setExpiresIn(getTokenResponse.getExpiresIn());
+                                            response.setIssuedAt(getTokenResponse.getIssuedAt());
+                                            // If server returns refresh token, docker registry uses OAuth2 refresh_token grant type
+                                            response.setRefreshToken(getTokenResponse.getRefreshToken());
+                                            return response;
+                                        });
+                            }));
         } catch (ServerSideBadRequestException e) {
             throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_CREDENTIALS, e.getMessage(), e);
         }
+    }
+
+    Uni<Long> getIdByUser(final String user) {
+        try {
+            final var userId = Long.valueOf(user);
+            return Uni.createFrom().item(userId);
+        } catch (NumberFormatException e) {
+            return findUserAlias(user)
+                    .map(AliasModel::getEntityId);
+        }
+    }
+
+    Uni<AliasModel> findUserAlias(final String alias) {
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY, alias);
+        return aliasModule.getService().execute(request)
+                .map(FindAliasResponse::getAlias);
     }
 
     Uni<String> createToken(final Long userId, final String password) {

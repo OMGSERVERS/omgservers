@@ -36,7 +36,7 @@ class ParseBasicAuthorizationHeaderOperationImpl implements ParseBasicAuthorizat
                         "wrong credentials structure");
             }
 
-            final var userId = Long.valueOf(credentials.substring(0, firstColonIndex));
+            final var user = credentials.substring(0, firstColonIndex);
 
             final var password = credentials.substring(firstColonIndex + 1);
             if (password.isEmpty()) {
@@ -44,7 +44,7 @@ class ParseBasicAuthorizationHeaderOperationImpl implements ParseBasicAuthorizat
                         "password is empty");
             }
 
-            return new BasicCredentialsDto(userId, password);
+            return new BasicCredentialsDto(user, password);
         } catch (IllegalArgumentException e) {
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, e.getMessage(), e);
         }

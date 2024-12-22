@@ -34,7 +34,7 @@ public class SupportApiTester {
     final ObjectMapper objectMapper;
 
     public String createSupportToken() throws JsonProcessingException {
-        final var userId = getConfigOperation.getConfig().support().userId();
+        final var alias = getConfigOperation.getConfig().support().alias();
         final var password = getConfigOperation.getConfig().support().password();
 
         final var responseSpecification = RestAssured
@@ -42,7 +42,7 @@ public class SupportApiTester {
                 .filter(new LoggingFilter("Support"))
                 .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateTokenSupportRequest(userId, password)))
+                .body(objectMapper.writeValueAsString(new CreateTokenSupportRequest(alias, password)))
                 .when().put("/omgservers/v1/entrypoint/support/request/create-token");
         responseSpecification.then().statusCode(200);
 
