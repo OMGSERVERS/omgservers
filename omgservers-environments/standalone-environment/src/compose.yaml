@@ -98,17 +98,17 @@ services:
       options:
         max-size: "128m"
         max-file: "8"
-  queues:
-    image: "omgservers/queues:${OMGSERVERS_VERSION}"
-    container_name: "queues"
+  broker:
+    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    container_name: "broker"
     restart: unless-stopped
     environment:
-      - ARTEMIS_USER=queues
-      - ARTEMIS_PASSWORD=${QUEUES_PASSWORD}
+      - ARTEMIS_USER=broker
+      - ARTEMIS_PASSWORD=${BROKER_PASSWORD}
     ports:
       - "127.0.0.1:8161:8161"
     volumes:
-      - queues:/var/lib/artemis-instance
+      - broker:/var/lib/artemis-instance
     networks:
       service:
         ipv4_address: 172.1.0.7
@@ -126,7 +126,7 @@ services:
         ipv4_address: 172.1.0.8
     depends_on:
       - database
-      - queues
+      - broker
     volumes:
       - ./jwtkeys/private_key.pem:/jwtkeys/private_key.pem:ro
       - ./jwtkeys/public_key.pem:/jwtkeys/public_key.pem:ro
@@ -134,8 +134,8 @@ services:
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
       - OMGSERVERS_DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - OMGSERVERS_QUEUES_HOST=queues
-      - OMGSERVERS_QUEUES_PASSWORD=${QUEUES_PASSWORD}
+      - OMGSERVERS_BROKER_HOST=broker
+      - OMGSERVERS_BROKER_PASSWORD=${BROKER_PASSWORD}
       - OMGSERVERS_INDEX_SHARD_COUNT=${OMGSERVERS_SHARDS}
       - OMGSERVERS_INDEX_SERVER_URI=http://service:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service:8080
@@ -184,8 +184,8 @@ volumes:
   database:
     name: database
     driver: local
-  queues:
-    name: queues
+  broker:
+    name: broker
     driver: local
 networks:
   service:

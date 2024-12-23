@@ -72,12 +72,12 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
-  queues1:
-    image: "omgservers/queues:${OMGSERVERS_VERSION}"
-    container_name: "queues1"
+  broker1:
+    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    container_name: "broker1"
     environment:
-      - ARTEMIS_USER=queues
-      - ARTEMIS_PASSWORD=queues
+      - ARTEMIS_USER=broker
+      - ARTEMIS_PASSWORD=broker
     networks:
       - omgservers
   service1:
@@ -88,14 +88,14 @@ services:
       - omgservers
     depends_on:
       - database1
-      - queues1
+      - broker1
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
       - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
       - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
-      - OMGSERVERS_QUEUES_HOST=queues1
+      - OMGSERVERS_BROKER_HOST=broker1
       - OMGSERVERS_INDEX_SHARD_COUNT=3
       - OMGSERVERS_INDEX_SERVER_URI=http://service1:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
@@ -125,12 +125,12 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
-  queues2:
-    image: "omgservers/queues:${OMGSERVERS_VERSION}"
-    container_name: "queues2"
+  broker2:
+    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    container_name: "broker2"
     environment:
-      - ARTEMIS_USER=queues
-      - ARTEMIS_PASSWORD=queues
+      - ARTEMIS_USER=broker
+      - ARTEMIS_PASSWORD=broker
     networks:
       - omgservers
   service2:
@@ -141,14 +141,14 @@ services:
       - omgservers
     depends_on:
       - database2
-      - queues2
+      - broker2
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
       - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
       - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database2:5432/root
-      - OMGSERVERS_QUEUES_HOST=queues2
+      - OMGSERVERS_BROKER_HOST=broker2
       - OMGSERVERS_INDEX_SHARD_COUNT=3
       - OMGSERVERS_INDEX_SERVER_URI=http://service2:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
@@ -165,12 +165,12 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
-  queues3:
-    image: "omgservers/queues:${OMGSERVERS_VERSION}"
-    container_name: "queues3"
+  broker3:
+    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    container_name: "broker3"
     environment:
-      - ARTEMIS_USER=queues
-      - ARTEMIS_PASSWORD=queues
+      - ARTEMIS_USER=broker
+      - ARTEMIS_PASSWORD=broker
     networks:
       - omgservers
   service3:
@@ -181,14 +181,14 @@ services:
       - omgservers
     depends_on:
       - database3
-      - queues3
+      - broker3
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
       - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
       - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database3:5432/root
-      - OMGSERVERS_QUEUES_HOST=queues3
+      - OMGSERVERS_BROKER_HOST=broker3
       - OMGSERVERS_INDEX_SHARD_COUNT=3
       - OMGSERVERS_INDEX_SERVER_URI=http://service3:8080
       - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080

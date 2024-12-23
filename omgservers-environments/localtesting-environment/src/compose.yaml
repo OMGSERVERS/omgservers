@@ -21,12 +21,12 @@ services:
       - "5432:5432"
     networks:
       - omgservers
-  queues:
-    image: "omgservers/queues:${OMGSERVERS_VERSION}"
-    container_name: "queues"
+  broker:
+    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    container_name: "broker"
     environment:
-      - ARTEMIS_USER=queues
-      - ARTEMIS_PASSWORD=queues
+      - ARTEMIS_USER=broker
+      - ARTEMIS_PASSWORD=broker
     ports:
       - "5672:5672"
       - "8161:8161"

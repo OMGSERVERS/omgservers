@@ -19,18 +19,18 @@ services:
       - omgservers
     volumes:
       - database:/var/lib/postgresql/data
-  queues:
-    image: "omgservers/queues:${OMGSERVERS_VERSION}"
-    container_name: "queues"
+  broker:
+    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    container_name: "broker"
     environment:
-      - ARTEMIS_USER=queues
-      - ARTEMIS_PASSWORD=queues
+      - ARTEMIS_USER=broker
+      - ARTEMIS_PASSWORD=broker
     ports:
       - "8161:8161"
     networks:
       - omgservers
     volumes:
-      - queues:/var/lib/artemis-instance
+      - broker:/var/lib/artemis-instance
   registry:
     image: "omgservers/registry:${OMGSERVERS_VERSION}"
     container_name: "registry"
@@ -73,12 +73,12 @@ services:
       - omgservers
     depends_on:
       - database
-      - queues
+      - broker
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
-      - OMGSERVERS_QUEUES_HOST=queues
+      - OMGSERVERS_BROKER_HOST=broker
       - OMGSERVERS_INDEX_SERVER_URI=http://service:8080
       - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS=http://service:8080
       - OMGSERVERS_BOOTSTRAP_ENABLED=TRUE
@@ -116,8 +116,8 @@ volumes:
   database:
     name: database
     driver: local
-  queues:
-    name: queues
+  broker:
+    name: broker
     driver: local
   ctl:
     name: ctl
