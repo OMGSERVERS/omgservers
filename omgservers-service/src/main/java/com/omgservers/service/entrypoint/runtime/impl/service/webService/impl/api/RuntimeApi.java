@@ -19,9 +19,9 @@ public interface RuntimeApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenRuntimeResponse> createToken(@NotNull CreateTokenRuntimeRequest request);
+    Uni<CreateTokenRuntimeResponse> execute(@NotNull CreateTokenRuntimeRequest request);
 
     @PUT
     @Path("/interchange")
-    Uni<InterchangeRuntimeResponse> interchange(@NotNull InterchangeRuntimeRequest request);
+    Uni<InterchangeRuntimeResponse> execute(@NotNull InterchangeRuntimeRequest request);
 }

@@ -31,35 +31,30 @@ import jakarta.validation.Valid;
 
 public interface SupportService {
 
-    Uni<CreateTokenSupportResponse> createToken(@Valid CreateTokenSupportRequest request);
+    Uni<CreateTokenSupportResponse> execute(@Valid CreateTokenSupportRequest request);
 
-    Uni<CreateTenantSupportResponse> createTenant(@Valid CreateTenantSupportRequest request);
+    Uni<CreateTenantSupportResponse> execute(@Valid CreateTenantSupportRequest request);
 
-    Uni<DeleteTenantSupportResponse> deleteTenant(@Valid DeleteTenantSupportRequest request);
+    Uni<DeleteTenantSupportResponse> execute(@Valid DeleteTenantSupportRequest request);
 
-    Uni<CreateTenantProjectSupportResponse> createTenantProject(@Valid CreateTenantProjectSupportRequest request);
+    Uni<CreateTenantProjectSupportResponse> execute(@Valid CreateTenantProjectSupportRequest request);
 
-    Uni<DeleteTenantProjectSupportResponse> deleteTenantProject(@Valid DeleteTenantProjectSupportRequest request);
+    Uni<DeleteTenantProjectSupportResponse> execute(@Valid DeleteTenantProjectSupportRequest request);
 
-    Uni<CreateDeveloperSupportResponse> createDeveloper(@Valid CreateDeveloperSupportRequest request);
+    Uni<CreateDeveloperSupportResponse> execute(@Valid CreateDeveloperSupportRequest request);
 
-    Uni<DeleteDeveloperSupportResponse> deleteDeveloper(@Valid DeleteDeveloperSupportRequest request);
+    Uni<DeleteDeveloperSupportResponse> execute(@Valid DeleteDeveloperSupportRequest request);
 
-    Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
-            @Valid CreateTenantPermissionsSupportRequest request);
+    Uni<CreateTenantPermissionsSupportResponse> execute(@Valid CreateTenantPermissionsSupportRequest request);
 
-    Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
-            @Valid DeleteTenantPermissionsSupportRequest request);
+    Uni<DeleteTenantPermissionsSupportResponse> execute(@Valid DeleteTenantPermissionsSupportRequest request);
 
-    Uni<CreateTenantProjectPermissionsSupportResponse> createTenantProjectPermissions(
+    Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             @Valid CreateTenantProjectPermissionsSupportRequest request);
 
-    Uni<DeleteProjectPermissionsSupportResponse> deleteTenantProjectPermissions(
-            @Valid DeleteProjectPermissionsSupportRequest request);
+    Uni<DeleteProjectPermissionsSupportResponse> execute(@Valid DeleteProjectPermissionsSupportRequest request);
 
-    Uni<CreateTenantStagePermissionsSupportResponse> createTenantStagePermissions(
-            @Valid CreateTenantStagePermissionsSupportRequest request);
+    Uni<CreateTenantStagePermissionsSupportResponse> execute(@Valid CreateTenantStagePermissionsSupportRequest request);
 
-    Uni<DeleteTenantStagePermissionsSupportResponse> deleteTenantStagePermissions(
-            @Valid DeleteTenantStagePermissionsSupportRequest request);
+    Uni<DeleteTenantStagePermissionsSupportResponse> execute(@Valid DeleteTenantStagePermissionsSupportRequest request);
 }

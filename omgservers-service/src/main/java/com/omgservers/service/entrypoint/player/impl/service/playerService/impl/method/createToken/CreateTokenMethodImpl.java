@@ -24,7 +24,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final PlayerModelFactory playerModelFactory;
 
     @Override
-    public Uni<CreateTokenPlayerResponse> createToken(final CreateTokenPlayerRequest request) {
+    public Uni<CreateTokenPlayerResponse> execute(final CreateTokenPlayerRequest request) {
         log.trace("Requested, {}", request);
 
         final var userId = request.getUserId();

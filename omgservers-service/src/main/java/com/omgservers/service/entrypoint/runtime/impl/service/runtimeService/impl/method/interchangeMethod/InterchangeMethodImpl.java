@@ -25,7 +25,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<InterchangeRuntimeResponse> interchange(final InterchangeRuntimeRequest request) {
+    public Uni<InterchangeRuntimeResponse> execute(final InterchangeRuntimeRequest request) {
         log.debug("Interchange, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var runtimeId = securityIdentity

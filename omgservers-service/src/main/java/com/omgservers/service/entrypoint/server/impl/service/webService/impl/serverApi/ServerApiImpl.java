@@ -32,7 +32,7 @@ public class ServerApiImpl implements ServerApi {
     }
 
     @Override
-    public Uni<BcryptHashServerResponse> bcryptHash(@NotNull final BcryptHashServerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::bcryptHash);
+    public Uni<BcryptHashServerResponse> execute(@NotNull final BcryptHashServerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

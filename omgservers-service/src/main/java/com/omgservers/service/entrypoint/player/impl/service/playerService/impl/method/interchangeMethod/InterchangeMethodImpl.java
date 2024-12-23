@@ -23,7 +23,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<InterchangePlayerResponse> interchange(final InterchangePlayerRequest request) {
+    public Uni<InterchangePlayerResponse> execute(final InterchangePlayerRequest request) {
         log.debug("Interchange, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity

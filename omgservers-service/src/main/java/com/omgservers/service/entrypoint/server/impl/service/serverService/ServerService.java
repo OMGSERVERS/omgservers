@@ -12,5 +12,5 @@ public interface ServerService {
 
     Uni<GenerateIdServerResponse> generateId();
 
-    Uni<BcryptHashServerResponse> bcryptHash(@Valid BcryptHashServerRequest request);
+    Uni<BcryptHashServerResponse> execute(@Valid BcryptHashServerRequest request);
 }

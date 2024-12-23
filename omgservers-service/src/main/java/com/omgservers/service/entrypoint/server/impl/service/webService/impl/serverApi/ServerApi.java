@@ -24,5 +24,5 @@ public interface ServerApi {
 
     @PUT
     @Path("/bcrypt-hash")
-    Uni<BcryptHashServerResponse> bcryptHash(@NotNull BcryptHashServerRequest request);
+    Uni<BcryptHashServerResponse> execute(@NotNull BcryptHashServerRequest request);
 }

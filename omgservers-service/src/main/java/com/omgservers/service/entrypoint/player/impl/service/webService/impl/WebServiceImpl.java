@@ -24,22 +24,22 @@ class WebServiceImpl implements WebService {
     final PlayerService playerService;
 
     @Override
-    public Uni<CreateUserPlayerResponse> createUser(final CreateUserPlayerRequest request) {
-        return playerService.createUser(request);
+    public Uni<CreateUserPlayerResponse> execute(final CreateUserPlayerRequest request) {
+        return playerService.execute(request);
     }
 
     @Override
-    public Uni<CreateTokenPlayerResponse> createToken(final CreateTokenPlayerRequest request) {
-        return playerService.createToken(request);
+    public Uni<CreateTokenPlayerResponse> execute(final CreateTokenPlayerRequest request) {
+        return playerService.execute(request);
     }
 
     @Override
-    public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
-        return playerService.createClient(request);
+    public Uni<CreateClientPlayerResponse> execute(final CreateClientPlayerRequest request) {
+        return playerService.execute(request);
     }
 
     @Override
-    public Uni<InterchangePlayerResponse> interchange(final InterchangePlayerRequest request) {
-        return playerService.interchange(request);
+    public Uni<InterchangePlayerResponse> execute(final InterchangePlayerRequest request) {
+        return playerService.execute(request);
     }
 }

@@ -91,113 +91,113 @@ class DeveloperServiceImpl implements DeveloperService {
     final DeleteLobbyMethod deleteLobbyMethod;
 
     @Override
-    public Uni<CreateTokenDeveloperResponse> createToken(@Valid final CreateTokenDeveloperRequest request) {
+    public Uni<CreateTokenDeveloperResponse> execute(@Valid final CreateTokenDeveloperRequest request) {
         return createTokenMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(
+    public Uni<GetTenantDashboardDeveloperResponse> execute(
             @Valid final GetTenantDashboardDeveloperRequest request) {
         return getTenantDashboardMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantProjectDeveloperResponse> createTenantProject(
+    public Uni<CreateTenantProjectDeveloperResponse> execute(
             @Valid final CreateTenantProjectDeveloperRequest request) {
         return createTenantProjectMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantProjectDashboardDeveloperResponse> getTenantProjectDashboard(
+    public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
             @Valid final GetTenantProjectDashboardDeveloperRequest request) {
         return getTenantProjectDashboardMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantProjectDeveloperResponse> deleteTenantProject(
+    public Uni<DeleteTenantProjectDeveloperResponse> execute(
             @Valid final DeleteTenantProjectDeveloperRequest request) {
         return deleteTenantProjectMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantStageDeveloperResponse> createTenantStage(
+    public Uni<CreateTenantStageDeveloperResponse> execute(
             @Valid final CreateTenantStageDeveloperRequest request) {
         return createTenantStageMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantStageDashboardDeveloperResponse> getTenantStageDashboard(
+    public Uni<GetTenantStageDashboardDeveloperResponse> execute(
             @Valid final GetTenantStageDashboardDeveloperRequest request) {
         return getTenantStageDashboardMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(
+    public Uni<DeleteTenantStageDeveloperResponse> execute(
             @Valid final DeleteTenantStageDeveloperRequest request) {
         return deleteTenantStageMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(
+    public Uni<CreateTenantVersionDeveloperResponse> execute(
             @Valid final CreateTenantVersionDeveloperRequest request) {
         return createTenantVersionMethod.execute(request);
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(
+    public Uni<UploadFilesArchiveDeveloperResponse> execute(
             @Valid final UploadFilesArchiveDeveloperRequest request) {
         return uploadFilesArchiveMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
+    public Uni<GetTenantVersionDashboardDeveloperResponse> execute(
             @Valid final GetTenantVersionDashboardDeveloperRequest request) {
         return getTenantVersionDashboardMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantVersionDeveloperResponse> deleteTenantVersion(
+    public Uni<DeleteTenantVersionDeveloperResponse> execute(
             @Valid final DeleteTenantVersionDeveloperRequest request) {
         return deleteTenantVersionMethod.execute(request);
     }
 
     @Override
-    public Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(
+    public Uni<DeployTenantVersionDeveloperResponse> execute(
             @Valid final DeployTenantVersionDeveloperRequest request) {
         return deployTenantVersionMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantDeploymentDashboardDeveloperResponse> getTenantDeploymentDashboard(
+    public Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
             @Valid final GetTenantDeploymentDashboardDeveloperRequest request) {
         return getTenantDeploymentDashboardMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
+    public Uni<DeleteTenantDeploymentDeveloperResponse> execute(
             @Valid final DeleteTenantDeploymentDeveloperRequest request) {
         return deleteTenantDeploymentMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(
+    public Uni<CreateLobbyRequestDeveloperResponse> execute(
             @Valid final CreateLobbyRequestDeveloperRequest request) {
         return createLobbyRequestMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteLobbyDeveloperResponse> deleteLobby(@Valid final DeleteLobbyDeveloperRequest request) {
+    public Uni<DeleteLobbyDeveloperResponse> execute(@Valid final DeleteLobbyDeveloperRequest request) {
         return deleteLobbyMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
+    public Uni<CreateMatchmakerRequestDeveloperResponse> execute(
             @Valid final CreateMatchmakerRequestDeveloperRequest request) {
         return createMatchmakerRequestMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(
+    public Uni<DeleteMatchmakerDeveloperResponse> execute(
             @Valid final DeleteMatchmakerDeveloperRequest request) {
         return deleteMatchmakerMethod.execute(request);
     }

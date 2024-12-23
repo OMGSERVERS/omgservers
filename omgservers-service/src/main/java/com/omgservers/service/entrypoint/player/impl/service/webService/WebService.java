@@ -12,11 +12,11 @@ import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<CreateUserPlayerResponse> createUser(CreateUserPlayerRequest request);
+    Uni<CreateUserPlayerResponse> execute(CreateUserPlayerRequest request);
 
-    Uni<CreateTokenPlayerResponse> createToken(CreateTokenPlayerRequest request);
+    Uni<CreateTokenPlayerResponse> execute(CreateTokenPlayerRequest request);
 
-    Uni<CreateClientPlayerResponse> createClient(CreateClientPlayerRequest request);
+    Uni<CreateClientPlayerResponse> execute(CreateClientPlayerRequest request);
 
-    Uni<InterchangePlayerResponse> interchange(InterchangePlayerRequest request);
+    Uni<InterchangePlayerResponse> execute(InterchangePlayerRequest request);
 }

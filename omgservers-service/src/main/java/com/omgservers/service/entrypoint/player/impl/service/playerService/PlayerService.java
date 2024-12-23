@@ -13,11 +13,11 @@ import jakarta.validation.Valid;
 
 public interface PlayerService {
 
-    Uni<CreateUserPlayerResponse> createUser(@Valid CreateUserPlayerRequest request);
+    Uni<CreateUserPlayerResponse> execute(@Valid CreateUserPlayerRequest request);
 
-    Uni<CreateTokenPlayerResponse> createToken(@Valid CreateTokenPlayerRequest request);
+    Uni<CreateTokenPlayerResponse> execute(@Valid CreateTokenPlayerRequest request);
 
-    Uni<CreateClientPlayerResponse> createClient(@Valid CreateClientPlayerRequest request);
+    Uni<CreateClientPlayerResponse> execute(@Valid CreateClientPlayerRequest request);
 
-    Uni<InterchangePlayerResponse> interchange(@Valid InterchangePlayerRequest request);
+    Uni<InterchangePlayerResponse> execute(@Valid InterchangePlayerRequest request);
 }

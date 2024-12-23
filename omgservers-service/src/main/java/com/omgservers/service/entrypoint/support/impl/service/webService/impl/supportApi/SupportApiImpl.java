@@ -49,73 +49,73 @@ public class SupportApiImpl implements SupportApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenSupportResponse> createToken(@NotNull final CreateTokenSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
+    public Uni<CreateTokenSupportResponse> execute(@NotNull final CreateTokenSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantSupportResponse> createTenant(@NotNull final CreateTenantSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenant);
+    public Uni<CreateTenantSupportResponse> execute(@NotNull final CreateTenantSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantSupportResponse> deleteTenant(@NotNull final DeleteTenantSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenant);
+    public Uni<DeleteTenantSupportResponse> execute(@NotNull final DeleteTenantSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantProjectSupportResponse> createTenantProject(@NotNull final CreateTenantProjectSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantProject);
+    public Uni<CreateTenantProjectSupportResponse> execute(@NotNull final CreateTenantProjectSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantProjectSupportResponse> deleteTenantProject(@NotNull final DeleteTenantProjectSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantProject);
+    public Uni<DeleteTenantProjectSupportResponse> execute(@NotNull final DeleteTenantProjectSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateDeveloperSupportResponse> createDeveloper(@NotNull final CreateDeveloperSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createDeveloper);
+    public Uni<CreateDeveloperSupportResponse> execute(@NotNull final CreateDeveloperSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteDeveloperSupportResponse> deleteDeveloper(@NotNull final DeleteDeveloperSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteDeveloper);
+    public Uni<DeleteDeveloperSupportResponse> execute(@NotNull final DeleteDeveloperSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
+    public Uni<CreateTenantPermissionsSupportResponse> execute(
             @NotNull final CreateTenantPermissionsSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantPermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
+    public Uni<DeleteTenantPermissionsSupportResponse> execute(
             @NotNull final DeleteTenantPermissionsSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantPermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantProjectPermissionsSupportResponse> createTenantProjectPermissions(
+    public Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             @NotNull final CreateTenantProjectPermissionsSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantProjectPermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteProjectPermissionsSupportResponse> deleteTenantProjectPermissions(
+    public Uni<DeleteProjectPermissionsSupportResponse> execute(
             @NotNull final DeleteProjectPermissionsSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantProjectPermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantStagePermissionsSupportResponse> createTenantStagePermissions(
+    public Uni<CreateTenantStagePermissionsSupportResponse> execute(
             @NotNull final CreateTenantStagePermissionsSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantStagePermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantStagePermissionsSupportResponse> deleteTenantStagePermissions(
+    public Uni<DeleteTenantStagePermissionsSupportResponse> execute(
             @NotNull final DeleteTenantStagePermissionsSupportRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantStagePermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

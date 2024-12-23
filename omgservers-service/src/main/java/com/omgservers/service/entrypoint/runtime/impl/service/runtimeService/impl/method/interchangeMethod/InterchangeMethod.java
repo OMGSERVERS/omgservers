@@ -5,5 +5,5 @@ import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface InterchangeMethod {
-    Uni<InterchangeRuntimeResponse> interchange(InterchangeRuntimeRequest request);
+    Uni<InterchangeRuntimeResponse> execute(InterchangeRuntimeRequest request);
 }

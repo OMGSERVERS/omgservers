@@ -23,17 +23,17 @@ public interface PlayerApi {
 
     @PUT
     @Path("/create-user")
-    Uni<CreateUserPlayerResponse> createUser(@NotNull CreateUserPlayerRequest request);
+    Uni<CreateUserPlayerResponse> execute(@NotNull CreateUserPlayerRequest request);
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenPlayerResponse> createToken(@NotNull CreateTokenPlayerRequest request);
+    Uni<CreateTokenPlayerResponse> execute(@NotNull CreateTokenPlayerRequest request);
 
     @PUT
     @Path("/create-client")
-    Uni<CreateClientPlayerResponse> createClient(@NotNull CreateClientPlayerRequest request);
+    Uni<CreateClientPlayerResponse> execute(@NotNull CreateClientPlayerRequest request);
 
     @PUT
     @Path("/interchange")
-    Uni<InterchangePlayerResponse> interchange(@NotNull InterchangePlayerRequest request);
+    Uni<InterchangePlayerResponse> execute(@NotNull InterchangePlayerRequest request);
 }

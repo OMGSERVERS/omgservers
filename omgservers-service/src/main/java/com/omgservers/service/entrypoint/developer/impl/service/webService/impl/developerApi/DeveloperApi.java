@@ -56,7 +56,7 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenDeveloperResponse> createToken(@NotNull CreateTokenDeveloperRequest request);
+    Uni<CreateTokenDeveloperResponse> execute(@NotNull CreateTokenDeveloperRequest request);
 
     /*
     Tenant
@@ -64,7 +64,7 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/get-tenant-dashboard")
-    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(@NotNull GetTenantDashboardDeveloperRequest request);
+    Uni<GetTenantDashboardDeveloperResponse> execute(@NotNull GetTenantDashboardDeveloperRequest request);
 
     /*
     Tenant project
@@ -72,16 +72,15 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/create-project")
-    Uni<CreateTenantProjectDeveloperResponse> createTenantProject(@NotNull CreateTenantProjectDeveloperRequest request);
+    Uni<CreateTenantProjectDeveloperResponse> execute(@NotNull CreateTenantProjectDeveloperRequest request);
 
     @PUT
     @Path("/get-project-dashboard")
-    Uni<GetTenantProjectDashboardDeveloperResponse> getTenantProjectDashboard(
-            @NotNull GetTenantProjectDashboardDeveloperRequest request);
+    Uni<GetTenantProjectDashboardDeveloperResponse> execute(@NotNull GetTenantProjectDashboardDeveloperRequest request);
 
     @PUT
     @Path("/delete-project")
-    Uni<DeleteTenantProjectDeveloperResponse> deleteTenantProject(@NotNull DeleteTenantProjectDeveloperRequest request);
+    Uni<DeleteTenantProjectDeveloperResponse> execute(@NotNull DeleteTenantProjectDeveloperRequest request);
 
     /*
     Tenant stage
@@ -89,16 +88,15 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/create-stage")
-    Uni<CreateTenantStageDeveloperResponse> createTenantStage(@NotNull CreateTenantStageDeveloperRequest request);
+    Uni<CreateTenantStageDeveloperResponse> execute(@NotNull CreateTenantStageDeveloperRequest request);
 
     @PUT
     @Path("/get-stage-dashboard")
-    Uni<GetTenantStageDashboardDeveloperResponse> getTenantStageDashboard(
-            @NotNull GetTenantStageDashboardDeveloperRequest request);
+    Uni<GetTenantStageDashboardDeveloperResponse> execute(@NotNull GetTenantStageDashboardDeveloperRequest request);
 
     @PUT
     @Path("/delete-stage")
-    Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(@NotNull DeleteTenantStageDeveloperRequest request);
+    Uni<DeleteTenantStageDeveloperResponse> execute(@NotNull DeleteTenantStageDeveloperRequest request);
 
     /*
     Tenant version
@@ -106,22 +104,21 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/create-version")
-    Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(@NotNull CreateTenantVersionDeveloperRequest request);
+    Uni<CreateTenantVersionDeveloperResponse> execute(@NotNull CreateTenantVersionDeveloperRequest request);
 
     @PUT
     @Path("/upload-files-archive")
-    Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(@RestForm("tenantId") Long tenantId,
-                                                                @RestForm("tenantVersionId") Long tenantVersionId,
-                                                                @RestForm(FileUpload.ALL) List<FileUpload> files);
+    Uni<UploadFilesArchiveDeveloperResponse> execute(@RestForm("tenantId") Long tenantId,
+                                                     @RestForm("tenantVersionId") Long tenantVersionId,
+                                                     @RestForm(FileUpload.ALL) List<FileUpload> files);
 
     @PUT
     @Path("/get-version-dashboard")
-    Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
-            @NotNull GetTenantVersionDashboardDeveloperRequest request);
+    Uni<GetTenantVersionDashboardDeveloperResponse> execute(@NotNull GetTenantVersionDashboardDeveloperRequest request);
 
     @PUT
     @Path("/delete-version")
-    Uni<DeleteTenantVersionDeveloperResponse> deleteTenantVersion(@NotNull DeleteTenantVersionDeveloperRequest request);
+    Uni<DeleteTenantVersionDeveloperResponse> execute(@NotNull DeleteTenantVersionDeveloperRequest request);
 
     /*
     Tenant deployment
@@ -129,33 +126,31 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/deploy-version")
-    Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(@NotNull DeployTenantVersionDeveloperRequest request);
+    Uni<DeployTenantVersionDeveloperResponse> execute(@NotNull DeployTenantVersionDeveloperRequest request);
 
     @PUT
     @Path("/get-deployment-dashboard")
-    Uni<GetTenantDeploymentDashboardDeveloperResponse> getTenantDeploymentDashboard(
+    Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
             @NotNull GetTenantDeploymentDashboardDeveloperRequest request);
 
     @PUT
     @Path("/delete-deployment")
-    Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
-            @NotNull DeleteTenantDeploymentDeveloperRequest request);
+    Uni<DeleteTenantDeploymentDeveloperResponse> execute(@NotNull DeleteTenantDeploymentDeveloperRequest request);
 
     @PUT
     @Path("/create-lobby-request")
-    Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(@NotNull CreateLobbyRequestDeveloperRequest request);
+    Uni<CreateLobbyRequestDeveloperResponse> execute(@NotNull CreateLobbyRequestDeveloperRequest request);
 
     @PUT
     @Path("/delete-lobby")
-    Uni<DeleteLobbyDeveloperResponse> deleteLobby(@NotNull DeleteLobbyDeveloperRequest request);
+    Uni<DeleteLobbyDeveloperResponse> execute(@NotNull DeleteLobbyDeveloperRequest request);
 
     @PUT
     @Path("/create-matchmaker-request")
-    Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
-            @NotNull CreateMatchmakerRequestDeveloperRequest request);
+    Uni<CreateMatchmakerRequestDeveloperResponse> execute(@NotNull CreateMatchmakerRequestDeveloperRequest request);
 
     @PUT
     @Path("/delete-matchmaker")
-    Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(@NotNull DeleteMatchmakerDeveloperRequest request);
+    Uni<DeleteMatchmakerDeveloperResponse> execute(@NotNull DeleteMatchmakerDeveloperRequest request);
 
 }

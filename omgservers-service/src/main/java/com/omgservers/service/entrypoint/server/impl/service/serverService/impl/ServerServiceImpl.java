@@ -34,7 +34,7 @@ class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public Uni<BcryptHashServerResponse> bcryptHash(@Valid final BcryptHashServerRequest request) {
+    public Uni<BcryptHashServerResponse> execute(@Valid final BcryptHashServerRequest request) {
         return Uni.createFrom().item(BcryptUtil.bcryptHash(request.getValue()))
                 .map(BcryptHashServerResponse::new);
     }

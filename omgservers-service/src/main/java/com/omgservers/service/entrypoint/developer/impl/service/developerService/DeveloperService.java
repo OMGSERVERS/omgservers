@@ -43,47 +43,42 @@ import jakarta.validation.Valid;
 
 public interface DeveloperService {
 
-    Uni<CreateTokenDeveloperResponse> createToken(@Valid CreateTokenDeveloperRequest request);
+    Uni<CreateTokenDeveloperResponse> execute(@Valid CreateTokenDeveloperRequest request);
 
-    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(@Valid GetTenantDashboardDeveloperRequest request);
+    Uni<GetTenantDashboardDeveloperResponse> execute(@Valid GetTenantDashboardDeveloperRequest request);
 
-    Uni<CreateTenantProjectDeveloperResponse> createTenantProject(@Valid CreateTenantProjectDeveloperRequest request);
+    Uni<CreateTenantProjectDeveloperResponse> execute(@Valid CreateTenantProjectDeveloperRequest request);
 
-    Uni<GetTenantProjectDashboardDeveloperResponse> getTenantProjectDashboard(
-            @Valid GetTenantProjectDashboardDeveloperRequest request);
+    Uni<GetTenantProjectDashboardDeveloperResponse> execute(@Valid GetTenantProjectDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantProjectDeveloperResponse> deleteTenantProject(@Valid DeleteTenantProjectDeveloperRequest request);
+    Uni<DeleteTenantProjectDeveloperResponse> execute(@Valid DeleteTenantProjectDeveloperRequest request);
 
-    Uni<CreateTenantStageDeveloperResponse> createTenantStage(@Valid CreateTenantStageDeveloperRequest request);
+    Uni<CreateTenantStageDeveloperResponse> execute(@Valid CreateTenantStageDeveloperRequest request);
 
-    Uni<GetTenantStageDashboardDeveloperResponse> getTenantStageDashboard(
-            @Valid GetTenantStageDashboardDeveloperRequest request);
+    Uni<GetTenantStageDashboardDeveloperResponse> execute(@Valid GetTenantStageDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(@Valid DeleteTenantStageDeveloperRequest request);
+    Uni<DeleteTenantStageDeveloperResponse> execute(@Valid DeleteTenantStageDeveloperRequest request);
 
-    Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(@Valid CreateTenantVersionDeveloperRequest request);
+    Uni<CreateTenantVersionDeveloperResponse> execute(@Valid CreateTenantVersionDeveloperRequest request);
 
-    Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(@Valid UploadFilesArchiveDeveloperRequest request);
+    Uni<UploadFilesArchiveDeveloperResponse> execute(@Valid UploadFilesArchiveDeveloperRequest request);
 
-    Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
-            @Valid GetTenantVersionDashboardDeveloperRequest request);
+    Uni<GetTenantVersionDashboardDeveloperResponse> execute(@Valid GetTenantVersionDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantVersionDeveloperResponse> deleteTenantVersion(@Valid DeleteTenantVersionDeveloperRequest request);
+    Uni<DeleteTenantVersionDeveloperResponse> execute(@Valid DeleteTenantVersionDeveloperRequest request);
 
-    Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(@Valid DeployTenantVersionDeveloperRequest request);
+    Uni<DeployTenantVersionDeveloperResponse> execute(@Valid DeployTenantVersionDeveloperRequest request);
 
-    Uni<GetTenantDeploymentDashboardDeveloperResponse> getTenantDeploymentDashboard(
+    Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
             @Valid GetTenantDeploymentDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
-            @Valid DeleteTenantDeploymentDeveloperRequest request);
+    Uni<DeleteTenantDeploymentDeveloperResponse> execute(@Valid DeleteTenantDeploymentDeveloperRequest request);
 
-    Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(@Valid CreateLobbyRequestDeveloperRequest request);
+    Uni<CreateLobbyRequestDeveloperResponse> execute(@Valid CreateLobbyRequestDeveloperRequest request);
 
-    Uni<DeleteLobbyDeveloperResponse> deleteLobby(@Valid DeleteLobbyDeveloperRequest request);
+    Uni<DeleteLobbyDeveloperResponse> execute(@Valid DeleteLobbyDeveloperRequest request);
 
-    Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
-            @Valid CreateMatchmakerRequestDeveloperRequest request);
+    Uni<CreateMatchmakerRequestDeveloperResponse> execute(@Valid CreateMatchmakerRequestDeveloperRequest request);
 
-    Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(@Valid DeleteMatchmakerDeveloperRequest request);
+    Uni<DeleteMatchmakerDeveloperResponse> execute(@Valid DeleteMatchmakerDeveloperRequest request);
 }

@@ -20,12 +20,12 @@ class WebServiceImpl implements WebService {
     final RuntimeService runtimeService;
 
     @Override
-    public Uni<CreateTokenRuntimeResponse> createToken(final CreateTokenRuntimeRequest request) {
-        return runtimeService.createToken(request);
+    public Uni<CreateTokenRuntimeResponse> execute(final CreateTokenRuntimeRequest request) {
+        return runtimeService.execute(request);
     }
 
     @Override
-    public Uni<InterchangeRuntimeResponse> interchange(final InterchangeRuntimeRequest request) {
-        return runtimeService.interchange(request);
+    public Uni<InterchangeRuntimeResponse> execute(final InterchangeRuntimeRequest request) {
+        return runtimeService.execute(request);
     }
 }

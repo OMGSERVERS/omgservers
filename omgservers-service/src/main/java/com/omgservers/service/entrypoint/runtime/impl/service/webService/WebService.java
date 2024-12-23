@@ -8,7 +8,7 @@ import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<CreateTokenRuntimeResponse> createToken(CreateTokenRuntimeRequest request);
+    Uni<CreateTokenRuntimeResponse> execute(CreateTokenRuntimeRequest request);
 
-    Uni<InterchangeRuntimeResponse> interchange(InterchangeRuntimeRequest request);
+    Uni<InterchangeRuntimeResponse> execute(InterchangeRuntimeRequest request);
 }

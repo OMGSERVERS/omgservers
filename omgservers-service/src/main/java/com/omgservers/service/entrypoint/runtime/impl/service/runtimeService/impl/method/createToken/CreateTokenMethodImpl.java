@@ -28,7 +28,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final IssueJwtTokenOperation issueJwtTokenOperation;
 
     @Override
-    public Uni<CreateTokenRuntimeResponse> createToken(final CreateTokenRuntimeRequest request) {
+    public Uni<CreateTokenRuntimeResponse> execute(final CreateTokenRuntimeRequest request) {
         log.trace("Requested, {}", request);
 
         final var runtimeId = request.getRuntimeId();

@@ -5,5 +5,5 @@ import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateTokenMethod {
-    Uni<CreateTokenPlayerResponse> createToken(CreateTokenPlayerRequest request);
+    Uni<CreateTokenPlayerResponse> execute(CreateTokenPlayerRequest request);
 }

@@ -24,13 +24,13 @@ class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenRuntimeResponse> createToken(@NotNull final CreateTokenRuntimeRequest request) {
-        return webService.createToken(request);
+    public Uni<CreateTokenRuntimeResponse> execute(@NotNull final CreateTokenRuntimeRequest request) {
+        return webService.execute(request);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.RUNTIME})
-    public Uni<InterchangeRuntimeResponse> interchange(@NotNull final InterchangeRuntimeRequest request) {
-        return webService.interchange(request);
+    public Uni<InterchangeRuntimeResponse> execute(@NotNull final InterchangeRuntimeRequest request) {
+        return webService.execute(request);
     }
 }

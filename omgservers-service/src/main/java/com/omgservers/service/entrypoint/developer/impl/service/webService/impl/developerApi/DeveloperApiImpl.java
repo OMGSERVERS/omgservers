@@ -64,116 +64,116 @@ class DeveloperApiImpl implements DeveloperApi {
 
     @Override
     @PermitAll
-    public Uni<CreateTokenDeveloperResponse> createToken(@NotNull final CreateTokenDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
+    public Uni<CreateTokenDeveloperResponse> execute(@NotNull final CreateTokenDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(
+    public Uni<GetTenantDashboardDeveloperResponse> execute(
             @NotNull final GetTenantDashboardDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDashboard);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantProjectDeveloperResponse> createTenantProject(
+    public Uni<CreateTenantProjectDeveloperResponse> execute(
             @NotNull final CreateTenantProjectDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantProject);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantProjectDashboardDeveloperResponse> getTenantProjectDashboard(
+    public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
             @NotNull final GetTenantProjectDashboardDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantProjectDashboard);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantProjectDeveloperResponse> deleteTenantProject(
+    public Uni<DeleteTenantProjectDeveloperResponse> execute(
             @NotNull final DeleteTenantProjectDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantProject);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantStageDeveloperResponse> createTenantStage(
+    public Uni<CreateTenantStageDeveloperResponse> execute(
             @NotNull final CreateTenantStageDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantStage);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantStageDashboardDeveloperResponse> getTenantStageDashboard(
+    public Uni<GetTenantStageDashboardDeveloperResponse> execute(
             @NotNull final GetTenantStageDashboardDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantStageDashboard);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(
+    public Uni<DeleteTenantStageDeveloperResponse> execute(
             @NotNull final DeleteTenantStageDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantStage);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(
+    public Uni<CreateTenantVersionDeveloperResponse> execute(
             @NotNull final CreateTenantVersionDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createTenantVersion);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(final Long tenantId,
-                                                                       final Long tenantVersionId,
-                                                                       final List<FileUpload> files) {
+    public Uni<UploadFilesArchiveDeveloperResponse> execute(final Long tenantId,
+                                                            final Long tenantVersionId,
+                                                            final List<FileUpload> files) {
         final var request = new UploadFilesArchiveDeveloperRequest(tenantId, tenantVersionId, files);
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::uploadFilesArchive);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
+    public Uni<GetTenantVersionDashboardDeveloperResponse> execute(
             final GetTenantVersionDashboardDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantVersionDashboard);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantVersionDeveloperResponse> deleteTenantVersion(
+    public Uni<DeleteTenantVersionDeveloperResponse> execute(
             @NotNull final DeleteTenantVersionDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantVersion);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(
+    public Uni<DeployTenantVersionDeveloperResponse> execute(
             @NotNull final DeployTenantVersionDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deployTenantVersion);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantDeploymentDashboardDeveloperResponse> getTenantDeploymentDashboard(
+    public Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
             @NotNull final GetTenantDeploymentDashboardDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDeploymentDashboard);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(
+    public Uni<DeleteTenantDeploymentDeveloperResponse> execute(
             @NotNull final DeleteTenantDeploymentDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantDeployment);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(
+    public Uni<CreateLobbyRequestDeveloperResponse> execute(
             @NotNull final CreateLobbyRequestDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createLobbyRequest);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteLobbyDeveloperResponse> deleteLobby(@NotNull final DeleteLobbyDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteLobby);
+    public Uni<DeleteLobbyDeveloperResponse> execute(@NotNull final DeleteLobbyDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
+    public Uni<CreateMatchmakerRequestDeveloperResponse> execute(
             @NotNull final CreateMatchmakerRequestDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createMatchmakerRequest);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(
+    public Uni<DeleteMatchmakerDeveloperResponse> execute(
             @NotNull final DeleteMatchmakerDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteMatchmaker);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

@@ -9,9 +9,9 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.PlayerService;
+import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createClient.CreateClientMethod;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createToken.CreateTokenMethod;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createUser.CreateUserMethod;
-import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createClient.CreateClientMethod;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.interchangeMethod.InterchangeMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,22 +31,22 @@ class PlayerServiceImpl implements PlayerService {
     final CreateUserMethod createUserMethod;
 
     @Override
-    public Uni<CreateUserPlayerResponse> createUser(@Valid final CreateUserPlayerRequest request) {
-        return createUserMethod.createUser(request);
+    public Uni<CreateUserPlayerResponse> execute(@Valid final CreateUserPlayerRequest request) {
+        return createUserMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTokenPlayerResponse> createToken(@Valid final CreateTokenPlayerRequest request) {
-        return createTokenMethod.createToken(request);
+    public Uni<CreateTokenPlayerResponse> execute(@Valid final CreateTokenPlayerRequest request) {
+        return createTokenMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateClientPlayerResponse> createClient(@Valid final CreateClientPlayerRequest request) {
-        return createClientMethod.createClient(request);
+    public Uni<CreateClientPlayerResponse> execute(@Valid final CreateClientPlayerRequest request) {
+        return createClientMethod.execute(request);
     }
 
     @Override
-    public Uni<InterchangePlayerResponse> interchange(@Valid final InterchangePlayerRequest request) {
-        return interchangeMethod.interchange(request);
+    public Uni<InterchangePlayerResponse> execute(@Valid final InterchangePlayerRequest request) {
+        return interchangeMethod.execute(request);
     }
 }

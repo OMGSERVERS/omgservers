@@ -42,46 +42,41 @@ import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<CreateTokenDeveloperResponse> createToken(CreateTokenDeveloperRequest request);
+    Uni<CreateTokenDeveloperResponse> execute(CreateTokenDeveloperRequest request);
 
-    Uni<GetTenantDashboardDeveloperResponse> getTenantDashboard(GetTenantDashboardDeveloperRequest request);
+    Uni<GetTenantDashboardDeveloperResponse> execute(GetTenantDashboardDeveloperRequest request);
 
-    Uni<CreateTenantProjectDeveloperResponse> createTenantProject(CreateTenantProjectDeveloperRequest request);
+    Uni<CreateTenantProjectDeveloperResponse> execute(CreateTenantProjectDeveloperRequest request);
 
-    Uni<GetTenantProjectDashboardDeveloperResponse> getTenantProjectDashboard(
-            GetTenantProjectDashboardDeveloperRequest request);
+    Uni<GetTenantProjectDashboardDeveloperResponse> execute(GetTenantProjectDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantProjectDeveloperResponse> deleteTenantProject(DeleteTenantProjectDeveloperRequest request);
+    Uni<DeleteTenantProjectDeveloperResponse> execute(DeleteTenantProjectDeveloperRequest request);
 
-    Uni<CreateTenantStageDeveloperResponse> createTenantStage(CreateTenantStageDeveloperRequest request);
+    Uni<CreateTenantStageDeveloperResponse> execute(CreateTenantStageDeveloperRequest request);
 
-    Uni<GetTenantStageDashboardDeveloperResponse> getTenantStageDashboard(
-            GetTenantStageDashboardDeveloperRequest request);
+    Uni<GetTenantStageDashboardDeveloperResponse> execute(GetTenantStageDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantStageDeveloperResponse> deleteTenantStage(DeleteTenantStageDeveloperRequest request);
+    Uni<DeleteTenantStageDeveloperResponse> execute(DeleteTenantStageDeveloperRequest request);
 
-    Uni<CreateTenantVersionDeveloperResponse> createTenantVersion(CreateTenantVersionDeveloperRequest request);
+    Uni<CreateTenantVersionDeveloperResponse> execute(CreateTenantVersionDeveloperRequest request);
 
-    Uni<UploadFilesArchiveDeveloperResponse> uploadFilesArchive(UploadFilesArchiveDeveloperRequest request);
+    Uni<UploadFilesArchiveDeveloperResponse> execute(UploadFilesArchiveDeveloperRequest request);
 
-    Uni<GetTenantVersionDashboardDeveloperResponse> getTenantVersionDashboard(
-            GetTenantVersionDashboardDeveloperRequest request);
+    Uni<GetTenantVersionDashboardDeveloperResponse> execute(GetTenantVersionDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantVersionDeveloperResponse> deleteTenantVersion(DeleteTenantVersionDeveloperRequest request);
+    Uni<DeleteTenantVersionDeveloperResponse> execute(DeleteTenantVersionDeveloperRequest request);
 
-    Uni<DeployTenantVersionDeveloperResponse> deployTenantVersion(DeployTenantVersionDeveloperRequest request);
+    Uni<DeployTenantVersionDeveloperResponse> execute(DeployTenantVersionDeveloperRequest request);
 
-    Uni<GetTenantDeploymentDashboardDeveloperResponse> getTenantDeploymentDashboard(
-            GetTenantDeploymentDashboardDeveloperRequest request);
+    Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(GetTenantDeploymentDashboardDeveloperRequest request);
 
-    Uni<DeleteTenantDeploymentDeveloperResponse> deleteTenantDeployment(DeleteTenantDeploymentDeveloperRequest request);
+    Uni<DeleteTenantDeploymentDeveloperResponse> execute(DeleteTenantDeploymentDeveloperRequest request);
 
-    Uni<CreateLobbyRequestDeveloperResponse> createLobbyRequest(CreateLobbyRequestDeveloperRequest request);
+    Uni<CreateLobbyRequestDeveloperResponse> execute(CreateLobbyRequestDeveloperRequest request);
 
-    Uni<DeleteLobbyDeveloperResponse> deleteLobby(DeleteLobbyDeveloperRequest request);
+    Uni<DeleteLobbyDeveloperResponse> execute(DeleteLobbyDeveloperRequest request);
 
-    Uni<CreateMatchmakerRequestDeveloperResponse> createMatchmakerRequest(
-            CreateMatchmakerRequestDeveloperRequest request);
+    Uni<CreateMatchmakerRequestDeveloperResponse> execute(CreateMatchmakerRequestDeveloperRequest request);
 
-    Uni<DeleteMatchmakerDeveloperResponse> deleteMatchmaker(DeleteMatchmakerDeveloperRequest request);
+    Uni<DeleteMatchmakerDeveloperResponse> execute(DeleteMatchmakerDeveloperRequest request);
 }

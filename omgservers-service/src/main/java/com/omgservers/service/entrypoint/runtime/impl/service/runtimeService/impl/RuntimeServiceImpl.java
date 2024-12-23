@@ -23,12 +23,12 @@ class RuntimeServiceImpl implements RuntimeService {
     final CreateTokenMethod createTokenMethod;
 
     @Override
-    public Uni<CreateTokenRuntimeResponse> createToken(@Valid final CreateTokenRuntimeRequest request) {
-        return createTokenMethod.createToken(request);
+    public Uni<CreateTokenRuntimeResponse> execute(@Valid final CreateTokenRuntimeRequest request) {
+        return createTokenMethod.execute(request);
     }
 
     @Override
-    public Uni<InterchangeRuntimeResponse> interchange(@Valid final InterchangeRuntimeRequest request) {
-        return interchangeMethod.interchange(request);
+    public Uni<InterchangeRuntimeResponse> execute(@Valid final InterchangeRuntimeRequest request) {
+        return interchangeMethod.execute(request);
     }
 }

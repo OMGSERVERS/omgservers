@@ -5,5 +5,5 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateUserMethod {
-    Uni<CreateUserPlayerResponse> createUser(CreateUserPlayerRequest request);
+    Uni<CreateUserPlayerResponse> execute(CreateUserPlayerRequest request);
 }

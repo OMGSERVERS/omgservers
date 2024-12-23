@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 
 public interface RuntimeService {
 
-    Uni<CreateTokenRuntimeResponse> createToken(@Valid CreateTokenRuntimeRequest request);
+    Uni<CreateTokenRuntimeResponse> execute(@Valid CreateTokenRuntimeRequest request);
 
-    Uni<InterchangeRuntimeResponse> interchange(@Valid InterchangeRuntimeRequest request);
+    Uni<InterchangeRuntimeResponse> execute(@Valid InterchangeRuntimeRequest request);
 }

@@ -29,7 +29,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<BcryptHashServerResponse> bcryptHash(final BcryptHashServerRequest request) {
-        return serverService.bcryptHash(request);
+    public Uni<BcryptHashServerResponse> execute(final BcryptHashServerRequest request) {
+        return serverService.execute(request);
     }
 }

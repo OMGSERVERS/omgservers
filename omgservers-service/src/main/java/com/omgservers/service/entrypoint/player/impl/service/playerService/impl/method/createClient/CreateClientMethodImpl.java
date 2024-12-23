@@ -50,7 +50,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateClientPlayerResponse> createClient(final CreateClientPlayerRequest request) {
+    public Uni<CreateClientPlayerResponse> execute(final CreateClientPlayerRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId =

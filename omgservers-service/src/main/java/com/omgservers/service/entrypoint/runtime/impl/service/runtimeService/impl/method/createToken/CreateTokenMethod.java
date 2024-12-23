@@ -5,5 +5,5 @@ import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateTokenMethod {
-    Uni<CreateTokenRuntimeResponse> createToken(CreateTokenRuntimeRequest request);
+    Uni<CreateTokenRuntimeResponse> execute(CreateTokenRuntimeRequest request);
 }

@@ -41,59 +41,56 @@ public interface SupportApi {
 
     @PUT
     @Path("/create-token")
-    Uni<CreateTokenSupportResponse> createToken(@NotNull CreateTokenSupportRequest request);
+    Uni<CreateTokenSupportResponse> execute(@NotNull CreateTokenSupportRequest request);
 
     @PUT
     @Path("/create-tenant")
-    Uni<CreateTenantSupportResponse> createTenant(@NotNull CreateTenantSupportRequest request);
+    Uni<CreateTenantSupportResponse> execute(@NotNull CreateTenantSupportRequest request);
 
     @PUT
     @Path("/delete-tenant")
-    Uni<DeleteTenantSupportResponse> deleteTenant(@NotNull DeleteTenantSupportRequest request);
+    Uni<DeleteTenantSupportResponse> execute(@NotNull DeleteTenantSupportRequest request);
 
     @PUT
     @Path("/create-project")
-    Uni<CreateTenantProjectSupportResponse> createTenantProject(@NotNull CreateTenantProjectSupportRequest request);
+    Uni<CreateTenantProjectSupportResponse> execute(@NotNull CreateTenantProjectSupportRequest request);
 
     @PUT
     @Path("/delete-project")
-    Uni<DeleteTenantProjectSupportResponse> deleteTenantProject(@NotNull DeleteTenantProjectSupportRequest request);
+    Uni<DeleteTenantProjectSupportResponse> execute(@NotNull DeleteTenantProjectSupportRequest request);
 
     @PUT
     @Path("/create-developer")
-    Uni<CreateDeveloperSupportResponse> createDeveloper(@NotNull CreateDeveloperSupportRequest request);
+    Uni<CreateDeveloperSupportResponse> execute(@NotNull CreateDeveloperSupportRequest request);
 
     @PUT
     @Path("/delete-developer")
-    Uni<DeleteDeveloperSupportResponse> deleteDeveloper(@NotNull DeleteDeveloperSupportRequest request);
+    Uni<DeleteDeveloperSupportResponse> execute(@NotNull DeleteDeveloperSupportRequest request);
 
     @PUT
     @Path("/create-tenant-permissions")
-    Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
-            @NotNull CreateTenantPermissionsSupportRequest request);
+    Uni<CreateTenantPermissionsSupportResponse> execute(@NotNull CreateTenantPermissionsSupportRequest request);
 
     @PUT
     @Path("/delete-tenant-permissions")
-    Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
-            @NotNull DeleteTenantPermissionsSupportRequest request);
+    Uni<DeleteTenantPermissionsSupportResponse> execute(@NotNull DeleteTenantPermissionsSupportRequest request);
 
     @PUT
     @Path("/create-project-permissions")
-    Uni<CreateTenantProjectPermissionsSupportResponse> createTenantProjectPermissions(
+    Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             @NotNull CreateTenantProjectPermissionsSupportRequest request);
 
     @PUT
     @Path("/delete-project-permissions")
-    Uni<DeleteProjectPermissionsSupportResponse> deleteTenantProjectPermissions(
-            @NotNull DeleteProjectPermissionsSupportRequest request);
+    Uni<DeleteProjectPermissionsSupportResponse> execute(@NotNull DeleteProjectPermissionsSupportRequest request);
 
     @PUT
     @Path("/create-stage-permissions")
-    Uni<CreateTenantStagePermissionsSupportResponse> createTenantStagePermissions(
+    Uni<CreateTenantStagePermissionsSupportResponse> execute(
             @NotNull CreateTenantStagePermissionsSupportRequest request);
 
     @PUT
     @Path("/delete-stage-permissions")
-    Uni<DeleteTenantStagePermissionsSupportResponse> deleteTenantStagePermissions(
+    Uni<DeleteTenantStagePermissionsSupportResponse> execute(
             @NotNull DeleteTenantStagePermissionsSupportRequest request);
 }

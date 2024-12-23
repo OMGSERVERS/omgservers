@@ -31,25 +31,25 @@ class PlayerApiImpl implements PlayerApi {
 
     @Override
     @PermitAll
-    public Uni<CreateUserPlayerResponse> createUser(@NotNull final CreateUserPlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createUser);
+    public Uni<CreateUserPlayerResponse> execute(@NotNull final CreateUserPlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
     @PermitAll
-    public Uni<CreateTokenPlayerResponse> createToken(@NotNull final CreateTokenPlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
+    public Uni<CreateTokenPlayerResponse> execute(@NotNull final CreateTokenPlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.PLAYER})
-    public Uni<CreateClientPlayerResponse> createClient(@NotNull final CreateClientPlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createClient);
+    public Uni<CreateClientPlayerResponse> execute(@NotNull final CreateClientPlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.PLAYER})
-    public Uni<InterchangePlayerResponse> interchange(@NotNull final InterchangePlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::interchange);
+    public Uni<InterchangePlayerResponse> execute(@NotNull final InterchangePlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

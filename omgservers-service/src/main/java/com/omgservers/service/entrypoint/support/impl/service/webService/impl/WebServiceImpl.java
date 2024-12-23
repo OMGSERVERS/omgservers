@@ -41,73 +41,73 @@ class WebServiceImpl implements WebService {
     final SupportService supportService;
 
     @Override
-    public Uni<CreateTokenSupportResponse> createToken(final CreateTokenSupportRequest request) {
-        return supportService.createToken(request);
+    public Uni<CreateTokenSupportResponse> execute(final CreateTokenSupportRequest request) {
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantSupportResponse> createTenant(final CreateTenantSupportRequest request) {
-        return supportService.createTenant(request);
+    public Uni<CreateTenantSupportResponse> execute(final CreateTenantSupportRequest request) {
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantSupportResponse> deleteTenant(final DeleteTenantSupportRequest request) {
-        return supportService.deleteTenant(request);
+    public Uni<DeleteTenantSupportResponse> execute(final DeleteTenantSupportRequest request) {
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantProjectSupportResponse> createTenantProject(final CreateTenantProjectSupportRequest request) {
-        return supportService.createTenantProject(request);
+    public Uni<CreateTenantProjectSupportResponse> execute(final CreateTenantProjectSupportRequest request) {
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantProjectSupportResponse> deleteTenantProject(final DeleteTenantProjectSupportRequest request) {
-        return supportService.deleteTenantProject(request);
+    public Uni<DeleteTenantProjectSupportResponse> execute(final DeleteTenantProjectSupportRequest request) {
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<CreateDeveloperSupportResponse> createDeveloper(final CreateDeveloperSupportRequest request) {
-        return supportService.createDeveloper(request);
+    public Uni<CreateDeveloperSupportResponse> execute(final CreateDeveloperSupportRequest request) {
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<DeleteDeveloperSupportResponse> deleteDeveloper(DeleteDeveloperSupportRequest request) {
-        return supportService.deleteDeveloper(request);
+    public Uni<DeleteDeveloperSupportResponse> execute(DeleteDeveloperSupportRequest request) {
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
+    public Uni<CreateTenantPermissionsSupportResponse> execute(
             final CreateTenantPermissionsSupportRequest request) {
-        return supportService.createTenantPermissions(request);
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
+    public Uni<DeleteTenantPermissionsSupportResponse> execute(
             final DeleteTenantPermissionsSupportRequest request) {
-        return supportService.deleteTenantPermissions(request);
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantProjectPermissionsSupportResponse> createTenantProjectPermissions(
+    public Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             CreateTenantProjectPermissionsSupportRequest request) {
-        return supportService.createTenantProjectPermissions(request);
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<DeleteProjectPermissionsSupportResponse> deleteTenantProjectPermissions(
+    public Uni<DeleteProjectPermissionsSupportResponse> execute(
             DeleteProjectPermissionsSupportRequest request) {
-        return supportService.deleteTenantProjectPermissions(request);
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantStagePermissionsSupportResponse> createTenantStagePermissions(
+    public Uni<CreateTenantStagePermissionsSupportResponse> execute(
             CreateTenantStagePermissionsSupportRequest request) {
-        return supportService.createTenantStagePermissions(request);
+        return supportService.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantStagePermissionsSupportResponse> deleteTenantStagePermissions(
+    public Uni<DeleteTenantStagePermissionsSupportResponse> execute(
             DeleteTenantStagePermissionsSupportRequest request) {
-        return supportService.deleteTenantStagePermissions(request);
+        return supportService.execute(request);
     }
 }

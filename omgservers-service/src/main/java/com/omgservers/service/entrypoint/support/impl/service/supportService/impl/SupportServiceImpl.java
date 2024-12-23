@@ -67,74 +67,74 @@ class SupportServiceImpl implements SupportService {
     final CreateTokenMethod createTokenMethod;
 
     @Override
-    public Uni<CreateTokenSupportResponse> createToken(@Valid final CreateTokenSupportRequest request) {
+    public Uni<CreateTokenSupportResponse> execute(@Valid final CreateTokenSupportRequest request) {
         return createTokenMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantSupportResponse> createTenant(@Valid final CreateTenantSupportRequest request) {
+    public Uni<CreateTenantSupportResponse> execute(@Valid final CreateTenantSupportRequest request) {
         return createTenantMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantSupportResponse> deleteTenant(@Valid final DeleteTenantSupportRequest request) {
+    public Uni<DeleteTenantSupportResponse> execute(@Valid final DeleteTenantSupportRequest request) {
         return deleteTenantMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantProjectSupportResponse> createTenantProject(
+    public Uni<CreateTenantProjectSupportResponse> execute(
             @Valid final CreateTenantProjectSupportRequest request) {
         return createTenantProjectMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantProjectSupportResponse> deleteTenantProject(
+    public Uni<DeleteTenantProjectSupportResponse> execute(
             @Valid final DeleteTenantProjectSupportRequest request) {
         return deleteTenantProjectMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateDeveloperSupportResponse> createDeveloper(@Valid final CreateDeveloperSupportRequest request) {
+    public Uni<CreateDeveloperSupportResponse> execute(@Valid final CreateDeveloperSupportRequest request) {
         return createDeveloperMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteDeveloperSupportResponse> deleteDeveloper(@Valid final DeleteDeveloperSupportRequest request) {
+    public Uni<DeleteDeveloperSupportResponse> execute(@Valid final DeleteDeveloperSupportRequest request) {
         return deleteDeveloperMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantPermissionsSupportResponse> createTenantPermissions(
+    public Uni<CreateTenantPermissionsSupportResponse> execute(
             @Valid final CreateTenantPermissionsSupportRequest request) {
         return createTenantPermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantPermissionsSupportResponse> deleteTenantPermissions(
+    public Uni<DeleteTenantPermissionsSupportResponse> execute(
             @Valid final DeleteTenantPermissionsSupportRequest request) {
         return deleteTenantPermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantProjectPermissionsSupportResponse> createTenantProjectPermissions(
+    public Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             @Valid final CreateTenantProjectPermissionsSupportRequest request) {
         return createTenantProjectPermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteProjectPermissionsSupportResponse> deleteTenantProjectPermissions(
+    public Uni<DeleteProjectPermissionsSupportResponse> execute(
             @Valid final DeleteProjectPermissionsSupportRequest request) {
         return deleteProjectPermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantStagePermissionsSupportResponse> createTenantStagePermissions(
+    public Uni<CreateTenantStagePermissionsSupportResponse> execute(
             @Valid final CreateTenantStagePermissionsSupportRequest request) {
         return createTenantStagePermissionsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantStagePermissionsSupportResponse> deleteTenantStagePermissions(
+    public Uni<DeleteTenantStagePermissionsSupportResponse> execute(
             @Valid final DeleteTenantStagePermissionsSupportRequest request) {
         return deleteTenantStagePermissionsMethod.execute(request);
     }
