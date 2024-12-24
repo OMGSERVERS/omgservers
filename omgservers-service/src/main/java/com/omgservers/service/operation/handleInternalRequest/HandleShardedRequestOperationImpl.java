@@ -3,7 +3,6 @@ package com.omgservers.service.operation.handleInternalRequest;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.ShardedRequest;
 import com.omgservers.service.exception.ServerSideInternalException;
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,8 +47,11 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                 })
                 .onFailure()
                 .invoke(t -> {
-                    if (!(t instanceof ServerSideNotFoundException)) {
+                    if (t instanceof ServerSideInternalException) {
                         log.warn("Internal request failed, request={}, {}:{}",
+                                request, t.getClass().getSimpleName(), t.getMessage());
+                    } else {
+                        log.trace("Internal request failed, request={}, {}:{}",
                                 request, t.getClass().getSimpleName(), t.getMessage());
                     }
                 });
