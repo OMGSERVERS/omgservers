@@ -2,8 +2,12 @@ package com.omgservers.service.entrypoint.support.impl.service.webService;
 
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
@@ -34,9 +38,13 @@ public interface WebService {
 
     Uni<CreateTenantSupportResponse> execute(CreateTenantSupportRequest request);
 
+    Uni<CreateTenantAliasSupportResponse> execute(CreateTenantAliasSupportRequest request);
+
     Uni<DeleteTenantSupportResponse> execute(DeleteTenantSupportRequest request);
 
     Uni<CreateTenantProjectSupportResponse> execute(CreateTenantProjectSupportRequest request);
+
+    Uni<CreateTenantProjectAliasSupportResponse> execute(CreateTenantProjectAliasSupportRequest request);
 
     Uni<DeleteTenantProjectSupportResponse> execute(DeleteTenantProjectSupportRequest request);
 

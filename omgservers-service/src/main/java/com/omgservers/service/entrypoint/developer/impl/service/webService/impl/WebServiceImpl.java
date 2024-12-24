@@ -4,8 +4,12 @@ import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperReq
 import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
@@ -71,6 +75,12 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<CreateTenantProjectAliasDeveloperResponse> execute(
+            final CreateTenantProjectAliasDeveloperRequest request) {
+        return developerService.execute(request);
+    }
+
+    @Override
     public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
             final GetTenantProjectDashboardDeveloperRequest request) {
         return developerService.execute(request);
@@ -84,6 +94,11 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<CreateTenantStageDeveloperResponse> execute(final CreateTenantStageDeveloperRequest request) {
+        return developerService.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantStageAliasDeveloperResponse> execute(final CreateTenantStageAliasDeveloperRequest request) {
         return developerService.execute(request);
     }
 

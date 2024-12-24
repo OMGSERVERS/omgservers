@@ -2,8 +2,12 @@ package com.omgservers.service.entrypoint.support.impl.service.webService.impl.s
 
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
@@ -43,17 +47,33 @@ public interface SupportApi {
     @Path("/create-token")
     Uni<CreateTokenSupportResponse> execute(@NotNull CreateTokenSupportRequest request);
 
+    /*
+    Tenant
+     */
+
     @PUT
     @Path("/create-tenant")
     Uni<CreateTenantSupportResponse> execute(@NotNull CreateTenantSupportRequest request);
 
     @PUT
+    @Path("/create-tenant-alias")
+    Uni<CreateTenantAliasSupportResponse> execute(@NotNull CreateTenantAliasSupportRequest request);
+
+    @PUT
     @Path("/delete-tenant")
     Uni<DeleteTenantSupportResponse> execute(@NotNull DeleteTenantSupportRequest request);
+
+    /*
+    Project
+     */
 
     @PUT
     @Path("/create-project")
     Uni<CreateTenantProjectSupportResponse> execute(@NotNull CreateTenantProjectSupportRequest request);
+
+    @PUT
+    @Path("/create-project-alias")
+    Uni<CreateTenantProjectAliasSupportResponse> execute(@NotNull CreateTenantProjectAliasSupportRequest request);
 
     @PUT
     @Path("/delete-project")

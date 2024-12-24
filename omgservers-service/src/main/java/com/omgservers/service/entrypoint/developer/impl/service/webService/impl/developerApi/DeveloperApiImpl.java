@@ -4,8 +4,12 @@ import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperReq
 import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
@@ -68,15 +72,29 @@ class DeveloperApiImpl implements DeveloperApi {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
+    /*
+    Tenant
+     */
+
     @Override
     public Uni<GetTenantDashboardDeveloperResponse> execute(
             @NotNull final GetTenantDashboardDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
+    /*
+    Tenant project
+     */
+
     @Override
     public Uni<CreateTenantProjectDeveloperResponse> execute(
             @NotNull final CreateTenantProjectDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<CreateTenantProjectAliasDeveloperResponse> execute(
+            @NotNull final CreateTenantProjectAliasDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -92,9 +110,19 @@ class DeveloperApiImpl implements DeveloperApi {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
+    /*
+    Tenant stage
+     */
+
     @Override
     public Uni<CreateTenantStageDeveloperResponse> execute(
             @NotNull final CreateTenantStageDeveloperRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<CreateTenantStageAliasDeveloperResponse> execute(
+            @NotNull final CreateTenantStageAliasDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -109,6 +137,10 @@ class DeveloperApiImpl implements DeveloperApi {
             @NotNull final DeleteTenantStageDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
+
+    /*
+    Tenant version
+     */
 
     @Override
     public Uni<CreateTenantVersionDeveloperResponse> execute(
@@ -135,6 +167,10 @@ class DeveloperApiImpl implements DeveloperApi {
             @NotNull final DeleteTenantVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
+
+    /*
+    Tenant deployment
+     */
 
     @Override
     public Uni<DeployTenantVersionDeveloperResponse> execute(

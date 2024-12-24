@@ -2,8 +2,12 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
@@ -28,8 +32,10 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateDeveloperMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantAliasMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantPermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectAliasMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectPermissionsMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantStagePermissionsMethod;
@@ -56,10 +62,12 @@ class SupportServiceImpl implements SupportService {
     final CreateTenantStagePermissionsMethod createTenantStagePermissionsMethod;
     final DeleteTenantStagePermissionsMethod deleteTenantStagePermissionsMethod;
     final DeleteProjectPermissionsMethod deleteProjectPermissionsMethod;
+    final CreateTenantProjectAliasMethod createTenantProjectAliasMethod;
     final CreateTenantPermissionsMethod createTenantPermissionsMethod;
     final DeleteTenantPermissionsMethod deleteTenantPermissionsMethod;
     final CreateTenantProjectMethod createTenantProjectMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
+    final CreateTenantAliasMethod createTenantAliasMethod;
     final CreateDeveloperMethod createDeveloperMethod;
     final DeleteDeveloperMethod deleteDeveloperMethod;
     final CreateTenantMethod createTenantMethod;
@@ -71,9 +79,18 @@ class SupportServiceImpl implements SupportService {
         return createTokenMethod.execute(request);
     }
 
+    /*
+    Tenant
+     */
+
     @Override
     public Uni<CreateTenantSupportResponse> execute(@Valid final CreateTenantSupportRequest request) {
         return createTenantMethod.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantAliasSupportResponse> execute(@Valid final CreateTenantAliasSupportRequest request) {
+        return createTenantAliasMethod.execute(request);
     }
 
     @Override
@@ -81,10 +98,20 @@ class SupportServiceImpl implements SupportService {
         return deleteTenantMethod.execute(request);
     }
 
+    /*
+    Project
+     */
+
     @Override
     public Uni<CreateTenantProjectSupportResponse> execute(
             @Valid final CreateTenantProjectSupportRequest request) {
         return createTenantProjectMethod.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantProjectAliasSupportResponse> execute(
+            @Valid final CreateTenantProjectAliasSupportRequest request) {
+        return createTenantProjectAliasMethod.execute(request);
     }
 
     @Override

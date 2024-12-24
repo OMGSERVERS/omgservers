@@ -4,8 +4,12 @@ import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperReq
 import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
@@ -75,6 +79,10 @@ public interface DeveloperApi {
     Uni<CreateTenantProjectDeveloperResponse> execute(@NotNull CreateTenantProjectDeveloperRequest request);
 
     @PUT
+    @Path("/create-project-alias")
+    Uni<CreateTenantProjectAliasDeveloperResponse> execute(@NotNull CreateTenantProjectAliasDeveloperRequest request);
+
+    @PUT
     @Path("/get-project-dashboard")
     Uni<GetTenantProjectDashboardDeveloperResponse> execute(@NotNull GetTenantProjectDashboardDeveloperRequest request);
 
@@ -89,6 +97,10 @@ public interface DeveloperApi {
     @PUT
     @Path("/create-stage")
     Uni<CreateTenantStageDeveloperResponse> execute(@NotNull CreateTenantStageDeveloperRequest request);
+
+    @PUT
+    @Path("/create-stage-alias")
+    Uni<CreateTenantStageAliasDeveloperResponse> execute(@NotNull CreateTenantStageAliasDeveloperRequest request);
 
     @PUT
     @Path("/get-stage-dashboard")

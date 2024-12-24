@@ -4,8 +4,12 @@ import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperReq
 import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
@@ -44,19 +48,39 @@ public interface WebService {
 
     Uni<CreateTokenDeveloperResponse> execute(CreateTokenDeveloperRequest request);
 
+    /*
+    Tenant
+     */
+
     Uni<GetTenantDashboardDeveloperResponse> execute(GetTenantDashboardDeveloperRequest request);
 
+    /*
+    Tenant project
+     */
+
     Uni<CreateTenantProjectDeveloperResponse> execute(CreateTenantProjectDeveloperRequest request);
+
+    Uni<CreateTenantProjectAliasDeveloperResponse> execute(CreateTenantProjectAliasDeveloperRequest request);
 
     Uni<GetTenantProjectDashboardDeveloperResponse> execute(GetTenantProjectDashboardDeveloperRequest request);
 
     Uni<DeleteTenantProjectDeveloperResponse> execute(DeleteTenantProjectDeveloperRequest request);
 
+    /*
+    Tenant stage
+     */
+
     Uni<CreateTenantStageDeveloperResponse> execute(CreateTenantStageDeveloperRequest request);
+
+    Uni<CreateTenantStageAliasDeveloperResponse> execute(CreateTenantStageAliasDeveloperRequest request);
 
     Uni<GetTenantStageDashboardDeveloperResponse> execute(GetTenantStageDashboardDeveloperRequest request);
 
     Uni<DeleteTenantStageDeveloperResponse> execute(DeleteTenantStageDeveloperRequest request);
+
+    /*
+    Tenant version
+     */
 
     Uni<CreateTenantVersionDeveloperResponse> execute(CreateTenantVersionDeveloperRequest request);
 
@@ -65,6 +89,10 @@ public interface WebService {
     Uni<GetTenantVersionDashboardDeveloperResponse> execute(GetTenantVersionDashboardDeveloperRequest request);
 
     Uni<DeleteTenantVersionDeveloperResponse> execute(DeleteTenantVersionDeveloperRequest request);
+
+    /*
+    Tenant deployment
+     */
 
     Uni<DeployTenantVersionDeveloperResponse> execute(DeployTenantVersionDeveloperRequest request);
 

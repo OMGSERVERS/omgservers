@@ -2,6 +2,10 @@ package com.omgservers.service.entrypoint.support.impl.service.webService.impl;
 
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
@@ -45,8 +49,17 @@ class WebServiceImpl implements WebService {
         return supportService.execute(request);
     }
 
+    /*
+    Tenant
+     */
+
     @Override
     public Uni<CreateTenantSupportResponse> execute(final CreateTenantSupportRequest request) {
+        return supportService.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantAliasSupportResponse> execute(final CreateTenantAliasSupportRequest request) {
         return supportService.execute(request);
     }
 
@@ -55,8 +68,17 @@ class WebServiceImpl implements WebService {
         return supportService.execute(request);
     }
 
+    /*
+    Project
+     */
+
     @Override
     public Uni<CreateTenantProjectSupportResponse> execute(final CreateTenantProjectSupportRequest request) {
+        return supportService.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantProjectAliasSupportResponse> execute(final CreateTenantProjectAliasSupportRequest request) {
         return supportService.execute(request);
     }
 

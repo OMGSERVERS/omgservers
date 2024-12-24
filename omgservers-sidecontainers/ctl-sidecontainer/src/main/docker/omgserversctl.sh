@@ -106,6 +106,9 @@ help() {
       echo "     - TENANT"
     fi
   fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantAlias" ]; then
+    echo " omgserversctl support createTenantAlias <tenant_id> <alias>"
+  fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenant" ]; then
     echo " omgserversctl support deleteTenant <tenant>"
     if [ "$1" = "support deleteTenant" ]; then
@@ -121,6 +124,9 @@ help() {
       echo "     - STAGE"
       echo "     - SECRET"
     fi
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectAlias" ]; then
+    echo " omgserversctl support createProjectAlias <tenant> <project_id> <alias>"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProject" ]; then
     echo " omgserversctl support deleteProject <tenant> <project>"
@@ -218,6 +224,9 @@ help() {
       echo "     - SECRET"
     fi
   fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProjectAlias" ]; then
+    echo " omgserversctl developer createProjectAlias <tenant> <project_id> <alias>"
+  fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getProjectDashboard" ]; then
     echo " omgserversctl developer getProjectDashboard <tenant> <project>"
   fi
@@ -235,6 +244,9 @@ help() {
       echo "     - STAGE"
       echo "     - SECRET"
     fi
+  fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStageAlias" ]; then
+    echo " omgserversctl developer createStageAlias <tenant> <stage_id> <alias>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDashboard" ]; then
     echo " omgserversctl developer getStageDashboard <tenant> <stage>"
@@ -704,6 +716,54 @@ support_createTenant() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT=$TENANT"
 }
 
+support_createTenantAlias() {
+  internal_useEnvironment
+
+  TENANT_ID=$1
+  ALIAS=$2
+
+  if [ -z "${TENANT_ID}" -o -z "${ALIAS}" ]; then
+    help "support createTenantAlias"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant id, TENANT_ID=${TENANT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-tenant-alias"
+  REQUEST="{\"tenant_id\": ${TENANT_ID}, \"alias\": \"${ALIAS}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-alias_${TENANT_ID}_${ALIAS}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant alias was created"
+}
+
 support_deleteTenant() {
   internal_useEnvironment
 
@@ -821,6 +881,56 @@ support_createProject() {
   echo "export OMGSERVERSCTL_SECRET=${SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
+}
+
+support_createProjectAlias() {
+  internal_useEnvironment
+
+  TENANT=$1
+  PROJECT_ID=$2
+  ALIAS=$3
+
+  if [ -z "${TENANT}" -o -z "${PROJECT_ID}" -o -z "${ALIAS}" ]; then
+    help "support createProjectAlias"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-project-alias"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project_id\": \"${PROJECT_ID}\", \"alias\": \"${ALIAS}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-alias_${TENANT}_${PROJECT_ID}_${ALIAS}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project alias was created"
 }
 
 support_deleteProject() {
@@ -1443,6 +1553,56 @@ developer_createProject() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
 }
 
+developer_createProjectAlias() {
+  internal_useEnvironment
+
+  TENANT=$1
+  PROJECT_ID=$2
+  ALIAS=$3
+
+  if [ -z "${TENANT}" -o -z "${PROJECT_ID}" -o -z "${ALIAS}" ]; then
+    help "developer createProjectAlias"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=${PROJECT_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-project-alias"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project_id\": ${PROJECT_ID}, \"alias\": \"${ALIAS}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project-alias_${TENANT}_${PROJECT_ID}_${ALIAS}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project alias was created"
+}
+
 developer_getProjectDashboard() {
   internal_useEnvironment
 
@@ -1609,6 +1769,56 @@ developer_createStage() {
   echo "export OMGSERVERSCTL_SECRET=$SECRET" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=${STAGE}, SECRET=${SECRET}"
+}
+
+developer_createStageAlias() {
+  internal_useEnvironment
+
+  TENANT=$1
+  STAGE_ID=$2
+  ALIAS=$3
+
+  if [ -z "${TENANT}" -o -z "${STAGE_ID}" -o -z "${ALIAS}" ]; then
+    help "developer createStageAlias"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=$TENANT"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=${STAGE_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+
+  DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
+
+  if [ -z "${DEVELOPER_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-stage-alias"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"stage_id\": \"${STAGE_ID}\", \"alias\": \"${ALIAS}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-stage_${TENANT}_${STAGE_ID}_${ALIAS}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage alias was created"
 }
 
 developer_getStageDashboard() {
@@ -2400,10 +2610,14 @@ elif [ "$1" = "support" ]; then
     support_createToken
   elif [ "$2" = "createTenant" ]; then
     support_createTenant
+  elif [ "$2" = "createTenantAlias" ]; then
+    support_createTenantAlias $3 $4
   elif [ "$2" = "deleteTenant" ]; then
     support_deleteTenant $3
   elif [ "$2" = "createProject" ]; then
     support_createProject $3
+  elif [ "$2" = "createProjectAlias" ]; then
+    support_createProjectAlias $3 $4 $5
   elif [ "$2" = "deleteProject" ]; then
     support_deleteProject $3 $4
   elif [ "$2" = "createDeveloper" ]; then
@@ -2435,12 +2649,16 @@ elif [ "$1" = "developer" ]; then
     developer_getTenantDashboard $3
   elif [ "$2" = "createProject" ]; then
     developer_createProject $3
+  elif [ "$2" = "createProjectAlias" ]; then
+    developer_createProjectAlias $3 $4 $5
   elif [ "$2" = "getProjectDashboard" ]; then
     developer_getProjectDashboard $3 $4
   elif [ "$2" = "deleteProject" ]; then
     developer_deleteProject $3 $4
   elif [ "$2" = "createStage" ]; then
     developer_createStage $3 $4
+  elif [ "$2" = "createStageAlias" ]; then
+    developer_createStageAlias $3 $4 $5
   elif [ "$2" = "getStageDashboard" ]; then
     developer_getStageDashboard $3 $4
   elif [ "$2" = "deleteStage" ]; then

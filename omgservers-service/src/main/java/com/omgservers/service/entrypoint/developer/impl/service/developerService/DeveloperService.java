@@ -4,8 +4,12 @@ import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperReq
 import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
@@ -49,11 +53,15 @@ public interface DeveloperService {
 
     Uni<CreateTenantProjectDeveloperResponse> execute(@Valid CreateTenantProjectDeveloperRequest request);
 
+    Uni<CreateTenantProjectAliasDeveloperResponse> execute(@Valid CreateTenantProjectAliasDeveloperRequest request);
+
     Uni<GetTenantProjectDashboardDeveloperResponse> execute(@Valid GetTenantProjectDashboardDeveloperRequest request);
 
     Uni<DeleteTenantProjectDeveloperResponse> execute(@Valid DeleteTenantProjectDeveloperRequest request);
 
     Uni<CreateTenantStageDeveloperResponse> execute(@Valid CreateTenantStageDeveloperRequest request);
+
+    Uni<CreateTenantStageAliasDeveloperResponse> execute(@Valid CreateTenantStageAliasDeveloperRequest request);
 
     Uni<GetTenantStageDashboardDeveloperResponse> execute(@Valid GetTenantStageDashboardDeveloperRequest request);
 

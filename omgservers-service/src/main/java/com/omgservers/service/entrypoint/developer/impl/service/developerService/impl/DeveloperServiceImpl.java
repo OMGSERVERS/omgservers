@@ -4,8 +4,12 @@ import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperReq
 import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
@@ -41,7 +45,9 @@ import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRes
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateLobbyRequestMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateMatchmakerRequestMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantProjectAliasMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantProjectMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantStageAliasMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantStageMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantVersionMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTokenMethod;
@@ -73,9 +79,11 @@ class DeveloperServiceImpl implements DeveloperService {
     final GetTenantDeploymentDashboardMethod getTenantDeploymentDashboardMethod;
     final GetTenantVersionDashboardMethod getTenantVersionDashboardMethod;
     final GetTenantProjectDashboardMethod getTenantProjectDashboardMethod;
+    final CreateTenantProjectAliasMethod createTenantProjectAliasMethod;
     final GetTenantStageDashboardMethod getTenantStageDashboardMethod;
     final CreateMatchmakerRequestMethod createMatchmakerRequestMethod;
     final DeleteTenantDeploymentMethod deleteTenantDeploymentMethod;
+    final CreateTenantStageAliasMethod createTenantStageAliasMethod;
     final CreateTenantVersionMethod createTenantVersionMethod;
     final CreateTenantProjectMethod createTenantProjectMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
@@ -108,6 +116,12 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
+    public Uni<CreateTenantProjectAliasDeveloperResponse> execute(
+            @Valid final CreateTenantProjectAliasDeveloperRequest request) {
+        return createTenantProjectAliasMethod.execute(request);
+    }
+
+    @Override
     public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
             @Valid final GetTenantProjectDashboardDeveloperRequest request) {
         return getTenantProjectDashboardMethod.execute(request);
@@ -123,6 +137,12 @@ class DeveloperServiceImpl implements DeveloperService {
     public Uni<CreateTenantStageDeveloperResponse> execute(
             @Valid final CreateTenantStageDeveloperRequest request) {
         return createTenantStageMethod.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantStageAliasDeveloperResponse> execute(
+            @Valid final CreateTenantStageAliasDeveloperRequest request) {
+        return createTenantStageAliasMethod.execute(request);
     }
 
     @Override
