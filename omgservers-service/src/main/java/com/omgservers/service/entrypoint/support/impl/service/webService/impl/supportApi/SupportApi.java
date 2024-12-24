@@ -79,6 +79,10 @@ public interface SupportApi {
     @Path("/delete-project")
     Uni<DeleteTenantProjectSupportResponse> execute(@NotNull DeleteTenantProjectSupportRequest request);
 
+    /*
+    Developer
+     */
+
     @PUT
     @Path("/create-developer")
     Uni<CreateDeveloperSupportResponse> execute(@NotNull CreateDeveloperSupportRequest request);
@@ -86,6 +90,10 @@ public interface SupportApi {
     @PUT
     @Path("/delete-developer")
     Uni<DeleteDeveloperSupportResponse> execute(@NotNull DeleteDeveloperSupportRequest request);
+
+    /*
+    Permissions
+     */
 
     @PUT
     @Path("/create-tenant-permissions")

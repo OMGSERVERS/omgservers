@@ -14,6 +14,7 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
@@ -31,6 +32,8 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final TenantPermissionModelFactory tenantPermissionModelFactory;
     final SecurityIdentity securityIdentity;
 
@@ -43,26 +46,32 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var forUserId = request.getUserId();
-        final var tenantId = request.getTenantId();
-        return getUser(forUserId)
-                .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> {
-                            final var permissionsToCreate = request.getPermissionsToCreate();
-                            return Multi.createFrom().iterable(permissionsToCreate)
-                                    .onItem().transformToUniAndConcatenate(permission ->
-                                            createTenantPermission(tenantId, forUserId, permission)
-                                                    .map(created -> Tuple2.of(permission, created)))
-                                    .collect().asList();
-                        }))
-                .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
-                .invoke(createdPermissions -> {
-                    if (createdPermissions.size() > 0) {
-                        log.info("The \"{}\" tenant permissions in tenant \"{}\" for user \"{}\" were created by the user {}",
-                                createdPermissions.size(), tenantId, forUserId, userId);
-                    }
+        return getIdByTenantOperation.execute(request.getTenant())
+                .flatMap(tenantId -> {
+                    final var forUserId = request.getUserId();
+                    return getUser(forUserId)
+                            .flatMap(user -> getTenant(tenantId)
+                                    .flatMap(tenant -> {
+                                        final var permissionsToCreate = request
+                                                .getPermissionsToCreate();
+                                        return Multi.createFrom().iterable(permissionsToCreate)
+                                                .onItem().transformToUniAndConcatenate(permission ->
+                                                        createTenantPermission(tenantId, forUserId, permission)
+                                                                .map(created -> Tuple2.of(permission, created)))
+                                                .collect().asList();
+                                    }))
+                            .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
+                            .invoke(createdPermissions -> {
+                                if (createdPermissions.size() > 0) {
+                                    log.info(
+                                            "The \"{}\" tenant permissions in tenant \"{}\" " +
+                                                    "for user \"{}\" were created by the user {}",
+                                            createdPermissions.size(), tenantId, forUserId, userId);
+                                }
+                            });
                 })
                 .map(CreateTenantPermissionsSupportResponse::new);
+
     }
 
     Uni<UserModel> getUser(final Long id) {

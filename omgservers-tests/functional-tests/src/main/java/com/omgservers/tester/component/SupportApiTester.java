@@ -73,7 +73,7 @@ public class SupportApiTester {
                 .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new DeleteTenantSupportRequest(tenantId)))
+                .body(objectMapper.writeValueAsString(new DeleteTenantSupportRequest(tenantId.toString())))
                 .when().put("/omgservers/v1/entrypoint/support/request/delete-tenant");
         responseSpecification.then().statusCode(200);
 
@@ -108,7 +108,7 @@ public class SupportApiTester {
                 .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateTenantPermissionsSupportRequest(tenantId,
+                .body(objectMapper.writeValueAsString(new CreateTenantPermissionsSupportRequest(tenantId.toString(),
                         userId,
                         permissions)))
                 .when().put("/omgservers/v1/entrypoint/support/request/create-tenant-permissions");
@@ -129,7 +129,7 @@ public class SupportApiTester {
                 .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new DeleteTenantPermissionsSupportRequest(tenantId,
+                .body(objectMapper.writeValueAsString(new DeleteTenantPermissionsSupportRequest(tenantId.toString(),
                         userId,
                         permissions)))
                 .when().put("/omgservers/v1/entrypoint/support/request/delete-tenant-permissions");

@@ -103,8 +103,7 @@ class SupportServiceImpl implements SupportService {
      */
 
     @Override
-    public Uni<CreateTenantProjectSupportResponse> execute(
-            @Valid final CreateTenantProjectSupportRequest request) {
+    public Uni<CreateTenantProjectSupportResponse> execute(@Valid final CreateTenantProjectSupportRequest request) {
         return createTenantProjectMethod.execute(request);
     }
 
@@ -120,6 +119,10 @@ class SupportServiceImpl implements SupportService {
         return deleteTenantProjectMethod.execute(request);
     }
 
+    /*
+    Developer
+     */
+
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(@Valid final CreateDeveloperSupportRequest request) {
         return createDeveloperMethod.execute(request);
@@ -129,6 +132,10 @@ class SupportServiceImpl implements SupportService {
     public Uni<DeleteDeveloperSupportResponse> execute(@Valid final DeleteDeveloperSupportRequest request) {
         return deleteDeveloperMethod.execute(request);
     }
+
+    /*
+    Permissions
+     */
 
     @Override
     public Uni<CreateTenantPermissionsSupportResponse> execute(

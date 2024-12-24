@@ -17,6 +17,8 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
@@ -34,6 +36,9 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
     final SecurityIdentity securityIdentity;
 
@@ -46,27 +51,33 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var forUserId = request.getUserId();
-        final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getProjectId();
-        return getUser(forUserId)
-                .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))
-                        .flatMap(project -> {
-                            final var permissionsToCreate = request.getPermissionsToCreate();
-                            return Multi.createFrom().iterable(permissionsToCreate)
-                                    .onItem().transformToUniAndConcatenate(permission ->
-                                            createTenantProjectPermission(tenantId, tenantProjectId, forUserId, permission)
-                                                    .map(created -> Tuple2.of(permission, created)))
-                                    .collect().asList();
+        return getIdByTenantOperation.execute(request.getTenant())
+                .flatMap(tenantId -> getIdByProjectOperation.execute(tenantId, request.getProject())
+                        .flatMap(tenantProjectId -> {
+                            final var forUserId = request.getUserId();
+                            return getUser(forUserId)
+                                    .flatMap(user -> getTenant(tenantId)
+                                            .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))
+                                            .flatMap(project -> {
+                                                final var permissionsToCreate = request.getPermissionsToCreate();
+                                                return Multi.createFrom().iterable(permissionsToCreate)
+                                                        .onItem().transformToUniAndConcatenate(permission ->
+                                                                createTenantProjectPermission(tenantId,
+                                                                        tenantProjectId, forUserId, permission)
+                                                                        .map(created -> Tuple2.of(permission,
+                                                                                created)))
+                                                        .collect().asList();
+                                            }))
+                                    .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1)
+                                            .toList())
+                                    .invoke(createdPermissions -> {
+                                        if (!createdPermissions.isEmpty()) {
+                                            log.info("The \"{}\" project permissions in tenant \"{}\" " +
+                                                            "for user \"{}\" were created by the user {}",
+                                                    createdPermissions.size(), tenantId, forUserId, userId);
+                                        }
+                                    });
                         }))
-                .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
-                .invoke(createdPermissions -> {
-                    if (createdPermissions.size() > 0) {
-                        log.info("The \"{}\" project permissions in tenant \"{}\" for user \"{}\" were created by the user {}",
-                                createdPermissions.size(), tenantId, forUserId, userId);
-                    }
-                })
                 .map(CreateTenantProjectPermissionsSupportResponse::new);
     }
 

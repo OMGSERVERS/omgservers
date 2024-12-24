@@ -178,7 +178,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
-    echo " omgserversctl support createStagePermission <tenant> <stage> <user> <permission>"
+    echo " omgserversctl support createStagePermission <tenant> <project> <stage> <user> <permission>"
     if [ "$1" = "support createStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGEMENT"
@@ -186,7 +186,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
-    echo " omgserversctl support deleteStagePermission <tenant> <stage> <user> <permission>"
+    echo " omgserversctl support deleteStagePermission <tenant> <project> <stage> <user> <permission>"
     if [ "$1" = "support deleteStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGEMENT"
@@ -782,7 +782,7 @@ support_deleteTenant() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-tenant"
-  REQUEST="{\"tenant_id\": \"${TENANT}\"}"
+  REQUEST="{\"tenant\": \"${TENANT}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -836,7 +836,7 @@ support_createProject() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-project"
-  REQUEST="{\"tenant_id\": ${TENANT}}"
+  REQUEST="{\"tenant\": \"${TENANT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -952,7 +952,7 @@ support_deleteProject() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-project"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"project_id\": ${PROJECT}}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1066,7 +1066,7 @@ support_createTenantPermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-tenant-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"user_id\": \"${USER}\", \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-permissions_${TENANT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1117,7 +1117,7 @@ support_deleteTenantPermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-tenant-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"user_id\": \"${USER}\", \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-permissions_${TENANT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1140,7 +1140,7 @@ support_deleteTenantPermission() {
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -r .deleted_permissions)
+  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
@@ -1170,7 +1170,7 @@ support_createProjectPermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-project-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"user_id\": \"${USER}\", \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1223,7 +1223,7 @@ support_deleteProjectPermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-project-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"user_id\": \"${USER}\", \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1246,7 +1246,7 @@ support_deleteProjectPermission() {
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -r .deleted_permissions)
+  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted tenant project permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
@@ -1254,16 +1254,18 @@ support_createStagePermission() {
   internal_useEnvironment
 
   TENANT=$1
-  STAGE=$2
-  USER=$3
-  PERMISSION=$4
+  PROJECT=$2
+  STAGE=$3
+  USER=$4
+  PERMISSION=$5
 
-  if [ -z "${TENANT}" -o -z "${STAGE}" -o -z "${USER}" -o -z "${PERMISSION}" ]; then
+  if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" -o -z "${USER}" -o -z "${PERMISSION}" ]; then
     help "support createStagePermission"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
@@ -1276,8 +1278,8 @@ support_createStagePermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/create-stage-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_create\": [\"${PERMISSION}\"]}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\", \"user_id\": \"${USER}\", \"permissions_to_create\": [\"${PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT}_${PROJECT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1307,16 +1309,18 @@ support_deleteStagePermission() {
   internal_useEnvironment
 
   TENANT=$1
-  STAGE=$2
-  USER=$3
-  PERMISSION=$4
+  PROJECT=$2
+  STAGE=$3
+  USER=$4
+  PERMISSION=$5
 
-  if [ -z "${TENANT}" -o -z "${STAGE}" -o -z "${USER}" -o -z "${PERMISSION}" ]; then
+  if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" -o -z "${USER}" -o -z "${PERMISSION}" ]; then
     help "support deleteStagePermission"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
@@ -1329,8 +1333,8 @@ support_deleteStagePermission() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/support/request/delete-stage-permissions"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\", \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT}_${PROJECT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1352,7 +1356,7 @@ support_deleteStagePermission() {
     exit 1
   fi
 
-  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -r .deleted_permissions)
+  DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .deleted_permissions)
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted tenant stage permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
@@ -2631,9 +2635,9 @@ elif [ "$1" = "support" ]; then
   elif [ "$2" = "deleteProjectPermission" ]; then
     support_deleteProjectPermission $3 $4 $5 $6
   elif [ "$2" = "createStagePermission" ]; then
-    support_createStagePermission $3 $4 $5 $6
+    support_createStagePermission $3 $4 $5 $6 $7
   elif [ "$2" = "deleteStagePermission" ]; then
-    support_deleteStagePermission $3 $4 $5 $6
+    support_deleteStagePermission $3 $4 $5 $6 $7
   else
     help "support"
   fi

@@ -5,6 +5,8 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRespon
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -19,6 +21,9 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
 
     final TenantModule tenantModule;
 
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final SecurityIdentity securityIdentity;
 
     @Override
@@ -28,16 +33,24 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getProjectId();
-        final var deleteTenantRequest = new DeleteTenantProjectRequest(tenantId, tenantProjectId);
-        return tenantModule.getService().deleteTenantProject(deleteTenantRequest)
-                .map(DeleteTenantProjectResponse::getDeleted)
-                .invoke(deleted -> {
-                    if (deleted) {
-                        log.info("Project \"{}\" was deleted in tenant \"{}\" by the user {}", tenantProjectId, tenantId, userId);
-                    }
-                })
-                .map(DeleteTenantProjectSupportResponse::new);
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var project = request.getProject();
+                    return getIdByProjectOperation.execute(tenantId, project)
+                            .flatMap(tenantProjectId -> {
+                                final var deleteTenantRequest = new DeleteTenantProjectRequest(tenantId,
+                                        tenantProjectId);
+                                return tenantModule.getService().deleteTenantProject(deleteTenantRequest)
+                                        .map(DeleteTenantProjectResponse::getDeleted)
+                                        .invoke(deleted -> {
+                                            if (deleted) {
+                                                log.info("Project \"{}\" was deleted in tenant \"{}\" by the user {}",
+                                                        tenantProjectId, tenantId, userId);
+                                            }
+                                        })
+                                        .map(DeleteTenantProjectSupportResponse::new);
+                            });
+                });
     }
 }

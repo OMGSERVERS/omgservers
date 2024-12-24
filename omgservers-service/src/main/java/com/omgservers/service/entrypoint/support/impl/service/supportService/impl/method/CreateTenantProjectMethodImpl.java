@@ -9,6 +9,7 @@ import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -23,6 +24,8 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
     final TenantModule tenantModule;
 
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final TenantProjectModelFactory tenantProjectModelFactory;
     final TenantStageModelFactory tenantStageModelFactory;
 
@@ -35,23 +38,24 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        return createTenantProject(tenantId)
-                .flatMap(tenantProject -> {
-                    final var tenantProjectId = tenantProject.getId();
-                    return createTenantStage(tenantId, tenantProjectId)
-                            .map(tenantStage -> {
-                                final var tenantStageId = tenantStage.getId();
-                                final var tenantStageSecret = tenantStage.getSecret();
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> createTenantProject(tenantId)
+                        .flatMap(tenantProject -> {
+                            final var tenantProjectId = tenantProject.getId();
+                            return createTenantStage(tenantId, tenantProjectId)
+                                    .map(tenantStage -> {
+                                        final var tenantStageId = tenantStage.getId();
+                                        final var tenantStageSecret = tenantStage.getSecret();
 
-                                log.info("The new project \"{}\" was created in tenant \"{}\" by the user {}",
-                                        tenantProjectId, tenantId, userId);
+                                        log.info("The new project \"{}\" was created in tenant \"{}\" by the user {}",
+                                                tenantProjectId, tenantId, userId);
 
-                                return new CreateTenantProjectSupportResponse(tenantProjectId,
-                                        tenantStageId,
-                                        tenantStageSecret);
-                            });
-                });
+                                        return new CreateTenantProjectSupportResponse(tenantProjectId,
+                                                tenantStageId,
+                                                tenantStageSecret);
+                                    });
+                        }));
     }
 
     Uni<TenantProjectModel> createTenantProject(final Long tenantId) {

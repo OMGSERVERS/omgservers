@@ -87,6 +87,10 @@ class WebServiceImpl implements WebService {
         return supportService.execute(request);
     }
 
+    /*
+    Developer
+     */
+
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(final CreateDeveloperSupportRequest request) {
         return supportService.execute(request);
@@ -96,6 +100,10 @@ class WebServiceImpl implements WebService {
     public Uni<DeleteDeveloperSupportResponse> execute(DeleteDeveloperSupportRequest request) {
         return supportService.execute(request);
     }
+
+    /*
+    Permissions
+     */
 
     @Override
     public Uni<CreateTenantPermissionsSupportResponse> execute(

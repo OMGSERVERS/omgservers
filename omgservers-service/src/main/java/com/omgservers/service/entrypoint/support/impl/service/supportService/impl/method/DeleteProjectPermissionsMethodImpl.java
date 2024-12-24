@@ -18,6 +18,8 @@ import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
@@ -37,6 +39,9 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final SecurityIdentity securityIdentity;
 
     @Override
@@ -48,37 +53,44 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var forUserId = request.getUserId();
-        final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getProjectId();
+        return getIdByTenantOperation.execute(request.getTenant())
+                .flatMap(tenantId -> getIdByProjectOperation.execute(tenantId, request.getProject())
+                        .flatMap(tenantProjectId -> {
+                            final var forUserId = request.getUserId();
+                            return getUser(forUserId)
+                                    .flatMap(user -> getTenant(tenantId)
+                                            .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))
+                                            .flatMap(project -> viewTenantProjectPermissions(tenantId, tenantProjectId)
+                                                    .flatMap(projectPermissions -> {
+                                                        final var requestPermissionToDelete =
+                                                                request.getPermissionsToDelete();
 
-        return getUser(forUserId)
-                .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getTenantProject(tenantId, tenantProjectId))
-                        .flatMap(project -> viewTenantProjectPermissions(tenantId, tenantProjectId)
-                                .flatMap(projectPermissions -> {
-                                    final var requestPermissionToDelete = request.getPermissionsToDelete();
+                                                        final var userPermissionsToDelete = projectPermissions.stream()
+                                                                .filter(permission -> permission.getUserId()
+                                                                        .equals(forUserId))
+                                                                .filter(permission -> requestPermissionToDelete.contains(
+                                                                        permission.getPermission()))
+                                                                .toList();
 
-                                    final var userPermissionsToDelete = projectPermissions.stream()
-                                            .filter(permission -> permission.getUserId().equals(forUserId))
-                                            .filter(permission -> requestPermissionToDelete.contains(
-                                                    permission.getPermission()))
-                                            .toList();
-
-                                    return Multi.createFrom().iterable(userPermissionsToDelete)
-                                            .onItem().transformToUniAndConcatenate(permission ->
-                                                    deleteTenantProjectPermission(tenantId, permission.getId())
-                                                            .map(deleted -> Tuple2.of(permission.getPermission(),
-                                                                    deleted)))
-                                            .collect().asList();
-                                })))
-                .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
-                .invoke(deletedPermissions -> {
-                    if (deletedPermissions.size() > 0) {
-                        log.info("The \"{}\" project permissions in tenant \"{}\" for user \"{}\" were deleted by the user {}",
-                                deletedPermissions.size(), tenantId, forUserId, userId);
-                    }
-                })
+                                                        return Multi.createFrom().iterable(userPermissionsToDelete)
+                                                                .onItem().transformToUniAndConcatenate(permission ->
+                                                                        deleteTenantProjectPermission(tenantId,
+                                                                                permission.getId())
+                                                                                .map(deleted -> Tuple2.of(
+                                                                                        permission.getPermission(),
+                                                                                        deleted)))
+                                                                .collect().asList();
+                                                    })))
+                                    .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1)
+                                            .toList())
+                                    .invoke(deletedPermissions -> {
+                                        if (deletedPermissions.size() > 0) {
+                                            log.info("The \"{}\" project permissions in tenant \"{}\" " +
+                                                            "for user \"{}\" were deleted by the user {}",
+                                                    deletedPermissions.size(), tenantId, forUserId, userId);
+                                        }
+                                    });
+                        }))
                 .map(DeleteProjectPermissionsSupportResponse::new);
     }
 

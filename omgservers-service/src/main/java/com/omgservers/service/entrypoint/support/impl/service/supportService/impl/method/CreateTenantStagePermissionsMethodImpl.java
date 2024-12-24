@@ -17,6 +17,9 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByStage.GetIdByStageOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
@@ -34,6 +37,10 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
     final TenantModule tenantModule;
     final UserModule userModule;
 
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+    final GetIdByStageOperation getIdByStageOperation;
+
     final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
     final SecurityIdentity securityIdentity;
 
@@ -46,27 +53,35 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var forUserId = request.getUserId();
-        final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getStageId();
-        return getUser(forUserId)
-                .flatMap(user -> getTenant(tenantId)
-                        .flatMap(project -> getTenantStage(tenantId, tenantStageId))
-                        .flatMap(stage -> {
-                            final var permissionsToCreate = request.getPermissionsToCreate();
-                            return Multi.createFrom().iterable(permissionsToCreate)
-                                    .onItem().transformToUniAndConcatenate(permission ->
-                                            createStagePermission(tenantId, tenantStageId, forUserId, permission)
-                                                    .map(created -> Tuple2.of(permission, created)))
-                                    .collect().asList();
-                        }))
-                .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
-                .invoke(createdPermissions -> {
-                    if (createdPermissions.size() > 0) {
-                        log.info("The \"{}\" stage permissions in tenant \"{}\" for user \"{}\" were created by the user {}",
-                                createdPermissions.size(), tenantId, forUserId, userId);
-                    }
-                })
+        return getIdByTenantOperation.execute(request.getTenant())
+                .flatMap(tenantId -> getIdByProjectOperation.execute(tenantId, request.getProject())
+                        .flatMap(tenantProjectId -> getIdByStageOperation.execute(tenantProjectId, request.getStage())
+                                .flatMap(tenantStageId -> {
+                                    final var forUserId = request.getUserId();
+                                    return getUser(forUserId)
+                                            .flatMap(user -> getTenant(tenantId)
+                                                    .flatMap(project -> getTenantStage(tenantId, tenantStageId))
+                                                    .flatMap(stage -> {
+                                                        final var permissionsToCreate =
+                                                                request.getPermissionsToCreate();
+                                                        return Multi.createFrom().iterable(permissionsToCreate)
+                                                                .onItem().transformToUniAndConcatenate(permission ->
+                                                                        createStagePermission(tenantId, tenantStageId,
+                                                                                forUserId, permission)
+                                                                                .map(created -> Tuple2.of(permission,
+                                                                                        created)))
+                                                                .collect().asList();
+                                                    }))
+                                            .map(results -> results.stream().filter(Tuple2::getItem2)
+                                                    .map(Tuple2::getItem1).toList())
+                                            .invoke(createdPermissions -> {
+                                                if (createdPermissions.size() > 0) {
+                                                    log.info(
+                                                            "The \"{}\" stage permissions in tenant \"{}\" for user \"{}\" were created by the user {}",
+                                                            createdPermissions.size(), tenantId, forUserId, userId);
+                                                }
+                                            });
+                                })))
                 .map(CreateTenantStagePermissionsSupportResponse::new);
     }
 
@@ -76,7 +91,7 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
                 .map(GetUserResponse::getUser);
     }
 
-    Uni<TenantModel> getTenant(Long tenantId) {
+    Uni<TenantModel> getTenant(final Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
         return tenantModule.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);

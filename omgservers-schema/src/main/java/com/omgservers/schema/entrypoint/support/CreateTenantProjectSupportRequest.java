@@ -1,6 +1,7 @@
 package com.omgservers.schema.entrypoint.support;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateTenantProjectSupportRequest {
 
-    @NotNull
-    Long tenantId;
+    @NotBlank
+    @Size(max = 64)
+    String tenant;
 }

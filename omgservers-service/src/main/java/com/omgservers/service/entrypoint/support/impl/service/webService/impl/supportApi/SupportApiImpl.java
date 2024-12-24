@@ -96,6 +96,10 @@ public class SupportApiImpl implements SupportApi {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
+    /*
+    Developer
+     */
+
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(@NotNull final CreateDeveloperSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
@@ -105,6 +109,10 @@ public class SupportApiImpl implements SupportApi {
     public Uni<DeleteDeveloperSupportResponse> execute(@NotNull final DeleteDeveloperSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
+
+    /*
+    Permissions
+     */
 
     @Override
     public Uni<CreateTenantPermissionsSupportResponse> execute(

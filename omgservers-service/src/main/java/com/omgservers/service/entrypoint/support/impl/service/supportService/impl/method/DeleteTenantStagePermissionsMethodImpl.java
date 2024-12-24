@@ -5,6 +5,7 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupp
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
@@ -18,6 +19,9 @@ import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByStage.GetIdByStageOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
@@ -28,6 +32,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @ApplicationScoped
@@ -36,6 +41,10 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
 
     final TenantModule tenantModule;
     final UserModule userModule;
+
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+    final GetIdByStageOperation getIdByStageOperation;
 
     final SecurityIdentity securityIdentity;
 
@@ -48,38 +57,56 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var forUserId = request.getUserId();
-        final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getStageId();
+        return getIdByTenantOperation.execute(request.getTenant())
+                .flatMap(tenantId -> getIdByProjectOperation.execute(tenantId, request.getProject())
+                        .flatMap(tenantProjectId -> getIdByStageOperation.execute(tenantProjectId, request.getStage())
+                                .flatMap(tenantStageId -> {
+
+                                    final var forUserId = request.getUserId();
+                                    final var permissionsToDelete = request
+                                            .getPermissionsToDelete();
+                                    return deletePermissions(tenantId, tenantStageId, forUserId, permissionsToDelete)
+                                            .invoke(deletedPermissions -> {
+                                                if (deletedPermissions.size() > 0) {
+                                                    log.info("The \"{}\" stage permissions in tenant \"{}\" " +
+                                                                    "for user \"{}\" were deleted by the user {}",
+                                                            deletedPermissions.size(), tenantId, forUserId, userId);
+                                                }
+                                            });
+                                })))
+                .map(DeleteTenantStagePermissionsSupportResponse::new);
+    }
+
+    Uni<List<TenantStagePermissionQualifierEnum>> deletePermissions(
+            final Long tenantId,
+            final Long tenantStageId,
+            final Long forUserId,
+            final Set<TenantStagePermissionQualifierEnum> permissionsToDelete) {
 
         return getUser(forUserId)
                 .flatMap(user -> getTenant(tenantId)
-                        .flatMap(tenant -> getTenantStage(tenantId, tenantStageId))
-                        .flatMap(stage -> viewTenantStagePermissions(tenantId, tenantStageId)
-                                .flatMap(stagePermissions -> {
-                                    final var requestPermissionToDelete = request.getPermissionsToDelete();
+                        .flatMap(tenant -> getTenantStage(tenantId, tenantStageId)
+                                .flatMap(stage -> viewTenantStagePermissions(tenantId, tenantStageId)
+                                        .flatMap(stagePermissions -> {
+                                            final var userPermissionsToDelete =
+                                                    stagePermissions.stream()
+                                                            .filter(permission -> permission.getUserId()
+                                                                    .equals(forUserId))
+                                                            .filter(permission -> permissionsToDelete.contains(
+                                                                    permission.getPermission()))
+                                                            .toList();
 
-                                    final var userPermissionsToDelete = stagePermissions.stream()
-                                            .filter(permission -> permission.getUserId().equals(forUserId))
-                                            .filter(permission -> requestPermissionToDelete.contains(
-                                                    permission.getPermission()))
-                                            .toList();
-
-                                    return Multi.createFrom().iterable(userPermissionsToDelete)
-                                            .onItem().transformToUniAndConcatenate(permission ->
-                                                    deleteTenantStagePermission(tenantId, permission.getId())
-                                                            .map(deleted -> Tuple2.of(permission.getPermission(),
-                                                                    deleted)))
-                                            .collect().asList();
-                                })))
-                .map(results -> results.stream().filter(Tuple2::getItem2).map(Tuple2::getItem1).toList())
-                .invoke(deletedPermissions -> {
-                    if (deletedPermissions.size() > 0) {
-                        log.info("The \"{}\" stage permissions in tenant \"{}\" for user \"{}\" were deleted by the user {}",
-                                deletedPermissions.size(), tenantId, forUserId, userId);
-                    }
-                })
-                .map(DeleteTenantStagePermissionsSupportResponse::new);
+                                            return Multi.createFrom().iterable(userPermissionsToDelete)
+                                                    .onItem().transformToUniAndConcatenate(permission ->
+                                                            deleteTenantStagePermission(tenantId, permission.getId())
+                                                                    .map(deleted -> Tuple2.of(
+                                                                            permission.getPermission(),
+                                                                            deleted)))
+                                                    .collect().asList();
+                                        })))
+                        .map(results -> results.stream().filter(Tuple2::getItem2)
+                                .map(Tuple2::getItem1).toList())
+                );
     }
 
     Uni<UserModel> getUser(final Long id) {
