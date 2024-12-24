@@ -88,24 +88,6 @@ services:
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_0__MEMORY_SIZE=8192
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_0__MAX_CONTAINERS=16
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-  ctl:
-    image: "omgservers/ctl:${OMGSERVERS_VERSION}"
-    container_name: "ctl"
-    restart: unless-stopped
-    depends_on:
-      - service
-    environment:
-      - DELAY=16
-      - SERVICE_URL=http://service:8080
-      - ADMIN_USER_ID=223221505901723648
-      - ADMIN_PASSWORD=admin
-      - SUPPORT_USER_ID=231928170708729857
-      - SUPPORT_PASSWORD=support
-      - BACKGROUND=true
-    networks:
-      - omgservers
-    volumes:
-      - ctl:/opt/omgserversctl/.omgserversctl
 volumes:
   builder:
     name: builder
@@ -118,9 +100,6 @@ volumes:
     driver: local
   broker:
     name: broker
-    driver: local
-  ctl:
-    name: ctl
     driver: local
 networks:
   omgservers:

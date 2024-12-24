@@ -157,23 +157,6 @@ services:
       options:
         max-size: "128m"
         max-file: "8"
-  ctl:
-    image: "omgservers/ctl:${OMGSERVERS_VERSION}"
-    container_name: "ctl"
-    restart: unless-stopped
-    depends_on:
-      - gateway
-    environment:
-      - DELAY=16
-      - SERVICE_URL=http://service:8080
-      - ADMIN_USER_ID=223221505901723648
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      - SUPPORT_USER_ID=231928170708729857
-      - SUPPORT_PASSWORD=${SUPPORT_PASSWORD}
-      - BACKGROUND=true
-    networks:
-      service:
-        ipv4_address: 172.1.0.9
 volumes:
   builder:
     name: builder
