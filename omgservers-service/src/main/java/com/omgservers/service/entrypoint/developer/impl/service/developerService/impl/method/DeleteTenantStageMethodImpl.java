@@ -11,6 +11,9 @@ import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByStage.GetIdByStageOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -27,6 +30,9 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
     final TenantModule tenantModule;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+    final GetIdByStageOperation getIdByStageOperation;
 
     final TenantVersionModelFactory tenantVersionModelFactory;
     final SecurityIdentity securityIdentity;
@@ -38,27 +44,33 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getId();
-
-        return getTenantStage(tenantId, tenantStageId)
-                .flatMap(tenantStage -> {
-                    final var stageProjectId = tenantStage.getProjectId();
-
-                    final var permissionQualifier =
-                            TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT;
-                    return checkTenantProjectPermissionOperation.execute(tenantId,
-                                    stageProjectId,
-                                    userId,
-                                    permissionQualifier)
-                            .flatMap(voidItem -> deleteTenantStage(tenantId, tenantStageId))
-                            .invoke(deleted -> {
-                                if (deleted) {
-                                    log.info("Stage \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                            tenantStageId, tenantId, userId);
-                                }
-                            })
-                            .map(DeleteTenantStageDeveloperResponse::new);
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var project = request.getProject();
+                    return getIdByProjectOperation.execute(tenantId, project)
+                            .flatMap(tenantProjectId -> {
+                                final var stage = request.getStage();
+                                return getIdByStageOperation.execute(tenantProjectId, stage)
+                                        .flatMap(tenantStageId -> {
+                                            final var permissionQualifier =
+                                                    TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT;
+                                            return checkTenantProjectPermissionOperation.execute(tenantId,
+                                                            tenantProjectId,
+                                                            userId,
+                                                            permissionQualifier)
+                                                    .flatMap(voidItem -> deleteTenantStage(tenantId,
+                                                            tenantStageId))
+                                                    .invoke(deleted -> {
+                                                        if (deleted) {
+                                                            log.info("Stage \"{}\" was deleted " +
+                                                                            "in tenant \"{}\" by the user {}",
+                                                                    tenantStageId, tenantId, userId);
+                                                        }
+                                                    })
+                                                    .map(DeleteTenantStageDeveloperResponse::new);
+                                        });
+                            });
                 });
     }
 

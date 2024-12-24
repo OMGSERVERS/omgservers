@@ -8,6 +8,8 @@ import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResp
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -24,6 +26,8 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     final TenantModule tenantModule;
 
     final CheckTenantPermissionOperation checkTenantPermissionOperation;
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantVersionModelFactory tenantVersionModelFactory;
     final SecurityIdentity securityIdentity;
@@ -35,19 +39,25 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getId();
-
-        final var permissionQualifier = TenantPermissionQualifierEnum.PROJECT_MANAGEMENT;
-        return checkTenantPermissionOperation.execute(tenantId,
-                        userId,
-                        permissionQualifier)
-                .flatMap(voidItem -> deleteTenantProject(tenantId, tenantProjectId))
-                .invoke(deleted -> {
-                    if (deleted) {
-                        log.info("Project \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                tenantProjectId, tenantId, userId);
-                    }
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var project = request.getProject();
+                    return getIdByProjectOperation.execute(tenantId, project)
+                            .flatMap(tenantProjectId -> {
+                                final var permissionQualifier =
+                                        TenantPermissionQualifierEnum.PROJECT_MANAGEMENT;
+                                return checkTenantPermissionOperation.execute(tenantId,
+                                                userId,
+                                                permissionQualifier)
+                                        .flatMap(voidItem -> deleteTenantProject(tenantId, tenantProjectId))
+                                        .invoke(deleted -> {
+                                            if (deleted) {
+                                                log.info("Project \"{}\" was deleted in tenant \"{}\" by the user {}",
+                                                        tenantProjectId, tenantId, userId);
+                                            }
+                                        });
+                            });
                 })
                 .map(DeleteTenantProjectDeveloperResponse::new);
     }

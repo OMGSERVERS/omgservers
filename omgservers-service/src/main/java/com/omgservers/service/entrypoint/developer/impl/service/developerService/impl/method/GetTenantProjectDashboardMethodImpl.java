@@ -9,6 +9,8 @@ import com.omgservers.schema.module.tenant.tenantProject.dto.TenantProjectDataDt
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantProjectMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -25,6 +27,9 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
     final TenantModule tenantModule;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final TenantProjectMapper tenantProjectMapper;
 
     final SecurityIdentity securityIdentity;
@@ -38,12 +43,19 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getProjectId();
-        final var permissionQualifier = TenantProjectPermissionQualifierEnum.GETTING_DASHBOARD;
-        return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId, permissionQualifier)
-                .flatMap(voidItem -> getTenantProjectData(tenantId, tenantProjectId))
-                .map(tenantProjectMapper::dataToDashboard)
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var project = request.getProject();
+                    return getIdByProjectOperation.execute(tenantId, project)
+                            .flatMap(tenantProjectId -> {
+                                final var permissionQualifier = TenantProjectPermissionQualifierEnum.GETTING_DASHBOARD;
+                                return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
+                                                permissionQualifier)
+                                        .flatMap(voidItem -> getTenantProjectData(tenantId, tenantProjectId))
+                                        .map(tenantProjectMapper::dataToDashboard);
+                            });
+                })
                 .map(GetTenantProjectDashboardDeveloperResponse::new);
     }
 

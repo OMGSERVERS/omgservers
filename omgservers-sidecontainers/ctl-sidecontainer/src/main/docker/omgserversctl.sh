@@ -249,10 +249,10 @@ help() {
     echo " omgserversctl developer createStageAlias <tenant> <stage_id> <alias>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDashboard" ]; then
-    echo " omgserversctl developer getStageDashboard <tenant> <stage>"
+    echo " omgserversctl developer getStageDashboard <tenant> <project> <stage>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteStage" ]; then
-    echo " omgserversctl developer deleteStage <tenant> <stage>"
+    echo " omgserversctl developer deleteStage <tenant> <project> <stage>"
     if [ "$1" = "developer deleteStage" ]; then
       echo "   produces:"
       echo "     - DELETED"
@@ -1382,7 +1382,6 @@ developer_useCredentials() {
   developer_createToken ${DEVELOPER_USER} ${DEVELOPER_PASSWORD}
 }
 
-
 developer_printCurrent() {
   internal_useEnvironment
 
@@ -1466,7 +1465,8 @@ developer_getTenantDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}}"
+  REQUEST="{\"tenant\": \"${TENANT}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1477,9 +1477,9 @@ developer_getTenantDashboard() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1511,7 +1511,8 @@ developer_createProject() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-project"
-  REQUEST="{\"tenant_id\": ${TENANT}}"
+  REQUEST="{\"tenant\": \"${TENANT}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1522,9 +1523,9 @@ developer_createProject() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1629,7 +1630,8 @@ developer_getProjectDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-project-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-dashboard_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1640,9 +1642,9 @@ developer_getProjectDashboard() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-dashboard_${TENANT}_${PROJECT}.json)
+    -o ${RESPONSE_FILE})
 
-  cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-dashboard_${TENANT}_${PROJECT}.json >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
@@ -1676,7 +1678,7 @@ developer_deleteProject() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-project"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"project_id\": \"${PROJECT}\" }"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-project_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1735,7 +1737,7 @@ developer_createStage() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-stage"
-  REQUEST="{\"tenant_id\": ${TENANT}}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-stage_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1829,9 +1831,10 @@ developer_getStageDashboard() {
   internal_useEnvironment
 
   TENANT=$1
-  STAGE=$2
+  PROJECT=$2
+  STAGE=$3
 
-  if [ -z "${TENANT}" -o -z "${STAGE}" ]; then
+  if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" ]; then
     help "developer getStageDashboard"
     exit 1
   fi
@@ -1847,8 +1850,8 @@ developer_getStageDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-stage-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT}_${STAGE}.json"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT}_${PROJECT}_${STAGE}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1877,9 +1880,10 @@ developer_deleteStage() {
   internal_useEnvironment
 
   TENANT=$1
-  STAGE=$2
+  PROJECT=$2
+  STAGE=$3
 
-  if [ -z "${TENANT}" -o -z "${STAGE}" ]; then
+  if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" ]; then
     help "developer deleteStage"
     exit 1
   fi
@@ -1895,8 +1899,8 @@ developer_deleteStage() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-stage"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"stage_id\": \"${STAGE}\" }"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-stage_${TENANT}_${STAGE}.json"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-stage_${TENANT}_${PROJECT}_${STAGE}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2664,9 +2668,9 @@ elif [ "$1" = "developer" ]; then
   elif [ "$2" = "createStageAlias" ]; then
     developer_createStageAlias $3 $4 $5
   elif [ "$2" = "getStageDashboard" ]; then
-    developer_getStageDashboard $3 $4
+    developer_getStageDashboard $3 $4 $5
   elif [ "$2" = "deleteStage" ]; then
-    developer_deleteStage $3 $4
+    developer_deleteStage $3 $4 $5
   elif [ "$2" = "createVersion" ]; then
     developer_createVersion $3 $4 $5
   elif [ "$2" = "uploadFilesArchive" ]; then

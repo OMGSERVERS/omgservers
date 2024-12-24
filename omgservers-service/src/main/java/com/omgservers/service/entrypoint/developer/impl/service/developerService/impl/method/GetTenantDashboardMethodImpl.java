@@ -9,6 +9,7 @@ import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -25,6 +26,8 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
     final TenantModule tenantModule;
 
     final CheckTenantPermissionOperation checkTenantPermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final TenantMapper tenantMapper;
 
     final SecurityIdentity securityIdentity;
@@ -37,11 +40,15 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var permissionQualifier = TenantPermissionQualifierEnum.GETTING_DASHBOARD;
-        return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
-                .flatMap(voidItem -> getTenantData(tenantId))
-                .map(tenantMapper::dataToDashboard)
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var permissionQualifier = TenantPermissionQualifierEnum
+                            .GETTING_DASHBOARD;
+                    return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
+                            .flatMap(voidItem -> getTenantData(tenantId))
+                            .map(tenantMapper::dataToDashboard);
+                })
                 .map(GetTenantDashboardDeveloperResponse::new);
     }
 

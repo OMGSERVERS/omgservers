@@ -85,7 +85,7 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new GetTenantDashboardDeveloperRequest(tenantId)))
+                .body(objectMapper.writeValueAsString(new GetTenantDashboardDeveloperRequest(tenantId.toString())))
                 .when().put("/omgservers/v1/entrypoint/developer/request/get-tenant-dashboard");
         responseSpecification.then().statusCode(200);
 
@@ -107,7 +107,7 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateTenantProjectDeveloperRequest(tenantId)))
+                .body(objectMapper.writeValueAsString(new CreateTenantProjectDeveloperRequest(tenantId.toString())))
                 .when().put("/omgservers/v1/entrypoint/developer/request/create-project");
         responseSpecification.then().statusCode(200);
 
@@ -127,7 +127,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantProjectDashboardDeveloperRequest(tenantId, tenantProjectId)))
+                        new GetTenantProjectDashboardDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
                 .when().put("/omgservers/v1/entrypoint/developer/request/get-project-dashboard");
         responseSpecification.then().statusCode(200);
 
@@ -147,7 +147,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new DeleteTenantProjectDeveloperRequest(tenantId, tenantProjectId)))
+                        new DeleteTenantProjectDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
                 .when().put("/omgservers/v1/entrypoint/developer/request/delete-project");
         responseSpecification.then().statusCode(200);
 
@@ -170,7 +170,8 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateTenantStageDeveloperRequest(tenantId, tenantProjectId)))
+                .body(objectMapper.writeValueAsString(
+                        new CreateTenantStageDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
                 .when().put("/omgservers/v1/entrypoint/developer/request/create-stage");
         responseSpecification.then().statusCode(200);
 
@@ -181,6 +182,7 @@ public class DeveloperApiTester {
 
     public TenantStageDashboardDto getTenantStageDashboard(final String token,
                                                            final Long tenantId,
+                                                           final Long tenantProjectId,
                                                            final Long tenantStageId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
@@ -190,7 +192,9 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantStageDashboardDeveloperRequest(tenantId, tenantStageId)))
+                        new GetTenantStageDashboardDeveloperRequest(tenantId.toString(),
+                                tenantProjectId.toString(),
+                                tenantStageId.toString())))
                 .when().put("/omgservers/v1/entrypoint/developer/request/get-stage-dashboard");
         responseSpecification.then().statusCode(200);
 
@@ -201,6 +205,7 @@ public class DeveloperApiTester {
 
     public DeleteTenantStageDeveloperResponse deleteTenantStage(final String token,
                                                                 final Long tenantId,
+                                                                final Long tenantProjectId,
                                                                 final Long tenantStageId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
@@ -210,7 +215,9 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new DeleteTenantStageDeveloperRequest(tenantId, tenantStageId)))
+                        new DeleteTenantStageDeveloperRequest(tenantId.toString(),
+                                tenantProjectId.toString(),
+                                tenantStageId.toString())))
                 .when().put("/omgservers/v1/entrypoint/developer/request/delete-project");
         responseSpecification.then().statusCode(200);
 
