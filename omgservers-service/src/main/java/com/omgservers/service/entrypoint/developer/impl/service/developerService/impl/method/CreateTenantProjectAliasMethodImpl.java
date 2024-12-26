@@ -47,7 +47,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
                     final var permissionQualifier =
-                            TenantPermissionQualifierEnum.PROJECT_MANAGEMENT;
+                            TenantPermissionQualifierEnum.PROJECT_MANAGER;
                     return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
                             .flatMap(voidItem -> {
                                 final var tenantProjectId = request.getProjectId();

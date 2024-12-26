@@ -60,7 +60,7 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
                                                     final var stageProjectId = tenantStage.getProjectId();
                                                     final var permissionQualifier =
                                                             TenantProjectPermissionQualifierEnum
-                                                                    .GETTING_DASHBOARD;
+                                                                    .PROJECT_VIEWER;
                                                     return checkTenantProjectPermissionOperation.execute(tenantId,
                                                                     stageProjectId,
                                                                     userId,

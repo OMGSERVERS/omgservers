@@ -5,15 +5,15 @@ public enum TenantProjectPermissionQualifierEnum {
     /**
      * Permission allows user to manage project stages.
      */
-    STAGE_MANAGEMENT,
+    STAGE_MANAGER,
 
     /**
      * Permission allows user to manage project versions.
      */
-    VERSION_MANAGEMENT,
+    VERSION_MANAGER,
 
     /**
-     * Permission allows user to get project dashboards.
+     * Permission allows user to get project data.
      */
-    GETTING_DASHBOARD
+    PROJECT_VIEWER
 }

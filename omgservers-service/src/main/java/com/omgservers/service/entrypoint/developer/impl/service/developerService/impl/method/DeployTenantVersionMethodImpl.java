@@ -59,7 +59,7 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                                 final var userId = securityIdentity.<Long>getAttribute(
                                         ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
                                 final var permissionQualifier =
-                                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT;
+                                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
                                 return checkTenantStagePermissionOperation.execute(tenantId,
                                                 tenantStageId,
                                                 userId,

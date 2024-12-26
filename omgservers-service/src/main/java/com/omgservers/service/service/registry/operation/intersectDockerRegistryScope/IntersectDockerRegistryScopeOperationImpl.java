@@ -70,7 +70,7 @@ class IntersectDockerRegistryScopeOperationImpl implements IntersectDockerRegist
 
                             for (final var userPermission : userPermissions) {
                                 switch (userPermission.getPermission()) {
-                                    case VERSION_MANAGEMENT -> {
+                                    case VERSION_MANAGER -> {
                                         dockerRegistryAccess.getActions().add(DockerRegistryActionEnum.PULL);
                                         dockerRegistryAccess.getActions().add(DockerRegistryActionEnum.PUSH);
                                     }

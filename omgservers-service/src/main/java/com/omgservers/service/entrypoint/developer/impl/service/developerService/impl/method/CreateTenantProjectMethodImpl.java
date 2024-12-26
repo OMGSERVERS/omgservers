@@ -59,7 +59,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
-                    final var permissionQualifier = TenantPermissionQualifierEnum.PROJECT_MANAGEMENT;
+                    final var permissionQualifier = TenantPermissionQualifierEnum.PROJECT_MANAGER;
                     return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
                             .flatMap(voidItem -> createTenantProject(tenantId, userId)
                                     .flatMap(tenantProject -> createTenantStage(tenantId, tenantProject.getId(), userId)
@@ -84,11 +84,11 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var request = new SyncTenantProjectRequest(tenantProject);
         return tenantModule.getService().syncTenantProject(request)
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
-                        TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT))
+                        TenantProjectPermissionQualifierEnum.STAGE_MANAGER))
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
-                        TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT))
+                        TenantProjectPermissionQualifierEnum.VERSION_MANAGER))
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
-                        TenantProjectPermissionQualifierEnum.GETTING_DASHBOARD))
+                        TenantProjectPermissionQualifierEnum.PROJECT_VIEWER))
                 .replaceWith(tenantProject);
     }
 
@@ -100,7 +100,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var request = new SyncTenantStageRequest(tenantStage);
         return tenantModule.getService().syncTenantStage(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
-                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT))
+                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER))
                 .replaceWith(tenantStage);
     }
 }

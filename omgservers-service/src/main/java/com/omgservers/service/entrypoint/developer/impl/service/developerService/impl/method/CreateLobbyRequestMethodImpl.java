@@ -48,7 +48,7 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
                     final var stageId = tenantDeployment.getStageId();
 
                     final var permissionQualifier =
-                            TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT;
+                            TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
                     return checkTenantStagePermissionOperation.execute(tenantId,
                                     stageId,
                                     userId,

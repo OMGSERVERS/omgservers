@@ -147,50 +147,50 @@ help() {
     echo " omgserversctl support createTenantPermission <tenant> <user> <permission>"
     if [ "$1" = "support createTenantPermission" ]; then
       echo "   permission:"
-      echo "     - PROJECT_MANAGEMENT"
-      echo "     - GETTING_DASHBOARD"
+      echo "     - PROJECT_MANAGER"
+      echo "     - TENANT_VIEWER"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantPermission" ]; then
     echo " omgserversctl support deleteTenantPermission <tenant> <user> <permission>"
     if [ "$1" = "support deleteTenantPermission" ]; then
       echo "   permission:"
-      echo "     - PROJECT_MANAGEMENT"
-      echo "     - GETTING_DASHBOARD"
+      echo "     - PROJECT_MANAGER"
+      echo "     - TENANT_VIEWER"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
     echo " omgserversctl support createProjectPermission <tenant> <project> <user> <permission>"
     if [ "$1" = "support createProjectPermission" ]; then
       echo "   permission:"
-      echo "     - STAGE_MANAGEMENT"
-      echo "     - VERSION_MANAGEMENT"
-      echo "     - GETTING_DASHBOARD"
+      echo "     - STAGE_MANAGER"
+      echo "     - VERSION_MANAGER"
+      echo "     - PROJECT_VIEWER"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
     echo " omgserversctl support deleteProjectPermission <tenant> <project> <user> <permission>"
     if [ "$1" = "support deleteProjectPermission" ]; then
       echo "   permission:"
-      echo "     - STAGE_MANAGEMENT"
-      echo "     - VERSION_MANAGEMENT"
-      echo "     - GETTING_DASHBOARD"
+      echo "     - STAGE_MANAGER"
+      echo "     - VERSION_MANAGER"
+      echo "     - PROJECT_VIEWER"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
     echo " omgserversctl support createStagePermission <tenant> <project> <stage> <user> <permission>"
     if [ "$1" = "support createStagePermission" ]; then
       echo "   permission:"
-      echo "     - DEPLOYMENT_MANAGEMENT"
-      echo "     - GETTING_DASHBOARD"
+      echo "     - DEPLOYMENT_MANAGER"
+      echo "     - STAGE_VIEWER"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
     echo " omgserversctl support deleteStagePermission <tenant> <project> <stage> <user> <permission>"
     if [ "$1" = "support deleteStagePermission" ]; then
       echo "   permission:"
-      echo "     - DEPLOYMENT_MANAGEMENT"
-      echo "     - GETTING_DASHBOARD"
+      echo "     - DEPLOYMENT_MANAGER"
+      echo "     - STAGE_VIEWER"
     fi
   fi
   # Developer

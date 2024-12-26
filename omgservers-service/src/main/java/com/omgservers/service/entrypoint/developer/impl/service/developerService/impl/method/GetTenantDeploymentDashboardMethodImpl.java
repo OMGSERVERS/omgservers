@@ -53,7 +53,7 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
                             .flatMap(tenantStage -> {
                                 final var tenantProjectId = tenantStage.getProjectId();
                                 final var permissionQualifier =
-                                        TenantProjectPermissionQualifierEnum.GETTING_DASHBOARD;
+                                        TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
                                 return checkTenantProjectPermissionOperation.execute(tenantId,
                                                 tenantProjectId,
                                                 userId,

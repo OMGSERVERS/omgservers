@@ -50,28 +50,28 @@ public class TestDataFactory {
 
         final var tenant = tenantTestDataFactory.createTenant();
         final var tenantProjectManagementPermission = tenantTestDataFactory
-                .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.PROJECT_MANAGEMENT);
+                .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.PROJECT_MANAGER);
         final var tenantGettingDashboardPermission = tenantTestDataFactory
-                .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.GETTING_DASHBOARD);
+                .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.TENANT_VIEWER);
 
         final var tenantProject = tenantTestDataFactory.createTenantProject(tenant);
         final var tenantProjectStageManagementPermission = tenantTestDataFactory
                 .createTenantProjectPermission(tenantProject, developerUser,
-                        TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT);
+                        TenantProjectPermissionQualifierEnum.STAGE_MANAGER);
         final var tenantProjectVersionManagementPermission = tenantTestDataFactory
                 .createTenantProjectPermission(tenantProject, developerUser,
-                        TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT);
+                        TenantProjectPermissionQualifierEnum.VERSION_MANAGER);
         final var tenantProjectGettingDashboardPermission = tenantTestDataFactory
                 .createTenantProjectPermission(tenantProject, developerUser,
-                        TenantProjectPermissionQualifierEnum.GETTING_DASHBOARD);
+                        TenantProjectPermissionQualifierEnum.PROJECT_VIEWER);
 
         final var tenantStage = tenantTestDataFactory.createStage(tenantProject);
         final var tenantStageDeploymentManagementPermission = tenantTestDataFactory
                 .createTenantStagePermission(tenantStage, developerUser,
-                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT);
+                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER);
         final var tenantStageGettingDashboardPermission = tenantTestDataFactory
                 .createTenantStagePermission(tenantStage, developerUser,
-                        TenantStagePermissionQualifierEnum.GETTING_DASHBOARD);
+                        TenantStagePermissionQualifierEnum.STAGE_VIEWER);
 
         final var tenantVersion = tenantTestDataFactory.createTenantVersion(tenantProject);
         final var tenantFilesArchive = tenantTestDataFactory.createTenantFilesArchive(tenantVersion);

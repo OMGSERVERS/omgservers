@@ -5,10 +5,10 @@ public enum TenantPermissionQualifierEnum {
     /**
      * Permission allows user to manage tenant projects.
      */
-    PROJECT_MANAGEMENT,
+    PROJECT_MANAGER,
 
     /**
-     * Permission allows user to get tenant dashboard.
+     * Permission allows user to get tenant data.
      */
-    GETTING_DASHBOARD,
+    TENANT_VIEWER,
 }

@@ -49,6 +49,6 @@ class VerifyTenantProjectPermissionExistsOperationTest extends BaseTestClass {
                 generateIdOperation.generateId(),
                 generateIdOperation.generateId(),
                 generateIdOperation.generateId(),
-                TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT));
+                TenantProjectPermissionQualifierEnum.STAGE_MANAGER));
     }
 }

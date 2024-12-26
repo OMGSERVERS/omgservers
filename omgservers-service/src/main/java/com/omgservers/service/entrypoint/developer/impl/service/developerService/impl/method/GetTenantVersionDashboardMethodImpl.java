@@ -48,7 +48,7 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
                 .flatMap(tenantVersion -> {
                     final var versionProjectId = tenantVersion.getProjectId();
                     final var permissionQualifier = TenantProjectPermissionQualifierEnum
-                            .GETTING_DASHBOARD;
+                            .PROJECT_VIEWER;
                     return checkTenantProjectPermissionOperation.execute(tenantId,
                                     versionProjectId,
                                     userId,

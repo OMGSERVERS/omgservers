@@ -44,7 +44,7 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
                     final var permissionQualifier = TenantPermissionQualifierEnum
-                            .GETTING_DASHBOARD;
+                            .TENANT_VIEWER;
                     return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
                             .flatMap(voidItem -> getTenantData(tenantId))
                             .map(tenantMapper::dataToDashboard);

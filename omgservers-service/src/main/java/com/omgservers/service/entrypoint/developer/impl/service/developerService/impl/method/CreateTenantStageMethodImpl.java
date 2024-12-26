@@ -54,7 +54,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
                     return getIdByProjectOperation.execute(tenantId, project)
                             .flatMap(tenantProjectId -> {
                                 final var permissionQualifier =
-                                        TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT;
+                                        TenantProjectPermissionQualifierEnum.STAGE_MANAGER;
                                 return checkTenantProjectPermissionOperation.execute(tenantId,
                                                 tenantProjectId,
                                                 userId,
@@ -82,7 +82,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
         final var request = new SyncTenantStageRequest(tenantStage);
         return tenantModule.getService().syncTenantStage(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
-                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT))
+                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER))
                 .replaceWith(tenantStage);
     }
 }

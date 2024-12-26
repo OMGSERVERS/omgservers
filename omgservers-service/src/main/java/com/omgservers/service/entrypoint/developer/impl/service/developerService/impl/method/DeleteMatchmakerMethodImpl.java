@@ -54,7 +54,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
                                 final var tenantStageId = tenantDeployment.getStageId();
 
                                 final var permissionQualifier =
-                                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT;
+                                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
                                 return checkTenantStagePermissionOperation.execute(tenantId,
                                                 tenantStageId,
                                                 userId,

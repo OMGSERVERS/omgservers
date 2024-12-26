@@ -75,7 +75,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
         return findDefaultUserAlias(getConfigOperation.getServiceConfig().bootstrap().builderUser().alias())
                 .flatMap(userAlias -> {
                     final var builderUserId = userAlias.getEntityId();
-                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
+                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
                     final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
                             tenantStageId,
                             builderUserId,
@@ -93,7 +93,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
         return findDefaultUserAlias(getConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
                 .flatMap(userAlias -> {
                     final var serviceUserId = userAlias.getEntityId();
-                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
+                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
                     final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
                             tenantStageId,
                             serviceUserId,

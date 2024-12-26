@@ -46,7 +46,7 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
                     final var versionProjectId = tenantVersion.getProjectId();
 
                     final var permissionQualifier =
-                            TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
+                            TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
                     return checkTenantProjectPermissionOperation.execute(tenantId,
                                     versionProjectId,
                                     userId,

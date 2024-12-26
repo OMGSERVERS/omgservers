@@ -5,10 +5,10 @@ public enum TenantStagePermissionQualifierEnum {
     /**
      * Permission allows user to manage stage deployments.
      */
-    DEPLOYMENT_MANAGEMENT,
+    DEPLOYMENT_MANAGER,
 
     /**
-     * Permission allows user to get stage dashboards.
+     * Permission allows user to get stage data.
      */
-    GETTING_DASHBOARD,
+    STAGE_VIEWER,
 }

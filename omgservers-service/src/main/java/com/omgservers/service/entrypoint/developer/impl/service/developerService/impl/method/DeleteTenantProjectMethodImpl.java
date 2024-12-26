@@ -46,7 +46,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
                     return getIdByProjectOperation.execute(tenantId, project)
                             .flatMap(tenantProjectId -> {
                                 final var permissionQualifier =
-                                        TenantPermissionQualifierEnum.PROJECT_MANAGEMENT;
+                                        TenantPermissionQualifierEnum.PROJECT_MANAGER;
                                 return checkTenantPermissionOperation.execute(tenantId,
                                                 userId,
                                                 permissionQualifier)

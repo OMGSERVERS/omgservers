@@ -47,8 +47,8 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
         supportApiTester.createTenantPermissions(supportToken,
                 tenantId,
                 developerUserId,
-                Set.of(TenantPermissionQualifierEnum.PROJECT_MANAGEMENT,
-                        TenantPermissionQualifierEnum.GETTING_DASHBOARD));
+                Set.of(TenantPermissionQualifierEnum.PROJECT_MANAGER,
+                        TenantPermissionQualifierEnum.TENANT_VIEWER));
 
         final var developerToken = developerApiTester.createDeveloperToken(developerUserId, developerPassword);
         final var createProjectDeveloperResponse = developerApiTester.createTenantProject(developerToken, tenantId);

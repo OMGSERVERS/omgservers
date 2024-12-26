@@ -43,7 +43,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
         final var tenantVersionConfig = request.getConfig();
 
         final var permissionQualifier = TenantProjectPermissionQualifierEnum
-                .VERSION_MANAGEMENT;
+                .VERSION_MANAGER;
         return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId, permissionQualifier)
                 .flatMap(voidItem -> createTenantVersion(tenantId, tenantProjectId, tenantVersionConfig))
                 .map(TenantVersionModel::getId)

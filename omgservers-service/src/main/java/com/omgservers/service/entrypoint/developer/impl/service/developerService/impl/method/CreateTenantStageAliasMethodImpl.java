@@ -54,7 +54,7 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
                             .flatMap(tenantStage -> {
                                 final var tenantProjectId = tenantStage.getProjectId();
                                 final var permissionQualifier =
-                                        TenantProjectPermissionQualifierEnum.STAGE_MANAGEMENT;
+                                        TenantProjectPermissionQualifierEnum.STAGE_MANAGER;
                                 return checkTenantProjectPermissionOperation.execute(tenantId,
                                                 tenantProjectId,
                                                 userId,

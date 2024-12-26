@@ -46,7 +46,7 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
                     final var tenantStageId = tenantDeployment.getStageId();
 
                     final var permissionQualifier =
-                            TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGEMENT;
+                            TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
                     return checkTenantStagePermissionOperation.execute(tenantId,
                                     tenantStageId,
                                     userId,

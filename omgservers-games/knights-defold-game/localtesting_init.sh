@@ -56,13 +56,13 @@ fi
 
 echo "Configure permissions"
 
-./omgserversctl.sh support createTenantPermission ${TENANT} ${DEVELOPER_USER} PROJECT_MANAGEMENT
-./omgserversctl.sh support createTenantPermission ${TENANT} ${DEVELOPER_USER} GETTING_DASHBOARD
-./omgserversctl.sh support createProjectPermission ${TENANT} ${PROJECT} ${DEVELOPER_USER} STAGE_MANAGEMENT
-./omgserversctl.sh support createProjectPermission ${TENANT} ${PROJECT} ${DEVELOPER_USER} VERSION_MANAGEMENT
-./omgserversctl.sh support createProjectPermission ${TENANT} ${PROJECT} ${DEVELOPER_USER} GETTING_DASHBOARD
-./omgserversctl.sh support createStagePermission ${TENANT} ${STAGE} ${DEVELOPER_USER} DEPLOYMENT_MANAGEMENT
-./omgserversctl.sh support createStagePermission ${TENANT} ${STAGE} ${DEVELOPER_USER} GETTING_DASHBOARD
+./omgserversctl.sh support createTenantPermission ${TENANT} ${DEVELOPER_USER} PROJECT_MANAGER
+./omgserversctl.sh support createTenantPermission ${TENANT} ${DEVELOPER_USER} TENANT_VIEWER
+./omgserversctl.sh support createProjectPermission ${TENANT} ${PROJECT} ${DEVELOPER_USER} STAGE_MANAGER
+./omgserversctl.sh support createProjectPermission ${TENANT} ${PROJECT} ${DEVELOPER_USER} VERSION_MANAGER
+./omgserversctl.sh support createProjectPermission ${TENANT} ${PROJECT} ${DEVELOPER_USER} PROJECT_VIEWER
+./omgserversctl.sh support createStagePermission ${TENANT} ${STAGE} ${DEVELOPER_USER} DEPLOYMENT_MANAGER
+./omgserversctl.sh support createStagePermission ${TENANT} ${STAGE} ${DEVELOPER_USER} STAGE_VIEWER
 
 echo "Login using developer account"
 

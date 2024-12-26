@@ -49,7 +49,7 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
                     final var project = request.getProject();
                     return getIdByProjectOperation.execute(tenantId, project)
                             .flatMap(tenantProjectId -> {
-                                final var permissionQualifier = TenantProjectPermissionQualifierEnum.GETTING_DASHBOARD;
+                                final var permissionQualifier = TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
                                 return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
                                                 permissionQualifier)
                                         .flatMap(voidItem -> getTenantProjectData(tenantId, tenantProjectId))

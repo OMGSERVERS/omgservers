@@ -57,7 +57,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
         return getTenantVersion(tenantId, tenantVersionId)
                 .flatMap(tenantVersion -> {
                     final var versionProjectId = tenantVersion.getProjectId();
-                    final var permissionQualifier = TenantProjectPermissionQualifierEnum.VERSION_MANAGEMENT;
+                    final var permissionQualifier = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
                     return checkTenantProjectPermissionOperation.execute(tenantId,
                                     versionProjectId,
                                     userId,
