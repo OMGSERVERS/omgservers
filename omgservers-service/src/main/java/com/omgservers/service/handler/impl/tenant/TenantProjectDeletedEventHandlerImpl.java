@@ -7,6 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.handler.operation.DeleteAliasesByEntityIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantProjectPermissionsOperation;
 import com.omgservers.service.handler.operation.DeleteTenantStagesByTenantProjectIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantVersionsByTenantProjectIdOperation;
@@ -27,6 +28,7 @@ public class TenantProjectDeletedEventHandlerImpl implements EventHandler {
     final DeleteTenantVersionsByTenantProjectIdOperation deleteTenantVersionsByTenantProjectIdOperation;
     final DeleteTenantStagesByTenantProjectIdOperation deleteTenantStagesByTenantProjectIdOperation;
     final DeleteTenantProjectPermissionsOperation deleteTenantProjectPermissionsOperation;
+    final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -49,6 +51,8 @@ public class TenantProjectDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> deleteTenantStagesByTenantProjectIdOperation
                                     .execute(tenantId, tenantProjectId))
                             .flatMap(voidItem -> deleteTenantVersionsByTenantProjectIdOperation
+                                    .execute(tenantId, tenantProjectId))
+                            .flatMap(voidItem -> deleteAliasesByEntityIdOperation
                                     .execute(tenantId, tenantProjectId));
                 })
                 .replaceWithVoid();

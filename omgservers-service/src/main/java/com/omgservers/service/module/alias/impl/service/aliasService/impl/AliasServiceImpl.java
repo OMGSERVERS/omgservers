@@ -8,12 +8,15 @@ import com.omgservers.schema.module.alias.GetAliasRequest;
 import com.omgservers.schema.module.alias.GetAliasResponse;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.alias.SyncAliasResponse;
+import com.omgservers.schema.module.alias.ViewAliasesRequest;
+import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.service.module.alias.impl.operation.getAliasModuleClient.GetAliasModuleClientOperation;
 import com.omgservers.service.module.alias.impl.service.aliasService.AliasService;
 import com.omgservers.service.module.alias.impl.service.aliasService.impl.method.DeleteAliasMethod;
 import com.omgservers.service.module.alias.impl.service.aliasService.impl.method.FindAliasMethod;
 import com.omgservers.service.module.alias.impl.service.aliasService.impl.method.GetAliasMethod;
 import com.omgservers.service.module.alias.impl.service.aliasService.impl.method.SyncAliasMethod;
+import com.omgservers.service.module.alias.impl.service.aliasService.impl.method.ViewAliasesMethod;
 import com.omgservers.service.module.alias.impl.service.webService.impl.api.AliasApi;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
@@ -30,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 class AliasServiceImpl implements AliasService {
 
     final DeleteAliasMethod deleteAliasMethod;
+    final ViewAliasesMethod viewAliasesMethod;
     final FindAliasMethod findAliasMethod;
     final SyncAliasMethod syncAliasMethod;
     final GetAliasMethod getAliasMethod;
@@ -52,6 +56,14 @@ class AliasServiceImpl implements AliasService {
                 getAliasModuleClientOperation::getClient,
                 AliasApi::execute,
                 findAliasMethod::execute);
+    }
+
+    @Override
+    public Uni<ViewAliasesResponse> execute(@Valid final ViewAliasesRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getAliasModuleClientOperation::getClient,
+                AliasApi::execute,
+                viewAliasesMethod::execute);
     }
 
     @Override

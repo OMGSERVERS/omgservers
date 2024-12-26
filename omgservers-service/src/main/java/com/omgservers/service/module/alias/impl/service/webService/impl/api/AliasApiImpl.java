@@ -9,6 +9,8 @@ import com.omgservers.schema.module.alias.GetAliasRequest;
 import com.omgservers.schema.module.alias.GetAliasResponse;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.alias.SyncAliasResponse;
+import com.omgservers.schema.module.alias.ViewAliasesRequest;
+import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.service.module.alias.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
@@ -34,6 +36,11 @@ public class AliasApiImpl implements AliasApi {
 
     @Override
     public Uni<FindAliasResponse> execute(final FindAliasRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<ViewAliasesResponse> execute(final ViewAliasesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 

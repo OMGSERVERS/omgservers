@@ -17,6 +17,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.handler.operation.DeleteAliasesByEntityIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantPermissionsOperation;
 import com.omgservers.service.handler.operation.DeleteTenantProjectsOperation;
 import com.omgservers.service.handler.operation.FindAndDeleteJobOperation;
@@ -43,6 +44,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     final JobService jobService;
 
     final DeleteTenantPermissionsOperation deleteTenantPermissionsOperation;
+    final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
     final DeleteTenantProjectsOperation deleteTenantProjectsOperation;
     final FindAndDeleteJobOperation findAndDeleteJobOperation;
     final GetConfigOperation getConfigOperation;
@@ -66,7 +68,9 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                     return deleteTenantPermissionsOperation.execute(tenantId)
                             .flatMap(voidItem -> deleteTenantProjectsOperation.execute(tenantId))
                             .flatMap(voidItem -> findAndDeleteRootTenantRef(tenantId))
-                            .flatMap(voidItem -> findAndDeleteJobOperation.execute(tenantId, tenantId));
+                            .flatMap(voidItem -> findAndDeleteJobOperation.execute(tenantId, tenantId))
+                            .flatMap(voidItem -> deleteAliasesByEntityIdOperation.execute(
+                                    DefaultAliasConfiguration.GLOBAL_SHARD_KEY, tenantId));
                 })
                 .replaceWithVoid();
     }

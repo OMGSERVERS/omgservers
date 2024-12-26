@@ -8,6 +8,8 @@ import com.omgservers.schema.module.alias.GetAliasRequest;
 import com.omgservers.schema.module.alias.GetAliasResponse;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.alias.SyncAliasResponse;
+import com.omgservers.schema.module.alias.ViewAliasesRequest;
+import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -24,6 +26,10 @@ public interface AliasApi {
     @PUT
     @Path("/find-alias")
     Uni<FindAliasResponse> execute(FindAliasRequest request);
+
+    @PUT
+    @Path("/view-aliases")
+    Uni<ViewAliasesResponse> execute(ViewAliasesRequest request);
 
     @PUT
     @Path("/sync-alias")

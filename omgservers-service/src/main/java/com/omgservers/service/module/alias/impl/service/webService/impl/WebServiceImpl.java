@@ -8,6 +8,8 @@ import com.omgservers.schema.module.alias.GetAliasRequest;
 import com.omgservers.schema.module.alias.GetAliasResponse;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.alias.SyncAliasResponse;
+import com.omgservers.schema.module.alias.ViewAliasesRequest;
+import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.service.module.alias.impl.service.aliasService.AliasService;
 import com.omgservers.service.module.alias.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -30,6 +32,11 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<FindAliasResponse> execute(final FindAliasRequest request) {
+        return aliasService.execute(request);
+    }
+
+    @Override
+    public Uni<ViewAliasesResponse> execute(final ViewAliasesRequest request) {
         return aliasService.execute(request);
     }
 

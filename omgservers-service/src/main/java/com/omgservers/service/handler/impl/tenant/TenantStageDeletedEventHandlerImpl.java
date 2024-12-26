@@ -7,8 +7,9 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.operation.DeleteTenantStagePermissionsOperation;
+import com.omgservers.service.handler.operation.DeleteAliasesByEntityIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantDeploymentsByTenantStageIdOperation;
+import com.omgservers.service.handler.operation.DeleteTenantStagePermissionsOperation;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
@@ -27,6 +28,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
     final DeleteTenantDeploymentsByTenantStageIdOperation deleteTenantDeploymentsByTenantStageIdOperation;
     final DeleteTenantStagePermissionsOperation deleteTenantStagePermissionsOperation;
+    final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -47,7 +49,12 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
                     return deleteTenantStagePermissionsOperation.execute(tenantId, tenantStageId)
                             .flatMap(voidItem -> deleteTenantDeploymentsByTenantStageIdOperation
-                                    .execute(tenantId, tenantStageId));
+                                    .execute(tenantId, tenantStageId))
+                            .flatMap(voidItem -> {
+                                final var tenantProjectId = tenantStage.getProjectId();
+                                return deleteAliasesByEntityIdOperation
+                                        .execute(tenantProjectId, tenantStageId);
+                            });
                 })
                 .replaceWithVoid();
     }
