@@ -15,6 +15,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -37,6 +38,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
     final TenantModule tenantModule;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
     final EncodeFilesOperation encodeFilesOperation;
 
     final TenantFilesArchiveModelFactory tenantFilesArchiveModelFactory;
@@ -48,25 +50,29 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
     public Uni<UploadFilesArchiveDeveloperResponse> execute(final UploadFilesArchiveDeveloperRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var userId = securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId =
+                securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantVersionId = request.getVersionId();
-        final var base64Archive = getBase64Archive(request);
-
-        return getTenantVersion(tenantId, tenantVersionId)
-                .flatMap(tenantVersion -> {
-                    final var versionProjectId = tenantVersion.getProjectId();
-                    final var permissionQualifier = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
-                    return checkTenantProjectPermissionOperation.execute(tenantId,
-                                    versionProjectId,
-                                    userId,
-                                    permissionQualifier)
-                            // The building process will run in the background.
-                            .flatMap(voidItem -> createTenantFilesArchive(tenantId, tenantVersionId, base64Archive))
-                            .map(TenantFilesArchiveModel::getId)
-                            .map(UploadFilesArchiveDeveloperResponse::new);
-                });
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var tenantVersionId = request.getVersionId();
+                    final var base64Archive = getBase64Archive(request);
+                    return getTenantVersion(tenantId, tenantVersionId)
+                            .flatMap(tenantVersion -> {
+                                final var versionProjectId = tenantVersion.getProjectId();
+                                final var permissionQualifier = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
+                                return checkTenantProjectPermissionOperation.execute(tenantId,
+                                                versionProjectId,
+                                                userId,
+                                                permissionQualifier)
+                                        // The building process will run in the background.
+                                        .flatMap(voidItem -> createTenantFilesArchive(tenantId, tenantVersionId,
+                                                base64Archive))
+                                        .map(TenantFilesArchiveModel::getId);
+                            });
+                })
+                .map(UploadFilesArchiveDeveloperResponse::new);
     }
 
     String getBase64Archive(final UploadFilesArchiveDeveloperRequest request) {

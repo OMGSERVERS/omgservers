@@ -11,6 +11,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRespons
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -27,6 +28,7 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
     final TenantModule tenantModule;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantVersionModelFactory tenantVersionModelFactory;
     final SecurityIdentity securityIdentity;
@@ -38,28 +40,29 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantVersionId = request.getId();
-
-        return getTenantVersion(tenantId, tenantVersionId)
-                .flatMap(tenantVersion -> {
-                    final var versionProjectId = tenantVersion.getProjectId();
-
-                    final var permissionQualifier =
-                            TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
-                    return checkTenantProjectPermissionOperation.execute(tenantId,
-                                    versionProjectId,
-                                    userId,
-                                    permissionQualifier)
-                            .flatMap(voidItem -> deleteTenantVersion(tenantId, tenantVersionId))
-                            .invoke(deleted -> {
-                                if (deleted) {
-                                    log.info("Version \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                            tenantVersionId, tenantId, userId);
-                                }
-                            })
-                            .map(DeleteTenantVersionDeveloperResponse::new);
-                });
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var tenantVersionId = request.getId();
+                    return getTenantVersion(tenantId, tenantVersionId)
+                            .flatMap(tenantVersion -> {
+                                final var versionProjectId = tenantVersion.getProjectId();
+                                final var permissionQualifier =
+                                        TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
+                                return checkTenantProjectPermissionOperation.execute(tenantId,
+                                                versionProjectId,
+                                                userId,
+                                                permissionQualifier)
+                                        .flatMap(voidItem -> deleteTenantVersion(tenantId, tenantVersionId))
+                                        .invoke(deleted -> {
+                                            if (deleted) {
+                                                log.info("Version \"{}\" was deleted in tenant \"{}\" by the user {}",
+                                                        tenantVersionId, tenantId, userId);
+                                            }
+                                        });
+                            });
+                })
+                .map(DeleteTenantVersionDeveloperResponse::new);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {

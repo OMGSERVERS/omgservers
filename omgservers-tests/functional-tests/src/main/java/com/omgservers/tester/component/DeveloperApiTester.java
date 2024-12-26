@@ -241,8 +241,8 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .contentType(ContentType.JSON)
                 .auth().oauth2(token)
-                .body(objectMapper.writeValueAsString(new CreateTenantVersionDeveloperRequest(tenantId,
-                        tenantProjectId,
+                .body(objectMapper.writeValueAsString(new CreateTenantVersionDeveloperRequest(tenantId.toString(),
+                        tenantProjectId.toString(),
                         tenantVersionConfig)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/create-version");
         responseSpecification.then().statusCode(200);
@@ -265,7 +265,7 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.MULTIPART)
-                .formParam("tenantId", tenantId)
+                .formParam("tenant", tenantId)
                 .formParam("tenantVersionId", tenantVersionId)
                 .multiPart("version.zip", "version.zip",
                         archiveBytes, "application/octet-stream")
@@ -288,7 +288,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantVersionDashboardDeveloperRequest(tenantId, tenantVersionId)))
+                        new GetTenantVersionDashboardDeveloperRequest(tenantId.toString(), tenantVersionId)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/get-version-dashboard");
         responseSpecification.then().statusCode(200);
 
@@ -308,7 +308,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new DeleteTenantVersionDeveloperRequest(tenantId, tenantVersionId)))
+                        new DeleteTenantVersionDeveloperRequest(tenantId.toString(), tenantVersionId)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/delete-version");
         responseSpecification.then().statusCode(200);
 
@@ -323,6 +323,7 @@ public class DeveloperApiTester {
 
     public DeployTenantVersionDeveloperResponse deployTenantVersion(final String token,
                                                                     final Long tenantId,
+                                                                    final Long tenantProjectId,
                                                                     final Long tenantStageId,
                                                                     final Long tenantVersionId)
             throws JsonProcessingException {
@@ -333,7 +334,10 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new DeployTenantVersionDeveloperRequest(tenantId, tenantStageId, tenantVersionId)))
+                        new DeployTenantVersionDeveloperRequest(tenantId.toString(),
+                                tenantProjectId.toString(),
+                                tenantStageId.toString(),
+                                tenantVersionId)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/deploy-version");
         responseSpecification.then().statusCode(200);
 
@@ -353,7 +357,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantDeploymentDashboardDeveloperRequest(tenantId, tenantDeploymentId)))
+                        new GetTenantDeploymentDashboardDeveloperRequest(tenantId.toString(), tenantDeploymentId)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/get-deployment-dashboard");
         responseSpecification.then().statusCode(200);
 
@@ -373,7 +377,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new DeleteTenantDeploymentDeveloperRequest(tenantId, tenantDeploymentId)))
+                        new DeleteTenantDeploymentDeveloperRequest(tenantId.toString(), tenantDeploymentId)))
                 .when().put("/omgservers/v1/entrypoint/developer/request/delete-deployment");
         responseSpecification.then().statusCode(200);
 

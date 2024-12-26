@@ -20,6 +20,9 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByStage.GetIdByStageOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -36,6 +39,9 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
     final TenantModule tenantModule;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+    final GetIdByStageOperation getIdByStageOperation;
 
     final TenantDeploymentModelFactory tenantDeploymentModelFactory;
     final SecurityIdentity securityIdentity;
@@ -45,10 +51,26 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
     public Uni<DeployTenantVersionDeveloperResponse> execute(final DeployTenantVersionDeveloperRequest request) {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getStageId();
-        final var tenantVersionId = request.getVersionId();
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var project = request.getProject();
+                    return getIdByProjectOperation.execute(tenantId, project)
+                            .flatMap(tenantProjectId -> {
+                                final var stage = request.getStage();
+                                return getIdByStageOperation.execute(tenantProjectId, stage)
+                                        .flatMap(tenantStageId -> {
+                                            final var tenantVersionId = request.getVersionId();
+                                            return deployTenantVersion(tenantId, tenantStageId, tenantVersionId);
+                                        });
+                            });
+                })
+                .map(DeployTenantVersionDeveloperResponse::new);
+    }
 
+    Uni<Long> deployTenantVersion(final Long tenantId,
+                                  final Long tenantStageId,
+                                  final Long tenantVersionId) {
         return verifyAtLeastOneTenantImageExists(tenantId, tenantVersionId)
                 .flatMap(voidItem -> getTenantVersion(tenantId, tenantVersionId))
                 .flatMap(tenantVersion -> getTenantStage(tenantId, tenantStageId)
@@ -70,10 +92,10 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                                         .map(tenantDeployment -> {
                                             final var tenantDeploymentId = tenantDeployment.getId();
 
-                                            log.info("The new deployment \"{}\" was created in tenant \"{}\" by the user {}",
+                                            log.info(
+                                                    "The new deployment \"{}\" was created in tenant \"{}\" by the user {}",
                                                     tenantDeploymentId, tenantId, userId);
-
-                                            return new DeployTenantVersionDeveloperResponse(tenantDeploymentId);
+                                            return tenantDeploymentId;
                                         });
                             } else {
                                 throw new ServerSideForbiddenException(ExceptionQualifierEnum.WRONG_REQUEST);

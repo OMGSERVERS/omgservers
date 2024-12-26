@@ -12,6 +12,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDt
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantVersionMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -28,6 +29,7 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
     final TenantModule tenantModule;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantVersionMapper tenantVersionMapper;
     final SecurityIdentity securityIdentity;
@@ -41,22 +43,25 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantVersionId = request.getVersionId();
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var tenantVersionId = request.getVersionId();
+                    return getTenantVersion(tenantId, tenantVersionId)
+                            .flatMap(tenantVersion -> {
+                                final var versionProjectId = tenantVersion.getProjectId();
+                                final var permissionQualifier = TenantProjectPermissionQualifierEnum
+                                        .PROJECT_VIEWER;
+                                return checkTenantProjectPermissionOperation.execute(tenantId,
+                                                versionProjectId,
+                                                userId,
+                                                permissionQualifier)
+                                        .flatMap(voidItem -> getTenantVersionData(tenantId, tenantVersionId))
+                                        .map(tenantVersionMapper::dataToDashboard);
 
-        return getTenantVersion(tenantId, tenantVersionId)
-                .flatMap(tenantVersion -> {
-                    final var versionProjectId = tenantVersion.getProjectId();
-                    final var permissionQualifier = TenantProjectPermissionQualifierEnum
-                            .PROJECT_VIEWER;
-                    return checkTenantProjectPermissionOperation.execute(tenantId,
-                                    versionProjectId,
-                                    userId,
-                                    permissionQualifier)
-                            .flatMap(voidItem -> getTenantVersionData(tenantId, tenantVersionId))
-                            .map(tenantVersionMapper::dataToDashboard)
-                            .map(GetTenantVersionDashboardDeveloperResponse::new);
-                });
+                            });
+                })
+                .map(GetTenantVersionDashboardDeveloperResponse::new);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {

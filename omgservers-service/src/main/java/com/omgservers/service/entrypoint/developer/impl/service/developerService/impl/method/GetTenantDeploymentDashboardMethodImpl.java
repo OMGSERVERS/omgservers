@@ -15,6 +15,7 @@ import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantDeploymentMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -31,6 +32,7 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
     final TenantModule tenantModule;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantDeploymentMapper tenantDeploymentMapper;
     final SecurityIdentity securityIdentity;
@@ -44,23 +46,27 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantDeploymentId = request.getDeploymentId();
-        return getTenantDeployment(tenantId, tenantDeploymentId)
-                .flatMap(tenantDeployment -> {
-                    final var tenantStageId = tenantDeployment.getStageId();
-                    return getTenantStage(tenantId, tenantStageId)
-                            .flatMap(tenantStage -> {
-                                final var tenantProjectId = tenantStage.getProjectId();
-                                final var permissionQualifier =
-                                        TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
-                                return checkTenantProjectPermissionOperation.execute(tenantId,
-                                                tenantProjectId,
-                                                userId,
-                                                permissionQualifier)
-                                        .flatMap(voidItem -> getTenantDeploymentData(tenantId, tenantDeploymentId))
-                                        .map(tenantDeploymentMapper::dataToDashboard)
-                                        .map(GetTenantDeploymentDashboardDeveloperResponse::new);
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var tenantDeploymentId = request.getDeploymentId();
+                    return getTenantDeployment(tenantId, tenantDeploymentId)
+                            .flatMap(tenantDeployment -> {
+                                final var tenantStageId = tenantDeployment.getStageId();
+                                return getTenantStage(tenantId, tenantStageId)
+                                        .flatMap(tenantStage -> {
+                                            final var tenantProjectId = tenantStage.getProjectId();
+                                            final var permissionQualifier =
+                                                    TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
+                                            return checkTenantProjectPermissionOperation.execute(tenantId,
+                                                            tenantProjectId,
+                                                            userId,
+                                                            permissionQualifier)
+                                                    .flatMap(voidItem -> getTenantDeploymentData(tenantId,
+                                                            tenantDeploymentId))
+                                                    .map(tenantDeploymentMapper::dataToDashboard)
+                                                    .map(GetTenantDeploymentDashboardDeveloperResponse::new);
+                                        });
                             });
                 });
     }

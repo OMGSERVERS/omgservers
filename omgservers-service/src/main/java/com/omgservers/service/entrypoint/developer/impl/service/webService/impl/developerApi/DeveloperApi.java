@@ -120,7 +120,7 @@ public interface DeveloperApi {
 
     @PUT
     @Path("/upload-files-archive")
-    Uni<UploadFilesArchiveDeveloperResponse> execute(@RestForm("tenantId") Long tenantId,
+    Uni<UploadFilesArchiveDeveloperResponse> execute(@RestForm("tenant") String tenant,
                                                      @RestForm("tenantVersionId") Long tenantVersionId,
                                                      @RestForm(FileUpload.ALL) List<FileUpload> files);
 

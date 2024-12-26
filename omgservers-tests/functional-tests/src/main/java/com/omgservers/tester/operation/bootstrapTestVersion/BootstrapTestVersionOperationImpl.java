@@ -68,7 +68,7 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
         waitForBuilding(developerToken, tenantId, tenantVersionId);
 
         final var deployVersionDeveloperResponse = developerApiTester
-                .deployTenantVersion(developerToken, tenantId, tenantStageId, tenantVersionId);
+                .deployTenantVersion(developerToken, tenantId, tenantProjectId, tenantStageId, tenantVersionId);
         final var tenantDeploymentId = deployVersionDeveloperResponse.getDeploymentId();
 
         waitForDeployment(developerToken, tenantId, tenantDeploymentId);

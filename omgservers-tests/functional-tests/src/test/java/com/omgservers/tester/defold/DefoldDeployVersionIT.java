@@ -64,6 +64,7 @@ public class DefoldDeployVersionIT extends BaseTestClass {
 
             final var tenantDeploymentId = developerApiTester.deployTenantVersion(testVersion.getDeveloperToken(),
                     testVersion.getTenantId(),
+                    testVersion.getTenantProjectId(),
                     testVersion.getTenantStageId(),
                     testVersion.getTenantVersionId()).getDeploymentId();
             testVersion.setTenantDeploymentId(tenantDeploymentId);

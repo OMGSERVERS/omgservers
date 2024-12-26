@@ -283,7 +283,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
-    echo " omgserversctl developer deployVersion <tenant> <stage> <version>"
+    echo " omgserversctl developer deployVersion <tenant> <project> <stage> <version>"
     if [ "$1" = "developer deployVersion" ]; then
       echo "   produces:"
       echo "     - DEPLOYMENT"
@@ -300,7 +300,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createLobbyRequest" ]; then
-    echo " omgserversctl developer createLobbyRequest"
+    echo " omgserversctl developer createLobbyRequest <tenant> <deployment>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteLobby" ]; then
     echo " omgserversctl developer deleteLobby <lobby>"
@@ -378,8 +378,8 @@ environment_usePublic() {
 
 environment_useLocal() {
   environment_useEnvironment local http://localhost:8080
-  admin_useCredentials 223221505901723648 admin
-  support_useCredentials 231928170708729857 support
+  admin_useCredentials admin admin
+  support_useCredentials support support
 }
 
 # ADMIN
@@ -1972,8 +1972,8 @@ developer_createVersion() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-version"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"project_id\": ${PROJECT}, \"config\": ${CONFIG}}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT}_${STAGE}.json"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"config\": ${CONFIG}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2047,7 +2047,7 @@ developer_uploadFilesArchive() {
     "${ENDPOINT}" \
     -H "Content-type: multipart/form-data" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
-    -F "tenantId=${TENANT}" \
+    -F "tenant=${TENANT}" \
     -F "tenantVersionId=${VERSION}" \
     -F "version.zip=@${ARCHIVE_PATH}" \
     -o ${RESPONSE_FILE})
@@ -2093,7 +2093,7 @@ developer_getVersionDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-version-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"version_id\": ${VERSION}}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"version_id\": ${VERSION}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2123,7 +2123,7 @@ developer_deleteVersion() {
   internal_useEnvironment
 
   TENANT=$1
-  VERSION=$1
+  VERSION=$2
 
   if [ -z "${TENANT}" -o -z "${VERSION}" ]; then
     help "developer deleteVersion"
@@ -2141,7 +2141,7 @@ developer_deleteVersion() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-version"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"version_id\": \"${VERSION}\" }"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"version_id\": \"${VERSION}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-tenant-version_${TENANT}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2182,15 +2182,17 @@ developer_deployVersion() {
   internal_useEnvironment
 
   TENANT=$1
-  STAGE=$2
-  VERSION=$3
+  PROJECT=$2
+  STAGE=$3
+  VERSION=$4
 
-  if [ -z "${TENANT}" -o -z "${STAGE}" -o -z "${VERSION}" ]; then
+  if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" -o -z "${VERSION}" ]; then
     help "developer deployVersion"
     exit 1
   fi
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=${VERSION}"
 
@@ -2202,8 +2204,8 @@ developer_deployVersion() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/deploy-version"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"stage_id\": ${STAGE}, \"version_id\": ${VERSION}}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT}_${STAGE}_${VERSION}.json"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\", \"version_id\": ${VERSION}}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT}_${PROJECT}_${STAGE}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2257,7 +2259,7 @@ developer_getDeploymentDashboard() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/get-deployment-dashboard"
-  REQUEST="{\"tenant_id\": ${TENANT}, \"deployment_id\": ${DEPLOYMENT}}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"deployment_id\": ${DEPLOYMENT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-deployment-dashboard_${TENANT}_${DEPLOYMENT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2305,7 +2307,7 @@ developer_deleteDeployment() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/delete-deployment"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"id\": \"${DEPLOYMENT}\" }"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"id\": \"${DEPLOYMENT}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-deployment_${TENANT}_${DEPLOYMENT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2348,14 +2350,15 @@ developer_createLobbyRequest() {
   TENANT=$1
   DEPLOYMENT=$2
 
-  if [ -z "${TENANT}" ] || [ -z "${DEPLOYMENT}" ]; then
-    echo "Usage: omgserversctl developer createLobbyRequest <tenant> <deployment>"
+  if [ -z "${TENANT}" -o -z "${DEPLOYMENT}" ]; then
+    help "developer createLobbyRequest"
     exit 1
   fi
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-lobby-request"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/create-lobby-request_${TENANT}_${DEPLOYMENT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2366,7 +2369,10 @@ developer_createLobbyRequest() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/create-lobby-request_${TENANT}_${DEPLOYMENT}.json)
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
@@ -2440,14 +2446,15 @@ developer_createMatchmakerRequest() {
   TENANT=$1
   DEPLOYMENT=$2
 
-  if [ -z "${TENANT}" ] || [ -z "${DEPLOYMENT}" ]; then
-    echo "Usage: omgserversctl developer createMatchmakerRequest <tenant> <deployment>"
+  if [ -z "${TENANT}" -o -z "${DEPLOYMENT}" ]; then
+    help "developer createMatchmakerRequest"
     exit 1
   fi
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/omgservers/v1/entrypoint/developer/request/create-matchmaker-request"
-  REQUEST="{\"tenant_id\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/create-matchmaker-request_${TENANT}_${DEPLOYMENT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2457,7 +2464,10 @@ developer_createMatchmakerRequest() {
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
     -d "${REQUEST}" \
-    -o ${OMGSERVERSCTL_DIRECTORY}/temp/create-matchmaker-request_${TENANT}_${DEPLOYMENT}.json)
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
@@ -2680,7 +2690,7 @@ elif [ "$1" = "developer" ]; then
   elif [ "$2" = "deleteVersion" ]; then
     developer_deleteVersion $3 $4
   elif [ "$2" = "deployVersion" ]; then
-    developer_deployVersion $3 $4 $5
+    developer_deployVersion $3 $4 $5 $6
   elif [ "$2" = "getDeploymentDashboard" ]; then
     developer_getDeploymentDashboard $3 $4
   elif [ "$2" = "deleteDeployment" ]; then

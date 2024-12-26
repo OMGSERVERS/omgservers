@@ -12,6 +12,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -29,6 +30,7 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
     final LobbyModule lobbyModule;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
     final SecurityIdentity securityIdentity;
@@ -40,24 +42,27 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var deploymentId = request.getDeploymentId();
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var deploymentId = request.getDeploymentId();
+                    return getTenantDeployment(tenantId, deploymentId)
+                            .flatMap(tenantDeployment -> {
+                                final var stageId = tenantDeployment.getStageId();
 
-        return getTenantDeployment(tenantId, deploymentId)
-                .flatMap(tenantDeployment -> {
-                    final var stageId = tenantDeployment.getStageId();
-
-                    final var permissionQualifier =
-                            TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
-                    return checkTenantStagePermissionOperation.execute(tenantId,
-                                    stageId,
-                                    userId,
-                                    permissionQualifier)
-                            .flatMap(voidItem -> createTenantLobbyRequest(tenantId, deploymentId));
-                })
-                .invoke(voidItem -> log.info("A new lobby was requested for deployment \"{}\" in tenant \"{}\" by the user {}",
-                        deploymentId, tenantId, userId))
-                .replaceWith(new CreateLobbyRequestDeveloperResponse());
+                                final var permissionQualifier =
+                                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
+                                return checkTenantStagePermissionOperation.execute(tenantId,
+                                                stageId,
+                                                userId,
+                                                permissionQualifier)
+                                        .flatMap(voidItem -> createTenantLobbyRequest(tenantId, deploymentId));
+                            })
+                            .invoke(voidItem -> log.info(
+                                    "A new lobby was requested for deployment \"{}\" in tenant \"{}\" by the user {}",
+                                    deploymentId, tenantId, userId))
+                            .replaceWith(new CreateLobbyRequestDeveloperResponse());
+                });
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {

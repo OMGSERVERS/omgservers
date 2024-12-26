@@ -12,6 +12,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -29,6 +30,7 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
     final LobbyModule lobbyModule;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
     final SecurityIdentity securityIdentity;
@@ -41,23 +43,25 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var deploymentId = request.getDeploymentId();
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var deploymentId = request.getDeploymentId();
+                    return getTenantDeployment(tenantId, deploymentId)
+                            .flatMap(tenantDeployment -> {
+                                final var stageId = tenantDeployment.getStageId();
 
-        return getTenantDeployment(tenantId, deploymentId)
-                .flatMap(tenantDeployment -> {
-                    final var stageId = tenantDeployment.getStageId();
-
-                    final var permissionQualifier =
-                            TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
-                    return checkTenantStagePermissionOperation.execute(tenantId,
-                                    stageId,
-                                    userId,
-                                    permissionQualifier)
-                            .invoke(voidItem -> log.info(
-                                    "A new matchmaker was requested for deployment \"{}\" in tenant \"{}\" by the user {}",
-                                    deploymentId, tenantId, userId))
-                            .flatMap(voidItem -> createTenantMatchmakerRequest(tenantId, deploymentId));
+                                final var permissionQualifier =
+                                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
+                                return checkTenantStagePermissionOperation.execute(tenantId,
+                                                stageId,
+                                                userId,
+                                                permissionQualifier)
+                                        .invoke(voidItem -> log.info(
+                                                "A new matchmaker was requested for deployment \"{}\" in tenant \"{}\" by the user {}",
+                                                deploymentId, tenantId, userId))
+                                        .flatMap(voidItem -> createTenantMatchmakerRequest(tenantId, deploymentId));
+                            });
                 })
                 .replaceWith(new CreateMatchmakerRequestDeveloperResponse());
     }

@@ -149,10 +149,10 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> execute(final Long tenantId,
+    public Uni<UploadFilesArchiveDeveloperResponse> execute(final String tenant,
                                                             final Long tenantVersionId,
                                                             final List<FileUpload> files) {
-        final var request = new UploadFilesArchiveDeveloperRequest(tenantId, tenantVersionId, files);
+        final var request = new UploadFilesArchiveDeveloperRequest(tenant, tenantVersionId, files);
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 

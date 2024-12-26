@@ -164,8 +164,7 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> execute(
-            @Valid final UploadFilesArchiveDeveloperRequest request) {
+    public Uni<UploadFilesArchiveDeveloperResponse> execute(@Valid final UploadFilesArchiveDeveloperRequest request) {
         return uploadFilesArchiveMethod.execute(request);
     }
 

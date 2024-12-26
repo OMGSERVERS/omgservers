@@ -120,8 +120,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> execute(
-            final UploadFilesArchiveDeveloperRequest request) {
+    public Uni<UploadFilesArchiveDeveloperResponse> execute(final UploadFilesArchiveDeveloperRequest request) {
         return developerService.execute(request);
     }
 

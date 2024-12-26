@@ -10,6 +10,8 @@ import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionReques
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -26,6 +28,8 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
     final TenantModule tenantModule;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantVersionModelFactory tenantVersionModelFactory;
     final SecurityIdentity securityIdentity;
@@ -38,17 +42,28 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantProjectId = request.getProjectId();
-        final var tenantVersionConfig = request.getConfig();
-
-        final var permissionQualifier = TenantProjectPermissionQualifierEnum
-                .VERSION_MANAGER;
-        return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId, permissionQualifier)
-                .flatMap(voidItem -> createTenantVersion(tenantId, tenantProjectId, tenantVersionConfig))
-                .map(TenantVersionModel::getId)
-                .invoke(tenantVersionId -> log.info("The new version \"{}\" was created in tenant \"{}\" by the user {}",
-                        tenantVersionId, tenantId, userId))
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var project = request.getProject();
+                    return getIdByProjectOperation.execute(tenantId, project)
+                            .flatMap(tenantProjectId -> {
+                                final var tenantVersionConfig = request.getConfig();
+                                final var permissionQualifier =
+                                        TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
+                                return checkTenantProjectPermissionOperation.execute(tenantId,
+                                                tenantProjectId,
+                                                userId,
+                                                permissionQualifier)
+                                        .flatMap(voidItem -> createTenantVersion(tenantId,
+                                                tenantProjectId,
+                                                tenantVersionConfig))
+                                        .map(TenantVersionModel::getId)
+                                        .invoke(tenantVersionId -> log.info(
+                                                "The new version \"{}\" was created in tenant \"{}\" by the user {}",
+                                                tenantVersionId, tenantId, userId));
+                            });
+                })
                 .map(CreateTenantVersionDeveloperResponse::new);
     }
 

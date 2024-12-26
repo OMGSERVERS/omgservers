@@ -1,6 +1,8 @@
 package com.omgservers.schema.entrypoint.developer;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +12,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeployTenantVersionDeveloperRequest {
 
-    @NotNull
-    Long tenantId;
+    @NotBlank
+    @Size(max = 64)
+    String tenant;
 
-    @NotNull
-    Long stageId;
+    @NotBlank
+    @Size(max = 64)
+    String project;
+
+    @NotBlank
+    @Size(max = 64)
+    String stage;
 
     @NotNull
     Long versionId;

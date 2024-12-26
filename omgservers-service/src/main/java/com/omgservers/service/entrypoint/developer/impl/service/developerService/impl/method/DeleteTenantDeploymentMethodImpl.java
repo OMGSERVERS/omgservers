@@ -11,6 +11,7 @@ import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentR
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -27,6 +28,7 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
     final TenantModule tenantModule;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantVersionModelFactory tenantVersionModelFactory;
     final SecurityIdentity securityIdentity;
@@ -38,27 +40,30 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
         final var userId = securityIdentity
                 .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantDeploymentId = request.getId();
+        final var tenant = request.getTenant();
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> {
+                    final var tenantDeploymentId = request.getId();
+                    return getTenantDeployment(tenantId, tenantDeploymentId)
+                            .flatMap(tenantDeployment -> {
+                                final var tenantStageId = tenantDeployment.getStageId();
 
-        return getTenantDeployment(tenantId, tenantDeploymentId)
-                .flatMap(tenantDeployment -> {
-                    final var tenantStageId = tenantDeployment.getStageId();
-
-                    final var permissionQualifier =
-                            TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
-                    return checkTenantStagePermissionOperation.execute(tenantId,
-                                    tenantStageId,
-                                    userId,
-                                    permissionQualifier)
-                            .flatMap(voidItem -> deleteTenantDeployment(tenantId, tenantDeploymentId))
-                            .invoke(deleted -> {
-                                if (deleted) {
-                                    log.info("Deployment \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                            tenantDeploymentId, tenantId, userId);
-                                }
-                            })
-                            .map(DeleteTenantDeploymentDeveloperResponse::new);
+                                final var permissionQualifier =
+                                        TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
+                                return checkTenantStagePermissionOperation.execute(tenantId,
+                                                tenantStageId,
+                                                userId,
+                                                permissionQualifier)
+                                        .flatMap(voidItem -> deleteTenantDeployment(tenantId, tenantDeploymentId))
+                                        .invoke(deleted -> {
+                                            if (deleted) {
+                                                log.info(
+                                                        "Deployment \"{}\" was deleted in tenant \"{}\" by the user {}",
+                                                        tenantDeploymentId, tenantId, userId);
+                                            }
+                                        })
+                                        .map(DeleteTenantDeploymentDeveloperResponse::new);
+                            });
                 });
     }
 
