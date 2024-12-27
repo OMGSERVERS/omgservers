@@ -33,13 +33,19 @@ public class AliasModel {
     Instant modified;
 
     @NotNull
+    AliasQualifierEnum qualifier;
+
+    @NotNull
     Long shardKey;
 
-    @NotBlank
-    String value;
+    @NotNull
+    Long uniquenessGroup;
 
     @NotNull
     Long entityId;
+
+    @NotBlank
+    String value;
 
     @NotNull
     Boolean deleted;

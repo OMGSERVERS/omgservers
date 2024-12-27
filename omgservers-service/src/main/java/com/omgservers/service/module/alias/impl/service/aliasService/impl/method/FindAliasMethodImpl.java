@@ -25,18 +25,17 @@ class FindAliasMethodImpl implements FindAliasMethod {
         log.trace("Requested, {}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var shardKey = request.getShardKey();
-
-                    return pgPool.withTransaction(
-                            sqlConnection -> {
-                                final var value = request.getValue();
-                                return selectAliasByValueOperation.execute(sqlConnection,
-                                        shard.shard(),
-                                        shardKey,
-                                        value);
-                            });
-                })
+                .flatMap(shard -> pgPool.withTransaction(
+                        sqlConnection -> {
+                            final var shardKey = request.getShardKey();
+                            final var uniquenessGroup = request.getUniquenessGroup();
+                            final var value = request.getValue();
+                            return selectAliasByValueOperation.execute(sqlConnection,
+                                    shard.shard(),
+                                    shardKey,
+                                    uniquenessGroup,
+                                    value);
+                        }))
                 .map(FindAliasResponse::new);
     }
 }

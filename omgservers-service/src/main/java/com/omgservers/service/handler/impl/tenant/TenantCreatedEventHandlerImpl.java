@@ -93,6 +93,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     Uni<AliasModel> findRootEntityAlias() {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);

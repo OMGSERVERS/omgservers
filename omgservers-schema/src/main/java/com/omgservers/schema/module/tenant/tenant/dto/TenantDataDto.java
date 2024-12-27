@@ -1,5 +1,6 @@
 package com.omgservers.schema.module.tenant.tenant.dto;
 
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
@@ -19,8 +20,14 @@ public class TenantDataDto {
     TenantModel tenant;
 
     @NotNull
+    List<AliasModel> aliases;
+
+    @NotNull
     List<TenantPermissionModel> tenantPermissions;
 
     @NotNull
     List<TenantProjectModel> tenantProjects;
+
+    @NotNull
+    List<AliasModel> tenantAliases;
 }

@@ -19,9 +19,11 @@ public class SelectAliasByValueOperationTestInterface {
 
     final PgPool pgPool;
 
-    public AliasModel execute(final Long shardKey, final String value) {
+    public AliasModel execute(final Long shardKey,
+                              final Long uniquenessGroup,
+                              final String value) {
         return pgPool.withTransaction(sqlConnection -> selectAliasByValueOperation
-                        .execute(sqlConnection, 0, shardKey, value))
+                        .execute(sqlConnection, 0, shardKey, uniquenessGroup, value))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

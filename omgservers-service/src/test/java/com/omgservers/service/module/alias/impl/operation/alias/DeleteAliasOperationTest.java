@@ -1,6 +1,7 @@
 package com.omgservers.service.module.alias.impl.operation.alias;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.module.alias.impl.operation.alias.testInterface.DeleteAliasOperationTestInterface;
 import com.omgservers.service.module.alias.impl.operation.alias.testInterface.UpsertAliasOperationTestInterface;
@@ -29,9 +30,11 @@ class DeleteAliasOperationTest extends BaseTestClass {
     @Test
     void givenAlias_whenDeleteAlias_thenDeleted() {
         final var shard = 0;
-        final var alias = aliasModelFactory.create(generateIdOperation.generateId(),
-                "alias",
-                generateIdOperation.generateId());
+        final var alias = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                "alias");
         upsertAliasOperation.execute(shard, alias);
 
         final var changeContext = deleteAliasOperation.execute(shard, alias.getId());

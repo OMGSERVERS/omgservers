@@ -17,19 +17,22 @@ class GetIdByStageOperationImpl implements GetIdByStageOperation {
     final AliasModule aliasModule;
 
     @Override
-    public Uni<Long> execute(final Long projectId, final String stage) {
+    public Uni<Long> execute(final Long tenantId,
+                             final Long projectId,
+                             final String stage) {
         try {
             final var stageId = Long.valueOf(stage);
             return Uni.createFrom().item(stageId);
         } catch (NumberFormatException e) {
-            return findProjectAlias(projectId, stage)
+            return findProjectAlias(tenantId, projectId, stage)
                     .map(AliasModel::getEntityId);
         }
     }
 
-    Uni<AliasModel> findProjectAlias(final Long projectId,
+    Uni<AliasModel> findProjectAlias(final Long tenantId,
+                                     final Long projectId,
                                      final String stageAlias) {
-        final var request = new FindAliasRequest(projectId, stageAlias);
+        final var request = new FindAliasRequest(tenantId, projectId, stageAlias);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }

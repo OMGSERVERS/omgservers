@@ -27,9 +27,8 @@ class UpsertAliasOperationImpl implements UpsertAliasOperation {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_alias(
-                            id, idempotency_key, created, modified, shard_key, alias_value, entity_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                        insert into $schema.tab_alias(id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
@@ -38,9 +37,11 @@ class UpsertAliasOperationImpl implements UpsertAliasOperation {
                         alias.getIdempotencyKey(),
                         alias.getCreated().atOffset(ZoneOffset.UTC),
                         alias.getModified().atOffset(ZoneOffset.UTC),
+                        alias.getQualifier(),
                         alias.getShardKey(),
-                        alias.getValue(),
+                        alias.getUniquenessGroup(),
                         alias.getEntityId(),
+                        alias.getValue(),
                         alias.getDeleted()
                 ),
                 () -> null,

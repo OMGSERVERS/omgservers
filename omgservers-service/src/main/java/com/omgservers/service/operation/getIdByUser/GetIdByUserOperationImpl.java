@@ -1,4 +1,4 @@
-package com.omgservers.service.operation.getIdByTenant;
+package com.omgservers.service.operation.getIdByUser;
 
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.module.alias.FindAliasRequest;
@@ -13,25 +13,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class GetIdByTenantOperationImpl implements GetIdByTenantOperation {
+class GetIdByUserOperationImpl implements GetIdByUserOperation {
 
     final AliasModule aliasModule;
 
     @Override
-    public Uni<Long> execute(final String tenant) {
+    public Uni<Long> execute(final String user) {
         try {
-            final var tenantId = Long.valueOf(tenant);
-            return Uni.createFrom().item(tenantId);
+            final var userId = Long.valueOf(user);
+            return Uni.createFrom().item(userId);
         } catch (NumberFormatException e) {
-            return findTenantAlias(tenant)
+            return findUserAlias(user)
                     .map(AliasModel::getEntityId);
         }
     }
 
-    Uni<AliasModel> findTenantAlias(final String tenantAlias) {
+    Uni<AliasModel> findUserAlias(final String userAlias) {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
-                tenantAlias);
+                DefaultAliasConfiguration.DEFAULT_USER_GROUP,
+                userAlias);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }

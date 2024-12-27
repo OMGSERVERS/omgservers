@@ -1,6 +1,7 @@
 package com.omgservers.service.module.alias.impl.operation.alias;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
@@ -27,9 +28,11 @@ class UpsertAliasOperationTest extends BaseTestClass {
     @Test
     void givenAlias_whenUpsertAlias_thenInserted() {
         final var shard = 0;
-        final var alias = aliasModelFactory.create(generateIdOperation.generateId(),
-                "alias",
-                generateIdOperation.generateId());
+        final var alias = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                "alias");
 
         final var changeContext = upsertAliasOperation.execute(shard, alias);
         assertTrue(changeContext.getResult());
@@ -38,9 +41,11 @@ class UpsertAliasOperationTest extends BaseTestClass {
     @Test
     void givenAlias_whenUpsertAlias_thenUpdated() {
         final var shard = 0;
-        final var alias = aliasModelFactory.create(generateIdOperation.generateId(),
-                "alias",
-                generateIdOperation.generateId());
+        final var alias = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                "alias");
         upsertAliasOperation.execute(shard, alias);
 
         final var changeContext = upsertAliasOperation.execute(shard, alias);
@@ -50,14 +55,18 @@ class UpsertAliasOperationTest extends BaseTestClass {
     @Test
     void givenAlias_whenUpsertAlias_thenIdempotencyViolation() {
         final var shard = 0;
-        final var alias1 = aliasModelFactory.create(generateIdOperation.generateId(),
-                "alias",
-                generateIdOperation.generateId());
+        final var alias1 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                "alias");
         upsertAliasOperation.execute(shard, alias1);
 
-        final var alias2 = aliasModelFactory.create(generateIdOperation.generateId(),
-                "alias",
+        final var alias2 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
                 generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                "alias",
                 alias1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertAliasOperation.execute(shard, alias2));

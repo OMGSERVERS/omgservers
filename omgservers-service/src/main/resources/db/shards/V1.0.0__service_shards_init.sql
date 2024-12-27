@@ -5,13 +5,15 @@ create table if not exists tab_alias (
     idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    qualifier text not null,
     shard_key bigint not null,
-    alias_value text not null,
+    uniqueness_group bigint not null,
     entity_id bigint not null,
+    alias_value text not null,
     deleted boolean not null
 );
 
-create unique index idx_alias_uniqueness on tab_alias(shard_key, alias_value) where deleted = false;
+create unique index idx_alias_uniqueness on tab_alias(qualifier, shard_key, uniqueness_group, alias_value) where deleted = false;
 
 -- root module
 

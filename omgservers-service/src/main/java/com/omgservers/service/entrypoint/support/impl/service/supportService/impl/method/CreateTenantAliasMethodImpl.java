@@ -3,6 +3,7 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
@@ -54,9 +55,11 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
     Uni<AliasModel> createTenantAlias(final Long tenantId,
                                       final String aliasValue,
                                       final Long userId) {
-        final var alias = aliasModelFactory.create(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
-                aliasValue,
-                tenantId);
+        final var alias = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
+                tenantId,
+                aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(alias);
         return aliasModule.getService().execute(syncAliasRequest)
                 .invoke(response -> {

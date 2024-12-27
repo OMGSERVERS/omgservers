@@ -3,6 +3,7 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportResponse;
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.module.alias.FindAliasRequest;
 import com.omgservers.schema.module.alias.FindAliasResponse;
@@ -62,7 +63,9 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
     }
 
     Uni<AliasModel> findTenantAlias(final String tenantAlias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY, tenantAlias);
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
+                tenantAlias);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
@@ -77,9 +80,11 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                                        final Long tenantProjectId,
                                        final String aliasValue,
                                        final Long userId) {
-        final var projectAlias = aliasModelFactory.create(tenantId,
-                aliasValue,
-                tenantProjectId);
+        final var projectAlias = aliasModelFactory.create(AliasQualifierEnum.PROJECT,
+                tenantId,
+                tenantId,
+                tenantProjectId,
+                aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(projectAlias);
         return aliasModule.getService().execute(syncAliasRequest)
                 .invoke(response -> {

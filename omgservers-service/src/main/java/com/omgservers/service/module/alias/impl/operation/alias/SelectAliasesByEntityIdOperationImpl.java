@@ -29,7 +29,7 @@ class SelectAliasesByEntityIdOperationImpl implements SelectAliasesByEntityIdOpe
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, created, modified, shard_key, alias_value, entity_id, deleted
+                        select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
                         from $schema.tab_alias
                         where shard_key = $1 and entity_id = $2
                         order by id asc

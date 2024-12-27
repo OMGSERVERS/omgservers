@@ -1,6 +1,7 @@
 package com.omgservers.service.service.bootstrap.impl.method;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.alias.FindAliasRequest;
@@ -42,14 +43,14 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
         log.debug("Bootstrap of default user");
 
         final var userAlias = request.getAlias();
-        return findUserAlias(userAlias)
+        return findDefaultUserAlias(userAlias)
                 .replaceWith(Boolean.FALSE)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var password = request.getPassword();
                     final var role = request.getRole();
                     return createUser(password, role)
-                            .flatMap(user -> createUserAlias(user.getId(), userAlias)
+                            .flatMap(user -> createDefaultUserAlias(user.getId(), userAlias)
                                     .invoke(alias -> log.info(
                                             "The default user \"{}\" under the alias \"{}\" was created",
                                             user.getId(), userAlias)))
@@ -58,15 +59,20 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
                 .map(BootstrapDefaultUserResponse::new);
     }
 
-    Uni<AliasModel> findUserAlias(final String alias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY, alias);
+    Uni<AliasModel> findDefaultUserAlias(final String alias) {
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.DEFAULT_USER_GROUP,
+                alias);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
-    Uni<AliasModel> createUserAlias(final Long userId, final String userAlias) {
-        final var alias = aliasModelFactory.create(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
-                userAlias, userId);
+    Uni<AliasModel> createDefaultUserAlias(final Long userId, final String userAlias) {
+        final var alias = aliasModelFactory.create(AliasQualifierEnum.USER,
+                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.DEFAULT_USER_GROUP,
+                userId,
+                userAlias);
         final var request = new SyncAliasRequest(alias);
         return aliasModule.getService().execute(request)
                 .replaceWith(alias);

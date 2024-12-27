@@ -51,7 +51,7 @@ class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperati
 
             final var dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
-            log.info("Docker client was created, uri={}", uri);
+            log.info("A docker client for the {} was created", uri);
 
             cache.put(uri, dockerClient);
         }

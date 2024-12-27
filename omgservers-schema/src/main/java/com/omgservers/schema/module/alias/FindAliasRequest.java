@@ -15,6 +15,9 @@ public class FindAliasRequest implements ShardedRequest {
     Long shardKey;
 
     @NotNull
+    Long uniquenessGroup;
+
+    @NotNull
     String value;
 
     @Override

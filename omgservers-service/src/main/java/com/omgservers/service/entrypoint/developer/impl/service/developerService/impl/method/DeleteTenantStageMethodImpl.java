@@ -51,7 +51,7 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
                     return getIdByProjectOperation.execute(tenantId, project)
                             .flatMap(tenantProjectId -> {
                                 final var stage = request.getStage();
-                                return getIdByStageOperation.execute(tenantProjectId, stage)
+                                return getIdByStageOperation.execute(tenantId, tenantProjectId, stage)
                                         .flatMap(tenantStageId -> {
                                             final var permissionQualifier =
                                                     TenantProjectPermissionQualifierEnum.STAGE_MANAGER;

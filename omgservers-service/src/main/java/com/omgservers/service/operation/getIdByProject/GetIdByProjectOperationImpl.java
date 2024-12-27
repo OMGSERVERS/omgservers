@@ -29,7 +29,7 @@ class GetIdByProjectOperationImpl implements GetIdByProjectOperation {
 
     Uni<AliasModel> findProjectAlias(final Long tenantId,
                                      final String projectAlias) {
-        final var request = new FindAliasRequest(tenantId, projectAlias);
+        final var request = new FindAliasRequest(tenantId, tenantId, projectAlias);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }

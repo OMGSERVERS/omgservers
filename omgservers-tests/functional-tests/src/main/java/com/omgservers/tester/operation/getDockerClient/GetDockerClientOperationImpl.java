@@ -39,7 +39,7 @@ class GetDockerClientOperationImpl implements GetDockerClientOperation {
 
         final var dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
-        log.info("Docker client was created, registryUserId={}", registryUserId);
+        log.info("A docker client was created, registryUserId={}", registryUserId);
 
         return dockerClient;
     }

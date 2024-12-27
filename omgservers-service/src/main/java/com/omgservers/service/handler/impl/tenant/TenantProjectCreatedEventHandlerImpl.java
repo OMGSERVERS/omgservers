@@ -106,7 +106,9 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<AliasModel> findDefaultUserAlias(final String alias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY, alias);
+        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.DEFAULT_USER_GROUP,
+                alias);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }

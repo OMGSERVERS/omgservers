@@ -8,5 +8,6 @@ public interface SelectAliasByValueOperation {
     Uni<AliasModel> execute(SqlConnection sqlConnection,
                             int shard,
                             Long shardKey,
+                            Long uniquenessGroup,
                             String value);
 }

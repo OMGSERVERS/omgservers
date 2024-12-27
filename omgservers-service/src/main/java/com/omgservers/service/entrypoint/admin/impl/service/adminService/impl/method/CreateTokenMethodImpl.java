@@ -2,14 +2,11 @@ package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.m
 
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
-import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByUser.GetIdByUserOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -24,34 +21,20 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final AliasModule aliasModule;
     final UserModule userModule;
 
+    final GetIdByUserOperation getIdByUserOperation;
+
     @Override
     public Uni<CreateTokenAdminResponse> execute(final CreateTokenAdminRequest request) {
         log.trace("Requested, {}", request);
 
         final var user = request.getUser();
-        return getIdByUser(user)
+        return getIdByUserOperation.execute(user)
                 .flatMap(userId -> {
                     final var password = request.getPassword();
                     return createToken(userId, password)
                             .invoke(token -> log.info("A token was issued for the admin user {}.", userId))
                             .map(CreateTokenAdminResponse::new);
                 });
-    }
-
-    Uni<Long> getIdByUser(final String user) {
-        try {
-            final var userId = Long.valueOf(user);
-            return Uni.createFrom().item(userId);
-        } catch (NumberFormatException e) {
-            return findUserAlias(user)
-                    .map(AliasModel::getEntityId);
-        }
-    }
-
-    Uni<AliasModel> findUserAlias(final String alias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY, alias);
-        return aliasModule.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
     }
 
     Uni<String> createToken(final Long userId, final String password) {

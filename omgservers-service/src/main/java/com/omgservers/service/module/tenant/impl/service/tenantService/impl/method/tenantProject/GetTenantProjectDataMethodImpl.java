@@ -1,8 +1,11 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantProject;
 
+import com.omgservers.schema.module.alias.ViewAliasesRequest;
+import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.module.tenant.tenantProject.dto.TenantProjectDataDto;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.impl.operation.tenantProject.SelectTenantProjectOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantProjectPermission.SelectActiveTenantProjectPermissionsByTenantProjectIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantStage.SelectActiveTenantStagesByTenantProjectIdOperation;
@@ -19,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor
 class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
+
+    final AliasModule aliasModule;
 
     final SelectActiveTenantProjectPermissionsByTenantProjectIdOperation
             selectActiveTenantProjectPermissionsByTenantProjectIdOperation;
@@ -39,79 +44,128 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
                 .flatMap(shardModel -> {
                     final int shard = shardModel.shard();
                     final var tenantId = request.getTenantId();
-                    final var tenantProjectid = request.getTenantProjectId();
+                    final var tenantProjectId = request.getTenantProjectId();
                     final var tenantProjectData = new TenantProjectDataDto();
 
-                    return pgPool.withTransaction(sqlConnection ->
-                            fillData(sqlConnection, shard, tenantId, tenantProjectid, tenantProjectData));
+                    return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
+                                    shard,
+                                    tenantId,
+                                    tenantProjectId,
+                                    tenantProjectData))
+                            .flatMap(voidItem -> fillAliases(tenantId,
+                                    tenantProjectId,
+                                    tenantProjectData))
+                            .flatMap(voidItem -> fillProjectAliases(tenantId,
+                                    tenantProjectId,
+                                    tenantProjectData))
+                            .replaceWith(tenantProjectData);
                 })
                 .map(GetTenantProjectDataResponse::new);
     }
 
-    Uni<TenantProjectDataDto> fillData(final SqlConnection sqlConnection,
-                                       final int shard,
-                                       final Long tenantId,
-                                       final Long tenantProjectId,
-                                       final TenantProjectDataDto tenantProjectData) {
-        return fillTenantProject(sqlConnection, shard, tenantId, tenantProjectId, tenantProjectData)
-                .flatMap(voidItem -> fillTenantProjectPermissions(sqlConnection, shard, tenantId, tenantProjectId,
+    Uni<Void> fillData(final SqlConnection sqlConnection,
+                       final int shard,
+                       final Long tenantId,
+                       final Long tenantProjectId,
+                       final TenantProjectDataDto tenantProjectData) {
+        return fillProject(sqlConnection, shard, tenantId, tenantProjectId, tenantProjectData)
+                .flatMap(voidItem -> fillAliases(tenantId,
+                        tenantProjectId,
                         tenantProjectData))
-                .flatMap(voidItem -> fillTenantStages(sqlConnection, shard, tenantId, tenantProjectId,
+                .flatMap(voidItem -> fillProjectPermissions(sqlConnection,
+                        shard,
+                        tenantId,
+                        tenantProjectId,
                         tenantProjectData))
-                .flatMap(voidItem -> fillTenantVersionProjections(sqlConnection, shard, tenantId, tenantProjectId,
+                .flatMap(voidItem -> fillProjectStages(sqlConnection,
+                        shard,
+                        tenantId,
+                        tenantProjectId,
                         tenantProjectData))
-                .replaceWith(tenantProjectData);
+                .flatMap(voidItem -> fillProjectVersions(sqlConnection,
+                        shard,
+                        tenantId,
+                        tenantProjectId,
+                        tenantProjectData))
+                .flatMap(voidItem -> fillProjectAliases(tenantId,
+                        tenantProjectId,
+                        tenantProjectData))
+                .replaceWithVoid();
     }
 
-    Uni<Void> fillTenantProject(final SqlConnection sqlConnection,
-                                final int shard,
-                                final Long tenantId,
-                                final Long tenantProjectId,
-                                final TenantProjectDataDto tenantProjectData) {
+    Uni<Void> fillProject(final SqlConnection sqlConnection,
+                          final int shard,
+                          final Long tenantId,
+                          final Long tenantProjectId,
+                          final TenantProjectDataDto tenantProjectData) {
         return selectTenantProjectOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantProjectId)
-                .invoke(tenantProjectData::setTenantProject)
+                .invoke(tenantProjectData::setProject)
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillTenantProjectPermissions(final SqlConnection sqlConnection,
-                                           final int shard,
-                                           final Long tenantId,
-                                           final Long tenantProjectId,
-                                           final TenantProjectDataDto tenantProjectData) {
+    Uni<Void> fillProjectPermissions(final SqlConnection sqlConnection,
+                                     final int shard,
+                                     final Long tenantId,
+                                     final Long tenantProjectId,
+                                     final TenantProjectDataDto tenantProjectData) {
         return selectActiveTenantProjectPermissionsByTenantProjectIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantProjectId)
-                .invoke(tenantProjectData::setTenantProjectPermissions)
+                .invoke(tenantProjectData::setProjectPermissions)
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillTenantStages(final SqlConnection sqlConnection,
-                               final int shard,
-                               final Long tenantId,
-                               final Long tenantProjectId,
-                               final TenantProjectDataDto tenantProjectData) {
+    Uni<Void> fillProjectStages(final SqlConnection sqlConnection,
+                                final int shard,
+                                final Long tenantId,
+                                final Long tenantProjectId,
+                                final TenantProjectDataDto tenantProjectData) {
         return selectActiveTenantStagesByTenantProjectIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantProjectId)
-                .invoke(tenantProjectData::setTenantStages)
+                .invoke(tenantProjectData::setProjectStages)
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillTenantVersionProjections(final SqlConnection sqlConnection,
-                                           final int shard,
-                                           final Long tenantId,
-                                           final Long tenantProjectId,
-                                           final TenantProjectDataDto tenantProjectData) {
+    Uni<Void> fillProjectVersions(final SqlConnection sqlConnection,
+                                  final int shard,
+                                  final Long tenantId,
+                                  final Long tenantProjectId,
+                                  final TenantProjectDataDto tenantProjectData) {
         return selectActiveTenantVersionProjectionsByTenantProjectIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantProjectId)
-                .invoke(tenantProjectData::setTenantVersionProjections)
+                .invoke(tenantProjectData::setProjectVersions)
+                .replaceWithVoid();
+    }
+
+    Uni<Void> fillAliases(final Long tenantId,
+                          final Long tenantProjectId,
+                          final TenantProjectDataDto tenantProjectData) {
+        final var request = new ViewAliasesRequest();
+        request.setShardKey(tenantId);
+        request.setEntityId(tenantProjectId);
+        return aliasModule.getService().execute(request)
+                .map(ViewAliasesResponse::getAliases)
+                .invoke(tenantProjectData::setAliases)
+                .replaceWithVoid();
+    }
+
+    Uni<Void> fillProjectAliases(final Long tenantId,
+                                 final Long tenantProjectId,
+                                 final TenantProjectDataDto tenantProjectData) {
+        final var request = new ViewAliasesRequest();
+        request.setShardKey(tenantId);
+        request.setUniquenessGroup(tenantProjectId);
+        return aliasModule.getService().execute(request)
+                .map(ViewAliasesResponse::getAliases)
+                .invoke(tenantProjectData::setProjectAliases)
                 .replaceWithVoid();
     }
 }

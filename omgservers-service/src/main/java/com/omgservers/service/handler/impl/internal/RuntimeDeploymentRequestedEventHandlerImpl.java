@@ -228,6 +228,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<AliasModel> findDefaultPoolAlias() {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);

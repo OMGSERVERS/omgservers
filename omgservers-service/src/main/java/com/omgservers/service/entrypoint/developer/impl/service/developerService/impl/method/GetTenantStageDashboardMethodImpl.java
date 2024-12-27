@@ -54,7 +54,7 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
                     return getIdByProjectOperation.execute(tenantId, project)
                             .flatMap(tenantProjectId -> {
                                 final var stage = request.getStage();
-                                return getIdByStageOperation.execute(tenantProjectId, stage)
+                                return getIdByStageOperation.execute(tenantId, tenantProjectId, stage)
                                         .flatMap(tenantStageId -> getTenantStage(tenantId, tenantStageId)
                                                 .flatMap(tenantStage -> {
                                                     final var stageProjectId = tenantStage.getProjectId();

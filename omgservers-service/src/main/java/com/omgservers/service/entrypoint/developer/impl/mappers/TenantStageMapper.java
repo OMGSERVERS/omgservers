@@ -12,8 +12,9 @@ public interface TenantStageMapper {
 
     TenantStageDto modelToDto(TenantStageModel model);
 
-    @Mapping(source = "tenantStage", target = "stage")
-    @Mapping(source = "tenantStagePermissions", target = "permissions")
-    @Mapping(source = "tenantDeployments", target = "deployments")
+    @Mapping(target = "stage", source = "stage")
+    @Mapping(target = "stage.aliases", source = "aliases")
+    @Mapping(target = "permissions", source = "stagePermissions")
+    @Mapping(target = "deployments", source = "stageDeployments")
     TenantStageDashboardDto dataToDashboard(TenantStageDataDto data);
 }

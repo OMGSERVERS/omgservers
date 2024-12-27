@@ -25,18 +25,19 @@ class SelectAliasByValueOperationImpl
     public Uni<AliasModel> execute(final SqlConnection sqlConnection,
                                    final int shard,
                                    final Long shardKey,
+                                   final Long uniquenessGroup,
                                    final String value) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, created, modified, shard_key, alias_value, entity_id, deleted
+                        select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
                         from $schema.tab_alias
-                        where shard_key = $1 and alias_value = $2
+                        where shard_key = $1 and uniqueness_group = $2 and alias_value = $3
                         order by id desc
                         limit 1
                         """,
-                List.of(shardKey, value),
+                List.of(shardKey, uniquenessGroup, value),
                 "Alias",
                 aliasModelMapper::fromRow);
     }

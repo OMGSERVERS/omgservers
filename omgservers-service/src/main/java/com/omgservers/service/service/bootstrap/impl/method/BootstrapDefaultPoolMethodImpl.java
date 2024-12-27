@@ -1,6 +1,7 @@
 package com.omgservers.service.service.bootstrap.impl.method;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
@@ -56,13 +57,15 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 .recoverWithUni(t -> createDefaultPool()
                         .flatMap(defaultPool -> createDefaultPoolServers(defaultPool.getId())
                                 .flatMap(voidIteam -> createDefaultPoolAlias(defaultPool.getId())
-                                        .invoke(alias -> log.info("The default pool \"{}\" was created", defaultPool.getId()))))
+                                        .invoke(alias -> log.info("The default pool \"{}\" was created",
+                                                defaultPool.getId()))))
                         .replaceWith(Boolean.TRUE))
                 .map(BootstrapDefaultPoolResponse::new);
     }
 
     Uni<AliasModel> findDefaultPoolAlias() {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
@@ -90,8 +93,11 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
     }
 
     Uni<AliasModel> createDefaultPoolAlias(final Long poolId) {
-        final var alias = aliasModelFactory.create(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.DEFAULT_POOL_ALIAS, poolId);
+        final var alias = aliasModelFactory.create(AliasQualifierEnum.POOL,
+                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
+                poolId,
+                DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
         final var request = new SyncAliasRequest(alias);
         return aliasModule.getService().execute(request)
                 .replaceWith(alias);

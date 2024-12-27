@@ -2,18 +2,15 @@ package com.omgservers.service.entrypoint.registry.impl.service.registryService.
 
 import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryRequest;
 import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryResponse;
-import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByUser.GetIdByUserOperation;
 import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
 import com.omgservers.service.service.registry.dto.IssueTokenRequest;
@@ -36,6 +33,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
     final RegistryService registryService;
 
     final ParseBasicAuthorizationHeaderOperation parseBasicAuthorizationHeaderOperation;
+    final GetIdByUserOperation getIdByUserOperation;
 
     final SecurityIdentity securityIdentity;
 
@@ -55,7 +53,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
             final var user = userCredentials.getUser();
             final var password = userCredentials.getPassword();
 
-            return getIdByUser(user)
+            return getIdByUserOperation.execute(user)
                     .flatMap(userId -> createToken(userId, password)
                             .flatMap(rawToken -> {
                                 final var offlineToken = Objects.nonNull(request.getOfflineToken()) ?
@@ -77,22 +75,6 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
         } catch (ServerSideBadRequestException e) {
             throw new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_CREDENTIALS, e.getMessage(), e);
         }
-    }
-
-    Uni<Long> getIdByUser(final String user) {
-        try {
-            final var userId = Long.valueOf(user);
-            return Uni.createFrom().item(userId);
-        } catch (NumberFormatException e) {
-            return findUserAlias(user)
-                    .map(AliasModel::getEntityId);
-        }
-    }
-
-    Uni<AliasModel> findUserAlias(final String alias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY, alias);
-        return aliasModule.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
     }
 
     Uni<String> createToken(final Long userId, final String password) {

@@ -1,6 +1,7 @@
 package com.omgservers.service.module.alias.impl.operation.alias;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
@@ -33,13 +34,15 @@ class SelectAliasByValueOperationTest extends BaseTestClass {
     @Test
     void givenAlias_whenExecute_thenSelected() {
         final var shard = 0;
-        final var alias1 = aliasModelFactory.create(generateIdOperation.generateId(),
-                "alias",
-                generateIdOperation.generateId());
+        final var alias1 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                "alias");
         upsertAliasOperation.execute(shard, alias1);
 
         final var alias2 = selectAliasByValueOperation
-                .execute(alias1.getShardKey(), alias1.getValue());
+                .execute(alias1.getShardKey(), alias1.getUniquenessGroup(), alias1.getValue());
         assertEquals(alias1, alias2);
     }
 
@@ -47,6 +50,7 @@ class SelectAliasByValueOperationTest extends BaseTestClass {
     void givenAlias_whenExecute_thenNotFound() {
         final var exception = assertThrows(ServerSideNotFoundException.class,
                 () -> selectAliasByValueOperation.execute(generateIdOperation.generateId(),
+                        generateIdOperation.generateId(),
                         UUID.randomUUID().toString()));
         assertEquals(ExceptionQualifierEnum.OBJECT_NOT_FOUND, exception.getQualifier());
     }

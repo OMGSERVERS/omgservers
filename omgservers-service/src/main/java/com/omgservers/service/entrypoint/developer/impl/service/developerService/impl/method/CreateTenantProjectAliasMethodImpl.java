@@ -3,6 +3,7 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
@@ -64,9 +65,11 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                                              final Long tenantProjectId,
                                              final String aliasValue,
                                              final Long userId) {
-        final var tenantProjectAlias = aliasModelFactory.create(tenantId,
-                aliasValue,
-                tenantProjectId);
+        final var tenantProjectAlias = aliasModelFactory.create(AliasQualifierEnum.PROJECT,
+                tenantId,
+                tenantId,
+                tenantProjectId,
+                aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(tenantProjectAlias);
         return aliasModule.getService().execute(syncAliasRequest)
                 .invoke(response -> {

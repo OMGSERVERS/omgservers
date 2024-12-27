@@ -49,7 +49,9 @@ class DeleteAliasesByEntityIdOperationImpl implements DeleteAliasesByEntityIdOpe
 
     Uni<List<AliasModel>> viewAliases(final Long shardKey,
                                       final Long entityId) {
-        final var request = new ViewAliasesRequest(shardKey, entityId);
+        final var request = new ViewAliasesRequest();
+        request.setShardKey(shardKey);
+        request.setEntityId(entityId);
         return aliasModule.getService().execute(request)
                 .map(ViewAliasesResponse::getAliases);
     }

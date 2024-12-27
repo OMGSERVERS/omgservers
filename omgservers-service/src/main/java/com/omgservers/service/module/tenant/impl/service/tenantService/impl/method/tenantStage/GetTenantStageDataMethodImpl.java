@@ -1,8 +1,11 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantStage;
 
+import com.omgservers.schema.module.alias.ViewAliasesRequest;
+import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataResponse;
 import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.SelectActiveTenantDeploymentsByTenantStageIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantStage.SelectTenantStageOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantStagePermission.SelectActiveTenantStagePermissionsByTenantStageIdOperation;
@@ -18,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor
 class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
+
+    final AliasModule aliasModule;
 
     final SelectActiveTenantStagePermissionsByTenantStageIdOperation
             selectActiveTenantStagePermissionsByTenantStageIdOperation;
@@ -39,8 +44,15 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
                     final var tenantStageId = request.getTenantStageId();
                     final var tenantStageData = new TenantStageDataDto();
 
-                    return pgPool.withTransaction(sqlConnection ->
-                            fillData(sqlConnection, shard, tenantId, tenantStageId, tenantStageData));
+                    return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
+                                    shard,
+                                    tenantId,
+                                    tenantStageId,
+                                    tenantStageData))
+                            .flatMap(voidItem -> fillAliases(tenantId,
+                                    tenantStageId,
+                                    tenantStageData))
+                            .replaceWith(tenantStageData);
                 })
                 .map(GetTenantStageDataResponse::new);
     }
@@ -49,57 +61,69 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
                                      final int shard,
                                      final Long tenantId,
                                      final Long tenantStageId,
-                                     final TenantStageDataDto stageData) {
-        return fillTenantState(sqlConnection, shard, tenantId, tenantStageId, stageData)
-                .flatMap(voidItem -> fillTenantStagePermissions(sqlConnection,
+                                     final TenantStageDataDto tenantStageData) {
+        return fillStage(sqlConnection, shard, tenantId, tenantStageId, tenantStageData)
+                .flatMap(voidItem -> fillStagePermissions(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId,
-                        stageData))
-                .flatMap(voidItem -> fillTenantDeployments(sqlConnection,
+                        tenantStageData))
+                .flatMap(voidItem -> fillStageDeployments(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId,
-                        stageData))
-                .replaceWith(stageData);
+                        tenantStageData))
+                .replaceWith(tenantStageData);
     }
 
-    Uni<Void> fillTenantState(final SqlConnection sqlConnection,
-                              final int shard,
-                              final Long tenantId,
-                              final Long tenantStageId,
-                              final TenantStageDataDto stageData) {
+    Uni<Void> fillStage(final SqlConnection sqlConnection,
+                        final int shard,
+                        final Long tenantId,
+                        final Long tenantStageId,
+                        final TenantStageDataDto tenantStageData) {
         return selectTenantStageOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId)
-                .invoke(stageData::setTenantStage)
+                .invoke(tenantStageData::setStage)
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillTenantStagePermissions(final SqlConnection sqlConnection,
-                                         final int shard,
-                                         final Long tenantId,
-                                         final Long tenantStageId,
-                                         final TenantStageDataDto stageData) {
+    Uni<Void> fillStagePermissions(final SqlConnection sqlConnection,
+                                   final int shard,
+                                   final Long tenantId,
+                                   final Long tenantStageId,
+                                   final TenantStageDataDto stageData) {
         return selectActiveTenantStagePermissionsByTenantStageIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId)
-                .invoke(stageData::setTenantStagePermissions)
+                .invoke(stageData::setStagePermissions)
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillTenantDeployments(final SqlConnection sqlConnection,
-                                    final int shard,
-                                    final Long tenantId,
-                                    final Long tenantStageId,
-                                    final TenantStageDataDto stageData) {
+    Uni<Void> fillStageDeployments(final SqlConnection sqlConnection,
+                                   final int shard,
+                                   final Long tenantId,
+                                   final Long tenantStageId,
+                                   final TenantStageDataDto stageData) {
         return selectActiveTenantDeploymentsByTenantStageIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId)
-                .invoke(stageData::setTenantDeployments)
+                .invoke(stageData::setStageDeployments)
+                .replaceWithVoid();
+    }
+
+    Uni<Void> fillAliases(final Long tenantId,
+                          final Long tenantStageId,
+                          final TenantStageDataDto tenantStageData) {
+        final var request = new ViewAliasesRequest();
+        request.setShardKey(tenantId);
+        request.setEntityId(tenantStageId);
+        return aliasModule.getService().execute(request)
+                .map(ViewAliasesResponse::getAliases)
+                .invoke(tenantStageData::setAliases)
                 .replaceWithVoid();
     }
 }

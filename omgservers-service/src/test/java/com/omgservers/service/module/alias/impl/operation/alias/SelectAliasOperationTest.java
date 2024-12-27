@@ -1,6 +1,7 @@
 package com.omgservers.service.module.alias.impl.operation.alias;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.module.alias.impl.operation.alias.testInterface.SelectAliasOperationTestInterface;
@@ -30,9 +31,11 @@ class SelectAliasOperationTest extends BaseTestClass {
     @Test
     void givenAlias_whenSelectAlias_thenSelected() {
         final var shard = 0;
-        final var alias1 = aliasModelFactory.create(generateIdOperation.generateId(),
-                "alias",
-                generateIdOperation.generateId());
+        final var alias1 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                generateIdOperation.generateId(),
+                "alias");
         final var id = alias1.getId();
         upsertAliasOperation.execute(shard, alias1);
 

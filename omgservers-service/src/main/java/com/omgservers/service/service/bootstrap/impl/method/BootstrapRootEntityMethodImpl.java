@@ -1,6 +1,7 @@
 package com.omgservers.service.service.bootstrap.impl.method;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.root.RootModel;
 import com.omgservers.schema.module.alias.FindAliasRequest;
 import com.omgservers.schema.module.alias.FindAliasResponse;
@@ -51,14 +52,18 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
 
     Uni<AliasModel> findRootAlias() {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
         return aliasModule.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
     Uni<AliasModel> createRootAlias(final Long rootId) {
-        final var alias = aliasModelFactory.create(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS, rootId);
+        final var alias = aliasModelFactory.create(AliasQualifierEnum.ROOT,
+                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
+                rootId,
+                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
         final var request = new SyncAliasRequest(alias);
         return aliasModule.getService().execute(request)
                 .replaceWith(alias);

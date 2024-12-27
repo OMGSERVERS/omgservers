@@ -3,6 +3,7 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
@@ -61,7 +62,8 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
                                                 permissionQualifier)
                                         .flatMap(voidItem -> {
                                             final var aliasValue = request.getAlias();
-                                            return createTenantStageAlias(tenantProjectId,
+                                            return createTenantStageAlias(tenantId,
+                                                    tenantProjectId,
                                                     tenantStageId,
                                                     aliasValue,
                                                     userId);
@@ -77,13 +79,16 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<AliasModel> createTenantStageAlias(final Long tenantProjectId,
+    Uni<AliasModel> createTenantStageAlias(final Long tenantId,
+                                           final Long tenantProjectId,
                                            final Long tenantStageId,
                                            final String aliasValue,
                                            final Long userId) {
-        final var tenantStageAlias = aliasModelFactory.create(tenantProjectId,
-                aliasValue,
-                tenantStageId);
+        final var tenantStageAlias = aliasModelFactory.create(AliasQualifierEnum.STAGE,
+                tenantId,
+                tenantProjectId,
+                tenantStageId,
+                aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(tenantStageAlias);
         return aliasModule.getService().execute(syncAliasRequest)
                 .invoke(response -> {

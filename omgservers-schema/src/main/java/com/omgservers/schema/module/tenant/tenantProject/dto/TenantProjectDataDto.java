@@ -1,5 +1,6 @@
 package com.omgservers.schema.module.tenant.tenantProject.dto;
 
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
@@ -17,14 +18,20 @@ import java.util.List;
 public class TenantProjectDataDto {
 
     @NotNull
-    TenantProjectModel tenantProject;
+    TenantProjectModel project;
 
     @NotNull
-    List<TenantProjectPermissionModel> tenantProjectPermissions;
+    List<AliasModel> aliases;
 
     @NotNull
-    List<TenantStageModel> tenantStages;
+    List<TenantProjectPermissionModel> projectPermissions;
 
     @NotNull
-    List<TenantVersionProjectionModel> tenantVersionProjections;
+    List<TenantStageModel> projectStages;
+
+    @NotNull
+    List<TenantVersionProjectionModel> projectVersions;
+
+    @NotNull
+    List<AliasModel> projectAliases;
 }

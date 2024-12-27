@@ -2,6 +2,7 @@ package com.omgservers.service.module.alias.impl.operation.alias;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.module.alias.impl.operation.alias.testInterface.SelectAliasesByEntityIdOperationTestInterface;
 import com.omgservers.service.module.alias.impl.operation.alias.testInterface.UpsertAliasOperationTestInterface;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class SelectAliasesByEntityIdOperationTest extends BaseTestClass {
+class SelectAliasesByShardKeyOperationTest extends BaseTestClass {
 
     @Inject
     SelectAliasesByEntityIdOperationTestInterface selectAliasesByEntityIdOperation;
@@ -31,16 +32,21 @@ class SelectAliasesByEntityIdOperationTest extends BaseTestClass {
     void givenAliases_whenExecute_thenSelected() {
         final var shard = 0;
         final var shardKey = generateIdOperation.generateId();
+        final var uniquenessGroup = generateIdOperation.generateId();
         final var entityId = generateIdOperation.generateId();
 
-        final var alias1 = aliasModelFactory.create(shardKey,
-                "alias1",
-                entityId);
+        final var alias1 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                shardKey,
+                uniquenessGroup,
+                entityId,
+                "alias1");
         upsertAliasOperation.execute(shard, alias1);
 
-        final var alias2 = aliasModelFactory.create(shardKey,
-                "alias2",
-                entityId);
+        final var alias2 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
+                shardKey,
+                uniquenessGroup,
+                entityId,
+                "alias2");
         upsertAliasOperation.execute(shard, alias2);
 
         final var aliases = selectAliasesByEntityIdOperation

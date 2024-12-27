@@ -58,7 +58,7 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                     return getIdByProjectOperation.execute(tenantId, project)
                             .flatMap(tenantProjectId -> {
                                 final var stage = request.getStage();
-                                return getIdByStageOperation.execute(tenantProjectId, stage)
+                                return getIdByStageOperation.execute(tenantId, tenantProjectId, stage)
                                         .flatMap(tenantStageId -> {
                                             final var tenantVersionId = request.getVersionId();
                                             return deployTenantVersion(tenantId, tenantStageId, tenantVersionId);

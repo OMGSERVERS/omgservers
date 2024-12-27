@@ -1,8 +1,12 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenant;
 
+import com.omgservers.schema.module.alias.ViewAliasesRequest;
+import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
+import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.impl.operation.tenant.SelectTenantOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantPermission.SelectActiveTenantPermissionsByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantProject.SelectActiveTenantProjectsByTenantIdOperation;
@@ -18,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @AllArgsConstructor
 class GetTenantDataMethodImpl implements GetTenantDataMethod {
+
+    final AliasModule aliasModule;
 
     final SelectActiveTenantPermissionsByTenantIdOperation selectActiveTenantPermissionsByTenantIdOperation;
     final SelectActiveTenantProjectsByTenantIdOperation selectActiveTenantProjectsByTenantIdOperation;
@@ -36,26 +42,33 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
                     final var tenantId = request.getTenantId();
                     final var tenantData = new TenantDataDto();
 
-                    return pgPool.withTransaction(sqlConnection ->
-                            fillData(sqlConnection, shard, tenantId, tenantData));
+                    return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
+                                    shard,
+                                    tenantId,
+                                    tenantData))
+                            .flatMap(voidItem -> fillAliases(tenantId,
+                                    tenantData))
+                            .flatMap(voidItem -> fillTenantAliases(tenantId,
+                                    tenantData))
+                            .replaceWith(tenantData);
                 })
                 .map(GetTenantDataResponse::new);
     }
 
-    Uni<TenantDataDto> fillData(final SqlConnection sqlConnection,
-                                final int shard,
-                                final Long tenantId,
-                                final TenantDataDto tenantData) {
-        return selectTenant(sqlConnection, shard, tenantId, tenantData)
+    Uni<Void> fillData(final SqlConnection sqlConnection,
+                       final int shard,
+                       final Long tenantId,
+                       final TenantDataDto tenantData) {
+        return fillTenant(sqlConnection, shard, tenantId, tenantData)
                 .flatMap(voidItem -> fillTenantPermissions(sqlConnection, shard, tenantId, tenantData))
                 .flatMap(voidItem -> fillProjects(sqlConnection, shard, tenantId, tenantData))
-                .replaceWith(tenantData);
+                .replaceWithVoid();
     }
 
-    Uni<Void> selectTenant(final SqlConnection sqlConnection,
-                           final int shard,
-                           final Long tenantId,
-                           final TenantDataDto tenantDetails) {
+    Uni<Void> fillTenant(final SqlConnection sqlConnection,
+                         final int shard,
+                         final Long tenantId,
+                         final TenantDataDto tenantDetails) {
         return selectTenantOperation.execute(sqlConnection,
                         shard,
                         tenantId)
@@ -82,6 +95,28 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
                         shard,
                         tenantId)
                 .invoke(tenantData::setTenantProjects)
+                .replaceWithVoid();
+    }
+
+    Uni<Void> fillAliases(final Long tenantId,
+                          final TenantDataDto tenantData) {
+        final var request = new ViewAliasesRequest();
+        request.setShardKey(DefaultAliasConfiguration.GLOBAL_SHARD_KEY);
+        request.setEntityId(tenantId);
+        return aliasModule.getService().execute(request)
+                .map(ViewAliasesResponse::getAliases)
+                .invoke(tenantData::setAliases)
+                .replaceWithVoid();
+    }
+
+    Uni<Void> fillTenantAliases(final Long tenantId,
+                                final TenantDataDto tenantData) {
+        final var request = new ViewAliasesRequest();
+        request.setShardKey(tenantId);
+        request.setUniquenessGroup(tenantId);
+        return aliasModule.getService().execute(request)
+                .map(ViewAliasesResponse::getAliases)
+                .invoke(tenantData::setTenantAliases)
                 .replaceWithVoid();
     }
 }

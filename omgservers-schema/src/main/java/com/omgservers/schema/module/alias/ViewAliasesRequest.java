@@ -14,7 +14,8 @@ public class ViewAliasesRequest implements ShardedRequest {
     @NotNull
     Long shardKey;
 
-    @NotNull
+    Long uniquenessGroup;
+
     Long entityId;
 
     @Override
