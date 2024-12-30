@@ -6,20 +6,15 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=OMGSERVERS_omgservers)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=coverage)](https://sonarcloud.io/summary/overall?id=OMGSERVERS_omgservers)
 
-OMGSERVERS is a platform for building, testing, and running multiplayer game servers, with a focus on cost-efficiency 
-and vendor independence.
+OMGSERVERS is a platform for building, testing, and running multiplayer game servers.
 
 ## Core Principles
 
-- **No Vendor Lock-in**  
-  Designed to minimize dependencies on any specific vendor, allowing teams to reduce costs and maintain agility
-  in server operations.
+- No Vendor Lock-in
 
-- **Simplified Monolithic Architecture**  
-  A monolithic approach is prioritized to make development and maintenance easier for small teams.
+- Monolithic Architecture  
 
-- **Sharding Over Clustering**  
-  Sharding is adopted instead of clustering to simplify maintenance and enable linear scalability in throughput.
+- Sharding Over Clustering  
 
 ## Currently Implemented / In-Development Features
 
