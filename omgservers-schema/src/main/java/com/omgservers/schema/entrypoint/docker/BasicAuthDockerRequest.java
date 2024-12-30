@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.registry.getToken;
+package com.omgservers.schema.entrypoint.docker;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import org.jboss.resteasy.reactive.RestQuery;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BasicAuthRegistryRequest {
+public class BasicAuthDockerRequest {
 
     @RestQuery
     String account;

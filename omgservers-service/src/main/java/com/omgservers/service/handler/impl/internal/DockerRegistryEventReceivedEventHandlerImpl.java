@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.impl.internal;
 
-import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
+import com.omgservers.schema.entrypoint.registry.DockerRegistryEventDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;

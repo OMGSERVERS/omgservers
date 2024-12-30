@@ -1,7 +1,7 @@
-package com.omgservers.service.entrypoint.registry.impl.service.registryService.impl.method.basicAuth;
+package com.omgservers.service.entrypoint.docker.impl.service.dockerService.impl.method;
 
-import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryRequest;
-import com.omgservers.schema.entrypoint.registry.getToken.BasicAuthRegistryResponse;
+import com.omgservers.schema.entrypoint.docker.BasicAuthDockerRequest;
+import com.omgservers.schema.entrypoint.docker.BasicAuthDockerResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
@@ -38,7 +38,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<BasicAuthRegistryResponse> basicAuth(final BasicAuthRegistryRequest request) {
+    public Uni<BasicAuthDockerResponse> basicAuth(final BasicAuthDockerRequest request) {
         log.debug("Requested, {}", request);
 
         final var authorizationHeader = request.getAuthorizationHeader();
@@ -62,7 +62,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
                                 final var issueTokenRequest = new IssueTokenRequest(userId, offlineToken, scope);
                                 return registryService.issueToken(issueTokenRequest)
                                         .map(getTokenResponse -> {
-                                            final var response = new BasicAuthRegistryResponse();
+                                            final var response = new BasicAuthDockerResponse();
                                             response.setToken(getTokenResponse.getAccessToken());
                                             response.setAccessToken(getTokenResponse.getAccessToken());
                                             response.setExpiresIn(getTokenResponse.getExpiresIn());

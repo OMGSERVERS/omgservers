@@ -1,7 +1,7 @@
-package com.omgservers.service.entrypoint.registry.impl.service.registryService.impl.method.oAuth2;
+package com.omgservers.service.entrypoint.docker.impl.service.dockerService.impl.method;
 
-import com.omgservers.schema.entrypoint.registry.getToken.OAuth2RegistryRequest;
-import com.omgservers.schema.entrypoint.registry.getToken.OAuth2RegistryResponse;
+import com.omgservers.schema.entrypoint.docker.OAuth2DockerRequest;
+import com.omgservers.schema.entrypoint.docker.OAuth2DockerResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
@@ -30,7 +30,7 @@ class OAuth2MethodImpl implements OAuth2Method {
     final JWTParser jwtParser;
 
     @Override
-    public Uni<OAuth2RegistryResponse> oAuth2(final OAuth2RegistryRequest request) {
+    public Uni<OAuth2DockerResponse> oAuth2(final OAuth2DockerRequest request) {
         log.debug("Requested, {}", request);
 
         final var grantType = request.getGrantType();
@@ -48,7 +48,7 @@ class OAuth2MethodImpl implements OAuth2Method {
                 final var issueTokenRequest = new IssueTokenRequest(userId, Boolean.FALSE, scope);
                 return registryService.issueToken(issueTokenRequest)
                         .map(getTokenResponse -> {
-                            final var response = new OAuth2RegistryResponse();
+                            final var response = new OAuth2DockerResponse();
                             response.setAccessToken(getTokenResponse.getAccessToken());
                             response.setScope(getTokenResponse.getScope());
                             response.setExpiresIn(getTokenResponse.getExpiresIn());

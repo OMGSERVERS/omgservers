@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.registry.getToken;
+package com.omgservers.schema.entrypoint.docker;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import org.jboss.resteasy.reactive.RestForm;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OAuth2RegistryRequest {
+public class OAuth2DockerRequest {
 
     @NotNull
     @RestForm("grant_type")

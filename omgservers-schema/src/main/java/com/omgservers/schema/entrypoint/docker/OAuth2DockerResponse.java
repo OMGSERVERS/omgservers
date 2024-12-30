@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.registry.getToken;
+package com.omgservers.schema.entrypoint.docker;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OAuth2RegistryResponse {
+public class OAuth2DockerResponse {
 
     @JsonProperty("access_token")
     String accessToken;

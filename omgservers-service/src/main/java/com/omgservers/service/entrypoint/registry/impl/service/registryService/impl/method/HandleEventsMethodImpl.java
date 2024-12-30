@@ -1,7 +1,7 @@
-package com.omgservers.service.entrypoint.registry.impl.service.registryService.impl.method.handleEvents;
+package com.omgservers.service.entrypoint.registry.impl.service.registryService.impl.method;
 
-import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
-import com.omgservers.schema.entrypoint.registry.handleEvents.HandleEventsRegistryRequest;
+import com.omgservers.schema.entrypoint.registry.DockerRegistryEventDto;
+import com.omgservers.schema.entrypoint.registry.HandleEventsRegistryRequest;
 import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.service.event.EventService;

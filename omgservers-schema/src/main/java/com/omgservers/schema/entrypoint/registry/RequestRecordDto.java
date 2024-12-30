@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.registry.handleEvents;
+package com.omgservers.schema.entrypoint.registry;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

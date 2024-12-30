@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.registry.handleEvents;
+package com.omgservers.schema.entrypoint.registry;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

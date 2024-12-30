@@ -1,6 +1,6 @@
 package com.omgservers.service.event.body.internal;
 
-import com.omgservers.schema.entrypoint.registry.handleEvents.DockerRegistryEventDto;
+import com.omgservers.schema.entrypoint.registry.DockerRegistryEventDto;
 import com.omgservers.service.event.EventBodyModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import jakarta.validation.constraints.NotNull;
