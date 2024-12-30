@@ -10,7 +10,7 @@ import java.util.List;
 @ConfigMapping(prefix = "omgservers")
 public interface ServiceConfig {
 
-    GeneratorConfig generator();
+    ServerConfig server();
 
     IndexConfig index();
 
@@ -32,16 +32,16 @@ public interface ServiceConfig {
 
     RegistryConfig registry();
 
-    interface GeneratorConfig {
+    interface ServerConfig {
         long datacenterId();
 
         long instanceId();
+
+        URI uri();
     }
 
     interface IndexConfig {
         int shardCount();
-
-        URI serverUri();
     }
 
     interface JwtConfig {

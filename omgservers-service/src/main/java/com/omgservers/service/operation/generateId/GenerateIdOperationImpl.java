@@ -17,13 +17,13 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
     long sequence;
 
     public GenerateIdOperationImpl(final GetConfigOperation getConfigOperation) {
-        datacenterId = getConfigOperation.getServiceConfig().generator().datacenterId();
+        datacenterId = getConfigOperation.getServiceConfig().server().datacenterId();
         if (datacenterId < 0 || datacenterId >= 1 << DATACENTER_ID_BITS) {
             throw new ServerSideInternalException(ExceptionQualifierEnum.WRONG_CONFIGURATION,
                     "wrong datacenterId, value=" + datacenterId);
         }
 
-        instanceId = getConfigOperation.getServiceConfig().generator().instanceId();
+        instanceId = getConfigOperation.getServiceConfig().server().instanceId();
         if (instanceId < 0 || instanceId >= 1 << INSTANCE_ID_BITS) {
             throw new ServerSideInternalException(ExceptionQualifierEnum.WRONG_CONFIGURATION,
                     "wrong instanceId, value=" + instanceId);

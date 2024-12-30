@@ -27,7 +27,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
     @Override
     public String issueServiceJwtToken() {
         final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
-        final var subject = getConfigOperation.getServiceConfig().index().serverUri().getHost();
+        final var subject = getConfigOperation.getServiceConfig().server().uri().getHost();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(subject)
