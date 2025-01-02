@@ -1,15 +1,26 @@
 name: development
 
 services:
+  ingress:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway"
+    ports:
+      - "8080:8080"
+    networks:
+      - omgservers
+    volumes:
+      - ./gateway_config.yaml:/etc/envoy/gateway_config.yaml:ro
+    command: "-c /etc/envoy/gateway_config.yaml"
   docker:
-    image: "omgservers/docker:${OMGSERVERS_VERSION}"
+    image: "alpine/socat"
     container_name: "docker"
     networks:
       - omgservers
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
   database:
-    image: "omgservers/database:${OMGSERVERS_VERSION}"
+    image: "postgres:16.1"
     container_name: "database"
     environment:
       - POSTGRES_USER=root
@@ -17,8 +28,6 @@ services:
       - POSTGRES_DB=root
     networks:
       - omgservers
-    volumes:
-      - database:/var/lib/postgresql/data
   broker:
     image: "omgservers/broker:${OMGSERVERS_VERSION}"
     container_name: "broker"
@@ -29,24 +38,19 @@ services:
       - "8161:8161"
     networks:
       - omgservers
-    volumes:
-      - broker:/var/lib/artemis-instance
   registry:
-    image: "omgservers/registry:${OMGSERVERS_VERSION}"
+    image: "registry:2.8.3"
     container_name: "registry"
-    environment:
-      - OMGSERVERS_ENVIRONMENT=development
-      - OMGSERVERS_AUTH_URL=http://localhost:8080
-      - OMGSERVERS_SERVICE_URL=http://service:8080
     volumes:
-      - ./cert.pem:/root/certs/bundle/cert.pem
-      - registry:/var/lib/registry
+      - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
+      - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
     ports:
       - "5000:5000"
     networks:
       - omgservers
+    command: "/etc/docker/registry/registry_config.yaml"
   builder:
-    image: "omgservers/builder:1.0.0-SNAPSHOT"
+    image: "omgservers/builder:${OMGSERVERS_VERSION}"
     container_name: "builder"
     ports:
       - "7070:8080"
@@ -61,14 +65,10 @@ services:
       - OMGSERVERS_BUILDER_USER_PASSWORD=builder
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5000
-    volumes:
-      - builder:/var/jenkins_home
   service:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service"
     restart: unless-stopped
-    ports:
-      - "8080:8080"
     networks:
       - omgservers
     depends_on:
@@ -76,11 +76,11 @@ services:
       - broker
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_LOGGING_LEVEL}
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database:5432/root
       - OMGSERVERS_BROKER_HOST=broker
-      - OMGSERVERS_SERVER_URI=http://service:8080
-      - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS=http://service:8080
+      - OMGSERVERS_SERVER_URI=http://gateway:8080
+      - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS=http://gateway:8080
       - OMGSERVERS_BOOTSTRAP_ENABLED=TRUE
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_0__DOCKER_DAEMON_URI=tcp://docker:2375
@@ -88,19 +88,18 @@ services:
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_0__MEMORY_SIZE=8192
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_0__MAX_CONTAINERS=16
       - OMGSERVERS_BUILDER_URI=http://builder:8080
-volumes:
-  builder:
-    name: builder
-    driver: local
-  registry:
-    name: registry
-    driver: local
-  database:
-    name: database
-    driver: local
-  broker:
-    name: broker
-    driver: local
+  dispatcher:
+    image: "omgservers/dispatcher:${OMGSERVERS_VERSION}"
+    container_name: "dispatcher"
+    restart: unless-stopped
+    networks:
+      - omgservers
+    depends_on:
+      - service
+    environment:
+      - OMGSERVERS_OTEL_DISABLED=true
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${DISPATCHER_LOGGING_LEVEL}
+      - OMGSERVERS_SERVICE_URI=http://service:8080
 networks:
   omgservers:
     name: omgservers

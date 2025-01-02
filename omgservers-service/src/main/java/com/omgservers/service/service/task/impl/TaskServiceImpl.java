@@ -5,8 +5,6 @@ import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteDispatcherTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteDispatcherTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
@@ -23,7 +21,6 @@ import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
 import com.omgservers.service.service.task.impl.method.executeBootstrapTask.ExecuteBootstrapTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeBuildRequestTask.ExecuteBuildRequestTaskMethod;
-import com.omgservers.service.service.task.impl.method.executeDispatcherTask.ExecuteDispatcherTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executePoolTask.ExecutePoolTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRelayTask.ExecuteRelayTaskMethod;
@@ -45,7 +42,6 @@ class TaskServiceImpl implements TaskService {
 
     final ExecuteBuildRequestTaskMethod executeBuildRequestTaskMethod;
     final ExecuteMatchmakerTaskMethod executeMatchmakerTaskMethod;
-    final ExecuteDispatcherTaskMethod executeDispatcherTaskMethod;
     final ExecuteBootstrapTaskMethod executeBootstrapTaskMethod;
     final ExecuteSchedulerTaskMethod executeSchedulerTaskMethod;
     final ExecuteRuntimeTaskMethod executeRuntimeTaskMethod;
@@ -57,11 +53,6 @@ class TaskServiceImpl implements TaskService {
     @Override
     public Uni<ExecuteSchedulerTaskResponse> execute(@Valid final ExecuteSchedulerTaskRequest request) {
         return executeSchedulerTaskMethod.execute(request);
-    }
-
-    @Override
-    public Uni<ExecuteDispatcherTaskResponse> execute(@Valid final ExecuteDispatcherTaskRequest request) {
-        return executeDispatcherTaskMethod.execute(request);
     }
 
     @Override

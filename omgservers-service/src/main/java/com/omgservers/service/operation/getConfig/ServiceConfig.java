@@ -20,8 +20,6 @@ public interface ServiceConfig {
 
     BootstrapConfig bootstrap();
 
-    DispatcherConfig dispatcher();
-
     ClientsConfig clients();
 
     DockerConfig docker();
@@ -74,14 +72,10 @@ public interface ServiceConfig {
         String interval();
     }
 
-    interface InitializationDispatcherJobConfig {
+    interface InitializationBootstrapJobConfig {
         boolean enabled();
 
         String interval();
-    }
-
-    interface DispatcherConfig {
-        long idleTimeout();
     }
 
     interface ClientsConfig {
@@ -116,9 +110,7 @@ public interface ServiceConfig {
 
         InitializationSchedulerJobConfig schedulerJob();
 
-        InitializationDispatcherJobConfig dispatcherJob();
-
-        InitializationDispatcherJobConfig bootstrapJob();
+        InitializationBootstrapJobConfig bootstrapJob();
     }
 
     interface BootstrapConfig {

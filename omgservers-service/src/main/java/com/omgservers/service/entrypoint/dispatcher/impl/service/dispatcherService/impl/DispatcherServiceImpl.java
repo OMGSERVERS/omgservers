@@ -1,16 +1,12 @@
 package com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl;
 
-import com.omgservers.service.entrypoint.dispatcher.dto.OnBinaryMessageDispatcherRequest;
-import com.omgservers.service.entrypoint.dispatcher.dto.OnCloseDispatcherRequest;
-import com.omgservers.service.entrypoint.dispatcher.dto.OnErrorDispatcherRequest;
-import com.omgservers.service.entrypoint.dispatcher.dto.OnOpenDispatcherRequest;
-import com.omgservers.service.entrypoint.dispatcher.dto.OnTextMessageDispatcherRequest;
+import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherRequest;
+import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherResponse;
+import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherRequest;
+import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherResponse;
 import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.DispatcherService;
-import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl.method.OnBinaryMessageMethod;
-import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl.method.OnCloseMethod;
-import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl.method.OnErrorMethod;
-import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl.method.OnOpenMethod;
-import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl.method.OnTextMessageMethod;
+import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl.method.CalculateShardMethod;
+import com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherService.impl.method.CreateTokenMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -23,34 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DispatcherServiceImpl implements DispatcherService {
 
-    final OnBinaryMessageMethod onBinaryMessageMethod;
-    final OnTextMessageMethod onTextMessageMethod;
-    final OnCloseMethod onCloseMethod;
-    final OnErrorMethod onErrorMethod;
-    final OnOpenMethod onOpenMethod;
+    final CalculateShardMethod calculateShardMethod;
+    final CreateTokenMethod createTokenMethod;
 
     @Override
-    public Uni<Void> onOpen(@Valid final OnOpenDispatcherRequest request) {
-        return onOpenMethod.execute(request);
+    public Uni<CreateTokenDispatcherResponse> execute(@Valid final CreateTokenDispatcherRequest request) {
+        return createTokenMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> onClose(OnCloseDispatcherRequest request) {
-        return onCloseMethod.execute(request);
-    }
-
-    @Override
-    public Uni<Void> onError(OnErrorDispatcherRequest request) {
-        return onErrorMethod.execute(request);
-    }
-
-    @Override
-    public Uni<Void> onTextMessage(OnTextMessageDispatcherRequest request) {
-        return onTextMessageMethod.execute(request);
-    }
-
-    @Override
-    public Uni<Void> onBinaryMessage(OnBinaryMessageDispatcherRequest request) {
-        return onBinaryMessageMethod.execute(request);
+    public Uni<CalculateShardDispatcherResponse> execute(@Valid final CalculateShardDispatcherRequest request) {
+        return calculateShardMethod.execute(request);
     }
 }

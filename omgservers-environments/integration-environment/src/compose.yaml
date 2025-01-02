@@ -1,37 +1,35 @@
 name: integration
 
 services:
-  # frontend
-  gateway:
-    image: "omgservers/gateway:${OMGSERVERS_VERSION}"
-    container_name: "gateway"
+  ingress:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "ingress"
     ports:
       - "8080:8080"
-      - "10000:10000"
     networks:
       - omgservers
-    command: "-c /etc/envoy/integration.yaml"
-  # backend
+    volumes:
+      - ./ingress_config.yaml:/etc/envoy/ingress_config.yaml:ro
+    command: "-c /etc/envoy/ingress_config.yaml"
   docker:
-    image: "omgservers/docker:${OMGSERVERS_VERSION}"
+    image: "alpine/socat"
     container_name: "docker"
     networks:
       - omgservers
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
   registry:
-    image: "omgservers/registry:${OMGSERVERS_VERSION}"
+    image: "registry:2.8.3"
     container_name: "registry"
-    environment:
-      - OMGSERVERS_ENVIRONMENT=integration
-      - OMGSERVERS_AUTH_URL=http://localhost:8080
-      - OMGSERVERS_SERVICE_URL=http://gateway:8080
     volumes:
-      - ./cert.pem:/root/certs/bundle/cert.pem
+      - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
+      - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
     ports:
       - "5000:5000"
     networks:
       - omgservers
+    command: "/etc/docker/registry/registry_config.yaml"
   builder:
     image: "omgservers/builder:${OMGSERVERS_VERSION}"
     container_name: "builder"
@@ -49,8 +47,16 @@ services:
       - DOCKER_HOST=tcp://docker:2375
       - DOCKER_REGISTRY=localhost:5000
   # service1
+  gateway1:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway1"
+    networks:
+      - omgservers
+    volumes:
+      - ./gateway1_config.yaml:/etc/envoy/gateway_config.yaml:ro
+    command: "-c /etc/envoy/gateway_config.yaml"
   database1:
-    image: "omgservers/database:${OMGSERVERS_VERSION}"
+    image: "postgres:16.1"
     container_name: "database1"
     environment:
       - POSTGRES_USER=root
@@ -77,14 +83,15 @@ services:
       - broker1
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
-      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
-      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${SERVICE_ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${SERVICE_TRAFFIC_LOGS_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/root
       - OMGSERVERS_BROKER_HOST=broker1
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_SERVER_URI=http://service1:8080
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
+      - OMGSERVERS_SERVER_URI=http://gateway1:8080
+      - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS=http://gateway1:8080,http://gateway2:8080,http://gateway3:8080
+      - OMGSERVERS_BOOTSTRAP_ENABLED=TRUE
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED=true
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_0__DOCKER_DAEMON_URI=tcp://docker:2375
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_0__CPU_COUNT=800
@@ -101,9 +108,29 @@ services:
       - OMGSERVERS_SERVER_DATACENTER_ID=0
       - OMGSERVERS_SERVER_INSTANCE_ID=0
       - OMGSERVERS_BUILDER_URI=http://builder:8080
+  dispatcher1:
+    image: "omgservers/dispatcher:${OMGSERVERS_VERSION}"
+    container_name: "dispatcher1"
+    restart: unless-stopped
+    networks:
+      - omgservers
+    depends_on:
+      - service1
+    environment:
+      - OMGSERVERS_OTEL_DISABLED=true
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${DISPATCHER_LOGGING_LEVEL}
+      - OMGSERVERS_SERVICE_URI=http://service1:8080
   # service2
+  gateway2:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway2"
+    networks:
+      - omgservers
+    volumes:
+      - ./gateway2_config.yaml:/etc/envoy/gateway_config.yaml:ro
+    command: "-c /etc/envoy/gateway_config.yaml"
   database2:
-    image: "omgservers/database:${OMGSERVERS_VERSION}"
+    image: "postgres:16.1"
     container_name: "database2"
     environment:
       - POSTGRES_USER=root
@@ -130,20 +157,40 @@ services:
       - broker2
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
-      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
-      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${SERVICE_ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${SERVICE_TRAFFIC_LOGS_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database2:5432/root
       - OMGSERVERS_BROKER_HOST=broker2
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_SERVER_URI=http://service2:8080
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
+      - OMGSERVERS_SERVER_URI=http://gateway2:8080
+      - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS=http://gateway1:8080,http://gateway2:8080,http://gateway3:8080
       - OMGSERVERS_SERVER_DATACENTER_ID=0
       - OMGSERVERS_SERVER_INSTANCE_ID=1
       - OMGSERVERS_BUILDER_URI=http://builder:8080
+  dispatcher2:
+    image: "omgservers/dispatcher:${OMGSERVERS_VERSION}"
+    container_name: "dispatcher2"
+    restart: unless-stopped
+    networks:
+      - omgservers
+    depends_on:
+      - service2
+    environment:
+      - OMGSERVERS_OTEL_DISABLED=true
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${DISPATCHER_LOGGING_LEVEL}
+      - OMGSERVERS_SERVICE_URI=http://service2:8080
   # service3
+  gateway3:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway3"
+    networks:
+      - omgservers
+    volumes:
+      - ./gateway3_config.yaml:/etc/envoy/gateway_config.yaml:ro
+    command: "-c /etc/envoy/gateway_config.yaml"
   database3:
-    image: "omgservers/database:${OMGSERVERS_VERSION}"
+    image: "postgres:16.1"
     container_name: "database3"
     environment:
       - POSTGRES_USER=root
@@ -170,17 +217,29 @@ services:
       - broker3
     environment:
       - OMGSERVERS_OTEL_DISABLED=true
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${OMGSERVERS_APP_LOGS_LEVEL}
-      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${OMGSERVERS_ACCESS_LOGS_ENABLED}
-      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${OMGSERVERS_TRAFFIC_LOGS_LEVEL}
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
+      - OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED=${SERVICE_ACCESS_LOGS_ENABLED}
+      - OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL=${SERVICE_TRAFFIC_LOGS_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database3:5432/root
       - OMGSERVERS_BROKER_HOST=broker3
       - OMGSERVERS_INDEX_SHARD_COUNT=3
-      - OMGSERVERS_SERVER_URI=http://service3:8080
-      - OMGSERVERS_BOOTSTRAP_INDEX_SERVERS=http://service1:8080,http://service2:8080,http://service3:8080
+      - OMGSERVERS_SERVER_URI=http://gateway3:8080
+      - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS=http://gateway1:8080,http://gateway2:8080,http://gateway3:8080
       - OMGSERVERS_SERVER_DATACENTER_ID=0
       - OMGSERVERS_SERVER_INSTANCE_ID=2
       - OMGSERVERS_BUILDER_URI=http://builder:8080
+  dispatcher3:
+    image: "omgservers/dispatcher:${OMGSERVERS_VERSION}"
+    container_name: "dispatcher3"
+    restart: unless-stopped
+    networks:
+      - omgservers
+    depends_on:
+      - service3
+    environment:
+      - OMGSERVERS_OTEL_DISABLED=true
+      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${DISPATCHER_LOGGING_LEVEL}
+      - OMGSERVERS_SERVICE_URI=http://service3:8080
 networks:
   omgservers:
     name: omgservers

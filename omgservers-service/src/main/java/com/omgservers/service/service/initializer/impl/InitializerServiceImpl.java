@@ -6,7 +6,6 @@ import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.initializer.InitializerService;
 import com.omgservers.service.service.initializer.impl.method.InitializeBootstrapJobMethod;
 import com.omgservers.service.service.initializer.impl.method.InitializeDatabaseSchemaMethod;
-import com.omgservers.service.service.initializer.impl.method.InitializeDispatcherJobMethod;
 import com.omgservers.service.service.initializer.impl.method.InitializeRelayJobMethod;
 import com.omgservers.service.service.initializer.impl.method.InitializeSchedulerJobMethod;
 import com.omgservers.service.service.initializer.impl.method.InitializeServerIndexMethod;
@@ -26,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 public class InitializerServiceImpl implements InitializerService {
 
     final InitializeDatabaseSchemaMethod initializeDatabaseSchemaMethod;
-    final InitializeDispatcherJobMethod initializeDispatcherJobMethod;
     final InitializeSchedulerJobMethod initializeSchedulerJobMethod;
     final InitializeBootstrapJobMethod initializeBootstrapJobMethod;
     final InitializeServerIndexMethod initializeServerIndexMethod;
@@ -49,7 +47,6 @@ public class InitializerServiceImpl implements InitializerService {
                 .flatMap(voidItem -> initializeServerIndex())
                 .flatMap(voidItem -> initializeRelayJob())
                 .flatMap(voidItem -> initializeSchedulerJob())
-                .flatMap(voidItem -> initializeDispatcherJob())
                 .flatMap(voidItem -> initializeBootstrapJob());
     }
 
@@ -89,16 +86,6 @@ public class InitializerServiceImpl implements InitializerService {
                     .invoke(voidItem -> log.info("The scheduler job was initialized."));
         } else {
             log.info("Scheduler job initialization is not enabled, skipping this step");
-            return Uni.createFrom().voidItem();
-        }
-    }
-
-    Uni<Void> initializeDispatcherJob() {
-        if (getConfigOperation.getServiceConfig().initialization().dispatcherJob().enabled()) {
-            return initializeDispatcherJobMethod.execute()
-                    .invoke(voidItem -> log.info("The dispatcher job was initialized."));
-        } else {
-            log.info("Dispatcher job initialization is not enabled, skipping this step");
             return Uni.createFrom().voidItem();
         }
     }

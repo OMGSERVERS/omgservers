@@ -4,8 +4,6 @@ import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteDispatcherTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteDispatcherTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
@@ -26,8 +24,6 @@ import jakarta.validation.Valid;
 public interface TaskService {
 
     Uni<ExecuteSchedulerTaskResponse> execute(@Valid ExecuteSchedulerTaskRequest request);
-
-    Uni<ExecuteDispatcherTaskResponse> execute(@Valid ExecuteDispatcherTaskRequest request);
 
     Uni<ExecuteTenantTaskResponse> execute(@Valid ExecuteTenantTaskRequest request);
 

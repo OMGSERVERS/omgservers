@@ -2,16 +2,15 @@ name: localtesting
 
 services:
   docker:
-    image: "omgservers/docker:${OMGSERVERS_VERSION}"
+    image: "alpine/socat"
     container_name: "docker"
     networks:
       - omgservers
-    ports:
-      - "2375:2375"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
   database:
-    image: "omgservers/database:${OMGSERVERS_VERSION}"
+    image: "postgres:16.1"
     container_name: "database"
     environment:
       - POSTGRES_USER=root
@@ -33,18 +32,16 @@ services:
     networks:
       - omgservers
   registry:
-    image: "omgservers/registry:${OMGSERVERS_VERSION}"
+    image: "registry:2.8.3"
     container_name: "registry"
-    environment:
-      - OMGSERVERS_ENVIRONMENT=localtesting
-      - OMGSERVERS_AUTH_URL=http://host.docker.internal:8080
-      - OMGSERVERS_SERVICE_URL=http://host.docker.internal:8080
     volumes:
-      - ./cert.pem:/root/certs/bundle/cert.pem
+      - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
+      - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
     ports:
       - "5000:5000"
     networks:
       - omgservers
+    command: "/etc/docker/registry/registry_config.yaml"
   builder:
     image: "omgservers/builder:${OMGSERVERS_VERSION}"
     container_name: "builder"

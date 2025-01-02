@@ -11,10 +11,8 @@ OMGSERVERS is a platform for building, testing, and running multiplayer game ser
 ## Core Principles
 
 - No Vendor Lock-in
-
-- Monolithic Architecture  
-
-- Sharding Over Clustering  
+- Monolithic Architecture
+- Sharding Over Clustering
 
 ## Currently Implemented / In-Development Features
 

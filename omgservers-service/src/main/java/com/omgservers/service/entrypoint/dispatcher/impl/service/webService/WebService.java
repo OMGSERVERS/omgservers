@@ -1,19 +1,14 @@
 package com.omgservers.service.entrypoint.dispatcher.impl.service.webService;
 
-import io.quarkus.websockets.next.CloseReason;
-import io.quarkus.websockets.next.WebSocketConnection;
+import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherRequest;
+import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherResponse;
+import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherRequest;
+import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherResponse;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.buffer.Buffer;
 
 public interface WebService {
 
-    Uni<Void> onOpen(WebSocketConnection webSocketConnection);
+    Uni<CreateTokenDispatcherResponse> execute(CreateTokenDispatcherRequest request);
 
-    Uni<Void> onClose(WebSocketConnection webSocketConnection, CloseReason closeReason);
-
-    Uni<Void> onError(WebSocketConnection webSocketConnection, Throwable throwable);
-
-    Uni<Void> onTextMessage(WebSocketConnection webSocketConnection, String message);
-
-    Uni<Void> onBinaryMessage(WebSocketConnection webSocketConnection, Buffer buffer);
+    Uni<CalculateShardDispatcherResponse> execute(CalculateShardDispatcherRequest request);
 }

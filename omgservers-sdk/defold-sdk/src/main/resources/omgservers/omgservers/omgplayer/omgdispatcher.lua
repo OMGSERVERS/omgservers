@@ -24,7 +24,7 @@ omgdispatcher = {
 		local events = options.events
 		local state = options.state
 		
-		local dispatcher_url = service_url .. "/omgservers/v1/entrypoint/dispatcher/connection"
+		local dispatcher_url = service_url .. "/omgservers/v1/dispatcher/websocket/endpoint"
 
 		return {
 			type = "omgdispatcher",
