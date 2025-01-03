@@ -39,7 +39,7 @@ static_resources:
                           route:
                             cluster: service
                         - match:
-                            prefix: "/omgservers/v1/dispatcher"
+                            prefix: "/dispatcher/v1/entrypoint"
                           route:
                             cluster: dispatcher
                 http_filters:

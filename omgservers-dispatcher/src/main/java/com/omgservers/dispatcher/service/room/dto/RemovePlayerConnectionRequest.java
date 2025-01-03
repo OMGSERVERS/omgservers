@@ -1,6 +1,6 @@
 package com.omgservers.dispatcher.service.room.dto;
 
-import com.omgservers.dispatcher.service.dispatcher.component.DispatcherConnection;
+import com.omgservers.dispatcher.service.handler.component.DispatcherConnection;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.omgservers.dispatcher.service.room.impl.method;
 
-import com.omgservers.dispatcher.service.dispatcher.component.ConnectionTypeEnum;
+import com.omgservers.dispatcher.service.handler.component.ConnectionTypeEnum;
 import com.omgservers.dispatcher.service.room.dto.AddPlayerConnectionRequest;
 import com.omgservers.dispatcher.service.room.dto.AddPlayerConnectionResponse;
 import com.omgservers.dispatcher.service.room.impl.component.DispatcherRooms;
@@ -21,34 +21,35 @@ class AddPlayerConnectionMethodImpl implements AddPlayerConnectionMethod {
 
     @Override
     public Uni<AddPlayerConnectionResponse> execute(final AddPlayerConnectionRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var playerConnection = request.getPlayerConnection();
         final var runtimeId = playerConnection.getRuntimeId();
         final var userRole = playerConnection.getUserRole();
 
         if (!playerConnection.getConnectionType().equals(ConnectionTypeEnum.SERVER)) {
-            log.error("Player connection type mismatch, playerConnection={}", playerConnection);
+            log.error("Wrong dispatcher connection type, {}", playerConnection);
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.FALSE));
         }
 
         final var playerRoom = dispatcherRooms.getRoom(runtimeId);
         if (Objects.isNull(playerRoom)) {
-            log.warn("Room was not found to add player connection, playerConnection={}", playerConnection);
+            log.warn("Room was not found, {}", playerConnection);
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.FALSE));
         }
 
         if (!userRole.equals(UserRoleEnum.PLAYER)) {
-            log.error("Player connection role mismatch, playerConnection={}", playerConnection);
+            log.warn("Wrong user role, {}", playerConnection);
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.FALSE));
         }
 
+
+        final var subject = playerConnection.getSubject();
         if (Objects.isNull(playerRoom.putIfAbsent(playerConnection))) {
-            log.debug("Room connection of player \"{}\" for runtime \"{}\" was added",
-                    playerConnection.getSubject(), playerConnection.getRuntimeId());
+            log.info("Player \"{}\" added to the room \"{}\"", subject, runtimeId);
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.TRUE));
         } else {
-            log.debug("Player connection duplication detected, playerConnection={}", playerConnection);
+            log.warn("Player \"{}\" was already added to the room, \"{}\"", subject, runtimeId);
             return Uni.createFrom().item(new AddPlayerConnectionResponse(Boolean.FALSE));
         }
     }

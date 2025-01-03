@@ -1,9 +1,9 @@
 package com.omgservers.dispatcher.service.service.impl.method;
 
-import com.omgservers.dispatcher.operation.getDispatcherConfig.GetDispatcherConfigOperation;
-import com.omgservers.dispatcher.operation.getServiceDispatcherEntrypointClient.GetServiceDispatcherEntrypointClientOperation;
+import com.omgservers.dispatcher.operation.GetDispatcherConfigOperation;
 import com.omgservers.dispatcher.service.service.dto.CreateTokenRequest;
 import com.omgservers.dispatcher.service.service.dto.CreateTokenResponse;
+import com.omgservers.dispatcher.service.service.impl.method.operation.getServiceAnonymousClient.GetServiceAnonymousClientOperation;
 import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherRequest;
 import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherResponse;
 import io.smallrye.mutiny.Uni;
@@ -17,13 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateTokenMethodImpl implements CreateTokenMethod {
 
-    final GetServiceDispatcherEntrypointClientOperation getServiceDispatcherEntrypointClientOperation;
+    final GetServiceAnonymousClientOperation getServiceAnonymousClientOperation;
     final GetDispatcherConfigOperation getDispatcherConfigOperation;
 
     @Override
     public Uni<CreateTokenResponse> execute(final CreateTokenRequest request) {
         final var serviceUri = getDispatcherConfigOperation.getDispatcherConfig().serviceUri();
-        final var serviceClient = getServiceDispatcherEntrypointClientOperation
+        final var serviceClient = getServiceAnonymousClientOperation
                 .getClient(serviceUri);
 
         final var user = request.getUser();

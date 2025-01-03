@@ -2,7 +2,8 @@ package com.omgservers.dispatcher.initializer.impl;
 
 import com.omgservers.dispatcher.configuration.StartUpPriorityConfiguration;
 import com.omgservers.dispatcher.initializer.InitializerService;
-import com.omgservers.dispatcher.initializer.impl.method.InitializeDispatcherJobMethod;
+import com.omgservers.dispatcher.initializer.impl.method.InitializeExpiredConnectionsHandlerJobMethod;
+import com.omgservers.dispatcher.initializer.impl.method.InitializeRefreshDispatcherTokenJobMethod;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
@@ -18,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class InitializerServiceImpl implements InitializerService {
 
-    final InitializeDispatcherJobMethod initializeDispatcherJobMethod;
+    final InitializeExpiredConnectionsHandlerJobMethod initializeExpiredConnectionsHandlerJobMethod;
+    final InitializeRefreshDispatcherTokenJobMethod initializeRefreshDispatcherTokenJobMethod;
 
     @WithSpan
     void startup(@Observes @Priority(StartUpPriorityConfiguration
@@ -29,11 +31,17 @@ public class InitializerServiceImpl implements InitializerService {
     @Override
     public Uni<Void> initialize() {
         return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> initializeDispatcherJob());
+                .flatMap(voidItem -> initializeExpiredConnectionsHandlerJob())
+                .flatMap(voidItem -> initializeRefreshDispatcherTokenJob());
     }
 
-    Uni<Void> initializeDispatcherJob() {
-        return initializeDispatcherJobMethod.execute()
-                .invoke(voidItem -> log.info("The dispatcher job was initialized."));
+    Uni<Void> initializeExpiredConnectionsHandlerJob() {
+        return initializeExpiredConnectionsHandlerJobMethod.execute()
+                .invoke(voidItem -> log.info("The expired connections handler job was initialized."));
+    }
+
+    Uni<Void> initializeRefreshDispatcherTokenJob() {
+        return initializeRefreshDispatcherTokenJobMethod.execute()
+                .invoke(voidItem -> log.info("The refresh dispatcher token job was initialized."));
     }
 }

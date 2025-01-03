@@ -1,7 +1,7 @@
 package com.omgservers.dispatcher.service.room.impl.operation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.dispatcher.service.dispatcher.component.DispatcherConnection;
+import com.omgservers.dispatcher.service.handler.component.DispatcherConnection;
 import com.omgservers.dispatcher.service.room.dto.MessageEncodingEnum;
 import com.omgservers.dispatcher.service.room.impl.component.DispatcherRooms;
 import io.smallrye.mutiny.Uni;
@@ -32,8 +32,6 @@ class TransferWebSocketMessageOperationImpl implements TransferWebSocketMessageO
             case RUNTIME -> {
                 final var runtimeRoom = dispatcherRooms.findRuntimeRoom(dispatcherConnection);
                 if (Objects.isNull(runtimeRoom)) {
-                    log.debug("Room was not found to transfer runtime message, dispatcherConnection={}",
-                            dispatcherConnection);
                     yield Uni.createFrom().item(Boolean.FALSE);
                 }
 
@@ -42,8 +40,6 @@ class TransferWebSocketMessageOperationImpl implements TransferWebSocketMessageO
             case PLAYER -> {
                 final var playerRoom = dispatcherRooms.findPlayerRoom(dispatcherConnection);
                 if (Objects.isNull(playerRoom)) {
-                    log.debug("Room was not found to transfer player message, dispatcherConnection={}",
-                            dispatcherConnection);
                     yield Uni.createFrom().item(Boolean.FALSE);
                 }
 

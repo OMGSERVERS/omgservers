@@ -1,6 +1,6 @@
 package com.omgservers.dispatcher.service.room.impl.component;
 
-import com.omgservers.dispatcher.service.dispatcher.component.DispatcherConnection;
+import com.omgservers.dispatcher.service.handler.component.DispatcherConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 

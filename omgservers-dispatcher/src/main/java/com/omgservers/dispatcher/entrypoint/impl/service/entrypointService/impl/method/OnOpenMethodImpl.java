@@ -1,9 +1,9 @@
 package com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl.method;
 
-import com.omgservers.dispatcher.entrypoint.dto.OnOpenEntrypointRequest;
+import com.omgservers.dispatcher.entrypoint.impl.dto.OnOpenEntrypointRequest;
+import com.omgservers.dispatcher.module.DispatcherModule;
+import com.omgservers.dispatcher.module.impl.dto.OnOpenRequest;
 import com.omgservers.dispatcher.operation.GetSecurityAttributeOperation;
-import com.omgservers.dispatcher.service.dispatcher.DispatcherService;
-import com.omgservers.dispatcher.service.dispatcher.dto.HandleOpenedConnectionRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class OnOpenMethodImpl implements OnOpenMethod {
 
-    final DispatcherService dispatcherService;
+    final DispatcherModule dispatcherModule;
 
     final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
@@ -27,13 +27,7 @@ class OnOpenMethodImpl implements OnOpenMethod {
         final var userRole = getSecurityAttributeOperation.getUserRole();
         final var subject = getSecurityAttributeOperation.getSubject();
 
-        final var handleOpenedConnectionRequest = new HandleOpenedConnectionRequest(webSocketConnection,
-                runtimeId, userRole, subject);
-        return dispatcherService.handleOpenedConnection(handleOpenedConnectionRequest)
-                .invoke(voidItem -> log.info("The dispatcher connection \"{}\" " +
-                                "to the runtime dispatcher \"{}\" " +
-                                "was opened by the \"{}\" with role {}",
-                        webSocketConnection.id(), runtimeId, subject, userRole))
-                .replaceWithVoid();
+        final var onOpenRequest = new OnOpenRequest(webSocketConnection, runtimeId, userRole, subject);
+        return dispatcherModule.getDispatcherService().execute(onOpenRequest);
     }
 }

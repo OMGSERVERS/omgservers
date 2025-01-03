@@ -1,11 +1,17 @@
 package com.omgservers.dispatcher.service.task;
 
-import com.omgservers.dispatcher.service.task.dto.ExecuteDispatcherTaskRequest;
-import com.omgservers.dispatcher.service.task.dto.ExecuteDispatcherTaskResponse;
+import com.omgservers.dispatcher.service.task.dto.ExecuteExpiredConnectionsHandlerTaskRequest;
+import com.omgservers.dispatcher.service.task.dto.ExecuteExpiredConnectionsHandlerTaskResponse;
+import com.omgservers.dispatcher.service.task.dto.ExecuteRefreshDispatcherTokenTaskRequest;
+import com.omgservers.dispatcher.service.task.dto.ExecuteRefreshDispatcherTokenTaskResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface TaskService {
 
-    Uni<ExecuteDispatcherTaskResponse> execute(@Valid ExecuteDispatcherTaskRequest request);
+    Uni<ExecuteExpiredConnectionsHandlerTaskResponse> execute(
+            @Valid ExecuteExpiredConnectionsHandlerTaskRequest request);
+
+    Uni<ExecuteRefreshDispatcherTokenTaskResponse> execute(
+            @Valid ExecuteRefreshDispatcherTokenTaskRequest request);
 }

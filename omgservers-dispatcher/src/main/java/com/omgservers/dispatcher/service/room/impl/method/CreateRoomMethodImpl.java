@@ -20,17 +20,18 @@ class CreateRoomMethodImpl implements CreateRoomMethod {
 
     @Override
     public Uni<CreateRoomResponse> execute(final CreateRoomRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var runtimeConnection = request.getRuntimeConnection();
+        final var runtimeId = runtimeConnection.getRuntimeId();
 
         final var dispatcherRoom = new DispatcherRoom(runtimeConnection);
 
         if (Objects.isNull(dispatcherRooms.putIfAbsent(dispatcherRoom))) {
-            log.debug("Room for runtime \"{}\" was created", dispatcherRoom.getRuntimeId());
+            log.info("Room \"{}\" was created", runtimeId);
             return Uni.createFrom().item(new CreateRoomResponse(Boolean.TRUE));
         } else {
-            log.debug("Room was already created, room={}, runtimeConnection={}", dispatcherRoom, runtimeConnection);
+            log.info("Room \"{}\" was already created", runtimeId);
             return Uni.createFrom().item(new CreateRoomResponse(Boolean.FALSE));
         }
     }

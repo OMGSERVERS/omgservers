@@ -1,6 +1,6 @@
 package com.omgservers.dispatcher.service.router.dto;
 
-import com.omgservers.dispatcher.service.dispatcher.component.DispatcherConnection;
+import com.omgservers.dispatcher.service.handler.component.DispatcherConnection;
 import io.vertx.core.buffer.Buffer;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

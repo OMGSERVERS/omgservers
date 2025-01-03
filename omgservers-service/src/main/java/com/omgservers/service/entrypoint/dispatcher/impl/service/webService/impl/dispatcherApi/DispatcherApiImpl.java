@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-@RolesAllowed({UserRoleEnum.Names.ADMIN})
+@RolesAllowed({UserRoleEnum.Names.DISPATCHER})
 public class DispatcherApiImpl implements DispatcherApi {
 
     final WebService webService;
@@ -32,7 +32,6 @@ public class DispatcherApiImpl implements DispatcherApi {
     }
 
     @Override
-    @PermitAll
     public Uni<CalculateShardDispatcherResponse> execute(final CalculateShardDispatcherRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }

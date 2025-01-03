@@ -19,23 +19,24 @@ class RemovePlayerConnectionMethodImpl implements RemovePlayerConnectionMethod {
 
     @Override
     public Uni<RemovePlayerConnectionResponse> execute(final RemovePlayerConnectionRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var playerConnection = request.getPlayerConnection();
+        final var subject = playerConnection.getSubject();
+        final var runtimeId = playerConnection.getRuntimeId();
 
         final var playerRoom = dispatcherRooms.findPlayerRoom(playerConnection);
         if (Objects.nonNull(playerRoom)) {
             final var removed = playerRoom.remove(playerConnection);
             if (removed) {
-                log.debug("Room connection of player \"{}\" for runtime \"{}\" was removed",
-                        playerConnection.getSubject(), playerConnection.getRuntimeId());
+                log.info("Player \"{}\" was removed from the room \"{}\"",  subject, runtimeId);
                 return Uni.createFrom().item(new RemovePlayerConnectionResponse(Boolean.TRUE));
             } else {
-                log.debug("Player connection was not found to remove, playerConnection={}", playerConnection);
+                log.warn("Player \"{}\" was not found to be removed from the \"{}\"", subject, runtimeId);
                 return Uni.createFrom().item(new RemovePlayerConnectionResponse(Boolean.FALSE));
             }
         } else {
-            log.debug("Room was not found to remove player connection, playerConnection={}", playerConnection);
+            log.warn("Room \"{}\" was not found to add player \"{}\"", runtimeId, subject);
             return Uni.createFrom().item(new RemovePlayerConnectionResponse(Boolean.FALSE));
         }
     }

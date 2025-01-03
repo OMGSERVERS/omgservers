@@ -1,6 +1,6 @@
 package com.omgservers.dispatcher.service.room.impl.method;
 
-import com.omgservers.dispatcher.service.dispatcher.component.DispatcherCloseReason;
+import com.omgservers.dispatcher.service.handler.component.DispatcherCloseReason;
 import com.omgservers.dispatcher.service.room.dto.RemoveRoomRequest;
 import com.omgservers.dispatcher.service.room.dto.RemoveRoomResponse;
 import com.omgservers.dispatcher.service.room.impl.component.DispatcherRooms;
@@ -21,7 +21,7 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
 
     @Override
     public Uni<RemoveRoomResponse> execute(final RemoveRoomRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var runtimeId = request.getRuntimeId();
 
@@ -29,8 +29,12 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
         if (Objects.nonNull(dispatcherRoom)) {
             final var allPlayerConnections = dispatcherRoom.getAllPlayerConnections();
 
-            log.debug("Room for runtime \"{}\" was removed. \"{}\" players are still connected.",
-                    runtimeId, allPlayerConnections.size());
+            if (allPlayerConnections.isEmpty()) {
+                log.info("Room \"{}\" was removed. There are no currently connected players.", runtimeId);
+            } else {
+                log.warn("Room \"{}\" was removed. \"{}\" players are still connected.",
+                        runtimeId, allPlayerConnections.size());
+            }
             return Multi.createFrom().iterable(allPlayerConnections)
                     .onItem().transformToUniAndConcatenate(playerConnection -> {
                         final var webSocketConnection = playerConnection.getWebSocketConnection();
@@ -43,7 +47,7 @@ class RemoveRoomMethodImpl implements RemoveRoomMethod {
                     .collect().asList()
                     .replaceWith(new RemoveRoomResponse(Boolean.TRUE));
         } else {
-            log.debug("Room was not found to remove, runtimeId={}", runtimeId);
+            log.warn("Room \"{}\" was not found to be removed", runtimeId);
             return Uni.createFrom().item(new RemoveRoomResponse(Boolean.FALSE));
         }
     }

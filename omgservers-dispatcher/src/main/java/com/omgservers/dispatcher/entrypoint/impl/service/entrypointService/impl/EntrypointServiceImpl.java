@@ -1,10 +1,10 @@
 package com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl;
 
-import com.omgservers.dispatcher.entrypoint.dto.OnBinaryMessageEntrypointRequest;
-import com.omgservers.dispatcher.entrypoint.dto.OnCloseEntrypointRequest;
-import com.omgservers.dispatcher.entrypoint.dto.OnErrorEntrypointRequest;
-import com.omgservers.dispatcher.entrypoint.dto.OnOpenEntrypointRequest;
-import com.omgservers.dispatcher.entrypoint.dto.OnTextMessageEntrypointRequest;
+import com.omgservers.dispatcher.entrypoint.impl.dto.OnBinaryMessageEntrypointRequest;
+import com.omgservers.dispatcher.entrypoint.impl.dto.OnCloseEntrypointRequest;
+import com.omgservers.dispatcher.entrypoint.impl.dto.OnErrorEntrypointRequest;
+import com.omgservers.dispatcher.entrypoint.impl.dto.OnOpenEntrypointRequest;
+import com.omgservers.dispatcher.entrypoint.impl.dto.OnTextMessageEntrypointRequest;
 import com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.EntrypointService;
 import com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl.method.OnBinaryMessageMethod;
 import com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl.method.OnCloseMethod;

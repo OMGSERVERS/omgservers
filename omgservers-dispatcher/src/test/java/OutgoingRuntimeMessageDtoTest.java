@@ -36,7 +36,7 @@ class OutgoingRuntimeMessageDtoTest extends Assertions {
         final var testMessageObject = objectMapper.readValue(textMessageObject.getMessage(),
                 TestMessageDto.class);
 
-        assertEquals(textMessageDto.getClients().getFirst(), textMessageObject.getClients().getFirst());
+        assertEquals(textMessageDto.getClients().get(0), textMessageObject.getClients().get(0));
         assertEquals(testMessageDto.getQualifier(), testMessageObject.getQualifier());
         assertEquals(testMessageDto.getX(), testMessageObject.getX());
         assertEquals(testMessageDto.getY(), testMessageObject.getY());

@@ -51,6 +51,7 @@ public class BootstrapTaskImpl {
                 .flatMap(voidItem -> bootstrapRegistryUser())
                 .flatMap(voidItem -> bootstrapBuilderUser())
                 .flatMap(voidItem -> bootstrapServiceUser())
+                .flatMap(voidItem -> bootstrapDispatcherUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .invoke(voidItem -> fullyFinished.set(true))
                 .replaceWith(Boolean.TRUE)
@@ -101,6 +102,14 @@ public class BootstrapTaskImpl {
         final var alias = getConfigOperation.getServiceConfig().bootstrap().serviceUser().alias();
         final var password = getConfigOperation.getServiceConfig().bootstrap().serviceUser().password();
         final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.SERVICE);
+        return bootstrapService.execute(request)
+                .map(BootstrapDefaultUserResponse::getCreated);
+    }
+
+    Uni<Boolean> bootstrapDispatcherUser() {
+        final var alias = getConfigOperation.getServiceConfig().bootstrap().dispatcherUser().alias();
+        final var password = getConfigOperation.getServiceConfig().bootstrap().dispatcherUser().password();
+        final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.DISPATCHER);
         return bootstrapService.execute(request)
                 .map(BootstrapDefaultUserResponse::getCreated);
     }

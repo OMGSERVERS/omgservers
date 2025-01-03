@@ -127,6 +127,8 @@ public interface ServiceConfig {
 
         BootstrapUserPasswordConfig serviceUser();
 
+        BootstrapUserPasswordConfig dispatcherUser();
+
         BootstrapDefaultPoolConfig defaultPool();
     }
 

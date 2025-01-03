@@ -1,6 +1,6 @@
 package com.omgservers.dispatcher.service.router.impl.component;
 
-import com.omgservers.dispatcher.service.dispatcher.component.DispatcherConnection;
+import com.omgservers.dispatcher.service.handler.component.DispatcherConnection;
 import io.quarkus.websockets.next.WebSocketClientConnection;
 import jakarta.enterprise.context.ApplicationScoped;
 

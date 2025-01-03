@@ -1,7 +1,7 @@
 package com.omgservers.dispatcher.service.service.impl.method;
 
-import com.omgservers.dispatcher.operation.getDispatcherConfig.GetDispatcherConfigOperation;
-import com.omgservers.dispatcher.operation.getServiceDispatcherEntrypointClient.GetServiceDispatcherEntrypointClientOperation;
+import com.omgservers.dispatcher.operation.GetDispatcherConfigOperation;
+import com.omgservers.dispatcher.service.service.impl.method.operation.getServiceClient.GetServiceClientOperation;
 import com.omgservers.dispatcher.service.service.dto.CalculateShardRequest;
 import com.omgservers.dispatcher.service.service.dto.CalculateShardResponse;
 import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherRequest;
@@ -16,13 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CalculateShardMethodImpl implements CalculateShardMethod {
 
-    final GetServiceDispatcherEntrypointClientOperation getServiceDispatcherEntrypointClientOperation;
+    final GetServiceClientOperation getServiceClientOperation;
     final GetDispatcherConfigOperation getDispatcherConfigOperation;
 
     @Override
     public Uni<CalculateShardResponse> execute(final CalculateShardRequest request) {
         final var serviceUri = getDispatcherConfigOperation.getDispatcherConfig().serviceUri();
-        final var serviceClient = getServiceDispatcherEntrypointClientOperation
+        final var serviceClient = getServiceClientOperation
                 .getClient(serviceUri);
 
         final var shardKey = request.getShardKey();
