@@ -21,7 +21,7 @@ class DeleteJobMethodImpl implements DeleteJobMethod {
 
     @Override
     public Uni<DeleteJobResponse> deleteJob(final DeleteJobRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

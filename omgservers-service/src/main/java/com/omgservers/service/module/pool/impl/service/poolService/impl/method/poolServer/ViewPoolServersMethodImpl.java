@@ -22,7 +22,7 @@ class ViewPoolServersMethodImpl implements ViewPoolServersMethod {
 
     @Override
     public Uni<ViewPoolServerResponse> execute(final ViewPoolServersRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

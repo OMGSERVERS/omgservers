@@ -16,7 +16,7 @@ public class ExecuteRuntimeTaskMethodImpl implements ExecuteRuntimeTaskMethod {
 
     @Override
     public Uni<ExecuteRuntimeTaskResponse> execute(final ExecuteRuntimeTaskRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var runtimeId = request.getRuntimeId();
 

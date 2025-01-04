@@ -23,7 +23,7 @@ class GetTenantBuildRequestMethodImpl implements GetTenantBuildRequestMethod {
     @Override
     public Uni<GetTenantBuildRequestResponse> execute(
             final GetTenantBuildRequestRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

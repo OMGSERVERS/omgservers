@@ -26,7 +26,7 @@ class ViewTenantDeploymentMethodImpl implements ViewTenantDeploymentMethod {
 
     @Override
     public Uni<ViewTenantDeploymentsResponse> execute(final ViewTenantDeploymentsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

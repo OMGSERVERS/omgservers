@@ -22,7 +22,7 @@ class ViewRuntimeAssignmentsMethodImpl implements ViewRuntimeAssignmentsMethod {
 
     @Override
     public Uni<ViewRuntimeAssignmentsResponse> execute(final ViewRuntimeAssignmentsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

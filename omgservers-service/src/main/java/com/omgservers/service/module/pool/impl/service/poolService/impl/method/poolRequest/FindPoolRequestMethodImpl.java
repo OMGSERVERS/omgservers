@@ -24,7 +24,7 @@ class FindPoolRequestMethodImpl implements FindPoolRequestMethod {
     @Override
     public Uni<FindPoolRequestResponse> execute(
             final FindPoolRequestRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

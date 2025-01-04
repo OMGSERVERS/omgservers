@@ -23,7 +23,7 @@ class ViewTenantVersionsMethodImpl implements ViewTenantVersionsMethod {
 
     @Override
     public Uni<ViewTenantVersionsResponse> execute(final ViewTenantVersionsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

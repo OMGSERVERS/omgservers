@@ -22,7 +22,7 @@ class FindLobbyRuntimeRefMethodImpl implements FindLobbyRuntimeRefMethod {
 
     @Override
     public Uni<FindLobbyRuntimeRefResponse> findLobbyRuntimeRef(final FindLobbyRuntimeRefRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

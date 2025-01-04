@@ -31,7 +31,7 @@ class GetTenantDeploymentDataMethodImpl implements GetTenantDeploymentDataMethod
 
     @Override
     public Uni<GetTenantDeploymentDataResponse> execute(final GetTenantDeploymentDataRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

@@ -25,7 +25,7 @@ class SyncClientMethodImpl implements SyncClientMethod {
 
     @Override
     public Uni<SyncClientResponse> syncClient(final SyncClientRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var client = request.getClient();
         return Uni.createFrom().voidItem()

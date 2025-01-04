@@ -23,7 +23,7 @@ class GetTenantFilesArchiveMethodImpl implements GetTenantFilesArchiveMethod {
     @Override
     public Uni<GetTenantFilesArchiveResponse> execute(
             final GetTenantFilesArchiveRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

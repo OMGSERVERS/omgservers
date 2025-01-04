@@ -22,7 +22,7 @@ class DeleteUserMethodImpl implements DeleteUserMethod {
 
     @Override
     public Uni<DeleteUserResponse> deleteUser(final DeleteUserRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var id = request.getId();
         return checkShardOperation.checkShard(request.getRequestShardKey())

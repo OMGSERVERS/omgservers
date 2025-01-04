@@ -33,7 +33,7 @@ class IssueTokenMethodImpl implements IssueTokenMethod {
 
     @Override
     public Uni<IssueTokenResponse> issueToken(final IssueTokenRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var userId = request.getUserId();
 

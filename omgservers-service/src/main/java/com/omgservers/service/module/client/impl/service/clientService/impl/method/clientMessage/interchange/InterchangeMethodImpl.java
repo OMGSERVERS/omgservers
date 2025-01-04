@@ -54,7 +54,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
 
     @Override
     public Uni<InterchangeResponse> interchange(final InterchangeRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var fromUserId = request.getFromUserId();
         final var clientId = request.getClientId();

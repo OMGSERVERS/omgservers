@@ -22,7 +22,7 @@ class SyncAliasMethodImpl implements SyncAliasMethod {
 
     @Override
     public Uni<SyncAliasResponse> execute(final SyncAliasRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var alias = request.getAlias();
         return checkShardOperation.checkShard(request.getRequestShardKey())

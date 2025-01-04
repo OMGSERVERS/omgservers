@@ -22,7 +22,7 @@ class DeleteRuntimeCommandsMethodImpl implements DeleteRuntimeCommandsMethod {
 
     @Override
     public Uni<DeleteRuntimeCommandsResponse> execute(final DeleteRuntimeCommandsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

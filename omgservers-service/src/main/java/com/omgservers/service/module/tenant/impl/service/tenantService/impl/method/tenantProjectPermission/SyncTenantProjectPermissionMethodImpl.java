@@ -29,7 +29,7 @@ class SyncTenantProjectPermissionMethodImpl implements SyncTenantProjectPermissi
 
     @Override
     public Uni<SyncTenantProjectPermissionResponse> execute(final SyncTenantProjectPermissionRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var permission = request.getTenantProjectPermission();

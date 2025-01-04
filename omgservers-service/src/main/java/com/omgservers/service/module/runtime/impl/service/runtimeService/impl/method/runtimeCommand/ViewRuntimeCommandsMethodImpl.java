@@ -22,7 +22,7 @@ class ViewRuntimeCommandsMethodImpl implements ViewRuntimeCommandsMethod {
 
     @Override
     public Uni<ViewRuntimeCommandsResponse> execute(ViewRuntimeCommandsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

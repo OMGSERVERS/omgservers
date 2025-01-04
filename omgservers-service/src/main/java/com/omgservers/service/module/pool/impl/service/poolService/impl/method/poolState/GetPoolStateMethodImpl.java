@@ -30,7 +30,7 @@ class GetPoolStateMethodImpl implements GetPoolStateMethod {
 
     @Override
     public Uni<GetPoolStateResponse> execute(final GetPoolStateRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

@@ -22,7 +22,7 @@ class ViewMatchmakerCommandsMethodImpl implements ViewMatchmakerCommandsMethod {
 
     @Override
     public Uni<ViewMatchmakerCommandsResponse> execute(final ViewMatchmakerCommandsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
 

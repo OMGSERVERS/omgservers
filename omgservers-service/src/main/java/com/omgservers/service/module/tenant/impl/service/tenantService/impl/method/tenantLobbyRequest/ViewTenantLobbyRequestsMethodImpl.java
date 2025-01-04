@@ -24,7 +24,7 @@ class ViewTenantLobbyRequestsMethodImpl implements ViewTenantLobbyRequestsMethod
     @Override
     public Uni<ViewTenantLobbyRequestsResponse> execute(
             final ViewTenantLobbyRequestsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

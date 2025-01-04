@@ -22,7 +22,7 @@ class GetPoolServerMethodImpl implements GetPoolServerMethod {
 
     @Override
     public Uni<GetPoolServerResponse> execute(final GetPoolServerRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

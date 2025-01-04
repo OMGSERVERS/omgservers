@@ -27,7 +27,7 @@ class SyncPoolRequestMethodImpl implements SyncPoolRequestMethod {
     @Override
     public Uni<SyncPoolRequestResponse> execute(
             final SyncPoolRequestRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var poolRequest = request.getPoolRequest();

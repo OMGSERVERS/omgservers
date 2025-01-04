@@ -47,7 +47,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     @Override
     public Uni<UpdateMatchmakerStateResponse> execute(final UpdateMatchmakerStateRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var matchmakerChangeOfState = request.getMatchmakerChangeOfState();
         return checkShardOperation.checkShard(request.getRequestShardKey())

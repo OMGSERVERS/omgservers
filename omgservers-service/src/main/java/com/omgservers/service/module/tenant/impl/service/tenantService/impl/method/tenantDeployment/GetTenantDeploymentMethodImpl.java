@@ -22,7 +22,7 @@ class GetTenantDeploymentMethodImpl implements GetTenantDeploymentMethod {
 
     @Override
     public Uni<GetTenantDeploymentResponse> execute(final GetTenantDeploymentRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

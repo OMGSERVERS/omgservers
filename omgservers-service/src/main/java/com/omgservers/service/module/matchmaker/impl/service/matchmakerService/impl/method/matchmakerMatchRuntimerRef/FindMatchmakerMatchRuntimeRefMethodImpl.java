@@ -24,7 +24,7 @@ class FindMatchmakerMatchRuntimeRefMethodImpl implements FindMatchmakerMatchRunt
     @Override
     public Uni<FindMatchmakerMatchRuntimeRefResponse> execute(
             final FindMatchmakerMatchRuntimeRefRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

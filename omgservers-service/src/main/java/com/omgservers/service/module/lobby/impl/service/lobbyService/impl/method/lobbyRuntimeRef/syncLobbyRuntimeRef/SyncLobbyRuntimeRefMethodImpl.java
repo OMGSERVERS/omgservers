@@ -26,7 +26,7 @@ class SyncLobbyRuntimeRefMethodImpl implements SyncLobbyRuntimeRefMethod {
 
     @Override
     public Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(SyncLobbyRuntimeRefRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var lobbyRuntime = request.getLobbyRuntimeRef();

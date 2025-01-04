@@ -22,7 +22,7 @@ class SyncUserMethodImpl implements SyncUserMethod {
 
     @Override
     public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var user = request.getUser();
         return checkShardOperation.checkShard(request.getRequestShardKey())

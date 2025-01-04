@@ -22,7 +22,7 @@ class FindTenantImageMethodImpl implements FindTenantImageMethod {
 
     @Override
     public Uni<FindTenantImageResponse> execute(final FindTenantImageRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

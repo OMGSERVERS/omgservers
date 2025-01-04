@@ -27,7 +27,7 @@ class SyncMatchmakerMatchAssignmentMethodImpl implements SyncMatchmakerMatchAssi
     @Override
     public Uni<SyncMatchmakerMatchAssignmentResponse> execute(
             final SyncMatchmakerMatchAssignmentRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var matchClient = request.getMatchmakerMatchAssignment();
         final var matchmakerId = matchClient.getMatchmakerId();

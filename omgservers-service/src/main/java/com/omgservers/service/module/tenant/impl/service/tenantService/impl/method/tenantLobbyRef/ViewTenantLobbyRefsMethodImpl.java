@@ -23,7 +23,7 @@ class ViewTenantLobbyRefsMethodImpl implements ViewTenantLobbyRefsMethod {
 
     @Override
     public Uni<ViewTenantLobbyRefsResponse> execute(final ViewTenantLobbyRefsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

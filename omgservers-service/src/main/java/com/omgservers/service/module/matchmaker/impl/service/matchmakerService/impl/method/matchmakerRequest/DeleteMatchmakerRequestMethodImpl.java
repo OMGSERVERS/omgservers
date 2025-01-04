@@ -23,7 +23,7 @@ class DeleteMatchmakerRequestMethodImpl implements DeleteMatchmakerRequestMethod
 
     @Override
     public Uni<DeleteMatchmakerRequestResponse> execute(final DeleteMatchmakerRequestRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();

@@ -25,7 +25,7 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
 
     @Override
     public Uni<DeleteTenantResponse> deleteTenant(final DeleteTenantRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var id = request.getId();
         return Uni.createFrom().voidItem()

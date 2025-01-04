@@ -22,7 +22,7 @@ class SyncLobbyMethodImpl implements SyncLobbyMethod {
 
     @Override
     public Uni<SyncLobbyResponse> syncLobby(final SyncLobbyRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var lobby = request.getLobby();
         return Uni.createFrom().voidItem()

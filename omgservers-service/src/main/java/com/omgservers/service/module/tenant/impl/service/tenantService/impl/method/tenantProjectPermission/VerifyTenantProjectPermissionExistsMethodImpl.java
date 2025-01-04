@@ -22,7 +22,7 @@ class VerifyTenantProjectPermissionExistsMethodImpl implements VerifyTenantProje
     @Override
     public Uni<VerifyTenantProjectPermissionExistsResponse> execute(
             VerifyTenantProjectPermissionExistsRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

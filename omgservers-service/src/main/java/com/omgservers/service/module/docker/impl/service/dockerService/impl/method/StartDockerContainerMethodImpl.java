@@ -26,7 +26,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
 
     @Override
     public Uni<StartDockerContainerResponse> execute(final StartDockerContainerRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var poolServer = request.getPoolServer();
         final var poolContainer = request.getPoolContainer();

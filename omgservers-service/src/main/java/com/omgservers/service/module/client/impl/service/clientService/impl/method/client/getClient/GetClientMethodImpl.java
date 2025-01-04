@@ -22,7 +22,7 @@ class GetClientMethodImpl implements GetClientMethod {
 
     @Override
     public Uni<GetClientResponse> getClient(final GetClientRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

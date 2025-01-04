@@ -22,7 +22,7 @@ class SyncPoolMethodImpl implements SyncPoolMethod {
 
     @Override
     public Uni<SyncPoolResponse> execute(final SyncPoolRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var pool = request.getPool();
         return Uni.createFrom().voidItem()

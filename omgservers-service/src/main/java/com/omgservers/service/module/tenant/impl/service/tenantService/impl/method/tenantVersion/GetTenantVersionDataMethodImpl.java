@@ -30,7 +30,7 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
 
     @Override
     public Uni<GetTenantVersionDataResponse> execute(final GetTenantVersionDataRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {

@@ -22,7 +22,7 @@ class GetAliasMethodImpl implements GetAliasMethod {
 
     @Override
     public Uni<GetAliasResponse> execute(final GetAliasRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

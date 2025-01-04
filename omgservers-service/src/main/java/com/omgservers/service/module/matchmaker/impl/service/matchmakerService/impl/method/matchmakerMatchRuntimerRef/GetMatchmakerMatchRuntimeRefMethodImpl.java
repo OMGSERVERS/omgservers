@@ -23,7 +23,7 @@ class GetMatchmakerMatchRuntimeRefMethodImpl implements GetMatchmakerMatchRuntim
     @Override
     public Uni<GetMatchmakerMatchRuntimeRefResponse> execute(
             final GetMatchmakerMatchRuntimeRefRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

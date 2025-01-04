@@ -16,7 +16,7 @@ public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMetho
 
     @Override
     public Uni<ExecuteSchedulerTaskResponse> execute(final ExecuteSchedulerTaskRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return schedulerTask.execute()
                 .onFailure()

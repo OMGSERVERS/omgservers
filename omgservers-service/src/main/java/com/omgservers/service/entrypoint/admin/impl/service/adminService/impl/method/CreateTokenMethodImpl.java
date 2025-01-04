@@ -25,7 +25,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     @Override
     public Uni<CreateTokenAdminResponse> execute(final CreateTokenAdminRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var user = request.getUser();
         return getIdByUserOperation.execute(user)

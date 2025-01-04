@@ -23,7 +23,7 @@ class FindClientMatchmakerRefMethodImpl implements FindClientMatchmakerRefMethod
 
     @Override
     public Uni<FindClientMatchmakerRefResponse> findClientMatchmakerRef(final FindClientMatchmakerRefRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -30,7 +30,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
 
     @Override
     public Uni<SyncRuntimeResponse> execute(SyncRuntimeRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var runtime = request.getRuntime();
         return Uni.createFrom().voidItem()

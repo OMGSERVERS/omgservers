@@ -54,7 +54,7 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
                 subject);
 
         if (Objects.isNull(dispatcherTokenContainer.getToken())) {
-            log.error("Closing websocket \"{}\", dispatcher token was created yet",
+            log.error("Closing websocket \"{}\", dispatcher token was not created yet",
                     webSocketConnection.id());
             return webSocketConnection.close(DispatcherCloseReason.CONNECTING_FAILED);
         }

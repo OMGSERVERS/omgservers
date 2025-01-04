@@ -26,7 +26,7 @@ class ViewTenantImagesMethodImpl implements ViewTenantImagesMethod {
 
     @Override
     public Uni<ViewTenantImagesResponse> execute(final ViewTenantImagesRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

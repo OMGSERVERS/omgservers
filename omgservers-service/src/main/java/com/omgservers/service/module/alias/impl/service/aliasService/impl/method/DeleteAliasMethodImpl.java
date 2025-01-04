@@ -22,7 +22,7 @@ class DeleteAliasMethodImpl implements DeleteAliasMethod {
 
     @Override
     public Uni<DeleteAliasResponse> execute(final DeleteAliasRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var id = request.getId();
         return Uni.createFrom().voidItem()

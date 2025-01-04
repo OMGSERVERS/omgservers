@@ -31,7 +31,7 @@ class SyncClientRuntimeRefMethodImpl implements SyncClientRuntimeRefMethod {
 
     @Override
     public Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(final SyncClientRuntimeRefRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var clientRuntimeRef = request.getClientRuntimeRef();
         final var clientId = clientRuntimeRef.getClientId();

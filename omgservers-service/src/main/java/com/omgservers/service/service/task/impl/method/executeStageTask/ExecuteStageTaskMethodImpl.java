@@ -16,7 +16,7 @@ public class ExecuteStageTaskMethodImpl implements ExecuteStageTaskMethod {
 
     @Override
     public Uni<ExecuteStageTaskResponse> execute(final ExecuteStageTaskRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();

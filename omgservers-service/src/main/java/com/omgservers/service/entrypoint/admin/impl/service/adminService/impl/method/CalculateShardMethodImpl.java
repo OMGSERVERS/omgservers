@@ -18,7 +18,7 @@ class CalculateShardMethodImpl implements CalculateShardMethod {
 
     @Override
     public Uni<CalculateShardAdminResponse> execute(final CalculateShardAdminRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var shardKey = request.getShardKey();
 

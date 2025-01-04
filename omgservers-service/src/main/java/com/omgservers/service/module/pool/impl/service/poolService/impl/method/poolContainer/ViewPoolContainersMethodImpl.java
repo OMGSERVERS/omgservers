@@ -29,7 +29,7 @@ class ViewPoolContainersMethodImpl implements ViewPoolContainersMethod {
     @Override
     public Uni<ViewPoolContainersResponse> execute(
             final ViewPoolContainersRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

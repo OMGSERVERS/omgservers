@@ -17,7 +17,7 @@ public class ExecuteBuildRequestTaskMethodImpl implements ExecuteBuildRequestTas
     @Override
     public Uni<ExecuteBuildRequestTaskResponse> execute(
             final ExecuteBuildRequestTaskRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var tenantId = request.getTenantId();
         final var buildRequestId = request.getTenantBuildRequestId();

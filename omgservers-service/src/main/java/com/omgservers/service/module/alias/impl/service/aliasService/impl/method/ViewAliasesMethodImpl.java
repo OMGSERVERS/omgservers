@@ -28,7 +28,7 @@ class ViewAliasesMethodImpl implements ViewAliasesMethod {
 
     @Override
     public Uni<ViewAliasesResponse> execute(final ViewAliasesRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

@@ -22,7 +22,7 @@ class GetMatchmakerMatchMethodImpl implements GetMatchmakerMatchMethod {
 
     @Override
     public Uni<GetMatchmakerMatchResponse> execute(final GetMatchmakerMatchRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {

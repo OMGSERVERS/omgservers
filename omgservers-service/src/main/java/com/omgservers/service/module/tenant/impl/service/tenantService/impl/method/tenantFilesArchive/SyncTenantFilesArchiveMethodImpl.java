@@ -30,7 +30,7 @@ class SyncTenantFilesArchiveMethodImpl implements SyncTenantFilesArchiveMethod {
     @Override
     public Uni<SyncTenantFilesArchiveResponse> execute(
             final SyncTenantFilesArchiveRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var tenantFilesArchive = request.getTenantFilesArchive();

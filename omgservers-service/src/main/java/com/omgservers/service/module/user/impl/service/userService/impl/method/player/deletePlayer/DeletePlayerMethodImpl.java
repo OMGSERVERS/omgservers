@@ -22,7 +22,7 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
 
     @Override
     public Uni<DeletePlayerResponse> deletePlayer(final DeletePlayerRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var userId = request.getUserId();
         final var id = request.getId();

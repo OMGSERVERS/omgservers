@@ -22,7 +22,7 @@ class DeleteRuntimePermissionMethodImpl implements DeleteRuntimePermissionMethod
 
     @Override
     public Uni<DeleteRuntimePermissionResponse> execute(final DeleteRuntimePermissionRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();

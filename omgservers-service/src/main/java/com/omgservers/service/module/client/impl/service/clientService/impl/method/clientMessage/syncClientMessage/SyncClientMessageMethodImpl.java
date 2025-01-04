@@ -31,7 +31,7 @@ class SyncClientMessageMethodImpl implements SyncClientMessageMethod {
 
     @Override
     public Uni<SyncClientMessageResponse> syncClientMessage(final SyncClientMessageRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         final var clientMessage = request.getClientMessage();
         final var clientId = clientMessage.getClientId();

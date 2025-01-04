@@ -16,7 +16,7 @@ class ExecuteBootstrapTaskMethodImpl implements ExecuteBootstrapTaskMethod {
 
     @Override
     public Uni<ExecuteBootstrapTaskResponse> execute(final ExecuteBootstrapTaskRequest request) {
-        log.trace("Requested, {}", request);
+        log.trace("{}", request);
 
         return bootstrapTask.execute()
                 .onFailure()
