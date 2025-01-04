@@ -66,7 +66,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Matchmaker Module API")
-@Path("/omgservers/v1/module/matchmaker/request")
+@Path("/service/v1/module/matchmaker/request")
 public interface MatchmakerApi {
 
     /*

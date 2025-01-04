@@ -150,7 +150,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Tenant Module API")
-@Path("/omgservers/v1/module/tenant/request")
+@Path("/service/v1/module/tenant/request")
 public interface TenantApi {
 
     /*

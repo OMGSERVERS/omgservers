@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 
-@Path("/omgservers/v1/entrypoint/dispatcher/request")
+@Path("/service/v1/entrypoint/dispatcher/request")
 public interface ServiceAnonymousApi {
 
     @PUT

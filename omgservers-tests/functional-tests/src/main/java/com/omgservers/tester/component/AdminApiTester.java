@@ -30,7 +30,7 @@ public class AdminApiTester {
                 .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenAdminRequest(alias, password)))
-                .when().put("/omgservers/v1/entrypoint/admin/request/create-token");
+                .when().put("/service/v1/entrypoint/admin/request/create-token");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTokenAdminResponse.class);

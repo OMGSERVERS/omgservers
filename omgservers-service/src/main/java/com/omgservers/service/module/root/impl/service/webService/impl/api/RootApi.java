@@ -22,7 +22,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Root Module API")
-@Path("/omgservers/v1/module/root/request")
+@Path("/service/v1/module/root/request")
 public interface RootApi {
 
     @PUT

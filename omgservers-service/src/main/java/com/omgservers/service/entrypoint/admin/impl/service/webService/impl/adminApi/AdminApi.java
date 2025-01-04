@@ -14,7 +14,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Admin Entrypoint API")
-@Path("/omgservers/v1/entrypoint/admin/request")
+@Path("/service/v1/entrypoint/admin/request")
 public interface AdminApi {
 
     @PUT

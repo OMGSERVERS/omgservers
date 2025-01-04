@@ -39,7 +39,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Support Entrypoint API")
-@Path("/omgservers/v1/entrypoint/support/request")
+@Path("/service/v1/entrypoint/support/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SUPPORT_SECURITY_SCHEMA)
 public interface SupportApi {
 

@@ -10,7 +10,7 @@ auth:
   token:
     issuer: omgservers
     service: registry
-    realm: http://localhost:8080/omgservers/v1/entrypoint/docker/request/create-token
+    realm: http://localhost:8080/service/v1/entrypoint/docker/request/create-token
     rootcertbundle: /root/certs/bundle/jwt_issuer_cert.pem
 http:
   addr: :5000
@@ -22,7 +22,7 @@ notifications:
   endpoints:
     - name: omgservers
       disabled: false
-      url: http://localhost:8080/omgservers/v1/entrypoint/registry/request/handle-events
+      url: http://localhost:8080/service/v1/entrypoint/registry/request/handle-events
       timeout: 5s
       threshold: 10
       backoff: 1s

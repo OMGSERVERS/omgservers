@@ -16,7 +16,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Alias Module API")
-@Path("/omgservers/v1/module/alias/request")
+@Path("/service/v1/module/alias/request")
 public interface AliasApi {
 
     @PUT

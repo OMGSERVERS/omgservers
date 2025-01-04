@@ -54,7 +54,7 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 import java.util.List;
 
 @Tag(name = "Developer Entrypoint API")
-@Path("/omgservers/v1/entrypoint/developer/request")
+@Path("/service/v1/entrypoint/developer/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.DEVELOPER_SECURITY_SCHEMA)
 public interface DeveloperApi {
 

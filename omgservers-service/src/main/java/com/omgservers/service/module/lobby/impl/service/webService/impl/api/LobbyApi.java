@@ -20,7 +20,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Lobby Module API")
-@Path("/omgservers/v1/module/lobby/request")
+@Path("/service/v1/module/lobby/request")
 public interface LobbyApi {
 
     @PUT

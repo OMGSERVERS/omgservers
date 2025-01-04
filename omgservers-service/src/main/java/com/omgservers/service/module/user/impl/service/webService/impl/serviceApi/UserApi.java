@@ -27,7 +27,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "User Module API")
-@Path("/omgservers/v1/module/user/request")
+@Path("/service/v1/module/user/request")
 public interface UserApi {
 
     @PUT

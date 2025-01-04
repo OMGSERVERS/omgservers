@@ -10,7 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Registry Entrypoint API")
-@Path("/omgservers/v1/entrypoint/registry/request")
+@Path("/service/v1/entrypoint/registry/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.REGISTRY_SECURITY_SCHEMA)
 public interface RegistryApi {
 

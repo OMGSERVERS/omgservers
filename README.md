@@ -18,7 +18,7 @@ OMGSERVERS is a platform for building, testing, and running authoritative server
 
 ### **Project Management**
 - **Developer Management:** Manage developer accounts and permissions.
-- **Tenant Management:** Organize tenants, projects, versions, and deployments across stages.
+- **Tenant Management:** Organize projects, versions, and deployments across stages.
 - **Registry Integration:** Automatically link uploaded Docker images to project versions.
 - **Runtimes Builder:** Build Docker images for game runtimes from source code.
 

@@ -54,7 +54,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Runtime Module API")
-@Path("/omgservers/v1/module/runtime/request")
+@Path("/service/v1/module/runtime/request")
 public interface RuntimeApi {
 
     @PUT

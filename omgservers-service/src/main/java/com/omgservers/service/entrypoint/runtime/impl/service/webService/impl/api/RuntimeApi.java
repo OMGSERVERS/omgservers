@@ -13,7 +13,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Runtime Entrypoint API")
-@Path("/omgservers/v1/entrypoint/runtime/request")
+@Path("/service/v1/entrypoint/runtime/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.RUNTIME_SECURITY_SCHEMA)
 public interface RuntimeApi {
 

@@ -17,7 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Player Entrypoint API")
-@Path("/omgservers/v1/entrypoint/player/request")
+@Path("/service/v1/entrypoint/player/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.PLAYER_SECURITY_SCHEMA)
 public interface PlayerApi {
 

@@ -31,10 +31,10 @@ omgclient = {
 		local state = options.state
 		local http = options.http
 		
-		local create_user_url = service_url .. "/omgservers/v1/entrypoint/player/request/create-user"
-		local create_token_url = service_url .. "/omgservers/v1/entrypoint/player/request/create-token"
-		local create_client_url = service_url .. "/omgservers/v1/entrypoint/player/request/create-client"
-		local interchange_url = service_url .. "/omgservers/v1/entrypoint/player/request/interchange"
+		local create_user_url = service_url .. "/service/v1/entrypoint/player/request/create-user"
+		local create_token_url = service_url .. "/service/v1/entrypoint/player/request/create-token"
+		local create_client_url = service_url .. "/service/v1/entrypoint/player/request/create-client"
+		local interchange_url = service_url .. "/service/v1/entrypoint/player/request/interchange"
 		
 		return {
 			type = "omgclient",

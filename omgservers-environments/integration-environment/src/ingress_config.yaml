@@ -31,7 +31,7 @@ static_resources:
                         - "*"
                       routes:
                         - match:
-                            prefix: "/omgservers/v1/entrypoint"
+                            prefix: "/service/v1/entrypoint"
                           route:
                             cluster: gateway
                         - match:

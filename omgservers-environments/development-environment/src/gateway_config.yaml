@@ -31,11 +31,11 @@ static_resources:
                         - "*"
                       routes:
                         - match:
-                            prefix: "/omgservers/v1/entrypoint"
+                            prefix: "/service/v1/entrypoint"
                           route:
                             cluster: service
                         - match:
-                            prefix: "/omgservers/v1/module"
+                            prefix: "/service/v1/module"
                           route:
                             cluster: service
                         - match:

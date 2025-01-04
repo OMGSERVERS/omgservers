@@ -15,7 +15,7 @@ import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Docker Entrypoint API")
-@Path("/omgservers/v1/entrypoint/docker/request")
+@Path("/service/v1/entrypoint/docker/request")
 public interface DockerApi {
 
     @GET

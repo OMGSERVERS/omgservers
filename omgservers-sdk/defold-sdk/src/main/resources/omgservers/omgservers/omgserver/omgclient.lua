@@ -29,8 +29,8 @@ omgclient = {
 
 		local http = options.http
 
-		local create_token_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/create-token"
-		local interchange_url = service_url .. "/omgservers/v1/entrypoint/runtime/request/interchange"
+		local create_token_url = service_url .. "/service/v1/entrypoint/runtime/request/create-token"
+		local interchange_url = service_url .. "/service/v1/entrypoint/runtime/request/interchange"
 		
 		return {
 			type = "omgclient",

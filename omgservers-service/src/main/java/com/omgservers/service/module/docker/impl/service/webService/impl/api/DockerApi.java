@@ -12,7 +12,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Docker Module API")
-@Path("/omgservers/v1/module/docker/request")
+@Path("/service/v1/module/docker/request")
 public interface DockerApi {
 
     /*

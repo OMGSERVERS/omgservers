@@ -12,7 +12,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 @Tag(name = "Dispatcher Entrypoint API")
-@Path("/omgservers/v1/entrypoint/dispatcher/request")
+@Path("/service/v1/entrypoint/dispatcher/request")
 public interface DispatcherApi {
 
     @PUT
