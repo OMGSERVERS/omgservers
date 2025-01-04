@@ -6,7 +6,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=OMGSERVERS_omgservers)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=coverage)](https://sonarcloud.io/summary/overall?id=OMGSERVERS_omgservers)
 
-OMGSERVERS is a platform for building, testing, and running multiplayer game servers.
+OMGSERVERS is a platform for building, testing, and running authoritative servers for multiplayer games.
 
 ## Core Principles
 
@@ -14,43 +14,36 @@ OMGSERVERS is a platform for building, testing, and running multiplayer game ser
 - Monolithic Architecture
 - Sharding Over Clustering
 
-## Currently Implemented / In-Development Features
+## Features: Implemented & In-Development
 
-- **Developer Management**  
-  Manage users and permissions for development teams.
+### **Developer & Tenant Management**
+- **Developer Account Management:** Manage developer accounts and permissions.
+- **Tenant & Project Management:** Oversee tenants, projects, and version deployments across stages.
 
-- **Tenant Management**  
-  Organize tenants, projects, stages, versions, and deployments.
+### **Player Management**
+- **Player Profile Management:** Store and manage player states, progress, and profiles.
+- **Matchmaking System:** Match players and launch on-demand game runtimes for gameplay.
+- **Player API:** Provide APIs for account creation and authentication.
 
-- **Docker Registry Integration**  
-  Automatically populate versions when Docker images are loaded.
+### **WebSocket Dispatcher**
+- Build game runtimes without web server components using client WebSocket connections to the Dispatcher.
 
-- **Builder**  
-  Build Docker images directly from source code.
+### **Player-to-Server Interactions**
+- **Command-Based API:** Support asynchronous commands in stateful player sessions.
+- **WebSockets:** Enable two-way communication between players and game runtimes.
 
-- **Straightforward Matchmaking**  
-  Match players based on minimum/maximum players per match or group.
+### **Game Engine SDKs**
+- **Defold Player SDK:** Enables interaction with game runtimes.
+- **Defold Server SDK:** Supports building game runtimes using a headless Defold build.
 
-- **Game Runtimes**  
-  Support lobbies and matches to facilitate game sessions.
+### **Docker-Based Runtimes**
+- **Lobbies:** Containerized environments for player preparation before matches.
+- **Matches:** On-demand containers to manage gameplay sessions and interactions.
 
-- **Server Pool for Game Runtimes**  
-  Implementation a pool of servers to run game runtimes via the Docker API.
+### **Build & Deployment**
+- **Automated Version Linking:** Automatically link uploaded Docker images to project versions.
+- **Runtime Image Builder:** Build Docker images for game runtimes from source code.
+- **Version Staging:** Distribute project versions across stages for testing and release.
 
-- **Defold SDK (Client/Server Side)**  
-  Provide SDK support for game and runtime development using the Defold engine.
-
-- **Command-Like API for Game Runtimes**  
-  Enable command-based interactions for managing game runtimes.
-
-- **Request/Response Protocol via APIs**  
-  Facilitate player creation, authentication, and data exchange through secure APIs.
-
-- **Player Profiles**  
-  Store and manage player states and progress.
-
-- **Dispatcher for Game Runtime Integration**  
-  Integrate game runtimes with player sessions using client websocket connections.
-
-- **CTL (Control Tool)**  
-  Provide a command-line tool for admin and support operations.
+### **Administrative Tools**
+- **Command-Line Utility:** Tool for administrative and support tasks.  
