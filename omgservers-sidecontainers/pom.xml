@@ -22,13 +22,8 @@
         <module>bob-sidecontainer</module>
         <module>broker-sidecontainer</module>
         <module>builder-sidecontainer</module>
-        <module>ca-sidecontainer</module>
         <module>ctl-sidecontainer</module>
-        <module>database-sidecontainer</module>
-        <module>docker-sidecontainer</module>
-        <module>gateway-sidecontainer</module>
         <module>luajit-sidecontainer</module>
-        <module>registry-sidecontainer</module>
     </modules>
 
     <dependencies>
