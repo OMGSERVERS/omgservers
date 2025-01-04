@@ -4,6 +4,7 @@ services:
   ingress:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "ingress"
+    restart: unless-stopped
     ports:
       - "8080:8080"
     networks:
@@ -14,6 +15,7 @@ services:
   docker:
     image: "alpine/socat"
     container_name: "docker"
+    restart: unless-stopped
     networks:
       - omgservers
     volumes:
@@ -22,6 +24,7 @@ services:
   registry:
     image: "registry:2.8.3"
     container_name: "registry"
+    restart: unless-stopped
     volumes:
       - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
       - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
@@ -33,6 +36,7 @@ services:
   builder:
     image: "omgservers/builder:${OMGSERVERS_VERSION}"
     container_name: "builder"
+    restart: unless-stopped
     ports:
       - "7070:8080"
     networks:
@@ -50,6 +54,7 @@ services:
   gateway1:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "gateway1"
+    restart: unless-stopped
     networks:
       - omgservers
     volumes:
@@ -58,6 +63,7 @@ services:
   database1:
     image: "postgres:16.1"
     container_name: "database1"
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -65,13 +71,17 @@ services:
     networks:
       - omgservers
   broker1:
-    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    image: "apache/activemq-artemis:2.33.0-alpine"
     container_name: "broker1"
+    restart: unless-stopped
     environment:
       - ARTEMIS_USER=broker
       - ARTEMIS_PASSWORD=broker
     networks:
       - omgservers
+    volumes:
+      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
+      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   service1:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service1"
@@ -124,6 +134,7 @@ services:
   gateway2:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "gateway2"
+    restart: unless-stopped
     networks:
       - omgservers
     volumes:
@@ -132,6 +143,7 @@ services:
   database2:
     image: "postgres:16.1"
     container_name: "database2"
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -139,13 +151,17 @@ services:
     networks:
       - omgservers
   broker2:
-    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    image: "apache/activemq-artemis:2.33.0-alpine"
     container_name: "broker2"
+    restart: unless-stopped
     environment:
       - ARTEMIS_USER=broker
       - ARTEMIS_PASSWORD=broker
     networks:
       - omgservers
+    volumes:
+      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
+      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   service2:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service2"
@@ -184,6 +200,7 @@ services:
   gateway3:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "gateway3"
+    restart: unless-stopped
     networks:
       - omgservers
     volumes:
@@ -192,6 +209,7 @@ services:
   database3:
     image: "postgres:16.1"
     container_name: "database3"
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -199,13 +217,17 @@ services:
     networks:
       - omgservers
   broker3:
-    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    image: "apache/activemq-artemis:2.33.0-alpine"
     container_name: "broker3"
+    restart: unless-stopped
     environment:
       - ARTEMIS_USER=broker
       - ARTEMIS_PASSWORD=broker
     networks:
       - omgservers
+    volumes:
+      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
+      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   service3:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service3"

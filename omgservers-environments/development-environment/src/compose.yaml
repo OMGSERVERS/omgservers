@@ -4,6 +4,7 @@ services:
   ingress:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "gateway"
+    restart: unless-stopped
     ports:
       - "8080:8080"
     networks:
@@ -14,6 +15,7 @@ services:
   docker:
     image: "alpine/socat"
     container_name: "docker"
+    restart: unless-stopped
     networks:
       - omgservers
     volumes:
@@ -22,6 +24,7 @@ services:
   database:
     image: "postgres:16.1"
     container_name: "database"
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -29,8 +32,9 @@ services:
     networks:
       - omgservers
   broker:
-    image: "omgservers/broker:${OMGSERVERS_VERSION}"
+    image: "apache/activemq-artemis:2.33.0-alpine"
     container_name: "broker"
+    restart: unless-stopped
     environment:
       - ARTEMIS_USER=broker
       - ARTEMIS_PASSWORD=broker
@@ -38,9 +42,13 @@ services:
       - "8161:8161"
     networks:
       - omgservers
+    volumes:
+      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
+      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   registry:
     image: "registry:2.8.3"
     container_name: "registry"
+    restart: unless-stopped
     volumes:
       - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
       - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
