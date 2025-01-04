@@ -7,23 +7,23 @@ help() {
   echo "OMGSERVERS ctl, v1.0.0"
   echo "Usage:"
   if [ -z "$1" -o "$1" = "help" ]; then
-    echo " omgserversctl help"
+    echo " ./omgserversctl.sh help"
   fi
   if [ -z "$1" -o "$1" = "logs" ]; then
-    echo " omgserversctl logs"
+    echo " ./omgserversctl.sh logs"
   fi
   # Environment
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment reset" ]; then
-    echo " omgserversctl environment reset"
+    echo " ./omgserversctl.sh environment reset"
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printCurrent" ]; then
-    echo " omgserversctl environment printCurrent"
+    echo " ./omgserversctl.sh environment printCurrent"
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printVariable" ]; then
-    echo " omgserversctl environment printVariable <variable>"
+    echo " ./omgserversctl.sh environment printVariable <variable>"
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useEnvironment" ]; then
-    echo " omgserversctl environment useEnvironment <name> <service_url>"
+    echo " ./omgserversctl.sh environment useEnvironment <name> <service_url>"
     if [ "$1" = "environment useEnvironment" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -31,7 +31,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment usePublic" ]; then
-    echo " omgserversctl environment usePublic"
+    echo " ./omgserversctl.sh environment usePublic"
     if [ "$1" = "environment usePublic" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -39,7 +39,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocal" ]; then
-    echo " omgserversctl environment useLocal"
+    echo " ./omgserversctl.sh environment useLocal"
     if [ "$1" = "environment useLocal" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -48,7 +48,7 @@ help() {
   fi
   # Admin
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin useCredentials" ]; then
-    echo " omgserversctl admin useCredentials <user> <password>"
+    echo " ./omgserversctl.sh admin useCredentials <user> <password>"
     if [ "$1" = "admin useCredentials" ]; then
       echo "   produces:"
       echo "     - ADMIN_USER"
@@ -56,17 +56,17 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin printCurrent" ]; then
-    echo " omgserversctl admin printCurrent"
+    echo " ./omgserversctl.sh admin printCurrent"
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createToken" ]; then
-    echo " omgserversctl admin createToken"
+    echo " ./omgserversctl.sh admin createToken"
     if [ "$1" = "admin createToken" ]; then
       echo "   produces:"
       echo "     - ADMIN_TOKEN"
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin calculateShard" ]; then
-    echo " omgserversctl admin calculateShard <shard_key>"
+    echo " ./omgserversctl.sh admin calculateShard <shard_key>"
     if [ "$1" = "admin calculateShard" ]; then
       echo "   produces:"
       echo "     - SHARD_INDEX"
@@ -74,7 +74,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin pingDockerHost" ]; then
-    echo " omgserversctl admin pingDockerHost <docker_daemon_uri>"
+    echo " ./omgserversctl.sh admin pingDockerHost <docker_daemon_uri>"
     if [ "$1" = "admin pingDockerHost" ]; then
       echo "   produces:"
       echo "     - SUCCESSFUL"
@@ -82,7 +82,7 @@ help() {
   fi
   # Support
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support useCredentials" ]; then
-    echo " omgserversctl support useCredentials <user> <password>"
+    echo " ./omgserversctl.sh support useCredentials <user> <password>"
     if [ "$1" = "support useCredentials" ]; then
       echo "   produces:"
       echo "     - SUPPORT_USER"
@@ -90,34 +90,34 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support printCurrent" ]; then
-    echo " omgserversctl support printCurrent"
+    echo " ./omgserversctl.sh support printCurrent"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createToken" ]; then
-    echo " omgserversctl support createToken"
+    echo " ./omgserversctl.sh support createToken"
     if [ "$1" = "support createToken" ]; then
       echo "   produces:"
       echo "     - SUPPORT_TOKEN"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenant" ]; then
-    echo " omgserversctl support createTenant"
+    echo " ./omgserversctl.sh support createTenant"
     if [ "$1" = "support createTenant" ]; then
       echo "   produces:"
       echo "     - TENANT"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantAlias" ]; then
-    echo " omgserversctl support createTenantAlias <tenant_id> <alias>"
+    echo " ./omgserversctl.sh support createTenantAlias <tenant_id> <alias>"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenant" ]; then
-    echo " omgserversctl support deleteTenant <tenant>"
+    echo " ./omgserversctl.sh support deleteTenant <tenant>"
     if [ "$1" = "support deleteTenant" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProject" ]; then
-    echo " omgserversctl support createProject <tenant>"
+    echo " ./omgserversctl.sh support createProject <tenant>"
     if [ "$1" = "support createProject" ]; then
       echo "   produces:"
       echo "     - PROJECT"
@@ -126,17 +126,17 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectAlias" ]; then
-    echo " omgserversctl support createProjectAlias <tenant> <project_id> <alias>"
+    echo " ./omgserversctl.sh support createProjectAlias <tenant> <project_id> <alias>"
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProject" ]; then
-    echo " omgserversctl support deleteProject <tenant> <project>"
+    echo " ./omgserversctl.sh support deleteProject <tenant> <project>"
     if [ "$1" = "support deleteProject" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createDeveloper" ]; then
-    echo " omgserversctl support createDeveloper"
+    echo " ./omgserversctl.sh support createDeveloper"
     if [ "$1" = "support createDeveloper" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_USER"
@@ -144,7 +144,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantPermission" ]; then
-    echo " omgserversctl support createTenantPermission <tenant> <user> <permission>"
+    echo " ./omgserversctl.sh support createTenantPermission <tenant> <user> <permission>"
     if [ "$1" = "support createTenantPermission" ]; then
       echo "   permission:"
       echo "     - PROJECT_MANAGER"
@@ -152,7 +152,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantPermission" ]; then
-    echo " omgserversctl support deleteTenantPermission <tenant> <user> <permission>"
+    echo " ./omgserversctl.sh support deleteTenantPermission <tenant> <user> <permission>"
     if [ "$1" = "support deleteTenantPermission" ]; then
       echo "   permission:"
       echo "     - PROJECT_MANAGER"
@@ -160,7 +160,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
-    echo " omgserversctl support createProjectPermission <tenant> <project> <user> <permission>"
+    echo " ./omgserversctl.sh support createProjectPermission <tenant> <project> <user> <permission>"
     if [ "$1" = "support createProjectPermission" ]; then
       echo "   permission:"
       echo "     - STAGE_MANAGER"
@@ -169,7 +169,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
-    echo " omgserversctl support deleteProjectPermission <tenant> <project> <user> <permission>"
+    echo " ./omgserversctl.sh support deleteProjectPermission <tenant> <project> <user> <permission>"
     if [ "$1" = "support deleteProjectPermission" ]; then
       echo "   permission:"
       echo "     - STAGE_MANAGER"
@@ -178,7 +178,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
-    echo " omgserversctl support createStagePermission <tenant> <project> <stage> <user> <permission>"
+    echo " ./omgserversctl.sh support createStagePermission <tenant> <project> <stage> <user> <permission>"
     if [ "$1" = "support createStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGER"
@@ -186,7 +186,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
-    echo " omgserversctl support deleteStagePermission <tenant> <project> <stage> <user> <permission>"
+    echo " ./omgserversctl.sh support deleteStagePermission <tenant> <project> <stage> <user> <permission>"
     if [ "$1" = "support deleteStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGER"
@@ -195,7 +195,7 @@ help() {
   fi
   # Developer
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer useCredentials" ]; then
-    echo " omgserversctl developer useCredentials <user> <password>"
+    echo " ./omgserversctl.sh developer useCredentials <user> <password>"
     if [ "$1" = "developer useCredentials" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_USER"
@@ -203,20 +203,20 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer printCurrent" ]; then
-    echo " omgserversctl developer printCurrent"
+    echo " ./omgserversctl.sh developer printCurrent"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
-    echo " omgserversctl developer createToken"
+    echo " ./omgserversctl.sh developer createToken"
     if [ "$1" = "developer createToken" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_TOKEN"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDashboard" ]; then
-    echo " omgserversctl developer getTenantDashboard <tenant>"
+    echo " ./omgserversctl.sh developer getTenantDashboard <tenant>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProject" ]; then
-    echo " omgserversctl developer createProject <tenant>"
+    echo " ./omgserversctl.sh developer createProject <tenant>"
     if [ "$1" = "developer createProject" ]; then
       echo "   produces:"
       echo "     - PROJECT"
@@ -225,20 +225,20 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProjectAlias" ]; then
-    echo " omgserversctl developer createProjectAlias <tenant> <project_id> <alias>"
+    echo " ./omgserversctl.sh developer createProjectAlias <tenant> <project_id> <alias>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getProjectDashboard" ]; then
-    echo " omgserversctl developer getProjectDashboard <tenant> <project>"
+    echo " ./omgserversctl.sh developer getProjectDashboard <tenant> <project>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteProject" ]; then
-      echo " omgserversctl developer deleteProject <tenant> <project>"
+      echo " ./omgserversctl.sh developer deleteProject <tenant> <project>"
       if [ "$1" = "developer deleteProject" ]; then
         echo "   produces:"
         echo "     - DELETED"
       fi
     fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStage" ]; then
-    echo " omgserversctl developer createStage <tenant> <project>"
+    echo " ./omgserversctl.sh developer createStage <tenant> <project>"
     if [ "$1" = "developer createStage" ]; then
       echo "   produces:"
       echo "     - STAGE"
@@ -246,74 +246,74 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStageAlias" ]; then
-    echo " omgserversctl developer createStageAlias <tenant> <stage_id> <alias>"
+    echo " ./omgserversctl.sh developer createStageAlias <tenant> <stage_id> <alias>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDashboard" ]; then
-    echo " omgserversctl developer getStageDashboard <tenant> <project> <stage>"
+    echo " ./omgserversctl.sh developer getStageDashboard <tenant> <project> <stage>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteStage" ]; then
-    echo " omgserversctl developer deleteStage <tenant> <project> <stage>"
+    echo " ./omgserversctl.sh developer deleteStage <tenant> <project> <stage>"
     if [ "$1" = "developer deleteStage" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createVersion" ]; then
-    echo " omgserversctl developer createVersion <tenant> <project> <config_path>"
+    echo " ./omgserversctl.sh developer createVersion <tenant> <project> <config_path>"
     if [ "$1" = "developer createVersion" ]; then
       echo "   produces:"
       echo "     - VERSION"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadFilesArchive" ]; then
-    echo " omgserversctl developer uploadFilesArchive <tenant> <version> <files_directory_path>"
+    echo " ./omgserversctl.sh developer uploadFilesArchive <tenant> <version> <files_directory_path>"
     if [ "$1" = "developer uploadFilesArchive" ]; then
       echo "   produces:"
       echo "     - FILES_ARCHIVE"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getVersionDashboard" ]; then
-    echo " omgserversctl developer getVersionDashboard <tenant> <version>"
+    echo " ./omgserversctl.sh developer getVersionDashboard <tenant> <version>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteVersion" ]; then
-    echo " omgserversctl developer deleteVersion <tenant> <version>"
+    echo " ./omgserversctl.sh developer deleteVersion <tenant> <version>"
     if [ "$1" = "developer deleteVersion" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
-    echo " omgserversctl developer deployVersion <tenant> <project> <stage> <version>"
+    echo " ./omgserversctl.sh developer deployVersion <tenant> <project> <stage> <version>"
     if [ "$1" = "developer deployVersion" ]; then
       echo "   produces:"
       echo "     - DEPLOYMENT"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getDeploymentDashboard" ]; then
-    echo " omgserversctl developer getDeploymentDashboard <tenant> <deployment>"
+    echo " ./omgserversctl.sh developer getDeploymentDashboard <tenant> <deployment>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteDeployment" ]; then
-    echo " omgserversctl developer deleteDeployment <tenant> <deployment>"
+    echo " ./omgserversctl.sh developer deleteDeployment <tenant> <deployment>"
     if [ "$1" = "developer deleteDeployment" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createLobbyRequest" ]; then
-    echo " omgserversctl developer createLobbyRequest <tenant> <deployment>"
+    echo " ./omgserversctl.sh developer createLobbyRequest <tenant> <deployment>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteLobby" ]; then
-    echo " omgserversctl developer deleteLobby <lobby>"
+    echo " ./omgserversctl.sh developer deleteLobby <lobby>"
     if [ "$1" = "developer deleteLobby" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createMatchmakerRequest" ]; then
-    echo " omgserversctl developer createMatchmakerRequest <tenant> <deployment>"
+    echo " ./omgserversctl.sh developer createMatchmakerRequest <tenant> <deployment>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteMatchmaker" ]; then
-    echo " omgserversctl developer deleteMatchmaker <matchmaker>"
+    echo " ./omgserversctl.sh developer deleteMatchmaker <matchmaker>"
     if [ "$1" = "developer deleteMatchmaker" ]; then
       echo "   produces:"
       echo "     - DELETED"
