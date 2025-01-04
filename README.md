@@ -31,7 +31,7 @@ OMGSERVERS is a platform for building, testing, and running authoritative server
 - Interact with players using client WebSocket connections through the Dispatcher.
 
 ### **Player-to-Server Interactions**
-- **Player API:** API for account creation and authentication.
+- **Player API:** API for creating accounts, sessions, and handling authentication.
 - **Command-Based API:** Support asynchronous commands in stateful player sessions.
 - **WebSockets:** Enable two-way communication with game runtimes.
 
