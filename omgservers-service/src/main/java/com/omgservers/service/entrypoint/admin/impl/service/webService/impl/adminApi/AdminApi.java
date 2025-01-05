@@ -1,10 +1,14 @@
 
 package com.omgservers.service.entrypoint.admin.impl.service.webService.impl.adminApi;
 
+import com.omgservers.schema.entrypoint.admin.BcryptHashAdminRequest;
+import com.omgservers.schema.entrypoint.admin.BcryptHashAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
+import com.omgservers.schema.entrypoint.admin.GenerateIdAdminRequest;
+import com.omgservers.schema.entrypoint.admin.GenerateIdAdminResponse;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
 import io.smallrye.mutiny.Uni;
@@ -20,6 +24,14 @@ public interface AdminApi {
     @PUT
     @Path("/create-token")
     Uni<CreateTokenAdminResponse> execute(@NotNull CreateTokenAdminRequest request);
+
+    @PUT
+    @Path("/generate-id")
+    Uni<GenerateIdAdminResponse> execute(@NotNull GenerateIdAdminRequest request);
+
+    @PUT
+    @Path("/bcrypt-hash")
+    Uni<BcryptHashAdminResponse> execute(@NotNull BcryptHashAdminRequest request);
 
     @PUT
     @Path("/calculate-shard")

@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.server;
+package com.omgservers.schema.entrypoint.admin;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BcryptHashServerRequest {
+public class BcryptHashAdminRequest {
 
     @NotBlank
     String value;

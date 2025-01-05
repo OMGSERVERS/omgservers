@@ -1,4 +1,4 @@
-package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createUser;
+package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method;
 
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;

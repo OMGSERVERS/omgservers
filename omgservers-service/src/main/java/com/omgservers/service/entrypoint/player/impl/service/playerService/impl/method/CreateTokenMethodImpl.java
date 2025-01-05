@@ -1,4 +1,4 @@
-package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createToken;
+package com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method;
 
 import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;

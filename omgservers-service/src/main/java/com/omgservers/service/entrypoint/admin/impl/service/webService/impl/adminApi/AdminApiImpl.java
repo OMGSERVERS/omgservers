@@ -1,9 +1,13 @@
 package com.omgservers.service.entrypoint.admin.impl.service.webService.impl.adminApi;
 
+import com.omgservers.schema.entrypoint.admin.BcryptHashAdminRequest;
+import com.omgservers.schema.entrypoint.admin.BcryptHashAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
+import com.omgservers.schema.entrypoint.admin.GenerateIdAdminRequest;
+import com.omgservers.schema.entrypoint.admin.GenerateIdAdminResponse;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -34,14 +38,22 @@ public class AdminApiImpl implements AdminApi {
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.ADMIN})
-    public Uni<CalculateShardAdminResponse> execute(final CalculateShardAdminRequest request) {
+    public Uni<GenerateIdAdminResponse> execute(@NotNull final GenerateIdAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    @RolesAllowed({UserRoleEnum.Names.ADMIN})
-    public Uni<PingDockerHostAdminResponse> execute(final PingDockerHostAdminRequest request) {
+    public Uni<BcryptHashAdminResponse> execute(@NotNull final BcryptHashAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<CalculateShardAdminResponse> execute(@NotNull final CalculateShardAdminRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<PingDockerHostAdminResponse> execute(@NotNull final PingDockerHostAdminRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

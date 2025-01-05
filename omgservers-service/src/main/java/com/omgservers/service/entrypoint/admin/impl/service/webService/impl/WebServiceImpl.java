@@ -1,9 +1,13 @@
 package com.omgservers.service.entrypoint.admin.impl.service.webService.impl;
 
+import com.omgservers.schema.entrypoint.admin.BcryptHashAdminRequest;
+import com.omgservers.schema.entrypoint.admin.BcryptHashAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminResponse;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
+import com.omgservers.schema.entrypoint.admin.GenerateIdAdminRequest;
+import com.omgservers.schema.entrypoint.admin.GenerateIdAdminResponse;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
 import com.omgservers.service.entrypoint.admin.impl.service.adminService.AdminService;
@@ -22,6 +26,16 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<CreateTokenAdminResponse> execute(final CreateTokenAdminRequest request) {
+        return adminService.execute(request);
+    }
+
+    @Override
+    public Uni<GenerateIdAdminResponse> execute(final GenerateIdAdminRequest request) {
+        return adminService.execute(request);
+    }
+
+    @Override
+    public Uni<BcryptHashAdminResponse> execute(final BcryptHashAdminRequest request) {
         return adminService.execute(request);
     }
 

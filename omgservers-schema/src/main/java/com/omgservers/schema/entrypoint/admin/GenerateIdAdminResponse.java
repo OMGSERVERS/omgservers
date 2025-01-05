@@ -1,4 +1,4 @@
-package com.omgservers.schema.entrypoint.server;
+package com.omgservers.schema.entrypoint.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenerateIdServerResponse {
+public class GenerateIdAdminResponse {
 
     Long id;
 }

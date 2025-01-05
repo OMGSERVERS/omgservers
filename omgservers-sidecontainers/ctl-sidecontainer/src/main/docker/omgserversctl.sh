@@ -73,6 +73,20 @@ help() {
       echo "     - SERVER_URI"
     fi
   fi
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin generateId" ]; then
+    echo " ./omgserversctl.sh admin generateId"
+    if [ "$1" = "admin generateId" ]; then
+      echo "   produces:"
+      echo "     - GENERATED_ID"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin bcryptHash" ]; then
+    echo " ./omgserversctl.sh admin bcryptHash <value>"
+    if [ "$1" = "admin bcryptHash" ]; then
+      echo "   produces:"
+      echo "     - BCRYPTED_HASH"
+    fi
+  fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin pingDockerHost" ]; then
     echo " ./omgserversctl.sh admin pingDockerHost <docker_daemon_uri>"
     if [ "$1" = "admin pingDockerHost" ]; then
@@ -524,6 +538,101 @@ admin_calculateShard() {
   echo "export OMGSERVERSCTL_SERVER_URI=${SERVER_URI}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Shard was calculated, SHARD_INDEX=${SHARD_INDEX}, SERVER_URI=${SERVER_URI}"
+}
+
+admin_generateId() {
+  internal_useEnvironment
+
+  ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
+
+  if [ -z "${ADMIN_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/generate-id"
+  REQUEST="{}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/admin-generate-id.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  GENERATED_ID=$(cat ${RESPONSE_FILE} | jq -r .id)
+  if [ -z "${GENERATED_ID}" -o "${GENERATED_ID}" == "null" ]; then
+    echo "ERROR: GENERATED_ID was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_GENERATED_ID=${GENERATED_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Id was generated, GENERATED_ID=${GENERATED_ID}"
+}
+
+admin_bcryptHash() {
+  internal_useEnvironment
+
+  VALUE=$1
+
+  if [ -z "${VALUE}" ]; then
+    help "admin bcryptHash"
+    exit 1
+  fi
+
+  ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
+
+  if [ -z "${ADMIN_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/bcrypt-hash"
+  REQUEST="{ \"value\": \"${VALUE}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/admin-bcrypt-hash.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  BCRYPTED_HASH=$(cat ${RESPONSE_FILE} | jq -r .hash)
+  if [ -z "${BCRYPTED_HASH}" -o "${BCRYPTED_HASH}" == "null" ]; then
+    echo "ERROR: BCRYPTED_HASH was not received"
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_BCRYPTED_HASH=${BCRYPTED_HASH}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Value was bcrypted, BCRYPTED_HASH=${BCRYPTED_HASH}"
 }
 
 admin_pingDockerHost() {
@@ -2613,6 +2722,10 @@ if [ "$1" = "admin" ]; then
     admin_createToken
   elif [ "$2" = "calculateShard" ]; then
     admin_calculateShard $3
+  elif [ "$2" = "generateId" ]; then
+    admin_generateId
+  elif [ "$2" = "bcryptHash" ]; then
+    admin_bcryptHash $3
   elif [ "$2" = "pingDockerHost" ]; then
     admin_pingDockerHost $3
   else
