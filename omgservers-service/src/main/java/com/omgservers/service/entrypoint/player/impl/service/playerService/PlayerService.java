@@ -8,10 +8,14 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface PlayerService {
+
+    Uni<PingServicePlayerResponse> execute(@Valid PingServicePlayerRequest request);
 
     Uni<CreateUserPlayerResponse> execute(@Valid CreateUserPlayerRequest request);
 

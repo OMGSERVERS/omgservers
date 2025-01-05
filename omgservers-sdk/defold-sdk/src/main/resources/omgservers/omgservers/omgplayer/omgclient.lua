@@ -31,6 +31,7 @@ omgclient = {
 		local state = options.state
 		local http = options.http
 		
+		local ping_service_url = service_url .. "/service/v1/entrypoint/player/request/ping-service"
 		local create_user_url = service_url .. "/service/v1/entrypoint/player/request/create-user"
 		local create_token_url = service_url .. "/service/v1/entrypoint/player/request/create-token"
 		local create_client_url = service_url .. "/service/v1/entrypoint/player/request/create-client"
@@ -38,12 +39,48 @@ omgclient = {
 		
 		return {
 			type = "omgclient",
+			ping_latency = nil,
 			user_id = nil,
 			user_password = nil,
 			api_token = nil,
 			client_id = nil,
 			client_messages = nil,
 			-- Methods
+			ping_service = function(instance, callback)
+				local request_url = ping_service_url
+				local request_body = {
+					message = "ping",
+				}
+				local request_time = socket.gettime()
+
+				local response_handler = function(response_status, response_body)
+					local latency = socket.gettime() - request_time
+					local message = response_body.message
+
+					if debug_logging then
+						print(socket.gettime() .. " [OMGPLAYER] Ping response was received, latency=" .. latency)
+					end
+
+					instance.ping_latency = latency
+					
+					if callback then
+						callback(latency, message)
+					end
+				end
+
+				local failure_handler = function(response_status, decoded_body, encoding_error)
+					local inlined_body
+					if decoded_body then
+						inlined_body = json.encode(decoded_body)
+					end
+
+					print(socket.gettime() .. " [OMGPLAYER] Ping response was failed, response_status=" .. response_status .. ", decoded_body=" .. tostring(inlined_body) .. ", encoding_error=" .. tostring(encoding_error))
+				end
+
+				local retries = 0
+
+				http:request_server(request_url, request_body, response_handler, failure_handler, retries)
+			end,
 			create_user = function(instance, callback)
 				local request_url = create_user_url
 				local request_body = {}
@@ -136,7 +173,7 @@ omgclient = {
 					instance.client_messages = omgmessages:create({})
 
 					if debug_logging then
-						print(socket.gettime() .. " [OMGPLAYER] Server client was created, client_id=" .. client_id)
+						print(socket.gettime() .. " [OMGPLAYER] Client was created, client_id=" .. client_id)
 					end
 					
 					if callback then

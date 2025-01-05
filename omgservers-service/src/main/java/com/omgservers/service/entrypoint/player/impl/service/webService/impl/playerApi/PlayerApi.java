@@ -8,6 +8,8 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +22,10 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/entrypoint/player/request")
 @SecurityRequirement(name = ServiceOpenApiConfiguration.PLAYER_SECURITY_SCHEMA)
 public interface PlayerApi {
+
+    @PUT
+    @Path("/ping-service")
+    Uni<PingServicePlayerResponse> execute(@NotNull PingServicePlayerRequest request);
 
     @PUT
     @Path("/create-user")

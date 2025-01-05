@@ -8,9 +8,13 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
+
+    Uni<PingServicePlayerResponse> execute(PingServicePlayerRequest request);
 
     Uni<CreateUserPlayerResponse> execute(CreateUserPlayerRequest request);
 

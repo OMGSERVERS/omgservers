@@ -8,6 +8,8 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.player.impl.service.webService.WebService;
 import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
@@ -28,6 +30,12 @@ class PlayerApiImpl implements PlayerApi {
     final WebService webService;
 
     final HandleApiRequestOperation handleApiRequestOperation;
+
+    @Override
+    @PermitAll
+    public Uni<PingServicePlayerResponse> execute(@NotNull final PingServicePlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
 
     @Override
     @PermitAll

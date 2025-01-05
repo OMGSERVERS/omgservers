@@ -65,10 +65,11 @@ function init(self)
 		tenant_id = tenant_id, 
 		stage_id = stage_id, 
 		stage_secret = secret, 
-		event_handler = function(event) handle_event(self, event) end, 
+		event_handler = function(event) handle_event(self, event) end,
 		debug_logging = true,
 	}
 	omgplayer:init(options)
+	omgplayer:ping()
 	omgplayer:sign_up()
 end
 

@@ -27,6 +27,16 @@ omgevents = {
 				end
 				instance.events[#instance.events + 1] = event
 			end,
+			service_pinged = function(instance, latency, message)
+				local event = {
+					qualifier = omgconstants.SERVICE_PINGED,
+					body = {
+						latency = latency,
+						message = message,
+					},
+				}
+				instance:add_event(event)
+			end,
 			signed_up = function(instance, user_id, password)
 				local event = {
 					qualifier = omgconstants.SIGNED_UP,

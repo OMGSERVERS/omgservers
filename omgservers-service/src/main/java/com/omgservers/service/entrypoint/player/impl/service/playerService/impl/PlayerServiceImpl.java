@@ -8,7 +8,10 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.PlayerService;
+import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.PingServiceMethod;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createClient.CreateClientMethod;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createToken.CreateTokenMethod;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.createUser.CreateUserMethod;
@@ -28,7 +31,13 @@ class PlayerServiceImpl implements PlayerService {
     final CreateClientMethod createClientMethod;
     final InterchangeMethod interchangeMethod;
     final CreateTokenMethod createTokenMethod;
+    final PingServiceMethod pingServiceMethod;
     final CreateUserMethod createUserMethod;
+
+    @Override
+    public Uni<PingServicePlayerResponse> execute(@Valid final PingServicePlayerRequest request) {
+        return pingServiceMethod.execute(request);
+    }
 
     @Override
     public Uni<CreateUserPlayerResponse> execute(@Valid final CreateUserPlayerRequest request) {

@@ -61,6 +61,15 @@ omginstance = {
 			dispatcher = self.dispatcher,
 		})
 	end,
+	ping = function(self)
+		assert(self, "The self must not be nil.")
+		assert(self.config, "The player must be initialized")
+		assert(not self.state.failed, "The player has failed, a reset is required")
+
+		self.client:ping_service(function(latency, message)
+			self.events:service_pinged(latency)
+		end)
+	end,
 	sign_up = function(self)
 		assert(self, "The self must not be nil.")
 		assert(self.config, "The player must be initialized")

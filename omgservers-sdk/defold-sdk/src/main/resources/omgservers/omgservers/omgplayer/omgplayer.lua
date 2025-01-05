@@ -11,6 +11,9 @@ omgplayer = {
 	reset = function(self)
 		omginstance:reset()
 	end,
+	ping = function(self)
+		omginstance:ping()
+	end,
 	sign_up = function(self)
 		omginstance:sign_up()
 	end,

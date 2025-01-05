@@ -8,6 +8,8 @@ import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
+import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.PlayerService;
 import com.omgservers.service.entrypoint.player.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -22,6 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 class WebServiceImpl implements WebService {
 
     final PlayerService playerService;
+
+    @Override
+    public Uni<PingServicePlayerResponse> execute(final PingServicePlayerRequest request) {
+        return playerService.execute(request);
+    }
 
     @Override
     public Uni<CreateUserPlayerResponse> execute(final CreateUserPlayerRequest request) {
