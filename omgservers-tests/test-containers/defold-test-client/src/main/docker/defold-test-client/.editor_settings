@@ -16,7 +16,7 @@
   :code {
     :find {
       :replacement "between_messages"
-      :term "send_text_message"
+      :term "omginstance:"
     }
   }
   :search-in-files {

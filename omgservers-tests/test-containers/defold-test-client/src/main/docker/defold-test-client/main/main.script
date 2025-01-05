@@ -16,7 +16,7 @@ local function handle_event(self, event)
 		local password = event_body.password
 		print(socket.gettime() .. " [GAMECLIENT] User was created, user_id=" .. user_id)
 		
-		omgplayer:sign_in(user_id, password)
+		self.omginstance:sign_in(user_id, password)
 
 		self.user_id = user_id
 		self.password = password
@@ -42,14 +42,14 @@ local function handle_event(self, event)
 		local message = event_body.message
 		print(socket.gettime() .. " [GAMECLIENT] Message was received, message=" .. message)
 
-		omgplayer:send_text_message(json.encode({
+		self.omginstance:send_text_message(json.encode({
 			text = "confirm_message",
 		}))
 
 	elseif event_qualifier == omgplayer.constants.CONNECTION_UPGRADED then
 		print(socket.gettime() .. " [GAMECLIENT] Connection was upgraded")
 
-		omgplayer:send_text_message(json.encode({
+		self.omginstance:send_text_message(json.encode({
 			text = "hello_message",
 		}))
 		
@@ -68,11 +68,14 @@ function init(self)
 		event_handler = function(event) handle_event(self, event) end,
 		debug_logging = true,
 	}
-	omgplayer:init(options)
-	omgplayer:ping()
-	omgplayer:sign_up()
+	local omginstance = omgplayer:create()
+	self.omginstance = omginstance
+
+	omginstance:init(options)
+	omginstance:ping()
+	omginstance:sign_up()
 end
 
 function update(self, dt)
-	omgplayer:update(dt)
+	self.omginstance:update(dt)
 end
