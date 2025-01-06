@@ -20,11 +20,15 @@ class GenerateIdOperationTest extends BaseTestClass {
     GetConfigOperation getConfigOperation;
 
     @Test
-    void sequenceTest() {
+    void sequenceTest() throws InterruptedException {
         long v1 = generateIdOperation.generateId();
         long v2 = generateIdOperation.generateId();
+        Thread.sleep(1);
         long v3 = generateIdOperation.generateId();
-        assertTrue(v3 > v2 && v2 > v1);
+        long v4 = generateIdOperation.generateId();
+        assertTrue(v4 > v3);
+        assertTrue(v3 > v2);
+        assertTrue(v2 > v1);
     }
 
     @Test
@@ -45,12 +49,10 @@ class GenerateIdOperationTest extends BaseTestClass {
 
         long sequence = id & GenerateIdOperation.SEQUENCE_MASK;
         long instanceId = (id >> GenerateIdOperation.INSTANCE_ID_OFFSET) & GenerateIdOperation.INSTANCE_ID_MASK;
-        long datacenterId = (id >> GenerateIdOperation.DATACENTER_ID_OFFSET) & GenerateIdOperation.DATACENTER_ID_MASK;
         long timestamp = (id >> GenerateIdOperation.TIMESTAMP_OFFSET);
 
         assertEquals(1, sequence);
         assertEquals(getConfigOperation.getServiceConfig().server().instanceId(), instanceId);
-        assertEquals(getConfigOperation.getServiceConfig().server().datacenterId(), datacenterId);
         assertTrue(timestamp > 0);
     }
 }

@@ -31,8 +31,6 @@ public interface ServiceConfig {
     RegistryConfig registry();
 
     interface ServerConfig {
-        long datacenterId();
-
         long instanceId();
 
         URI uri();

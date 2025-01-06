@@ -10,30 +10,21 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 class GenerateIdOperationImpl implements GenerateIdOperation {
 
-    final long datacenterId;
     final long instanceId;
 
     long lastTimestamp;
     long sequence;
 
     public GenerateIdOperationImpl(final GetConfigOperation getConfigOperation) {
-        datacenterId = getConfigOperation.getServiceConfig().server().datacenterId();
-        if (datacenterId < 0 || datacenterId >= 1 << DATACENTER_ID_BITS) {
-            throw new ServerSideInternalException(ExceptionQualifierEnum.WRONG_CONFIGURATION,
-                    "wrong datacenterId, value=" + datacenterId);
-        }
-
         instanceId = getConfigOperation.getServiceConfig().server().instanceId();
         if (instanceId < 0 || instanceId >= 1 << INSTANCE_ID_BITS) {
             throw new ServerSideInternalException(ExceptionQualifierEnum.WRONG_CONFIGURATION,
-                    "wrong instanceId, value=" + instanceId);
+                    "server instanceId is wrong, value=" + instanceId);
         }
 
         log.info("Generator was initialized, " +
-                        "(timestampBits={}, datacenterIdBits={}, instanceIdBits={}, sequenceBits={}) " +
-                        "datacenterId={}, instanceId={}",
-                TIMESTAMP_BITS, DATACENTER_ID_BITS, INSTANCE_ID_BITS, SEQUENCE_BITS,
-                datacenterId, instanceId);
+                        "(timestampBits={}, instanceIdBits={}, sequenceBits={}) instanceId={}",
+                TIMESTAMP_BITS, INSTANCE_ID_BITS, SEQUENCE_BITS, instanceId);
 
         lastTimestamp = 0;
         sequence = 0;
@@ -46,7 +37,7 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
         if (timestamp == lastTimestamp) {
             sequence += 1;
 
-            if (sequence >= (1 << SEQUENCE_BITS)) {
+            if (sequence > SEQUENCE_MASK) {
                 throw new ServerSideInternalException(ExceptionQualifierEnum.ID_GENERATOR_FAILED,
                         String.format("sequence was overflowed, sequence=%d, timestamp=%d", sequence, timestamp));
             }
@@ -55,16 +46,13 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
         }
 
         if (timestamp < lastTimestamp) {
-            throw new ServerSideInternalException(ExceptionQualifierEnum.ID_GENERATOR_FAILED,
-                    String.format("wrong system time, current=%d, last=%d", timestamp, lastTimestamp));
+            timestamp = lastTimestamp;
         } else {
             lastTimestamp = timestamp;
         }
 
-        var id = timestamp << TIMESTAMP_OFFSET |
-                datacenterId << DATACENTER_ID_OFFSET |
+        return timestamp << TIMESTAMP_OFFSET |
                 instanceId << INSTANCE_ID_OFFSET |
                 sequence;
-        return id;
     }
 }
