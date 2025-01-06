@@ -1,6 +1,6 @@
 package com.omgservers.service.component;
 
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ public class ServiceTokenFactory {
 
     final AtomicReference<String> serviceJwtToken;
 
-    public ServiceTokenFactory(final GetConfigOperation getConfigOperation,
+    public ServiceTokenFactory(final GetServiceConfigOperation getServiceConfigOperation,
                                final IssueJwtTokenOperation issueJwtTokenOperation) {
         serviceJwtToken = new AtomicReference<>(issueJwtTokenOperation.issueServiceJwtToken());
         log.debug("Service JWT token was issued");

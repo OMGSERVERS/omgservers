@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.issueJwtToken;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,12 +22,12 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
     private static final Duration RUNTIME_TOKEN_DURATION = Duration.ofSeconds(3600);
     private static final Duration WS_TOKEN_DURATION = Duration.ofSeconds(3600);
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public String issueServiceJwtToken() {
-        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
-        final var subject = getConfigOperation.getServiceConfig().server().uri().getHost();
+        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
+        final var subject = getServiceConfigOperation.getServiceConfig().server().uri().getHost();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(subject)
@@ -40,7 +40,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueUserJwtToken(final Long userId, final Set<String> groups) {
-        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
+        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(userId.toString())
@@ -54,7 +54,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueRuntimeJwtToken(final Long runtimeId) {
-        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
+        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(runtimeId.toString())
@@ -70,7 +70,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
     public String issueWsJwtToken(final Long subject,
                                   final Long runtimeId,
                                   final UserRoleEnum role) {
-        final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
+        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(subject.toString())

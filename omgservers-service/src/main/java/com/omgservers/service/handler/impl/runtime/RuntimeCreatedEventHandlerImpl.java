@@ -30,7 +30,7 @@ import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.event.EventService;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
 import com.omgservers.service.service.event.dto.SyncEventResponse;
@@ -58,7 +58,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final JobService jobService;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final MatchmakerMatchRuntimeRefModelFactory matchmakerMatchRuntimeRefModelFactory;
     final RuntimePermissionModelFactory runtimePermissionModelFactory;

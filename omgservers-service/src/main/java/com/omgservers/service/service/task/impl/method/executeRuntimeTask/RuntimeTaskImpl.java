@@ -4,6 +4,7 @@ import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
 import com.omgservers.service.service.event.dto.SyncEventResponse;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
@@ -12,7 +13,6 @@ import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
 import com.omgservers.service.service.event.EventService;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -32,7 +32,7 @@ public class RuntimeTaskImpl {
 
     final EventService eventService;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final EventModelFactory eventModelFactory;
 
@@ -54,7 +54,7 @@ public class RuntimeTaskImpl {
     }
 
     Uni<Void> checkRuntimeInactivity(final RuntimeModel runtime) {
-        final var inactiveInterval = getConfigOperation.getServiceConfig().runtimes().inactiveInterval();
+        final var inactiveInterval = getServiceConfigOperation.getServiceConfig().runtimes().inactiveInterval();
         final var now = Instant.now();
         if (runtime.getLastActivity().plusSeconds(inactiveInterval).isBefore(now)) {
 
@@ -98,7 +98,7 @@ public class RuntimeTaskImpl {
     }
 
     List<RuntimeAssignmentModel> filterInactiveClients(List<RuntimeAssignmentModel> runtimeAssignments) {
-        final var inactiveInterval = getConfigOperation.getServiceConfig().clients().inactiveInterval();
+        final var inactiveInterval = getServiceConfigOperation.getServiceConfig().clients().inactiveInterval();
         final var now = Instant.now();
 
         return runtimeAssignments.stream()

@@ -1,6 +1,6 @@
 package com.omgservers.service.service.initializer.impl.method;
 
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +19,7 @@ class InitializeDatabaseSchemaMethodImpl implements InitializeDatabaseSchemaMeth
     private static final String SYSTEM_SCHEMA_LOCATION = "db/system";
     private static final String SHARDS_SCHEMA_LOCATION = "db/shards";
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final DataSource dataSource;
 
@@ -46,8 +46,8 @@ class InitializeDatabaseSchemaMethodImpl implements InitializeDatabaseSchemaMeth
     }
 
     public void migrateShardsSchema(final String location) {
-        final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
-        final var migrationConcurrency = getConfigOperation.getServiceConfig().initialization().databaseSchema().concurrency();
+        final var shardCount = getServiceConfigOperation.getServiceConfig().index().shardCount();
+        final var migrationConcurrency = getServiceConfigOperation.getServiceConfig().initialization().databaseSchema().concurrency();
         final var migrationTasks = IntStream.range(0, shardCount)
                 .mapToObj(shard -> migrateShard(location, shard)).toList();
         Uni.join().all(migrationTasks).usingConcurrencyOf(migrationConcurrency)

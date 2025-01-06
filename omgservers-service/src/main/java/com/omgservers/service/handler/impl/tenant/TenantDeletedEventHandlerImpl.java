@@ -24,7 +24,7 @@ import com.omgservers.service.handler.operation.FindAndDeleteJobOperation;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.job.JobService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -47,7 +47,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
     final DeleteTenantProjectsOperation deleteTenantProjectsOperation;
     final FindAndDeleteJobOperation findAndDeleteJobOperation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {

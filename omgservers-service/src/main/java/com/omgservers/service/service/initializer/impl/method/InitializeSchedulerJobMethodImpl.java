@@ -1,6 +1,6 @@
 package com.omgservers.service.service.initializer.impl.method;
 
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskRequest;
 import io.quarkus.scheduler.Scheduled;
@@ -17,7 +17,7 @@ class InitializeSchedulerJobMethodImpl implements InitializeSchedulerJobMethod {
 
     final TaskService taskService;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final Scheduler scheduler;
 
@@ -27,7 +27,7 @@ class InitializeSchedulerJobMethodImpl implements InitializeSchedulerJobMethod {
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
-                    final var interval = getConfigOperation.getServiceConfig().initialization()
+                    final var interval = getServiceConfigOperation.getServiceConfig().initialization()
                             .schedulerJob().interval();
                     final var trigger = scheduler.newJob("scheduler")
                             .setInterval(interval)

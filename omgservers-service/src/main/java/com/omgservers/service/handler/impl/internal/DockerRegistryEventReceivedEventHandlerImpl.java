@@ -13,7 +13,7 @@ import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.buildDockerImageId.BuildDockerImageIdOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.operation.parseDockerRepository.ParseDockerRepositoryOperation;
 import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
 import io.smallrye.mutiny.Uni;
@@ -33,7 +33,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
 
     final ParseDockerRepositoryOperation parseDockerRepositoryOperation;
     final BuildDockerImageIdOperation buildDockerImageIdOperation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final TenantImageModelFactory tenantImageModelFactory;
 

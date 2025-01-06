@@ -20,7 +20,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
 import com.omgservers.service.service.job.dto.SyncJobResponse;
@@ -41,7 +41,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     final JobService jobService;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final RootEntityRefModelFactory rootEntityRefModelFactory;
     final JobModelFactory jobModelFactory;

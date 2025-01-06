@@ -21,7 +21,7 @@ import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.module.pool.impl.service.poolService.testInterface.PoolServiceTestInterface;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class PoolTestDataFactory {
 
     final PoolServiceTestInterface poolService;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final PoolContainerModelFactory poolContainerModelFactory;
     final PoolRequestModelFactory poolRequestModelFactory;

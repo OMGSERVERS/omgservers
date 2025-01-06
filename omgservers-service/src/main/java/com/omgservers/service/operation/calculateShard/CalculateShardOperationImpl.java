@@ -3,7 +3,7 @@ package com.omgservers.service.operation.calculateShard;
 import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.operation.calculateCrc16.CalculateCrc16Operation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.index.IndexService;
 import com.omgservers.service.service.index.dto.GetIndexRequest;
 import com.omgservers.service.service.index.dto.GetIndexResponse;
@@ -24,7 +24,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
     final IndexService indexService;
 
     final CalculateCrc16Operation calculateCrc16Operation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public Uni<ShardModel> calculateShard(String... keys) {
@@ -37,7 +37,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);
                     final var shardServerUri = index.getConfig().getServerUri(shardIndex);
-                    final var thisServerUri = getConfigOperation.getServiceConfig().server().uri();
+                    final var thisServerUri = getServiceConfigOperation.getServiceConfig().server().uri();
                     final var foreign = !shardServerUri.equals(thisServerUri);
                     final var locked = index.getConfig().getLockedShards().contains(shardIndex);
 

@@ -1,4 +1,4 @@
-package com.omgservers.service.operation.getConfig;
+package com.omgservers.service.operation.getServiceConfig;
 
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithConverter;

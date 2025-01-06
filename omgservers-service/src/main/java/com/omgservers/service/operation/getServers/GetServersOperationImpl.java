@@ -3,7 +3,7 @@ package com.omgservers.service.operation.getServers;
 import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.schema.model.index.IndexServerDto;
 import com.omgservers.service.operation.calculateCrc16.CalculateCrc16Operation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.index.IndexService;
 import com.omgservers.service.service.index.dto.GetIndexRequest;
 import com.omgservers.service.service.index.dto.GetIndexResponse;
@@ -23,7 +23,7 @@ class GetServersOperationImpl implements GetServersOperation {
     final IndexService indexService;
 
     final CalculateCrc16Operation calculateCrc16Operation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public Uni<List<URI>> getServers() {

@@ -2,7 +2,7 @@ package com.omgservers.service.operation.generateId;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,8 +15,8 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
     long lastTimestamp;
     long sequence;
 
-    public GenerateIdOperationImpl(final GetConfigOperation getConfigOperation) {
-        instanceId = getConfigOperation.getServiceConfig().server().instanceId();
+    public GenerateIdOperationImpl(final GetServiceConfigOperation getServiceConfigOperation) {
+        instanceId = getServiceConfigOperation.getServiceConfig().server().instanceId();
         if (instanceId < 0 || instanceId >= 1 << INSTANCE_ID_BITS) {
             throw new ServerSideInternalException(ExceptionQualifierEnum.WRONG_CONFIGURATION,
                     "server instanceId is wrong, value=" + instanceId);

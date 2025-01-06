@@ -1,6 +1,6 @@
 package com.omgservers.service.service.initializer.impl.method;
 
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.ExecuteRelayTaskRequest;
 import io.quarkus.scheduler.Scheduled;
@@ -17,7 +17,7 @@ class InitializeRelayJobMethodImpl implements InitializeRelayJobMethod {
 
     final TaskService taskService;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
     final Scheduler scheduler;
 
     @Override
@@ -26,7 +26,7 @@ class InitializeRelayJobMethodImpl implements InitializeRelayJobMethod {
 
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
-                    final var interval = getConfigOperation.getServiceConfig().initialization().relayJob().interval();
+                    final var interval = getServiceConfigOperation.getServiceConfig().initialization().relayJob().interval();
                     final var trigger = scheduler.newJob("relay")
                             .setInterval(interval)
                             .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)

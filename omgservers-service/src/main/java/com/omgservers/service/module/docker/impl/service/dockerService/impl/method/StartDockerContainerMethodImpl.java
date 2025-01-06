@@ -6,7 +6,7 @@ import com.github.dockerjava.api.model.LogConfig;
 import com.omgservers.schema.module.docker.StartDockerContainerRequest;
 import com.omgservers.schema.module.docker.StartDockerContainerResponse;
 import com.omgservers.service.operation.GetDockerDaemonClientOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
 
     final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public Uni<StartDockerContainerResponse> execute(final StartDockerContainerRequest request) {
@@ -34,7 +34,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .map(voidItem -> {
-                    final var registryURI = getConfigOperation.getServiceConfig().registry().uri();
+                    final var registryURI = getServiceConfigOperation.getServiceConfig().registry().uri();
                     final var imageId = poolContainer.getConfig().getImageId();
                     final var containerName = poolContainer.getContainerName();
                     final var environment = poolContainer.getConfig().getEnvironment().entrySet().stream()
@@ -44,7 +44,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerDaemonClient = getDockerDaemonClientOperation
                             .getClient(dockerDaemonUri);
-                    final var dockerNetwork = getConfigOperation.getServiceConfig().runtimes().dockerNetwork();
+                    final var dockerNetwork = getServiceConfigOperation.getServiceConfig().runtimes().dockerNetwork();
 
                     try {
                         // Convert milliseconds -> microseconds

@@ -40,7 +40,7 @@ import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -66,7 +66,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     final GenerateSecureStringOperation generateSecureStringOperation;
     final CalculateShardOperation calculateShardOperation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final PoolRequestModelFactory poolRequestModelFactory;
     final UserModelFactory userModelFactory;
@@ -202,9 +202,9 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         poolRequestConfig.setContainerConfig(new PoolRequestConfigDto.ContainerConfig());
         poolRequestConfig.getContainerConfig().setImageId(imageId);
         // TODO: get limits from version config
-        final var defaultCpuLimit = getConfigOperation.getServiceConfig().runtimes().defaultCpuLimit();
+        final var defaultCpuLimit = getServiceConfigOperation.getServiceConfig().runtimes().defaultCpuLimit();
         poolRequestConfig.getContainerConfig().setCpuLimitInMilliseconds(defaultCpuLimit);
-        final var defaultMemoryLimit = getConfigOperation.getServiceConfig().runtimes().defaultMemoryLimit();
+        final var defaultMemoryLimit = getServiceConfigOperation.getServiceConfig().runtimes().defaultMemoryLimit();
         poolRequestConfig.getContainerConfig().setMemoryLimitInMegabytes(defaultMemoryLimit);
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());

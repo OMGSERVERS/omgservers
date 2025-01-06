@@ -18,7 +18,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.root.RootModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -34,7 +34,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
     final UserModule userModule;
     final RootModule rootModule;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final RootEntityRefModelFactory rootEntityRefModelFactory;
 

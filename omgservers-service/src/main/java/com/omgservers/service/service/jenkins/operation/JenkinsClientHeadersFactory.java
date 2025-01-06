@@ -1,6 +1,6 @@
 package com.omgservers.service.service.jenkins.operation;
 
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import io.quarkus.rest.client.reactive.ReactiveClientHeadersFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,14 +15,14 @@ import java.util.Base64;
 @AllArgsConstructor
 public class JenkinsClientHeadersFactory extends ReactiveClientHeadersFactory {
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public Uni<MultivaluedMap<String, String>> getHeaders(MultivaluedMap<String, String> incomingHeaders,
                                                           MultivaluedMap<String, String> clientOutgoingHeaders) {
         final var multivaluedHashMap = new MultivaluedHashMap<String, String>();
-        final var username = getConfigOperation.getServiceConfig().builder().userId();
-        final var userToken = getConfigOperation.getServiceConfig().builder().userToken();
+        final var username = getServiceConfigOperation.getServiceConfig().builder().userId();
+        final var userToken = getServiceConfigOperation.getServiceConfig().builder().userToken();
         final var plainCredentials = username + ":" + userToken;
         multivaluedHashMap.add("Authorization", "Basic " + Base64.getEncoder().encodeToString(plainCredentials
                 .getBytes(StandardCharsets.UTF_8)));

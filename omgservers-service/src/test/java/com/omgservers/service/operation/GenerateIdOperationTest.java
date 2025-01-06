@@ -3,7 +3,7 @@ package com.omgservers.service.operation;
 import com.omgservers.BaseTestClass;
 import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ class GenerateIdOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Inject
-    GetConfigOperation getConfigOperation;
+    GetServiceConfigOperation getServiceConfigOperation;
 
     @Test
     void sequenceTest() throws InterruptedException {
@@ -52,7 +52,7 @@ class GenerateIdOperationTest extends BaseTestClass {
         long timestamp = (id >> GenerateIdOperation.TIMESTAMP_OFFSET);
 
         assertEquals(1, sequence);
-        assertEquals(getConfigOperation.getServiceConfig().server().instanceId(), instanceId);
+        assertEquals(getServiceConfigOperation.getServiceConfig().server().instanceId(), instanceId);
         assertTrue(timestamp > 0);
     }
 }

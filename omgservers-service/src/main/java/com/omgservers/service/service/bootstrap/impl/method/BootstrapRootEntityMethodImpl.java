@@ -13,7 +13,7 @@ import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.root.RootModelFactory;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityResponse;
 import io.smallrye.mutiny.Uni;
@@ -30,7 +30,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
 
     final RootModule rootModule;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final RootModelFactory rootModelFactory;
 

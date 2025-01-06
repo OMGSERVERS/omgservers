@@ -2,7 +2,7 @@ package com.omgservers.service.service.initializer.impl.method;
 
 import com.omgservers.schema.model.index.IndexConfigDto;
 import com.omgservers.service.factory.system.IndexModelFactory;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.index.IndexService;
 import com.omgservers.service.service.index.dto.SyncIndexRequest;
 import io.smallrye.mutiny.Uni;
@@ -17,7 +17,7 @@ class InitializeServerIndexMethodImpl implements InitializeServerIndexMethod {
 
     final IndexService indexService;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final IndexModelFactory indexModelFactory;
 
@@ -25,8 +25,8 @@ class InitializeServerIndexMethodImpl implements InitializeServerIndexMethod {
     public Uni<Void> execute() {
         log.debug("Initialize server index");
 
-        final var servers = getConfigOperation.getServiceConfig().initialization().serverIndex().servers();
-        final var shardCount = getConfigOperation.getServiceConfig().index().shardCount();
+        final var servers = getServiceConfigOperation.getServiceConfig().initialization().serverIndex().servers();
+        final var shardCount = getServiceConfigOperation.getServiceConfig().index().shardCount();
         final var indexConfig = IndexConfigDto.create(servers, shardCount);
         final var index = indexModelFactory.create(indexConfig, "index");
 

@@ -2,7 +2,7 @@ package com.omgservers.service.service.jenkins.impl.method.getLuaJitRuntimeBuild
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Request;
 import com.omgservers.service.service.jenkins.dto.GetLuaJitRuntimeBuilderV1Response;
 import com.omgservers.service.service.jenkins.dto.getJobByBuildNumber.ResultEnum;
@@ -20,14 +20,14 @@ import java.util.Objects;
 class GetLuaJitRuntimeBuilderV1MethodImpl implements GetLuaJitRuntimeBuilderV1Method {
 
     final GetJenkinsClientOperation getJenkinsClientOperation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public Uni<GetLuaJitRuntimeBuilderV1Response> getLuaJitRuntimeBuilderV1(
             final GetLuaJitRuntimeBuilderV1Request request) {
         log.trace("{}", request);
 
-        final var builderUri = getConfigOperation.getServiceConfig().builder().uri();
+        final var builderUri = getServiceConfigOperation.getServiceConfig().builder().uri();
         final var jenkinsClient = getJenkinsClientOperation.getClient(builderUri);
 
         final var buildNumber = request.getBuildNumber();

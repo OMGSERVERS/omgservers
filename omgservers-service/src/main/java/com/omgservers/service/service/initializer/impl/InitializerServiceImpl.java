@@ -2,7 +2,7 @@ package com.omgservers.service.service.initializer.impl;
 
 import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.initializer.InitializerService;
 import com.omgservers.service.service.initializer.impl.method.InitializeBootstrapJobMethod;
 import com.omgservers.service.service.initializer.impl.method.InitializeDatabaseSchemaMethod;
@@ -30,7 +30,7 @@ public class InitializerServiceImpl implements InitializerService {
     final InitializeServerIndexMethod initializeServerIndexMethod;
     final InitializeRelayJobMethod initializeRelayJobMethod;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final EventModelFactory eventModelFactory;
 
@@ -51,7 +51,7 @@ public class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> initializeDatabaseSchema() {
-        if (getConfigOperation.getServiceConfig().initialization().databaseSchema().enabled()) {
+        if (getServiceConfigOperation.getServiceConfig().initialization().databaseSchema().enabled()) {
             return initializeDatabaseSchemaMethod.execute()
                     .invoke(voidItem -> log.info("The database schema was initialized"));
         } else {
@@ -61,7 +61,7 @@ public class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> initializeServerIndex() {
-        if (getConfigOperation.getServiceConfig().initialization().serverIndex().enabled()) {
+        if (getServiceConfigOperation.getServiceConfig().initialization().serverIndex().enabled()) {
             return initializeServerIndexMethod.execute()
                     .invoke(voidItem -> log.info("Server index was initialized"));
         } else {
@@ -71,7 +71,7 @@ public class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> initializeRelayJob() {
-        if (getConfigOperation.getServiceConfig().initialization().relayJob().enabled()) {
+        if (getServiceConfigOperation.getServiceConfig().initialization().relayJob().enabled()) {
             return initializeRelayJobMethod.execute()
                     .invoke(voidItem -> log.info("The relay job was initialized"));
         } else {
@@ -81,7 +81,7 @@ public class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> initializeSchedulerJob() {
-        if (getConfigOperation.getServiceConfig().initialization().schedulerJob().enabled()) {
+        if (getServiceConfigOperation.getServiceConfig().initialization().schedulerJob().enabled()) {
             return initializeSchedulerJobMethod.execute()
                     .invoke(voidItem -> log.info("The scheduler job was initialized."));
         } else {
@@ -91,7 +91,7 @@ public class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> initializeBootstrapJob() {
-        if (getConfigOperation.getServiceConfig().initialization().bootstrapJob().enabled()) {
+        if (getServiceConfigOperation.getServiceConfig().initialization().bootstrapJob().enabled()) {
             return initializeBootstrapJobMethod.execute()
                     .invoke(voidItem -> log.info("The bootstrap job was initialized."));
         } else {

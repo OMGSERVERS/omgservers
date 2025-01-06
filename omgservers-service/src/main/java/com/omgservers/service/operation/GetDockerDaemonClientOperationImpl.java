@@ -4,7 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,28 +17,28 @@ import java.util.concurrent.ConcurrentHashMap;
 @ApplicationScoped
 class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperation {
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final Map<URI, DockerClient> cache;
 
-    GetDockerDaemonClientOperationImpl(final GetConfigOperation getConfigOperation) {
-        this.getConfigOperation = getConfigOperation;
+    GetDockerDaemonClientOperationImpl(final GetServiceConfigOperation getServiceConfigOperation) {
+        this.getServiceConfigOperation = getServiceConfigOperation;
         cache = new ConcurrentHashMap<>();
     }
 
     @Override
     public synchronized DockerClient getClient(final URI uri) {
         if (!cache.containsKey(uri)) {
-            final var tlsVerify = getConfigOperation.getServiceConfig().docker().tlsVerify();
-            final var certPath = getConfigOperation.getServiceConfig().docker().certPath();
+            final var tlsVerify = getServiceConfigOperation.getServiceConfig().docker().tlsVerify();
+            final var certPath = getServiceConfigOperation.getServiceConfig().docker().certPath();
 
             final var config = DefaultDockerClientConfig.createDefaultConfigBuilder()
                     .withDockerHost(uri.toString())
                     .withDockerTlsVerify(tlsVerify)
                     .withDockerCertPath(certPath)
-                    .withRegistryUrl(getConfigOperation.getServiceConfig().registry().uri().toString())
-                    .withRegistryUsername(getConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
-                    .withRegistryPassword(getConfigOperation.getServiceConfig().bootstrap().serviceUser().password())
+                    .withRegistryUrl(getServiceConfigOperation.getServiceConfig().registry().uri().toString())
+                    .withRegistryUsername(getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
+                    .withRegistryPassword(getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().password())
                     .build();
 
             final var httpClient = new ZerodepDockerHttpClient.Builder()

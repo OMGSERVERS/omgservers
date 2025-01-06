@@ -18,8 +18,8 @@ import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
-import com.omgservers.service.operation.getConfig.ServiceConfig;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.ServiceConfig;
 import com.omgservers.service.operation.getServers.GetServersOperation;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolResponse;
@@ -41,7 +41,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
     final PoolModule poolModule;
 
     final GetServersOperation getServersOperation;
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final PoolServerModelFactory poolServerModelFactory;
     final AliasModelFactory aliasModelFactory;
@@ -79,7 +79,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
     }
 
     Uni<Void> createDefaultPoolServers(final Long defaultPoolId) {
-        final var dockerHosts = getConfigOperation.getServiceConfig()
+        final var dockerHosts = getServiceConfigOperation.getServiceConfig()
                 .bootstrap().defaultPool().dockerHosts();
 
         final var serverCounter = new AtomicInteger();

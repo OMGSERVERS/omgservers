@@ -18,7 +18,7 @@ import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -33,7 +33,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
     final TenantModule tenantModule;
     final AliasModule aliasModule;
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
     final EventModelFactory eventModelFactory;
@@ -72,7 +72,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
     Uni<TenantProjectPermissionModel> syncBuilderPermission(final Long tenantId,
                                                             final Long tenantStageId,
                                                             final String idempotencyKey) {
-        return findDefaultUserAlias(getConfigOperation.getServiceConfig().bootstrap().builderUser().alias())
+        return findDefaultUserAlias(getServiceConfigOperation.getServiceConfig().bootstrap().builderUser().alias())
                 .flatMap(userAlias -> {
                     final var builderUserId = userAlias.getEntityId();
                     final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
@@ -90,7 +90,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
     Uni<TenantProjectPermissionModel> syncServicePermission(final Long tenantId,
                                                             final Long tenantStageId,
                                                             final String idempotencyKey) {
-        return findDefaultUserAlias(getConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
+        return findDefaultUserAlias(getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
                 .flatMap(userAlias -> {
                     final var serviceUserId = userAlias.getEntityId();
                     final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;

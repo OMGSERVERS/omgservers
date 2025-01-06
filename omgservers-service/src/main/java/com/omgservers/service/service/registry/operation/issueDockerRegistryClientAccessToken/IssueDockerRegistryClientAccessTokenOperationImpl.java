@@ -1,7 +1,7 @@
 package com.omgservers.service.service.registry.operation.issueDockerRegistryClientAccessToken;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.operation.getConfig.GetConfigOperation;
+import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
 import com.omgservers.service.service.registry.dto.DockerRegistryAccessDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryActionEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
@@ -25,7 +25,7 @@ class IssueDockerRegistryClientAccessTokenOperationImpl implements IssueDockerRe
 
     private final String REGISTRY_AUDIENCE = "registry";
 
-    final GetConfigOperation getConfigOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
     final JWTParser jwtParser;
 
     @Override
@@ -33,8 +33,8 @@ class IssueDockerRegistryClientAccessTokenOperationImpl implements IssueDockerRe
                                                              final List<DockerRegistryAccessDto> access) {
 
         try {
-            final var issuer = getConfigOperation.getServiceConfig().jwt().issuer();
-            final var x5c = getConfigOperation.getServiceConfig().jwt().x5c();
+            final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
+            final var x5c = getServiceConfigOperation.getServiceConfig().jwt().x5c();
             final var jwtToken = Jwt.issuer(issuer)
                     .subject(userId.toString())
                     .audience(REGISTRY_AUDIENCE)
