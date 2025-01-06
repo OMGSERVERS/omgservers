@@ -10,39 +10,65 @@ OMGSERVERS is a platform for building, testing, and running authoritative server
 
 ## Core Principles
 
-- Monolithic Architecture
-- Sharding Over Clustering
-- No Vendor Lock-in
+- Monolithic Architecture.
+- Sharding Over Clustering.
+- No Vendor Lock-in.
 
-## Features: Implemented & In-Development
+## Features
+- Manage developer accounts and permissions.
+- Organize projects, versions, and deployments across stages.
+- Build Docker images for game runtimes from source code.
+- Store and manage player data.
+- Match players and launch game runtimes in Docker containers.
+- Request/Response API for player authentication and registration.
+- Command-based API for delivering asynchronous commands between players and the server.
+- WebSockets for enabling two-way communication with game runtimes.
+- Defold SDK for implementing the client and server sides of games.
+- Headless builds functioning as game runtimes.
+- Run game runtime containers on a pool of servers.
+- WebSocket Dispatcher to connect game runtimes with players via client WebSocket connections.
+- Lobby runtimes to handle player commands and update player data in an authoritative way.
+- Match runtimes to allow players to play together.
+- Command-line tool for administrative and support tasks.
 
-### **Project Management**
-- **Developer Management:** Manage developer accounts and permissions.
-- **Tenant Management:** Organize projects, versions, and deployments across stages.
-- **Registry Integration:** Automatically link uploaded Docker images to project versions.
-- **Runtimes Builder:** Build Docker images for game runtimes from source code.
+# Deployment types
 
-### **Player Management**
-- **Player Profiles:** Store and manage player data.
-- **Matchmaking:** Match players and launch game runtimes.
+## Dedicated
 
-### **WebSocket Dispatcher**
-- Build game runtimes without web server components.
-- Interact with players using client WebSocket connections through the Dispatcher.
+### Standalone
+- Single-server service deployment.
+- Runs game runtimes locally via the Docker API.
 
-### **Player-to-Server Interactions**
-- **Player API:** API for creating accounts, sessions, and handling authentication.
-- **Command-Based API:** Support asynchronous commands in stateful player sessions.
-- **WebSockets:** Enable two-way communication with game runtimes.
+Suitable for:
+- Players can be distributed across independent deployments.
+- Non-resource-intensive game runtimes.
 
-### **Game Engine SDKs**
-- **Defold Player SDK:** Interact with game runtimes from game.
-- **Defold Server SDK:** Build game runtimes using a headless Defold builds.
+### Standalone with server pool
+- Single-server service deployment.
+- Runs game runtime on a pool of Docker hosts.
 
-### **Docker-Based Runtimes**
-- **Server Pools:** Run game runtimes across Docker host pools.
-- **Lobby Runtimes:** Containerized environments for player preparation.
-- **Match Runtimes:** On-demand containers for managing gameplay sessions.
+Suitable for:
+- Player can be distributed across independent deployments.
+- Resource-intensive game runtimes.
 
-### **Administrative Tools**
-- **Command-Line Utility:** Tool for administrative and support tasks.
+### Sharded
+- Distribute data across multiple servers by using shards.
+- Support on-demand infrastructure scaling.
+- Runs game runtimes locally via the Docker API.
+
+Suitable for:
+- A significant number of players should be able to play together.
+- Non-resource-intensive game runtimes.
+
+### Sharded with server pool
+- Distribute data across multiple servers by using shards.
+- Support on-demand infrastructure scaling.
+- Runs game runtime on a pool of Docker hosts.
+
+Suitable for:
+- A significant number of players should be able to play together.
+- Resource-intensive game runtimes.
+
+## Public cloud
+- Provide a pay-as-you-go service.
+- On-demand dedicated server pools.
