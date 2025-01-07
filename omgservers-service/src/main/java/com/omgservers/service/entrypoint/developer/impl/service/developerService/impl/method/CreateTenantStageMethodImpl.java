@@ -62,13 +62,11 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
                                         .flatMap(voidItem -> createTenantStage(tenantId, tenantProjectId, userId)
                                                 .map(tenantStage -> {
                                                     final var tenantStageId = tenantStage.getId();
-                                                    final var tenantStageSecret = tenantStage.getSecret();
 
                                                     log.info("The new stage \"{}\" was created in tenant \"{}\" " +
                                                             "by the user {}", tenantStageId, tenantId, userId);
 
-                                                    return new CreateTenantStageDeveloperResponse(tenantStageId,
-                                                            tenantStageSecret);
+                                                    return new CreateTenantStageDeveloperResponse(tenantStageId);
                                                 }));
                             });
                 });

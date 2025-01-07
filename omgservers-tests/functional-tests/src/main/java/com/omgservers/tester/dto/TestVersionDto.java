@@ -20,7 +20,6 @@ public class TestVersionDto {
     Long tenantId;
     Long tenantProjectId;
     Long tenantStageId;
-    String tenantStageSecret;
     Long tenantVersionId;
     Long tenantFilesArchiveId;
     Long tenantDeploymentId;

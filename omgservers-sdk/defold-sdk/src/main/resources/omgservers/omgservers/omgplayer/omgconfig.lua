@@ -4,9 +4,9 @@ omgconfig = {
 		self,
 		options = {
 			-- Required
-			tenant_id,
-			stage_id,
-			stage_secret,
+			tenant,
+			project
+			stage,
 			event_handler,
 			-- Optional
 			service_url,
@@ -20,9 +20,9 @@ omgconfig = {
 	create = function(self, options)
 		assert(self, "The self must not be nil.")
 		assert(options, "The options must not be nil.")
-		assert(options.tenant_id, "The value tenant_id must not be nil.")
-		assert(options.stage_id, "The value stage_id must not be nil.")
-		assert(options.stage_secret, "The value stage_secret must not be nil.")
+		assert(options.tenant, "The value tenant must not be nil.")
+		assert(options.project, "The value project must not be nil.")
+		assert(options.stage, "The value stage must not be nil.")
 		assert(options.event_handler, "The value event_handler must not be null.")
 
 		local service_url = options.service_url or "https://api.omgservers.com"
@@ -39,9 +39,9 @@ omgconfig = {
 		
 		local instance = {
 			type = "omgconfig",
-			tenant_id = options.tenant_id,
-			stage_id = options.stage_id,
-			stage_secret = options.stage_secret,
+			tenant = options.tenant,
+			project = options.project,
+			stage = options.stage,
 			event_handler = options.event_handler,
 			service_url = service_url,
 			debug_logging = debug_logging,

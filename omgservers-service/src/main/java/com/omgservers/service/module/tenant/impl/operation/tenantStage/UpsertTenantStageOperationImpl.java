@@ -1,8 +1,8 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantStage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.event.body.module.tenant.TenantStageCreatedEventBodyModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.service.event.body.module.tenant.TenantStageCreatedEventBodyModel;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
 import com.omgservers.service.operation.changeWithContext.ChangeContext;
@@ -33,8 +33,8 @@ class UpsertTenantStageOperationImpl implements UpsertTenantStageOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_stage(
-                            id, idempotency_key, tenant_id, project_id, created, modified, secret, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, tenant_id, project_id, created, modified, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,7 +45,6 @@ class UpsertTenantStageOperationImpl implements UpsertTenantStageOperation {
                         tenantStage.getProjectId(),
                         tenantStage.getCreated().atOffset(ZoneOffset.UTC),
                         tenantStage.getModified().atOffset(ZoneOffset.UTC),
-                        tenantStage.getSecret(),
                         tenantStage.getDeleted()
                 ),
                 () -> new TenantStageCreatedEventBodyModel(tenantStage.getTenantId(), tenantStage.getId()),

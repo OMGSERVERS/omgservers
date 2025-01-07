@@ -2,7 +2,6 @@ package com.omgservers.schema.model.tenantStage;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,11 +37,6 @@ public class TenantStageModel {
     @NotBlank
     @ToString.Exclude
     String idempotencyKey;
-
-    @NotBlank
-    @Size(max = 1024)
-    @ToString.Exclude
-    String secret;
 
     @NotNull
     Boolean deleted;

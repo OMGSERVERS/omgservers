@@ -128,9 +128,9 @@ public class DefoldDefaultRuntimeIT extends BaseTestClass {
     private GenericContainer startDefoldTestClient(final TestVersionDto testVersion) {
         return new GenericContainer("omgservers/defold-test-client:1.0.0-SNAPSHOT")
                 .withEnv(Map.of("OMGSERVERS_SERVICE_URL", "http://host.docker.internal:8080",
-                        "OMGSERVERS_TENANT_ID", testVersion.getTenantId().toString(),
-                        "OMGSERVERS_STAGE_ID", testVersion.getTenantStageId().toString(),
-                        "OMGSERVERS_SECRET", testVersion.getTenantStageSecret()))
+                        "OMGSERVERS_TENANT", testVersion.getTenantId().toString(),
+                        "OMGSERVERS_PROJECT", testVersion.getTenantProjectId().toString(),
+                        "OMGSERVERS_STAGE", testVersion.getTenantStageId().toString()))
                 // Make host.docker.internal work on Linux
                 .withExtraHost("host.docker.internal", "host-gateway");
     }

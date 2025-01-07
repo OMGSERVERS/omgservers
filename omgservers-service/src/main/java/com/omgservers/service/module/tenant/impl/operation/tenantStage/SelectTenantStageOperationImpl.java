@@ -29,15 +29,12 @@ class SelectTenantStageOperationImpl implements SelectTenantStageOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, tenant_id, project_id, created, modified, secret, deleted
+                        select id, idempotency_key, tenant_id, project_id, created, modified, deleted
                         from $schema.tab_tenant_stage
                         where tenant_id = $1 and id = $2
                         limit 1
                         """,
-                List.of(
-                        tenantId,
-                        id
-                ),
+                List.of(tenantId, id),
                 "Stage",
                 tenantStageModelMapper::fromRow);
     }

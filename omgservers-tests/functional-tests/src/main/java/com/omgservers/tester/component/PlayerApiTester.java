@@ -66,9 +66,9 @@ public class PlayerApiTester {
     }
 
     public Long createClient(final String token,
-                             final Long tenantId,
-                             final Long tenantStageId,
-                             final String tenantStageSecret)
+                             final String tenant,
+                             final String tenantProject,
+                             final String tenantStage)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -76,9 +76,9 @@ public class PlayerApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new CreateClientPlayerRequest(tenantId,
-                        tenantStageId,
-                        tenantStageSecret)))
+                .body(objectMapper.writeValueAsString(new CreateClientPlayerRequest(tenant,
+                        tenantProject,
+                        tenantStage)))
                 .when().put("/service/v1/entrypoint/player/request/create-client");
         responseSpecification.then().statusCode(200);
 

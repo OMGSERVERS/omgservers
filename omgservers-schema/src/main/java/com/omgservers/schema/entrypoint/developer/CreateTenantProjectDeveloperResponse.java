@@ -11,5 +11,4 @@ public class CreateTenantProjectDeveloperResponse {
 
     Long projectId;
     Long stageId;
-    String secret;
 }

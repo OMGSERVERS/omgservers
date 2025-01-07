@@ -24,9 +24,9 @@ omgclient = {
 		local debug_logging = options.config.debug_logging
 		
 		local service_url = options.config.service_url
-		local tenant_id = options.config.tenant_id
-		local stage_id = options.config.stage_id
-		local stage_secret = options.config.stage_secret
+		local tenant = options.config.tenant
+		local project = options.config.project
+		local stage = options.config.stage
 
 		local state = options.state
 		local http = options.http
@@ -162,9 +162,9 @@ omgclient = {
 
 				local request_url = create_client_url
 				local request_body = {
-					tenant_id = tenant_id,
-					stage_id = stage_id,
-					secret = stage_secret,
+					tenant = tenant,
+					project = project,
+					stage = stage,
 				}
 				
 				local response_handler = function(response_status, response_body)

@@ -21,23 +21,20 @@ public class TenantStageModelFactory {
     public TenantStageModel create(final Long tenantId,
                                    final Long projectId) {
         final var id = generateIdOperation.generateId();
-        final var secret = generateSecureStringOperation.generateSecureString();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, projectId, secret, idempotencyKey);
+        return create(id, tenantId, projectId, idempotencyKey);
     }
 
     public TenantStageModel create(final Long tenantId,
                                    final Long projectId,
                                    final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        final var secret = generateSecureStringOperation.generateSecureString();
-        return create(id, tenantId, projectId, secret, idempotencyKey);
+        return create(id, tenantId, projectId, idempotencyKey);
     }
 
     public TenantStageModel create(final Long id,
                                    final Long tenantId,
                                    final Long projectId,
-                                   final String secret,
                                    final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -48,7 +45,6 @@ public class TenantStageModelFactory {
         tenantStage.setCreated(now);
         tenantStage.setModified(now);
         tenantStage.setIdempotencyKey(idempotencyKey);
-        tenantStage.setSecret(secret);
         tenantStage.setDeleted(false);
         return tenantStage;
     }

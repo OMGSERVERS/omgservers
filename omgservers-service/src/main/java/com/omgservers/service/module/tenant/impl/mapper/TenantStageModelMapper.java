@@ -22,7 +22,6 @@ public class TenantStageModelMapper {
         tenantStage.setCreated(row.getOffsetDateTime("created").toInstant());
         tenantStage.setModified(row.getOffsetDateTime("modified").toInstant());
         tenantStage.setIdempotencyKey(row.getString("idempotency_key"));
-        tenantStage.setSecret(row.getString("secret"));
         tenantStage.setDeleted(row.getBoolean("deleted"));
         return tenantStage;
     }

@@ -215,7 +215,6 @@ create table if not exists tab_tenant_stage (
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    secret text not null,
     deleted boolean not null
 );
 

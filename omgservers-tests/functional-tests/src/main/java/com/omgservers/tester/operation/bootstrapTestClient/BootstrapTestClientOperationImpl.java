@@ -45,9 +45,9 @@ class BootstrapTestClientOperationImpl implements BootstrapTestClientOperation {
         final var token = playerApiTester.createToken(userId, password);
 
         final var clientId = playerApiTester.createClient(token,
-                testVersion.getTenantId(),
-                testVersion.getTenantStageId(),
-                testVersion.getTenantStageSecret());
+                testVersion.getTenantId().toString(),
+                testVersion.getTenantProjectId().toString(),
+                testVersion.getTenantStageId().toString());
 
         return TestClientDto.builder()
                 .id(idGenerator.getAndIncrement())

@@ -54,7 +54,6 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
         final var createProjectDeveloperResponse = developerApiTester.createTenantProject(developerToken, tenantId);
         final var tenantProjectId = createProjectDeveloperResponse.getProjectId();
         final var tenantStageId = createProjectDeveloperResponse.getStageId();
-        final var tenantStageSecret = createProjectDeveloperResponse.getSecret();
 
         final var createVersionDeveloperResponse = developerApiTester
                 .createTenantVersion(developerToken, tenantId, tenantProjectId, versionConfig);
@@ -69,7 +68,6 @@ class CreateTestVersionOperationImpl implements CreateTestVersionOperation {
                 .developerToken(developerToken)
                 .tenantProjectId(tenantProjectId)
                 .tenantStageId(tenantStageId)
-                .tenantStageSecret(tenantStageSecret)
                 .tenantVersionId(tenantVersionId)
                 .build();
     }

@@ -3,28 +3,23 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
 import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.client.SyncClientRequest;
-import com.omgservers.schema.module.client.SyncClientResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
-import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientModelFactory;
-import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
+import com.omgservers.service.operation.getIdByStage.GetIdByStageOperation;
+import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
 import com.omgservers.service.security.ServiceSecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -38,12 +33,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateClientMethodImpl implements CreateClientMethod {
 
-    final RuntimeModule runtimeModule;
     final ClientModule clientModule;
     final TenantModule tenantModule;
     final UserModule userModule;
 
-    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
+    final GetIdByProjectOperation getIdByProjectOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
+    final GetIdByStageOperation getIdByStageOperation;
+
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
 
@@ -51,49 +48,40 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     @Override
     public Uni<CreateClientPlayerResponse> execute(final CreateClientPlayerRequest request) {
-        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.trace("{}", request);
 
-        final var userId =
-                securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = securityIdentity
+                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
 
-        final var tenantId = request.getTenantId();
-        final var tenantStageId = request.getStageId();
-        final var tenantStageSecret = request.getSecret();
+        final var tenant = request.getTenant();
+        final var project = request.getProject();
+        final var stage = request.getStage();
 
-        return validateStageSecret(tenantId, tenantStageId, tenantStageSecret)
-                .flatMap(rawToken -> findOrCreatePlayer(userId, tenantId, tenantStageId)
-                        .flatMap(player -> {
-                            final var playerId = player.getId();
-                            return createClient(userId, playerId, tenantId, tenantStageId)
-                                    .flatMap(client -> syncClient(client)
-                                            .replaceWith(client.getId()));
-                        })
+        return getIdByTenantOperation.execute(tenant)
+                .flatMap(tenantId -> getIdByProjectOperation.execute(tenantId, project)
+                        .flatMap(tenantProjectId -> getIdByStageOperation.execute(tenantId, tenantProjectId, stage)
+                                .flatMap(tenantStageId -> findOrCreatePlayer(userId, tenantId, tenantStageId)
+                                        .flatMap(player -> {
+                                            final var playerId = player.getId();
+                                            return createClient(userId, playerId, tenantId, tenantStageId)
+                                                    .map(client -> {
+                                                        final var clientId = client.getId();
+                                                        log.info("The new client \"{}\" was created by the user {}",
+                                                                clientId, userId);
+                                                        return clientId;
+                                                    });
+                                        }))
+                        )
                 )
-                .invoke(clientId -> log.info("The new client \"{}\" was created by the user {}", clientId, userId))
                 .map(CreateClientPlayerResponse::new);
-    }
-
-    Uni<TenantStageModel> validateStageSecret(final Long tenantId,
-                                              final Long tenantStageId,
-                                              final String secret) {
-        final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantModule.getService().getTenantStage(request)
-                .map(GetTenantStageResponse::getTenantStage)
-                .invoke(tenantStage -> {
-                    final var stageSecret = tenantStage.getSecret();
-                    if (!stageSecret.equals(secret)) {
-                        throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_STAGE_SECRET,
-                                "stage secret is wrong");
-                    }
-                });
     }
 
     Uni<PlayerModel> findOrCreatePlayer(final Long userId,
                                         final Long tenantId,
-                                        final Long tennatStageId) {
-        return findPlayer(userId, tennatStageId)
+                                        final Long tenantStageId) {
+        return findPlayer(userId, tenantStageId)
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithUni(t -> createPlayer(userId, tenantId, tennatStageId));
+                .recoverWithUni(t -> createPlayer(userId, tenantId, tenantStageId));
     }
 
     Uni<PlayerModel> findPlayer(final Long userId, final Long tenantStageId) {
@@ -116,14 +104,16 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long tenantId,
                                   final Long tenantStageId) {
         return selectTenantDeployment(tenantId, tenantStageId)
-                .map(tenantDeployment -> {
+                .flatMap(tenantDeployment -> {
                     final var tenantDeploymentId = tenantDeployment.getId();
                     final var client = clientModelFactory.create(userId,
                             playerId,
                             tenantId,
                             tenantDeploymentId);
 
-                    return client;
+                    final var request = new SyncClientRequest(client);
+                    return clientModule.getService().syncClient(request)
+                            .replaceWith(client);
                 });
     }
 
@@ -133,11 +123,5 @@ class CreateClientMethodImpl implements CreateClientMethod {
                 SelectTenantDeploymentRequest.StrategyEnum.LATEST);
         return tenantModule.getService().selectTenantDeployment(request)
                 .map(SelectTenantDeploymentResponse::getTenantDeployment);
-    }
-
-    Uni<Boolean> syncClient(ClientModel client) {
-        final var request = new SyncClientRequest(client);
-        return clientModule.getService().syncClient(request)
-                .map(SyncClientResponse::getCreated);
     }
 }

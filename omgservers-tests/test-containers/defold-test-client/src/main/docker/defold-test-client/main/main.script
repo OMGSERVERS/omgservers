@@ -1,8 +1,9 @@
 local omgplayer = require("omgservers.omgplayer.omgplayer")
 
 local service_url = os.getenv("OMGSERVERS_SERVICE_URL") or "http://localhost:8080"
-local tenant_id = os.getenv("OMGSERVERS_TENANT_ID")
-local stage_id = os.getenv("OMGSERVERS_STAGE_ID")
+local tenant = os.getenv("OMGSERVERS_TENANT")
+local project = os.getenv("OMGSERVERS_PROJECT")
+local stage = os.getenv("OMGSERVERS_STAGE")
 local secret = os.getenv("OMGSERVERS_SECRET")
 
 local function handle_event(self, event)
@@ -62,8 +63,9 @@ end
 function init(self)
 	local options = {
 		service_url = service_url,
-		tenant_id = tenant_id, 
-		stage_id = stage_id, 
+		tenant = tenant,
+		project = project,
+		stage = stage,
 		stage_secret = secret, 
 		event_handler = function(event) handle_event(self, event) end,
 		debug_logging = true,
