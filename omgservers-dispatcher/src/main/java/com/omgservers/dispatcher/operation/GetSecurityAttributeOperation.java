@@ -8,5 +8,5 @@ public interface GetSecurityAttributeOperation {
 
     UserRoleEnum getUserRole();
 
-    Long getSubject();
+    <T> T getSubject();
 }

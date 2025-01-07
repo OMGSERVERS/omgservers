@@ -16,7 +16,7 @@ import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -51,7 +51,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId =
-                securityIdentity.<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+                securityIdentity.<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)

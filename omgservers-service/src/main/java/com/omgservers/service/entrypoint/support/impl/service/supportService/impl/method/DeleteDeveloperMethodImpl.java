@@ -5,7 +5,7 @@ import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
 import com.omgservers.schema.module.user.DeleteUserRequest;
 import com.omgservers.schema.module.user.DeleteUserResponse;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +26,7 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var developerUserId = request.getUserId();
         final var deleteUserRequest = new DeleteUserRequest(developerUserId);

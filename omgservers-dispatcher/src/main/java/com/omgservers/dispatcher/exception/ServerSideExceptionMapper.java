@@ -138,7 +138,8 @@ public class ServerSideExceptionMapper {
                                                                   final UriInfo uriInfo) {
         log.error("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
-                e.getMessage());
+                e.getMessage(),
+                e);
 
         final var exceptionErrorResponse = new ExceptionErrorResponse(e.getQualifier());
         return RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR, exceptionErrorResponse);
@@ -149,7 +150,8 @@ public class ServerSideExceptionMapper {
                                                           final UriInfo uriInfo) {
         log.error("Server side exception, {}, {}:{}", uriInfo.getAbsolutePath(),
                 e.getClass().getSimpleName(),
-                e.getMessage());
+                e.getMessage(),
+                e);
 
         final var exceptionErrorResponse = new ExceptionErrorResponse(ExceptionQualifierEnum
                 .INTERNAL_EXCEPTION_OCCURRED);

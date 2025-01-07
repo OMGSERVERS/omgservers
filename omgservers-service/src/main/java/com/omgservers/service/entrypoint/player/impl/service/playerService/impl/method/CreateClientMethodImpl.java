@@ -20,7 +20,7 @@ import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
 import com.omgservers.service.operation.getIdByStage.GetIdByStageOperation;
 import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -51,7 +51,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
         log.trace("{}", request);
 
         final var userId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = request.getTenant();
         final var project = request.getProject();

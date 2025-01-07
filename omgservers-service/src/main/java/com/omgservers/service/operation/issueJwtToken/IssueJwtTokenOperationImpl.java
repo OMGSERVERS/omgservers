@@ -2,7 +2,7 @@ package com.omgservers.service.operation.issueJwtToken;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -44,7 +44,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(userId.toString())
-                .claim(ServiceSecurityAttributesEnum.USER_ID.getAttributeName(), userId.toString())
+                .claim(SecurityAttributesEnum.USER_ID.getAttributeName(), userId.toString())
                 .expiresIn(USER_TOKEN_DURATION)
                 .groups(groups)
                 .sign();
@@ -58,7 +58,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(runtimeId.toString())
-                .claim(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName(), runtimeId.toString())
+                .claim(SecurityAttributesEnum.RUNTIME_ID.getAttributeName(), runtimeId.toString())
                 .expiresIn(RUNTIME_TOKEN_DURATION)
                 .groups(UserRoleEnum.RUNTIME.getName())
                 .sign();
@@ -74,9 +74,8 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(subject.toString())
-                .claim(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName(), runtimeId.toString())
-                .claim(ServiceSecurityAttributesEnum.SUBJECT.getAttributeName(), subject.toString())
-                .claim(ServiceSecurityAttributesEnum.USER_ROLE.getAttributeName(), role.getName())
+                .claim(SecurityAttributesEnum.RUNTIME_ID.getAttributeName(), runtimeId.toString())
+                .claim(SecurityAttributesEnum.USER_ROLE.getAttributeName(), role.getName())
                 .expiresIn(WS_TOKEN_DURATION)
                 .groups(UserRoleEnum.WEBSOCKET.getName())
                 .sign();

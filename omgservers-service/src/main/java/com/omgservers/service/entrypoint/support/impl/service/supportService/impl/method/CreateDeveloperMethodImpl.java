@@ -11,7 +11,7 @@ import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.generateId.GenerateIdOperation;
 import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -39,7 +39,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var password = generateSecureStringOperation.generateSecureString();
         return createDeveloperUser(password)

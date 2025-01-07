@@ -19,7 +19,7 @@ import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
 import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -49,7 +49,7 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
                 securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         return getIdByTenantOperation.execute(request.getTenant())
                 .flatMap(tenantId -> getIdByProjectOperation.execute(tenantId, request.getProject())

@@ -25,7 +25,7 @@ class OnOpenMethodImpl implements OnOpenMethod {
 
         final var runtimeId = getSecurityAttributeOperation.getRuntimeId();
         final var userRole = getSecurityAttributeOperation.getUserRole();
-        final var subject = getSecurityAttributeOperation.getSubject();
+        final var subject = getSecurityAttributeOperation.<Long>getSubject();
 
         final var onOpenRequest = new OnOpenRequest(webSocketConnection, runtimeId, userRole, subject);
         return dispatcherModule.getDispatcherService().execute(onOpenRequest);

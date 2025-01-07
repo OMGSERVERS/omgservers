@@ -6,7 +6,7 @@ import com.omgservers.schema.module.runtime.InterchangeRequest;
 import com.omgservers.schema.module.runtime.InterchangeResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +29,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
         log.debug("Interchange, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var runtimeId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.RUNTIME_ID.getAttributeName());
+                .<Long>getAttribute(SecurityAttributesEnum.RUNTIME_ID.getAttributeName());
 
         final var outgoingCommands = request.getOutgoingCommands();
         final var consumedCommands = request.getConsumedCommands();

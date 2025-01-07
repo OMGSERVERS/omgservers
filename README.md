@@ -24,7 +24,6 @@ OMGSERVERS is a platform for building, testing, and running authoritative server
 - Command-based API for delivering asynchronous commands between players and the server.
 - WebSockets for enabling two-way communication with game runtimes.
 - Defold SDK for implementing the client and server sides of games.
-- Headless builds functioning as game runtimes.
 - Run game runtime containers on a pool of servers.
 - WebSocket Dispatcher to connect game runtimes with players via client WebSocket connections.
 - Lobby runtimes to handle player commands and update player data in an authoritative way.
@@ -37,7 +36,7 @@ OMGSERVERS is a platform for building, testing, and running authoritative server
 
 ### Standalone
 - Single-server service deployment.
-- Runs game runtimes locally via the Docker API.
+- Run game runtimes locally via the Docker API.
 
 Suitable for:
 - Players can be distributed across independent deployments.
@@ -45,7 +44,7 @@ Suitable for:
 
 ### Standalone with server pool
 - Single-server service deployment.
-- Runs game runtime on a pool of Docker hosts.
+- Run game runtime on a pool of Docker hosts.
 
 Suitable for:
 - Player can be distributed across independent deployments.
@@ -54,7 +53,7 @@ Suitable for:
 ### Sharded
 - Distribute data across multiple servers by using shards.
 - Support on-demand infrastructure scaling.
-- Runs game runtimes locally via the Docker API.
+- Run game runtimes locally via the Docker API.
 
 Suitable for:
 - A significant number of players should be able to play together.
@@ -63,7 +62,7 @@ Suitable for:
 ### Sharded with server pool
 - Distribute data across multiple servers by using shards.
 - Support on-demand infrastructure scaling.
-- Runs game runtime on a pool of Docker hosts.
+- Run game runtime on a pool of Docker hosts.
 
 Suitable for:
 - A significant number of players should be able to play together.

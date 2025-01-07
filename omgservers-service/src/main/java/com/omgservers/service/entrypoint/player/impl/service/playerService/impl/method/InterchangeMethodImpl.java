@@ -5,7 +5,7 @@ import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
 import com.omgservers.schema.module.client.InterchangeRequest;
 import com.omgservers.schema.module.client.InterchangeResponse;
 import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.security.ServiceSecurityAttributesEnum;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +27,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
         log.debug("Interchange, request={}, principal={}", request, securityIdentity.getPrincipal().getName());
 
         final var userId = securityIdentity
-                .<Long>getAttribute(ServiceSecurityAttributesEnum.USER_ID.getAttributeName());
+                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var clientId = request.getClientId();
         final var messagesToHandle = request.getOutgoingMessages();
