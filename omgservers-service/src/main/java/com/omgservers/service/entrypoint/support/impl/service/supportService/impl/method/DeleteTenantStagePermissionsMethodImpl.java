@@ -70,8 +70,8 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
                                             .invoke(deletedPermissions -> {
                                                 if (deletedPermissions.size() > 0) {
                                                     log.info("The \"{}\" stage permissions in tenant \"{}\" " +
-                                                                    "for user \"{}\" were deleted by the user {}",
-                                                            deletedPermissions.size(), tenantId, forUserId, userId);
+                                                                    "for user \"{}\" were deleted",
+                                                            deletedPermissions.size(), tenantId, forUserId);
                                                 }
                                             });
                                 })))

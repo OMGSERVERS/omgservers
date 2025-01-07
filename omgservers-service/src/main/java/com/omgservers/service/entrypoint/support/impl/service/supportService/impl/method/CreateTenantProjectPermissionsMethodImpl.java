@@ -72,8 +72,8 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
                                     .invoke(createdPermissions -> {
                                         if (!createdPermissions.isEmpty()) {
                                             log.info("The \"{}\" project permissions in tenant \"{}\" " +
-                                                            "for user \"{}\" were created by the user {}",
-                                                    createdPermissions.size(), tenantId, forUserId, userId);
+                                                            "for user \"{}\" were created",
+                                                    createdPermissions.size(), tenantId, forUserId);
                                         }
                                     });
                         }))

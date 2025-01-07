@@ -64,8 +64,8 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
                                                     .invoke(deleted -> {
                                                         if (deleted) {
                                                             log.info("Stage \"{}\" was deleted " +
-                                                                            "in tenant \"{}\" by the user {}",
-                                                                    tenantStageId, tenantId, userId);
+                                                                            "in tenant \"{}\"",
+                                                                    tenantStageId, tenantId);
                                                         }
                                                     })
                                                     .map(DeleteTenantStageDeveloperResponse::new);

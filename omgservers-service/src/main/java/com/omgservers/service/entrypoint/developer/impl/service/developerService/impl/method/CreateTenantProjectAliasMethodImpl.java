@@ -74,8 +74,8 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
         return aliasModule.getService().execute(syncAliasRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
-                        log.info("The alias \"{}\" for the project \"{}\" was created by the user \"{}\"",
-                                aliasValue, tenantProjectId, userId);
+                        log.info("The alias \"{}\" for the project \"{}\" was created",
+                                aliasValue, tenantProjectId);
                     }
                 })
                 .replaceWith(tenantProjectAlias);

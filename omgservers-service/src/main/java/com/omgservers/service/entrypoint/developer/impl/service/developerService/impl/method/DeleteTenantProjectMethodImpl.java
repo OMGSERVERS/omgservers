@@ -53,8 +53,8 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
                                         .flatMap(voidItem -> deleteTenantProject(tenantId, tenantProjectId))
                                         .invoke(deleted -> {
                                             if (deleted) {
-                                                log.info("Project \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                                        tenantProjectId, tenantId, userId);
+                                                log.info("Project \"{}\" was deleted in tenant \"{}\"",
+                                                        tenantProjectId, tenantId);
                                             }
                                         });
                             });

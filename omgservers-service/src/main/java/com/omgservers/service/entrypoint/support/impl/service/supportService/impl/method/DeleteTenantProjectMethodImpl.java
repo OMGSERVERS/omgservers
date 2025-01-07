@@ -45,8 +45,8 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
                                         .map(DeleteTenantProjectResponse::getDeleted)
                                         .invoke(deleted -> {
                                             if (deleted) {
-                                                log.info("Project \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                                        tenantProjectId, tenantId, userId);
+                                                log.info("Project \"{}\" was deleted in tenant \"{}\"",
+                                                        tenantProjectId, tenantId);
                                             }
                                         })
                                         .map(DeleteTenantProjectSupportResponse::new);

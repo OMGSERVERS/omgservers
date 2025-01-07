@@ -66,8 +66,8 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                             return createClient(userId, playerId, tenantId, tenantStageId)
                                                     .map(client -> {
                                                         final var clientId = client.getId();
-                                                        log.info("The new client \"{}\" was created by the user {}",
-                                                                clientId, userId);
+                                                        log.info("The new client \"{}\" was created",
+                                                                clientId);
                                                         return clientId;
                                                     });
                                         }))

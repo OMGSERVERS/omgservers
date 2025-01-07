@@ -60,8 +60,8 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
                                                 tenantVersionConfig))
                                         .map(TenantVersionModel::getId)
                                         .invoke(tenantVersionId -> log.info(
-                                                "The new version \"{}\" was created in tenant \"{}\" by the user {}",
-                                                tenantVersionId, tenantId, userId));
+                                                "The new version \"{}\" was created in tenant \"{}\"",
+                                                tenantVersionId, tenantId));
                             });
                 })
                 .map(CreateTenantVersionDeveloperResponse::new);

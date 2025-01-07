@@ -64,8 +64,8 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
                                 if (createdPermissions.size() > 0) {
                                     log.info(
                                             "The \"{}\" tenant permissions in tenant \"{}\" " +
-                                                    "for user \"{}\" were created by the user {}",
-                                            createdPermissions.size(), tenantId, forUserId, userId);
+                                                    "for user \"{}\" were created",
+                                            createdPermissions.size(), tenantId, forUserId);
                                 }
                             });
                 })

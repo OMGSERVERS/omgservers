@@ -56,8 +56,8 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
                                         .flatMap(voidItem -> deleteTenantVersion(tenantId, tenantVersionId))
                                         .invoke(deleted -> {
                                             if (deleted) {
-                                                log.info("Version \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                                        tenantVersionId, tenantId, userId);
+                                                log.info("Version \"{}\" was deleted in tenant \"{}\"",
+                                                        tenantVersionId, tenantId);
                                             }
                                         });
                             });

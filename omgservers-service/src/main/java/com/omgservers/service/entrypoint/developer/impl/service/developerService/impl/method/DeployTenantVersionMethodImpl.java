@@ -93,8 +93,8 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                                             final var tenantDeploymentId = tenantDeployment.getId();
 
                                             log.info(
-                                                    "The new deployment \"{}\" was created in tenant \"{}\" by the user {}",
-                                                    tenantDeploymentId, tenantId, userId);
+                                                    "The new deployment \"{}\" was created in tenant \"{}\"",
+                                                    tenantDeploymentId, tenantId);
                                             return tenantDeploymentId;
                                         });
                             } else {

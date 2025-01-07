@@ -78,8 +78,8 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
                                             .invoke(createdPermissions -> {
                                                 if (createdPermissions.size() > 0) {
                                                     log.info(
-                                                            "The \"{}\" stage permissions in tenant \"{}\" for user \"{}\" were created by the user {}",
-                                                            createdPermissions.size(), tenantId, forUserId, userId);
+                                                            "The \"{}\" stage permissions in tenant \"{}\" for user \"{}\" were created",
+                                                            createdPermissions.size(), tenantId, forUserId);
                                                 }
                                             });
                                 })))

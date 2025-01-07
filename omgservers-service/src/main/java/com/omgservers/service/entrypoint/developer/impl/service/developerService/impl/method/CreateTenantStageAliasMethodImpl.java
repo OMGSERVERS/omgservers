@@ -93,8 +93,8 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
         return aliasModule.getService().execute(syncAliasRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
-                        log.info("The alias \"{}\" for the stage \"{}\" was created by the user \"{}\"",
-                                aliasValue, tenantStageId, userId);
+                        log.info("The alias \"{}\" for the stage \"{}\" was created",
+                                aliasValue, tenantStageId);
                     }
                 })
                 .replaceWith(tenantStageAlias);

@@ -58,8 +58,8 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
                                         .invoke(deleted -> {
                                             if (deleted) {
                                                 log.info(
-                                                        "Deployment \"{}\" was deleted in tenant \"{}\" by the user {}",
-                                                        tenantDeploymentId, tenantId, userId);
+                                                        "Deployment \"{}\" was deleted in tenant \"{}\"",
+                                                        tenantDeploymentId, tenantId);
                                             }
                                         })
                                         .map(DeleteTenantDeploymentDeveloperResponse::new);

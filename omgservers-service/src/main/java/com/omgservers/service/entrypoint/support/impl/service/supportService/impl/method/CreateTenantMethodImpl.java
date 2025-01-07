@@ -37,7 +37,7 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
         return tenantModule.getService().syncTenant(syncTenantInternalRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
-                        log.info("The new tenant \"{}\" was created by the user {}", tenant.getId(), userId);
+                        log.info("The new tenant \"{}\" was created", tenant.getId());
                     }
                 })
                 .replaceWith(new CreateTenantSupportResponse(tenant.getId()));

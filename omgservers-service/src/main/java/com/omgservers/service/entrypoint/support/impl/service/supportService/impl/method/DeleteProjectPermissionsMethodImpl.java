@@ -85,8 +85,8 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
                                     .invoke(deletedPermissions -> {
                                         if (deletedPermissions.size() > 0) {
                                             log.info("The \"{}\" project permissions in tenant \"{}\" " +
-                                                            "for user \"{}\" were deleted by the user {}",
-                                                    deletedPermissions.size(), tenantId, forUserId, userId);
+                                                            "for user \"{}\" were deleted",
+                                                    deletedPermissions.size(), tenantId, forUserId);
                                         }
                                     });
                         }))

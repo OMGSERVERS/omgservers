@@ -59,8 +59,8 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
                                         .flatMap(voidItem -> createTenantLobbyRequest(tenantId, deploymentId));
                             })
                             .invoke(voidItem -> log.info(
-                                    "A new lobby was requested for deployment \"{}\" in tenant \"{}\" by the user {}",
-                                    deploymentId, tenantId, userId))
+                                    "A new lobby was requested for deployment \"{}\" in tenant \"{}\"",
+                                    deploymentId, tenantId))
                             .replaceWith(new CreateLobbyRequestDeveloperResponse());
                 });
     }
