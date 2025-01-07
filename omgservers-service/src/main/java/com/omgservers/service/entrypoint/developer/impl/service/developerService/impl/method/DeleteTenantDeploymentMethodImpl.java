@@ -35,7 +35,7 @@ class DeleteTenantDeploymentMethodImpl implements DeleteTenantDeploymentMethod {
 
     @Override
     public Uni<DeleteTenantDeploymentDeveloperResponse> execute(final DeleteTenantDeploymentDeveloperRequest request) {
-        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

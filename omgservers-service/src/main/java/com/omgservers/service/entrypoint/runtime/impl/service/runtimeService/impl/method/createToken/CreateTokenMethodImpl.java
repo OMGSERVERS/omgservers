@@ -44,7 +44,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                                 final var wsToken = issueJwtTokenOperation
                                         .issueWsJwtToken(userId, runtimeId, UserRoleEnum.RUNTIME);
 
-                                log.info("A token was issued to use by runtime {}", runtimeId);
+                                log.info("A token was issued to use by runtime \"{}\"", runtimeId);
 
                                 return new CreateTokenRuntimeResponse(apiToken, wsToken);
                             });

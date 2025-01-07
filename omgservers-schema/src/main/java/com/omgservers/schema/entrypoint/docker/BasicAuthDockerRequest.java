@@ -3,6 +3,7 @@ package com.omgservers.schema.entrypoint.docker;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.jboss.resteasy.reactive.RestHeader;
 import org.jboss.resteasy.reactive.RestQuery;
 
@@ -26,6 +27,7 @@ public class BasicAuthDockerRequest {
     @RestQuery
     String scope;
 
+    @ToString.Exclude
     @RestHeader("Authorization")
     String authorizationHeader;
 }

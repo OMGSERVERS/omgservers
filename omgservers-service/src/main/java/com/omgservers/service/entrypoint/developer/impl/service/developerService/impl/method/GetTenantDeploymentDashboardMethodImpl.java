@@ -40,8 +40,7 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
     @Override
     public Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
             final GetTenantDeploymentDashboardDeveloperRequest request) {
-        log.debug("Requested, {}, principal={}",
-                request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

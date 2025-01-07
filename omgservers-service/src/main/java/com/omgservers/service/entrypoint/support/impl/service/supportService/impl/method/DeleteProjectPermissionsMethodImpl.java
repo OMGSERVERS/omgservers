@@ -47,8 +47,7 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
     @Override
     public Uni<DeleteProjectPermissionsSupportResponse> execute(
             final DeleteProjectPermissionsSupportRequest request) {
-        log.debug("Requested, {}, principal={}", request,
-                securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

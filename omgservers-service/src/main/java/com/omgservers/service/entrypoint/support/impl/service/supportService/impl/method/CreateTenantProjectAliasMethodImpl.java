@@ -34,7 +34,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
 
     @Override
     public Uni<CreateTenantProjectAliasSupportResponse> execute(final CreateTenantProjectAliasSupportRequest request) {
-        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

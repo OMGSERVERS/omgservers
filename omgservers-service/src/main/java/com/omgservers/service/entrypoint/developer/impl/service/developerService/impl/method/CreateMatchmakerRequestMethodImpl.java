@@ -38,7 +38,7 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
     @Override
     public Uni<CreateMatchmakerRequestDeveloperResponse> execute(
             final CreateMatchmakerRequestDeveloperRequest request) {
-        log.debug("Requested, {}", request);
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

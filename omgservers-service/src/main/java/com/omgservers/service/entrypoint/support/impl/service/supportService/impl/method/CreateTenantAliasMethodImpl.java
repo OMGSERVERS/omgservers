@@ -32,7 +32,7 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
 
     @Override
     public Uni<CreateTenantAliasSupportResponse> execute(final CreateTenantAliasSupportRequest request) {
-        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

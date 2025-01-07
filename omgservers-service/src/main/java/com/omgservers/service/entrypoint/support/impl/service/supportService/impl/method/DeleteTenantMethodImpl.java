@@ -29,7 +29,7 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
 
     @Override
     public Uni<DeleteTenantSupportResponse> execute(final DeleteTenantSupportRequest request) {
-        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

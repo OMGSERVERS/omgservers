@@ -47,8 +47,7 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
     @Override
     public Uni<CreateTenantStagePermissionsSupportResponse> execute(
             final CreateTenantStagePermissionsSupportRequest request) {
-        log.debug("Requested, {}, principal={}", request,
-                securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

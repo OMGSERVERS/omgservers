@@ -45,8 +45,7 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
     @Override
     public Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             final CreateTenantProjectPermissionsSupportRequest request) {
-        log.debug("Requested, {}, principal={}", request,
-                securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

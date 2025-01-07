@@ -30,7 +30,7 @@ class CreateUserMethodImpl implements CreateUserMethod {
 
     @Override
     public Uni<CreateUserPlayerResponse> execute(final CreateUserPlayerRequest request) {
-        log.debug("Requested, {}", request);
+        log.info("Requested, {}", request);
 
         final var password = generateSecureStringOperation.generateSecureString();
         return createUser(password)

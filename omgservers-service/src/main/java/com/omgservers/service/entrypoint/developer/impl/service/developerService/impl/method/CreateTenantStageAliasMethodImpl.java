@@ -42,7 +42,7 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
     @Override
     public Uni<CreateTenantStageAliasDeveloperResponse> execute(
             final CreateTenantStageAliasDeveloperRequest request) {
-        log.debug("Requested, {}, principal={}", request, securityIdentity.getPrincipal().getName());
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());

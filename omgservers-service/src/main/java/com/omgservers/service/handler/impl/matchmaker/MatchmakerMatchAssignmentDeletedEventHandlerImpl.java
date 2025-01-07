@@ -58,16 +58,16 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
                     return getMatchmaker(matchmakerId)
                             .flatMap(matchmaker -> {
                                 if (matchmaker.getDeleted()) {
-                                    log.warn("Matchmaker was already deleted, skip lobby assignment, " +
-                                            "matchmakerId={}", matchmakerId);
+                                    log.warn("The matchmaker \"{}\" was already deleted, skip lobby assignment",
+                                            matchmakerId);
                                     return Uni.createFrom().voidItem();
                                 }
 
                                 return getClient(clientId)
                                         .flatMap(client -> {
                                             if (client.getDeleted()) {
-                                                log.warn("Client was already deleted, skip lobby assignment, " +
-                                                        "clientId={}", clientId);
+                                                log.warn("The client \"{}\" was already deleted, skip lobby assignment",
+                                                        clientId);
                                                 return Uni.createFrom().voidItem();
                                             }
 

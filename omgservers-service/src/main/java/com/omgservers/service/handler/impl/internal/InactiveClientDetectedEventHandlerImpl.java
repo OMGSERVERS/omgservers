@@ -47,7 +47,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
         return getClient(clientId)
                 .flatMap(client -> {
                     if (client.getDeleted()) {
-                        log.debug("Client was already deleted, skip operation, {}", client);
+                        log.debug("The client \"{}\" was already deleted, skip operation", client);
                         return Uni.createFrom().item(Boolean.FALSE);
                     } else {
                         log.debug("Client \"{}\" of deployment \"{}\" was marked inactive after no activity",

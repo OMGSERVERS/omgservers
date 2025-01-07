@@ -2,6 +2,7 @@ package com.omgservers.service.module.docker.impl.service.dockerService.impl.met
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
+import com.github.dockerjava.api.exception.NotModifiedException;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
 import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.service.operation.GetDockerDaemonClientOperation;
@@ -38,7 +39,7 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                     // TODO: get final the container logs
                     removeDockerContainer(dockerDaemonUri, dockerClient, containerName);
 
-                    log.info("The docker container \"{}\" was stopped on the server {}",
+                    log.info("The docker container \"{}\" was stopped on the server \"{}\"",
                             containerName, dockerDaemonUri);
 
                     return new StopDockerContainerResponse(Boolean.TRUE);
@@ -54,8 +55,14 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                     containerName, dockerDaemonUri);
             return Boolean.TRUE;
         } catch (DockerException e) {
-            log.warn("Failed to stop docker container, containerName={}, dockerDaemonUri={}, {}:{}",
-                    containerName, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
+            if (e instanceof NotModifiedException) {
+                log.debug("Failed to stop docker container \"{}\" on the server \"{}\", {}:{}",
+                        containerName, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
+            } else {
+                log.warn("Failed to stop docker container \"{}\" on the server \"{}\", {}:{}",
+                        containerName, dockerDaemonUri, e.getClass().getSimpleName(), e.getMessage());
+            }
+
             return Boolean.FALSE;
         }
     }

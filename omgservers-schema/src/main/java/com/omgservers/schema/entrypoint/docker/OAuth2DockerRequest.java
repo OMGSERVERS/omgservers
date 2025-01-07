@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.jboss.resteasy.reactive.RestForm;
 
 @Data
@@ -29,12 +30,14 @@ public class OAuth2DockerRequest {
     @RestForm("scope")
     String scope;
 
+    @ToString.Exclude
     @RestForm("refresh_token")
     String refreshToken;
 
     @RestForm("username")
     String username;
 
+    @ToString.Exclude
     @RestForm("password")
     String password;
 }
