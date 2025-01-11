@@ -21,9 +21,9 @@ public class JenkinsClientHeadersFactory extends ReactiveClientHeadersFactory {
     public Uni<MultivaluedMap<String, String>> getHeaders(MultivaluedMap<String, String> incomingHeaders,
                                                           MultivaluedMap<String, String> clientOutgoingHeaders) {
         final var multivaluedHashMap = new MultivaluedHashMap<String, String>();
-        final var username = getServiceConfigOperation.getServiceConfig().builder().userId();
-        final var userToken = getServiceConfigOperation.getServiceConfig().builder().userToken();
-        final var plainCredentials = username + ":" + userToken;
+        final var username = getServiceConfigOperation.getServiceConfig().builder().username();
+        final var token = getServiceConfigOperation.getServiceConfig().builder().token();
+        final var plainCredentials = username + ":" + token;
         multivaluedHashMap.add("Authorization", "Basic " + Base64.getEncoder().encodeToString(plainCredentials
                 .getBytes(StandardCharsets.UTF_8)));
         return Uni.createFrom().item(multivaluedHashMap);

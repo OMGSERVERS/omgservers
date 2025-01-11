@@ -26,8 +26,8 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueServiceJwtToken() {
-        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
-        final var subject = getServiceConfigOperation.getServiceConfig().server().uri().getHost();
+        final var issuer = getServiceConfigOperation.getServiceConfig().server().jwtIssuer();
+        final var subject = getServiceConfigOperation.getServiceConfig().index().serverUri().getHost();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(subject)
@@ -40,7 +40,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueUserJwtToken(final Long userId, final Set<String> groups) {
-        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
+        final var issuer = getServiceConfigOperation.getServiceConfig().server().jwtIssuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(userId.toString())
@@ -54,7 +54,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
 
     @Override
     public String issueRuntimeJwtToken(final Long runtimeId) {
-        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
+        final var issuer = getServiceConfigOperation.getServiceConfig().server().jwtIssuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(runtimeId.toString())
@@ -70,7 +70,7 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
     public String issueWsJwtToken(final Long subject,
                                   final Long runtimeId,
                                   final UserRoleEnum role) {
-        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
+        final var issuer = getServiceConfigOperation.getServiceConfig().server().jwtIssuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(subject.toString())

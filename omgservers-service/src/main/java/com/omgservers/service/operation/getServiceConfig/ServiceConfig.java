@@ -6,6 +6,7 @@ import org.eclipse.microprofile.config.spi.Converter;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @ConfigMapping(prefix = "omgservers")
 public interface ServiceConfig {
@@ -14,15 +15,13 @@ public interface ServiceConfig {
 
     IndexConfig index();
 
-    JwtConfig jwt();
-
     InitializationConfig initialization();
 
     BootstrapConfig bootstrap();
 
     ClientsConfig clients();
 
-    DockerConfig docker();
+    DockerClientConfig dockerClient();
 
     RuntimesConfig runtimes();
 
@@ -33,17 +32,23 @@ public interface ServiceConfig {
     interface ServerConfig {
         long instanceId();
 
-        URI uri();
+        String jwtIssuer();
+
+        String x5c();
+
+        ServiceUserConfig serviceUser();
+    }
+
+    interface ServiceUserConfig {
+        String alias();
+
+        String password();
     }
 
     interface IndexConfig {
+        URI serverUri();
+
         int shardCount();
-    }
-
-    interface JwtConfig {
-        String issuer();
-
-        String x5c();
     }
 
     interface InitializationDatabaseSchemaConfig {
@@ -82,7 +87,7 @@ public interface ServiceConfig {
         long inactiveInterval();
     }
 
-    interface DockerConfig {
+    interface DockerClientConfig {
         boolean tlsVerify();
 
         @WithConverter(UserHomeConverter.class)
@@ -133,7 +138,7 @@ public interface ServiceConfig {
     interface BootstrapUserPasswordConfig {
         String alias();
 
-        String password();
+        Optional<String> password();
     }
 
     interface BootstrapDefaultPoolConfig {
@@ -156,9 +161,9 @@ public interface ServiceConfig {
     interface BuilderConfig {
         URI uri();
 
-        String userId();
+        String username();
 
-        String userToken();
+        String token();
     }
 
     interface RegistryConfig {

@@ -37,7 +37,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
                 .map(index -> {
                     final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);
                     final var shardServerUri = index.getConfig().getServerUri(shardIndex);
-                    final var thisServerUri = getServiceConfigOperation.getServiceConfig().server().uri();
+                    final var thisServerUri = getServiceConfigOperation.getServiceConfig().index().serverUri();
                     final var foreign = !shardServerUri.equals(thisServerUri);
                     final var locked = index.getConfig().getLockedShards().contains(shardIndex);
 

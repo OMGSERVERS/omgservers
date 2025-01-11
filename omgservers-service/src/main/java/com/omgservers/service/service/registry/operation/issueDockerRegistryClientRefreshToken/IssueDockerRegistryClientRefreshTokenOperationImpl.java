@@ -22,7 +22,7 @@ class IssueDockerRegistryClientRefreshTokenOperationImpl implements IssueDockerR
     @Override
     public JsonWebToken issueDockerRegistryClientRefreshToken(final Long userId) {
 
-        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
+        final var issuer = getServiceConfigOperation.getServiceConfig().server().jwtIssuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .subject(userId.toString())
                 // Service uses refresh_token to issue new access_token

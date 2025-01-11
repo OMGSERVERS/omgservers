@@ -69,49 +69,73 @@ public class BootstrapTaskImpl {
     Uni<Boolean> bootstrapAdminUser() {
         final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().adminUser().alias();
         final var password = getServiceConfigOperation.getServiceConfig().bootstrap().adminUser().password();
-        final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.ADMIN);
-        return bootstrapService.execute(request)
-                .map(BootstrapDefaultUserResponse::getCreated);
+        if (password.isPresent()) {
+            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.ADMIN);
+            return bootstrapService.execute(request)
+                    .map(BootstrapDefaultUserResponse::getCreated);
+        } else {
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
     }
 
     Uni<Boolean> bootstrapSupportUser() {
         final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().supportUser().alias();
         final var password = getServiceConfigOperation.getServiceConfig().bootstrap().supportUser().password();
-        final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.SUPPORT);
-        return bootstrapService.execute(request)
-                .map(BootstrapDefaultUserResponse::getCreated);
+        if (password.isPresent()) {
+            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.SUPPORT);
+            return bootstrapService.execute(request)
+                    .map(BootstrapDefaultUserResponse::getCreated);
+        } else {
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
     }
 
     Uni<Boolean> bootstrapRegistryUser() {
         final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().registryUser().alias();
         final var password = getServiceConfigOperation.getServiceConfig().bootstrap().registryUser().password();
-        final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.REGISTRY);
-        return bootstrapService.execute(request)
-                .map(BootstrapDefaultUserResponse::getCreated);
+        if (password.isPresent()) {
+            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.REGISTRY);
+            return bootstrapService.execute(request)
+                    .map(BootstrapDefaultUserResponse::getCreated);
+        } else {
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
     }
 
     Uni<Boolean> bootstrapBuilderUser() {
         final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().builderUser().alias();
         final var password = getServiceConfigOperation.getServiceConfig().bootstrap().builderUser().password();
-        final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.BUILDER);
-        return bootstrapService.execute(request)
-                .map(BootstrapDefaultUserResponse::getCreated);
+        if (password.isPresent()) {
+            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.BUILDER);
+            return bootstrapService.execute(request)
+                    .map(BootstrapDefaultUserResponse::getCreated);
+        } else {
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
     }
 
     Uni<Boolean> bootstrapServiceUser() {
         final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().alias();
         final var password = getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().password();
-        final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.SERVICE);
-        return bootstrapService.execute(request)
-                .map(BootstrapDefaultUserResponse::getCreated);
+        if (password.isPresent()) {
+            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.SERVICE);
+            return bootstrapService.execute(request)
+                    .map(BootstrapDefaultUserResponse::getCreated);
+        } else {
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
     }
 
     Uni<Boolean> bootstrapDispatcherUser() {
         final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().dispatcherUser().alias();
         final var password = getServiceConfigOperation.getServiceConfig().bootstrap().dispatcherUser().password();
-        final var request = new BootstrapDefaultUserRequest(alias, password, UserRoleEnum.DISPATCHER);
-        return bootstrapService.execute(request)
-                .map(BootstrapDefaultUserResponse::getCreated);
+        if (password.isPresent()) {
+            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.DISPATCHER);
+            return bootstrapService.execute(request)
+                    .map(BootstrapDefaultUserResponse::getCreated);
+        } else {
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
     }
 
     Uni<Boolean> bootstrapDefaultPool() {

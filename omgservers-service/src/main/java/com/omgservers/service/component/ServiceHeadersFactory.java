@@ -22,7 +22,8 @@ public class ServiceHeadersFactory extends ReactiveClientHeadersFactory {
     public Uni<MultivaluedMap<String, String>> getHeaders(final MultivaluedMap<String, String> incomingHeaders,
                                                           final MultivaluedMap<String, String> clientOutgoingHeaders) {
         final var multivaluedHashMap = new MultivaluedHashMap<String, String>();
-        multivaluedHashMap.add("User-Agent", getServiceConfigOperation.getServiceConfig().server().uri().getHost());
+        multivaluedHashMap.add("User-Agent", getServiceConfigOperation
+                .getServiceConfig().index().serverUri().getHost());
         multivaluedHashMap.add("Authorization", "Bearer " + serviceTokenFactory.getServiceJwtToken());
         return Uni.createFrom().item(multivaluedHashMap);
     }

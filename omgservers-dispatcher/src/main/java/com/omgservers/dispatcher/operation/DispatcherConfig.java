@@ -7,13 +7,13 @@ import java.net.URI;
 @ConfigMapping(prefix = "omgservers")
 public interface DispatcherConfig {
 
-    long idleTimeout();
-
     URI serviceUri();
 
     DispatcherUserConfig dispatcherUser();
 
     String expiredConnectionsHandlerJobInterval();
+
+    long expiredConnectionsIdleTimeout();
 
     String refreshDispatcherTokenJobInterval();
 

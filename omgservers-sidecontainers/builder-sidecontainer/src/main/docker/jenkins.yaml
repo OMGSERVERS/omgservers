@@ -62,7 +62,7 @@ credentials:
           - usernamePassword:
               scope: GLOBAL
               id: "builder-user-credentials"
-              username: "${OMGSERVERS_BUILDER_USER_ID}"
+              username: "${OMGSERVERS_BUILDER_USERNAME}"
               password: "${OMGSERVERS_BUILDER_USER_PASSWORD}"
               description: "Builder user to get registry access token"
 appearance:

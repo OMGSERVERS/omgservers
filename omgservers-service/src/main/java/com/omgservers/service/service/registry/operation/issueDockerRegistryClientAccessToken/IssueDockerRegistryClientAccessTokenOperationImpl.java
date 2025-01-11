@@ -33,8 +33,8 @@ class IssueDockerRegistryClientAccessTokenOperationImpl implements IssueDockerRe
                                                              final List<DockerRegistryAccessDto> access) {
 
         try {
-            final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
-            final var x5c = getServiceConfigOperation.getServiceConfig().jwt().x5c();
+            final var issuer = getServiceConfigOperation.getServiceConfig().server().jwtIssuer();
+            final var x5c = getServiceConfigOperation.getServiceConfig().server().x5c();
             final var jwtToken = Jwt.issuer(issuer)
                     .subject(userId.toString())
                     .audience(REGISTRY_AUDIENCE)

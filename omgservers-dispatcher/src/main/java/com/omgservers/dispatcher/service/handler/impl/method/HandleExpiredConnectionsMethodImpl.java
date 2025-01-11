@@ -34,7 +34,7 @@ class HandleExpiredConnectionsMethodImpl implements HandleExpiredConnectionsMeth
                     final var lastUsage = dispatcherConnection.getLastUsage();
                     final var idleInterval = Duration.between(lastUsage, now).toSeconds();
 
-                    final var idleTimeout = getDispatcherConfigOperation.getDispatcherConfig().idleTimeout();
+                    final var idleTimeout = getDispatcherConfigOperation.getDispatcherConfig().expiredConnectionsIdleTimeout();
 
                     if (idleInterval > idleTimeout) {
                         final var webSocketConnection = dispatcherConnection
