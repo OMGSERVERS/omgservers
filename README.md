@@ -27,20 +27,20 @@ OMGSERVERS is a backend for authoritative game servers.
 
 # Installation Types
 
-| **Type**                        | **Description**                                          | **Suitable for**                                                 |
-|---------------------------------|----------------------------------------------------------|------------------------------------------------------------------|
-| **Standalone**                  | Single-server service installation.                      | Players can be distributed across independent installations.     |
-|                                 | Run game runtimes locally via the Docker API.            | Non-resource-intensive game runtimes.                            |
-| **Standalone with server pool** | Single-server service installation.                      | Players can be distributed across independent installations.     |
-|                                 | Run game runtime on a pool of Docker hosts.              | Resource-intensive game runtimes.                                |
-| **Sharded**                     | Distribute data across multiple servers by using shards. | A significant number of players should be able to play together. |
-|                                 | Support on-demand infrastructure scaling.                | Non-resource-intensive game runtimes.                            |
-|                                 | Run game runtimes locally via the Docker API.            |                                                                  |
-| **Sharded with server pool**    | Distribute data across multiple servers by using shards. | A significant number of players should be able to play together. |
-|                                 | Support on-demand infrastructure scaling.                | Resource-intensive game runtimes.                                |
-|                                 | Run game runtime on a pool of Docker hosts.              |                                                                  |
-| **Public cloud**                | Provide a pay-as-you-go service.                         |                                                                  |
-|                                 | On-demand dedicated server pools.                        |                                                                  |
+| **Type**                        | **Description**                                                     | **Suitable for**                                                         |
+|---------------------------------|---------------------------------------------------------------------|--------------------------------------------------------------------------|
+| **Standalone**                  | Single-server service installation.                                 | It is acceptable to distribute players across independent installations. |
+|                                 | Game runtimes are executed on the same server using the Docker API. | Non-resource-intensive game runtimes.                                    |
+| **Standalone with server pool** | Single-server service installation.                                 | It is acceptable to distribute players across independent installations. |
+|                                 | Run game runtime on a pool of Docker hosts.                         | Resource-intensive game runtimes.                                        |
+| **Sharded**                     | Distribute data across multiple servers by using shards.            | A significant number of players should be able to play together.         |
+|                                 | Support on-demand infrastructure scaling.                           | Non-resource-intensive game runtimes.                                    |
+|                                 | Servers are shared for both service and game runtime execution.     |                                                                          |
+| **Sharded with server pool**    | Distribute data across multiple servers by using shards.            | A significant number of players should be able to play together.         |
+|                                 | Support on-demand infrastructure scaling.                           | Resource-intensive game runtimes.                                        |
+|                                 | Run game runtime on a pool of Docker hosts.                         |                                                                          |
+| **Public cloud**                | Provide a pay-as-you-go service.                                    |                                                                          |
+|                                 | On-demand dedicated server pools.                                   |                                                                          |
 
 # Configuration
 
@@ -83,10 +83,10 @@ OMGSERVERS is a backend for authoritative game servers.
 | OMGSERVERS_BROKER_HOST: `broker`                                                |
 | OMGSERVERS_BROKER_PORT: `5672`                                                  |
 | OMGSERVERS_BROKER_USERNAME: `omgservers`                                        |
-| OMGSERVERS_BUILDER_URI: `http://builder:8080`                                   |
-| OMGSERVERS_BUILDER_USERNAME: `omgservers`                                       |
 | OMGSERVERS_SERVICE_QUEUE: `ServiceEvents`                                       |
 | OMGSERVERS_FORWARDING_QUEUE: `ForwardedEvents`                                  |
+| OMGSERVERS_BUILDER_URI: `http://builder:8080`                                   |
+| OMGSERVERS_BUILDER_USERNAME: `omgservers`                                       |
 | OMGSERVERS_DOCKER_CLIENT_TLS_VERIFY: `false`                                    |
 | OMGSERVERS_DOCKER_CLIENT_CERT_PATH: `/docker/certs`                             |
 | OMGSERVERS_REGISTRY_URI: `http://localhost:5000`                                |
