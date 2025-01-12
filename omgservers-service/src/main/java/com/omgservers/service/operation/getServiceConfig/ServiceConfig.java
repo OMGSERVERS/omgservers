@@ -13,8 +13,6 @@ public interface ServiceConfig {
 
     ServerConfig server();
 
-    IndexConfig index();
-
     InitializationConfig initialization();
 
     BootstrapConfig bootstrap();
@@ -37,18 +35,16 @@ public interface ServiceConfig {
         String x5c();
 
         ServiceUserConfig serviceUser();
+
+        URI uri();
+
+        int shardCount();
     }
 
     interface ServiceUserConfig {
         String alias();
 
         String password();
-    }
-
-    interface IndexConfig {
-        URI serverUri();
-
-        int shardCount();
     }
 
     interface InitializationDatabaseSchemaConfig {

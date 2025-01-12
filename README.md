@@ -76,8 +76,8 @@ OMGSERVERS is a backend for authoritative game servers.
 | OMGSERVERS_SERVER_PRIVATE_KEY: `file:/jwt_issuer/private_key.pem`               |
 | OMGSERVERS_SERVER_JWT_ISSUER: `omgservers`                                      |
 | OMGSERVERS_SERVER_SERVICE_USER_ALIAS: `service`                                 |
-| OMGSERVERS_INDEX_SERVER_URI: `http://gateway:8080`                              |
-| OMGSERVERS_INDEX_SHARD_COUNT: `1`                                               |
+| OMGSERVERS_SERVER_URI: `http://gateway:8080`                                    |
+| OMGSERVERS_SERVER_SHARD_COUNT: `1`                                              |
 | OMGSERVERS_DATABASE_URL: `postgresql://database:5432/omgservers`                |
 | OMGSERVERS_DATABASE_USERNAME: `omgservers`                                      |
 | OMGSERVERS_BROKER_HOST: `broker`                                                |
@@ -106,7 +106,7 @@ OMGSERVERS is a backend for authoritative game servers.
 | OMGSERVERS_INITIALIZATION_SCHEDULER_JOB_INTERVAL: `1s`                          |
 | OMGSERVERS_INITIALIZATION_BOOTSTRAP_JOB_ENABLED: `true`                         |
 | OMGSERVERS_INITIALIZATION_BOOTSTRAP_JOB_INTERVAL: `1s`                          |
-| OMGSERVERS_BOOTSTRAP_ENABLED: `true`                                            |
+| OMGSERVERS_BOOTSTRAP_ENABLED: `false`                                           |
 | OMGSERVERS_BOOTSTRAP_ADMIN_USER_ALIAS: `admin`                                  |
 | OMGSERVERS_BOOTSTRAP_SUPPORT_USER_ALIAS: `support`                              |
 | OMGSERVERS_BOOTSTRAP_REGISTRY_USER_ALIAS: `registry`                            |

@@ -26,7 +26,7 @@ class InitializeServerIndexMethodImpl implements InitializeServerIndexMethod {
         log.debug("Initialize server index");
 
         final var servers = getServiceConfigOperation.getServiceConfig().initialization().serverIndex().servers();
-        final var shardCount = getServiceConfigOperation.getServiceConfig().index().shardCount();
+        final var shardCount = getServiceConfigOperation.getServiceConfig().server().shardCount();
         final var indexConfig = IndexConfigDto.create(servers, shardCount);
         final var index = indexModelFactory.create(indexConfig, "index");
 

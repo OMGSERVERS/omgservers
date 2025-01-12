@@ -34,6 +34,6 @@ class PingDockerHostMethodImpl implements PingDockerHostMethod {
                     log.info("The Docker host \"{}\" was successfully pinged", dockerDaemonUri);
                 })
                 .replaceWith(new PingDockerHostAdminResponse(Boolean.TRUE,
-                        getServiceConfigOperation.getServiceConfig().index().serverUri()));
+                        getServiceConfigOperation.getServiceConfig().server().uri()));
     }
 }
