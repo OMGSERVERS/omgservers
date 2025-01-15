@@ -136,7 +136,6 @@ help() {
       echo "   produces:"
       echo "     - PROJECT"
       echo "     - STAGE"
-      echo "     - SECRET"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectAlias" ]; then
@@ -235,7 +234,6 @@ help() {
       echo "   produces:"
       echo "     - PROJECT"
       echo "     - STAGE"
-      echo "     - SECRET"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProjectAlias" ]; then
@@ -256,7 +254,6 @@ help() {
     if [ "$1" = "developer createStage" ]; then
       echo "   produces:"
       echo "     - STAGE"
-      echo "     - SECRET"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStageAlias" ]; then
@@ -982,14 +979,7 @@ support_createProject() {
   fi
   echo "export OMGSERVERSCTL_STAGE=${STAGE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  SECRET=$(cat ${RESPONSE_FILE} | jq -r .secret)
-  if [ -z "${SECRET}" -o "${SECRET}" == "null" ]; then
-    echo "ERROR: SECRET was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERSCTL_SECRET=${SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}"
 }
 
 support_createProjectAlias() {
@@ -1657,14 +1647,7 @@ developer_createProject() {
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  SECRET=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .secret)
-  if [ -z "$SECRET" -o "$SECRET" == "null" ]; then
-    echo "ERROR: SECRET was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERSCTL_SECRET=${SECRET}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}, SECRET=${SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}"
 }
 
 developer_createProjectAlias() {
@@ -1876,14 +1859,7 @@ developer_createStage() {
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  SECRET=$(cat ${RESPONSE_FILE} | jq -r .secret)
-  if [ -z "$SECRET" -o "$SECRET" == "null" ]; then
-    echo "ERROR: SECRET was not received"
-    exit 1
-  fi
-  echo "export OMGSERVERSCTL_SECRET=$SECRET" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=${STAGE}, SECRET=${SECRET}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=${STAGE}"
 }
 
 developer_createStageAlias() {
