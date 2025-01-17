@@ -1,5 +1,7 @@
 package com.omgservers.service.module.queue.impl.service.queueService;
 
+import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
+import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
 import com.omgservers.schema.module.queue.queue.DeleteQueueRequest;
 import com.omgservers.schema.module.queue.queue.DeleteQueueResponse;
 import com.omgservers.schema.module.queue.queue.GetQueueRequest;
@@ -28,6 +30,8 @@ public interface QueueService {
     Uni<GetQueueResponse> execute(@Valid GetQueueRequest request);
 
     Uni<SyncQueueResponse> execute(@Valid SyncQueueRequest request);
+
+    Uni<SyncQueueResponse> executeWithIdempotency(@Valid SyncQueueRequest request);
 
     Uni<DeleteQueueResponse> execute(@Valid DeleteQueueRequest request);
 

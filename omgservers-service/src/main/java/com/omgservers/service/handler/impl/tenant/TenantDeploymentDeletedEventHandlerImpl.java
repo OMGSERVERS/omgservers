@@ -1,6 +1,8 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.module.queue.queue.DeleteQueueRequest;
+import com.omgservers.schema.module.queue.queue.DeleteQueueResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.service.event.EventModel;
@@ -13,8 +15,7 @@ import com.omgservers.service.handler.operation.DeleteTenantLobbiesByTenantDeplo
 import com.omgservers.service.handler.operation.DeleteTenantLobbyRequestsByTenantDeploymentIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperation;
 import com.omgservers.service.handler.operation.DeleteTenantMatchmakersByTenantDeploymentIdOperation;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.module.queue.QueueModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,9 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
     final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final QueueModule queueModule;
 
     final DeleteTenantLobbyRequestsByTenantDeploymentIdOperation
             deleteTenantLobbyRequestsByTenantDeploymentIdOperation;
@@ -66,7 +66,12 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> deleteTenantMatchmakerRequestsByTenantDeploymentIdOperation
                                     .execute(tenantId, tenantDeploymentId))
                             .flatMap(voidItem -> deleteTenantMatchmakersByTenantDeploymentIdOperation
-                                    .execute(tenantId, tenantDeploymentId));
+                                    .execute(tenantId, tenantDeploymentId))
+                            .flatMap(voiditem -> {
+                                final var queueId = tenantDeployment.getQueueId();
+                                return deleteQueue(queueId)
+                                        .replaceWithVoid();
+                            });
                 })
                 .replaceWithVoid();
     }
@@ -75,5 +80,11 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
         return tenantModule.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
+    }
+
+    Uni<Boolean> deleteQueue(final Long queueId) {
+        final var request = new DeleteQueueRequest(queueId);
+        return queueModule.getQueueService().execute(request)
+                .map(DeleteQueueResponse::getDeleted);
     }
 }

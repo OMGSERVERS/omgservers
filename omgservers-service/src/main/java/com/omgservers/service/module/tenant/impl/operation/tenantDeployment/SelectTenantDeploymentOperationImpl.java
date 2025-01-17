@@ -29,7 +29,7 @@ class SelectTenantDeploymentOperationImpl implements SelectTenantDeploymentOpera
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deleted
+                        select id, idempotency_key, tenant_id, stage_id, version_id, created, modified, queue_id, deleted
                         from $schema.tab_tenant_deployment
                         where tenant_id = $1 and id = $2
                         limit 1

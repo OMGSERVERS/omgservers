@@ -34,8 +34,8 @@ class UpsertTenantDeploymentOperationImpl implements UpsertTenantDeploymentOpera
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_deployment(
-                            id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, tenant_id, stage_id, version_id, created, modified, queue_id, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,6 +47,7 @@ class UpsertTenantDeploymentOperationImpl implements UpsertTenantDeploymentOpera
                         tenantDeployment.getVersionId(),
                         tenantDeployment.getCreated().atOffset(ZoneOffset.UTC),
                         tenantDeployment.getModified().atOffset(ZoneOffset.UTC),
+                        tenantDeployment.getQueueId(),
                         tenantDeployment.getDeleted()
                 ),
                 () -> new TenantDeploymentCreatedEventBodyModel(tenantDeployment.getTenantId(),

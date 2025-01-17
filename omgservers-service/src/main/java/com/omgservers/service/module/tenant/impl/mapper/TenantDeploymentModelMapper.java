@@ -20,6 +20,7 @@ public class TenantDeploymentModelMapper {
         tenantDeployment.setVersionId(row.getLong("version_id"));
         tenantDeployment.setCreated(row.getOffsetDateTime("created").toInstant());
         tenantDeployment.setModified(row.getOffsetDateTime("modified").toInstant());
+        tenantDeployment.setQueueId(row.getLong("queue_id"));
         tenantDeployment.setDeleted(row.getBoolean("deleted"));
         return tenantDeployment;
     }

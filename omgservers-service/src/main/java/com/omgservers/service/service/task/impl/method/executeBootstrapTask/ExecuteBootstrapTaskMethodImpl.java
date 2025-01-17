@@ -24,7 +24,7 @@ class ExecuteBootstrapTaskMethodImpl implements ExecuteBootstrapTaskMethod {
                     log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
-                .invoke(result -> log.debug("Task finished, result={}", result))
+                .invoke(result -> log.trace("Task finished, result={}", result))
                 .map(ExecuteBootstrapTaskResponse::new);
     }
 }

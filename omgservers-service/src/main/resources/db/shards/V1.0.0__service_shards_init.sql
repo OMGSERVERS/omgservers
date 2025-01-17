@@ -284,6 +284,7 @@ create table if not exists tab_tenant_deployment (
     version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    queue_id bigint not null,
     deleted boolean not null
 );
 

@@ -42,5 +42,8 @@ public class TenantDeploymentModel {
     Instant modified;
 
     @NotNull
+    Long queueId;
+
+    @NotNull
     Boolean deleted;
 }

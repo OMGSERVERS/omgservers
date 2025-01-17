@@ -1,5 +1,6 @@
 package com.omgservers.service.module.queue.impl.service.queueService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.queue.queue.DeleteQueueRequest;
 import com.omgservers.schema.module.queue.queue.DeleteQueueResponse;
 import com.omgservers.schema.module.queue.queue.GetQueueRequest;
@@ -16,6 +17,8 @@ import com.omgservers.schema.module.queue.queueRequest.SyncQueueRequestRequest;
 import com.omgservers.schema.module.queue.queueRequest.SyncQueueRequestResponse;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsRequest;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsResponse;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.queue.impl.operation.getQueueModuleClient.GetQueueModuleClientOperation;
 import com.omgservers.service.module.queue.impl.service.queueService.QueueService;
 import com.omgservers.service.module.queue.impl.service.queueService.impl.method.queue.DeleteQueueMethod;
@@ -72,6 +75,22 @@ class QueueServiceImpl implements QueueService {
                 getQueueModuleClientOperation::getClient,
                 QueueApi::execute,
                 syncQueueMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncQueueResponse> executeWithIdempotency(@Valid final SyncQueueRequest request) {
+        return execute(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.debug("Idempotency was violated, object={}, {}", request.getQueue(), t.getMessage());
+                            return Uni.createFrom().item(new SyncQueueResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
     }
 
     @Override

@@ -38,6 +38,7 @@ public class TenantDeploymentModelFactory {
                                         final Long tenantVersionId,
                                         final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        final var queueId = generateIdOperation.generateId();
 
         final var tenantDeployment = new TenantDeploymentModel();
         tenantDeployment.setId(id);
@@ -47,6 +48,7 @@ public class TenantDeploymentModelFactory {
         tenantDeployment.setVersionId(tenantVersionId);
         tenantDeployment.setCreated(now);
         tenantDeployment.setModified(now);
+        tenantDeployment.setQueueId(queueId);
         tenantDeployment.setDeleted(false);
         return tenantDeployment;
     }
