@@ -25,4 +25,9 @@ public enum JobQualifierEnum {
      * Build request job.
      */
     BUILD_REQUEST,
+
+    /**
+     * Queue job.
+     */
+    QUEUE,
 }

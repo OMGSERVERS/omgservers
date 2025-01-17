@@ -8,6 +8,8 @@ import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskResponse;
+import com.omgservers.service.service.task.dto.ExecuteQueueTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteQueueTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteRelayTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteRelayTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
@@ -40,4 +42,6 @@ public interface TaskService {
     Uni<ExecuteBuildRequestTaskResponse> execute(@Valid ExecuteBuildRequestTaskRequest request);
 
     Uni<ExecuteBootstrapTaskResponse> execute(@Valid ExecuteBootstrapTaskRequest request);
+
+    Uni<ExecuteQueueTaskResponse> execute(@Valid ExecuteQueueTaskRequest request);
 }

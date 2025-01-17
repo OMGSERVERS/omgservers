@@ -7,6 +7,7 @@ import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteQueueTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
 import io.smallrye.mutiny.Multi;
@@ -49,6 +50,8 @@ public class SchedulerTaskImpl {
             case BUILD_REQUEST -> taskService
                     .execute(new ExecuteBuildRequestTaskRequest(job.getShardKey(),
                             job.getEntityId()));
+            case QUEUE -> taskService
+                    .execute(new ExecuteQueueTaskRequest(job.getEntityId()));
         }).replaceWithVoid();
     }
 }

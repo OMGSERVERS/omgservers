@@ -8,6 +8,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.queue.QueueDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.handler.operation.DeleteQueueRequestsOperation;
+import com.omgservers.service.handler.operation.FindAndDeleteJobOperation;
 import com.omgservers.service.module.queue.QueueModule;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,6 +24,7 @@ public class QueueDeletedEventHandlerImpl implements EventHandler {
     final QueueModule queueModule;
 
     final DeleteQueueRequestsOperation deleteQueueRequestsOperation;
+    final FindAndDeleteJobOperation findAndDeleteJobOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -41,8 +43,10 @@ public class QueueDeletedEventHandlerImpl implements EventHandler {
                     log.debug("Deleted, {}", queue);
 
                     return deleteQueueRequestsOperation.execute(queueId)
-                            .replaceWithVoid();
-                });
+                            .flatMap(deleted -> findAndDeleteJobOperation.execute(queueId, queueId));
+
+                })
+                .replaceWithVoid();
     }
 
     Uni<QueueModel> getQueue(final Long id) {

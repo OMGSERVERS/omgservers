@@ -9,6 +9,8 @@ import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskResponse;
+import com.omgservers.service.service.task.dto.ExecuteQueueTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteQueueTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteRelayTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteRelayTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
@@ -23,6 +25,7 @@ import com.omgservers.service.service.task.impl.method.executeBootstrapTask.Exec
 import com.omgservers.service.service.task.impl.method.executeBuildRequestTask.ExecuteBuildRequestTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executePoolTask.ExecutePoolTaskMethod;
+import com.omgservers.service.service.task.impl.method.executeQueueTask.ExecuteQueueTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRelayTask.ExecuteRelayTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRuntimeTask.ExecuteRuntimeTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeSchedulerTask.ExecuteSchedulerTaskMethod;
@@ -48,6 +51,7 @@ class TaskServiceImpl implements TaskService {
     final ExecuteTenantTaskMethod executeTenantTaskMethod;
     final ExecuteStageTaskMethod executeStageTaskMethod;
     final ExecuteRelayTaskMethod executeRelayTaskMethod;
+    final ExecuteQueueTaskMethod executeQueueTaskMethod;
     final ExecutePoolTaskMethod executePoolTaskMethod;
 
     @Override
@@ -93,5 +97,10 @@ class TaskServiceImpl implements TaskService {
     @Override
     public Uni<ExecuteBootstrapTaskResponse> execute(@Valid final ExecuteBootstrapTaskRequest request) {
         return executeBootstrapTaskMethod.execute(request);
+    }
+
+    @Override
+    public Uni<ExecuteQueueTaskResponse> execute(@Valid final ExecuteQueueTaskRequest request) {
+        return executeQueueTaskMethod.execute(request);
     }
 }
