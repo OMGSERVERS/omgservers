@@ -362,6 +362,28 @@ create index if not exists idx_tenant_matchmaker_request_deployment_id on tab_te
 create index if not exists idx_tenant_matchmaker_ref_tenant_id on tab_tenant_matchmaker_ref(tenant_id);
 create index if not exists idx_tenant_matchmaker_ref_deployment_id on tab_tenant_matchmaker_ref(deployment_id);
 
+-- queue module
+
+create table if not exists tab_queue (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    tenant_id bigint not null,
+    deployment_id bigint not null,
+    deleted boolean not null
+);
+
+create table if not exists tab_queue_request (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    queue_id bigint not null references tab_queue(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    client_id bigint not null,
+    deleted boolean not null
+);
+
 -- lobby module
 
 create table if not exists tab_lobby (

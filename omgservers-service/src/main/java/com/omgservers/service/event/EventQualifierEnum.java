@@ -40,6 +40,8 @@ import com.omgservers.service.event.body.module.pool.PoolRequestCreatedEventBody
 import com.omgservers.service.event.body.module.pool.PoolRequestDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolServerCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolServerDeletedEventBodyModel;
+import com.omgservers.service.event.body.module.queue.QueueCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.queue.QueueDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
@@ -132,6 +134,8 @@ public enum EventQualifierEnum {
     CLIENT_RUNTIME_REF_DELETED(ClientRuntimeRefDeletedEventBodyModel.class, false),
     CLIENT_MATCHMAKER_REF_CREATED(ClientMatchmakerRefCreatedEventBodyModel.class, false),
     CLIENT_MATCHMAKER_REF_DELETED(ClientMatchmakerRefDeletedEventBodyModel.class, false),
+    QUEUE_CREATED(QueueCreatedEventBodyModel.class, true),
+    QUEUE_DELETED(QueueDeletedEventBodyModel.class, true),
     LOBBY_CREATED(LobbyCreatedEventBodyModel.class, true),
     LOBBY_DELETED(LobbyDeletedEventBodyModel.class, true),
     LOBBY_RUNTIME_REF_CREATED(LobbyRuntimeRefCreatedEventBodyModel.class, false),
