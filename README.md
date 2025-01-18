@@ -8,6 +8,12 @@
 
 OMGSERVERS is a backend for authoritative game servers.
 
+## Principles
+
+- Monolithic Architecture.
+- Sharding Over Clustering.
+- No Vendor Lock-in.
+
 # Features
 
 - Manage developer accounts and permissions.
@@ -133,15 +139,3 @@ OMGSERVERS is a backend for authoritative game servers.
 | `OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED`                    | No           | `true`                            |
 | `OMGSERVERS_OTEL_DISABLED`                                   | No           | `true`                            |
 | `OMGSERVERS_OTEL_ENDPOINT`                                   | No           | `http://collector:4317`           |
-
-# Development
-
-## Technology stack
-
-- Java, Quarkus, Postgresql, ActiveMQ, Docker, Bash
-
-## Principles
-
-- Monolithic Architecture.
-- Sharding Over Clustering.
-- No Vendor Lock-in.
