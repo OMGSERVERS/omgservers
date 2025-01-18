@@ -138,6 +138,23 @@ class QueueServiceImpl implements QueueService {
     }
 
     @Override
+    public Uni<SyncQueueRequestResponse> executeWithIdempotency(SyncQueueRequestRequest request) {
+        return execute(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.debug("Idempotency was violated, object={}, {}",
+                                    request.getQueueRequest(), t.getMessage());
+                            return Uni.createFrom().item(new SyncQueueRequestResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<DeleteQueueRequestResponse> execute(@Valid final DeleteQueueRequestRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getQueueModuleClientOperation::getClient,

@@ -294,6 +294,23 @@ public class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
+    public Uni<SyncRuntimeAssignmentResponse> executeWithIdempotency(SyncRuntimeAssignmentRequest request) {
+        return execute(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.debug("Idempotency was violated, object={}, {}", request.getRuntimeAssignment(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncRuntimeAssignmentResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(
             @Valid final UpdateRuntimeAssignmentLastActivityRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,

@@ -47,5 +47,7 @@ public interface QueueService {
 
     Uni<SyncQueueRequestResponse> execute(@Valid SyncQueueRequestRequest request);
 
+    Uni<SyncQueueRequestResponse> executeWithIdempotency(@Valid SyncQueueRequestRequest request);
+
     Uni<DeleteQueueRequestResponse> execute(@Valid DeleteQueueRequestRequest request);
 }

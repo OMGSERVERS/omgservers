@@ -89,6 +89,8 @@ public interface MatchmakerService {
 
     Uni<SyncMatchmakerAssignmentResponse> execute(@Valid SyncMatchmakerAssignmentRequest request);
 
+    Uni<SyncMatchmakerAssignmentResponse> executeWithIdempotency(@Valid SyncMatchmakerAssignmentRequest request);
+
     Uni<DeleteMatchmakerAssignmentResponse> execute(@Valid DeleteMatchmakerAssignmentRequest request);
 
     /*

@@ -227,6 +227,24 @@ class MatchmakerServiceImpl implements MatchmakerService {
     }
 
     @Override
+    public Uni<SyncMatchmakerAssignmentResponse> executeWithIdempotency(
+            @Valid final SyncMatchmakerAssignmentRequest request) {
+        return execute(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.debug("Idempotency was violated, object={}, {}",
+                                    request.getMatchmakerAssignment(), t.getMessage());
+                            return Uni.createFrom().item(new SyncMatchmakerAssignmentResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
     public Uni<DeleteMatchmakerAssignmentResponse> execute(@Valid final DeleteMatchmakerAssignmentRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getMatchServiceApiClientOperation::getClient,

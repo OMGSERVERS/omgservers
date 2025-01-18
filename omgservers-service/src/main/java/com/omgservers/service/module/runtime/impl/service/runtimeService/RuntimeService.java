@@ -91,6 +91,8 @@ public interface RuntimeService {
 
     Uni<SyncRuntimeAssignmentResponse> execute(@Valid SyncRuntimeAssignmentRequest request);
 
+    Uni<SyncRuntimeAssignmentResponse> executeWithIdempotency(@Valid SyncRuntimeAssignmentRequest request);
+
     Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(@Valid UpdateRuntimeAssignmentLastActivityRequest request);
 
     Uni<DeleteRuntimeAssignmentResponse> execute(@Valid DeleteRuntimeAssignmentRequest request);
