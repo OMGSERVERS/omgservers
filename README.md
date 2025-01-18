@@ -46,107 +46,93 @@ OMGSERVERS is a backend for authoritative game servers.
 
 ## Service
 
-### Mandatory
-
-| Environment Variable                                                                                             |
-|------------------------------------------------------------------------------------------------------------------|
-| OMGSERVERS_DATABASE_PASSWORD: `<db_password>`                                                                    |
-| OMGSERVERS_BROKER_PASSWORD: `<broker_password>`                                                                  |
-| OMGSERVERS_BUILDER_TOKEN: `<builder_token>`                                                                      |
-| OMGSERVERS_SERVER_X5C: `<public_key_string>`                                                                     |
-| OMGSERVERS_SERVER_SERVICE_USER_PASSWORD: `<service_password>`                                                    |
-| OMGSERVERS_BOOTSTRAP_ADMIN_USER_PASSWORD: `<admin_password>`                                                     |
-| OMGSERVERS_BOOTSTRAP_SUPPORT_USER_PASSWORD: `<support_password>`                                                 |
-| OMGSERVERS_BOOTSTRAP_REGISTRY_USER_PASSWORD: `<registry_password>`                                               |
-| OMGSERVERS_BOOTSTRAP_BUILDER_USER_PASSWORD: `<builder_password>`                                                 |
-| OMGSERVERS_BOOTSTRAP_SERVICE_USER_PASSWORD: `<service_password>`                                                 |
-| OMGSERVERS_BOOTSTRAP_DISPATCHER_USER_PASSWORD: `<dispatcher_password>`                                           |
-| OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_`<index>`__DOCKER_DAEMON_URI: `tcp://<docker_host>:<docker_port>` |
-| OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_`<index>`__CPU_COUNT: `<cpu_count>`                               |
-| OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_`<index>`__MEMORY_SIZE: `<memory_size>`                           |
-| OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_`<index>`__MAX_CONTAINERS: `<max_containers>`                     |
-
-### Optional
-
-| Environment Variable                                                            |
-|---------------------------------------------------------------------------------|
-| OMGSERVERS_APPLICATION_NAME: `service`                                          |
-| OMGSERVERS_SERVER_INSTANCE_ID: `0`                                              |
-| OMGSERVERS_SERVER_PUBLIC_KEY: `file:/jwt_issuer/public_key.pem`                 |
-| OMGSERVERS_SERVER_PRIVATE_KEY: `file:/jwt_issuer/private_key.pem`               |
-| OMGSERVERS_SERVER_JWT_ISSUER: `omgservers`                                      |
-| OMGSERVERS_SERVER_SERVICE_USER_ALIAS: `service`                                 |
-| OMGSERVERS_SERVER_URI: `http://gateway:8080`                                    |
-| OMGSERVERS_SERVER_SHARD_COUNT: `1`                                              |
-| OMGSERVERS_DATABASE_URL: `postgresql://database:5432/omgservers`                |
-| OMGSERVERS_DATABASE_USERNAME: `omgservers`                                      |
-| OMGSERVERS_BROKER_HOST: `broker`                                                |
-| OMGSERVERS_BROKER_PORT: `5672`                                                  |
-| OMGSERVERS_BROKER_USERNAME: `omgservers`                                        |
-| OMGSERVERS_SERVICE_QUEUE: `ServiceEvents`                                       |
-| OMGSERVERS_FORWARDING_QUEUE: `ForwardedEvents`                                  |
-| OMGSERVERS_BUILDER_URI: `http://builder:8080`                                   |
-| OMGSERVERS_BUILDER_USERNAME: `omgservers`                                       |
-| OMGSERVERS_DOCKER_CLIENT_TLS_VERIFY: `false`                                    |
-| OMGSERVERS_DOCKER_CLIENT_CERT_PATH: `/docker/certs`                             |
-| OMGSERVERS_REGISTRY_URI: `http://localhost:5000`                                |
-| OMGSERVERS_RUNTIMES_DOCKER_NETWORK: `omgservers`                                |
-| OMGSERVERS_RUNTIMES_INACTIVE_INTERVAL: `30`                                     |
-| OMGSERVERS_RUNTIMES_DEFAULT_CPU_LIMIT: `1`                                      |
-| OMGSERVERS_RUNTIMES_DEFAULT_MEMORY_LIMIT: `512`                                 |
-| OMGSERVERS_CLIENTS_TOKEN_LIFETIME: `3600`                                       |
-| OMGSERVERS_CLIENTS_INACTIVE_INTERVAL: `30`                                      |
-| OMGSERVERS_INITIALIZATION_DATABASE_SCHEMA_ENABLED: `true`                       |
-| OMGSERVERS_INITIALIZATION_DATABASE_SCHEMA_CONCURRENCY: `16`                     |
-| OMGSERVERS_INITIALIZATION_SERVER_INDEX_ENABLED: `true`                          |
-| OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS_`<index>`: `http://gateway:8080` |
-| OMGSERVERS_INITIALIZATION_RELAY_JOB_ENABLED: `true`                             |
-| OMGSERVERS_INITIALIZATION_RELAY_JOB_INTERVAL: `1s`                              |
-| OMGSERVERS_INITIALIZATION_SCHEDULER_JOB_ENABLED: `true`                         |
-| OMGSERVERS_INITIALIZATION_SCHEDULER_JOB_INTERVAL: `1s`                          |
-| OMGSERVERS_INITIALIZATION_BOOTSTRAP_JOB_ENABLED: `true`                         |
-| OMGSERVERS_INITIALIZATION_BOOTSTRAP_JOB_INTERVAL: `1s`                          |
-| OMGSERVERS_BOOTSTRAP_ENABLED: `false`                                           |
-| OMGSERVERS_BOOTSTRAP_ADMIN_USER_ALIAS: `admin`                                  |
-| OMGSERVERS_BOOTSTRAP_SUPPORT_USER_ALIAS: `support`                              |
-| OMGSERVERS_BOOTSTRAP_REGISTRY_USER_ALIAS: `registry`                            |
-| OMGSERVERS_BOOTSTRAP_BUILDER_USER_ALIAS: `builder`                              |
-| OMGSERVERS_BOOTSTRAP_SERVICE_USER_ALIAS: `service`                              |
-| OMGSERVERS_BOOTSTRAP_DISPATCHER_USER_ALIAS: `dispatcher`                        |
-| OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED: `true`                               |
-| OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED: `false`                                 |
-| OMGSERVERS_LOGGING_ROOT_LOGS_LEVEL: `INFO`                                      |
-| OMGSERVERS_LOGGING_APP_LOGS_LEVEL: `INFO`                                       |
-| OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL: `INFO`                                   |
-| OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED: `true`                                 |
-| OMGSERVERS_OTEL_DISABLED: `true`                                                |
-| OMGSERVERS_OTEL_ENDPOINT: `http://localhost:4317`                               |
+| **Environment Variable**                                                    | **Required** | **Value**                               |
+|-----------------------------------------------------------------------------|--------------|-----------------------------------------|
+| `OMGSERVERS_DATABASE_PASSWORD`                                              | Yes          | `<db_password>`                         |
+| `OMGSERVERS_BROKER_PASSWORD`                                                | Yes          | `<broker_password>`                     |
+| `OMGSERVERS_BUILDER_TOKEN`                                                  | Yes          | `<builder_token>`                       |
+| `OMGSERVERS_SERVER_X5C`                                                     | Yes          | `<public_key_string>`                   |
+| `OMGSERVERS_SERVER_SERVICE_USER_PASSWORD`                                   | Yes          | `<service_password>`                    |
+| `OMGSERVERS_BOOTSTRAP_ADMIN_USER_PASSWORD`                                  | Yes          | `<admin_password>`                      |
+| `OMGSERVERS_BOOTSTRAP_SUPPORT_USER_PASSWORD`                                | Yes          | `<support_password>`                    |
+| `OMGSERVERS_BOOTSTRAP_REGISTRY_USER_PASSWORD`                               | Yes          | `<registry_password>`                   |
+| `OMGSERVERS_BOOTSTRAP_BUILDER_USER_PASSWORD`                                | Yes          | `<builder_password>`                    |
+| `OMGSERVERS_BOOTSTRAP_SERVICE_USER_PASSWORD`                                | Yes          | `<service_password>`                    |
+| `OMGSERVERS_BOOTSTRAP_DISPATCHER_USER_PASSWORD`                             | Yes          | `<dispatcher_password>`                 |
+| `OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_<index>__DOCKER_DAEMON_URI` | Yes          | `tcp://<docker_host>:<docker_port>`     |
+| `OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_<index>__CPU_COUNT`         | Yes          | `<cpu_count>`                           |
+| `OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_<index>__MEMORY_SIZE`       | Yes          | `<memory_size>`                         |
+| `OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_DOCKER_HOSTS_<index>__MAX_CONTAINERS`    | Yes          | `<max_containers>`                      |
+| `OMGSERVERS_APPLICATION_NAME`                                               | No           | `service`                               |
+| `OMGSERVERS_SERVER_INSTANCE_ID`                                             | No           | `0`                                     |
+| `OMGSERVERS_SERVER_PUBLIC_KEY`                                              | No           | `file:/jwt_issuer/public_key.pem`       |
+| `OMGSERVERS_SERVER_PRIVATE_KEY`                                             | No           | `file:/jwt_issuer/private_key.pem`      |
+| `OMGSERVERS_SERVER_JWT_ISSUER`                                              | No           | `omgservers`                            |
+| `OMGSERVERS_SERVER_SERVICE_USER_ALIAS`                                      | No           | `service`                               |
+| `OMGSERVERS_SERVER_URI`                                                     | No           | `http://gateway:8080`                   |
+| `OMGSERVERS_SERVER_SHARD_COUNT`                                             | No           | `1`                                     |
+| `OMGSERVERS_DATABASE_URL`                                                   | No           | `postgresql://database:5432/omgservers` |
+| `OMGSERVERS_DATABASE_USERNAME`                                              | No           | `omgservers`                            |
+| `OMGSERVERS_BROKER_HOST`                                                    | No           | `broker`                                |
+| `OMGSERVERS_BROKER_PORT`                                                    | No           | `5672`                                  |
+| `OMGSERVERS_BROKER_USERNAME`                                                | No           | `omgservers`                            |
+| `OMGSERVERS_SERVICE_QUEUE`                                                  | No           | `ServiceEvents`                         |
+| `OMGSERVERS_FORWARDING_QUEUE`                                               | No           | `ForwardedEvents`                       |
+| `OMGSERVERS_BUILDER_URI`                                                    | No           | `http://builder:8080`                   |
+| `OMGSERVERS_BUILDER_USERNAME`                                               | No           | `omgservers`                            |
+| `OMGSERVERS_DOCKER_CLIENT_TLS_VERIFY`                                       | No           | `false`                                 |
+| `OMGSERVERS_DOCKER_CLIENT_CERT_PATH`                                        | No           | `/docker/certs`                         |
+| `OMGSERVERS_REGISTRY_URI`                                                   | No           | `http://localhost:5000`                 |
+| `OMGSERVERS_RUNTIMES_DOCKER_NETWORK`                                        | No           | `omgservers`                            |
+| `OMGSERVERS_RUNTIMES_INACTIVE_INTERVAL`                                     | No           | `30`                                    |
+| `OMGSERVERS_RUNTIMES_DEFAULT_CPU_LIMIT`                                     | No           | `100`                                   |
+| `OMGSERVERS_RUNTIMES_DEFAULT_MEMORY_LIMIT`                                  | No           | `512`                                   |
+| `OMGSERVERS_CLIENTS_TOKEN_LIFETIME`                                         | No           | `3600`                                  |
+| `OMGSERVERS_CLIENTS_INACTIVE_INTERVAL`                                      | No           | `30`                                    |
+| `OMGSERVERS_INITIALIZATION_DATABASE_SCHEMA_ENABLED`                         | No           | `true`                                  |
+| `OMGSERVERS_INITIALIZATION_DATABASE_SCHEMA_CONCURRENCY`                     | No           | `16`                                    |
+| `OMGSERVERS_INITIALIZATION_SERVER_INDEX_ENABLED`                            | No           | `true`                                  |
+| `OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS_<index>`                    | No           | `http://gateway:8080`                   |
+| `OMGSERVERS_INITIALIZATION_RELAY_JOB_ENABLED`                               | No           | `true`                                  |
+| `OMGSERVERS_INITIALIZATION_RELAY_JOB_INTERVAL`                              | No           | `1s`                                    |
+| `OMGSERVERS_INITIALIZATION_SCHEDULER_JOB_ENABLED`                           | No           | `true`                                  |
+| `OMGSERVERS_INITIALIZATION_SCHEDULER_JOB_INTERVAL`                          | No           | `1s`                                    |
+| `OMGSERVERS_INITIALIZATION_BOOTSTRAP_JOB_ENABLED`                           | No           | `true`                                  |
+| `OMGSERVERS_INITIALIZATION_BOOTSTRAP_JOB_INTERVAL`                          | No           | `1s`                                    |
+| `OMGSERVERS_BOOTSTRAP_ENABLED`                                              | No           | `false`                                 |
+| `OMGSERVERS_BOOTSTRAP_ADMIN_USER_ALIAS`                                     | No           | `admin`                                 |
+| `OMGSERVERS_BOOTSTRAP_SUPPORT_USER_ALIAS`                                   | No           | `support`                               |
+| `OMGSERVERS_BOOTSTRAP_REGISTRY_USER_ALIAS`                                  | No           | `registry`                              |
+| `OMGSERVERS_BOOTSTRAP_BUILDER_USER_ALIAS`                                   | No           | `builder`                               |
+| `OMGSERVERS_BOOTSTRAP_SERVICE_USER_ALIAS`                                   | No           | `service`                               |
+| `OMGSERVERS_BOOTSTRAP_DISPATCHER_USER_ALIAS`                                | No           | `dispatcher`                            |
+| `OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_ENABLED`                                 | No           | `true`                                  |
+| `OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED`                                    | No           | `false`                                 |
+| `OMGSERVERS_LOGGING_ROOT_LOGS_LEVEL`                                        | No           | `INFO`                                  |
+| `OMGSERVERS_LOGGING_APP_LOGS_LEVEL`                                         | No           | `INFO`                                  |
+| `OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL`                                     | No           | `INFO`                                  |
+| `OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED`                                   | No           | `true`                                  |
+| `OMGSERVERS_OTEL_DISABLED`                                                  | No           | `true`                                  |
+| `OMGSERVERS_OTEL_ENDPOINT`                                                  | No           | `http://collector:4317`                 |
 
 ## Dispatcher
 
-### Mandatory
-
-| Environment Variable                                         |
-|--------------------------------------------------------------|
-| OMGSERVERS_DISPATCHER_USER_PASSWORD: `<dispatcher_password>` |
-
-### Optional
-
-| Environment Variable                                            |
-|-----------------------------------------------------------------|
-| OMGSERVERS_APPLICATION_NAME: `dispatcher`                       |
-| OMGSERVERS_DISPATCHER_USER_ALIAS: `dispatcher`                  |
-| OMGSERVERS_SERVICE_URI: `http://service:8080`                   |
-| OMGSERVERS_SERVER_PUBLIC_KEY: `file:/jwt_issuer/public_key.pem` |
-| OMGSERVERS_EXPIRED_CONNECTIONS_HANDLER_JOB_INTERVAL: `60s`      |
-| OMGSERVERS_REFRESH_DISPATCHER_TOKEN_JOB_INTERVAL: `60s`         |
-| OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED: `false`                 |
-| OMGSERVERS_LOGGING_ROOT_LOGS_LEVEL: `INFO`                      |
-| OMGSERVERS_LOGGING_APP_LOGS_LEVEL: `INFO`                       |
-| OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL: `INFO`                   |
-| OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED: `true`                 |
-| OMGSERVERS_OTEL_DISABLED: `true`                                |
-| OMGSERVERS_OTEL_ENDPOINT: `http://collector:4317`               |
+| **Environment Variable**                                     | **Required** | **Value**                         |
+|--------------------------------------------------------------|--------------|-----------------------------------|
+| `OMGSERVERS_DISPATCHER_USER_PASSWORD`                        | Yes          | `<dispatcher_password>`           |
+| `OMGSERVERS_APPLICATION_NAME`                                | No           | `dispatcher`                      |
+| `OMGSERVERS_DISPATCHER_USER_ALIAS`                           | No           | `dispatcher`                      |
+| `OMGSERVERS_SERVICE_URI`                                     | No           | `http://service:8080`             |
+| `OMGSERVERS_SERVER_PUBLIC_KEY`                               | No           | `file:/jwt_issuer/public_key.pem` |
+| `OMGSERVERS_EXPIRED_CONNECTIONS_HANDLER_JOB_INTERVAL`        | No           | `60s`                             |
+| `OMGSERVERS_REFRESH_DISPATCHER_TOKEN_JOB_INTERVAL`           | No           | `60s`                             |
+| `OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED`                     | No           | `false`                           |
+| `OMGSERVERS_LOGGING_ROOT_LOGS_LEVEL`                         | No           | `INFO`                            |
+| `OMGSERVERS_LOGGING_APP_LOGS_LEVEL`                          | No           | `INFO`                            |
+| `OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL`                      | No           | `INFO`                            |
+| `OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED`                    | No           | `true`                            |
+| `OMGSERVERS_OTEL_DISABLED`                                   | No           | `true`                            |
+| `OMGSERVERS_OTEL_ENDPOINT`                                   | No           | `http://collector:4317`           |
 
 # Development
 
