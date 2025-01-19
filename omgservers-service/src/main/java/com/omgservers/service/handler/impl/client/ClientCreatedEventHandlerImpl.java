@@ -15,18 +15,15 @@ import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
-import com.omgservers.service.event.body.internal.MatchmakerAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
+import com.omgservers.service.factory.queue.QueueRequestModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
-import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.service.event.EventService;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
+import com.omgservers.service.operation.assignMatchmaker.AssignMatchmakerOperation;
+import com.omgservers.service.operation.selectRandomMatchmaker.SelectRandomMatchmakerOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -41,12 +38,12 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
     final ClientModule clientModule;
     final TenantModule tenantModule;
 
-    final EventService eventService;
+    final SelectRandomMatchmakerOperation selectRandomMatchmakerOperation;
+    final AssignMatchmakerOperation assignMatchmakerOperation;
 
-    final ClientMessageModelFactory clientMessageModelFactory;
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
-
-    final EventModelFactory eventModelFactory;
+    final ClientMessageModelFactory clientMessageModelFactory;
+    final QueueRequestModelFactory queueRequestModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -64,6 +61,8 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
         return getClient(clientId)
                 .flatMap(client -> {
+                    log.debug("Created, {}", client);
+
                     final var tenantId = client.getTenantId();
                     final var deploymentId = client.getDeploymentId();
 
@@ -71,7 +70,9 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                             .flatMap(tenantDeployment -> {
                                 final var deploymentVersionId = tenantDeployment.getVersionId();
                                 return getTenantVersion(tenantId, deploymentVersionId)
-                                        .flatMap(tenantVersion -> handleEvent(client, tenantVersion, idempotencyKey));
+                                        .flatMap(tenantVersion -> handleEvent(client,
+                                                tenantVersion,
+                                                idempotencyKey));
                             });
                 })
                 .replaceWithVoid();
@@ -95,18 +96,24 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
-    Uni<Boolean> handleEvent(final ClientModel client,
-                             final TenantVersionModel tenantVersion,
-                             final String idempotencyKey) {
-        log.debug("Created, {}", client);
-        return syncWelcomeMessage(client, tenantVersion, idempotencyKey)
-                .flatMap(created -> requestLobbyAssignment(client, idempotencyKey))
-                .flatMap(created -> requestMatchmakerAssignment(client, idempotencyKey));
+    Uni<Void> handleEvent(final ClientModel client,
+                          final TenantVersionModel tenantVersion,
+                          final String idempotencyKey) {
+        final var clientId = client.getId();
+        final var tenantId = client.getTenantId();
+        final var tenantDeploymentId = client.getDeploymentId();
+
+        return createWelcomeMessage(client, tenantVersion, idempotencyKey)
+                .flatMap(created -> selectRandomMatchmakerOperation.execute(tenantId, tenantDeploymentId)
+                        .flatMap(randomSelectedMatchmaker -> assignMatchmakerOperation.execute(clientId,
+                                randomSelectedMatchmaker.getId(),
+                                idempotencyKey)))
+                .replaceWithVoid();
     }
 
-    Uni<Boolean> syncWelcomeMessage(final ClientModel client,
-                                    final TenantVersionModel tenantVersion,
-                                    final String idempotencyKey) {
+    Uni<Boolean> createWelcomeMessage(final ClientModel client,
+                                      final TenantVersionModel tenantVersion,
+                                      final String idempotencyKey) {
         final var clientId = client.getId();
         final var tenantId = client.getTenantId();
         final var tenantVersionId = tenantVersion.getId();
@@ -120,34 +127,6 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
         final var request = new SyncClientMessageRequest(clientMessage);
         return clientModule.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
-    }
-
-    Uni<Boolean> requestLobbyAssignment(final ClientModel client,
-                                        final String idempotencyKey) {
-        final var clientId = client.getId();
-        final var tenantId = client.getTenantId();
-        final var deploymentId = client.getDeploymentId();
-        final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId, tenantId, deploymentId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
-    }
-
-    Uni<Boolean> requestMatchmakerAssignment(final ClientModel client,
-                                             final String idempotencyKey) {
-        final var clientId = client.getId();
-        final var tenantId = client.getTenantId();
-        final var deploymentId = client.getDeploymentId();
-        final var eventBody = new MatchmakerAssignmentRequestedEventBodyModel(clientId, tenantId, deploymentId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
     }
 }
 

@@ -25,21 +25,10 @@ class ClientMatchmakerRefCreatedEventHandlerImplTest extends BaseTestClass {
 
     @Test
     void givenHandler_whenRetry_thenFinished() {
-        final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var project = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
-        final var stage = testDataFactory.getTenantTestDataFactory().createStage(project);
-        final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
-        final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
-                .createTenantDeployment(stage, version);
-        final var matchmaker = testDataFactory.getMatchmakerTestDataFactory()
-                .createMatchmaker(tenant, tenantDeployment);
-        final var user = testDataFactory.getUserTestDataFactory().createPlayerUser("password");
-        final var player = testDataFactory.getUserTestDataFactory().createUserPlayer(user, tenant, stage);
-        final var client = testDataFactory.getClientTestDataFactory().createClient(player,
-                tenant,
-                tenantDeployment);
-        final var clientMatchmakerRef = testDataFactory.getClientTestDataFactory()
-                .createClientMatchmakerRef(client, matchmaker);
+        final var testData = testDataFactory.createDefaultTestData();
+
+        final var client = testData.getClient();
+        final var clientMatchmakerRef = testData.getClientMatchmakerRef();
 
         final var clientId = client.getId();
         final var id = clientMatchmakerRef.getId();

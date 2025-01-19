@@ -32,7 +32,7 @@ class VerifyTenantPermissionExistsOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantPermission_whenExecute_thenTrue() {
-        final var tenantPermission = testData.getTenantProjectManagementPermission();
+        final var tenantPermission = testData.getTenantProjectManagerPermission();
 
         assertTrue(verifyTenantPermissionExistsOperation.execute(
                 tenantPermission.getTenantId(),
@@ -42,7 +42,7 @@ class VerifyTenantPermissionExistsOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownIds_whenExecute_thenFalse() {
-        final var tenantPermission = testData.getTenantProjectManagementPermission();
+        final var tenantPermission = testData.getTenantProjectManagerPermission();
         tenantPermission.setId(generateIdOperation.generateId());
         tenantPermission.setTenantId(generateIdOperation.generateId());
         tenantPermission.setUserId(generateIdOperation.generateId());

@@ -11,15 +11,14 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.LobbyAssignmentRequestedEventBodyModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.operation.assignLobby.AssignLobbyOperation;
+import com.omgservers.service.operation.selectRandomLobby.SelectRandomLobbyOperation;
 import com.omgservers.service.service.event.EventService;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -35,6 +34,9 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
     final ClientModule clientModule;
     final EventService eventService;
 
+    final SelectRandomLobbyOperation selectRandomLobbyOperation;
+    final AssignLobbyOperation assignLobbyOperation;
+
     final EventModelFactory eventModelFactory;
 
     @Override
@@ -49,6 +51,8 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
         final var body = (MatchmakerMatchAssignmentDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
         final var id = body.getId();
+
+        final var idempotencyKey = event.getId().toString();
 
         return getMatchmakerMatchAssignment(matchmakerId, id)
                 .flatMap(matchmakerMatchAssignment -> {
@@ -72,13 +76,10 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
                                             }
 
                                             final var tenantId = client.getTenantId();
-                                            final var deploymentId = client.getDeploymentId();
-                                            final var idempotencyKey = event.getId().toString();
-
-                                            return syncClientRandomLobbyAssignmentRequestedEvent(clientId,
-                                                    tenantId,
-                                                    deploymentId,
-                                                    idempotencyKey);
+                                            final var tenantDeploymentId = client.getDeploymentId();
+                                            return selectRandomLobbyOperation.execute(tenantId, tenantDeploymentId)
+                                                    .flatMap(randomSelectedLobby -> assignLobbyOperation
+                                                            .execute(clientId, randomSelectedLobby, idempotencyKey));
                                         });
                             });
                 })
@@ -101,20 +102,5 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
         final var request = new GetClientRequest(clientId);
         return clientModule.getService().getClient(request)
                 .map(GetClientResponse::getClient);
-    }
-
-    Uni<Boolean> syncClientRandomLobbyAssignmentRequestedEvent(final Long clientId,
-                                                               final Long tenantId,
-                                                               final Long deploymentId,
-                                                               final String idempotencyKey) {
-        final var eventBody = new LobbyAssignmentRequestedEventBodyModel(clientId,
-                tenantId,
-                deploymentId);
-        final var eventIdempotencyKey = idempotencyKey + "/" + eventBody.getQualifier();
-        final var eventModel = eventModelFactory.create(eventBody, eventIdempotencyKey);
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
     }
 }

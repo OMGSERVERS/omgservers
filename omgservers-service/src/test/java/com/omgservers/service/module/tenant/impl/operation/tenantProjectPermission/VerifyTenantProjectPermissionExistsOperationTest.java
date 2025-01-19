@@ -33,7 +33,7 @@ class VerifyTenantProjectPermissionExistsOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantProjectPermission_whenExecute_thenTrue() {
-        final var tenantProjectPermission = testData.getTenantProjectStageManagementPermission();
+        final var tenantProjectPermission = testData.getTenantProjectStageManagerPermission();
 
         assertTrue(verifyTenantProjectPermissionExistsOperation.execute(
                 tenantProjectPermission.getTenantId(),

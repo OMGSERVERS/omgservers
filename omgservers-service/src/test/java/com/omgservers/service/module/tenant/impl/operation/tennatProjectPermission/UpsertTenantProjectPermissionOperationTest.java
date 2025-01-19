@@ -35,7 +35,7 @@ class UpsertTenantProjectPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenProjectPermission_whenExecute_thenInserted() {
-        final var tenantProjectPermission = testData.getTenantProjectStageManagementPermission();
+        final var tenantProjectPermission = testData.getTenantProjectStageManagerPermission();
         tenantProjectPermission.setId(generateIdOperation.generateId());
         tenantProjectPermission.setUserId(generateIdOperation.generateId());
         tenantProjectPermission.setIdempotencyKey(generateIdOperation.generateStringId());
@@ -47,7 +47,7 @@ class UpsertTenantProjectPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenProjectPermission_whenExecute_thenUpdated() {
-        final var tenantProjectPermission = testData.getTenantProjectStageManagementPermission();
+        final var tenantProjectPermission = testData.getTenantProjectStageManagerPermission();
 
         final var changeContext = upsertTenantProjectPermissionOperation
                 .execute(tenantProjectPermission);
@@ -56,7 +56,7 @@ class UpsertTenantProjectPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownIds_whenExecute_thenException() {
-        final var tenantProjectPermission = testData.getTenantProjectStageManagementPermission();
+        final var tenantProjectPermission = testData.getTenantProjectStageManagerPermission();
         tenantProjectPermission.setId(generateIdOperation.generateId());
         tenantProjectPermission.setTenantId(generateIdOperation.generateId());
         tenantProjectPermission.setProjectId(generateIdOperation.generateId());
@@ -68,7 +68,7 @@ class UpsertTenantProjectPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenProjectPermission_whenExecute_thenIdempotencyViolation() {
-        final var tenantProjectPermission = testData.getTenantProjectStageManagementPermission();
+        final var tenantProjectPermission = testData.getTenantProjectStageManagerPermission();
         tenantProjectPermission.setId(generateIdOperation.generateId());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->

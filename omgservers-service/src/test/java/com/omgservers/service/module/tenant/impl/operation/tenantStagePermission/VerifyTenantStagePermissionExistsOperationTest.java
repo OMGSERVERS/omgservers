@@ -32,7 +32,7 @@ class VerifyTenantStagePermissionExistsOperationTest extends BaseTestClass {
 
     @Test
     void givenStagePermission_whenExecute_thenTrue() {
-        final var tenantStagePermission = testData.getTenantStageDeploymentManagementPermission();
+        final var tenantStagePermission = testData.getTenantStageDeploymentManagerPermission();
         tenantStagePermission.setId(generateIdOperation.generateId());
 
         assertTrue(verifyTenantStagePermissionExistsOperation.execute(
@@ -44,7 +44,7 @@ class VerifyTenantStagePermissionExistsOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownIds_whenExecute_thenFalse() {
-        final var tenantStagePermission = testData.getTenantStageDeploymentManagementPermission();
+        final var tenantStagePermission = testData.getTenantStageDeploymentManagerPermission();
         tenantStagePermission.setTenantId(generateIdOperation.generateId());
         tenantStagePermission.setStageId(generateIdOperation.generateId());
         tenantStagePermission.setUserId(generateIdOperation.generateId());

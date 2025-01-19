@@ -1,11 +1,19 @@
 package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
+import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
+import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.queue.QueueModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
@@ -41,6 +49,7 @@ public class TestDataFactory {
     final TenantTestDataFactory tenantTestDataFactory;
     final ClientTestDataFactory clientTestDataFactory;
     final LobbyTestDataFactory lobbyTestDataFactory;
+    final QueueTestDataFactory queueTestDataFactory;
     final RootTestDataFactory rootTestDataFactory;
     final PoolTestDataFactory poolTestDataFactory;
     final UserTestDataFactory userTestDataFactory;
@@ -49,27 +58,27 @@ public class TestDataFactory {
         final var developerUser = getUserTestDataFactory().createDeveloperUser("password");
 
         final var tenant = tenantTestDataFactory.createTenant();
-        final var tenantProjectManagementPermission = tenantTestDataFactory
+        final var tenantProjectManagerPermission = tenantTestDataFactory
                 .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.PROJECT_MANAGER);
-        final var tenantGettingDashboardPermission = tenantTestDataFactory
+        final var tenantViewerPermission = tenantTestDataFactory
                 .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.TENANT_VIEWER);
 
         final var tenantProject = tenantTestDataFactory.createTenantProject(tenant);
-        final var tenantProjectStageManagementPermission = tenantTestDataFactory
+        final var tenantProjectStageManagerPermission = tenantTestDataFactory
                 .createTenantProjectPermission(tenantProject, developerUser,
                         TenantProjectPermissionQualifierEnum.STAGE_MANAGER);
-        final var tenantProjectVersionManagementPermission = tenantTestDataFactory
+        final var tenantProjectVersionManagerPermission = tenantTestDataFactory
                 .createTenantProjectPermission(tenantProject, developerUser,
                         TenantProjectPermissionQualifierEnum.VERSION_MANAGER);
-        final var tenantProjectGettingDashboardPermission = tenantTestDataFactory
+        final var tenantProjectViewerPermission = tenantTestDataFactory
                 .createTenantProjectPermission(tenantProject, developerUser,
                         TenantProjectPermissionQualifierEnum.PROJECT_VIEWER);
 
         final var tenantStage = tenantTestDataFactory.createStage(tenantProject);
-        final var tenantStageDeploymentManagementPermission = tenantTestDataFactory
+        final var tenantStageDeploymentManagerPermission = tenantTestDataFactory
                 .createTenantStagePermission(tenantStage, developerUser,
                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER);
-        final var tenantStageGettingDashboardPermission = tenantTestDataFactory
+        final var tenantStageViewerPermission = tenantTestDataFactory
                 .createTenantStagePermission(tenantStage, developerUser,
                         TenantStagePermissionQualifierEnum.STAGE_VIEWER);
 
@@ -94,11 +103,20 @@ public class TestDataFactory {
         final var tenantLobbyRef = tenantTestDataFactory
                 .createTenantLobbyRef(tenantDeployment, lobby);
 
-        final var matchmaker = getMatchmakerTestDataFactory().createMatchmaker(tenant,
+        final var matchmaker = matchmakerTestDataFactory.createMatchmaker(tenant,
                 tenantDeployment);
+
+        final var matchmakerMatch = matchmakerTestDataFactory.createMatchmakerMatch(matchmaker);
+
+        final var matchRuntime = runtimeTestDataFactory
+                .createMatchRuntime(tenant, tenantDeployment, matchmakerMatch);
+        final var matchmakerMatchRuntimeRef = matchmakerTestDataFactory
+                .createMatchmakerMatchRuntimeRef(matchmakerMatch, matchRuntime);
 
         final var tenantMatchmakerRef = tenantTestDataFactory
                 .createTenantMatchmakerRef(tenantDeployment, matchmaker);
+
+        final var queue = queueTestDataFactory.createQueue(tenantDeployment);
 
         final var user = getUserTestDataFactory().createPlayerUser("password");
         final var player = getUserTestDataFactory().createUserPlayer(user, tenant, tenantStage);
@@ -109,21 +127,29 @@ public class TestDataFactory {
         final var matchmakerAssignment = getMatchmakerTestDataFactory()
                 .createMatchmakerAssignment(matchmaker, client);
 
+        final var matchmakerMatchAssignment = matchmakerTestDataFactory
+                .createMatchmakerMatchAssignment(matchmakerMatch, client);
+        final var matchRuntimeAssignment = runtimeTestDataFactory
+                .createRuntimeAssignment(matchRuntime, client);
+
+        final var clientMatchmakerRef = getClientTestDataFactory()
+                .createClientMatchmakerRef(client, matchmaker);
+
         return DefaultTestData.builder()
                 .developerUser(developerUser)
 
                 .tenant(tenant)
-                .tenantProjectManagementPermission(tenantProjectManagementPermission)
-                .tenantGettingDashboardPermission(tenantGettingDashboardPermission)
+                .tenantProjectManagerPermission(tenantProjectManagerPermission)
+                .tenantViewerPermission(tenantViewerPermission)
 
                 .tenantProject(tenantProject)
-                .tenantProjectStageManagementPermission(tenantProjectStageManagementPermission)
-                .tenantProjectVersionManagementPermission(tenantProjectVersionManagementPermission)
-                .tenantProjectGettingDashboardPermission(tenantProjectGettingDashboardPermission)
+                .tenantProjectStageManagerPermission(tenantProjectStageManagerPermission)
+                .tenantProjectVersionManagerPermission(tenantProjectVersionManagerPermission)
+                .tenantProjectViewerPermission(tenantProjectViewerPermission)
 
                 .tenantStage(tenantStage)
-                .tenantStageDeploymentManagementPermission(tenantStageDeploymentManagementPermission)
-                .tenantStageGettingDashboardPermission(tenantStageGettingDashboardPermission)
+                .tenantStageDeploymentManagerPermission(tenantStageDeploymentManagerPermission)
+                .tenantStageViewerPermission(tenantStageViewerPermission)
 
                 .tenantVersion(tenantVersion)
                 .tenantFilesArchive(tenantFilesArchive)
@@ -140,9 +166,22 @@ public class TestDataFactory {
                 .lobbyRuntime(lobbyRuntime)
                 .lobbyRuntimeRef(lobbyRuntimeRef)
 
+                .matchmaker(matchmaker)
+                .matchmakerMatch(matchmakerMatch)
+                .matchmakerAssignment(matchmakerAssignment)
+                .matchmakerMatchRuntimeRef(matchmakerMatchRuntimeRef)
+                .matchmakerMatchAssignment(matchmakerMatchAssignment)
+
+                .matchRuntime(matchRuntime)
+                .matchRuntimeAssignment(matchRuntimeAssignment)
+
+                .queue(queue)
+
                 .user(user)
                 .player(player)
                 .client(client)
+                .clientMatchmakerRef(clientMatchmakerRef)
+
                 .build();
     }
 
@@ -152,17 +191,17 @@ public class TestDataFactory {
         UserModel developerUser;
 
         TenantModel tenant;
-        TenantPermissionModel tenantProjectManagementPermission;
-        TenantPermissionModel tenantGettingDashboardPermission;
+        TenantPermissionModel tenantProjectManagerPermission;
+        TenantPermissionModel tenantViewerPermission;
 
         TenantProjectModel tenantProject;
-        TenantProjectPermissionModel tenantProjectStageManagementPermission;
-        TenantProjectPermissionModel tenantProjectVersionManagementPermission;
-        TenantProjectPermissionModel tenantProjectGettingDashboardPermission;
+        TenantProjectPermissionModel tenantProjectStageManagerPermission;
+        TenantProjectPermissionModel tenantProjectVersionManagerPermission;
+        TenantProjectPermissionModel tenantProjectViewerPermission;
 
         TenantStageModel tenantStage;
-        TenantStagePermissionModel tenantStageDeploymentManagementPermission;
-        TenantStagePermissionModel tenantStageGettingDashboardPermission;
+        TenantStagePermissionModel tenantStageDeploymentManagerPermission;
+        TenantStagePermissionModel tenantStageViewerPermission;
 
         TenantVersionModel tenantVersion;
         TenantFilesArchiveModel tenantFilesArchive;
@@ -179,8 +218,20 @@ public class TestDataFactory {
         RuntimeModel lobbyRuntime;
         LobbyRuntimeRefModel lobbyRuntimeRef;
 
+        MatchmakerModel matchmaker;
+        MatchmakerMatchModel matchmakerMatch;
+        MatchmakerAssignmentModel matchmakerAssignment;
+        MatchmakerMatchRuntimeRefModel matchmakerMatchRuntimeRef;
+        MatchmakerMatchAssignmentModel matchmakerMatchAssignment;
+
+        RuntimeModel matchRuntime;
+        RuntimeAssignmentModel matchRuntimeAssignment;
+
+        QueueModel queue;
+
         UserModel user;
         PlayerModel player;
         ClientModel client;
+        ClientMatchmakerRefModel clientMatchmakerRef;
     }
 }

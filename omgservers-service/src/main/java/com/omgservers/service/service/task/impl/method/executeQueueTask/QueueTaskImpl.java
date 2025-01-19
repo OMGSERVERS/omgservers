@@ -1,56 +1,99 @@
 package com.omgservers.service.service.task.impl.method.executeQueueTask;
 
-import com.omgservers.schema.model.queue.QueueModel;
-import com.omgservers.schema.model.queueRequest.QueueRequestModel;
-import com.omgservers.schema.module.queue.queue.GetQueueRequest;
-import com.omgservers.schema.module.queue.queue.GetQueueResponse;
-import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsRequest;
-import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.module.queue.queueRequest.DeleteQueueRequestRequest;
+import com.omgservers.schema.module.queue.queueRequest.DeleteQueueRequestResponse;
+import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.module.matchmaker.MatchmakerModule;
 import com.omgservers.service.module.queue.QueueModule;
+import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.assignLobby.AssignLobbyOperation;
+import com.omgservers.service.operation.deleteDanglingLobbies.DeleteDanglingLobbiesOperation;
+import com.omgservers.service.operation.ensureOneLobby.EnsureOneLobbyOperation;
+import com.omgservers.service.operation.fetchQueue.FetchQueueOperation;
+import com.omgservers.service.operation.fetchQueue.FetchedQueue;
+import com.omgservers.service.operation.selectRandomLobby.SelectRandomLobbyOperation;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
 public class QueueTaskImpl {
 
+    final MatchmakerModule matchmakerModule;
+    final TenantModule tenantModule;
     final QueueModule queueModule;
 
+    final DeleteDanglingLobbiesOperation deleteDanglingLobbiesOperation;
+    final SelectRandomLobbyOperation selectRandomLobbyOperation;
+    final EnsureOneLobbyOperation ensureOneLobbyOperation;
+    final AssignLobbyOperation assignLobbyOperation;
+    final FetchQueueOperation fetchQueueOperation;
+
     public Uni<Boolean> execute(final Long queueId) {
-        return getQueue(queueId)
-                .flatMap(queue -> handleQueue(queue)
-                        .replaceWith(Boolean.TRUE));
+        return fetchQueueOperation.execute(queueId)
+                .flatMap(this::handleQueue)
+                .replaceWith(Boolean.TRUE);
     }
 
-    Uni<QueueModel> getQueue(final Long id) {
-        final var request = new GetQueueRequest(id);
-        return queueModule.getQueueService().execute(request)
-                .map(GetQueueResponse::getQueue);
-    }
-
-    Uni<Void> handleQueue(final QueueModel queue) {
+    Uni<Void> handleQueue(final FetchedQueue fetchedQueue) {
+        final var queue = fetchedQueue.queue();
         final var queueId = queue.getId();
+        final var queueRequests = fetchedQueue.queueRequests();
 
-        return viewQueueRequests(queueId)
-                .flatMap(queueRequests -> {
-                    if (queueRequests.size() > 0) {
-                        // TODO: TBD
-                        return Uni.createFrom().voidItem();
-                    } else {
-                        log.trace("The queue \"{}\" has no requests to process", queueId);
-                        return Uni.createFrom().voidItem();
+        if (queueRequests.isEmpty()) {
+            log.trace("The queue \"{}\" has no requests to process", queueId);
+
+            final var tenantId = queue.getTenantId();
+            final var deploymentId = queue.getDeploymentId();
+            return deleteDanglingLobbiesOperation.execute(tenantId, deploymentId);
+        } else {
+            return handleRequests(fetchedQueue);
+        }
+    }
+
+    Uni<Void> handleRequests(final FetchedQueue fetchedQueue) {
+        final var queue = fetchedQueue.queue();
+        final var queueId = queue.getId();
+        final var tenantId = queue.getTenantId();
+        final var tenantDeploymentId = queue.getDeploymentId();
+        final var queueRequests = fetchedQueue.queueRequests();
+
+        return selectRandomLobbyOperation.execute(tenantId, tenantDeploymentId)
+                .flatMap(randomSelectedLobby -> Multi.createFrom().iterable(queueRequests)
+                        .onItem().transformToUniAndConcatenate(queueRequest -> {
+                            final var clientId = queueRequest.getClientId();
+                            final var idempotencyKey = queueRequest.getId().toString();
+                            return assignLobbyOperation.execute(clientId,
+                                            randomSelectedLobby,
+                                            idempotencyKey)
+                                    .flatMap(voidItem -> {
+                                        final var queueRequestId = queueRequest.getId();
+                                        return deleteQueueRequest(queueId, queueRequestId);
+                                    });
+                        })
+                        .collect().asList()
+                        .replaceWithVoid())
+                .onFailure(ServerSideNotFoundException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideNotFoundException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.LOBBY_NOT_FOUND)) {
+                            return ensureOneLobbyOperation.execute(tenantId, tenantDeploymentId);
+                        }
                     }
+
+                    return Uni.createFrom().failure(t);
                 });
     }
 
-    Uni<List<QueueRequestModel>> viewQueueRequests(final Long queueId) {
-        final var request = new ViewQueueRequestsRequest(queueId);
+    Uni<Boolean> deleteQueueRequest(final Long queueId,
+                                    final Long queueRequestId) {
+        final var request = new DeleteQueueRequestRequest(queueId, queueRequestId);
         return queueModule.getQueueService().execute(request)
-                .map(ViewQueueRequestsResponse::getQueueRequests);
+                .map(DeleteQueueRequestResponse::getDeleted);
     }
 }

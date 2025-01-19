@@ -35,7 +35,7 @@ class UpsertTenantPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantPermission_whenExecute_thenInserted() {
-        final var tenantPermission = testData.getTenantProjectManagementPermission();
+        final var tenantPermission = testData.getTenantProjectManagerPermission();
         tenantPermission.setId(generateIdOperation.generateId());
         tenantPermission.setUserId(generateIdOperation.generateId());
         tenantPermission.setIdempotencyKey(generateIdOperation.generateStringId());
@@ -46,7 +46,7 @@ class UpsertTenantPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantPermission_whenExecute_thenUpdated() {
-        final var tenantPermission = testData.getTenantProjectManagementPermission();
+        final var tenantPermission = testData.getTenantProjectManagerPermission();
 
         final var changeContext = upsertTenantPermissionOperation.execute(tenantPermission);
         assertFalse(changeContext.getResult());
@@ -54,7 +54,7 @@ class UpsertTenantPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownIds_whenExecute_thenException() {
-        final var tenantPermission = testData.getTenantProjectManagementPermission();
+        final var tenantPermission = testData.getTenantProjectManagerPermission();
         tenantPermission.setId(generateIdOperation.generateId());
         tenantPermission.setTenantId(generateIdOperation.generateId());
         tenantPermission.setIdempotencyKey(generateIdOperation.generateStringId());
@@ -65,7 +65,7 @@ class UpsertTenantPermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantPermission_whenExecute_thenIdempotencyViolation() {
-        final var tenantPermission = testData.getTenantProjectManagementPermission();
+        final var tenantPermission = testData.getTenantProjectManagerPermission();
         tenantPermission.setId(generateIdOperation.generateId());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->

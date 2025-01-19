@@ -35,7 +35,7 @@ class UpsertTenantStagePermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantStagePermission_whenExecute_thenInserted() {
-        final var tenantStagePermission = testData.getTenantStageDeploymentManagementPermission();
+        final var tenantStagePermission = testData.getTenantStageDeploymentManagerPermission();
         tenantStagePermission.setId(generateIdOperation.generateId());
         tenantStagePermission.setUserId(generateIdOperation.generateId());
         tenantStagePermission.setIdempotencyKey(generateIdOperation.generateStringId());
@@ -46,7 +46,7 @@ class UpsertTenantStagePermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantStagePermission_whenExecute_thenUpdated() {
-        final var tenantStagePermission = testData.getTenantStageDeploymentManagementPermission();
+        final var tenantStagePermission = testData.getTenantStageDeploymentManagerPermission();
 
         final var changeContext = upsertStagePermissionOperation.execute(tenantStagePermission);
         assertFalse(changeContext.getResult());
@@ -54,7 +54,7 @@ class UpsertTenantStagePermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownIds_whenExecute_thenException() {
-        final var tenantStagePermission = testData.getTenantStageDeploymentManagementPermission();
+        final var tenantStagePermission = testData.getTenantStageDeploymentManagerPermission();
         tenantStagePermission.setId(generateIdOperation.generateId());
         tenantStagePermission.setTenantId(generateIdOperation.generateId());
         tenantStagePermission.setStageId(generateIdOperation.generateId());
@@ -66,7 +66,7 @@ class UpsertTenantStagePermissionOperationTest extends BaseTestClass {
 
     @Test
     void givenTenantStagePermission_whenExecute_thenIdempotencyViolation() {
-        final var tenantStagePermission = testData.getTenantStageDeploymentManagementPermission();
+        final var tenantStagePermission = testData.getTenantStageDeploymentManagerPermission();
         tenantStagePermission.setId(generateIdOperation.generateId());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->

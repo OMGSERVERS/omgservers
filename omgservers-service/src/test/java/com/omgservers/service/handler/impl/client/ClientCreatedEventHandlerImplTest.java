@@ -31,6 +31,10 @@ class ClientCreatedEventHandlerImplTest extends BaseTestClass {
         final var tenantVersion = testDataFactory.getTenantTestDataFactory().createTenantVersion(tenantProject);
         final var tenantDeployment =
                 testDataFactory.getTenantTestDataFactory().createTenantDeployment(tenantStage, tenantVersion);
+        final var matchmaker = testDataFactory.getMatchmakerTestDataFactory()
+                .createMatchmaker(tenant, tenantDeployment);
+        final var tenantMatchmakerRef = testDataFactory.getTenantTestDataFactory()
+                .createTenantMatchmakerRef(tenantDeployment, matchmaker);
         final var user = testDataFactory.getUserTestDataFactory().createPlayerUser("password");
         final var player = testDataFactory.getUserTestDataFactory().createUserPlayer(user, tenant, tenantStage);
         final var client = testDataFactory.getClientTestDataFactory().createClient(player, tenant, tenantDeployment);
