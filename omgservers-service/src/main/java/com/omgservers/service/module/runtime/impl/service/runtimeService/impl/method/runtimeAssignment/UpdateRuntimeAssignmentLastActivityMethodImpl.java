@@ -3,9 +3,9 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityRequest;
 import com.omgservers.schema.module.runtime.UpdateRuntimeAssignmentLastActivityResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.UpdateRuntimeAssignmentLastActivityOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

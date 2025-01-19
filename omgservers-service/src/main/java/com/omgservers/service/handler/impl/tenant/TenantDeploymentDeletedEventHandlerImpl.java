@@ -11,12 +11,12 @@ import com.omgservers.service.event.body.module.tenant.TenantDeploymentDeletedEv
 import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.handler.operation.DeleteTenantLobbiesByTenantDeploymentIdOperation;
-import com.omgservers.service.handler.operation.DeleteTenantLobbyRequestsByTenantDeploymentIdOperation;
-import com.omgservers.service.handler.operation.DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperation;
-import com.omgservers.service.handler.operation.DeleteTenantMatchmakersByTenantDeploymentIdOperation;
 import com.omgservers.service.module.queue.QueueModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.tenant.DeleteTenantLobbiesByTenantDeploymentIdOperation;
+import com.omgservers.service.operation.tenant.DeleteTenantLobbyRequestsByTenantDeploymentIdOperation;
+import com.omgservers.service.operation.tenant.DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperation;
+import com.omgservers.service.operation.tenant.DeleteTenantMatchmakersByTenantDeploymentIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

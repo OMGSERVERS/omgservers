@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeployment
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
 import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.SelectActiveTenantDeploymentsByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.SelectActiveTenantDeploymentsByTenantStageIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

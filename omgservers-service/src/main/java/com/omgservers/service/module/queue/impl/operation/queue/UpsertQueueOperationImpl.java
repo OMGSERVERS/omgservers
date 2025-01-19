@@ -2,8 +2,8 @@ package com.omgservers.service.module.queue.impl.operation.queue;
 
 import com.omgservers.schema.model.queue.QueueModel;
 import com.omgservers.service.event.body.module.queue.QueueCreatedEventBodyModel;
-import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

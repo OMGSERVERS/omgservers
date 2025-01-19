@@ -2,7 +2,7 @@ package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.m
 
 import com.omgservers.schema.entrypoint.admin.BcryptHashAdminRequest;
 import com.omgservers.schema.entrypoint.admin.BcryptHashAdminResponse;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

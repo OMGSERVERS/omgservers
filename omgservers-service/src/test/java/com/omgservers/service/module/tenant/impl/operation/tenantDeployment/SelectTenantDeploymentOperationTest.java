@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantDeployment;
 import com.omgservers.BaseTestClass;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.testInterface.SelectTenantDeploymentOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

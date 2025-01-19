@@ -4,7 +4,7 @@ import com.omgservers.schema.entrypoint.docker.OAuth2DockerRequest;
 import com.omgservers.schema.entrypoint.docker.OAuth2DockerResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
-import com.omgservers.service.operation.parseBasicAuthorizationHeader.ParseBasicAuthorizationHeaderOperation;
+import com.omgservers.service.operation.security.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
 import com.omgservers.service.service.registry.dto.IssueTokenRequest;
 import io.quarkus.security.identity.SecurityIdentity;

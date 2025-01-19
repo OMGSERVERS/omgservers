@@ -3,7 +3,7 @@ package com.omgservers.service.module.root.impl.service.rootService.impl.method.
 import com.omgservers.schema.module.root.root.GetRootRequest;
 import com.omgservers.schema.module.root.root.GetRootResponse;
 import com.omgservers.service.module.root.impl.operation.root.selectRoot.SelectRootOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

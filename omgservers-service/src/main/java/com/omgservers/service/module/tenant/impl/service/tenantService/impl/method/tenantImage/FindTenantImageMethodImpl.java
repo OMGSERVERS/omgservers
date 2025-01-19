@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageResponse;
 import com.omgservers.service.module.tenant.impl.operation.tenantImage.SelectTenantImageByTenantVersionIdAndQualifierOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -6,7 +6,7 @@ import com.omgservers.schema.entrypoint.registry.HandleEventsRegistryRequest;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.entrypoint.registry.impl.service.webService.WebService;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.ApplicationScoped;

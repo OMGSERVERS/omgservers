@@ -3,7 +3,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantFilesArchive;
 import com.omgservers.BaseTestClass;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.module.tenant.impl.operation.tenantFilesArchive.testInterface.DeleteTenantFilesArchiveOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

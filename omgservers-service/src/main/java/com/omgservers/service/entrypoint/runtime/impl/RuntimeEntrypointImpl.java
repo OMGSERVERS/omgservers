@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.runtime.impl;
 
-import com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.service.entrypoint.runtime.RuntimeEntrypoint;
+import com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.RuntimeService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

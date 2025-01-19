@@ -9,7 +9,7 @@ import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

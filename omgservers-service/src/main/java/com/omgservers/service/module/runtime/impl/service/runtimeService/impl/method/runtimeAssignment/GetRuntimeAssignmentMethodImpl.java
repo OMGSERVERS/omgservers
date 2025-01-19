@@ -3,7 +3,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 import com.omgservers.schema.module.runtime.GetRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeAssignmentResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.SelectRuntimeAssignmentOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

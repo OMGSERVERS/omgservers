@@ -3,9 +3,9 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
 import com.omgservers.service.module.tenant.impl.operation.tenant.UpsertTenantOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

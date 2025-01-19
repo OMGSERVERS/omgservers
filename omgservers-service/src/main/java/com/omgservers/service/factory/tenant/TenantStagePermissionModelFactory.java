@@ -1,8 +1,8 @@
 package com.omgservers.service.factory.tenant;
 
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

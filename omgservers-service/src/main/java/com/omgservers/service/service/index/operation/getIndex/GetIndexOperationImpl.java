@@ -1,7 +1,7 @@
 package com.omgservers.service.service.index.operation.getIndex;
 
 import com.omgservers.schema.model.index.IndexModel;
-import com.omgservers.service.operation.selectObject.SelectObjectOperation;
+import com.omgservers.service.operation.server.SelectObjectOperation;
 import com.omgservers.service.service.index.impl.mapper.IndexModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

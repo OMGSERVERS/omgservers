@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
+import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

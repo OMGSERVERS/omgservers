@@ -1,10 +1,10 @@
 package com.omgservers.service.service.registry.impl.method;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.service.registry.dto.DockerRegistryAccessDto;
 import com.omgservers.service.service.registry.dto.IssueTokenRequest;
 import com.omgservers.service.service.registry.dto.IssueTokenResponse;
-import com.omgservers.service.module.user.UserModule;
 import com.omgservers.service.service.registry.operation.intersectDockerRegistryScope.IntersectDockerRegistryScopeOperation;
 import com.omgservers.service.service.registry.operation.issueDockerRegistryClientAccessToken.IssueDockerRegistryClientAccessTokenOperation;
 import com.omgservers.service.service.registry.operation.issueDockerRegistryClientRefreshToken.IssueDockerRegistryClientRefreshTokenOperation;

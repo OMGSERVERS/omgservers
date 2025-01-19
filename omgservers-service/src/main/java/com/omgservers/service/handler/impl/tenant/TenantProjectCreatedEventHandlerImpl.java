@@ -18,7 +18,7 @@ import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

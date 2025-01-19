@@ -16,9 +16,9 @@ import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.U
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchAssignment.DeleteMatchmakerMatchAssignmentOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchAssignment.UpsertMatchmakerMatchAssignmentOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.DeleteMatchmakerRequestOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

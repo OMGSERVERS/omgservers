@@ -12,7 +12,7 @@ import com.omgservers.schema.module.alias.SyncAliasResponse;
 import com.omgservers.schema.module.alias.ViewAliasesRequest;
 import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.service.module.alias.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

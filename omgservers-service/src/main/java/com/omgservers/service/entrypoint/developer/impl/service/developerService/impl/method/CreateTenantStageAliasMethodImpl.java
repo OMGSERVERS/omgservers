@@ -14,7 +14,7 @@ import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

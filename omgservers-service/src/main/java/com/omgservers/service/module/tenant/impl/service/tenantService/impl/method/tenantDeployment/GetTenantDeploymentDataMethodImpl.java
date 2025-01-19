@@ -6,7 +6,7 @@ import com.omgservers.schema.module.tenant.tenantDeployment.dto.TenantDeployment
 import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.SelectTenantDeploymentOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantLobbyRef.SelectActiveTenantLobbyRefsByTenantDeploymentIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantMatchmakerRef.SelectActiveTenantMatchmakerRefsByTenantDeploymentIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

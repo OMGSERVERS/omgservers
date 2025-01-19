@@ -3,10 +3,10 @@ package com.omgservers.service.module.tenant.impl.service.tenantService.impl.met
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
-import com.omgservers.service.module.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantVersionIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantBuildRequest.SelectActiveTenantBuildRequestsByTenantVersionIdOperation;
+import com.omgservers.service.module.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantVersionIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantVersion.SelectTenantVersionOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

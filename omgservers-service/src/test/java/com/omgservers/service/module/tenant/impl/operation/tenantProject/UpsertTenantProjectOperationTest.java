@@ -6,7 +6,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.impl.operation.tenantProject.testInterface.UpsertTenantProjectOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

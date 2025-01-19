@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantPermission;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.service.module.tenant.impl.operation.tenantPermission.testInterface.VerifyTenantPermissionExistsOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

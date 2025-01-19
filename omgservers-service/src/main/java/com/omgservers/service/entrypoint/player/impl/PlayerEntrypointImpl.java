@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.player.impl;
 
-import com.omgservers.service.entrypoint.player.impl.service.playerService.PlayerService;
 import com.omgservers.service.entrypoint.player.PlayerEntrypoint;
+import com.omgservers.service.entrypoint.player.impl.service.playerService.PlayerService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

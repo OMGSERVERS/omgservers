@@ -6,9 +6,9 @@ import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRespon
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.tenant.VerifyTenantExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantProject.UpsertTenantProjectOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

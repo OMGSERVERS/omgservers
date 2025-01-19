@@ -2,7 +2,7 @@ package com.omgservers.service.factory.runtime;
 
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

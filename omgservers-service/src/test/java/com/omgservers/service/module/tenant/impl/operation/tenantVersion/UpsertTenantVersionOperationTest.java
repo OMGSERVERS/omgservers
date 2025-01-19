@@ -5,7 +5,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.tenant.impl.operation.tenantVersion.testInterface.UpsertTenantVersionOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

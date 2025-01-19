@@ -3,9 +3,9 @@ package com.omgservers.service.module.user.impl.service.userService.impl.method.
 import com.omgservers.schema.module.user.DeleteUserRequest;
 import com.omgservers.schema.module.user.DeleteUserResponse;
 import com.omgservers.service.module.user.impl.operation.user.deleteUser.DeleteUserOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

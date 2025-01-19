@@ -2,8 +2,8 @@ package com.omgservers.service.service.event.operation.selectEventsForRelaying;
 
 import com.omgservers.service.event.EventProjectionModel;
 import com.omgservers.service.event.EventStatusEnum;
+import com.omgservers.service.operation.server.SelectListOperation;
 import com.omgservers.service.service.event.mapper.EventProjectionModelMapper;
-import com.omgservers.service.operation.selectList.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,9 +1,9 @@
 package com.omgservers.service.module.root.impl.operation.root.upsertRoot;
 
-import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
 import com.omgservers.schema.model.root.RootModel;
-import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -3,7 +3,7 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsResponse;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchAssignment.SelectActiveMatchmakerMatchAssignmentsByMatchIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

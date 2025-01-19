@@ -1,14 +1,14 @@
 package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmaker.HasMatchmakerOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand.UpsertMatchmakerCommandOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

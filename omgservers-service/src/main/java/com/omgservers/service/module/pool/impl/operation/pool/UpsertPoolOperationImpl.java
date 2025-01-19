@@ -1,9 +1,9 @@
 package com.omgservers.service.module.pool.impl.operation.pool;
 
-import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.schema.model.pool.PoolModel;
-import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

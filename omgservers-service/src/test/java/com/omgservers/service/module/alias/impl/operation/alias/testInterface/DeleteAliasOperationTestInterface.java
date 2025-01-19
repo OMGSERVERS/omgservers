@@ -1,7 +1,7 @@
 package com.omgservers.service.module.alias.impl.operation.alias.testInterface;
 
 import com.omgservers.service.module.alias.impl.operation.alias.DeleteAliasOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

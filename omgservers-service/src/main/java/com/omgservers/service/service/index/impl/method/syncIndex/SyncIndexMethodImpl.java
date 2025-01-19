@@ -1,10 +1,10 @@
 package com.omgservers.service.service.index.impl.method.syncIndex;
 
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.service.index.dto.SyncIndexRequest;
 import com.omgservers.service.service.index.dto.SyncIndexResponse;
 import com.omgservers.service.service.index.operation.upsertIndex.UpsertIndexOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

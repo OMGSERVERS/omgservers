@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantDeployment.tes
 
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.UpsertTenantDeploymentOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

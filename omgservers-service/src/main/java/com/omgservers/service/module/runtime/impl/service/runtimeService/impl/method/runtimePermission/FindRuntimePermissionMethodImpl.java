@@ -3,7 +3,7 @@ package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.m
 import com.omgservers.schema.module.runtime.FindRuntimePermissionRequest;
 import com.omgservers.schema.module.runtime.FindRuntimePermissionResponse;
 import com.omgservers.service.module.runtime.impl.operation.runtimePermission.SelectRuntimePermissionByRuntimeIdAndUserIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

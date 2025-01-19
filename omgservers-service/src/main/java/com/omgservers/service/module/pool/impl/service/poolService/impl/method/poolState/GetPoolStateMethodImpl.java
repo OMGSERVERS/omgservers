@@ -7,7 +7,7 @@ import com.omgservers.service.module.pool.impl.operation.pool.SelectPoolOperatio
 import com.omgservers.service.module.pool.impl.operation.poolContainer.SelectActivePoolContainersByPoolIdOperation;
 import com.omgservers.service.module.pool.impl.operation.poolRequest.SelectActivePoolRequestsByPoolIdOperation;
 import com.omgservers.service.module.pool.impl.operation.poolServer.SelectActivePoolServersByPoolIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

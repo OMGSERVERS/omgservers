@@ -1,7 +1,7 @@
 package com.omgservers.service.module.pool.impl.operation.pool;
 
 import com.omgservers.schema.model.pool.PoolModel;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

@@ -2,9 +2,9 @@ package com.omgservers.service.module.pool.impl.service.poolService.impl.method.
 
 import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersRequest;
 import com.omgservers.schema.module.pool.poolContainer.ViewPoolContainersResponse;
-import com.omgservers.service.module.pool.impl.operation.poolContainer.SelectActivePoolContainersByPoolIdOperation;
 import com.omgservers.service.module.pool.impl.operation.poolContainer.SelectActivePoolContainersByPoolIdAndServerIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.module.pool.impl.operation.poolContainer.SelectActivePoolContainersByPoolIdOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

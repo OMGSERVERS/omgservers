@@ -6,7 +6,7 @@ import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.module.alias.impl.operation.alias.testInterface.SelectAliasOperationTestInterface;
 import com.omgservers.service.module.alias.impl.operation.alias.testInterface.UpsertAliasOperationTestInterface;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

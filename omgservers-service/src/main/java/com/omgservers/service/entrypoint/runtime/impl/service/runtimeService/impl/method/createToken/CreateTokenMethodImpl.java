@@ -10,7 +10,7 @@ import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
+import com.omgservers.service.operation.security.IssueJwtTokenOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

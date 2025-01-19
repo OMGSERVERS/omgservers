@@ -5,7 +5,7 @@ import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

@@ -11,7 +11,7 @@ import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentR
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

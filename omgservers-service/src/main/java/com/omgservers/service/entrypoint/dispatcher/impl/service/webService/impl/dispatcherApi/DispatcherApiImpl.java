@@ -6,7 +6,7 @@ import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherRequest;
 import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.dispatcher.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;

@@ -1,11 +1,11 @@
 package com.omgservers.service.service.registry.operation.parseDockerRegistryScope;
 
+import com.omgservers.service.operation.docker.ParseDockerRepositoryOperation;
 import com.omgservers.service.service.registry.dto.DockerRegistryActionEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceNameDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceScopeDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceTypeEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryScopeDto;
-import com.omgservers.service.operation.parseDockerRepository.ParseDockerRepositoryOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

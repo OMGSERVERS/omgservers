@@ -40,7 +40,7 @@ import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import com.omgservers.service.module.pool.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

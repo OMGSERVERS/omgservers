@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantStagePermissio
 
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.service.module.tenant.impl.mapper.TenantStagePermissionModelMapper;
-import com.omgservers.service.operation.selectList.SelectListOperation;
+import com.omgservers.service.operation.server.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

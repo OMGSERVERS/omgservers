@@ -6,7 +6,7 @@ import com.omgservers.schema.entrypoint.docker.BasicAuthDockerResponse;
 import com.omgservers.schema.entrypoint.docker.OAuth2DockerRequest;
 import com.omgservers.schema.entrypoint.docker.OAuth2DockerResponse;
 import com.omgservers.service.entrypoint.docker.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.enterprise.context.ApplicationScoped;

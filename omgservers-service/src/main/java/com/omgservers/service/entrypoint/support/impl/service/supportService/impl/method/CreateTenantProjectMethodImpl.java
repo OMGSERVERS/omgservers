@@ -9,7 +9,7 @@ import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

@@ -8,7 +8,7 @@ import com.omgservers.schema.module.docker.StartDockerContainerResponse;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
 import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.service.module.docker.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

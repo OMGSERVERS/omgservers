@@ -1,14 +1,14 @@
 package com.omgservers.service.module.user.impl.service.userService.impl.method.user.createToken;
 
+import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.module.user.impl.operation.user.selectUser.SelectUserOperation;
 import com.omgservers.service.module.user.impl.operation.user.validateCredentials.ValidateCredentialsOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
-import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
+import com.omgservers.service.operation.security.IssueJwtTokenOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

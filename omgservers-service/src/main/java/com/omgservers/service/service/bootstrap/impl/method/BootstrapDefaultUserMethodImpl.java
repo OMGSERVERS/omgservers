@@ -14,7 +14,7 @@ import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserResponse;
 import io.quarkus.elytron.security.common.BcryptUtil;

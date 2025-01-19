@@ -4,7 +4,7 @@ import com.omgservers.schema.module.tenant.tenantFilesArchive.ViewTenantFilesArc
 import com.omgservers.schema.module.tenant.tenantFilesArchive.ViewTenantFilesArchivesResponse;
 import com.omgservers.service.module.tenant.impl.operation.tenantFilesArchive.SelectActiveTenantFilesArchiveProjectionsByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantFilesArchive.SelectActiveTenantFilesArchiveProjectionsByTenantVersionIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

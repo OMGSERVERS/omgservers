@@ -32,7 +32,7 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.support.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;

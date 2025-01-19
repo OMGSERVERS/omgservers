@@ -9,8 +9,8 @@ import com.omgservers.schema.module.tenant.tenantProject.dto.TenantProjectDataDt
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantProjectMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
-import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
+import com.omgservers.service.operation.alias.GetIdByProjectOperation;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

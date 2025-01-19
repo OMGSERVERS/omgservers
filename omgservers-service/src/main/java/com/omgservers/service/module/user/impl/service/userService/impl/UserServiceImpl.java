@@ -36,8 +36,8 @@ import com.omgservers.service.module.user.impl.service.userService.impl.method.u
 import com.omgservers.service.module.user.impl.service.userService.impl.method.user.deleteUser.DeleteUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.user.getUser.GetUserMethod;
 import com.omgservers.service.module.user.impl.service.userService.impl.method.user.syncUser.SyncUserMethod;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

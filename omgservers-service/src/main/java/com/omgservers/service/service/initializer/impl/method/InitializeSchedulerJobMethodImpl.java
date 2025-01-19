@@ -1,6 +1,6 @@
 package com.omgservers.service.service.initializer.impl.method;
 
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskRequest;
 import io.quarkus.scheduler.Scheduled;

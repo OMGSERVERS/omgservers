@@ -2,7 +2,7 @@ package com.omgservers.service.module.lobby.impl.operation.lobby.selectLobby;
 
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.service.module.lobby.impl.mappers.LobbyModelMapper;
-import com.omgservers.service.operation.selectObject.SelectObjectOperation;
+import com.omgservers.service.operation.server.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

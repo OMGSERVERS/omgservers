@@ -2,7 +2,7 @@ package com.omgservers.service.module.lobby.operation.testInterface;
 
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.service.module.lobby.impl.operation.lobby.upsertLobby.UpsertLobbyOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

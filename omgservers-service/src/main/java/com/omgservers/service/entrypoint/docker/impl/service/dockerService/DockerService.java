@@ -4,7 +4,6 @@ import com.omgservers.schema.entrypoint.docker.BasicAuthDockerRequest;
 import com.omgservers.schema.entrypoint.docker.BasicAuthDockerResponse;
 import com.omgservers.schema.entrypoint.docker.OAuth2DockerRequest;
 import com.omgservers.schema.entrypoint.docker.OAuth2DockerResponse;
-import com.omgservers.schema.entrypoint.registry.HandleEventsRegistryRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 

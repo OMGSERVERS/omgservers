@@ -18,8 +18,8 @@ import com.omgservers.service.module.alias.impl.service.aliasService.impl.method
 import com.omgservers.service.module.alias.impl.service.aliasService.impl.method.SyncAliasMethod;
 import com.omgservers.service.module.alias.impl.service.aliasService.impl.method.ViewAliasesMethod;
 import com.omgservers.service.module.alias.impl.service.webService.impl.api.AliasApi;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

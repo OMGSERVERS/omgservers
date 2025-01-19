@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantStage.testInte
 
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.service.module.tenant.impl.operation.tenantStage.UpsertTenantStageOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

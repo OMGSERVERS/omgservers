@@ -1,14 +1,14 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.runtime.impl.operation.runtime.HasRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimePoolContainerRef.UpsertRuntimePoolContainerRefOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

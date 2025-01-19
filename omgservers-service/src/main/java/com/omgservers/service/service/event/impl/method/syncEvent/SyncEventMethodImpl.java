@@ -1,10 +1,10 @@
 package com.omgservers.service.service.event.impl.method.syncEvent;
 
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.UpsertEventOperation;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
 import com.omgservers.service.service.event.dto.SyncEventResponse;
-import com.omgservers.service.operation.upsertEvent.UpsertEventOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

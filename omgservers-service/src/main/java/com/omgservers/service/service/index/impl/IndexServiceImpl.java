@@ -1,15 +1,15 @@
 package com.omgservers.service.service.index.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ServerSideBaseException;
+import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.service.index.IndexService;
 import com.omgservers.service.service.index.dto.DeleteIndexRequest;
 import com.omgservers.service.service.index.dto.DeleteIndexResponse;
 import com.omgservers.service.service.index.dto.GetIndexRequest;
 import com.omgservers.service.service.index.dto.GetIndexResponse;
 import com.omgservers.service.service.index.dto.SyncIndexRequest;
 import com.omgservers.service.service.index.dto.SyncIndexResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.service.index.IndexService;
 import com.omgservers.service.service.index.impl.method.deleteIndex.DeleteIndexMethod;
 import com.omgservers.service.service.index.impl.method.getIndex.GetIndexMethod;
 import com.omgservers.service.service.index.impl.method.syncIndex.SyncIndexMethod;

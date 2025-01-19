@@ -2,7 +2,7 @@ package com.omgservers.service.module.runtime.impl.operation.runtimeCommand;
 
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.service.module.runtime.impl.mapper.RuntimeCommandModelMapper;
-import com.omgservers.service.operation.selectList.SelectListOperation;
+import com.omgservers.service.operation.server.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

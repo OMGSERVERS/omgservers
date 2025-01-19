@@ -1,7 +1,7 @@
 package com.omgservers.service.module.tenant.impl.operation.tenantLobbyRequest;
 
 import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

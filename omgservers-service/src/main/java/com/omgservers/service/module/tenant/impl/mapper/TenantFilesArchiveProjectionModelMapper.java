@@ -1,7 +1,6 @@
 package com.omgservers.service.module.tenant.impl.mapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
 import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveProjectionModel;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,8 +1,8 @@
 package com.omgservers.service.service.event.component.eventHandler;
 
+import com.omgservers.service.service.event.EventService;
 import com.omgservers.service.service.event.dto.HandleEventRequest;
 import com.omgservers.service.service.event.dto.HandleEventResponse;
-import com.omgservers.service.service.event.EventService;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import jakarta.enterprise.context.ApplicationScoped;

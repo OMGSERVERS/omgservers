@@ -63,8 +63,8 @@ import com.omgservers.service.module.pool.impl.service.poolService.impl.method.p
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolState.GetPoolStateMethod;
 import com.omgservers.service.module.pool.impl.service.poolService.impl.method.poolState.UpdatePoolStateMethod;
 import com.omgservers.service.module.pool.impl.service.webService.impl.api.PoolApi;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

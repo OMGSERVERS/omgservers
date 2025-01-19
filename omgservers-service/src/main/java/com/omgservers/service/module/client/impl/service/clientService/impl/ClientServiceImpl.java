@@ -1,5 +1,6 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.client.DeleteClientMatchmakerRefRequest;
 import com.omgservers.schema.module.client.DeleteClientMatchmakerRefResponse;
 import com.omgservers.schema.module.client.DeleteClientMessagesRequest;
@@ -34,7 +35,6 @@ import com.omgservers.schema.module.client.ViewClientMessagesRequest;
 import com.omgservers.schema.module.client.ViewClientMessagesResponse;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.client.impl.operation.getClientModuleClient.ClientModuleClient;
@@ -57,8 +57,8 @@ import com.omgservers.service.module.client.impl.service.clientService.impl.meth
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.getClientRuntimeRef.GetClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.syncClientRuntimeRef.SyncClientRuntimeRefMethod;
 import com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.viewClientRuntimeRefs.ViewClientRuntimeRefsMethod;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

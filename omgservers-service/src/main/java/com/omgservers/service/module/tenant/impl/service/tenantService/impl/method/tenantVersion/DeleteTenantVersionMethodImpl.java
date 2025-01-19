@@ -1,12 +1,12 @@
 package com.omgservers.service.module.tenant.impl.service.tenantService.impl.method.tenantVersion;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
-import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.module.tenant.impl.operation.tenantVersion.DeleteTenantVersionOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

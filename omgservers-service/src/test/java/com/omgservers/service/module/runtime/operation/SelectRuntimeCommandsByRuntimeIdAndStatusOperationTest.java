@@ -6,7 +6,7 @@ import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.module.runtime.impl.operation.runtime.UpsertRuntimeOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.UpsertRuntimeCommandOperation;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.inject.Inject;

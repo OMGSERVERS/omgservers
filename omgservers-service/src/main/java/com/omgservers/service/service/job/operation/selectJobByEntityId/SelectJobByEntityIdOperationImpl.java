@@ -1,7 +1,7 @@
 package com.omgservers.service.service.job.operation.selectJobByEntityId;
 
 import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.service.operation.selectObject.SelectObjectOperation;
+import com.omgservers.service.operation.server.SelectObjectOperation;
 import com.omgservers.service.service.job.impl.mapper.JobModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

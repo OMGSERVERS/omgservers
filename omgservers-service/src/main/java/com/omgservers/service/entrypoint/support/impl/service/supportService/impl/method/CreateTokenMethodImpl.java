@@ -6,7 +6,7 @@ import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.getIdByUser.GetIdByUserOperation;
+import com.omgservers.service.operation.alias.GetIdByUserOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -3,9 +3,9 @@ package com.omgservers.service.module.alias.impl.service.aliasService.impl.metho
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.alias.SyncAliasResponse;
 import com.omgservers.service.module.alias.impl.operation.alias.UpsertAliasOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

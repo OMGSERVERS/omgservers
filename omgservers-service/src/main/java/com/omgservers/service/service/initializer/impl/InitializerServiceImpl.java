@@ -2,7 +2,7 @@ package com.omgservers.service.service.initializer.impl;
 
 import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.initializer.InitializerService;
 import com.omgservers.service.service.initializer.impl.method.InitializeBootstrapJobMethod;
 import com.omgservers.service.service.initializer.impl.method.InitializeDatabaseSchemaMethod;

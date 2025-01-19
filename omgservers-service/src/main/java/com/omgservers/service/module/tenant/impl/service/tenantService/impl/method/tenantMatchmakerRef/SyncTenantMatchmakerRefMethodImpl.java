@@ -6,9 +6,9 @@ import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchma
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.module.tenant.impl.operation.tenantDeployment.VerifyTenantDeploymentExistsOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantMatchmakerRef.UpsertTenantMatchmakerRefOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

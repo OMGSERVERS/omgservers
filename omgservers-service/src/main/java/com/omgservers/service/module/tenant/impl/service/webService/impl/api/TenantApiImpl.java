@@ -146,7 +146,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRespon
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.module.tenant.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

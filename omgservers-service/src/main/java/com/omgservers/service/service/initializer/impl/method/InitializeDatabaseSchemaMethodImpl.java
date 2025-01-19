@@ -1,6 +1,6 @@
 package com.omgservers.service.service.initializer.impl.method;
 
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -2,7 +2,7 @@ package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.m
 
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CalculateShardAdminResponse;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.operation.server.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

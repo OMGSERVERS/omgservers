@@ -12,7 +12,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

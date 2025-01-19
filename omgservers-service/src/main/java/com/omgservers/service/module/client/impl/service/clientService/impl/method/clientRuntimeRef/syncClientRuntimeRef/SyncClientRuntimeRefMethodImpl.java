@@ -1,15 +1,15 @@
 package com.omgservers.service.module.client.impl.service.clientService.impl.method.clientRuntimeRef.syncClientRuntimeRef;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.client.SyncClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.SyncClientRuntimeRefResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.lobby.LogModelFactory;
 import com.omgservers.service.module.client.impl.operation.client.hasClient.HasClientOperation;
 import com.omgservers.service.module.client.impl.operation.clientRuntimeRef.upsertClientRuntimeRef.UpsertClientRuntimeRefOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

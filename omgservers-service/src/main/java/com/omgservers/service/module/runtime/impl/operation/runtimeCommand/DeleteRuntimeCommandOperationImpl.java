@@ -1,8 +1,8 @@
 package com.omgservers.service.module.runtime.impl.operation.runtimeCommand;
 
 import com.omgservers.service.factory.lobby.LogModelFactory;
-import com.omgservers.service.operation.changeObject.ChangeObjectOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

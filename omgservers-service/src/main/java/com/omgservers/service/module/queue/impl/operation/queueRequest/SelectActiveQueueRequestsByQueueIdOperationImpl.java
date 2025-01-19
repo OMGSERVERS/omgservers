@@ -2,7 +2,7 @@ package com.omgservers.service.module.queue.impl.operation.queueRequest;
 
 import com.omgservers.schema.model.queueRequest.QueueRequestModel;
 import com.omgservers.service.module.queue.impl.mappers.QueueRequestModelMapper;
-import com.omgservers.service.operation.selectList.SelectListOperation;
+import com.omgservers.service.operation.server.SelectListOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

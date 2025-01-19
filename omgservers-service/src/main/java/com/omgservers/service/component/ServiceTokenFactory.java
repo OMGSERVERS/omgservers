@@ -1,7 +1,7 @@
 package com.omgservers.service.component;
 
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
-import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
+import com.omgservers.service.operation.security.IssueJwtTokenOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 

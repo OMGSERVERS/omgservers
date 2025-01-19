@@ -2,7 +2,7 @@ package com.omgservers.service.factory.system;
 
 import com.omgservers.schema.model.index.IndexConfigDto;
 import com.omgservers.schema.model.index.IndexModel;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

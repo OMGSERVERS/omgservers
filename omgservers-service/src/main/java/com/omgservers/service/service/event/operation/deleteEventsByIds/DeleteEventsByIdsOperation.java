@@ -1,6 +1,6 @@
 package com.omgservers.service.service.event.operation.deleteEventsByIds;
 
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 

@@ -1,6 +1,6 @@
 package com.omgservers.service.service.jenkins.operation;
 
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.quarkus.rest.client.reactive.ReactiveClientHeadersFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

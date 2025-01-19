@@ -1,10 +1,10 @@
 package com.omgservers.service.service.job.impl.method.syncJob;
 
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
 import com.omgservers.service.service.job.dto.SyncJobResponse;
 import com.omgservers.service.service.job.operation.upsertJob.UpsertJobOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

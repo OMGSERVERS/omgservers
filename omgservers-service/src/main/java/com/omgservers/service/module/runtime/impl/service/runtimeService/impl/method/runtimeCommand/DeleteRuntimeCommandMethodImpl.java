@@ -1,12 +1,12 @@
 package com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimeCommand;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.runtime.DeleteRuntimeCommandRequest;
 import com.omgservers.schema.module.runtime.DeleteRuntimeCommandResponse;
-import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.DeleteRuntimeCommandOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

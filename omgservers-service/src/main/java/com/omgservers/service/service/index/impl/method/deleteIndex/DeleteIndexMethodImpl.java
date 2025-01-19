@@ -1,10 +1,10 @@
 package com.omgservers.service.service.index.impl.method.deleteIndex;
 
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.service.index.dto.DeleteIndexRequest;
 import com.omgservers.service.service.index.dto.DeleteIndexResponse;
 import com.omgservers.service.service.index.operation.deleteIndex.DeleteIndexOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

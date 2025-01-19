@@ -1,5 +1,6 @@
 package com.omgservers.service.module.root.impl.service.rootService.impl;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.root.root.DeleteRootRequest;
 import com.omgservers.schema.module.root.root.DeleteRootResponse;
 import com.omgservers.schema.module.root.root.GetRootRequest;
@@ -16,7 +17,6 @@ import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsRequest;
 import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsResponse;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.module.root.impl.operation.getRootModuleClient.GetRootModuleClientOperation;
@@ -30,8 +30,8 @@ import com.omgservers.service.module.root.impl.service.rootService.impl.method.r
 import com.omgservers.service.module.root.impl.service.rootService.impl.method.rootEntityRef.syncRootEntityRef.SyncRootEntityRefMethod;
 import com.omgservers.service.module.root.impl.service.rootService.impl.method.rootEntityRef.viewRootEntityRefs.ViewRootEntityRefsMethod;
 import com.omgservers.service.module.root.impl.service.webService.impl.api.RootApi;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
-import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

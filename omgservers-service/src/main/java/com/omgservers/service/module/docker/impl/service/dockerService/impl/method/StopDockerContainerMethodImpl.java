@@ -5,7 +5,7 @@ import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotModifiedException;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
 import com.omgservers.schema.module.docker.StopDockerContainerResponse;
-import com.omgservers.service.operation.GetDockerDaemonClientOperation;
+import com.omgservers.service.operation.docker.GetDockerDaemonClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

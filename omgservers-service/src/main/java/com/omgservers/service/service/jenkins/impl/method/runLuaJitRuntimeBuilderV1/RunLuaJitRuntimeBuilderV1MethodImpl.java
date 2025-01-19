@@ -2,7 +2,7 @@ package com.omgservers.service.service.jenkins.impl.method.runLuaJitRuntimeBuild
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Request;
 import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Response;
 import com.omgservers.service.service.jenkins.operation.GetJenkinsClientOperation;

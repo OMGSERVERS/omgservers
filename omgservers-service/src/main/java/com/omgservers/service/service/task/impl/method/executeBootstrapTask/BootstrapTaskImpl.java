@@ -3,7 +3,7 @@ package com.omgservers.service.service.task.impl.method.executeBootstrapTask;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.BootstrapService;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolResponse;

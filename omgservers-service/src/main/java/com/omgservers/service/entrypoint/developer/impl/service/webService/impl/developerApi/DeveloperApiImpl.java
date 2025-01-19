@@ -44,7 +44,7 @@ import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperReq
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;

@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.m
 
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
-import com.omgservers.service.operation.GetDockerDaemonClientOperation;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.docker.GetDockerDaemonClientOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import jakarta.enterprise.context.ApplicationScoped;

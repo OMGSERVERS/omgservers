@@ -1,8 +1,6 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
-import com.omgservers.schema.module.client.SyncClientMessageRequest;
-import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.ConnectionUpgradeMessageBodyDto;
@@ -12,13 +10,15 @@ import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
 import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionOutgoingCommandBodyDto;
 import com.omgservers.schema.model.outgoingCommand.body.UpgradeConnectionQualifierEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.module.client.SyncClientMessageRequest;
+import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
 import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.HasRuntimeAssignmentOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
-import com.omgservers.service.operation.issueJwtToken.IssueJwtTokenOperation;
+import com.omgservers.service.operation.security.IssueJwtTokenOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

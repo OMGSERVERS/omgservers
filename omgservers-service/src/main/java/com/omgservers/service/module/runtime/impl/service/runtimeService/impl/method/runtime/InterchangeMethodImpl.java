@@ -14,9 +14,9 @@ import com.omgservers.service.module.runtime.impl.operation.executeOutgoingComma
 import com.omgservers.service.module.runtime.impl.operation.runtime.UpdateRuntimeLastActivityOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.DeleteRuntimeCommandByIdsOperation;
 import com.omgservers.service.module.runtime.impl.operation.runtimeCommand.SelectActiveRuntimeCommandsByRuntimeIdOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

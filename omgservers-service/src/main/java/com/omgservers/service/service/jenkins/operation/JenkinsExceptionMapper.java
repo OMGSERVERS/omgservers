@@ -1,8 +1,8 @@
 package com.omgservers.service.service.jenkins.operation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.exception.ClientSideHttpException;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.service.exception.ClientSideHttpException;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideInternalException;
 import jakarta.ws.rs.core.Response;

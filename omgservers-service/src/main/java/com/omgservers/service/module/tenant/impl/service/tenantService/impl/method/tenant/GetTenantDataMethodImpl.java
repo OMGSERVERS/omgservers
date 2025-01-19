@@ -10,7 +10,7 @@ import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.impl.operation.tenant.SelectTenantOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantPermission.SelectActiveTenantPermissionsByTenantIdOperation;
 import com.omgservers.service.module.tenant.impl.operation.tenantProject.SelectActiveTenantProjectsByTenantIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;

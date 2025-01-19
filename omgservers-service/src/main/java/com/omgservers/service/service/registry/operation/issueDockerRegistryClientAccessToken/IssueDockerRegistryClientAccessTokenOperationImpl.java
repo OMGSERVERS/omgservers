@@ -1,10 +1,10 @@
 package com.omgservers.service.service.registry.operation.issueDockerRegistryClientAccessToken;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.exception.ServerSideInternalException;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.registry.dto.DockerRegistryAccessDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryActionEnum;
-import com.omgservers.service.exception.ServerSideInternalException;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.jwt.build.Jwt;

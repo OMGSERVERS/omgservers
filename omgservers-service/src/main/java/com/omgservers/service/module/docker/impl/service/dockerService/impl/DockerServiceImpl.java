@@ -12,7 +12,7 @@ import com.omgservers.service.module.docker.impl.service.dockerService.impl.meth
 import com.omgservers.service.module.docker.impl.service.dockerService.impl.method.StartDockerContainerMethod;
 import com.omgservers.service.module.docker.impl.service.dockerService.impl.method.StopDockerContainerMethod;
 import com.omgservers.service.module.docker.impl.service.webService.impl.api.DockerApi;
-import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

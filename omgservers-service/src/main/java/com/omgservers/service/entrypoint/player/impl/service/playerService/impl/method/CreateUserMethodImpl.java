@@ -7,7 +7,7 @@ import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.generateSecureString.GenerateSecureStringOperation;
+import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

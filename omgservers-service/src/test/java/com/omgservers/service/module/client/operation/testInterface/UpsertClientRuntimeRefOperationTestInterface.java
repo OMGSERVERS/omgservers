@@ -2,7 +2,7 @@ package com.omgservers.service.module.client.operation.testInterface;
 
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.service.module.client.impl.operation.clientRuntimeRef.upsertClientRuntimeRef.UpsertClientRuntimeRefOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

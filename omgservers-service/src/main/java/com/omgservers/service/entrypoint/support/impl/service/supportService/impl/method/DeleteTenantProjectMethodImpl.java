@@ -5,8 +5,8 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRespon
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.getIdByProject.GetIdByProjectOperation;
-import com.omgservers.service.operation.getIdByTenant.GetIdByTenantOperation;
+import com.omgservers.service.operation.alias.GetIdByProjectOperation;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

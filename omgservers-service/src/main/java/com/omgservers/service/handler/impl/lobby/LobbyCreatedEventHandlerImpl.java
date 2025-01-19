@@ -25,7 +25,7 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.lobby.LobbyModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

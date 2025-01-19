@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantPermission.tes
 
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.service.module.tenant.impl.operation.tenantPermission.UpsertTenantPermissionOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
+import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

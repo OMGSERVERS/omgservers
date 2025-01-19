@@ -78,7 +78,7 @@ import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.me
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef.FindRuntimePoolContainerRefMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef.GetRuntimePoolContainerRefMethod;
 import com.omgservers.service.module.runtime.impl.service.runtimeService.impl.method.runtimePoolContainerRef.SyncRuntimePoolContainerRefMethod;
-import com.omgservers.service.operation.handleInternalRequest.HandleShardedRequestOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;

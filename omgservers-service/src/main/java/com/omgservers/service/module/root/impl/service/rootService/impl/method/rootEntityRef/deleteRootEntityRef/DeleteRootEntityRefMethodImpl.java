@@ -3,9 +3,9 @@ package com.omgservers.service.module.root.impl.service.rootService.impl.method.
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefRequest;
 import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.service.module.root.impl.operation.rootEntityRef.deleteRootEntityRef.DeleteRootEntityRefOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

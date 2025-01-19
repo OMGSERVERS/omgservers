@@ -5,7 +5,7 @@ import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.service.module.alias.impl.operation.alias.SelectAliasesByEntityIdOperation;
 import com.omgservers.service.module.alias.impl.operation.alias.SelectAliasesByShardKeyOperation;
 import com.omgservers.service.module.alias.impl.operation.alias.SelectAliasesByUniquenessGroupOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -40,7 +40,7 @@ import com.omgservers.service.module.pool.PoolModule;
 import com.omgservers.service.module.runtime.RuntimeModule;
 import com.omgservers.service.module.tenant.TenantModule;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.getServers.GetServersOperation;
+import com.omgservers.service.operation.server.GetServersOperation;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.DeleteJobRequest;
 import com.omgservers.service.service.job.dto.DeleteJobResponse;

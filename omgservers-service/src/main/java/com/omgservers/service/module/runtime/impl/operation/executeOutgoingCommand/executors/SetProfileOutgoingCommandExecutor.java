@@ -1,20 +1,20 @@
 package com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.executors;
 
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
+import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
+import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyDto;
 import com.omgservers.schema.module.client.GetClientRequest;
 import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
-import com.omgservers.schema.model.outgoingCommand.OutgoingCommandModel;
-import com.omgservers.schema.model.outgoingCommand.OutgoingCommandQualifierEnum;
-import com.omgservers.schema.model.outgoingCommand.body.SetProfileOutgoingCommandBodyDto;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.runtime.impl.operation.executeOutgoingCommand.OutgoingCommandExecutor;
 import com.omgservers.service.module.runtime.impl.operation.runtimeAssignment.HasRuntimeAssignmentOperation;
 import com.omgservers.service.module.user.UserModule;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

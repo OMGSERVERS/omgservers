@@ -13,7 +13,7 @@ import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.operation.getServiceConfig.GetServiceConfigOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
 import com.omgservers.service.service.job.dto.SyncJobResponse;

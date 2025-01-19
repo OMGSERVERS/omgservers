@@ -3,7 +3,7 @@ package com.omgservers.service.module.alias.impl.service.aliasService.impl.metho
 import com.omgservers.schema.module.alias.GetAliasRequest;
 import com.omgservers.schema.module.alias.GetAliasResponse;
 import com.omgservers.service.module.alias.impl.operation.alias.SelectAliasOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

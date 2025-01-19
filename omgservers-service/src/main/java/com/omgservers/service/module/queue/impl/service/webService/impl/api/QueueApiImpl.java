@@ -18,7 +18,7 @@ import com.omgservers.schema.module.queue.queueRequest.SyncQueueRequestResponse;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsRequest;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsResponse;
 import com.omgservers.service.module.queue.impl.service.webService.WebService;
-import com.omgservers.service.operation.handleApiRequest.HandleApiRequestOperation;
+import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;

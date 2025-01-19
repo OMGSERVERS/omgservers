@@ -3,7 +3,7 @@ package com.omgservers.service.module.queue.impl.service.queueService.impl.metho
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsRequest;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsResponse;
 import com.omgservers.service.module.queue.impl.operation.queueRequest.SelectActiveQueueRequestsByQueueIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

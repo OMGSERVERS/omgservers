@@ -2,7 +2,7 @@ package com.omgservers.service.module.tenant.impl.operation.tenantFilesArchive;
 
 import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
 import com.omgservers.service.module.tenant.impl.mapper.TenantFilesArchiveModelMapper;
-import com.omgservers.service.operation.selectObject.SelectObjectOperation;
+import com.omgservers.service.operation.server.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

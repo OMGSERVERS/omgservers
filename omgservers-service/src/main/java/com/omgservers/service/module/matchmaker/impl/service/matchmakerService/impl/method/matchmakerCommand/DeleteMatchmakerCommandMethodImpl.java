@@ -3,9 +3,9 @@ package com.omgservers.service.module.matchmaker.impl.service.matchmakerService.
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand.DeleteMatchmakerCommandOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

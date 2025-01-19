@@ -1,8 +1,8 @@
 package com.omgservers.service.service.event.operation.selectEvent;
 
 import com.omgservers.service.event.EventModel;
+import com.omgservers.service.operation.server.SelectObjectOperation;
 import com.omgservers.service.service.event.mapper.EventModelMapper;
-import com.omgservers.service.operation.selectObject.SelectObjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;

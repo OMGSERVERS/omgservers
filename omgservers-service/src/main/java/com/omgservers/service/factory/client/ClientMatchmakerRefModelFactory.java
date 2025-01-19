@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.client;
 
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
-import com.omgservers.service.operation.generateId.GenerateIdOperation;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,20 +1,20 @@
 package com.omgservers.service.service.event.impl.method.handleEvent;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.service.event.dto.HandleEventRequest;
-import com.omgservers.service.service.event.dto.HandleEventResponse;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.EventStatusEnum;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.service.event.component.eventEmitter.EventEmitter;
+import com.omgservers.service.service.event.dto.HandleEventRequest;
+import com.omgservers.service.service.event.dto.HandleEventResponse;
 import com.omgservers.service.service.event.operation.deleteEventAndUpdateStatus.DeleteEventAndUpdateStatusOperation;
 import com.omgservers.service.service.event.operation.selectEvent.SelectEventOperation;
-import com.omgservers.service.operation.changeWithContext.ChangeContext;
-import com.omgservers.service.operation.changeWithContext.ChangeWithContextOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

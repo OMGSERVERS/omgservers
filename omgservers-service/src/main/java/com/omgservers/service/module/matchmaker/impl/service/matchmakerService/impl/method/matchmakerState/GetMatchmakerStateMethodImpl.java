@@ -9,7 +9,7 @@ import com.omgservers.service.module.matchmaker.impl.operation.matchmakerCommand
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatch.SelectActiveMatchmakerMatchesByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerMatchAssignment.SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation;
 import com.omgservers.service.module.matchmaker.impl.operation.matchmakerRequest.SelectActiveMatchmakerRequestsByMatchmakerIdOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

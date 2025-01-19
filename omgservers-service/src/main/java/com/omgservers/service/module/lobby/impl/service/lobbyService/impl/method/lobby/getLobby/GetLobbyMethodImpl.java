@@ -3,7 +3,7 @@ package com.omgservers.service.module.lobby.impl.service.lobbyService.impl.metho
 import com.omgservers.schema.module.lobby.GetLobbyRequest;
 import com.omgservers.schema.module.lobby.GetLobbyResponse;
 import com.omgservers.service.module.lobby.impl.operation.lobby.selectLobby.SelectLobbyOperation;
-import com.omgservers.service.operation.checkShard.CheckShardOperation;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;

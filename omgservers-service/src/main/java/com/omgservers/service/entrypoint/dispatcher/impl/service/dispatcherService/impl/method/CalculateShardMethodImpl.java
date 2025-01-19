@@ -2,7 +2,7 @@ package com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherServ
 
 import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherRequest;
 import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherResponse;
-import com.omgservers.service.operation.calculateShard.CalculateShardOperation;
+import com.omgservers.service.operation.server.CalculateShardOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
