@@ -1,5 +1,7 @@
 package com.omgservers.service.service.task.impl.method.executeSchedulerTask;
 
+import com.omgservers.service.operation.job.test.ExecuteTaskOperation;
+import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskResponse;
 import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,19 +14,15 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final SchedulerTaskImpl schedulerTask;
 
     @Override
     public Uni<ExecuteSchedulerTaskResponse> execute(final ExecuteSchedulerTaskRequest request) {
         log.trace("{}", request);
 
-        return schedulerTask.execute()
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
-                .invoke(result -> log.trace("Task finished, result={}", result))
+        return executeTaskOperation.execute(schedulerTask.execute())
                 .map(ExecuteSchedulerTaskResponse::new);
     }
 }

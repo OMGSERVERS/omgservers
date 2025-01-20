@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask;
 
+import com.omgservers.service.operation.job.test.ExecuteTaskOperation;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ExecuteMatchmakerTaskMethodImpl implements ExecuteMatchmakerTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final MatchmakerTaskImpl matchmakerTask;
 
     @Override
@@ -20,13 +23,7 @@ public class ExecuteMatchmakerTaskMethodImpl implements ExecuteMatchmakerTaskMet
 
         final var matchmakerId = request.getMatchmakerId();
 
-        return matchmakerTask.execute(matchmakerId)
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, matchmakerId={}, {}:{}",
-                            matchmakerId, t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
+        return executeTaskOperation.execute(matchmakerTask.execute(matchmakerId))
                 .map(ExecuteMatchmakerTaskResponse::new);
     }
 }

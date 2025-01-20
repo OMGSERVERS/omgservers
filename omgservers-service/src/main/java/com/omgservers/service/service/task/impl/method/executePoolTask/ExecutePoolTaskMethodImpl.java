@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executePoolTask;
 
+import com.omgservers.service.operation.job.test.ExecuteTaskOperation;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
 import com.omgservers.service.service.task.dto.ExecutePoolTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ExecutePoolTaskMethodImpl implements ExecutePoolTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final PoolTaskImpl poolTask;
 
     @Override
@@ -20,13 +23,7 @@ public class ExecutePoolTaskMethodImpl implements ExecutePoolTaskMethod {
 
         final var poolId = request.getPoolId();
 
-        return poolTask.execute(poolId)
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, poolId={}, {}:{}",
-                            poolId, t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
+        return executeTaskOperation.execute(poolTask.execute(poolId))
                 .map(ExecutePoolTaskResponse::new);
     }
 }

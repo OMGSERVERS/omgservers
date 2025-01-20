@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeQueueTask;
 
+import com.omgservers.service.operation.job.test.ExecuteTaskOperation;
 import com.omgservers.service.service.task.dto.ExecuteQueueTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteQueueTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ExecuteQueueTaskMethodImpl implements ExecuteQueueTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final QueueTaskImpl queueTask;
 
     @Override
@@ -20,13 +23,7 @@ public class ExecuteQueueTaskMethodImpl implements ExecuteQueueTaskMethod {
 
         final var queueId = request.getQueueId();
 
-        return queueTask.execute(queueId)
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, poolId={}, {}:{}",
-                            queueId, t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
+        return executeTaskOperation.execute(queueTask.execute(queueId))
                 .map(ExecuteQueueTaskResponse::new);
     }
 }

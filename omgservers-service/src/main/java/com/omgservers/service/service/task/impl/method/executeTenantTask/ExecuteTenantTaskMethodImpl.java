@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeTenantTask;
 
+import com.omgservers.service.operation.job.test.ExecuteTaskOperation;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ExecuteTenantTaskMethodImpl implements ExecuteTenantTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final TenantTaskImpl tenantTask;
 
     @Override
@@ -20,13 +23,7 @@ public class ExecuteTenantTaskMethodImpl implements ExecuteTenantTaskMethod {
 
         final var tenantId = request.getTenantId();
 
-        return tenantTask.execute(tenantId)
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, tenant={}, {}:{}",
-                            tenantId, t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
+        return executeTaskOperation.execute(tenantTask.execute(tenantId))
                 .map(ExecuteTenantTaskResponse::new);
     }
 }

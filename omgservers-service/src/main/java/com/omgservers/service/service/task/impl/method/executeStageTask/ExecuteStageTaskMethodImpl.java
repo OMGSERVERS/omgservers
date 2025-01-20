@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeStageTask;
 
+import com.omgservers.service.operation.job.test.ExecuteTaskOperation;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ExecuteStageTaskMethodImpl implements ExecuteStageTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final StageTaskImpl stageTask;
 
     @Override
@@ -21,13 +24,7 @@ public class ExecuteStageTaskMethodImpl implements ExecuteStageTaskMethod {
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();
 
-        return stageTask.execute(tenantId, tenantStageId)
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, tenantStage={}:{}, {}:{}",
-                            tenantId, tenantStageId, t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
+        return executeTaskOperation.execute(stageTask.execute(tenantId, tenantStageId))
                 .map(ExecuteStageTaskResponse::new);
     }
 }

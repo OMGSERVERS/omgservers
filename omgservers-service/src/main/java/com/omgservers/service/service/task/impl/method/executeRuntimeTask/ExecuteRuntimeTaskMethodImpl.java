@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeRuntimeTask;
 
+import com.omgservers.service.operation.job.test.ExecuteTaskOperation;
 import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
 import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class ExecuteRuntimeTaskMethodImpl implements ExecuteRuntimeTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final RuntimeTaskImpl runtimeTask;
 
     @Override
@@ -20,13 +23,7 @@ public class ExecuteRuntimeTaskMethodImpl implements ExecuteRuntimeTaskMethod {
 
         final var runtimeId = request.getRuntimeId();
 
-        return runtimeTask.execute(runtimeId)
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, runtimeId={}, {}:{}",
-                            runtimeId, t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
+        return executeTaskOperation.execute(runtimeTask.execute(runtimeId))
                 .map(ExecuteRuntimeTaskResponse::new);
     }
 }
