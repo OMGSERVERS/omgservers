@@ -12,8 +12,8 @@ import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserResponse;
@@ -28,9 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
 
-    final AliasModule aliasModule;
+    final AliasShard aliasShard;
 
-    final UserModule userModule;
+    final UserShard userShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -63,7 +63,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.DEFAULT_USER_GROUP,
                 alias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
@@ -74,7 +74,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
                 userId,
                 userAlias);
         final var request = new SyncAliasRequest(alias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .replaceWith(alias);
     }
 
@@ -84,7 +84,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
         final var user = userModelFactory.create(role, passwordHash);
 
         final var request = new SyncUserRequest(user);
-        return userModule.getService().syncUser(request)
+        return userShard.getService().syncUser(request)
                 .replaceWith(user);
     }
 }

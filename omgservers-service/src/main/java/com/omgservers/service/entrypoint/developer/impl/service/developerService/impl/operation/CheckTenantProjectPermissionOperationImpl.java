@@ -5,7 +5,7 @@ import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissi
 import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CheckTenantProjectPermissionOperationImpl implements CheckTenantProjectPermissionOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId,
@@ -27,7 +27,7 @@ class CheckTenantProjectPermissionOperationImpl implements CheckTenantProjectPer
                 tenantProjectId,
                 userId,
                 permissionQualifier);
-        return tenantModule.getService().verifyTenantProjectPermissionExists(request)
+        return tenantShard.getService().verifyTenantProjectPermissionExists(request)
                 .map(VerifyTenantProjectPermissionExistsResponse::getExists)
                 .invoke(exists -> {
                     if (!exists) {

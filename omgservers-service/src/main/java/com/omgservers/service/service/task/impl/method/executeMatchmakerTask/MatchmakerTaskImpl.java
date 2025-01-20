@@ -6,7 +6,7 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerStateRequest;
 import com.omgservers.schema.module.matchmaker.GetMatchmakerStateResponse;
 import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateRequest;
 import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.getTenantVersionConfig.GetTenantVersionConfigOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleClosedMatches.HandleClosedMatchesOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.handleEmptyMatchesOperation.HandleEmptyMatchesOperation;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerTaskImpl {
 
-    final MatchmakerModule matchmakerModule;
+    final MatchmakerShard matchmakerShard;
 
     final HandleMatchmakerCommandsOperation handleMatchmakerCommandsOperation;
     final HandleMatchmakerRequestsOperation handleMatchmakerRequestsOperation;
@@ -73,14 +73,14 @@ public class MatchmakerTaskImpl {
 
     Uni<MatchmakerStateDto> getMatchmakerState(final Long matchmakerId) {
         final var request = new GetMatchmakerStateRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerStateResponse::getMatchmakerState);
     }
 
     Uni<Boolean> updateMatchmakerState(final Long matchmakerId,
                                        final MatchmakerChangeOfStateDto changeOfState) {
         final var request = new UpdateMatchmakerStateRequest(matchmakerId, changeOfState);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(UpdateMatchmakerStateResponse::getUpdated);
     }
 }

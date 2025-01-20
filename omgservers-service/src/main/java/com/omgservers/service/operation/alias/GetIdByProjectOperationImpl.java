@@ -3,7 +3,7 @@ package com.omgservers.service.operation.alias;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.module.alias.FindAliasRequest;
 import com.omgservers.schema.module.alias.FindAliasResponse;
-import com.omgservers.service.module.alias.AliasModule;
+import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetIdByProjectOperationImpl implements GetIdByProjectOperation {
 
-    final AliasModule aliasModule;
+    final AliasShard aliasShard;
 
     @Override
     public Uni<Long> execute(final Long tenantId, final String project) {
@@ -30,7 +30,7 @@ class GetIdByProjectOperationImpl implements GetIdByProjectOperation {
     Uni<AliasModel> findProjectAlias(final Long tenantId,
                                      final String projectAlias) {
         final var request = new FindAliasRequest(tenantId, tenantId, projectAlias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 }

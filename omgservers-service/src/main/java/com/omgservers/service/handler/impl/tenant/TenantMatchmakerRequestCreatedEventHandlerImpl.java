@@ -10,8 +10,8 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRequestCreatedEventBodyModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     final MatchmakerModelFactory matchmakerModelFactory;
 
@@ -52,7 +52,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
 
     Uni<TenantMatchmakerRequestModel> getTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getService().getTenantMatchmakerRequest(request)
+        return tenantShard.getService().getTenantMatchmakerRequest(request)
                 .map(GetTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
     }
 
@@ -66,7 +66,7 @@ public class TenantMatchmakerRequestCreatedEventHandlerImpl implements EventHand
                 deploymentId,
                 idempotencyKey);
         final var request = new SyncMatchmakerRequest(matchmaker);
-        return matchmakerModule.getService().executeWithIdempotency(request)
+        return matchmakerShard.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerResponse::getCreated);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.service.service.registry.impl.method;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.service.registry.dto.DockerRegistryAccessDto;
 import com.omgservers.service.service.registry.dto.IssueTokenRequest;
 import com.omgservers.service.service.registry.dto.IssueTokenResponse;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 class IssueTokenMethodImpl implements IssueTokenMethod {
 
-    final UserModule userModule;
+    final UserShard userShard;
 
     final IssueDockerRegistryClientRefreshTokenOperation issueDockerRegistryClientRefreshTokenOperation;
     final IssueDockerRegistryClientAccessTokenOperation issueDockerRegistryClientAccessTokenOperation;

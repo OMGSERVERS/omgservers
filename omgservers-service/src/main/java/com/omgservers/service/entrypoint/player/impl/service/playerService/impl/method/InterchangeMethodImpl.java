@@ -4,7 +4,7 @@ import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
 import com.omgservers.schema.module.client.InterchangeRequest;
 import com.omgservers.schema.module.client.InterchangeResponse;
-import com.omgservers.service.module.client.ClientModule;
+import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class InterchangeMethodImpl implements InterchangeMethod {
 
-    final ClientModule clientModule;
+    final ClientShard clientShard;
 
     final SecurityIdentity securityIdentity;
 
@@ -34,7 +34,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
         final var consumedMessages = request.getConsumedMessages();
 
         final var interchangeRequest = new InterchangeRequest(userId, clientId, messagesToHandle, consumedMessages);
-        return clientModule.getService().interchange(interchangeRequest)
+        return clientShard.getService().interchange(interchangeRequest)
                 .map(InterchangeResponse::getIncomingMessages)
                 .map(InterchangePlayerResponse::new);
     }

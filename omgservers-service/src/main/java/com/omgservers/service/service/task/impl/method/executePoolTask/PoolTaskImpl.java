@@ -6,7 +6,7 @@ import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
-import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.service.task.impl.method.executePoolTask.operation.HandlePoolRequestsOperation;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class PoolTaskImpl {
 
-    final PoolModule poolModule;
+    final PoolShard poolShard;
 
     final HandlePoolRequestsOperation handlePoolRequestsOperation;
 
@@ -50,14 +50,14 @@ public class PoolTaskImpl {
 
     Uni<PoolStateDto> getPoolState(final Long poolId) {
         final var request = new GetPoolStateRequest(poolId);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolStateResponse::getPoolState);
     }
 
     Uni<Boolean> updatePoolState(final Long poolId,
                                  final PoolChangeOfStateDto poolChangeOfState) {
         final var request = new UpdatePoolStateRequest(poolId, poolChangeOfState);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(UpdatePoolStateResponse::getUpdated);
     }
 }

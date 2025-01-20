@@ -5,7 +5,7 @@ import com.omgservers.schema.module.user.DeleteUserRequest;
 import com.omgservers.service.event.body.module.user.UserDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.user.testInterface.UserDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.user.impl.service.userService.testInterface.UserServiceTestInterface;
+import com.omgservers.service.shard.user.impl.service.userService.testInterface.UserServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

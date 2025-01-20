@@ -9,7 +9,7 @@ import com.omgservers.schema.module.lobby.SyncLobbyRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.service.factory.lobby.LobbyModelFactory;
 import com.omgservers.service.factory.lobby.LobbyRuntimeRefModelFactory;
-import com.omgservers.service.module.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;
+import com.omgservers.service.shard.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

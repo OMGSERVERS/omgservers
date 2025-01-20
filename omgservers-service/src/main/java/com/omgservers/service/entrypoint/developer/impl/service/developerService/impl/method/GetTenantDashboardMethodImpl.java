@@ -8,7 +8,7 @@ import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantPermissionOperation checkTenantPermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -54,7 +54,7 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
 
     Uni<TenantDataDto> getTenantData(final Long tenantId) {
         final var request = new GetTenantDataRequest(tenantId);
-        return tenantModule.getService().getTenantData(request)
+        return tenantShard.getService().getTenantData(request)
                 .map(GetTenantDataResponse::getTenantData);
     }
 }

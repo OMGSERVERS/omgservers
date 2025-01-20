@@ -5,7 +5,7 @@ import com.omgservers.schema.module.runtime.DeleteRuntimeAssignmentRequest;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.runtime.testInterface.RuntimeAssignmentDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;
+import com.omgservers.service.shard.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

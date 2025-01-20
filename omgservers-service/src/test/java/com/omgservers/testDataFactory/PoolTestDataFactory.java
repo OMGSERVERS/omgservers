@@ -19,7 +19,7 @@ import com.omgservers.service.factory.pool.PoolContainerModelFactory;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
-import com.omgservers.service.module.pool.impl.service.poolService.testInterface.PoolServiceTestInterface;
+import com.omgservers.service.shard.pool.impl.service.poolService.testInterface.PoolServiceTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;

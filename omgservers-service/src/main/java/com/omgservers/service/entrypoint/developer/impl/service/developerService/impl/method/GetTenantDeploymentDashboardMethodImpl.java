@@ -14,7 +14,7 @@ import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantDeploymentMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashboardMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -72,19 +72,19 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getService().getTenantStage(request)
+        return tenantShard.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<TenantDeploymentDataDto> getTenantDeploymentData(final Long tenantId, final Long tenantDeploymentId) {
         final var request = new GetTenantDeploymentDataRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getService().getTenantDeploymentData(request)
+        return tenantShard.getService().getTenantDeploymentData(request)
                 .map(GetTenantDeploymentDataResponse::getTenantDeploymentData);
     }
 }

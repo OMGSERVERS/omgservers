@@ -33,11 +33,11 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.pool.PoolShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
@@ -58,11 +58,11 @@ import java.util.Optional;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
-    final AliasModule aliasModule;
-    final PoolModule poolModule;
-    final UserModule userModule;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
+    final AliasShard aliasShard;
+    final PoolShard poolShard;
+    final UserShard userShard;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
     final CalculateShardOperation calculateShardOperation;
@@ -108,19 +108,19 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<List<TenantImageModel>> viewTenantImage(final Long tenantId, final Long tenantVersionId) {
         final var request = new ViewTenantImagesRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().viewTenantImages(request)
+        return tenantShard.getService().viewTenantImages(request)
                 .map(ViewTenantImagesResponse::getTenantImages);
     }
 
@@ -168,7 +168,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(id, UserRoleEnum.RUNTIME, passwordHash, idempotencyKey);
         final var request = new SyncUserRequest(user);
-        return userModule.getService().syncUser(request)
+        return userShard.getService().syncUser(request)
                 .map(SyncUserResponse::getCreated)
                 .replaceWith(user)
                 .onFailure(ServerSideConflictException.class)
@@ -179,7 +179,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
                             // User was already created
                             final var getUserRequest = new GetUserRequest(id);
-                            return userModule.getService().getUser(getUserRequest)
+                            return userShard.getService().getUser(getUserRequest)
                                     .map(GetUserResponse::getUser);
 
                         }
@@ -232,13 +232,13 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
     Uni<Boolean> syncPoolRequest(final PoolRequestModel poolRequest) {
         final var request = new SyncPoolRequestRequest(poolRequest);
-        return poolModule.getPoolService().executeWithIdempotency(request)
+        return poolShard.getPoolService().executeWithIdempotency(request)
                 .map(SyncPoolRequestResponse::getCreated);
     }
 }

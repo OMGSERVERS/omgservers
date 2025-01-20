@@ -8,7 +8,7 @@ import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRes
 import com.omgservers.schema.module.tenant.tenantProject.dto.TenantProjectDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantProjectMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
@@ -60,7 +60,7 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
 
     Uni<TenantProjectDataDto> getTenantProjectData(final Long tenantId, final Long tenantProjectId) {
         final var request = new GetTenantProjectDataRequest(tenantId, tenantProjectId);
-        return tenantModule.getService().getTenantProjectData(request)
+        return tenantShard.getService().getTenantProjectData(request)
                 .map(GetTenantProjectDataResponse::getTenantProjectData);
     }
 }

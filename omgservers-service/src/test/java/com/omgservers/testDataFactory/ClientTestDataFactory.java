@@ -14,7 +14,7 @@ import com.omgservers.schema.module.client.SyncClientRuntimeRefRequest;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.client.ClientRuntimeRefModelFactory;
-import com.omgservers.service.module.client.impl.service.clientService.testInterface.ClientServiceTestInterface;
+import com.omgservers.service.shard.client.impl.service.clientService.testInterface.ClientServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

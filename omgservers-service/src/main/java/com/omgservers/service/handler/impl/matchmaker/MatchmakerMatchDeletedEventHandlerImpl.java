@@ -14,8 +14,8 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,8 +30,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
+    final MatchmakerShard matchmakerShard;
+    final RuntimeShard runtimeShard;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -59,13 +59,13 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
     Uni<Boolean> deleteRuntime(final Long runtimeId) {
         final var request = new DeleteRuntimeRequest(runtimeId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(DeleteRuntimeResponse::getDeleted);
     }
 
@@ -91,13 +91,13 @@ public class MatchmakerMatchDeletedEventHandlerImpl implements EventHandler {
     Uni<List<MatchmakerMatchAssignmentModel>> viewMatchmakerMatchAssignments(final Long matchmakerId,
                                                                              final Long matchId) {
         final var request = new ViewMatchmakerMatchAssignmentsRequest(matchmakerId, matchId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(ViewMatchmakerMatchAssignmentsResponse::getMatchmakerMatchAssignments);
     }
 
     Uni<Boolean> deleteMatchAssignment(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerMatchAssignmentRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(DeleteMatchmakerMatchAssignmentResponse::getDeleted);
     }
 }

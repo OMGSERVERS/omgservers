@@ -24,11 +24,11 @@ import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.pool.PoolShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.event.EventService;
@@ -48,11 +48,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
-    final LobbyModule lobbyModule;
-    final UserModule userModule;
-    final PoolModule poolModule;
+    final MatchmakerShard matchmakerShard;
+    final RuntimeShard runtimeShard;
+    final LobbyShard lobbyShard;
+    final UserShard userShard;
+    final PoolShard poolShard;
 
     final EventService eventService;
     final JobService jobService;
@@ -95,7 +95,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeModel> getRuntime(final Long runtimeId) {
         final var request = new GetRuntimeRequest(runtimeId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -106,7 +106,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var lobbyId = runtime.getConfig().getLobbyConfig().getLobbyId();
                 final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId, idempotencyKey);
                 final var request = new SyncLobbyRuntimeRefRequest(lobbyRuntimeRef);
-                yield lobbyModule.getService().syncLobbyRuntimeRef(request)
+                yield lobbyShard.getService().syncLobbyRuntimeRef(request)
                         .map(SyncLobbyRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
                         .recoverWithItem(Boolean.FALSE)
@@ -130,7 +130,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 final var matchRuntimeRef = matchmakerMatchRuntimeRefModelFactory
                         .create(matchmakerId, matchId, runtimeId, idempotencyKey);
                 final var request = new SyncMatchmakerMatchRuntimeRefRequest(matchRuntimeRef);
-                yield matchmakerModule.getService().execute(request)
+                yield matchmakerShard.getService().execute(request)
                         .map(SyncMatchmakerMatchRuntimeRefResponse::getCreated)
                         .onFailure(ServerSideNotFoundException.class)
                         .recoverWithItem(Boolean.FALSE)

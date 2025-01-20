@@ -6,8 +6,8 @@ import com.omgservers.schema.module.queue.queueRequest.SyncQueueRequestResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.service.factory.queue.QueueRequestModelFactory;
-import com.omgservers.service.module.queue.QueueModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.queue.QueueShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -19,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateQueueRequestOperationImpl implements CreateQueueRequestOperation {
 
-    final TenantModule tenantModule;
-    final QueueModule queueModule;
+    final TenantShard tenantShard;
+    final QueueShard queueShard;
 
     final QueueRequestModelFactory queueRequestModelFactory;
 
@@ -38,7 +38,7 @@ class CreateQueueRequestOperationImpl implements CreateQueueRequestOperation {
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
@@ -47,7 +47,7 @@ class CreateQueueRequestOperationImpl implements CreateQueueRequestOperation {
                                     final String idempotencyKey) {
         final var queueRequest = queueRequestModelFactory.create(queueId, clientId, idempotencyKey);
         final var request = new SyncQueueRequestRequest(queueRequest);
-        return queueModule.getQueueService().executeWithIdempotency(request)
+        return queueShard.getQueueService().executeWithIdempotency(request)
                 .map(SyncQueueRequestResponse::getCreated);
     }
 }

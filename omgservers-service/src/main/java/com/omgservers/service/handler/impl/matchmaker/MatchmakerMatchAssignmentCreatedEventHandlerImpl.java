@@ -17,8 +17,8 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -30,8 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
+    final MatchmakerShard matchmakerShard;
+    final RuntimeShard runtimeShard;
 
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
 
@@ -68,13 +68,13 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
 
     Uni<MatchmakerMatchAssignmentModel> getMatchmakerMatchAssignment(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerMatchAssignmentRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerMatchAssignmentResponse::getMatchmakerMatchAssignment);
     }
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
@@ -89,7 +89,7 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
                 runtimeAssignmentConfig,
                 idempotencyKey);
         final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(SyncRuntimeAssignmentResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

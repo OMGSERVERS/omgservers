@@ -10,7 +10,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -67,14 +67,14 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Boolean> deleteTenantVersion(final Long tenantId,
                                      final Long id) {
         final var request = new DeleteTenantVersionRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantVersion(request)
+        return tenantShard.getService().deleteTenantVersion(request)
                 .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

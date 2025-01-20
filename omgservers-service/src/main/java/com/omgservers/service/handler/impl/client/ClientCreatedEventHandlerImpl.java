@@ -20,8 +20,8 @@ import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.factory.queue.QueueRequestModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.assignment.AssignMatchmakerOperation;
 import com.omgservers.service.operation.assignment.SelectRandomMatchmakerOperation;
 import io.smallrye.mutiny.Uni;
@@ -35,8 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientCreatedEventHandlerImpl implements EventHandler {
 
-    final ClientModule clientModule;
-    final TenantModule tenantModule;
+    final ClientShard clientShard;
+    final TenantShard tenantShard;
 
     final SelectRandomMatchmakerOperation selectRandomMatchmakerOperation;
     final AssignMatchmakerOperation assignMatchmakerOperation;
@@ -80,19 +80,19 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getService().getClient(request)
+        return clientShard.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -125,7 +125,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getService().syncClientMessageWithIdempotency(request)
+        return clientShard.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 }

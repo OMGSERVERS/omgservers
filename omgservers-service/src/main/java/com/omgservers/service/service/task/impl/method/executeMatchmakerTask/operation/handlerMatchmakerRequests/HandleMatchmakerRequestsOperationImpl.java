@@ -3,8 +3,8 @@ package com.omgservers.service.service.task.impl.method.executeMatchmakerTask.op
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.executeGreedyMatchmaking.ExecuteGreedyMatchmakingOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -17,8 +17,8 @@ import java.util.ArrayList;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsOperation {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     final ExecuteGreedyMatchmakingOperation executeGreedyMatchmaking;
 

@@ -13,8 +13,8 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final ClientModule clientModule;
+    final MatchmakerShard matchmakerShard;
+    final ClientShard clientShard;
 
     final ClientMatchmakerRefModelFactory clientMatchmakerRefModelFactory;
 
@@ -57,7 +57,7 @@ public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler
 
     Uni<MatchmakerAssignmentModel> getMatchmakerAssignment(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerAssignmentRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerAssignmentResponse::getMatchmakerAssignment);
     }
 
@@ -66,7 +66,7 @@ public class MatchmakerAssignmentCreatedEventHandlerImpl implements EventHandler
                                          final String idempotencyKey) {
         final var clientMatchmakerRef = clientMatchmakerRefModelFactory.create(clientId, matchmakerId, idempotencyKey);
         final var request = new SyncClientMatchmakerRefRequest(clientMatchmakerRef);
-        return clientModule.getService().syncClientMatchmakerRef(request)
+        return clientShard.getService().syncClientMatchmakerRef(request)
                 .map(SyncClientMatchmakerRefResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {

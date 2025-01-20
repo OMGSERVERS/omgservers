@@ -16,8 +16,8 @@ import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -33,8 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final CreateTenantProjectPermissionOperation createTenantProjectPermissionOperation;
     final CreateTenantStagePermissionOperation createTenantStagePermissionOperation;
@@ -80,7 +80,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var tenantProject = tenantProjectModelFactory.create(tenantId);
         final var tenantProjectId = tenantProject.getId();
         final var request = new SyncTenantProjectRequest(tenantProject);
-        return tenantModule.getService().syncTenantProject(request)
+        return tenantShard.getService().syncTenantProject(request)
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
                         TenantProjectPermissionQualifierEnum.STAGE_MANAGER))
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
@@ -96,7 +96,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var tenantStageId = tenantStage.getId();
         final var request = new SyncTenantStageRequest(tenantStage);
-        return tenantModule.getService().syncTenantStage(request)
+        return tenantShard.getService().syncTenantStage(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER))
                 .replaceWith(tenantStage);

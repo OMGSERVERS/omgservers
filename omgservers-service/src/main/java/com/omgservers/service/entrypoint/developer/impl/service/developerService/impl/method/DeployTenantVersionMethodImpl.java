@@ -19,7 +19,7 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
@@ -106,19 +106,19 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
 
     Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantModule.getService().getTenantStage(request)
+        return tenantShard.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<Void> verifyAtLeastOneTenantImageExists(final Long tenantId, final Long tenantVersionId) {
         final var request = new ViewTenantImagesRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().viewTenantImages(request)
+        return tenantShard.getService().viewTenantImages(request)
                 .map(ViewTenantImagesResponse::getTenantImages)
                 .invoke(tenantImages -> {
                     if (tenantImages.isEmpty()) {
@@ -136,7 +136,7 @@ class DeployTenantVersionMethodImpl implements DeployTenantVersionMethod {
                 tenantVersionId);
 
         final var request = new SyncTenantDeploymentRequest(tenantDeployment);
-        return tenantModule.getService().syncTenantDeployment(request)
+        return tenantShard.getService().syncTenantDeployment(request)
                 .replaceWith(tenantDeployment);
     }
 }

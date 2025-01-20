@@ -29,8 +29,8 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.DeleteJobRequest;
 import com.omgservers.service.service.job.dto.DeleteJobResponse;
@@ -50,8 +50,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     final JobService jobService;
 
@@ -82,7 +82,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
@@ -111,13 +111,13 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<MatchmakerCommandModel>> viewMatchmakerCommands(final Long matchmakerId) {
         final var request = new ViewMatchmakerCommandsRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(ViewMatchmakerCommandsResponse::getMatchmakerCommands);
     }
 
     Uni<Boolean> deleteMatchmakerCommand(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerCommandRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(DeleteMatchmakerCommandResponse::getDeleted);
     }
 
@@ -146,13 +146,13 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<MatchmakerRequestModel>> viewRequests(final Long matchmakerId) {
         final var request = new ViewMatchmakerRequestsRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(ViewMatchmakerRequestsResponse::getMatchmakerRequests);
     }
 
     Uni<Boolean> deleteRequest(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerRequestRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(DeleteMatchmakerRequestResponse::getDeleted);
     }
 
@@ -181,13 +181,13 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<MatchmakerMatchModel>> viewMatches(final Long matchmakerId) {
         final var request = new ViewMatchmakerMatchesRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(ViewMatchmakerMatchesResponse::getMatchmakerMatches);
     }
 
     Uni<Boolean> deleteMatch(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerMatchRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(DeleteMatchmakerMatchResponse::getDeleted);
     }
 
@@ -206,7 +206,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                                                           final Long deploymentId,
                                                           final Long matchmakerId) {
         final var request = new FindTenantMatchmakerRefRequest(tenantId, deploymentId, matchmakerId);
-        return tenantModule.getService().findTenantMatchmakerRef(request)
+        return tenantShard.getService().findTenantMatchmakerRef(request)
                 .map(FindTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 
@@ -214,7 +214,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
         final var tenantId = tenantMatchmakerRef.getTenantId();
         final var id = tenantMatchmakerRef.getId();
         final var request = new DeleteTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantMatchmakerRef(request)
+        return tenantShard.getService().deleteTenantMatchmakerRef(request)
                 .map(DeleteTenantMatchmakerRefResponse::getDeleted);
     }
 

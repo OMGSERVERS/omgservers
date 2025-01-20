@@ -15,9 +15,9 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.root.RootShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,9 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserCreatedEventHandlerImpl implements EventHandler {
 
-    final AliasModule aliasModule;
-    final UserModule userModule;
-    final RootModule rootModule;
+    final AliasShard aliasShard;
+    final UserShard userShard;
+    final RootShard rootShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -76,7 +76,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
@@ -90,7 +90,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
                             refQualifier,
                             tenantId);
                     final var request = new SyncRootEntityRefRequest(rootEntityRef);
-                    return rootModule.getService().syncRootEntityRefWithIdempotency(request)
+                    return rootShard.getService().syncRootEntityRefWithIdempotency(request)
                             .map(SyncRootEntityRefResponse::getCreated);
                 });
     }
@@ -99,7 +99,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 }

@@ -12,7 +12,7 @@ import com.omgservers.service.factory.pool.PoolServerModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolCreatedEventHandlerImpl implements EventHandler {
 
-    final PoolModule poolModule;
+    final PoolShard poolShard;
 
     final JobService jobService;
 
@@ -64,7 +64,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
 
     Uni<PoolModel> getPool(final Long id) {
         final var request = new GetPoolRequest(id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolResponse::getPool);
     }
 

@@ -8,8 +8,8 @@ import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.security.IssueJwtTokenOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateTokenMethodImpl implements CreateTokenMethod {
 
-    final RuntimeModule runtimeModule;
-    final UserModule userModule;
+    final RuntimeShard runtimeShard;
+    final UserShard userShard;
 
     final IssueJwtTokenOperation issueJwtTokenOperation;
 
@@ -53,13 +53,13 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     Uni<String> createUserToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userModule.getService().createToken(createTokenRequest)
+        return userShard.getService().createToken(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken);
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 }

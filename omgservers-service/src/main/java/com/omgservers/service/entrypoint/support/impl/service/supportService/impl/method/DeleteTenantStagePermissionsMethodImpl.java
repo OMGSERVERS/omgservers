@@ -17,8 +17,8 @@ import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStage
 import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
@@ -39,8 +39,8 @@ import java.util.Set;
 @AllArgsConstructor
 class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermissionsMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -112,32 +112,32 @@ class DeleteTenantStagePermissionsMethodImpl implements DeleteTenantStagePermiss
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getService().getTenantStage(request)
+        return tenantShard.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<List<TenantStagePermissionModel>> viewTenantStagePermissions(final Long tenantId,
                                                                      final Long tenantStageId) {
         final var request = new ViewTenantStagePermissionsRequest(tenantId, tenantStageId);
-        return tenantModule.getService().viewTenantStagePermissions(request)
+        return tenantShard.getService().viewTenantStagePermissions(request)
                 .map(ViewTenantStagePermissionsResponse::getTenantStagePermissions);
     }
 
     Uni<Boolean> deleteTenantStagePermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantStagePermissionRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantStagePermission(request)
+        return tenantShard.getService().deleteTenantStagePermission(request)
                 .map(DeleteTenantStagePermissionResponse::getDeleted);
     }
 }

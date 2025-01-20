@@ -9,7 +9,7 @@ import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchRuntim
 import com.omgservers.service.factory.client.MessageModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
+    final MatchmakerShard matchmakerShard;
 
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
     final MessageModelFactory messageModelFactory;
@@ -52,7 +52,7 @@ public class MatchmakerMatchRuntimeRefDeletedEventHandlerImpl implements EventHa
                                                                      final Long matchId,
                                                                      final Long id) {
         final var request = new GetMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerMatchRuntimeRefResponse::getMatchmakerMatchRuntimeRef);
     }
 }

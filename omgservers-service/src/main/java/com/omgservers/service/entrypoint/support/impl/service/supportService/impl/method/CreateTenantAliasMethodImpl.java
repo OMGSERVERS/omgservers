@@ -6,8 +6,8 @@ import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.CreateTenantAliasOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
 
-    final TenantModule tenantModule;
-    final AliasModule aliasModule;
+    final TenantShard tenantShard;
+    final AliasShard aliasShard;
 
     final CreateTenantAliasOperation createTenantAliasOperation;
 
@@ -47,7 +47,7 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
 
     Uni<TenantModel> getTenant(final Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 }

@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.DeleteAliasesByEntityIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantProjectPermissionsOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantStagesByTenantProjectIdOperation;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantProjectDeletedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final DeleteTenantVersionsByTenantProjectIdOperation deleteTenantVersionsByTenantProjectIdOperation;
     final DeleteTenantStagesByTenantProjectIdOperation deleteTenantStagesByTenantProjectIdOperation;
@@ -60,7 +60,7 @@ public class TenantProjectDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getService().getTenantProject(request)
+        return tenantShard.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 

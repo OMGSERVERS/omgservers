@@ -16,8 +16,8 @@ import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.operation.server.GetServersOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.server.ServiceConfig;
@@ -36,9 +36,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @AllArgsConstructor
 class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
 
-    final AliasModule aliasModule;
+    final AliasShard aliasShard;
 
-    final PoolModule poolModule;
+    final PoolShard poolShard;
 
     final GetServersOperation getServersOperation;
     final GetServiceConfigOperation getServiceConfigOperation;
@@ -67,14 +67,14 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
     Uni<PoolModel> createDefaultPool() {
         final var defaultPool = poolModelFactory.create();
         final var request = new SyncPoolRequest(defaultPool);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .replaceWith(defaultPool);
     }
 
@@ -99,7 +99,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 poolId,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
         final var request = new SyncAliasRequest(alias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .replaceWith(alias);
     }
 
@@ -118,7 +118,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 poolServerConfig);
 
         final var request = new SyncPoolServerRequest(poolServer);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(SyncPoolServerResponse::getCreated);
     }
 }

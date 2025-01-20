@@ -11,7 +11,7 @@ import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEve
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.docker.BuildDockerImageIdOperation;
 import com.omgservers.service.operation.docker.ParseDockerRepositoryOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
@@ -29,7 +29,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
 
     final String PUSH_ACTION = "push";
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final ParseDockerRepositoryOperation parseDockerRepositoryOperation;
     final BuildDockerImageIdOperation buildDockerImageIdOperation;
@@ -101,7 +101,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
                 idempotencyKey);
 
         final var request = new SyncTenantImageRequest(tenantImage);
-        return tenantModule.getService().syncTenantImageWithIdempotency(request)
+        return tenantShard.getService().syncTenantImageWithIdempotency(request)
                 .map(SyncTenantImageResponse::getCreated);
     }
 }

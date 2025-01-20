@@ -11,9 +11,9 @@ import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,9 +27,9 @@ import java.util.List;
 @AllArgsConstructor
 class DeleteDanglingLobbiesOperationImpl implements DeleteDanglingLobbiesOperation {
 
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId,
@@ -44,7 +44,7 @@ class DeleteDanglingLobbiesOperationImpl implements DeleteDanglingLobbiesOperati
 
     Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long deploymentId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, deploymentId);
-        return tenantModule.getService().viewTenantLobbyRefs(request)
+        return tenantShard.getService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
@@ -73,19 +73,19 @@ class DeleteDanglingLobbiesOperationImpl implements DeleteDanglingLobbiesOperati
 
     Uni<LobbyModel> getLobby(final Long lobbyId) {
         final var request = new GetLobbyRequest(lobbyId);
-        return lobbyModule.getService().getLobby(request)
+        return lobbyShard.getService().getLobby(request)
                 .map(GetLobbyResponse::getLobby);
     }
 
     Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignment(final Long runtimeId) {
         final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 
     Uni<Boolean> deleteLobby(final Long lobbyId) {
         final var request = new DeleteLobbyRequest(lobbyId);
-        return lobbyModule.getService().deleteLobby(request)
+        return lobbyShard.getService().deleteLobby(request)
                 .map(DeleteLobbyResponse::getDeleted);
     }
 }

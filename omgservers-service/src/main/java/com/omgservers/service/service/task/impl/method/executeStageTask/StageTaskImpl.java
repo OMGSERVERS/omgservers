@@ -8,8 +8,8 @@ import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeployment
 import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,8 +23,8 @@ import java.util.List;
 @AllArgsConstructor
 public class StageTaskImpl {
 
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
 
     public Uni<Boolean> execute(final Long tenantId, final Long tenantStageId) {
         return getTenantStage(tenantId, tenantStageId)
@@ -34,7 +34,7 @@ public class StageTaskImpl {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getService().getTenantStage(request)
+        return tenantShard.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
@@ -68,7 +68,7 @@ public class StageTaskImpl {
 
     Uni<List<TenantDeploymentModel>> viewTenantDeployments(final Long tenantId, final Long tenantStageId) {
         final var request = new ViewTenantDeploymentsRequest(tenantId, tenantStageId);
-        return tenantModule.getService().viewTenantDeployments(request)
+        return tenantShard.getService().viewTenantDeployments(request)
                 .map(ViewTenantDeploymentsResponse::getTenantDeployments);
     }
 
@@ -76,7 +76,7 @@ public class StageTaskImpl {
         final var tenantId = tenantDeployment.getTenantId();
         final var tenantDeploymentId = tenantDeployment.getId();
         final var request = new DeleteTenantDeploymentRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getService().deleteTenantDeployment(request)
+        return tenantShard.getService().deleteTenantDeployment(request)
                 .map(DeleteTenantDeploymentResponse::getDeleted);
     }
 }

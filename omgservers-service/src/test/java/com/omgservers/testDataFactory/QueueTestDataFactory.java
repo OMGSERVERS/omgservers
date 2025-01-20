@@ -4,7 +4,7 @@ import com.omgservers.schema.model.queue.QueueModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.module.queue.queue.SyncQueueRequest;
 import com.omgservers.service.factory.queue.QueueModelFactory;
-import com.omgservers.service.module.queue.impl.service.queueService.testInterface.QueueServiceTestInterface;
+import com.omgservers.service.shard.queue.impl.service.queueService.testInterface.QueueServiceTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

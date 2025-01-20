@@ -3,8 +3,8 @@ package com.omgservers.service.operation.assignment;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentResponse;
 import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,8 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class AssignMatchmakerOperationImpl implements AssignMatchmakerOperation {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     final MatchmakerAssignmentModelFactory matchmakerAssignmentModelFactory;
 
@@ -33,7 +33,7 @@ class AssignMatchmakerOperationImpl implements AssignMatchmakerOperation {
         final var matchmakerAssignment = matchmakerAssignmentModelFactory
                 .create(matchmakerId, clientId, idempotencyKey);
         final var request = new SyncMatchmakerAssignmentRequest(matchmakerAssignment);
-        return matchmakerModule.getService().executeWithIdempotency(request)
+        return matchmakerShard.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerAssignmentResponse::getCreated);
     }
 }

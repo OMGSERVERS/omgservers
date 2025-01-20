@@ -9,8 +9,8 @@ import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CreateTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.server.GenerateIdOperation;
@@ -27,8 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GenerateIdOperation generateIdOperation;
 
@@ -78,7 +78,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var tenantStageId = tenantStage.getId();
         final var request = new SyncTenantStageRequest(tenantStage);
-        return tenantModule.getService().syncTenantStage(request)
+        return tenantShard.getService().syncTenantStage(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER))
                 .replaceWith(tenantStage);

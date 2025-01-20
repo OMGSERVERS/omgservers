@@ -10,7 +10,7 @@ import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
@@ -76,14 +76,14 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantModule.getService().getTenantStage(request)
+        return tenantShard.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<Boolean> deleteTenantStage(final Long tenantId,
                                    final Long id) {
         final var request = new DeleteTenantStageRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantStage(request)
+        return tenantShard.getService().deleteTenantStage(request)
                 .map(DeleteTenantStageResponse::getDeleted);
     }
 }

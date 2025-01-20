@@ -6,7 +6,7 @@ import com.omgservers.schema.module.alias.DeleteAliasResponse;
 import com.omgservers.schema.module.alias.ViewAliasesRequest;
 import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.alias.AliasModule;
+import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteAliasesByEntityIdOperationImpl implements DeleteAliasesByEntityIdOperation {
 
-    final AliasModule aliasModule;
+    final AliasShard aliasShard;
 
     @Override
     public Uni<Void> execute(final Long shardKey, final Long entityId) {
@@ -52,13 +52,13 @@ class DeleteAliasesByEntityIdOperationImpl implements DeleteAliasesByEntityIdOpe
         final var request = new ViewAliasesRequest();
         request.setShardKey(shardKey);
         request.setEntityId(entityId);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(ViewAliasesResponse::getAliases);
     }
 
     Uni<Boolean> deleteAlias(final Long shardKey, final Long id) {
         final var request = new DeleteAliasRequest(shardKey, id);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(DeleteAliasResponse::getDeleted);
     }
 }

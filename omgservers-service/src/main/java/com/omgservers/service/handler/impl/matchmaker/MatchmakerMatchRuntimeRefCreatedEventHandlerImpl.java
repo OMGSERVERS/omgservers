@@ -11,7 +11,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchRuntimeRefCreatedEventBodyModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
+    final MatchmakerShard matchmakerShard;
 
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
@@ -55,7 +55,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
                                                                      final Long matchId,
                                                                      final Long id) {
         final var request = new GetMatchmakerMatchRuntimeRefRequest(matchmakerId, matchId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerMatchRuntimeRefResponse::getMatchmakerMatchRuntimeRef);
     }
 
@@ -65,7 +65,7 @@ public class MatchmakerMatchRuntimeRefCreatedEventHandlerImpl implements EventHa
         final var commandBody = new OpenMatchMatchmakerCommandBodyDto(matchId);
         final var commandModel = matchmakerCommandModelFactory.create(matchmakerId, commandBody, idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getService().executeWithIdempotency(request)
+        return matchmakerShard.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

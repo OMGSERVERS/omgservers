@@ -9,8 +9,8 @@ import com.omgservers.service.event.body.module.client.ClientRuntimeRefDeletedEv
 import com.omgservers.service.factory.client.ClientRuntimeRefModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,8 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final ClientModule clientModule;
+    final RuntimeShard runtimeShard;
+    final ClientShard clientShard;
 
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
     final ClientRuntimeRefModelFactory clientRuntimeRefModelFactory;
@@ -52,7 +52,7 @@ public class ClientRuntimeRefDeletedEventHandlerImpl implements EventHandler {
 
     Uni<ClientRuntimeRefModel> getClientRuntimeRef(final Long clientId, final Long id) {
         final var request = new GetClientRuntimeRefRequest(clientId, id);
-        return clientModule.getService().getClientRuntimeRef(request)
+        return clientShard.getService().getClientRuntimeRef(request)
                 .map(GetClientRuntimeRefResponse::getClientRuntimeRef);
     }
 }

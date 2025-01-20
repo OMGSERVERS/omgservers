@@ -10,8 +10,8 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRequestCreatedEventBodyModel;
 import com.omgservers.service.factory.lobby.LobbyModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     final LobbyModelFactory lobbyModelFactory;
 
@@ -52,7 +52,7 @@ public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantLobbyRequestModel> getTenantLobbyRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantLobbyRequestRequest(tenantId, id);
-        return tenantModule.getService().getTenantLobbyRequest(request)
+        return tenantShard.getService().getTenantLobbyRequest(request)
                 .map(GetTenantLobbyRequestResponse::getTenantLobbyRequest);
     }
 
@@ -66,7 +66,7 @@ public class TenantLobbyRequestCreatedEventHandlerImpl implements EventHandler {
                 deploymentId,
                 idempotencyKey);
         final var request = new SyncLobbyRequest(lobby);
-        return lobbyModule.getService().syncLobbyWithIdempotency(request)
+        return lobbyShard.getService().syncLobbyWithIdempotency(request)
                 .map(SyncLobbyResponse::getCreated);
     }
 }

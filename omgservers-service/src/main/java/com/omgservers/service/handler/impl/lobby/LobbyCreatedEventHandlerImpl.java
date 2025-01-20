@@ -22,9 +22,9 @@ import com.omgservers.service.event.body.module.lobby.LobbyCreatedEventBodyModel
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,9 +37,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     final GenerateIdOperation generateIdOperation;
 
@@ -83,19 +83,19 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
     Uni<LobbyModel> getLobby(final Long id) {
         final var request = new GetLobbyRequest(id);
-        return lobbyModule.getService().getLobby(request)
+        return lobbyShard.getService().getLobby(request)
                 .map(GetLobbyResponse::getLobby);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -120,7 +120,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var request = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getService().executeWithIdempotency(request)
+        return runtimeShard.getService().executeWithIdempotency(request)
                 .map(SyncRuntimeResponse::getCreated);
     }
 
@@ -134,7 +134,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
                 lobbyId,
                 idempotencyKey);
         final var request = new SyncTenantLobbyRefRequest(tenantLobbyRef);
-        return tenantModule.getService().syncTenantLobbyRefWithIdempotency(request)
+        return tenantShard.getService().syncTenantLobbyRefWithIdempotency(request)
                 .map(SyncTenantLobbyRefResponse::getCreated);
     }
 }

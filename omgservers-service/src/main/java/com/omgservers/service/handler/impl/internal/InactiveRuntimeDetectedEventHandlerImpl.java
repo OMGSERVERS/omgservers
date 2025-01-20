@@ -16,10 +16,10 @@ import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBo
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -31,10 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final MatchmakerShard matchmakerShard;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
@@ -82,13 +82,13 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
     Uni<Boolean> deleteLobby(final Long lobbyId) {
         final var request = new DeleteLobbyRequest(lobbyId);
-        return lobbyModule.getService().deleteLobby(request)
+        return lobbyShard.getService().deleteLobby(request)
                 .map(DeleteLobbyResponse::getDeleted);
     }
 
@@ -99,7 +99,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 deploymentId,
                 idempotencyKey);
         final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        return tenantModule.getService().syncTenantLobbyRequestWithIdempotency(request)
+        return tenantShard.getService().syncTenantLobbyRequestWithIdempotency(request)
                 .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 
@@ -111,7 +111,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 commandBody,
                 idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getService().executeWithIdempotency(request)
+        return matchmakerShard.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 }

@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.root.RootModule;
+import com.omgservers.service.shard.root.RootShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RootDeletedEventHandlerImpl implements EventHandler {
 
-    final RootModule rootModule;
+    final RootShard rootShard;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -44,7 +44,7 @@ public class RootDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RootModel> getRoot(final Long id) {
         final var request = new GetRootRequest(id);
-        return rootModule.getService().getRoot(request)
+        return rootShard.getService().getRoot(request)
                 .map(GetRootResponse::getRoot);
     }
 }

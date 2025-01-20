@@ -5,7 +5,7 @@ import com.omgservers.schema.module.root.root.DeleteRootRequest;
 import com.omgservers.service.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.root.testInterface.RootDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.root.impl.service.rootService.testInterface.RootServiceTestInterface;
+import com.omgservers.service.shard.root.impl.service.rootService.testInterface.RootServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

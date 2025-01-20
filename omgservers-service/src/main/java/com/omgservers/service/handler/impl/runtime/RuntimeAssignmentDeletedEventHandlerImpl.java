@@ -24,8 +24,8 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -37,8 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final ClientModule clientModule;
+    final RuntimeShard runtimeShard;
+    final ClientShard clientShard;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
@@ -79,13 +79,13 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> getRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new GetRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<RuntimeModel> getRuntime(final Long runtimeId) {
         final var request = new GetRuntimeRequest(runtimeId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -99,7 +99,7 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
         final var request = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(SyncRuntimeCommandResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -125,13 +125,13 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<ClientRuntimeRefModel> findClientRuntimeRef(final Long clientId, final Long runtimeId) {
         final var request = new FindClientRuntimeRefRequest(clientId, runtimeId);
-        return clientModule.getService().findClientRuntimeRef(request)
+        return clientShard.getService().findClientRuntimeRef(request)
                 .map(FindClientRuntimeRefResponse::getClientRuntimeRef);
     }
 
     Uni<Boolean> deleteClientRuntimeRef(final Long clientId, final Long id) {
         final var request = new DeleteClientRuntimeRefRequest(clientId, id);
-        return clientModule.getService().deleteClientRuntimeRef(request)
+        return clientShard.getService().deleteClientRuntimeRef(request)
                 .map(DeleteClientRuntimeRefResponse::getDeleted);
     }
 }

@@ -6,8 +6,8 @@ import com.omgservers.schema.module.lobby.DeleteLobbyResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +22,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteTenantLobbiesByTenantDeploymentIdOperationImpl implements DeleteTenantLobbiesByTenantDeploymentIdOperation {
 
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId, final Long tenantDeploymentId) {
@@ -50,13 +50,13 @@ class DeleteTenantLobbiesByTenantDeploymentIdOperationImpl implements DeleteTena
 
     Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long tenantDeploymentId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getService().viewTenantLobbyRefs(request)
+        return tenantShard.getService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<Boolean> deleteLobby(final Long lobbyId) {
         final var request = new DeleteLobbyRequest(lobbyId);
-        return lobbyModule.getService().deleteLobby(request)
+        return lobbyShard.getService().deleteLobby(request)
                 .map(DeleteLobbyResponse::getDeleted);
     }
 }

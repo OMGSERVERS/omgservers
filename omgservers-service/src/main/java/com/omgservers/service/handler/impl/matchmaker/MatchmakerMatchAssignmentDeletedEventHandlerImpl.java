@@ -13,8 +13,8 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import com.omgservers.service.operation.queue.CreateQueueRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,8 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final ClientModule clientModule;
+    final MatchmakerShard matchmakerShard;
+    final ClientShard clientShard;
 
     final CreateQueueRequestOperation createQueueRequestOperation;
 
@@ -82,19 +82,19 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<MatchmakerMatchAssignmentModel> getMatchmakerMatchAssignment(final Long matchmakerId, final Long id) {
         final var request = new GetMatchmakerMatchAssignmentRequest(matchmakerId, id);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerMatchAssignmentResponse::getMatchmakerMatchAssignment);
     }
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getService().getClient(request)
+        return clientShard.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 }

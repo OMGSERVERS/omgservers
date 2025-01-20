@@ -8,9 +8,9 @@ import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnu
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.factory.alias.AliasModelFactory;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -25,9 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMethod {
 
-    final TenantModule tenantModule;
-    final AliasModule aliasModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final AliasShard aliasShard;
+    final UserShard userShard;
 
     final CheckTenantPermissionOperation checkTenantPermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -71,7 +71,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                 tenantProjectId,
                 aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(tenantProjectAlias);
-        return aliasModule.getService().execute(syncAliasRequest)
+        return aliasShard.getService().execute(syncAliasRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
                         log.info("The alias \"{}\" for the project \"{}\" was created",

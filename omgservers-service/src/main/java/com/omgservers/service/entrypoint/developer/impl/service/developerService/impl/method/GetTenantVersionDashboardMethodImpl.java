@@ -11,7 +11,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRespons
 import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantVersionMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -65,13 +65,13 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<TenantVersionDataDto> getTenantVersionData(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionDataRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().getTenantVersionData(request)
+        return tenantShard.getService().getTenantVersionData(request)
                 .map(GetTenantVersionDataResponse::getTenantVersionData);
     }
 }

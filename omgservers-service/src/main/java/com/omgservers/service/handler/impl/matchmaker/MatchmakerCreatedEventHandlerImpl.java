@@ -14,8 +14,8 @@ import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
 import com.omgservers.service.service.job.dto.SyncJobResponse;
@@ -30,8 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     final JobService jobService;
 
@@ -64,7 +64,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
@@ -77,7 +77,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                 matchmakerId,
                 idempotencyKey);
         final var request = new SyncTenantMatchmakerRefRequest(tenantMatchmakerRef);
-        return tenantModule.getService().syncTenantMatchmakerRefWithIdempotency(request)
+        return tenantShard.getService().syncTenantMatchmakerRefWithIdempotency(request)
                 .map(SyncTenantMatchmakerRefResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithItem(Boolean.FALSE);

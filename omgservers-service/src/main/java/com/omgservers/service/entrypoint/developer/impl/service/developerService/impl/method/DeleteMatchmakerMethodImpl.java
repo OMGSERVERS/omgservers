@@ -13,8 +13,8 @@ import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentR
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -28,8 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
 
@@ -73,19 +73,19 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<Boolean> deleteMatchmaker(final Long matchmakerId) {
         final var request = new DeleteMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(DeleteMatchmakerResponse::getDeleted);
     }
 }

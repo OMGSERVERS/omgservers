@@ -5,7 +5,7 @@ import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQu
 import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CheckTenantStagePermissionOperationImpl implements CheckTenantStagePermissionOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId,
@@ -27,7 +27,7 @@ class CheckTenantStagePermissionOperationImpl implements CheckTenantStagePermiss
                 tenantStageId,
                 userId,
                 permissionQualifier);
-        return tenantModule.getService().verifyTenantStagePermissionExists(request)
+        return tenantShard.getService().verifyTenantStagePermissionExists(request)
                 .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(exists -> {
                     if (!exists) {

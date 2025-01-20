@@ -1,0 +1,14 @@
+package com.omgservers.service.shard.tenant.impl.operation.tenantMatchmakerRequest;
+
+import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.sqlclient.SqlConnection;
+
+import java.util.List;
+
+public interface SelectActiveTenantMatchmakerRequestsByTenantIdOperation {
+    Uni<List<TenantMatchmakerRequestModel>> execute(
+            SqlConnection sqlConnection,
+            int shard,
+            Long tenantId);
+}

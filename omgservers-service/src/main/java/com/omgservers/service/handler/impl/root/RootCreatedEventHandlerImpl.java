@@ -8,8 +8,8 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.root.RootModule;
+import com.omgservers.service.shard.pool.PoolShard;
+import com.omgservers.service.shard.root.RootShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RootCreatedEventHandlerImpl implements EventHandler {
 
-    final RootModule rootModule;
-    final PoolModule poolModule;
+    final RootShard rootShard;
+    final PoolShard poolShard;
 
     final PoolModelFactory poolModelFactory;
 
@@ -49,7 +49,7 @@ public class RootCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RootModel> getRoot(final Long id) {
         final var request = new GetRootRequest(id);
-        return rootModule.getService().getRoot(request)
+        return rootShard.getService().getRoot(request)
                 .map(GetRootResponse::getRoot);
     }
 }

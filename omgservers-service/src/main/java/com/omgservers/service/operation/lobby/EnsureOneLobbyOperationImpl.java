@@ -9,7 +9,7 @@ import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyReq
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
 import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 class EnsureOneLobbyOperationImpl implements EnsureOneLobbyOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
 
@@ -51,14 +51,14 @@ class EnsureOneLobbyOperationImpl implements EnsureOneLobbyOperation {
 
     Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long deploymentId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, deploymentId);
-        return tenantModule.getService().viewTenantLobbyRefs(request)
+        return tenantShard.getService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<List<TenantLobbyRequestModel>> viewTenantLobbyRequests(final Long tenantId,
                                                                final Long tenantDeploymentId) {
         final var request = new ViewTenantLobbyRequestsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getService().viewTenantLobbyRequests(request)
+        return tenantShard.getService().viewTenantLobbyRequests(request)
                 .map(ViewTenantLobbyRequestsResponse::getTenantLobbyRequests);
     }
 
@@ -67,7 +67,7 @@ class EnsureOneLobbyOperationImpl implements EnsureOneLobbyOperation {
         final var tenantLobbyRequest = tenantLobbyRequestModelFactory
                 .create(tenantId, tenantDeploymentId);
         final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        return tenantModule.getService().syncTenantLobbyRequestWithIdempotency(request)
+        return tenantShard.getService().syncTenantLobbyRequestWithIdempotency(request)
                 .map(SyncTenantLobbyRequestResponse::getCreated);
     }
 }

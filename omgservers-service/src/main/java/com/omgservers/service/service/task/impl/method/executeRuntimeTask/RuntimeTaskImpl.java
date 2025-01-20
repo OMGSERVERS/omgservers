@@ -9,7 +9,7 @@ import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.event.EventService;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
@@ -28,7 +28,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RuntimeTaskImpl {
 
-    final RuntimeModule runtimeModule;
+    final RuntimeShard runtimeShard;
 
     final EventService eventService;
 
@@ -44,7 +44,7 @@ public class RuntimeTaskImpl {
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -93,7 +93,7 @@ public class RuntimeTaskImpl {
 
     Uni<List<RuntimeAssignmentModel>> viewRuntimeAssignments(final Long runtimeId) {
         final var request = new ViewRuntimeAssignmentsRequest(runtimeId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(ViewRuntimeAssignmentsResponse::getRuntimeAssignments);
     }
 

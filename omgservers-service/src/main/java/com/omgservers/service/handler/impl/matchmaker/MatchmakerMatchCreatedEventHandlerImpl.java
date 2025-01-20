@@ -24,9 +24,9 @@ import com.omgservers.service.factory.matchmaker.MatchmakerMatchAssignmentModelF
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,9 +39,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
 
     final MatchmakerMatchAssignmentModelFactory matchmakerMatchAssignmentModelFactory;
     final RuntimeModelFactory runtimeModelFactory;
@@ -89,25 +89,25 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long matchId) {
         final var request = new GetMatchmakerMatchRequest(matchmakerId, matchId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -134,7 +134,7 @@ public class MatchmakerMatchCreatedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
-        return runtimeModule.getService().executeWithIdempotency(syncRuntimeRequest)
+        return runtimeShard.getService().executeWithIdempotency(syncRuntimeRequest)
                 .map(SyncRuntimeResponse::getCreated);
     }
 }

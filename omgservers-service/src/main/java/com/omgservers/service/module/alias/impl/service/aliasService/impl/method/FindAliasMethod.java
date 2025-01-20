@@ -1,9 +1,0 @@
-package com.omgservers.service.module.alias.impl.service.aliasService.impl.method;
-
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
-import io.smallrye.mutiny.Uni;
-
-public interface FindAliasMethod {
-    Uni<FindAliasResponse> execute(FindAliasRequest request);
-}

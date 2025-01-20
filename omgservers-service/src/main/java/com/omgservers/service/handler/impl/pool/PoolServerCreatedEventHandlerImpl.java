@@ -9,9 +9,9 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolServerCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.docker.DockerModule;
-import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.docker.DockerShard;
+import com.omgservers.service.shard.pool.PoolShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,9 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final DockerModule dockerModule;
-    final PoolModule poolModule;
+    final RuntimeShard runtimeShard;
+    final DockerShard dockerShard;
+    final PoolShard poolShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -48,7 +48,7 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
                     log.debug("Created, {}", poolServer);
 
                     final var pingDockerHostRequest = new PingDockerHostRequest(poolServer);
-                    return dockerModule.getService().execute(pingDockerHostRequest)
+                    return dockerShard.getService().execute(pingDockerHostRequest)
                             .map(PingDockerHostResponse::getSuccessful)
                             .invoke(successful -> {
                                 if (successful) {
@@ -63,7 +63,7 @@ public class PoolServerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 }

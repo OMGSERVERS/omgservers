@@ -15,8 +15,8 @@ import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantPro
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -33,8 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPermissionsMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -82,19 +82,19 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getService().getTenantProject(request)
+        return tenantShard.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
@@ -128,7 +128,7 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
                 .create(tenantId, tenantProjectId, userId, permission);
 
         final var request = new SyncTenantProjectPermissionRequest(tenantProjectPermission);
-        return tenantModule.getService().syncTenantProjectPermission(request)
+        return tenantShard.getService().syncTenantProjectPermission(request)
                 .map(SyncTenantProjectPermissionResponse::getCreated);
     }
 }

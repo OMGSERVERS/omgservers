@@ -9,8 +9,8 @@ import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchma
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.matchmaker.MatchmakerAssignmentModelFactory;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,8 +24,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @AllArgsConstructor
 class SelectRandomMatchmakerOperationImpl implements SelectRandomMatchmakerOperation {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     final MatchmakerAssignmentModelFactory matchmakerAssignmentModelFactory;
 
@@ -58,13 +58,13 @@ class SelectRandomMatchmakerOperationImpl implements SelectRandomMatchmakerOpera
 
     Uni<List<TenantMatchmakerRefModel>> viewTenantMatchmakerRefs(final Long tenantId, final Long deploymentId) {
         final var request = new ViewTenantMatchmakerRefsRequest(tenantId, deploymentId);
-        return tenantModule.getService().viewTenantMatchmakerRefs(request)
+        return tenantShard.getService().viewTenantMatchmakerRefs(request)
                 .map(ViewTenantMatchmakerRefsResponse::getTenantMatchmakerRefs);
     }
 
     Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
         final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 }

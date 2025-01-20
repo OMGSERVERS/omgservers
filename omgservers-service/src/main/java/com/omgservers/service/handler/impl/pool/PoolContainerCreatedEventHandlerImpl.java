@@ -18,9 +18,9 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimePoolContainerRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.docker.DockerModule;
-import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.docker.DockerShard;
+import com.omgservers.service.shard.pool.PoolShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,9 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final DockerModule dockerModule;
-    final PoolModule poolModule;
+    final RuntimeShard runtimeShard;
+    final DockerShard dockerShard;
+    final PoolShard poolShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -69,7 +69,7 @@ public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
                                              final Long serverId,
                                              final Long id) {
         final var request = new GetPoolContainerRequest(poolId, serverId, id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolContainerResponse::getPoolContainer);
     }
 
@@ -81,7 +81,7 @@ public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
         final var runtimePoolContainerRef = runtimePoolContainerRefModelFactory
                 .create(runtimeId, poolId, serverId, containerId);
         final var request = new SyncRuntimePoolContainerRefRequest(runtimePoolContainerRef);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(SyncRuntimePoolContainerRefResponse::getCreated)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
@@ -99,14 +99,14 @@ public class PoolContainerCreatedEventHandlerImpl implements EventHandler {
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
     Uni<Boolean> startDockerContainer(final PoolServerModel poolServer,
                                       final PoolContainerModel poolContainer) {
         final var request = new StartDockerContainerRequest(poolServer, poolContainer);
-        return dockerModule.getService().execute(request)
+        return dockerShard.getService().execute(request)
                 .map(StartDockerContainerResponse::getStarted);
     }
 }

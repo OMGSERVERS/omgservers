@@ -5,7 +5,7 @@ import com.omgservers.schema.module.client.DeleteClientMatchmakerRefRequest;
 import com.omgservers.service.event.body.module.client.ClientMatchmakerRefDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.client.testInterface.ClientMatchmakerRefDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.client.impl.service.clientService.testInterface.ClientServiceTestInterface;
+import com.omgservers.service.shard.client.impl.service.clientService.testInterface.ClientServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

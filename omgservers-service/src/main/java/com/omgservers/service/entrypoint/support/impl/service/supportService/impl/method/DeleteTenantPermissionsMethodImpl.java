@@ -13,8 +13,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermission
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -32,8 +32,8 @@ import java.util.List;
 @AllArgsConstructor
 class DeleteTenantPermissionsMethodImpl implements DeleteTenantPermissionsMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GetIdByTenantOperation getIdByTenantOperation;
 
@@ -88,25 +88,25 @@ class DeleteTenantPermissionsMethodImpl implements DeleteTenantPermissionsMethod
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<List<TenantPermissionModel>> viewTenantPermissions(final Long tenantId) {
         final var request = new ViewTenantPermissionsRequest(tenantId);
-        return tenantModule.getService().viewTenantPermissions(request)
+        return tenantShard.getService().viewTenantPermissions(request)
                 .map(ViewTenantPermissionsResponse::getTenantPermissions);
     }
 
     Uni<Boolean> deleteTenantPermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantPermissionRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantPermission(request)
+        return tenantShard.getService().deleteTenantPermission(request)
                 .map(DeleteTenantPermissionResponse::getDeleted);
     }
 }

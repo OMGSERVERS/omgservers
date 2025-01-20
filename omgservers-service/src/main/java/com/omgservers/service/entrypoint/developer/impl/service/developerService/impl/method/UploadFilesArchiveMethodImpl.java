@@ -14,7 +14,7 @@ import com.omgservers.service.entrypoint.developer.impl.operation.EncodeFilesOpe
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -35,7 +35,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
 
     private static final String VERSION_ZIP = "version.zip";
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -96,7 +96,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
@@ -108,7 +108,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
                 tenantVersionId,
                 base64Archive);
         final var request = new SyncTenantFilesArchiveRequest(tenantFilesArchive);
-        return tenantModule.getService().syncTenantFilesArchive(request)
+        return tenantShard.getService().syncTenantFilesArchive(request)
                 .replaceWith(tenantFilesArchive);
     }
 }

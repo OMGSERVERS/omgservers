@@ -6,7 +6,7 @@ import com.omgservers.schema.module.queue.queue.GetQueueRequest;
 import com.omgservers.schema.module.queue.queue.GetQueueResponse;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsRequest;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsResponse;
-import com.omgservers.service.module.queue.QueueModule;
+import com.omgservers.service.shard.queue.QueueShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 class FetchQueueOperationImpl implements FetchQueueOperation {
 
-    final QueueModule queueModule;
+    final QueueShard queueShard;
 
     @Override
     public Uni<FetchedQueue> execute(Long queueId) {
@@ -31,13 +31,13 @@ class FetchQueueOperationImpl implements FetchQueueOperation {
 
     Uni<QueueModel> getQueue(final Long id) {
         final var request = new GetQueueRequest(id);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(GetQueueResponse::getQueue);
     }
 
     Uni<List<QueueRequestModel>> viewQueueRequests(final Long queueId) {
         final var request = new ViewQueueRequestsRequest(queueId);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(ViewQueueRequestsResponse::getQueueRequests);
     }
 }

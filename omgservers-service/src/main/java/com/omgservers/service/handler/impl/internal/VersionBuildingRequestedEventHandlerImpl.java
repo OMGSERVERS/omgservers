@@ -14,7 +14,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventBodyModel;
 import com.omgservers.service.factory.tenant.TenantBuildRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.jenkins.JenkinsService;
 import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Request;
 import com.omgservers.service.service.jenkins.dto.RunLuaJitRuntimeBuilderV1Response;
@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final JenkinsService jenkinsService;
 
@@ -64,13 +64,13 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<TenantFilesArchiveModel> findTenantFilesArchive(Long tenantId, Long tenantVersionId) {
         final var request = new FindTenantFilesArchiveRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().findTenantFilesArchive(request)
+        return tenantShard.getService().findTenantFilesArchive(request)
                 .map(FindTenantFilesArchiveResponse::getTenantFilesArchive);
     }
 
@@ -114,7 +114,7 @@ public class VersionBuildingRequestedEventHandlerImpl implements EventHandler {
                 idempotencyKey);
 
         final var request = new SyncTenantBuildRequestRequest(tenantBuildRequest);
-        return tenantModule.getService().syncTenantBuildRequestWithIdempotency(request)
+        return tenantShard.getService().syncTenantBuildRequestWithIdempotency(request)
                 .map(SyncTenantBuildRequestResponse::getCreated);
     }
 }

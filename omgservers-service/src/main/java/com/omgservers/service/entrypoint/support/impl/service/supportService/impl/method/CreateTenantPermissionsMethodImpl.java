@@ -12,8 +12,8 @@ import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermission
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -29,8 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GetIdByTenantOperation getIdByTenantOperation;
 
@@ -75,13 +75,13 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -111,7 +111,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
                 .create(tenantId, userId, permission);
 
         final var syncTenantPermissionServiceRequest = new SyncTenantPermissionRequest(tenantPermission);
-        return tenantModule.getService().syncTenantPermission(syncTenantPermissionServiceRequest)
+        return tenantShard.getService().syncTenantPermission(syncTenantPermissionServiceRequest)
                 .map(SyncTenantPermissionResponse::getCreated);
     }
 }

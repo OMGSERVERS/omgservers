@@ -8,7 +8,7 @@ import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectReques
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final GetIdByTenantOperation getIdByTenantOperation;
 
@@ -58,7 +58,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     Uni<TenantProjectModel> createTenantProject(final Long tenantId) {
         final var tenantProject = tenantProjectModelFactory.create(tenantId);
         final var syncProjectInternalRequest = new SyncTenantProjectRequest(tenantProject);
-        return tenantModule.getService().syncTenantProject(syncProjectInternalRequest)
+        return tenantShard.getService().syncTenantProject(syncProjectInternalRequest)
                 .replaceWith(tenantProject);
     }
 
@@ -66,7 +66,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                                             final Long tenantProjectId) {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var syncStageInternalRequest = new SyncTenantStageRequest(tenantStage);
-        return tenantModule.getService().syncTenantStage(syncStageInternalRequest)
+        return tenantShard.getService().syncTenantStage(syncStageInternalRequest)
                 .replaceWith(tenantStage);
     }
 }

@@ -16,7 +16,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
+import com.omgservers.service.shard.client.ClientShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
-    final ClientModule clientModule;
+    final ClientShard clientShard;
 
     final ClientMessageModelFactory clientMessageModelFactory;
 
@@ -62,7 +62,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getService().getClient(request)
+        return clientShard.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -77,13 +77,13 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getService().syncClientMessageWithIdempotency(request)
+        return clientShard.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {
         final var request = new DeleteClientRequest(clientId);
-        return clientModule.getService().deleteClient(request)
+        return clientShard.getService().deleteClient(request)
                 .map(DeleteClientResponse::getDeleted);
     }
 }

@@ -6,7 +6,7 @@ import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyR
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ import java.util.List;
 class DeleteTenantLobbyRequestsByTenantDeploymentIdOperationImpl
         implements DeleteTenantLobbyRequestsByTenantDeploymentIdOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId, final Long tenantDeploymentId) {
@@ -50,13 +50,13 @@ class DeleteTenantLobbyRequestsByTenantDeploymentIdOperationImpl
     Uni<List<TenantLobbyRequestModel>> viewTenantLobbyRequests(final Long tenantId,
                                                                final Long tenantDeploymentId) {
         final var request = new ViewTenantLobbyRequestsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getService().viewTenantLobbyRequests(request)
+        return tenantShard.getService().viewTenantLobbyRequests(request)
                 .map(ViewTenantLobbyRequestsResponse::getTenantLobbyRequests);
     }
 
     Uni<Boolean> deleteTenantLobbyRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantLobbyRequestRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantLobbyRequest(request)
+        return tenantShard.getService().deleteTenantLobbyRequest(request)
                 .map(DeleteTenantLobbyRequestResponse::getDeleted);
     }
 }

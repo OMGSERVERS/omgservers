@@ -5,7 +5,7 @@ import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
 import com.omgservers.service.event.body.module.lobby.LobbyDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.lobby.testInterface.LobbyDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;
+import com.omgservers.service.shard.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

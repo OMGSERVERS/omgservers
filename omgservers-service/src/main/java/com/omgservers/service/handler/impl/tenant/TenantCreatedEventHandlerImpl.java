@@ -17,9 +17,9 @@ import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyMod
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.root.RootShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
@@ -35,9 +35,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantCreatedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
-    final AliasModule aliasModule;
-    final RootModule rootModule;
+    final TenantShard tenantShard;
+    final AliasShard aliasShard;
+    final RootShard rootShard;
 
     final JobService jobService;
 
@@ -72,7 +72,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantModel> getTenant(final Long id) {
         final var request = new GetTenantRequest(id);
-        return tenantModule.getService().getTenant(request)
+        return tenantShard.getService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -86,7 +86,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                             RootEntityRefQualifierEnum.TENANT,
                             tenantId);
                     final var request = new SyncRootEntityRefRequest(rootEntityRef);
-                    return rootModule.getService().syncRootEntityRefWithIdempotency(request)
+                    return rootShard.getService().syncRootEntityRefWithIdempotency(request)
                             .map(SyncRootEntityRefResponse::getCreated);
                 });
     }
@@ -95,7 +95,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 

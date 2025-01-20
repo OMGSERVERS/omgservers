@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.queue.QueueDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.queue.QueueModule;
+import com.omgservers.service.shard.queue.QueueShard;
 import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
 import com.omgservers.service.operation.queue.DeleteQueueRequestsOperation;
 import io.smallrye.mutiny.Uni;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class QueueDeletedEventHandlerImpl implements EventHandler {
 
-    final QueueModule queueModule;
+    final QueueShard queueShard;
 
     final DeleteQueueRequestsOperation deleteQueueRequestsOperation;
     final FindAndDeleteJobOperation findAndDeleteJobOperation;
@@ -51,7 +51,7 @@ public class QueueDeletedEventHandlerImpl implements EventHandler {
 
     Uni<QueueModel> getQueue(final Long id) {
         final var request = new GetQueueRequest(id);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(GetQueueResponse::getQueue);
     }
 }

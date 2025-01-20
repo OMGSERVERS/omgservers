@@ -6,7 +6,7 @@ import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateUserMethodImpl implements CreateUserMethod {
 
-    final UserModule userModule;
+    final UserShard userShard;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
 
@@ -42,7 +42,7 @@ class CreateUserMethodImpl implements CreateUserMethod {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
         final var request = new SyncUserRequest(user);
-        return userModule.getService().syncUser(request)
+        return userShard.getService().syncUser(request)
                 .replaceWith(user);
     }
 }

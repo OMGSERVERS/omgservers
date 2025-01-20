@@ -5,7 +5,7 @@ import com.omgservers.schema.module.queue.queue.DeleteQueueRequest;
 import com.omgservers.service.event.body.module.queue.QueueDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.queue.testInterface.QueueDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.queue.impl.service.queueService.testInterface.QueueServiceTestInterface;
+import com.omgservers.service.shard.queue.impl.service.queueService.testInterface.QueueServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

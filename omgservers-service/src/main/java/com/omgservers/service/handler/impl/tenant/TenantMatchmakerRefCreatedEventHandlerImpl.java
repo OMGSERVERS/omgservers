@@ -13,7 +13,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRefCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantMatchmakerRefCreatedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -53,7 +53,7 @@ public class TenantMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
 
     Uni<TenantMatchmakerRefModel> getTenantMatchmakerRef(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getService().getTenantMatchmakerRef(request)
+        return tenantShard.getService().getTenantMatchmakerRef(request)
                 .map(GetTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 
@@ -71,13 +71,13 @@ public class TenantMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                                                                   final Long deploymentId,
                                                                   final Long matchmakerId) {
         final var request = new FindTenantMatchmakerRequestRequest(tenantId, deploymentId, matchmakerId);
-        return tenantModule.getService().findTenantMatchmakerRequest(request)
+        return tenantShard.getService().findTenantMatchmakerRequest(request)
                 .map(FindTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
     }
 
     Uni<Boolean> deleteTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantMatchmakerRequest(request)
+        return tenantShard.getService().deleteTenantMatchmakerRequest(request)
                 .map(DeleteTenantMatchmakerRequestResponse::getDeleted);
     }
 }

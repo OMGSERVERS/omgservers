@@ -13,7 +13,7 @@ import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
-import com.omgservers.service.module.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;
+import com.omgservers.service.shard.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -9,8 +9,8 @@ import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsReque
 import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
 import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesRequest;
 import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesResponse;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
 import io.smallrye.mutiny.Multi;
@@ -26,8 +26,8 @@ import java.util.List;
 @AllArgsConstructor
 public class TenantTaskImpl {
 
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
 
     final TaskService taskService;
 
@@ -39,7 +39,7 @@ public class TenantTaskImpl {
 
     Uni<TenantModel> getTenant(final Long id) {
         final var request = new GetTenantRequest(id);
-        return tenantModule.getService().getTenant(request)
+        return tenantShard.getService().getTenant(request)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -55,7 +55,7 @@ public class TenantTaskImpl {
 
     Uni<List<TenantProjectModel>> viewTenantProjects(final Long tenantId) {
         final var request = new ViewTenantProjectsRequest(tenantId);
-        return tenantModule.getService().viewTenantProjects(request)
+        return tenantShard.getService().viewTenantProjects(request)
                 .map(ViewTenantProjectsResponse::getTenantProjects);
     }
 
@@ -72,7 +72,7 @@ public class TenantTaskImpl {
 
     Uni<List<TenantStageModel>> viewTenantStages(final Long tenantId, final Long tenantProjectId) {
         final var request = new ViewTenantStagesRequest(tenantId, tenantProjectId);
-        return tenantModule.getService().viewTenantStages(request)
+        return tenantShard.getService().viewTenantStages(request)
                 .map(ViewTenantStagesResponse::getTenantStages);
     }
 

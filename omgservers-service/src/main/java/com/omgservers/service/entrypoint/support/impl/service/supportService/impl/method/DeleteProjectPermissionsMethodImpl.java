@@ -16,8 +16,8 @@ import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantPro
 import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -36,8 +36,8 @@ import java.util.List;
 @AllArgsConstructor
 class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -95,32 +95,32 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getService().getTenantProject(request)
+        return tenantShard.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
     Uni<List<TenantProjectPermissionModel>> viewTenantProjectPermissions(final Long tenantId,
                                                                          final Long tenantProjectId) {
         final var request = new ViewTenantProjectPermissionsRequest(tenantId, tenantProjectId);
-        return tenantModule.getService().viewTenantProjectPermissions(request)
+        return tenantShard.getService().viewTenantProjectPermissions(request)
                 .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }
 
     Uni<Boolean> deleteTenantProjectPermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantProjectPermissionRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantProjectPermission(request)
+        return tenantShard.getService().deleteTenantProjectPermission(request)
                 .map(DeleteTenantProjectPermissionResponse::getDeleted);
     }
 }

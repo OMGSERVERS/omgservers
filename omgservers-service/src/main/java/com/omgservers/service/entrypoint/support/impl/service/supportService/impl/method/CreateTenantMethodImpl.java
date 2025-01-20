@@ -4,7 +4,7 @@ import com.omgservers.schema.entrypoint.support.CreateTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantMethodImpl implements CreateTenantMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final GenerateIdOperation generateIdOperation;
 
@@ -34,7 +34,7 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
 
         final var tenant = tenantModelFactory.create();
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);
-        return tenantModule.getService().syncTenant(syncTenantInternalRequest)
+        return tenantShard.getService().syncTenant(syncTenantInternalRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
                         log.info("The new tenant \"{}\" was created", tenant.getId());

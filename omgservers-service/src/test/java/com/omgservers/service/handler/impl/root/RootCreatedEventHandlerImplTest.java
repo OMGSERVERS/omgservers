@@ -4,7 +4,7 @@ import com.omgservers.BaseTestClass;
 import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.root.testInterface.RootCreatedEventHandlerImplTestInterface;
-import com.omgservers.service.module.root.impl.service.rootService.testInterface.RootServiceTestInterface;
+import com.omgservers.service.shard.root.impl.service.rootService.testInterface.RootServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

@@ -4,8 +4,8 @@ import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
 import com.omgservers.schema.module.runtime.InterchangeRequest;
 import com.omgservers.schema.module.runtime.InterchangeResponse;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -19,8 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class InterchangeMethodImpl implements InterchangeMethod {
 
-    final RuntimeModule runtimeModule;
-    final UserModule userModule;
+    final RuntimeShard runtimeShard;
+    final UserShard userShard;
 
     final SecurityIdentity securityIdentity;
 
@@ -35,7 +35,7 @@ class InterchangeMethodImpl implements InterchangeMethod {
         final var consumedCommands = request.getConsumedCommands();
 
         final var interchangeRequest = new InterchangeRequest(runtimeId, outgoingCommands, consumedCommands);
-        return runtimeModule.getService().execute(interchangeRequest)
+        return runtimeShard.getService().execute(interchangeRequest)
                 .map(InterchangeResponse::getIncomingCommands)
                 .map(InterchangeRuntimeResponse::new);
     }

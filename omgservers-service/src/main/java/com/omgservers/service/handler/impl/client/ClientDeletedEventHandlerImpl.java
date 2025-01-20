@@ -25,10 +25,10 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.user.UserShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,10 +43,10 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientDeletedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerModule matchmakerModule;
-    final RuntimeModule runtimeModule;
-    final ClientModule clientModule;
-    final UserModule userModule;
+    final MatchmakerShard matchmakerShard;
+    final RuntimeShard runtimeShard;
+    final ClientShard clientShard;
+    final UserShard userShard;
 
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
@@ -77,7 +77,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getService().getClient(request)
+        return clientShard.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -96,7 +96,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<ClientMatchmakerRefModel>> viewClientMatchmakerRefs(final Long clientId) {
         final var request = new ViewClientMatchmakerRefsRequest(clientId);
-        return clientModule.getService().viewClientMatchmakerRefs(request)
+        return clientShard.getService().viewClientMatchmakerRefs(request)
                 .map(ViewClientMatchmakerRefsResponse::getClientMatchmakerRefs);
     }
 
@@ -109,7 +109,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                 commandBody,
                 commandIdempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(commandModel);
-        return matchmakerModule.getService().executeWithIdempotency(request)
+        return matchmakerShard.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
@@ -137,7 +137,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<List<ClientRuntimeRefModel>> viewClientRuntimeRefs(final Long clientId) {
         final var request = new ViewClientRuntimeRefsRequest(clientId);
-        return clientModule.getService().viewClientRuntimeRefs(request)
+        return clientShard.getService().viewClientRuntimeRefs(request)
                 .map(ViewClientRuntimeRefsResponse::getClientRuntimeRefs);
     }
 
@@ -152,13 +152,13 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> findRuntimeAssignment(final Long runtimeId, final Long clientId) {
         final var request = new FindRuntimeAssignmentRequest(runtimeId, clientId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(FindRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 }

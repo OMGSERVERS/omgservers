@@ -4,7 +4,7 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.schema.module.tenant.tenant.DeleteTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteTenantMethodImpl implements DeleteTenantMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final GetIdByTenantOperation getIdByTenantOperation;
     final GenerateIdOperation generateIdOperation;
@@ -38,7 +38,7 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
                     final var deleteTenantRequest = new DeleteTenantRequest(tenantId);
-                    return tenantModule.getService().deleteTenant(deleteTenantRequest)
+                    return tenantShard.getService().deleteTenant(deleteTenantRequest)
                             .map(deleteTenantResponse -> {
                                 final var deleted = deleteTenantResponse.getDeleted();
 

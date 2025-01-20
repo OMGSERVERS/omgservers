@@ -4,7 +4,7 @@ import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.module.alias.FindAliasRequest;
 import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.module.alias.AliasModule;
+import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class GetIdByTenantOperationImpl implements GetIdByTenantOperation {
 
-    final AliasModule aliasModule;
+    final AliasShard aliasShard;
 
     @Override
     public Uni<Long> execute(final String tenant) {
@@ -32,7 +32,7 @@ class GetIdByTenantOperationImpl implements GetIdByTenantOperation {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
                 tenantAlias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 }

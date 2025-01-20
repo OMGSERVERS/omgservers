@@ -6,7 +6,7 @@ import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantM
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ import java.util.List;
 class DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperationImpl
         implements DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId, final Long tenantDeploymentId) {
@@ -50,13 +50,13 @@ class DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperationImpl
     Uni<List<TenantMatchmakerRequestModel>> viewTenantMatchmakerRequests(final Long tenantId,
                                                                          final Long tenantDeploymentId) {
         final var request = new ViewTenantMatchmakerRequestsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getService().viewTenantMatchmakerRequests(request)
+        return tenantShard.getService().viewTenantMatchmakerRequests(request)
                 .map(ViewTenantMatchmakerRequestsResponse::getTenantMatchmakerRequests);
     }
 
     Uni<Boolean> deleteTenantMatchmakerRequest(final Long tenantId, final Long id) {
         final var request = new DeleteTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantMatchmakerRequest(request)
+        return tenantShard.getService().deleteTenantMatchmakerRequest(request)
                 .map(DeleteTenantMatchmakerRequestResponse::getDeleted);
     }
 }

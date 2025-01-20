@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantImageDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantImageDeletedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -46,7 +46,7 @@ public class TenantImageDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantImageModel> getTenantImage(final Long tenantId, final Long id) {
         final var request = new GetTenantImageRequest(tenantId, id);
-        return tenantModule.getService().getTenantImage(request)
+        return tenantShard.getService().getTenantImage(request)
                 .map(GetTenantImageResponse::getTenantImage);
     }
 }

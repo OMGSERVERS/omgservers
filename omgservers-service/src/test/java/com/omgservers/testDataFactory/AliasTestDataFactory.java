@@ -3,7 +3,7 @@ package com.omgservers.testDataFactory;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.service.factory.alias.AliasModelFactory;
-import com.omgservers.service.module.alias.impl.service.aliasService.testInterface.AliasServiceTestInterface;
+import com.omgservers.service.shard.alias.impl.service.aliasService.testInterface.AliasServiceTestInterface;
 import com.omgservers.service.operation.alias.testInterface.CreateTenantAliasOperationTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

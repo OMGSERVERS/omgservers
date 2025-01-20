@@ -7,8 +7,8 @@ import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -24,8 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
     final GenerateIdOperation generateIdOperation;
@@ -53,7 +53,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
         final var syncUserShardedRequest = new SyncUserRequest(user);
-        return userModule.getService().syncUser(syncUserShardedRequest)
+        return userShard.getService().syncUser(syncUserShardedRequest)
                 .replaceWith(user);
     }
 }

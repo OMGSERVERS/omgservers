@@ -8,8 +8,8 @@ import com.omgservers.schema.module.lobby.GetLobbyResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -23,8 +23,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @AllArgsConstructor
 class SelectRandomLobbyOperationImpl implements SelectRandomLobbyOperation {
 
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     @Override
     public Uni<LobbyModel> execute(final Long tenantId,
@@ -53,13 +53,13 @@ class SelectRandomLobbyOperationImpl implements SelectRandomLobbyOperation {
 
     Uni<List<TenantLobbyRefModel>> viewTenantLobbyRefs(final Long tenantId, final Long deploymentId) {
         final var request = new ViewTenantLobbyRefsRequest(tenantId, deploymentId);
-        return tenantModule.getService().viewTenantLobbyRefs(request)
+        return tenantShard.getService().viewTenantLobbyRefs(request)
                 .map(ViewTenantLobbyRefsResponse::getTenantLobbyRefs);
     }
 
     Uni<LobbyModel> getLobby(final Long lobbyId) {
         final var request = new GetLobbyRequest(lobbyId);
-        return lobbyModule.getService().getLobby(request)
+        return lobbyShard.getService().getLobby(request)
                 .map(GetLobbyResponse::getLobby);
     }
 }

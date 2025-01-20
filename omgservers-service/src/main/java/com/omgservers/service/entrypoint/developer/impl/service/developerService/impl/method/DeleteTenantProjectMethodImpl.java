@@ -7,7 +7,7 @@ import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequ
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantPermissionOperation checkTenantPermissionOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
@@ -65,7 +65,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     Uni<Boolean> deleteTenantProject(final Long tenantId,
                                      final Long id) {
         final var request = new DeleteTenantProjectRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantProject(request)
+        return tenantShard.getService().deleteTenantProject(request)
                 .map(DeleteTenantProjectResponse::getDeleted);
     }
 }

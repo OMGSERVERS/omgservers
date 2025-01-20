@@ -54,7 +54,7 @@ import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

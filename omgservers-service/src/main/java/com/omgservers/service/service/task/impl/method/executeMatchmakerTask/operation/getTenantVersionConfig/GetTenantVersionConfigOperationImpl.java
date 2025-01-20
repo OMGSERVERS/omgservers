@@ -7,7 +7,7 @@ import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentR
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class GetTenantVersionConfigOperationImpl implements GetTenantVersionConfigOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<TenantVersionConfigDto> execute(final MatchmakerModel matchmaker) {
@@ -33,13 +33,13 @@ class GetTenantVersionConfigOperationImpl implements GetTenantVersionConfigOpera
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<TenantVersionConfigDto> getTenantVersionConfig(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionConfigRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().getTenantVersionConfig(request)
+        return tenantShard.getService().getTenantVersionConfig(request)
                 .map(GetTenantVersionConfigResponse::getTenantVersionConfig);
     }
 }

@@ -18,9 +18,9 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolContainerDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.docker.DockerModule;
-import com.omgservers.service.module.pool.PoolModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.docker.DockerShard;
+import com.omgservers.service.shard.pool.PoolShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -32,9 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final DockerModule dockerModule;
-    final PoolModule poolModule;
+    final RuntimeShard runtimeShard;
+    final DockerShard dockerShard;
+    final PoolShard poolShard;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -65,7 +65,7 @@ public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
                                              final Long serverId,
                                              final Long id) {
         final var request = new GetPoolContainerRequest(poolId, serverId, id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolContainerResponse::getPoolContainer);
     }
 
@@ -80,7 +80,7 @@ public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimePoolContainerRefModel> findRuntimePoolContainerRef(final Long runtimeId) {
         final var request = new FindRuntimePoolContainerRefRequest(runtimeId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(FindRuntimePoolContainerRefResponse::getRuntimePoolContainerRef);
     }
 
@@ -89,20 +89,20 @@ public class PoolContainerDeletedEventHandlerImpl implements EventHandler {
         final var runtimeId = runtimeServerContainerRef.getRuntimeId();
         final var id = runtimeServerContainerRef.getId();
         final var request = new DeleteRuntimePoolContainerRefRequest(runtimeId, id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(DeleteRuntimePoolContainerRefResponse::getDeleted);
     }
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
     Uni<Boolean> stopDockerContainer(final PoolServerModel poolServer,
                                      final PoolContainerModel poolContainer) {
         final var request = new StopDockerContainerRequest(poolServer, poolContainer);
-        return dockerModule.getService().execute(request)
+        return dockerShard.getService().execute(request)
                 .map(StopDockerContainerResponse::getStopped);
     }
 }

@@ -9,7 +9,7 @@ import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
@@ -74,7 +74,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
                 tenantProjectId,
                 tenantVersionConfigDto);
         final var request = new SyncTenantVersionRequest(tenantVersion);
-        return tenantModule.getService().syncTenantVersion(request)
+        return tenantShard.getService().syncTenantVersion(request)
                 .replaceWith(tenantVersion);
     }
 }

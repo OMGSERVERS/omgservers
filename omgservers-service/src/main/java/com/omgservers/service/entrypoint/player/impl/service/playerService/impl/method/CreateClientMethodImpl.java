@@ -14,9 +14,9 @@ import com.omgservers.schema.module.user.SyncPlayerRequest;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.user.PlayerModelFactory;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
@@ -33,9 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateClientMethodImpl implements CreateClientMethod {
 
-    final ClientModule clientModule;
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final ClientShard clientShard;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -86,7 +86,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     Uni<PlayerModel> findPlayer(final Long userId, final Long tenantStageId) {
         final var request = new FindPlayerRequest(userId, tenantStageId);
-        return userModule.getService().findPlayer(request)
+        return userShard.getService().findPlayer(request)
                 .map(FindPlayerResponse::getPlayer);
     }
 
@@ -95,7 +95,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long tenantStageId) {
         final var player = playerModelFactory.create(userId, tenantId, tenantStageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
-        return userModule.getService().syncPlayer(syncPlayerRequest)
+        return userShard.getService().syncPlayer(syncPlayerRequest)
                 .replaceWith(player);
     }
 
@@ -112,7 +112,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                             tenantDeploymentId);
 
                     final var request = new SyncClientRequest(client);
-                    return clientModule.getService().syncClient(request)
+                    return clientShard.getService().syncClient(request)
                             .replaceWith(client);
                 });
     }
@@ -121,7 +121,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
         final var request = new SelectTenantDeploymentRequest(tenantId,
                 tenantStageId,
                 SelectTenantDeploymentRequest.StrategyEnum.LATEST);
-        return tenantModule.getService().selectTenantDeployment(request)
+        return tenantShard.getService().selectTenantDeployment(request)
                 .map(SelectTenantDeploymentResponse::getTenantDeployment);
     }
 }

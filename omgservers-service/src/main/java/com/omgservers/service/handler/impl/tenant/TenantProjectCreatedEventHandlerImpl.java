@@ -16,8 +16,8 @@ import com.omgservers.service.event.body.module.tenant.TenantProjectCreatedEvent
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,8 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
-    final AliasModule aliasModule;
+    final TenantShard tenantShard;
+    final AliasShard aliasShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -65,7 +65,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getService().getTenantProject(request)
+        return tenantShard.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
@@ -82,7 +82,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                             permission,
                             idempotencyKey + "/" + builderUserId + "/" + permission);
                     final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-                    return tenantModule.getService().syncTenantProjectPermissionWithIdempotency(request)
+                    return tenantShard.getService().syncTenantProjectPermissionWithIdempotency(request)
                             .replaceWith(projectPermission);
                 });
     }
@@ -100,7 +100,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                             permission,
                             idempotencyKey + "/" + serviceUserId + "/" + permission);
                     final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-                    return tenantModule.getService().syncTenantProjectPermissionWithIdempotency(request)
+                    return tenantShard.getService().syncTenantProjectPermissionWithIdempotency(request)
                             .replaceWith(projectPermission);
                 });
     }
@@ -109,7 +109,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.DEFAULT_USER_GROUP,
                 alias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 }

@@ -15,7 +15,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientMatchmakerRefCreatedEventBodyModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
+import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.operation.queue.CreateQueueRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler {
 
-    final ClientModule clientModule;
+    final ClientShard clientShard;
 
     final CreateQueueRequestOperation createQueueRequestOperation;
 
@@ -72,13 +72,13 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
 
     Uni<ClientMatchmakerRefModel> getClientMatchmakerRef(final Long clientId, final Long id) {
         final var request = new GetClientMatchmakerRefRequest(clientId, id);
-        return clientModule.getService().getClientMatchmakerRef(request)
+        return clientShard.getService().getClientMatchmakerRef(request)
                 .map(GetClientMatchmakerRefResponse::getClientMatchmakerRef);
     }
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientModule.getService().getClient(request)
+        return clientShard.getService().getClient(request)
                 .map(GetClientResponse::getClient);
     }
 
@@ -91,7 +91,7 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                 messageBody,
                 idempotencyKey);
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getService().syncClientMessageWithIdempotency(request)
+        return clientShard.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 }

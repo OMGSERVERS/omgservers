@@ -6,7 +6,7 @@ import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissi
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
 import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteTenantPermissionsOperationImpl implements DeleteTenantPermissionsOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId) {
@@ -49,13 +49,13 @@ class DeleteTenantPermissionsOperationImpl implements DeleteTenantPermissionsOpe
 
     Uni<List<TenantPermissionModel>> viewTenantPermissions(final Long tenantId) {
         final var request = new ViewTenantPermissionsRequest(tenantId);
-        return tenantModule.getService().viewTenantPermissions(request)
+        return tenantShard.getService().viewTenantPermissions(request)
                 .map(ViewTenantPermissionsResponse::getTenantPermissions);
     }
 
     Uni<Boolean> deleteTenantPermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantPermissionRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantPermission(request)
+        return tenantShard.getService().deleteTenantPermission(request)
                 .map(DeleteTenantPermissionResponse::getDeleted);
     }
 }

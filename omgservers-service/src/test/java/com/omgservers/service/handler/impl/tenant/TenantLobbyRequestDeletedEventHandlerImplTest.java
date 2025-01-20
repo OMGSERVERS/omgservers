@@ -5,7 +5,7 @@ import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyR
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRequestDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.tenant.testInterface.VersionLobbyRequestDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

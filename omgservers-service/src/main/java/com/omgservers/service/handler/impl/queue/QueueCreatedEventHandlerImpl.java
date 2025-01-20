@@ -9,7 +9,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.queue.QueueCreatedEventBodyModel;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.queue.QueueModule;
+import com.omgservers.service.shard.queue.QueueShard;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
 import com.omgservers.service.service.job.dto.SyncJobResponse;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class QueueCreatedEventHandlerImpl implements EventHandler {
 
-    final QueueModule queueModule;
+    final QueueShard queueShard;
 
     final JobService jobService;
 
@@ -55,7 +55,7 @@ public class QueueCreatedEventHandlerImpl implements EventHandler {
 
     Uni<QueueModel> getQueue(final Long id) {
         final var request = new GetQueueRequest(id);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(GetQueueResponse::getQueue);
     }
 

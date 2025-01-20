@@ -10,7 +10,7 @@ import com.omgservers.service.event.body.module.pool.PoolDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.DeleteJobRequest;
 import com.omgservers.service.service.job.dto.DeleteJobResponse;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolDeletedEventHandlerImpl implements EventHandler {
 
-    final PoolModule poolModule;
+    final PoolShard poolShard;
 
     final JobService jobService;
 
@@ -56,7 +56,7 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
 
     Uni<PoolModel> getPool(final Long id) {
         final var request = new GetPoolRequest(id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolResponse::getPool);
     }
 

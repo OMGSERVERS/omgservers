@@ -4,9 +4,9 @@ import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentResponse;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -17,9 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class AssignLobbyOperationImpl implements AssignLobbyOperation {
 
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
 
@@ -38,7 +38,7 @@ class AssignLobbyOperationImpl implements AssignLobbyOperation {
                 clientId,
                 idempotencyKey);
         final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
-        return runtimeModule.getService().executeWithIdempotency(request)
+        return runtimeShard.getService().executeWithIdempotency(request)
                 .map(SyncRuntimeAssignmentResponse::getCreated);
     }
 }

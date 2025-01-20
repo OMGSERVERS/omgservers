@@ -10,8 +10,8 @@ import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMat
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod {
 
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -68,7 +68,7 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
@@ -77,7 +77,7 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
         final var tenantMatchmakerRequest = tenantMatchmakerRequestModelFactory
                 .create(tenantId, tenantDeploymentId);
         final var request = new SyncTenantMatchmakerRequestRequest(tenantMatchmakerRequest);
-        return tenantModule.getService().syncTenantMatchmakerRequestWithIdempotency(request)
+        return tenantShard.getService().syncTenantMatchmakerRequestWithIdempotency(request)
                 .map(SyncTenantMatchmakerRequestResponse::getCreated);
     }
 

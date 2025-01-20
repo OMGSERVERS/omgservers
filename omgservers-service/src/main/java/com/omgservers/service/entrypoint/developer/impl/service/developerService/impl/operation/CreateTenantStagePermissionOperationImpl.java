@@ -4,7 +4,7 @@ import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionMo
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantStagePermissionOperationImpl implements CreateTenantStagePermissionOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
 
@@ -29,7 +29,7 @@ class CreateTenantStagePermissionOperationImpl implements CreateTenantStagePermi
                 userId,
                 permissionQualifier);
         final var request = new SyncTenantStagePermissionRequest(stagePermission);
-        return tenantModule.getService().syncTenantStagePermission(request)
+        return tenantShard.getService().syncTenantStagePermission(request)
                 .replaceWith(stagePermission);
     }
 }

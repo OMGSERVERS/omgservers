@@ -4,7 +4,7 @@ import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
 import com.omgservers.schema.module.user.DeleteUserRequest;
 import com.omgservers.schema.module.user.DeleteUserResponse;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
 
-    final UserModule userModule;
+    final UserShard userShard;
 
     final SecurityIdentity securityIdentity;
 
@@ -30,7 +30,7 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
 
         final var developerUserId = request.getUserId();
         final var deleteUserRequest = new DeleteUserRequest(developerUserId);
-        return userModule.getService().deleteUser(deleteUserRequest)
+        return userShard.getService().deleteUser(deleteUserRequest)
                 .map(DeleteUserResponse::getDeleted)
                 .invoke(deleted -> {
                     if (deleted) {

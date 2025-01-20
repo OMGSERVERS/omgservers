@@ -8,8 +8,8 @@ import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByUserOperation;
 import com.omgservers.service.operation.security.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
@@ -27,8 +27,8 @@ import java.util.Objects;
 @AllArgsConstructor
 class BasicAuthMethodImpl implements BasicAuthMethod {
 
-    final AliasModule aliasModule;
-    final UserModule userModule;
+    final AliasShard aliasShard;
+    final UserShard userShard;
 
     final RegistryService registryService;
 
@@ -79,7 +79,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
 
     Uni<String> createToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userModule.getService().createToken(createTokenRequest)
+        return userShard.getService().createToken(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken)
                 .onFailure(ServerSideNotFoundException.class)
                 .transform(t -> new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_CREDENTIALS,

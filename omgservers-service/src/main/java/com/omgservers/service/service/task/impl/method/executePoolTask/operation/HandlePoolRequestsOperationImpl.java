@@ -7,7 +7,7 @@ import com.omgservers.schema.model.poolSeverContainer.PoolContainerConfigDto;
 import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
 import com.omgservers.schema.model.poolState.PoolStateDto;
 import com.omgservers.service.factory.pool.PoolContainerModelFactory;
-import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.shard.pool.PoolShard;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class HandlePoolRequestsOperationImpl implements HandlePoolRequestsOperation {
 
-    final PoolModule poolModule;
+    final PoolShard poolShard;
 
     final PoolContainerModelFactory poolContainerModelFactory;
 

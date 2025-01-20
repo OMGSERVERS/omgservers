@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.tenant.DeleteTenantBuildRequestsByTenantVersionIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantFilesArchivesByTenantVersionIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantImagesByTenantVersionIdOperation;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final DeleteTenantBuildRequestsByTenantVersionIdOperation deleteTenantBuildRequestsByTenantVersionIdOperation;
     final DeleteTenantFilesArchivesByTenantVersionIdOperation deleteTenantFilesArchivesByTenantVersionIdOperation;
@@ -56,7 +56,7 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().getTenantVersion(request)
+        return tenantShard.getService().getTenantVersion(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 }

@@ -5,7 +5,7 @@ import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
 import com.omgservers.service.event.body.module.tenant.TenantImageDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.tenant.testInterface.TenantImageDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

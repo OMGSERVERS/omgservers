@@ -12,7 +12,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolServerDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.pool.PoolModule;
+import com.omgservers.service.shard.pool.PoolShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PoolServerDeletedEventHandlerImpl implements EventHandler {
 
-    final PoolModule poolModule;
+    final PoolShard poolShard;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -53,7 +53,7 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
 
     Uni<PoolServerModel> getPoolServer(final Long poolId, final Long id) {
         final var request = new GetPoolServerRequest(poolId, id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(GetPoolServerResponse::getPoolServer);
     }
 
@@ -81,7 +81,7 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
     Uni<List<PoolContainerModel>> viewPoolContainers(final Long poolId,
                                                      final Long serverId) {
         final var request = new ViewPoolContainersRequest(poolId, serverId);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(ViewPoolContainersResponse::getPoolContainers);
     }
 
@@ -89,7 +89,7 @@ public class PoolServerDeletedEventHandlerImpl implements EventHandler {
                                      final Long serverId,
                                      final Long id) {
         final var request = new DeletePoolContainerRequest(poolId, serverId, id);
-        return poolModule.getPoolService().execute(request)
+        return poolShard.getPoolService().execute(request)
                 .map(DeletePoolContainerResponse::getDeleted);
     }
 }

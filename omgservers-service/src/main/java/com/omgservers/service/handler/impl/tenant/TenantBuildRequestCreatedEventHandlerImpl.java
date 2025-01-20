@@ -10,7 +10,7 @@ import com.omgservers.service.event.body.module.tenant.TenantBuildRequestCreated
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.SyncJobRequest;
 import com.omgservers.service.service.job.dto.SyncJobResponse;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantBuildRequestCreatedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final JobService jobService;
 
@@ -59,7 +59,7 @@ public class TenantBuildRequestCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantBuildRequestModel> getTenantBuildRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantBuildRequestRequest(tenantId, id);
-        return tenantModule.getService().getTenantBuildRequest(request)
+        return tenantShard.getService().getTenantBuildRequest(request)
                 .map(GetTenantBuildRequestResponse::getTenantBuildRequest);
     }
 

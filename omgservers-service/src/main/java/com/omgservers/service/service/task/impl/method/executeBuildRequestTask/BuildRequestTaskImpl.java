@@ -13,8 +13,8 @@ import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.TenantImageModelFactory;
-import com.omgservers.service.module.runtime.RuntimeModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.event.EventService;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
 import com.omgservers.service.service.event.dto.SyncEventResponse;
@@ -31,8 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class BuildRequestTaskImpl {
 
-    final RuntimeModule runtimeModule;
-    final TenantModule tenantModule;
+    final RuntimeShard runtimeShard;
+    final TenantShard tenantShard;
 
     final JenkinsService jenkinsService;
     final EventService eventService;
@@ -48,7 +48,7 @@ public class BuildRequestTaskImpl {
 
     Uni<TenantBuildRequestModel> getTenantBuildRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantBuildRequestRequest(tenantId, id);
-        return tenantModule.getService().getTenantBuildRequest(request)
+        return tenantShard.getService().getTenantBuildRequest(request)
                 .map(GetTenantBuildRequestResponse::getTenantBuildRequest);
     }
 
@@ -123,7 +123,7 @@ public class BuildRequestTaskImpl {
                 idempotencyKey);
 
         final var request = new SyncTenantImageRequest(versionImage);
-        return tenantModule.getService().syncTenantImageWithIdempotency(request)
+        return tenantShard.getService().syncTenantImageWithIdempotency(request)
                 .map(SyncTenantImageResponse::getCreated);
     }
 

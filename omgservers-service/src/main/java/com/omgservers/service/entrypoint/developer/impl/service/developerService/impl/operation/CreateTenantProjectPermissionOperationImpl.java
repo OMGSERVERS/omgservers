@@ -4,7 +4,7 @@ import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissi
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantProjectPermissionOperationImpl implements CreateTenantProjectPermissionOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
 
@@ -29,7 +29,7 @@ class CreateTenantProjectPermissionOperationImpl implements CreateTenantProjectP
                 userId,
                 permissionQualifier);
         final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-        return tenantModule.getService().syncTenantProjectPermission(request)
+        return tenantShard.getService().syncTenantProjectPermission(request)
                 .replaceWith(projectPermission);
     }
 }

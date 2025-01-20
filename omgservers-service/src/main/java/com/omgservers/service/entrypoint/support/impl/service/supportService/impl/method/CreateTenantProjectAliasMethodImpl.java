@@ -12,8 +12,8 @@ import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.factory.alias.AliasModelFactory;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMethod {
 
-    final TenantModule tenantModule;
-    final AliasModule aliasModule;
+    final TenantShard tenantShard;
+    final AliasShard aliasShard;
 
     final AliasModelFactory aliasModelFactory;
     final SecurityIdentity securityIdentity;
@@ -66,13 +66,13 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
                 tenantAlias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getService().getTenantProject(request)
+        return tenantShard.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
@@ -86,7 +86,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                 tenantProjectId,
                 aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(projectAlias);
-        return aliasModule.getService().execute(syncAliasRequest)
+        return aliasShard.getService().execute(syncAliasRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
                         log.info("The alias \"{}\" for the project \"{}\" was created",

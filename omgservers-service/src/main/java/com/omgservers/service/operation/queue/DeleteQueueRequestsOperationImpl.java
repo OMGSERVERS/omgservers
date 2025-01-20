@@ -6,7 +6,7 @@ import com.omgservers.schema.module.queue.queueRequest.DeleteQueueRequestRespons
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsRequest;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.queue.QueueModule;
+import com.omgservers.service.shard.queue.QueueShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteQueueRequestsOperationImpl implements DeleteQueueRequestsOperation {
 
-    final QueueModule queueModule;
+    final QueueShard queueShard;
 
     @Override
     public Uni<Void> execute(final Long queueId) {
@@ -48,13 +48,13 @@ class DeleteQueueRequestsOperationImpl implements DeleteQueueRequestsOperation {
 
     Uni<List<QueueRequestModel>> viewQueueRequests(final Long queueId) {
         final var request = new ViewQueueRequestsRequest(queueId);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(ViewQueueRequestsResponse::getQueueRequests);
     }
 
     Uni<Boolean> deleteQueueRequest(final Long queueId, final Long id) {
         final var request = new DeleteQueueRequestRequest(queueId, id);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(DeleteQueueRequestResponse::getDeleted);
     }
 }

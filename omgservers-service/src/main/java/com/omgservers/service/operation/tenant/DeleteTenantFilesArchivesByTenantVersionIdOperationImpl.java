@@ -6,7 +6,7 @@ import com.omgservers.schema.module.tenant.tenantFilesArchive.DeleteTenantFilesA
 import com.omgservers.schema.module.tenant.tenantFilesArchive.ViewTenantFilesArchivesRequest;
 import com.omgservers.schema.module.tenant.tenantFilesArchive.ViewTenantFilesArchivesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ import java.util.List;
 class DeleteTenantFilesArchivesByTenantVersionIdOperationImpl
         implements DeleteTenantFilesArchivesByTenantVersionIdOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId, final Long tenantVersionId) {
@@ -52,13 +52,13 @@ class DeleteTenantFilesArchivesByTenantVersionIdOperationImpl
     Uni<List<TenantFilesArchiveProjectionModel>> viewTenantFilesArchives(final Long tenantId,
                                                                          final Long tenantVersionId) {
         final var request = new ViewTenantFilesArchivesRequest(tenantId, tenantVersionId);
-        return tenantModule.getService().viewTenantFilesArchives(request)
+        return tenantShard.getService().viewTenantFilesArchives(request)
                 .map(ViewTenantFilesArchivesResponse::getTenantFilesArchives);
     }
 
     Uni<Boolean> deleteTenantFilesArchive(final Long tenantId, final Long id) {
         final var request = new DeleteTenantFilesArchiveRequest(tenantId, id);
-        return tenantModule.getService().deleteTenantFilesArchive(request)
+        return tenantShard.getService().deleteTenantFilesArchive(request)
                 .map(DeleteTenantFilesArchiveResponse::getDeleted);
     }
 }

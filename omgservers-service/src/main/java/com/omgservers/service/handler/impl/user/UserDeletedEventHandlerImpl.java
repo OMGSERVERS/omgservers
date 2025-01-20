@@ -18,9 +18,9 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.user.UserDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.root.RootModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.root.RootShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,9 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserDeletedEventHandlerImpl implements EventHandler {
 
-    final AliasModule aliasModule;
-    final UserModule userModule;
-    final RootModule rootModule;
+    final AliasShard aliasShard;
+    final UserShard userShard;
+    final RootShard rootShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -66,7 +66,7 @@ public class UserDeletedEventHandlerImpl implements EventHandler {
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
@@ -87,20 +87,20 @@ public class UserDeletedEventHandlerImpl implements EventHandler {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
     Uni<RootEntityRefModel> findRootEntityRef(final Long rootId,
                                               final Long tenantId) {
         final var request = new FindRootEntityRefRequest(rootId, tenantId);
-        return rootModule.getService().findRootEntityRef(request)
+        return rootShard.getService().findRootEntityRef(request)
                 .map(FindRootEntityRefResponse::getRootEntityRef);
     }
 
     Uni<Boolean> deleteRootEntityRef(final Long rootId, final Long id) {
         final var request = new DeleteRootEntityRefRequest(rootId, id);
-        return rootModule.getService().deleteRootEntityRef(request)
+        return rootShard.getService().deleteRootEntityRef(request)
                 .map(DeleteRootEntityRefResponse::getDeleted);
     }
 }

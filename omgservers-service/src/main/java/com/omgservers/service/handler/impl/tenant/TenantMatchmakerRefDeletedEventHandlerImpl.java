@@ -7,8 +7,8 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRefDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -20,8 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -47,7 +47,7 @@ public class TenantMatchmakerRefDeletedEventHandlerImpl implements EventHandler 
 
     Uni<TenantMatchmakerRefModel> getTenantMatchmakerRef(final Long tenantId, final Long id) {
         final var request = new GetTenantMatchmakerRefRequest(tenantId, id);
-        return tenantModule.getService().getTenantMatchmakerRef(request)
+        return tenantShard.getService().getTenantMatchmakerRef(request)
                 .map(GetTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 }

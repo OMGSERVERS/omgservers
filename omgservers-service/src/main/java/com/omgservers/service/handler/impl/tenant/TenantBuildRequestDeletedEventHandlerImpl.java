@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantBuildRequestDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantBuildRequestDeletedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final FindAndDeleteJobOperation findAndDeleteJobOperation;
 
@@ -48,7 +48,7 @@ public class TenantBuildRequestDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantBuildRequestModel> getTenantBuildRequest(final Long tenantId, final Long id) {
         final var request = new GetTenantBuildRequestRequest(tenantId, id);
-        return tenantModule.getService().getTenantBuildRequest(request)
+        return tenantShard.getService().getTenantBuildRequest(request)
                 .map(GetTenantBuildRequestResponse::getTenantBuildRequest);
     }
 }

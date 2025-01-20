@@ -4,9 +4,9 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.queue.queueRequest.DeleteQueueRequestRequest;
 import com.omgservers.schema.module.queue.queueRequest.DeleteQueueRequestResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.queue.QueueModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.queue.QueueShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.assignment.AssignLobbyOperation;
 import com.omgservers.service.operation.assignment.SelectRandomLobbyOperation;
 import com.omgservers.service.operation.lobby.DeleteDanglingLobbiesOperation;
@@ -24,9 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class QueueTaskImpl {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
-    final QueueModule queueModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
+    final QueueShard queueShard;
 
     final DeleteDanglingLobbiesOperation deleteDanglingLobbiesOperation;
     final SelectRandomLobbyOperation selectRandomLobbyOperation;
@@ -93,7 +93,7 @@ public class QueueTaskImpl {
     Uni<Boolean> deleteQueueRequest(final Long queueId,
                                     final Long queueRequestId) {
         final var request = new DeleteQueueRequestRequest(queueId, queueRequestId);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(DeleteQueueRequestResponse::getDeleted);
     }
 }

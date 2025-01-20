@@ -22,7 +22,7 @@ import com.omgservers.service.factory.matchmaker.MatchmakerMatchAssignmentModelF
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchRuntimeRefModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
-import com.omgservers.service.module.matchmaker.impl.service.matchmakerService.testInterface.MatchmakerServiceTestInterface;
+import com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.testInterface.MatchmakerServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

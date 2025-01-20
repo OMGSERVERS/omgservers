@@ -13,8 +13,8 @@ import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentR
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.module.lobby.LobbyModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -28,8 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
 
-    final TenantModule tenantModule;
-    final LobbyModule lobbyModule;
+    final TenantShard tenantShard;
+    final LobbyShard lobbyShard;
 
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
 
@@ -73,19 +73,19 @@ class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
 
     Uni<LobbyModel> getLobby(final Long lobbyId) {
         final var request = new GetLobbyRequest(lobbyId);
-        return lobbyModule.getService().getLobby(request)
+        return lobbyShard.getService().getLobby(request)
                 .map(GetLobbyResponse::getLobby);
     }
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<Boolean> deleteLobby(final Long lobbyId) {
         final var request = new DeleteLobbyRequest(lobbyId);
-        return lobbyModule.getService().deleteLobby(request)
+        return lobbyShard.getService().deleteLobby(request)
                 .map(DeleteLobbyResponse::getDeleted);
     }
 }

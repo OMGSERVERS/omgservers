@@ -4,7 +4,7 @@ import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateTokenMethodImpl implements CreateTokenMethod {
 
-    final UserModule userModule;
+    final UserShard userShard;
 
     final SecurityIdentity securityIdentity;
 
@@ -35,7 +35,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     Uni<String> createToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userModule.getService().createToken(createTokenRequest)
+        return userShard.getService().createToken(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken);
     }
 }

@@ -6,8 +6,8 @@ import com.omgservers.schema.module.matchmaker.DeleteMatchmakerResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
-import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,8 +23,8 @@ import java.util.List;
 class DeleteTenantMatchmakersByTenantDeploymentIdOperationImpl
         implements DeleteTenantMatchmakersByTenantDeploymentIdOperation {
 
-    final MatchmakerModule matchmakerModule;
-    final TenantModule tenantModule;
+    final MatchmakerShard matchmakerShard;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<Void> execute(final Long tenantId, final Long tenantDeploymentId) {
@@ -51,13 +51,13 @@ class DeleteTenantMatchmakersByTenantDeploymentIdOperationImpl
 
     Uni<List<TenantMatchmakerRefModel>> viewTenantMatchmakerRefs(final Long tenantId, final Long tenantDeploymentId) {
         final var request = new ViewTenantMatchmakerRefsRequest(tenantId, tenantDeploymentId);
-        return tenantModule.getService().viewTenantMatchmakerRefs(request)
+        return tenantShard.getService().viewTenantMatchmakerRefs(request)
                 .map(ViewTenantMatchmakerRefsResponse::getTenantMatchmakerRefs);
     }
 
     Uni<Boolean> deleteMatchmaker(final Long matchmakerId) {
         final var request = new DeleteMatchmakerRequest(matchmakerId);
-        return matchmakerModule.getService().execute(request)
+        return matchmakerShard.getService().execute(request)
                 .map(DeleteMatchmakerResponse::getDeleted);
     }
 

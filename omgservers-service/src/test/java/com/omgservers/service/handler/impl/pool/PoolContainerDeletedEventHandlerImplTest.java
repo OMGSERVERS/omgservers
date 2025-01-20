@@ -7,7 +7,7 @@ import com.omgservers.service.event.body.module.pool.PoolContainerDeletedEventBo
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.impl.pool.testInterface.PoolContainerCreatedEventHandlerImplTestInterface;
 import com.omgservers.service.handler.impl.pool.testInterface.PoolContainerDeletedEventHandlerImplTestInterface;
-import com.omgservers.service.module.pool.impl.service.poolService.testInterface.PoolServiceTestInterface;
+import com.omgservers.service.shard.pool.impl.service.poolService.testInterface.PoolServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

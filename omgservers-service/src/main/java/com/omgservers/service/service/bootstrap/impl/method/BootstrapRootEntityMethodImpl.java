@@ -11,8 +11,8 @@ import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.root.RootModelFactory;
-import com.omgservers.service.module.alias.AliasModule;
-import com.omgservers.service.module.root.RootModule;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.root.RootShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityResponse;
@@ -26,9 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
 
-    final AliasModule aliasModule;
+    final AliasShard aliasShard;
 
-    final RootModule rootModule;
+    final RootShard rootShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -54,7 +54,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
         final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }
 
@@ -65,7 +65,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
                 rootId,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
         final var request = new SyncAliasRequest(alias);
-        return aliasModule.getService().execute(request)
+        return aliasShard.getService().execute(request)
                 .replaceWith(alias);
     }
 
@@ -73,7 +73,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
         final var root = rootModelFactory.create();
 
         final var request = new SyncRootRequest(root);
-        return rootModule.getService().syncRoot(request)
+        return rootShard.getService().syncRoot(request)
                 .replaceWith(root);
     }
 }

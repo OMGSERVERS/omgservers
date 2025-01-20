@@ -11,8 +11,8 @@ import com.omgservers.service.event.body.module.tenant.TenantDeploymentDeletedEv
 import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.queue.QueueModule;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.queue.QueueShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.tenant.DeleteTenantLobbiesByTenantDeploymentIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantLobbyRequestsByTenantDeploymentIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperation;
@@ -28,8 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
-    final QueueModule queueModule;
+    final TenantShard tenantShard;
+    final QueueShard queueShard;
 
     final DeleteTenantLobbyRequestsByTenantDeploymentIdOperation
             deleteTenantLobbyRequestsByTenantDeploymentIdOperation;
@@ -78,13 +78,13 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
         final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantModule.getService().getTenantDeployment(request)
+        return tenantShard.getService().getTenantDeployment(request)
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
     Uni<Boolean> deleteQueue(final Long queueId) {
         final var request = new DeleteQueueRequest(queueId);
-        return queueModule.getQueueService().execute(request)
+        return queueShard.getQueueService().execute(request)
                 .map(DeleteQueueResponse::getDeleted);
     }
 }

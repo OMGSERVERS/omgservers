@@ -23,8 +23,8 @@ import com.omgservers.service.event.body.module.client.ClientRuntimeRefCreatedEv
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.client.ClientModule;
-import com.omgservers.service.module.runtime.RuntimeModule;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,8 +39,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
-    final RuntimeModule runtimeModule;
-    final ClientModule clientModule;
+    final RuntimeShard runtimeShard;
+    final ClientShard clientShard;
 
     final ClientMessageModelFactory clientMessageModelFactory;
 
@@ -73,13 +73,13 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<ClientRuntimeRefModel> getClientRuntimeRef(final Long clientId, final Long id) {
         final var request = new GetClientRuntimeRefRequest(clientId, id);
-        return clientModule.getService().getClientRuntimeRef(request)
+        return clientShard.getService().getClientRuntimeRef(request)
                 .map(GetClientRuntimeRefResponse::getClientRuntimeRef);
     }
 
     Uni<RuntimeModel> getRuntime(final Long id) {
         final var request = new GetRuntimeRequest(id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(GetRuntimeResponse::getRuntime);
     }
 
@@ -94,7 +94,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
                 messageBody,
                 idempotencyKey);
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientModule.getService().syncClientMessageWithIdempotency(request)
+        return clientShard.getService().syncClientMessageWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
@@ -118,7 +118,7 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<List<ClientRuntimeRefModel>> viewClientRuntimeRefs(final Long clientId) {
         final var request = new ViewClientRuntimeRefsRequest(clientId);
-        return clientModule.getService().viewClientRuntimeRefs(request)
+        return clientShard.getService().viewClientRuntimeRefs(request)
                 .map(ViewClientRuntimeRefsResponse::getClientRuntimeRefs);
     }
 
@@ -133,13 +133,13 @@ public class ClientRuntimeRefCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RuntimeAssignmentModel> findRuntimeAssignment(final Long runtimeId, final Long clientId) {
         final var request = new FindRuntimeAssignmentRequest(runtimeId, clientId);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(FindRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
     Uni<Boolean> deleteRuntimeAssignment(final Long runtimeId, final Long id) {
         final var request = new DeleteRuntimeAssignmentRequest(runtimeId, id);
-        return runtimeModule.getService().execute(request)
+        return runtimeShard.getService().execute(request)
                 .map(DeleteRuntimeAssignmentResponse::getDeleted);
     }
 }

@@ -6,7 +6,7 @@ import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.registry.dto.DockerRegistryAccessDto;
 import com.omgservers.service.service.registry.dto.DockerRegistryActionEnum;
 import com.omgservers.service.service.registry.dto.DockerRegistryResourceScopeDto;
@@ -25,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 class IntersectDockerRegistryScopeOperationImpl implements IntersectDockerRegistryScopeOperation {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     @Override
     public Uni<List<DockerRegistryAccessDto>> intersectDockerRegistryScope(final Long userId,
@@ -83,14 +83,14 @@ class IntersectDockerRegistryScopeOperationImpl implements IntersectDockerRegist
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantModule.getService().getTenantProject(request)
+        return tenantShard.getService().getTenantProject(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
     Uni<List<TenantProjectPermissionModel>> viewTenantProjectPermissions(final Long tenantId,
                                                                          final Long tenantProjectId) {
         final var request = new ViewTenantProjectPermissionsRequest(tenantId, tenantProjectId);
-        return tenantModule.getService().viewTenantProjectPermissions(request)
+        return tenantShard.getService().viewTenantProjectPermissions(request)
                 .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }
 }

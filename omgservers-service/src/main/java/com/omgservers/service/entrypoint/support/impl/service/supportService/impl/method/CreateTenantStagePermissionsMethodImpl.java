@@ -15,8 +15,8 @@ import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStage
 import com.omgservers.schema.module.user.GetUserRequest;
 import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
-import com.omgservers.service.module.tenant.TenantModule;
-import com.omgservers.service.module.user.UserModule;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
@@ -34,8 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermissionsMethod {
 
-    final TenantModule tenantModule;
-    final UserModule userModule;
+    final TenantShard tenantShard;
+    final UserShard userShard;
 
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
@@ -88,19 +88,19 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userModule.getService().getUser(request)
+        return userShard.getService().getUser(request)
                 .map(GetUserResponse::getUser);
     }
 
     Uni<TenantModel> getTenant(final Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantModule.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantModule.getService().getTenantStage(request)
+        return tenantShard.getService().getTenantStage(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
@@ -134,7 +134,7 @@ class CreateTenantStagePermissionsMethodImpl implements CreateTenantStagePermiss
                 .create(tenantId, tenantStageId, userId, permission);
 
         final var request = new SyncTenantStagePermissionRequest(stagePermission);
-        return tenantModule.getService().syncTenantStagePermission(request)
+        return tenantShard.getService().syncTenantStagePermission(request)
                 .map(SyncTenantStagePermissionResponse::getCreated);
     }
 }

@@ -9,7 +9,7 @@ import com.omgservers.service.event.body.internal.VersionBuildingRequestedEventB
 import com.omgservers.service.event.body.module.tenant.TenantFilesArchiveCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.service.event.EventService;
 import com.omgservers.service.service.event.dto.SyncEventRequest;
 import com.omgservers.service.service.event.dto.SyncEventResponse;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantFilesArchiveCreatedEventHandlerImpl implements EventHandler {
 
-    final TenantModule tenantModule;
+    final TenantShard tenantShard;
 
     final EventService eventService;
 
@@ -58,7 +58,7 @@ public class TenantFilesArchiveCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantFilesArchiveModel> getTenantFilesArchive(final Long tenantId, final Long id) {
         final var request = new GetTenantFilesArchiveRequest(tenantId, id);
-        return tenantModule.getService().getTenantFilesArchive(request)
+        return tenantShard.getService().getTenantFilesArchive(request)
                 .map(GetTenantFilesArchiveResponse::getTenantFilesArchive);
     }
 
