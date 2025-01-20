@@ -2,16 +2,13 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
-import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.module.alias.AliasModule;
 import com.omgservers.service.module.tenant.TenantModule;
+import com.omgservers.service.operation.alias.CreateTenantAliasOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -27,6 +24,8 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
     final TenantModule tenantModule;
     final AliasModule aliasModule;
 
+    final CreateTenantAliasOperation createTenantAliasOperation;
+
     final AliasModelFactory aliasModelFactory;
     final SecurityIdentity securityIdentity;
 
@@ -41,7 +40,7 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
         return getTenant(tenantId)
                 .flatMap(tenant -> {
                     final var aliasValue = request.getAlias();
-                    return createTenantAlias(tenantId, aliasValue, userId);
+                    return createTenantAliasOperation.execute(tenantId, aliasValue);
                 })
                 .replaceWith(new CreateTenantAliasSupportResponse());
     }
@@ -50,24 +49,5 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
         final var getTenantRequest = new GetTenantRequest(tenantId);
         return tenantModule.getService().getTenant(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
-    }
-
-    Uni<AliasModel> createTenantAlias(final Long tenantId,
-                                      final String aliasValue,
-                                      final Long userId) {
-        final var alias = aliasModelFactory.create(AliasQualifierEnum.TENANT,
-                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
-                tenantId,
-                aliasValue);
-        final var syncAliasRequest = new SyncAliasRequest(alias);
-        return aliasModule.getService().execute(syncAliasRequest)
-                .invoke(response -> {
-                    if (response.getCreated()) {
-                        log.info("The alias \"{}\" for the tenant \"{}\" was created",
-                                aliasValue, tenantId);
-                    }
-                })
-                .replaceWith(alias);
     }
 }

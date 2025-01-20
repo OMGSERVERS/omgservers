@@ -1,5 +1,6 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
@@ -38,6 +39,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.UUID;
+
 @Slf4j
 @Getter
 @ApplicationScoped
@@ -50,6 +53,7 @@ public class TestDataFactory {
     final ClientTestDataFactory clientTestDataFactory;
     final LobbyTestDataFactory lobbyTestDataFactory;
     final QueueTestDataFactory queueTestDataFactory;
+    final AliasTestDataFactory aliasTestDataFactory;
     final RootTestDataFactory rootTestDataFactory;
     final PoolTestDataFactory poolTestDataFactory;
     final UserTestDataFactory userTestDataFactory;
@@ -58,6 +62,9 @@ public class TestDataFactory {
         final var developerUser = getUserTestDataFactory().createDeveloperUser("password");
 
         final var tenant = tenantTestDataFactory.createTenant();
+        final var tenantAlias = aliasTestDataFactory.createAlias(tenant,
+                "tenant-" + UUID.randomUUID());
+
         final var tenantProjectManagerPermission = tenantTestDataFactory
                 .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.PROJECT_MANAGER);
         final var tenantViewerPermission = tenantTestDataFactory
@@ -139,6 +146,7 @@ public class TestDataFactory {
                 .developerUser(developerUser)
 
                 .tenant(tenant)
+                .tenantAlias(tenantAlias)
                 .tenantProjectManagerPermission(tenantProjectManagerPermission)
                 .tenantViewerPermission(tenantViewerPermission)
 
@@ -191,6 +199,7 @@ public class TestDataFactory {
         UserModel developerUser;
 
         TenantModel tenant;
+        AliasModel tenantAlias;
         TenantPermissionModel tenantProjectManagerPermission;
         TenantPermissionModel tenantViewerPermission;
 

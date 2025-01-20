@@ -16,7 +16,7 @@
   :code {
     :find {
       :replacement "between_messages"
-      :term "instance"
+      :term "matchmaker_id"
     }
   }
   :search-in-files {
