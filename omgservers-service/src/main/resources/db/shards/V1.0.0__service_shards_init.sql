@@ -385,6 +385,8 @@ create table if not exists tab_queue_request (
     deleted boolean not null
 );
 
+create index if not exists idx_queue_request_queue_id on tab_queue_request(queue_id);
+
 -- lobby module
 
 create table if not exists tab_lobby (
