@@ -95,9 +95,17 @@ public interface ServiceConfig {
 
         String dockerNetwork();
 
+        RuntimesOverridingConfig overriding();
+
         long defaultCpuLimit();
 
         long defaultMemoryLimit();
+    }
+
+    interface RuntimesOverridingConfig {
+        boolean enabled();
+
+        URI uri();
     }
 
     interface InitializationConfig {

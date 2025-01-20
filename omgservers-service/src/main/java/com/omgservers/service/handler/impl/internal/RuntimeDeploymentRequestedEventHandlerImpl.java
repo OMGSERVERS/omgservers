@@ -99,12 +99,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                             final var idempotencyKey = event.getId().toString();
                                             final var imageId = tenantImage.getImageId();
                                             return createUser(userId, password, idempotencyKey)
-                                                    .flatMap(user -> calculateShardOperation
-                                                            .calculateShard(runtimeId.toString())
-                                                            .flatMap(shard -> syncPoolRequest(runtime,
-                                                                    password,
-                                                                    imageId,
-                                                                    shard.serverUri())));
+                                                    .flatMap(user -> syncPoolRequest(runtime, password, imageId));
                                         });
                             });
                 })
@@ -196,8 +191,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
 
     Uni<Boolean> syncPoolRequest(final RuntimeModel runtime,
                                  final String password,
-                                 final String imageId,
-                                 final URI serverUri) {
+                                 final String imageId) {
         final var poolRequestConfig = new PoolRequestConfigDto();
         poolRequestConfig.setContainerConfig(new PoolRequestConfigDto.ContainerConfig());
         poolRequestConfig.getContainerConfig().setImageId(imageId);
@@ -210,7 +204,15 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
         environment.put("OMGSERVERS_PASSWORD", password);
         environment.put("OMGSERVERS_RUNTIME_QUALIFIER", runtime.getQualifier().toString());
-        environment.put("OMGSERVERS_SERVICE_URL", serverUri.toString());
+
+        final URI serviceUri;
+        if (getServiceConfigOperation.getServiceConfig().runtimes().overriding().enabled()) {
+            serviceUri = getServiceConfigOperation.getServiceConfig().runtimes().overriding().uri();
+        } else {
+            serviceUri = getServiceConfigOperation.getServiceConfig().server().uri();
+        }
+
+        environment.put("OMGSERVERS_SERVICE_URL", serviceUri.toString());
         poolRequestConfig.getContainerConfig().setEnvironment(environment);
 
         return findDefaultPoolAlias()

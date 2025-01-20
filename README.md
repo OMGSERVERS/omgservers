@@ -91,6 +91,8 @@ OMGSERVERS is a backend for authoritative game servers.
 | `OMGSERVERS_REGISTRY_URI`                                                   | No           | `http://localhost:5000`                 |
 | `OMGSERVERS_RUNTIMES_DOCKER_NETWORK`                                        | No           | `omgservers`                            |
 | `OMGSERVERS_RUNTIMES_INACTIVE_INTERVAL`                                     | No           | `30`                                    |
+| `OMGSERVERS_RUNTIMES_OVERRIDING_ENABLED`                                    | No           | `false`                                 |
+| `OMGSERVERS_RUNTIMES_OVERRIDING_URI`                                        | No           | `http://gateway:8080`                   |
 | `OMGSERVERS_RUNTIMES_DEFAULT_CPU_LIMIT`                                     | No           | `100`                                   |
 | `OMGSERVERS_RUNTIMES_DEFAULT_MEMORY_LIMIT`                                  | No           | `512`                                   |
 | `OMGSERVERS_CLIENTS_TOKEN_LIFETIME`                                         | No           | `3600`                                  |
