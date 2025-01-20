@@ -32,9 +32,6 @@ omgstate = {
 			end,
 			assign_matchmaker = function(instance, matchmaker_id)
 				instance.matchmaker_id = matchmaker_id
-				if not instance.greeted and instance.lobby_id then
-					instance:greet()
-				end
 			end,
 			assign_lobby = function(instance, runtime_id)
 				instance.lobby_id = runtime_id
@@ -43,9 +40,7 @@ omgstate = {
 				if instance.greeted then
 					events:assigned(omgconstants.LOBBY, runtime_id)
 				else
-					if instance.matchmaker_id then
-						instance:greet()
-					end
+					instance:greet()
 				end
 			end,
 			assign_match = function(instance, runtime_id)

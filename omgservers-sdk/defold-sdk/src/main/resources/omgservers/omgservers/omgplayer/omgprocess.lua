@@ -49,10 +49,6 @@ omgprocess = {
 					print(socket.gettime() .. " [OMGPLAYER] Incoming message, incoming_message=" .. json.encode(incoming_message))
 				end
 
-				-- SERVER_WELCOME_MESSAGE is a first server message
-				-- Server produces MATCHMAKER_ASSIGNMENT_MESSAGE and RUNTIME_ASSIGNMENT_MESSAGE concurrently
-				-- So we trigger greeted event only when MATCHMAKER_ASSIGNMENT_MESSAGE and RUNTIME_ASSIGNMENT_MESSAGE were received
-
 				if message_qualifier == omgconstants.SERVER_WELCOME_MESSAGE then
 					local version_id = incoming_message.body.version_id
 					local version_created = incoming_message.body.version_created
