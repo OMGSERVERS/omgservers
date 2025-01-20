@@ -12,13 +12,10 @@ import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentDeletedEventBodyModel;
-import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.module.client.ClientModule;
 import com.omgservers.service.module.matchmaker.MatchmakerModule;
-import com.omgservers.service.operation.assignment.AssignLobbyOperation;
-import com.omgservers.service.operation.assignment.SelectRandomLobbyOperation;
-import com.omgservers.service.service.event.EventService;
+import com.omgservers.service.operation.queue.CreateQueueRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -32,12 +29,8 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
 
     final MatchmakerModule matchmakerModule;
     final ClientModule clientModule;
-    final EventService eventService;
 
-    final SelectRandomLobbyOperation selectRandomLobbyOperation;
-    final AssignLobbyOperation assignLobbyOperation;
-
-    final EventModelFactory eventModelFactory;
+    final CreateQueueRequestOperation createQueueRequestOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -77,9 +70,10 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
 
                                             final var tenantId = client.getTenantId();
                                             final var tenantDeploymentId = client.getDeploymentId();
-                                            return selectRandomLobbyOperation.execute(tenantId, tenantDeploymentId)
-                                                    .flatMap(randomSelectedLobby -> assignLobbyOperation
-                                                            .execute(clientId, randomSelectedLobby, idempotencyKey));
+                                            return createQueueRequestOperation.execute(clientId,
+                                                    tenantId,
+                                                    tenantDeploymentId,
+                                                    idempotencyKey);
                                         });
                             });
                 })

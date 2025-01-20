@@ -133,8 +133,6 @@ public class LobbyMultipleReassignmentIT extends BaseTestClass {
                                     RuntimeQualifierEnum.LOBBY),
                     Collections.singletonList(matchAssignment2.getId()));
 
-            Thread.sleep(32_000);
-
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }

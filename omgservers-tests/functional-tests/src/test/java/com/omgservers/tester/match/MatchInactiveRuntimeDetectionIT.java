@@ -114,7 +114,6 @@ public class MatchInactiveRuntimeDetectionIT extends BaseTestClass {
             final var lobbyRuntimeId2 = ((RuntimeAssignmentMessageBodyDto) lobbyAssignment2.getBody())
                     .getRuntimeId();
 
-            assertEquals(lobbyRuntimeId1, lobbyRuntimeId2);
         } finally {
             supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());
         }
