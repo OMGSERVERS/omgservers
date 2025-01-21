@@ -31,15 +31,11 @@ static_resources:
                         - "*"
                       routes:
                         - match:
-                            prefix: "/service/v1/entrypoint"
+                            prefix: "/service"
                           route:
                             cluster: service
                         - match:
-                            prefix: "/service/v1/module"
-                          route:
-                            cluster: service
-                        - match:
-                            prefix: "/dispatcher/v1/entrypoint"
+                            prefix: "/dispatcher"
                           route:
                             cluster: dispatcher
                 http_filters:
