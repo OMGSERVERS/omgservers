@@ -20,7 +20,7 @@ OMGSERVERS is a backend for authoritative game servers.
 - Developer accounts and permissions management.
 - Projects, stages, versions, and deployments.
 - Authoritative handling of player commands within lobbies.
-- Matchmaking and match execution in Docker containers. 
+- Matchmaking and match execution in Docker containers.
 - Player data storage and management.
 - Defold SDK for both clients and servers.
 - A command-line tool for administrative tasks.
@@ -28,17 +28,18 @@ OMGSERVERS is a backend for authoritative game servers.
 # Flows
 
 ## Players
-1. **Create a new user for the player**
-   - `PUT /service/v1/entrypoint/player/request/create-user`
 
-1. **Issue a user access token to authorize subsequent server requests**
-   - `PUT /service/v1/entrypoint/player/request/create-token`
+1. Create a new user for the player
+    - `POST /service/v1/entrypoint/player/request/create-user`
 
-1. **Create a new client for a specific game project**
-   - `PUT /service/v1/entrypoint/player/request/create-client`
+1. Issue a user access token to authorize subsequent server requests
+    - `POST /service/v1/entrypoint/player/request/create-token`
 
-1. **Communicate with the server asynchronously**
-   - `PUT /service/v1/entrypoint/player/request/interchange`
+1. Create a new client to interact with a specific game project
+    - `POST /service/v1/entrypoint/player/request/create-client`
+
+1. Communicate with the server asynchronously
+    - `POST /service/v1/entrypoint/player/request/interchange`
 
 # Installation Types
 
@@ -56,6 +57,66 @@ OMGSERVERS is a backend for authoritative game servers.
 |                                 | Pool of Docker hosts for game runtimes.                  |                                                                          |
 | **Public cloud**                | Provide a pay-as-you-go service.                         |                                                                          |
 |                                 | On-demand dedicated server pools.                        |                                                                          |
+
+# Command-line tool
+```bash
+OMGSERVERS ctl, v1.0.0
+Usage:
+ ./omgserversctl.sh help
+ ./omgserversctl.sh logs
+ ./omgserversctl.sh environment reset
+ ./omgserversctl.sh environment printCurrent
+ ./omgserversctl.sh environment printVariable <variable>
+ ./omgserversctl.sh environment useEnvironment <name> <service_url>
+ ./omgserversctl.sh environment usePublic
+ ./omgserversctl.sh environment useLocal
+ ./omgserversctl.sh admin useCredentials <user> <password>
+ ./omgserversctl.sh admin printCurrent
+ ./omgserversctl.sh admin createToken
+ ./omgserversctl.sh admin calculateShard <shard_key>
+ ./omgserversctl.sh admin generateId
+ ./omgserversctl.sh admin bcryptHash <value>
+ ./omgserversctl.sh admin pingDockerHost <docker_daemon_uri>
+ ./omgserversctl.sh support useCredentials <user> <password>
+ ./omgserversctl.sh support printCurrent
+ ./omgserversctl.sh support createToken
+ ./omgserversctl.sh support createTenant
+ ./omgserversctl.sh support createTenantAlias <tenant_id> <alias>
+ ./omgserversctl.sh support deleteTenant <tenant>
+ ./omgserversctl.sh support createProject <tenant>
+ ./omgserversctl.sh support createProjectAlias <tenant> <project_id> <alias>
+ ./omgserversctl.sh support deleteProject <tenant> <project>
+ ./omgserversctl.sh support createDeveloper
+ ./omgserversctl.sh support createTenantPermission <tenant> <user> <permission>
+ ./omgserversctl.sh support deleteTenantPermission <tenant> <user> <permission>
+ ./omgserversctl.sh support createProjectPermission <tenant> <project> <user> <permission>
+ ./omgserversctl.sh support deleteProjectPermission <tenant> <project> <user> <permission>
+ ./omgserversctl.sh support createStagePermission <tenant> <project> <stage> <user> <permission>
+ ./omgserversctl.sh support deleteStagePermission <tenant> <project> <stage> <user> <permission>
+ ./omgserversctl.sh developer useCredentials <user> <password>
+ ./omgserversctl.sh developer printCurrent
+ ./omgserversctl.sh developer createToken
+ ./omgserversctl.sh developer getTenantDashboard <tenant>
+ ./omgserversctl.sh developer createProject <tenant>
+ ./omgserversctl.sh developer createProjectAlias <tenant> <project_id> <alias>
+ ./omgserversctl.sh developer getProjectDashboard <tenant> <project>
+ ./omgserversctl.sh developer deleteProject <tenant> <project>
+ ./omgserversctl.sh developer createStage <tenant> <project>
+ ./omgserversctl.sh developer createStageAlias <tenant> <stage_id> <alias>
+ ./omgserversctl.sh developer getStageDashboard <tenant> <project> <stage>
+ ./omgserversctl.sh developer deleteStage <tenant> <project> <stage>
+ ./omgserversctl.sh developer createVersion <tenant> <project> <config_path>
+ ./omgserversctl.sh developer uploadFilesArchive <tenant> <version> <files_directory_path>
+ ./omgserversctl.sh developer getVersionDashboard <tenant> <version>
+ ./omgserversctl.sh developer deleteVersion <tenant> <version>
+ ./omgserversctl.sh developer deployVersion <tenant> <project> <stage> <version>
+ ./omgserversctl.sh developer getDeploymentDashboard <tenant> <deployment>
+ ./omgserversctl.sh developer deleteDeployment <tenant> <deployment>
+ ./omgserversctl.sh developer createLobbyRequest <tenant> <deployment>
+ ./omgserversctl.sh developer deleteLobby <lobby>
+ ./omgserversctl.sh developer createMatchmakerRequest <tenant> <deployment>
+ ./omgserversctl.sh developer deleteMatchmaker <matchmaker>
+```
 
 # Configuration
 
@@ -134,19 +195,19 @@ OMGSERVERS is a backend for authoritative game servers.
 
 ## Dispatcher
 
-| **Environment Variable**                                     | **Required** | **Value**                         |
-|--------------------------------------------------------------|--------------|-----------------------------------|
-| `OMGSERVERS_DISPATCHER_USER_PASSWORD`                        | Yes          | `<dispatcher_password>`           |
-| `OMGSERVERS_APPLICATION_NAME`                                | No           | `dispatcher`                      |
-| `OMGSERVERS_DISPATCHER_USER_ALIAS`                           | No           | `dispatcher`                      |
-| `OMGSERVERS_SERVICE_URI`                                     | No           | `http://service:8080`             |
-| `OMGSERVERS_SERVER_PUBLIC_KEY`                               | No           | `file:/jwt_issuer/public_key.pem` |
-| `OMGSERVERS_EXPIRED_CONNECTIONS_HANDLER_JOB_INTERVAL`        | No           | `60s`                             |
-| `OMGSERVERS_REFRESH_DISPATCHER_TOKEN_JOB_INTERVAL`           | No           | `60s`                             |
-| `OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED`                     | No           | `false`                           |
-| `OMGSERVERS_LOGGING_ROOT_LOGS_LEVEL`                         | No           | `INFO`                            |
-| `OMGSERVERS_LOGGING_APP_LOGS_LEVEL`                          | No           | `INFO`                            |
-| `OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL`                      | No           | `INFO`                            |
-| `OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED`                    | No           | `true`                            |
-| `OMGSERVERS_OTEL_DISABLED`                                   | No           | `true`                            |
-| `OMGSERVERS_OTEL_ENDPOINT`                                   | No           | `http://collector:4317`           |
+| **Environment Variable**                              | **Required** | **Value**                         |
+|-------------------------------------------------------|--------------|-----------------------------------|
+| `OMGSERVERS_DISPATCHER_USER_PASSWORD`                 | Yes          | `<dispatcher_password>`           |
+| `OMGSERVERS_APPLICATION_NAME`                         | No           | `dispatcher`                      |
+| `OMGSERVERS_DISPATCHER_USER_ALIAS`                    | No           | `dispatcher`                      |
+| `OMGSERVERS_SERVICE_URI`                              | No           | `http://service:8080`             |
+| `OMGSERVERS_SERVER_PUBLIC_KEY`                        | No           | `file:/jwt_issuer/public_key.pem` |
+| `OMGSERVERS_EXPIRED_CONNECTIONS_HANDLER_JOB_INTERVAL` | No           | `60s`                             |
+| `OMGSERVERS_REFRESH_DISPATCHER_TOKEN_JOB_INTERVAL`    | No           | `60s`                             |
+| `OMGSERVERS_LOGGING_ACCESS_LOGS_ENABLED`              | No           | `false`                           |
+| `OMGSERVERS_LOGGING_ROOT_LOGS_LEVEL`                  | No           | `INFO`                            |
+| `OMGSERVERS_LOGGING_APP_LOGS_LEVEL`                   | No           | `INFO`                            |
+| `OMGSERVERS_LOGGING_TRAFFIC_LOGS_LEVEL`               | No           | `INFO`                            |
+| `OMGSERVERS_LOGGING_CONSOLE_LOGS_ENABLED`             | No           | `true`                            |
+| `OMGSERVERS_OTEL_DISABLED`                            | No           | `true`                            |
+| `OMGSERVERS_OTEL_ENDPOINT`                            | No           | `http://collector:4317`           |
