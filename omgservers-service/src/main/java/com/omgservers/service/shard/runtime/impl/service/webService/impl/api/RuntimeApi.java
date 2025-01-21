@@ -49,7 +49,7 @@ import com.omgservers.schema.module.runtime.poolContainerRef.GetRuntimePoolConta
 import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefRequest;
 import com.omgservers.schema.module.runtime.poolContainerRef.SyncRuntimePoolContainerRefResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -57,104 +57,104 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/shard/runtime/request")
 public interface RuntimeApi {
 
-    @PUT
+    @POST
     @Path("/get-runtime")
     Uni<GetRuntimeResponse> execute(GetRuntimeRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-runtime")
     Uni<SyncRuntimeResponse> execute(SyncRuntimeRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-runtime")
     Uni<DeleteRuntimeResponse> execute(DeleteRuntimeRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-runtime-permission")
     Uni<SyncRuntimePermissionResponse> execute(SyncRuntimePermissionRequest request);
 
-    @PUT
+    @POST
     @Path("/find-runtime-permission")
     Uni<FindRuntimePermissionResponse> execute(FindRuntimePermissionRequest request);
 
-    @PUT
+    @POST
     @Path("/view-runtime-permissions")
     Uni<ViewRuntimePermissionsResponse> execute(ViewRuntimePermissionsRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-runtime-permission")
     Uni<DeleteRuntimePermissionResponse> execute(DeleteRuntimePermissionRequest request);
 
-    @PUT
+    @POST
     @Path("/view-runtime-commands")
     Uni<ViewRuntimeCommandsResponse> execute(ViewRuntimeCommandsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-runtime-command")
     Uni<SyncRuntimeCommandResponse> execute(SyncRuntimeCommandRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-client-command")
     Uni<SyncClientCommandResponse> execute(SyncClientCommandRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-runtime-command")
     Uni<DeleteRuntimeCommandResponse> execute(DeleteRuntimeCommandRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-runtime-commands")
     Uni<DeleteRuntimeCommandsResponse> execute(DeleteRuntimeCommandsRequest request);
 
-    @PUT
+    @POST
     @Path("/get-runtime-assignment")
     Uni<GetRuntimeAssignmentResponse> execute(GetRuntimeAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/find-runtime-assignment")
     Uni<FindRuntimeAssignmentResponse> execute(FindRuntimeAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/view-runtime-assignment")
     Uni<ViewRuntimeAssignmentsResponse> execute(ViewRuntimeAssignmentsRequest request);
 
-    @PUT
+    @POST
     @Path("/count-runtime-assignments")
     Uni<CountRuntimeAssignmentsResponse> execute(CountRuntimeAssignmentsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-runtime-assignment")
     Uni<SyncRuntimeAssignmentResponse> execute(SyncRuntimeAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/update-runtime-assignment-last-activity")
     Uni<UpdateRuntimeAssignmentLastActivityResponse> execute(
             UpdateRuntimeAssignmentLastActivityRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-runtime-assignment")
     Uni<DeleteRuntimeAssignmentResponse> execute(DeleteRuntimeAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/get-runtime-pool-server-container-ref")
     Uni<GetRuntimePoolContainerRefResponse> execute(
             GetRuntimePoolContainerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-runtime-pool-server-container-ref")
     Uni<FindRuntimePoolContainerRefResponse> execute(
             FindRuntimePoolContainerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-runtime-pool-server-container-ref")
     Uni<SyncRuntimePoolContainerRefResponse> execute(
             SyncRuntimePoolContainerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-runtime-pool-server-container-ref")
     Uni<DeleteRuntimePoolContainerRefResponse> execute(
             DeleteRuntimePoolContainerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/interchange")
     Uni<InterchangeResponse> execute(InterchangeRequest request);
 }

@@ -7,7 +7,7 @@ import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -17,11 +17,11 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @SecurityRequirement(name = ServiceOpenApiConfiguration.RUNTIME_SECURITY_SCHEMA)
 public interface RuntimeApi {
 
-    @PUT
+    @POST
     @Path("/create-token")
     Uni<CreateTokenRuntimeResponse> execute(@NotNull CreateTokenRuntimeRequest request);
 
-    @PUT
+    @POST
     @Path("/interchange")
     Uni<InterchangeRuntimeResponse> execute(@NotNull InterchangeRuntimeRequest request);
 }

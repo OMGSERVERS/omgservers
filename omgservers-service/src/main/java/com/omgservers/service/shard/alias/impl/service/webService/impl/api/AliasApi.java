@@ -11,7 +11,7 @@ import com.omgservers.schema.module.alias.SyncAliasResponse;
 import com.omgservers.schema.module.alias.ViewAliasesRequest;
 import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -19,23 +19,23 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/shard/alias/request")
 public interface AliasApi {
 
-    @PUT
+    @POST
     @Path("/get-alias")
     Uni<GetAliasResponse> execute(GetAliasRequest request);
 
-    @PUT
+    @POST
     @Path("/find-alias")
     Uni<FindAliasResponse> execute(FindAliasRequest request);
 
-    @PUT
+    @POST
     @Path("/view-aliases")
     Uni<ViewAliasesResponse> execute(ViewAliasesRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-alias")
     Uni<SyncAliasResponse> execute(SyncAliasRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-alias")
     Uni<DeleteAliasResponse> execute(DeleteAliasRequest request);
 }

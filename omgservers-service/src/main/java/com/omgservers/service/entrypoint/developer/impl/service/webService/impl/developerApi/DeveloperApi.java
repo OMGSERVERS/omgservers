@@ -44,7 +44,7 @@ import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRes
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -58,7 +58,7 @@ import java.util.List;
 @SecurityRequirement(name = ServiceOpenApiConfiguration.DEVELOPER_SECURITY_SCHEMA)
 public interface DeveloperApi {
 
-    @PUT
+    @POST
     @Path("/create-token")
     Uni<CreateTokenDeveloperResponse> execute(@NotNull CreateTokenDeveloperRequest request);
 
@@ -66,7 +66,7 @@ public interface DeveloperApi {
     Tenant
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-dashboard")
     Uni<GetTenantDashboardDeveloperResponse> execute(@NotNull GetTenantDashboardDeveloperRequest request);
 
@@ -74,19 +74,19 @@ public interface DeveloperApi {
     Tenant project
      */
 
-    @PUT
+    @POST
     @Path("/create-project")
     Uni<CreateTenantProjectDeveloperResponse> execute(@NotNull CreateTenantProjectDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/create-project-alias")
     Uni<CreateTenantProjectAliasDeveloperResponse> execute(@NotNull CreateTenantProjectAliasDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/get-project-dashboard")
     Uni<GetTenantProjectDashboardDeveloperResponse> execute(@NotNull GetTenantProjectDashboardDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-project")
     Uni<DeleteTenantProjectDeveloperResponse> execute(@NotNull DeleteTenantProjectDeveloperRequest request);
 
@@ -94,19 +94,19 @@ public interface DeveloperApi {
     Tenant stage
      */
 
-    @PUT
+    @POST
     @Path("/create-stage")
     Uni<CreateTenantStageDeveloperResponse> execute(@NotNull CreateTenantStageDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/create-stage-alias")
     Uni<CreateTenantStageAliasDeveloperResponse> execute(@NotNull CreateTenantStageAliasDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/get-stage-dashboard")
     Uni<GetTenantStageDashboardDeveloperResponse> execute(@NotNull GetTenantStageDashboardDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-stage")
     Uni<DeleteTenantStageDeveloperResponse> execute(@NotNull DeleteTenantStageDeveloperRequest request);
 
@@ -114,21 +114,21 @@ public interface DeveloperApi {
     Tenant version
      */
 
-    @PUT
+    @POST
     @Path("/create-version")
     Uni<CreateTenantVersionDeveloperResponse> execute(@NotNull CreateTenantVersionDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/upload-files-archive")
     Uni<UploadFilesArchiveDeveloperResponse> execute(@RestForm("tenant") String tenant,
                                                      @RestForm("tenantVersionId") Long tenantVersionId,
                                                      @RestForm(FileUpload.ALL) List<FileUpload> files);
 
-    @PUT
+    @POST
     @Path("/get-version-dashboard")
     Uni<GetTenantVersionDashboardDeveloperResponse> execute(@NotNull GetTenantVersionDashboardDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-version")
     Uni<DeleteTenantVersionDeveloperResponse> execute(@NotNull DeleteTenantVersionDeveloperRequest request);
 
@@ -136,32 +136,32 @@ public interface DeveloperApi {
     Tenant deployment
      */
 
-    @PUT
+    @POST
     @Path("/deploy-version")
     Uni<DeployTenantVersionDeveloperResponse> execute(@NotNull DeployTenantVersionDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/get-deployment-dashboard")
     Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
             @NotNull GetTenantDeploymentDashboardDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-deployment")
     Uni<DeleteTenantDeploymentDeveloperResponse> execute(@NotNull DeleteTenantDeploymentDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/create-lobby-request")
     Uni<CreateLobbyRequestDeveloperResponse> execute(@NotNull CreateLobbyRequestDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-lobby")
     Uni<DeleteLobbyDeveloperResponse> execute(@NotNull DeleteLobbyDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/create-matchmaker-request")
     Uni<CreateMatchmakerRequestDeveloperResponse> execute(@NotNull CreateMatchmakerRequestDeveloperRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker")
     Uni<DeleteMatchmakerDeveloperResponse> execute(@NotNull DeleteMatchmakerDeveloperRequest request);
 

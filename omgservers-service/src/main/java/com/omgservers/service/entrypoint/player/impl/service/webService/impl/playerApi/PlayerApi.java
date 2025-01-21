@@ -13,7 +13,7 @@ import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -23,23 +23,23 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @SecurityRequirement(name = ServiceOpenApiConfiguration.PLAYER_SECURITY_SCHEMA)
 public interface PlayerApi {
 
-    @PUT
+    @POST
     @Path("/ping-service")
     Uni<PingServicePlayerResponse> execute(@NotNull PingServicePlayerRequest request);
 
-    @PUT
+    @POST
     @Path("/create-user")
     Uni<CreateUserPlayerResponse> execute(@NotNull CreateUserPlayerRequest request);
 
-    @PUT
+    @POST
     @Path("/create-token")
     Uni<CreateTokenPlayerResponse> execute(@NotNull CreateTokenPlayerRequest request);
 
-    @PUT
+    @POST
     @Path("/create-client")
     Uni<CreateClientPlayerResponse> execute(@NotNull CreateClientPlayerRequest request);
 
-    @PUT
+    @POST
     @Path("/interchange")
     Uni<InterchangePlayerResponse> execute(@NotNull InterchangePlayerRequest request);
 }

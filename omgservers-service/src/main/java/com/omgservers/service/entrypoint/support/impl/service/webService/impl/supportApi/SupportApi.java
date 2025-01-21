@@ -33,7 +33,7 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -43,7 +43,7 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @SecurityRequirement(name = ServiceOpenApiConfiguration.SUPPORT_SECURITY_SCHEMA)
 public interface SupportApi {
 
-    @PUT
+    @POST
     @Path("/create-token")
     Uni<CreateTokenSupportResponse> execute(@NotNull CreateTokenSupportRequest request);
 
@@ -51,15 +51,15 @@ public interface SupportApi {
     Tenant
      */
 
-    @PUT
+    @POST
     @Path("/create-tenant")
     Uni<CreateTenantSupportResponse> execute(@NotNull CreateTenantSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/create-tenant-alias")
     Uni<CreateTenantAliasSupportResponse> execute(@NotNull CreateTenantAliasSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant")
     Uni<DeleteTenantSupportResponse> execute(@NotNull DeleteTenantSupportRequest request);
 
@@ -67,15 +67,15 @@ public interface SupportApi {
     Project
      */
 
-    @PUT
+    @POST
     @Path("/create-project")
     Uni<CreateTenantProjectSupportResponse> execute(@NotNull CreateTenantProjectSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/create-project-alias")
     Uni<CreateTenantProjectAliasSupportResponse> execute(@NotNull CreateTenantProjectAliasSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-project")
     Uni<DeleteTenantProjectSupportResponse> execute(@NotNull DeleteTenantProjectSupportRequest request);
 
@@ -83,11 +83,11 @@ public interface SupportApi {
     Developer
      */
 
-    @PUT
+    @POST
     @Path("/create-developer")
     Uni<CreateDeveloperSupportResponse> execute(@NotNull CreateDeveloperSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-developer")
     Uni<DeleteDeveloperSupportResponse> execute(@NotNull DeleteDeveloperSupportRequest request);
 
@@ -95,29 +95,29 @@ public interface SupportApi {
     Permissions
      */
 
-    @PUT
+    @POST
     @Path("/create-tenant-permissions")
     Uni<CreateTenantPermissionsSupportResponse> execute(@NotNull CreateTenantPermissionsSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-permissions")
     Uni<DeleteTenantPermissionsSupportResponse> execute(@NotNull DeleteTenantPermissionsSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/create-project-permissions")
     Uni<CreateTenantProjectPermissionsSupportResponse> execute(
             @NotNull CreateTenantProjectPermissionsSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-project-permissions")
     Uni<DeleteProjectPermissionsSupportResponse> execute(@NotNull DeleteProjectPermissionsSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/create-stage-permissions")
     Uni<CreateTenantStagePermissionsSupportResponse> execute(
             @NotNull CreateTenantStagePermissionsSupportRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-stage-permissions")
     Uni<DeleteTenantStagePermissionsSupportResponse> execute(
             @NotNull DeleteTenantStagePermissionsSupportRequest request);

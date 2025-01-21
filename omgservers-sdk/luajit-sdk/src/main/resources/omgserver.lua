@@ -79,7 +79,7 @@ local exchanger = {
         end
 
         local response_table = {}
-        local method = "PUT"
+        local method = "POST"
 
         if settings.trace then
             internal:log("Request, " .. method .. " " .. request_url .. ", body=" .. encoded_body)

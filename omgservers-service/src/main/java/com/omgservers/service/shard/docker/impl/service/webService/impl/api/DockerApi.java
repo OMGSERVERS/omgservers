@@ -7,7 +7,7 @@ import com.omgservers.schema.module.docker.StartDockerContainerResponse;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
 import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -19,15 +19,15 @@ public interface DockerApi {
     Docker
      */
 
-    @PUT
+    @POST
     @Path("/ping-docker-host")
     Uni<PingDockerHostResponse> execute(PingDockerHostRequest request);
 
-    @PUT
+    @POST
     @Path("/start-docker-container")
     Uni<StartDockerContainerResponse> execute(StartDockerContainerRequest request);
 
-    @PUT
+    @POST
     @Path("/stop-docker-container")
     Uni<StopDockerContainerResponse> execute(StopDockerContainerRequest request);
 }

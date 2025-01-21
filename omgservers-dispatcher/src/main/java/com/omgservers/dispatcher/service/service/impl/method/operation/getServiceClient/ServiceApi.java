@@ -4,13 +4,13 @@ import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherReque
 import com.omgservers.schema.entrypoint.dispatcher.CalculateShardDispatcherResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 
 @Path("/service/v1/entrypoint/dispatcher/request")
 public interface ServiceApi {
 
-    @PUT
+    @POST
     @Path("/calculate-shard")
     Uni<CalculateShardDispatcherResponse> execute(@NotNull CalculateShardDispatcherRequest request);
 }

@@ -17,7 +17,7 @@ import com.omgservers.schema.module.queue.queueRequest.SyncQueueRequestResponse;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsRequest;
 import com.omgservers.schema.module.queue.queueRequest.ViewQueueRequestsResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -29,15 +29,15 @@ public interface QueueApi {
     Queue
      */
 
-    @PUT
+    @POST
     @Path("/get-queue")
     Uni<GetQueueResponse> execute(GetQueueRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-queue")
     Uni<SyncQueueResponse> execute(SyncQueueRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-queue")
     Uni<DeleteQueueResponse> execute(DeleteQueueRequest request);
 
@@ -45,23 +45,23 @@ public interface QueueApi {
     QueueRequest
      */
 
-    @PUT
+    @POST
     @Path("/get-queue-request")
     Uni<GetQueueRequestResponse> execute(GetQueueRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/find-queue-request")
     Uni<FindQueueRequestResponse> execute(FindQueueRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/view-queue-requests")
     Uni<ViewQueueRequestsResponse> execute(ViewQueueRequestsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-queue-request")
     Uni<SyncQueueRequestResponse> execute(SyncQueueRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-queue-request")
     Uni<DeleteQueueRequestResponse> execute(DeleteQueueRequestRequest request);
 }

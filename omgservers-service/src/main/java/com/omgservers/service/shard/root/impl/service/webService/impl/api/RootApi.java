@@ -17,7 +17,7 @@ import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse
 import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsRequest;
 import com.omgservers.schema.module.root.rootEntityRef.ViewRootEntityRefsResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -25,35 +25,35 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/shard/root/request")
 public interface RootApi {
 
-    @PUT
+    @POST
     @Path("/get-root")
     Uni<GetRootResponse> getRoot(GetRootRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-root")
     Uni<SyncRootResponse> syncRoot(SyncRootRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-root")
     Uni<DeleteRootResponse> deleteRoot(DeleteRootRequest request);
 
-    @PUT
+    @POST
     @Path("/get-root-entity-ref")
     Uni<GetRootEntityRefResponse> getRootEntityRef(GetRootEntityRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-root-entity-ref")
     Uni<FindRootEntityRefResponse> findRootEntityRef(FindRootEntityRefRequest request);
 
-    @PUT
+    @POST
     @Path("/view-root-entity-refs")
     Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(ViewRootEntityRefsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-root-entity-ref")
     Uni<SyncRootEntityRefResponse> syncRootEntityRef(SyncRootEntityRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-root-entity-ref")
     Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(DeleteRootEntityRefRequest request);
 }

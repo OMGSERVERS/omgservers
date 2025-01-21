@@ -15,7 +15,7 @@ import com.omgservers.schema.module.lobby.SyncLobbyResponse;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -23,31 +23,31 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/shard/lobby/request")
 public interface LobbyApi {
 
-    @PUT
+    @POST
     @Path("/get-lobby")
     Uni<GetLobbyResponse> getLobby(GetLobbyRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-lobby")
     Uni<SyncLobbyResponse> syncLobby(SyncLobbyRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-lobby")
     Uni<DeleteLobbyResponse> deleteLobby(DeleteLobbyRequest request);
 
-    @PUT
+    @POST
     @Path("/get-lobby-runtime-ref")
     Uni<GetLobbyRuntimeRefResponse> getLobbyRuntimeRef(GetLobbyRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-lobby-runtime-ref")
     Uni<FindLobbyRuntimeRefResponse> findLobbyRuntimeRef(FindLobbyRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-lobby-runtime-ref")
     Uni<SyncLobbyRuntimeRefResponse> syncLobbyRuntimeRef(SyncLobbyRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-lobby-runtime-ref")
     Uni<DeleteLobbyRuntimeRefResponse> deleteLobbyRuntimeRef(DeleteLobbyRuntimeRefRequest request);
 }

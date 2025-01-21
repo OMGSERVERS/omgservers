@@ -61,7 +61,7 @@ import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
 import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -73,15 +73,15 @@ public interface MatchmakerApi {
     Matchmaker
      */
 
-    @PUT
+    @POST
     @Path("/get-matchmaker")
     Uni<GetMatchmakerResponse> execute(GetMatchmakerRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-matchmaker")
     Uni<SyncMatchmakerResponse> execute(SyncMatchmakerRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker")
     Uni<DeleteMatchmakerResponse> execute(DeleteMatchmakerRequest request);
 
@@ -89,23 +89,23 @@ public interface MatchmakerApi {
     MatchmakerAssignment
      */
 
-    @PUT
+    @POST
     @Path("/get-matchmaker-assignment")
     Uni<GetMatchmakerAssignmentResponse> execute(GetMatchmakerAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/find-matchmaker-assignment")
     Uni<FindMatchmakerAssignmentResponse> execute(FindMatchmakerAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/view-matchmaker-assignments")
     Uni<ViewMatchmakerAssignmentsResponse> execute(ViewMatchmakerAssignmentsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-matchmaker-assignment")
     Uni<SyncMatchmakerAssignmentResponse> execute(SyncMatchmakerAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker-assignment")
     Uni<DeleteMatchmakerAssignmentResponse> execute(DeleteMatchmakerAssignmentRequest request);
 
@@ -113,15 +113,15 @@ public interface MatchmakerApi {
     MatchmakerCommand
      */
 
-    @PUT
+    @POST
     @Path("/view-matchmaker-commands")
     Uni<ViewMatchmakerCommandsResponse> execute(ViewMatchmakerCommandsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-matchmaker-command")
     Uni<SyncMatchmakerCommandResponse> execute(SyncMatchmakerCommandRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker-command")
     Uni<DeleteMatchmakerCommandResponse> execute(DeleteMatchmakerCommandRequest request);
 
@@ -129,15 +129,15 @@ public interface MatchmakerApi {
     MatchmakerRequest
      */
 
-    @PUT
+    @POST
     @Path("/view-matchmaker-requests")
     Uni<ViewMatchmakerRequestsResponse> execute(ViewMatchmakerRequestsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-matchmaker-request")
     Uni<SyncMatchmakerRequestResponse> execute(SyncMatchmakerRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker-request")
     Uni<DeleteMatchmakerRequestResponse> execute(DeleteMatchmakerRequestRequest request);
 
@@ -145,23 +145,23 @@ public interface MatchmakerApi {
     MatchmakerMatch
      */
 
-    @PUT
+    @POST
     @Path("/get-matchmaker-match")
     Uni<GetMatchmakerMatchResponse> execute(GetMatchmakerMatchRequest request);
 
-    @PUT
+    @POST
     @Path("/view-matchmaker-matches")
     Uni<ViewMatchmakerMatchesResponse> execute(ViewMatchmakerMatchesRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-matchmaker-match")
     Uni<SyncMatchmakerMatchResponse> execute(SyncMatchmakerMatchRequest request);
 
-    @PUT
+    @POST
     @Path("/update-matchmaker-match-status")
     Uni<UpdateMatchmakerMatchStatusResponse> execute(UpdateMatchmakerMatchStatusRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker-match")
     Uni<DeleteMatchmakerMatchResponse> execute(DeleteMatchmakerMatchRequest request);
 
@@ -169,23 +169,23 @@ public interface MatchmakerApi {
     MatchmakerMatchAssignment
      */
 
-    @PUT
+    @POST
     @Path("/get-matchmaker-match-assignment")
     Uni<GetMatchmakerMatchAssignmentResponse> execute(GetMatchmakerMatchAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/find-matchmaker-match-assignment")
     Uni<FindMatchmakerMatchAssignmentResponse> execute(FindMatchmakerMatchAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/view-matchmaker-match-assignments")
     Uni<ViewMatchmakerMatchAssignmentsResponse> execute(ViewMatchmakerMatchAssignmentsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-matchmaker-match-assignment")
     Uni<SyncMatchmakerMatchAssignmentResponse> execute(SyncMatchmakerMatchAssignmentRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker-match-assignment")
     Uni<DeleteMatchmakerMatchAssignmentResponse> execute(DeleteMatchmakerMatchAssignmentRequest request);
 
@@ -193,19 +193,19 @@ public interface MatchmakerApi {
     MatchmakerMatchRuntimeRef
      */
 
-    @PUT
+    @POST
     @Path("/get-matchmaker-match-runtime-ref")
     Uni<GetMatchmakerMatchRuntimeRefResponse> execute(GetMatchmakerMatchRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-matchmaker-match-runtime-ref")
     Uni<FindMatchmakerMatchRuntimeRefResponse> execute(FindMatchmakerMatchRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-matchmaker-match-runtime-ref")
     Uni<SyncMatchmakerMatchRuntimeRefResponse> execute(SyncMatchmakerMatchRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-matchmaker-match-runtime-ref")
     Uni<DeleteMatchmakerMatchRuntimeRefResponse> execute(DeleteMatchmakerMatchRuntimeRefRequest request);
 
@@ -213,11 +213,11 @@ public interface MatchmakerApi {
     MatchmakerState
      */
 
-    @PUT
+    @POST
     @Path("/get-matchmaker-state")
     Uni<GetMatchmakerStateResponse> execute(GetMatchmakerStateRequest request);
 
-    @PUT
+    @POST
     @Path("/update-matchmaker-state")
     Uni<UpdateMatchmakerStateResponse> execute(UpdateMatchmakerStateRequest request);
 }

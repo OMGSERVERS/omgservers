@@ -7,7 +7,7 @@ import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherRequest;
 import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -15,11 +15,11 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/entrypoint/dispatcher/request")
 public interface DispatcherApi {
 
-    @PUT
+    @POST
     @Path("/create-token")
     Uni<CreateTokenDispatcherResponse> execute(@NotNull CreateTokenDispatcherRequest request);
 
-    @PUT
+    @POST
     @Path("/calculate-shard")
     Uni<CalculateShardDispatcherResponse> execute(@NotNull CalculateShardDispatcherRequest request);
 }

@@ -22,6 +22,7 @@ import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -30,43 +31,43 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/shard/user/request")
 public interface UserApi {
 
-    @PUT
+    @POST
     @Path("/get-user")
     Uni<GetUserResponse> getUser(GetUserRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-user")
     Uni<SyncUserResponse> syncUser(SyncUserRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-user")
     Uni<DeleteUserResponse> deleteUser(DeleteUserRequest request);
 
-    @PUT
+    @POST
     @Path("/create-token")
     Uni<CreateTokenResponse> createToken(CreateTokenRequest request);
 
-    @PUT
+    @POST
     @Path("/get-player")
     Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
 
-    @PUT
+    @POST
     @Path("/get-player-profile")
     Uni<GetPlayerProfileResponse> getPlayerProfile(GetPlayerProfileRequest request);
 
-    @PUT
+    @POST
     @Path("/find-player")
     Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-player")
     Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request);
 
-    @PUT
+    @POST
     @Path("/update-player-profile")
     Uni<UpdatePlayerProfileResponse> updatePlayerProfile(@Valid final UpdatePlayerProfileRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-player")
     Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request);
 }

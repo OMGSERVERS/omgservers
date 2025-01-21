@@ -13,7 +13,7 @@ import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminRequest;
 import com.omgservers.schema.entrypoint.admin.PingDockerHostAdminResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -21,23 +21,23 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/entrypoint/admin/request")
 public interface AdminApi {
 
-    @PUT
+    @POST
     @Path("/create-token")
     Uni<CreateTokenAdminResponse> execute(@NotNull CreateTokenAdminRequest request);
 
-    @PUT
+    @POST
     @Path("/generate-id")
     Uni<GenerateIdAdminResponse> execute(@NotNull GenerateIdAdminRequest request);
 
-    @PUT
+    @POST
     @Path("/bcrypt-hash")
     Uni<BcryptHashAdminResponse> execute(@NotNull BcryptHashAdminRequest request);
 
-    @PUT
+    @POST
     @Path("/calculate-shard")
     Uni<CalculateShardAdminResponse> execute(@NotNull CalculateShardAdminRequest request);
 
-    @PUT
+    @POST
     @Path("/ping-docker-host")
     Uni<PingDockerHostAdminResponse> execute(@NotNull PingDockerHostAdminRequest request);
 }

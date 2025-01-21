@@ -145,7 +145,7 @@ import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRespon
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -157,19 +157,19 @@ public interface TenantApi {
     Tenant
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant")
     Uni<GetTenantResponse> getTenant(GetTenantRequest request);
 
-    @PUT
+    @POST
     @Path("/get-tenant-data")
     Uni<GetTenantDataResponse> getTenantData(GetTenantDataRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant")
     Uni<SyncTenantResponse> syncTenant(SyncTenantRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant")
     Uni<DeleteTenantResponse> deleteTenant(DeleteTenantRequest request);
 
@@ -177,19 +177,19 @@ public interface TenantApi {
     TenantPermission
      */
 
-    @PUT
+    @POST
     @Path("/view-tenant-permissions")
     Uni<ViewTenantPermissionsResponse> viewTenantPermissions(ViewTenantPermissionsRequest request);
 
-    @PUT
+    @POST
     @Path("/verify-tenant-permission-exist")
     Uni<VerifyTenantPermissionExistsResponse> verifyTenantPermissionExists(VerifyTenantPermissionExistsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-permission")
     Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-permission")
     Uni<DeleteTenantPermissionResponse> deleteTenantPermission(DeleteTenantPermissionRequest request);
 
@@ -197,23 +197,23 @@ public interface TenantApi {
     TenantProject
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-project")
     Uni<GetTenantProjectResponse> getTenantProject(GetTenantProjectRequest request);
 
-    @PUT
+    @POST
     @Path("/get-tenant-project-data")
     Uni<GetTenantProjectDataResponse> getTenantProjectData(GetTenantProjectDataRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-project")
     Uni<SyncTenantProjectResponse> syncTenantProject(SyncTenantProjectRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-projects")
     Uni<ViewTenantProjectsResponse> viewTenantProjects(ViewTenantProjectsRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-project")
     Uni<DeleteTenantProjectResponse> deleteTenantProject(DeleteTenantProjectRequest request);
 
@@ -221,20 +221,20 @@ public interface TenantApi {
     TenantProjectPermission
      */
 
-    @PUT
+    @POST
     @Path("/view-tenant-project-permissions")
     Uni<ViewTenantProjectPermissionsResponse> viewTenantProjectPermissions(ViewTenantProjectPermissionsRequest request);
 
-    @PUT
+    @POST
     @Path("/verify-tenant-project-permission-exists")
     Uni<VerifyTenantProjectPermissionExistsResponse> verifyTenantProjectPermissionExists(
             VerifyTenantProjectPermissionExistsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-project-permission")
     Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(SyncTenantProjectPermissionRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-project-permission")
     Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
             DeleteTenantProjectPermissionRequest request);
@@ -243,23 +243,23 @@ public interface TenantApi {
     TenantStage
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-stage")
     Uni<GetTenantStageResponse> getTenantStage(GetTenantStageRequest request);
 
-    @PUT
+    @POST
     @Path("/get-tenant-stage-data")
     Uni<GetTenantStageDataResponse> getTenantStageData(GetTenantStageDataRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-stage")
     Uni<SyncTenantStageResponse> syncTenantStage(SyncTenantStageRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-stages")
     Uni<ViewTenantStagesResponse> viewTenantStages(ViewTenantStagesRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-stage")
     Uni<DeleteTenantStageResponse> deleteTenantStage(DeleteTenantStageRequest request);
 
@@ -267,20 +267,20 @@ public interface TenantApi {
     TenantStagePermission
      */
 
-    @PUT
+    @POST
     @Path("/view-tenant-stage-permissions")
     Uni<ViewTenantStagePermissionsResponse> viewTenantStagePermissions(ViewTenantStagePermissionsRequest request);
 
-    @PUT
+    @POST
     @Path("/verify-tenant-stage-permission-exists")
     Uni<VerifyTenantStagePermissionExistsResponse> verifyTenantStagePermissionExists(
             VerifyTenantStagePermissionExistsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-stage-permission")
     Uni<SyncTenantStagePermissionResponse> syncTenantStagePermission(SyncTenantStagePermissionRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-stage-permission")
     Uni<DeleteTenantStagePermissionResponse> deleteTenantStagePermission(DeleteTenantStagePermissionRequest request);
 
@@ -288,27 +288,27 @@ public interface TenantApi {
     TenantVersion
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-version")
     Uni<GetTenantVersionResponse> getTenantVersion(GetTenantVersionRequest request);
 
-    @PUT
+    @POST
     @Path("/get-tenant-version-config")
     Uni<GetTenantVersionConfigResponse> getTenantVersionConfig(GetTenantVersionConfigRequest request);
 
-    @PUT
+    @POST
     @Path("/get-tenant-version-data")
     Uni<GetTenantVersionDataResponse> getTenantVersionData(GetTenantVersionDataRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-version")
     Uni<SyncTenantVersionResponse> syncTenantVersion(SyncTenantVersionRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-versions")
     Uni<ViewTenantVersionsResponse> viewTenantVersions(ViewTenantVersionsRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-version")
     Uni<DeleteTenantVersionResponse> deleteTenantVersion(DeleteTenantVersionRequest request);
 
@@ -316,23 +316,23 @@ public interface TenantApi {
     TenantFilesArchive
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-files-archive")
     Uni<GetTenantFilesArchiveResponse> getTenantFilesArchive(GetTenantFilesArchiveRequest request);
 
-    @PUT
+    @POST
     @Path("/find-tenant-files-archive")
     Uni<FindTenantFilesArchiveResponse> findTenantFilesArchive(FindTenantFilesArchiveRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-files-archives")
     Uni<ViewTenantFilesArchivesResponse> viewTenantFilesArchives(ViewTenantFilesArchivesRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-files-archive")
     Uni<SyncTenantFilesArchiveResponse> syncTenantFilesArchive(SyncTenantFilesArchiveRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-files-archive")
     Uni<DeleteTenantFilesArchiveResponse> deleteTenantFilesArchive(DeleteTenantFilesArchiveRequest request);
 
@@ -340,19 +340,19 @@ public interface TenantApi {
     TenantBuildRequest
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-build-request")
     Uni<GetTenantBuildRequestResponse> getTenantBuildRequest(GetTenantBuildRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-build-requests")
     Uni<ViewTenantBuildRequestsResponse> viewTenantBuildRequests(ViewTenantBuildRequestsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-build-request")
     Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequest(SyncTenantBuildRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-build-request")
     Uni<DeleteTenantBuildRequestResponse> deleteTenantBuildRequest(DeleteTenantBuildRequestRequest request);
 
@@ -360,23 +360,23 @@ public interface TenantApi {
     TenantImage
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-image")
     Uni<GetTenantImageResponse> getTenantImage(GetTenantImageRequest request);
 
-    @PUT
+    @POST
     @Path("/find-tenant-image")
     Uni<FindTenantImageResponse> findTenantImage(FindTenantImageRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-images")
     Uni<ViewTenantImagesResponse> viewTenantImages(ViewTenantImagesRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-image")
     Uni<SyncTenantImageResponse> syncTenantImage(SyncTenantImageRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-image")
     Uni<DeleteTenantImageResponse> deleteTenantImage(DeleteTenantImageRequest request);
 
@@ -384,27 +384,27 @@ public interface TenantApi {
     TenantDeployment
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-deployment")
     Uni<GetTenantDeploymentResponse> getTenantDeployment(GetTenantDeploymentRequest request);
 
-    @PUT
+    @POST
     @Path("/get-tenant-deployment-data")
     Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(GetTenantDeploymentDataRequest request);
 
-    @PUT
+    @POST
     @Path("/select-tenant-deployment")
     Uni<SelectTenantDeploymentResponse> selectTenantDeployment(SelectTenantDeploymentRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-deployments")
     Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(ViewTenantDeploymentsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-deployment")
     Uni<SyncTenantDeploymentResponse> syncTenantDeployment(SyncTenantDeploymentRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-deployment")
     Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(DeleteTenantDeploymentRequest request);
 
@@ -412,23 +412,23 @@ public interface TenantApi {
     TenantLobbyRequest
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-lobby-request")
     Uni<GetTenantLobbyRequestResponse> getTenantLobbyRequest(GetTenantLobbyRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/find-tenant-lobby-request")
     Uni<FindTenantLobbyRequestResponse> findTenantLobbyRequest(FindTenantLobbyRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-lobby-requests")
     Uni<ViewTenantLobbyRequestsResponse> viewTenantLobbyRequests(ViewTenantLobbyRequestsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-lobby-request")
     Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequest(SyncTenantLobbyRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-lobby-request")
     Uni<DeleteTenantLobbyRequestResponse> deleteTenantLobbyRequest(DeleteTenantLobbyRequestRequest request);
 
@@ -436,23 +436,23 @@ public interface TenantApi {
     TenantLobbyRef
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-lobby-ref")
     Uni<GetTenantLobbyRefResponse> getTenantLobbyRef(GetTenantLobbyRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-tenant-lobby-ref")
     Uni<FindTenantLobbyRefResponse> findTenantLobbyRef(FindTenantLobbyRefRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-lobby-refs")
     Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(ViewTenantLobbyRefsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-lobby-ref")
     Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(SyncTenantLobbyRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-lobby-ref")
     Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(DeleteTenantLobbyRefRequest request);
 
@@ -460,24 +460,24 @@ public interface TenantApi {
     TenantMatchmakerRequest
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-matchmaker-request")
     Uni<GetTenantMatchmakerRequestResponse> getTenantMatchmakerRequest(GetTenantMatchmakerRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/find-tenant-matchmaker-request")
     Uni<FindTenantMatchmakerRequestResponse> findTenantMatchmakerRequest(FindTenantMatchmakerRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-matchmaker-requests")
     Uni<ViewTenantMatchmakerRequestsResponse> viewTenantMatchmakerRequests(
             ViewTenantMatchmakerRequestsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-tenant-matchmaker-request")
     Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequest(SyncTenantMatchmakerRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-matchmaker-request")
     Uni<DeleteTenantMatchmakerRequestResponse> deleteTenantMatchmakerRequest(
             DeleteTenantMatchmakerRequestRequest request);
@@ -486,23 +486,23 @@ public interface TenantApi {
     TenantMatchmakerRef
      */
 
-    @PUT
+    @POST
     @Path("/get-tenant-matchmaker-ref")
     Uni<GetTenantMatchmakerRefResponse> getTenantMatchmakerRef(GetTenantMatchmakerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-tenant-matchmaker-ref")
     Uni<FindTenantMatchmakerRefResponse> findTenantMatchmakerRef(FindTenantMatchmakerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/view-tenant-matchmaker-refs")
     Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(ViewTenantMatchmakerRefsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-version-matchmaker-ref")
     Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(SyncTenantMatchmakerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-tenant-matchmaker-ref")
     Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(DeleteTenantMatchmakerRefRequest request);
 }

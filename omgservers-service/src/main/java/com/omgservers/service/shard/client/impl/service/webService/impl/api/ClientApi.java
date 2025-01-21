@@ -35,7 +35,7 @@ import com.omgservers.schema.module.client.ViewClientMessagesResponse;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsRequest;
 import com.omgservers.schema.module.client.ViewClientRuntimeRefsResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -43,71 +43,71 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 @Path("/service/v1/shard/client/request")
 public interface ClientApi {
 
-    @PUT
+    @POST
     @Path("/get-client")
     Uni<GetClientResponse> getClient(GetClientRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-client")
     Uni<SyncClientResponse> syncClient(SyncClientRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-client")
     Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request);
 
-    @PUT
+    @POST
     @Path("/interchange")
     Uni<InterchangeResponse> interchange(InterchangeRequest request);
 
-    @PUT
+    @POST
     @Path("/view-client-messages")
     Uni<ViewClientMessagesResponse> viewClientMessages(ViewClientMessagesRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-client-message")
     Uni<SyncClientMessageResponse> syncClientMessage(SyncClientMessageRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-client-messages")
     Uni<DeleteClientMessagesResponse> deleteClientMessages(DeleteClientMessagesRequest request);
 
-    @PUT
+    @POST
     @Path("/get-client-runtime-ref")
     Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(GetClientRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-client-runtime-ref")
     Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(FindClientRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/view-client-runtime-refs")
     Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(ViewClientRuntimeRefsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-client-runtime-ref")
     Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(SyncClientRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-client-runtime-ref")
     Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(DeleteClientRuntimeRefRequest request);
 
-    @PUT
+    @POST
     @Path("/get-client-matchmaker-ref")
     Uni<GetClientMatchmakerRefResponse> getClientMatchmakerRef(GetClientMatchmakerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/find-client-matchmaker-ref")
     Uni<FindClientMatchmakerRefResponse> findClientMatchmakerRef(FindClientMatchmakerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/view-client-matchmaker-refs")
     Uni<ViewClientMatchmakerRefsResponse> viewClientMatchmakerRefs(ViewClientMatchmakerRefsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-client-matchmaker-ref")
     Uni<SyncClientMatchmakerRefResponse> syncClientMatchmakerRef(SyncClientMatchmakerRefRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-client-matchmaker-ref")
     Uni<DeleteClientMatchmakerRefResponse> deleteClientMatchmakerRef(DeleteClientMatchmakerRefRequest request);
 }

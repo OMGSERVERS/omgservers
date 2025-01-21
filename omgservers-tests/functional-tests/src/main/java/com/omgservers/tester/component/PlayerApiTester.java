@@ -44,7 +44,7 @@ public class PlayerApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateUserPlayerRequest()))
-                .when().put("/service/v1/entrypoint/player/request/create-user");
+                .when().post("/service/v1/entrypoint/player/request/create-user");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateUserPlayerResponse.class);
@@ -58,7 +58,7 @@ public class PlayerApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenPlayerRequest(userId, password)))
-                .when().put("/service/v1/entrypoint/player/request/create-token");
+                .when().post("/service/v1/entrypoint/player/request/create-token");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTokenPlayerResponse.class);
@@ -79,7 +79,7 @@ public class PlayerApiTester {
                 .body(objectMapper.writeValueAsString(new CreateClientPlayerRequest(tenant,
                         tenantProject,
                         tenantStage)))
-                .when().put("/service/v1/entrypoint/player/request/create-client");
+                .when().post("/service/v1/entrypoint/player/request/create-client");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateClientPlayerResponse.class);
@@ -155,7 +155,7 @@ public class PlayerApiTester {
                 .body(objectMapper.writeValueAsString(new InterchangePlayerRequest(clientId,
                         messagesToHandle,
                         consumedMessages)))
-                .when().put("/service/v1/entrypoint/player/request/interchange");
+                .when().post("/service/v1/entrypoint/player/request/interchange");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(InterchangePlayerResponse.class);

@@ -68,7 +68,7 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenDeveloperRequest(userId, password)))
-                .when().put("/service/v1/entrypoint/developer/request/create-token");
+                .when().post("/service/v1/entrypoint/developer/request/create-token");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -86,7 +86,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new GetTenantDashboardDeveloperRequest(tenantId.toString())))
-                .when().put("/service/v1/entrypoint/developer/request/get-tenant-dashboard");
+                .when().post("/service/v1/entrypoint/developer/request/get-tenant-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -108,7 +108,7 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTenantProjectDeveloperRequest(tenantId.toString())))
-                .when().put("/service/v1/entrypoint/developer/request/create-project");
+                .when().post("/service/v1/entrypoint/developer/request/create-project");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -128,7 +128,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new GetTenantProjectDashboardDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
-                .when().put("/service/v1/entrypoint/developer/request/get-project-dashboard");
+                .when().post("/service/v1/entrypoint/developer/request/get-project-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -148,7 +148,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteTenantProjectDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
-                .when().put("/service/v1/entrypoint/developer/request/delete-project");
+                .when().post("/service/v1/entrypoint/developer/request/delete-project");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -172,7 +172,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new CreateTenantStageDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
-                .when().put("/service/v1/entrypoint/developer/request/create-stage");
+                .when().post("/service/v1/entrypoint/developer/request/create-stage");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -195,7 +195,7 @@ public class DeveloperApiTester {
                         new GetTenantStageDashboardDeveloperRequest(tenantId.toString(),
                                 tenantProjectId.toString(),
                                 tenantStageId.toString())))
-                .when().put("/service/v1/entrypoint/developer/request/get-stage-dashboard");
+                .when().post("/service/v1/entrypoint/developer/request/get-stage-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -218,7 +218,7 @@ public class DeveloperApiTester {
                         new DeleteTenantStageDeveloperRequest(tenantId.toString(),
                                 tenantProjectId.toString(),
                                 tenantStageId.toString())))
-                .when().put("/service/v1/entrypoint/developer/request/delete-project");
+                .when().post("/service/v1/entrypoint/developer/request/delete-project");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -244,7 +244,7 @@ public class DeveloperApiTester {
                 .body(objectMapper.writeValueAsString(new CreateTenantVersionDeveloperRequest(tenantId.toString(),
                         tenantProjectId.toString(),
                         tenantVersionConfig)))
-                .when().put("/service/v1/entrypoint/developer/request/create-version");
+                .when().post("/service/v1/entrypoint/developer/request/create-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -269,7 +269,7 @@ public class DeveloperApiTester {
                 .formParam("tenantVersionId", tenantVersionId)
                 .multiPart("version.zip", "version.zip",
                         archiveBytes, "application/octet-stream")
-                .when().put("/service/v1/entrypoint/developer/request/upload-files-archive");
+                .when().post("/service/v1/entrypoint/developer/request/upload-files-archive");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -289,7 +289,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new GetTenantVersionDashboardDeveloperRequest(tenantId.toString(), tenantVersionId)))
-                .when().put("/service/v1/entrypoint/developer/request/get-version-dashboard");
+                .when().post("/service/v1/entrypoint/developer/request/get-version-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -309,7 +309,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteTenantVersionDeveloperRequest(tenantId.toString(), tenantVersionId)))
-                .when().put("/service/v1/entrypoint/developer/request/delete-version");
+                .when().post("/service/v1/entrypoint/developer/request/delete-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -338,7 +338,7 @@ public class DeveloperApiTester {
                                 tenantProjectId.toString(),
                                 tenantStageId.toString(),
                                 tenantVersionId)))
-                .when().put("/service/v1/entrypoint/developer/request/deploy-version");
+                .when().post("/service/v1/entrypoint/developer/request/deploy-version");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -358,7 +358,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new GetTenantDeploymentDashboardDeveloperRequest(tenantId.toString(), tenantDeploymentId)))
-                .when().put("/service/v1/entrypoint/developer/request/get-deployment-dashboard");
+                .when().post("/service/v1/entrypoint/developer/request/get-deployment-dashboard");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
@@ -378,7 +378,7 @@ public class DeveloperApiTester {
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
                         new DeleteTenantDeploymentDeveloperRequest(tenantId.toString(), tenantDeploymentId)))
-                .when().put("/service/v1/entrypoint/developer/request/delete-deployment");
+                .when().post("/service/v1/entrypoint/developer/request/delete-deployment");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()

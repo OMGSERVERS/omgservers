@@ -43,7 +43,7 @@ public class SupportApiTester {
                 .baseUri(getConfigOperation.getConfig().internalUri().toString())
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTokenSupportRequest(alias, password)))
-                .when().put("/service/v1/entrypoint/support/request/create-token");
+                .when().post("/service/v1/entrypoint/support/request/create-token");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTokenSupportResponse.class);
@@ -58,7 +58,7 @@ public class SupportApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateTenantSupportRequest()))
-                .when().put("/service/v1/entrypoint/support/request/create-tenant");
+                .when().post("/service/v1/entrypoint/support/request/create-tenant");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTenantSupportResponse.class);
@@ -74,7 +74,7 @@ public class SupportApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new DeleteTenantSupportRequest(tenantId.toString())))
-                .when().put("/service/v1/entrypoint/support/request/delete-tenant");
+                .when().post("/service/v1/entrypoint/support/request/delete-tenant");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(DeleteTenantVersionDeveloperResponse.class);
@@ -90,7 +90,7 @@ public class SupportApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(new CreateDeveloperSupportRequest()))
-                .when().put("/service/v1/entrypoint/support/request/create-developer");
+                .when().post("/service/v1/entrypoint/support/request/create-developer");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateDeveloperSupportResponse.class);
@@ -111,7 +111,7 @@ public class SupportApiTester {
                 .body(objectMapper.writeValueAsString(new CreateTenantPermissionsSupportRequest(tenantId.toString(),
                         userId,
                         permissions)))
-                .when().put("/service/v1/entrypoint/support/request/create-tenant-permissions");
+                .when().post("/service/v1/entrypoint/support/request/create-tenant-permissions");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(CreateTenantPermissionsSupportResponse.class);
@@ -132,7 +132,7 @@ public class SupportApiTester {
                 .body(objectMapper.writeValueAsString(new DeleteTenantPermissionsSupportRequest(tenantId.toString(),
                         userId,
                         permissions)))
-                .when().put("/service/v1/entrypoint/support/request/delete-tenant-permissions");
+                .when().post("/service/v1/entrypoint/support/request/delete-tenant-permissions");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody().as(DeleteTenantPermissionsSupportResponse.class);

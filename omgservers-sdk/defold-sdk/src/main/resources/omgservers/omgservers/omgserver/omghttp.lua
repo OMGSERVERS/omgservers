@@ -63,7 +63,7 @@ omghttp = {
 					encode_empty_table_as_object = is_empty
 				})
 
-				local method = "PUT"
+				local method = "POST"
 
 				if trace_logging then
 					print(socket.gettime() .. " [OMGSERVER] Request, " .. method .. " " .. url .. ", body=" .. encoded_body)

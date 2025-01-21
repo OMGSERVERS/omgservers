@@ -39,7 +39,7 @@ import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -51,15 +51,15 @@ public interface PoolApi {
     Pool
      */
 
-    @PUT
+    @POST
     @Path("/get-pool")
     Uni<GetPoolResponse> execute(GetPoolRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-pool")
     Uni<SyncPoolResponse> execute(SyncPoolRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-pool")
     Uni<DeletePoolResponse> execute(DeletePoolRequest request);
 
@@ -67,19 +67,19 @@ public interface PoolApi {
     PoolServer
      */
 
-    @PUT
+    @POST
     @Path("/get-pool-server")
     Uni<GetPoolServerResponse> execute(GetPoolServerRequest request);
 
-    @PUT
+    @POST
     @Path("/view-pool-servers")
     Uni<ViewPoolServerResponse> execute(ViewPoolServersRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-pool-server")
     Uni<SyncPoolServerResponse> execute(SyncPoolServerRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-pool-server")
     Uni<DeletePoolServerResponse> execute(DeletePoolServerRequest request);
 
@@ -87,23 +87,23 @@ public interface PoolApi {
     PoolContainer
      */
 
-    @PUT
+    @POST
     @Path("/get-pool-server-container")
     Uni<GetPoolContainerResponse> execute(GetPoolContainerRequest request);
 
-    @PUT
+    @POST
     @Path("/find-pool-server-container")
     Uni<FindPoolContainerResponse> execute(FindPoolContainerRequest request);
 
-    @PUT
+    @POST
     @Path("/view-pool-server-containers")
     Uni<ViewPoolContainersResponse> execute(ViewPoolContainersRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-pool-server-container")
     Uni<SyncPoolContainerResponse> execute(SyncPoolContainerRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-pool-server-container")
     Uni<DeletePoolContainerResponse> execute(DeletePoolContainerRequest request);
 
@@ -111,23 +111,23 @@ public interface PoolApi {
     PoolRequest
      */
 
-    @PUT
+    @POST
     @Path("/get-pool-request")
     Uni<GetPoolRequestResponse> execute(GetPoolRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/find-pool-request")
     Uni<FindPoolRequestResponse> execute(FindPoolRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/view-pool-requests")
     Uni<ViewPoolRequestsResponse> execute(ViewPoolRequestsRequest request);
 
-    @PUT
+    @POST
     @Path("/sync-pool-request")
     Uni<SyncPoolRequestResponse> execute(SyncPoolRequestRequest request);
 
-    @PUT
+    @POST
     @Path("/delete-pool-request")
     Uni<DeletePoolRequestResponse> execute(DeletePoolRequestRequest request);
 
@@ -135,11 +135,11 @@ public interface PoolApi {
     PoolState
      */
 
-    @PUT
+    @POST
     @Path("/get-pool-state")
     Uni<GetPoolStateResponse> execute(GetPoolStateRequest request);
 
-    @PUT
+    @POST
     @Path("/update-pool-state")
     Uni<UpdatePoolStateResponse> execute(UpdatePoolStateRequest request);
 }
