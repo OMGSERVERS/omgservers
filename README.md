@@ -25,6 +25,21 @@ OMGSERVERS is a backend for authoritative game servers.
 - Defold SDK for both clients and servers.
 - A command-line tool for administrative tasks.
 
+# Flows
+
+## Players
+1. **Create a new user for the player**
+   - `PUT /service/v1/entrypoint/player/request/create-user`
+
+1. **Issue a user access token to authorize subsequent server requests**
+   - `PUT /service/v1/entrypoint/player/request/create-token`
+
+1. **Create a new client for a specific game project**
+   - `PUT /service/v1/entrypoint/player/request/create-client`
+
+1. **Communicate with the server asynchronously**
+   - `PUT /service/v1/entrypoint/player/request/interchange`
+
 # Installation Types
 
 | **Type**                        | **Description**                                          | **Suitable for**                                                         |
