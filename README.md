@@ -5,6 +5,7 @@
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=bugs)](https://sonarcloud.io/summary/new_code?id=OMGSERVERS_omgservers)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=OMGSERVERS_omgservers)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=OMGSERVERS_omgservers&metric=coverage)](https://sonarcloud.io/summary/overall?id=OMGSERVERS_omgservers)
+![Docker Pulls](https://img.shields.io/docker/pulls/omgservers/service)
 
 OMGSERVERS is a backend for authoritative game servers.
 
@@ -16,37 +17,30 @@ OMGSERVERS is a backend for authoritative game servers.
 
 # Features
 
-- Manage developer accounts and permissions.
-- Organize projects, versions, and deployments across stages.
-- Build Docker images for game runtimes from source code.
-- Store and manage player data.
-- Match players and launch game runtimes in Docker containers.
-- Request/Response API for player authentication and registration.
-- Command-based API for delivering asynchronous commands between players and the server.
-- WebSockets for enabling two-way communication with game runtimes.
-- Defold SDK for implementing the client and server sides of games.
-- Run game runtime containers on a pool of servers.
-- WebSocket Dispatcher to connect game runtimes with players via client WebSocket connections.
-- Lobby runtimes to handle player commands and update player data in an authoritative way.
-- Match runtimes to allow players to play together.
-- Command-line tool for administrative and support tasks.
+- Developer accounts and permissions management.
+- Projects, stages, versions, and deployments.
+- Authoritative handling of player commands within lobbies.
+- Matchmaking and match execution in Docker containers. 
+- Player data storage and management.
+- Defold SDK for both clients and servers.
+- A command-line tool for administrative tasks.
 
 # Installation Types
 
-| **Type**                        | **Description**                                                     | **Suitable for**                                                         |
-|---------------------------------|---------------------------------------------------------------------|--------------------------------------------------------------------------|
-| **Standalone**                  | Single-server service installation.                                 | It is acceptable to distribute players across independent installations. |
-|                                 | Game runtimes are executed on the same server using the Docker API. | Non-resource-intensive game runtimes.                                    |
-| **Standalone with server pool** | Single-server service installation.                                 | It is acceptable to distribute players across independent installations. |
-|                                 | Run game runtime on a pool of Docker hosts.                         | Resource-intensive game runtimes.                                        |
-| **Sharded**                     | Distribute data across multiple servers by using shards.            | A significant number of players should be able to play together.         |
-|                                 | Support on-demand infrastructure scaling.                           | Non-resource-intensive game runtimes.                                    |
-|                                 | Servers are shared for both service and game runtime execution.     |                                                                          |
-| **Sharded with server pool**    | Distribute data across multiple servers by using shards.            | A significant number of players should be able to play together.         |
-|                                 | Support on-demand infrastructure scaling.                           | Resource-intensive game runtimes.                                        |
-|                                 | Run game runtime on a pool of Docker hosts.                         |                                                                          |
-| **Public cloud**                | Provide a pay-as-you-go service.                                    |                                                                          |
-|                                 | On-demand dedicated server pools.                                   |                                                                          |
+| **Type**                        | **Description**                                          | **Suitable for**                                                         |
+|---------------------------------|----------------------------------------------------------|--------------------------------------------------------------------------|
+| **Standalone**                  | Backend single-server installation.                      | It is acceptable to distribute players across independent installations. |
+|                                 | Shared server for game runtimes and backend.             | Non-resource-intensive game runtimes.                                    |
+| **Standalone with server pool** | Backend single-server installation.                      | It is acceptable to distribute players across independent installations. |
+|                                 | Pool of Docker hosts for game runtimes.                  | Resource-intensive game runtimes.                                        |
+| **Sharded**                     | Distribute data across multiple servers by using shards. | A significant number of players should be able to play together.         |
+|                                 | Support on-demand infrastructure scaling.                | Non-resource-intensive game runtimes.                                    |
+|                                 | Shared servers for game runtimes and backend.            |                                                                          |
+| **Sharded with server pool**    | Distribute data across multiple servers by using shards. | A significant number of players should be able to play together.         |
+|                                 | Support on-demand infrastructure scaling.                | Resource-intensive game runtimes.                                        |
+|                                 | Pool of Docker hosts for game runtimes.                  |                                                                          |
+| **Public cloud**                | Provide a pay-as-you-go service.                         |                                                                          |
+|                                 | On-demand dedicated server pools.                        |                                                                          |
 
 # Configuration
 
