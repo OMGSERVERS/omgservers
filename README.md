@@ -17,93 +17,32 @@ OMGSERVERS is a backend for authoritative game servers.
 
 # Features
 
-- Developer accounts and permissions management.
-- Projects, stages, versions and deployments.
-- Lobbies to authoritative handling of player commands.
-- Matchmaking and matches execution in Docker containers.
-- Player data storage and management.
-- Defold SDK for both clients and servers.
+- Developer account and permission management.
+- Support for tenants, projects, stages, versions, and deployments.
+- Two types of game runtimes: lobbies and matches.
+- Game runtimes execution in Docker containers.
+- Players assignment across lobbies and matches.
+- Players data storage and management.
+- Defold SDK support for both clients and servers.
 - A command-line tool for administrative tasks.
 
 # User Roles
 
-The backend supports different user roles, each with dedicated APIs tailored to specific tasks. These roles include:
-
-- admin – Manages the backend installation.
-- support – Creates and configures tenants for developer users.
-- developer – Prepares a docker image of the game server and pushes it to the registry under a new game project
-  version.
-- player – Plays the games developed by developers.
-- runtime – Interacts with the backend and handles gameplay.
-
-# Getting Started
-
-1. Check the `Installation Types` section below and either run it or get access to it.
-
-1. If you are running the backend on your own way:
-    - As a support user, complete the `Create and configure a new tenant` flow.
-
-1. Integrate the OMGSERVERS SDK(s) into your project and build a Docker container to use it as the game runtime.
-
-1. As a developer user:
-    - Complete the `Create a new game project` flow.
-    - Complete the `Deploy a new project version` flow.
+- Admin – Manages the backend installation.
+- Support – Creates and configures tenants for developer users.
+- Developer – Prepares a docker image of the game servers.
+- Player – Plays the games developed by developers.
+- Runtime – Interacts with the backend and handles gameplay.
 
 # How it works
 
-## Backend Logic
-
-To connect to the game server, a player must create a client using the Player
-API: `POST /service/v1/entrypoint/player/request/create-client`.
-
-When the first player creates a client, the backend launches the developer-provided game runtime Docker image as
-a lobby and assigns it to the client. All incoming player messages are then routed to the launched lobby, where
-they are handled in an authoritative manner.
-
-Meanwhile, the lobby communicates asynchronously with the backend via command exchanges. It is notified of newly
-created and deleted clients, as well as their messages.
-
-In response to these events, or independently, the lobby can trigger various backend-specific operations, such
-as:
-
-- Sending player messages
-- Profile updates
-- Matchmaking
-
-To allow a group of players to play together, lobbies can utilize the matchmaker functionality. In this case,
-the matchmaker can run matches within Docker containers and assign them to the players to handle their
-input.
-
-## Player Interactions
-
-To interact with the backend as a player, there is OMGPLAYER SDK.
-
-While the direct communication protocol between game clients and game runtimes may vary, interaction via backend
-follows a standardized asynchronous command-based approach via HTTP requests
-to: `POST /service/v1/entrypoint/player/request/interchange`
-
-The request body must include:
-
-- A list of outgoing messages to be delivered to the runtime (lobby or match) currently assigned to the client.
-- The IDs of successfully consumed incoming messages received in response to a previously created request.
-
-The list of messages exchanged between players and the backend is detailed in the `Player Messages` section below.
-
-To achieve more real-time gameplay, it is possible to obtain direct connection details through the upgrade protocol.
-This protocol must be initiated by the game runtime via the backend using the `UPGRADE_CONNECTION` command.
-
-## Runtime Interactions
-
-For game runtimes, the OMGSERVER SDK can be used in a headless game builds or a separated from the game server
-projects to connect to the backend. The API endpoint is: `POST /service/v1/entrypoint/runtime/request/interchange`
-
-The request body must include:
-
-- A list of outgoing commands to be processed by the backend.
-- The IDs of successfully consumed incoming commands received in response to a previously created request.
-
-The list of commands exchanged between the game runtime and the backend is detailed in the `Runtime Commands` section
-below.
+- Developers push game runtime Docker images to the registry.
+- When players connect, the backend runs and assigns lobbies to them.
+- To enable multiplayer gameplay, the backend runs matches.
+- Lobbies and matches use the OMGSERVER SDK to perform backend-specific commands.
+- Players use the OMGPLAYER SDK to interact with the backend.
+- All incoming player messages are routed to assigned runtimes.
+- To implement real-time gameplay, matches require players to connect directly.
 
 # Flows
 
