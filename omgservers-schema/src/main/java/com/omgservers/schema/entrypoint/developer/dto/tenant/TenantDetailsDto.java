@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TenantDashboardDto {
+public class TenantDetailsDto {
 
     TenantDto tenant;
 

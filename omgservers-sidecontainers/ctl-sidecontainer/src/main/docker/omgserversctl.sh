@@ -225,8 +225,8 @@ help() {
       echo "     - DEVELOPER_TOKEN"
     fi
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDashboard" ]; then
-    echo " ./omgserversctl.sh developer getTenantDashboard <tenant>"
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDetails" ]; then
+    echo " ./omgserversctl.sh developer getTenantDetails <tenant>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProject" ]; then
     echo " ./omgserversctl.sh developer createProject <tenant>"
@@ -239,8 +239,8 @@ help() {
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProjectAlias" ]; then
     echo " ./omgserversctl.sh developer createProjectAlias <tenant> <project_id> <alias>"
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getProjectDashboard" ]; then
-    echo " ./omgserversctl.sh developer getProjectDashboard <tenant> <project>"
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getProjectDetails" ]; then
+    echo " ./omgserversctl.sh developer getProjectDetails <tenant> <project>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteProject" ]; then
       echo " ./omgserversctl.sh developer deleteProject <tenant> <project>"
@@ -259,8 +259,8 @@ help() {
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStageAlias" ]; then
     echo " ./omgserversctl.sh developer createStageAlias <tenant> <stage_id> <alias>"
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDashboard" ]; then
-    echo " ./omgserversctl.sh developer getStageDashboard <tenant> <project> <stage>"
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDetails" ]; then
+    echo " ./omgserversctl.sh developer getStageDetails <tenant> <project> <stage>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteStage" ]; then
     echo " ./omgserversctl.sh developer deleteStage <tenant> <project> <stage>"
@@ -283,8 +283,8 @@ help() {
       echo "     - FILES_ARCHIVE"
     fi
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getVersionDashboard" ]; then
-    echo " ./omgserversctl.sh developer getVersionDashboard <tenant> <version>"
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getVersionDetails" ]; then
+    echo " ./omgserversctl.sh developer getVersionDetails <tenant> <version>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteVersion" ]; then
     echo " ./omgserversctl.sh developer deleteVersion <tenant> <version>"
@@ -300,8 +300,8 @@ help() {
       echo "     - DEPLOYMENT"
     fi
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getDeploymentDashboard" ]; then
-    echo " ./omgserversctl.sh developer getDeploymentDashboard <tenant> <deployment>"
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getDeploymentDetails" ]; then
+    echo " ./omgserversctl.sh developer getDeploymentDetails <tenant> <deployment>"
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteDeployment" ]; then
     echo " ./omgserversctl.sh developer deleteDeployment <tenant> <deployment>"
@@ -1544,13 +1544,13 @@ developer_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created"
 }
 
-developer_getTenantDashboard() {
+developer_getTenantDetails() {
   internal_useEnvironment
 
   TENANT=$1
 
   if [ -z "${TENANT}" ]; then
-    help "developer getTenantDashboard"
+    help "developer getTenantDetails"
     exit 1
   fi
 
@@ -1563,9 +1563,9 @@ developer_getTenantDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-tenant-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-tenant-details"
   REQUEST="{\"tenant\": \"${TENANT}\"}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT}.json"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1587,7 +1587,7 @@ developer_getTenantDashboard() {
     exit 1
   fi
 
-  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-dashboard_${TENANT}.json | jq
+  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json | jq
 }
 
 developer_createProject() {
@@ -1700,14 +1700,14 @@ developer_createProjectAlias() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project alias was created"
 }
 
-developer_getProjectDashboard() {
+developer_getProjectDetails() {
   internal_useEnvironment
 
   TENANT=$1
   PROJECT=$2
 
   if [ -z "${TENANT}" -o -z "${PROJECT}" ]; then
-    help "developer getProjectDashboard"
+    help "developer getProjectDetails"
     exit 1
   fi
 
@@ -1721,9 +1721,9 @@ developer_getProjectDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-project-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-project-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-dashboard_${TENANT}_${PROJECT}.json"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1745,7 +1745,7 @@ developer_getProjectDashboard() {
     exit 1
   fi
 
-  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-dashboard_${TENANT}_${PROJECT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-dashboard_${TENANT}_${PROJECT}.json | jq
+  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json | jq
 }
 
 developer_deleteProject() {
@@ -1912,7 +1912,7 @@ developer_createStageAlias() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage alias was created"
 }
 
-developer_getStageDashboard() {
+developer_getStageDetails() {
   internal_useEnvironment
 
   TENANT=$1
@@ -1920,7 +1920,7 @@ developer_getStageDashboard() {
   STAGE=$3
 
   if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" ]; then
-    help "developer getStageDashboard"
+    help "developer getStageDetails"
     exit 1
   fi
 
@@ -1934,9 +1934,9 @@ developer_getStageDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-stage-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-stage-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\"}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-dashboard_${TENANT}_${PROJECT}_${STAGE}.json"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-details_${TENANT}_${PROJECT}_${STAGE}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2156,14 +2156,14 @@ developer_uploadFilesArchive() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Files archive was uploaded, FILES_ARCHIVE=${FILES_ARCHIVE}"
 }
 
-developer_getVersionDashboard() {
+developer_getVersionDetails() {
   internal_useEnvironment
 
   TENANT=$1
   VERSION=$2
 
   if [ -z "${TENANT}" -o -z "${VERSION}" ]; then
-    help "developer getVersionDashboard"
+    help "developer getVersionDetails"
     exit 1
   fi
 
@@ -2177,9 +2177,9 @@ developer_getVersionDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-version-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-version-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"version_id\": ${VERSION}}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-dashboard_${TENANT}_${VERSION}.json"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-details_${TENANT}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2322,14 +2322,14 @@ developer_deployVersion() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=${DEPLOYMENT}"
 }
 
-developer_getDeploymentDashboard() {
+developer_getDeploymentDetails() {
   internal_useEnvironment
 
   TENANT=$1
   DEPLOYMENT=$2
 
   if [ -z "${TENANT}" -o -z "${DEPLOYMENT}" ]; then
-    help "developer getDeploymentDashboard"
+    help "developer getDeploymentDetails"
     exit 1
   fi
 
@@ -2343,9 +2343,9 @@ developer_getDeploymentDashboard() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-deployment-dashboard"
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-deployment-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"deployment_id\": ${DEPLOYMENT}}"
-  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-deployment-dashboard_${TENANT}_${DEPLOYMENT}.json"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-deployment-details_${TENANT}_${DEPLOYMENT}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2752,36 +2752,36 @@ elif [ "$1" = "developer" ]; then
       developer_printCurrent
   elif [ "$2" = "createToken" ]; then
     developer_createToken
-  elif [ "$2" = "getTenantDashboard" ]; then
-    developer_getTenantDashboard $3
+  elif [ "$2" = "getTenantDetails" ]; then
+    developer_getTenantDetails $3
   elif [ "$2" = "createProject" ]; then
     developer_createProject $3
   elif [ "$2" = "createProjectAlias" ]; then
     developer_createProjectAlias $3 $4 $5
-  elif [ "$2" = "getProjectDashboard" ]; then
-    developer_getProjectDashboard $3 $4
+  elif [ "$2" = "getProjectDetails" ]; then
+    developer_getProjectDetails $3 $4
   elif [ "$2" = "deleteProject" ]; then
     developer_deleteProject $3 $4
   elif [ "$2" = "createStage" ]; then
     developer_createStage $3 $4
   elif [ "$2" = "createStageAlias" ]; then
     developer_createStageAlias $3 $4 $5
-  elif [ "$2" = "getStageDashboard" ]; then
-    developer_getStageDashboard $3 $4 $5
+  elif [ "$2" = "getStageDetails" ]; then
+    developer_getStageDetails $3 $4 $5
   elif [ "$2" = "deleteStage" ]; then
     developer_deleteStage $3 $4 $5
   elif [ "$2" = "createVersion" ]; then
     developer_createVersion $3 $4 $5
   elif [ "$2" = "uploadFilesArchive" ]; then
     developer_uploadFilesArchive $3 $4 $5
-  elif [ "$2" = "getVersionDashboard" ]; then
-    developer_getVersionDashboard $3 $4
+  elif [ "$2" = "getVersionDetails" ]; then
+    developer_getVersionDetails $3 $4
   elif [ "$2" = "deleteVersion" ]; then
     developer_deleteVersion $3 $4
   elif [ "$2" = "deployVersion" ]; then
     developer_deployVersion $3 $4 $5 $6
-  elif [ "$2" = "getDeploymentDashboard" ]; then
-    developer_getDeploymentDashboard $3 $4
+  elif [ "$2" = "getDeploymentDetails" ]; then
+    developer_getDeploymentDetails $3 $4
   elif [ "$2" = "deleteDeployment" ]; then
     developer_deleteDeployment $3 $4
   elif [ "$2" = "createLobbyRequest" ]; then

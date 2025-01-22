@@ -31,16 +31,16 @@ class WaitForDeploymentOperationImpl implements WaitForDeploymentOperation {
         final var tenantId = testVersion.getTenantId();
         final var tenantDeploymentId = testVersion.getTenantDeploymentId();
 
-        var currentVersionDashboard = developerApiTester
-                .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
+        var currentVersionDetails = developerApiTester
+                .getTenantDeploymentDetails(developerToken, tenantId, tenantDeploymentId);
         var attempt = 1;
         var maxAttempts = 12;
-        while (currentVersionDashboard.getMatchmakerRefs().isEmpty() &&
+        while (currentVersionDetails.getMatchmakerRefs().isEmpty() &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for deployment, attempt={}", attempt);
                 Thread.sleep((long) attempt * 2 * 1000);
-                currentVersionDashboard = developerApiTester.getTenantDeploymentDashboard(developerToken,
+                currentVersionDetails = developerApiTester.getTenantDeploymentDetails(developerToken,
                         tenantId,
                         tenantDeploymentId);
                 attempt++;

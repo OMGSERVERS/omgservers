@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-public class DeveloperGetTenantDashboardIT extends BaseTestClass {
+public class DeveloperGetTenantDetailsIT extends BaseTestClass {
 
     @Inject
     BootstrapTestVersionOperation bootstrapTestVersionOperation;
@@ -23,7 +23,7 @@ public class DeveloperGetTenantDashboardIT extends BaseTestClass {
     DeveloperApiTester developerApiTester;
 
     @Test
-    void getTenantDashboardIT() throws Exception {
+    void getTenantDetailsIT() throws Exception {
         final var version = bootstrapTestVersionOperation.bootstrapTestVersion(
                 """
                         local omgserver = require("omgserver")
@@ -34,16 +34,16 @@ public class DeveloperGetTenantDashboardIT extends BaseTestClass {
                         """);
 
         try {
-            final var tenantDashboard = developerApiTester.getTenantDashboard(version.getDeveloperToken(),
+            final var tenantDetails = developerApiTester.getTenantDetails(version.getDeveloperToken(),
                     version.getTenantId());
-            log.info("Tenant dashboard, {}", tenantDashboard);
+            log.info("Tenant details, {}", tenantDetails);
 
-            assertNotNull(tenantDashboard);
-//            assertEquals(1, tenantDashboard.getProjects().size());
-//            assertEquals(1, tenantDashboard.getStages().size());
-//            assertEquals(1, tenantDashboard.getVersions().size());
-//            assertEquals(1, tenantDashboard.getLobbyRefs().size());
-//            assertEquals(1, tenantDashboard.getMatchmakerRefs().size());
+            assertNotNull(tenantDetails);
+//            assertEquals(1, tenantDetails.getProjects().size());
+//            assertEquals(1, tenantDetails.getStages().size());
+//            assertEquals(1, tenantDetails.getVersions().size());
+//            assertEquals(1, tenantDetails.getLobbyRefs().size());
+//            assertEquals(1, tenantDetails.getMatchmakerRefs().size());
         } finally {
             supportApiTester.deleteTenant(version.getSupportToken(), version.getTenantId());
         }

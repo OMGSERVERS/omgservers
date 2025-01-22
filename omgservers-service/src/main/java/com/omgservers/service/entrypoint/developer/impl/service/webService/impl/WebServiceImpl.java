@@ -30,16 +30,16 @@ import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
@@ -63,8 +63,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetTenantDashboardDeveloperResponse> execute(
-            final GetTenantDashboardDeveloperRequest request) {
+    public Uni<GetTenantDetailsDeveloperResponse> execute(
+            final GetTenantDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
@@ -81,8 +81,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
-            final GetTenantProjectDashboardDeveloperRequest request) {
+    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
+            final GetTenantProjectDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
@@ -103,8 +103,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetTenantStageDashboardDeveloperResponse> execute(
-            final GetTenantStageDashboardDeveloperRequest request) {
+    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
+            final GetTenantStageDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
@@ -125,8 +125,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetTenantVersionDashboardDeveloperResponse> execute(
-            final GetTenantVersionDashboardDeveloperRequest request) {
+    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
+            final GetTenantVersionDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
@@ -143,8 +143,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
-            final GetTenantDeploymentDashboardDeveloperRequest request) {
+    public Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
+            final GetTenantDeploymentDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 

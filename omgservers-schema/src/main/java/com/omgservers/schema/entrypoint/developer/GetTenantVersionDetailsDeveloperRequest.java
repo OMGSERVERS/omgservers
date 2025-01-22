@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetTenantVersionDashboardDeveloperRequest {
+public class GetTenantVersionDetailsDeveloperRequest {
 
     @NotBlank
     @Size(max = 64)

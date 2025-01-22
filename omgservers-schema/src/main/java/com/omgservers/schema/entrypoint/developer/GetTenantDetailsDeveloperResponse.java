@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.developer;
 
-import com.omgservers.schema.entrypoint.developer.dto.tenant.TenantDashboardDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenant.TenantDetailsDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetTenantDashboardDeveloperResponse {
+public class GetTenantDetailsDeveloperResponse {
 
-    TenantDashboardDto dashboard;
+    TenantDetailsDto details;
 }

@@ -505,21 +505,21 @@ Usage:
  ./omgserversctl.sh developer useCredentials <user> <password>
  ./omgserversctl.sh developer printCurrent
  ./omgserversctl.sh developer createToken
- ./omgserversctl.sh developer getTenantDashboard <tenant>
+ ./omgserversctl.sh developer getTenantDetails <tenant>
  ./omgserversctl.sh developer createProject <tenant>
  ./omgserversctl.sh developer createProjectAlias <tenant> <project_id> <alias>
- ./omgserversctl.sh developer getProjectDashboard <tenant> <project>
+ ./omgserversctl.sh developer getProjectDetails <tenant> <project>
  ./omgserversctl.sh developer deleteProject <tenant> <project>
  ./omgserversctl.sh developer createStage <tenant> <project>
  ./omgserversctl.sh developer createStageAlias <tenant> <stage_id> <alias>
- ./omgserversctl.sh developer getStageDashboard <tenant> <project> <stage>
+ ./omgserversctl.sh developer getStageDetails <tenant> <project> <stage>
  ./omgserversctl.sh developer deleteStage <tenant> <project> <stage>
  ./omgserversctl.sh developer createVersion <tenant> <project> <config_path>
  ./omgserversctl.sh developer uploadFilesArchive <tenant> <version> <files_directory_path>
- ./omgserversctl.sh developer getVersionDashboard <tenant> <version>
+ ./omgserversctl.sh developer getVersionDetails <tenant> <version>
  ./omgserversctl.sh developer deleteVersion <tenant> <version>
  ./omgserversctl.sh developer deployVersion <tenant> <project> <stage> <version>
- ./omgserversctl.sh developer getDeploymentDashboard <tenant> <deployment>
+ ./omgserversctl.sh developer getDeploymentDetails <tenant> <deployment>
  ./omgserversctl.sh developer deleteDeployment <tenant> <deployment>
  ./omgserversctl.sh developer createLobbyRequest <tenant> <deployment>
  ./omgserversctl.sh developer deleteLobby <lobby>

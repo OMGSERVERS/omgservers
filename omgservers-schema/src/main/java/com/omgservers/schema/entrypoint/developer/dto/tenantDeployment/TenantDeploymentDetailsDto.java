@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TenantDeploymentDashboardDto {
+public class TenantDeploymentDetailsDto {
 
     TenantDeploymentDto deployment;
 

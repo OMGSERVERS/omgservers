@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMethod {
+class GetTenantVersionDetailsMethodImpl implements GetTenantVersionDetailsMethod {
 
     final TenantShard tenantShard;
 
@@ -35,8 +35,8 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantVersionDashboardDeveloperResponse> execute(
-            final GetTenantVersionDashboardDeveloperRequest request) {
+    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
+            final GetTenantVersionDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -56,11 +56,11 @@ class GetTenantVersionDashboardMethodImpl implements GetTenantVersionDashboardMe
                                                 userId,
                                                 permissionQualifier)
                                         .flatMap(voidItem -> getTenantVersionData(tenantId, tenantVersionId))
-                                        .map(tenantVersionMapper::dataToDashboard);
+                                        .map(tenantVersionMapper::dataToDetails);
 
                             });
                 })
-                .map(GetTenantVersionDashboardDeveloperResponse::new);
+                .map(GetTenantVersionDetailsDeveloperResponse::new);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {

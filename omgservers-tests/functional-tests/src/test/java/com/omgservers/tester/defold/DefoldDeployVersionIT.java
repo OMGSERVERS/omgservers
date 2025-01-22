@@ -55,12 +55,12 @@ public class DefoldDeployVersionIT extends BaseTestClass {
 
             Thread.sleep(1000);
 
-            final var tenantVersionDashboard = developerApiTester
-                    .getTenantVersionDashboard(testVersion.getDeveloperToken(),
+            final var tenantVersionDetails = developerApiTester
+                    .getTenantVersionDetails(testVersion.getDeveloperToken(),
                             testVersion.getTenantId(),
                             testVersion.getTenantVersionId());
-            log.info("Version dashboard, {}", tenantVersionDashboard);
-            assertEquals(1, tenantVersionDashboard.getImages().size());
+            log.info("Version details, {}", tenantVersionDetails);
+            assertEquals(1, tenantVersionDetails.getImages().size());
 
             final var tenantDeploymentId = developerApiTester.deployTenantVersion(testVersion.getDeveloperToken(),
                     testVersion.getTenantId(),

@@ -90,17 +90,17 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
     private void waitForBuilding(final String developerToken,
                                  final Long tenantId,
                                  final Long tenantVersionId) throws IOException {
-        var currentTenantVersionDashboard = developerApiTester
-                .getTenantVersionDashboard(developerToken, tenantId, tenantVersionId);
+        var currentTenantVersionDetails = developerApiTester
+                .getTenantVersionDetails(developerToken, tenantId, tenantVersionId);
         var attempt = 1;
         var maxAttempts = 12;
-        while ((currentTenantVersionDashboard.getImages().isEmpty()) &&
+        while ((currentTenantVersionDetails.getImages().isEmpty()) &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for building, attempt={}", attempt);
                 Thread.sleep((long) attempt * 2 * 1000);
-                currentTenantVersionDashboard = developerApiTester
-                        .getTenantVersionDashboard(developerToken, tenantId, tenantVersionId);
+                currentTenantVersionDetails = developerApiTester
+                        .getTenantVersionDetails(developerToken, tenantId, tenantVersionId);
                 attempt++;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -117,17 +117,17 @@ class BootstrapTestVersionOperationImpl implements BootstrapTestVersionOperation
     private void waitForDeployment(final String developerToken,
                                    final Long tenantId,
                                    final Long tenantDeploymentId) throws IOException {
-        var currentTenantDeploymentDashboard = developerApiTester
-                .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
+        var currentTenantDeploymentDetails = developerApiTester
+                .getTenantDeploymentDetails(developerToken, tenantId, tenantDeploymentId);
         var attempt = 1;
         var maxAttempts = 12;
-        while (currentTenantDeploymentDashboard.getMatchmakerRefs().isEmpty() &&
+        while (currentTenantDeploymentDetails.getMatchmakerRefs().isEmpty() &&
                 attempt < maxAttempts) {
             try {
                 log.info("Waiting for deployment, attempt={}", attempt);
                 Thread.sleep((long) attempt * 2 * 1000);
-                currentTenantDeploymentDashboard = developerApiTester
-                        .getTenantDeploymentDashboard(developerToken, tenantId, tenantDeploymentId);
+                currentTenantDeploymentDetails = developerApiTester
+                        .getTenantDeploymentDetails(developerToken, tenantId, tenantDeploymentId);
                 attempt++;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

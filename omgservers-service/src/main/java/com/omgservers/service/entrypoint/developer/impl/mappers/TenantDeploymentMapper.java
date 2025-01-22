@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.developer.impl.mappers;
 
-import com.omgservers.schema.entrypoint.developer.dto.tenantDeployment.TenantDeploymentDashboardDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenantDeployment.TenantDeploymentDetailsDto;
 import com.omgservers.schema.entrypoint.developer.dto.tenantDeployment.TenantDeploymentDto;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.module.tenant.tenantDeployment.dto.TenantDeploymentDataDto;
@@ -15,5 +15,5 @@ public interface TenantDeploymentMapper {
     @Mapping(source = "tenantDeployment", target = "deployment")
     @Mapping(source = "tenantLobbyRefs", target = "lobbyRefs")
     @Mapping(source = "tenantMatchmakerRefs", target = "matchmakerRefs")
-    TenantDeploymentDashboardDto dataToDashboard(TenantDeploymentDataDto data);
+    TenantDeploymentDetailsDto dataToDetails(TenantDeploymentDataDto data);
 }

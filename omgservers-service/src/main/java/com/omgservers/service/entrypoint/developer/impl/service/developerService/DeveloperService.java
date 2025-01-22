@@ -30,16 +30,16 @@ import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import io.smallrye.mutiny.Uni;
@@ -49,13 +49,13 @@ public interface DeveloperService {
 
     Uni<CreateTokenDeveloperResponse> execute(@Valid CreateTokenDeveloperRequest request);
 
-    Uni<GetTenantDashboardDeveloperResponse> execute(@Valid GetTenantDashboardDeveloperRequest request);
+    Uni<GetTenantDetailsDeveloperResponse> execute(@Valid GetTenantDetailsDeveloperRequest request);
 
     Uni<CreateTenantProjectDeveloperResponse> execute(@Valid CreateTenantProjectDeveloperRequest request);
 
     Uni<CreateTenantProjectAliasDeveloperResponse> execute(@Valid CreateTenantProjectAliasDeveloperRequest request);
 
-    Uni<GetTenantProjectDashboardDeveloperResponse> execute(@Valid GetTenantProjectDashboardDeveloperRequest request);
+    Uni<GetTenantProjectDetailsDeveloperResponse> execute(@Valid GetTenantProjectDetailsDeveloperRequest request);
 
     Uni<DeleteTenantProjectDeveloperResponse> execute(@Valid DeleteTenantProjectDeveloperRequest request);
 
@@ -63,7 +63,7 @@ public interface DeveloperService {
 
     Uni<CreateTenantStageAliasDeveloperResponse> execute(@Valid CreateTenantStageAliasDeveloperRequest request);
 
-    Uni<GetTenantStageDashboardDeveloperResponse> execute(@Valid GetTenantStageDashboardDeveloperRequest request);
+    Uni<GetTenantStageDetailsDeveloperResponse> execute(@Valid GetTenantStageDetailsDeveloperRequest request);
 
     Uni<DeleteTenantStageDeveloperResponse> execute(@Valid DeleteTenantStageDeveloperRequest request);
 
@@ -71,14 +71,14 @@ public interface DeveloperService {
 
     Uni<UploadFilesArchiveDeveloperResponse> execute(@Valid UploadFilesArchiveDeveloperRequest request);
 
-    Uni<GetTenantVersionDashboardDeveloperResponse> execute(@Valid GetTenantVersionDashboardDeveloperRequest request);
+    Uni<GetTenantVersionDetailsDeveloperResponse> execute(@Valid GetTenantVersionDetailsDeveloperRequest request);
 
     Uni<DeleteTenantVersionDeveloperResponse> execute(@Valid DeleteTenantVersionDeveloperRequest request);
 
     Uni<DeployTenantVersionDeveloperResponse> execute(@Valid DeployTenantVersionDeveloperRequest request);
 
-    Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
-            @Valid GetTenantDeploymentDashboardDeveloperRequest request);
+    Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
+            @Valid GetTenantDeploymentDetailsDeveloperRequest request);
 
     Uni<DeleteTenantDeploymentDeveloperResponse> execute(@Valid DeleteTenantDeploymentDeveloperRequest request);
 

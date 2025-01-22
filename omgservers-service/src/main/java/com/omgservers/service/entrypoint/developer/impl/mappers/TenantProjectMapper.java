@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.mappers;
 
 import com.omgservers.schema.entrypoint.developer.dto.alias.AliasDto;
-import com.omgservers.schema.entrypoint.developer.dto.tenantProject.TenantProjectDashboardDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenantProject.TenantProjectDetailsDto;
 import com.omgservers.schema.entrypoint.developer.dto.tenantProject.TenantProjectDto;
 import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDto;
 import com.omgservers.schema.model.alias.AliasModel;
@@ -27,7 +27,7 @@ public interface TenantProjectMapper {
     @Mapping(target = "permissions", source = "projectPermissions")
     @Mapping(target = "stages", expression = "java(mapStages(data.getProjectStages(), data.getProjectAliases()))")
     @Mapping(target = "versions", source = "projectVersions")
-    TenantProjectDashboardDto dataToDashboard(TenantProjectDataDto data);
+    TenantProjectDetailsDto dataToDetails(TenantProjectDataDto data);
 
     default List<TenantStageDto> mapStages(final List<TenantStageModel> projectStages,
                                            final List<AliasModel> projectAliases) {

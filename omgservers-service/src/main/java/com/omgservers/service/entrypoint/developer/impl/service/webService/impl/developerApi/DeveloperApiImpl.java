@@ -30,16 +30,16 @@ import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -77,8 +77,8 @@ class DeveloperApiImpl implements DeveloperApi {
      */
 
     @Override
-    public Uni<GetTenantDashboardDeveloperResponse> execute(
-            @NotNull final GetTenantDashboardDeveloperRequest request) {
+    public Uni<GetTenantDetailsDeveloperResponse> execute(
+            @NotNull final GetTenantDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -99,8 +99,8 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
-            @NotNull final GetTenantProjectDashboardDeveloperRequest request) {
+    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
+            @NotNull final GetTenantProjectDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -127,8 +127,8 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<GetTenantStageDashboardDeveloperResponse> execute(
-            @NotNull final GetTenantStageDashboardDeveloperRequest request) {
+    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
+            @NotNull final GetTenantStageDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -157,8 +157,8 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<GetTenantVersionDashboardDeveloperResponse> execute(
-            final GetTenantVersionDashboardDeveloperRequest request) {
+    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
+            final GetTenantVersionDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -179,8 +179,8 @@ class DeveloperApiImpl implements DeveloperApi {
     }
 
     @Override
-    public Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
-            @NotNull final GetTenantDeploymentDashboardDeveloperRequest request) {
+    public Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
+            @NotNull final GetTenantDeploymentDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 

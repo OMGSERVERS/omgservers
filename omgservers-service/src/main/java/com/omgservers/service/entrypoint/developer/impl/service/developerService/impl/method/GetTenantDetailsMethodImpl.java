@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
+class GetTenantDetailsMethodImpl implements GetTenantDetailsMethod {
 
     final TenantShard tenantShard;
 
@@ -33,8 +33,8 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantDashboardDeveloperResponse> execute(
-            final GetTenantDashboardDeveloperRequest request) {
+    public Uni<GetTenantDetailsDeveloperResponse> execute(
+            final GetTenantDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -47,9 +47,9 @@ class GetTenantDashboardMethodImpl implements GetTenantDashboardMethod {
                             .TENANT_VIEWER;
                     return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
                             .flatMap(voidItem -> getTenantData(tenantId))
-                            .map(tenantMapper::dataToDashboard);
+                            .map(tenantMapper::dataToDetails);
                 })
-                .map(GetTenantDashboardDeveloperResponse::new);
+                .map(GetTenantDetailsDeveloperResponse::new);
     }
 
     Uni<TenantDataDto> getTenantData(final Long tenantId) {

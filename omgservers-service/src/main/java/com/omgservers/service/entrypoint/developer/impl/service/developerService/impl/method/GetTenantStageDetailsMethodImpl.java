@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod {
+class GetTenantStageDetailsMethodImpl implements GetTenantStageDetailsMethod {
 
     final TenantShard tenantShard;
 
@@ -39,8 +39,8 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantStageDashboardDeveloperResponse> execute(
-            final GetTenantStageDashboardDeveloperRequest request) {
+    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
+            final GetTenantStageDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -66,11 +66,11 @@ class GetTenantStageDashboardMethodImpl implements GetTenantStageDashboardMethod
                                                                     permissionQualifier)
                                                             .flatMap(voidItem -> getTenantStageData(tenantId,
                                                                     tenantStageId))
-                                                            .map(tenantStageMapper::dataToDashboard);
+                                                            .map(tenantStageMapper::dataToDetails);
                                                 }));
                             });
                 })
-                .map(GetTenantStageDashboardDeveloperResponse::new);
+                .map(GetTenantStageDetailsDeveloperResponse::new);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {

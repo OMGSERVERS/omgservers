@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TenantStageDashboardDto {
+public class TenantStageDetailsDto {
 
     TenantStageDto stage;
 

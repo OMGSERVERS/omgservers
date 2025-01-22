@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashboardMethod {
+class GetTenantDeploymentDetailsMethodImpl implements GetTenantDeploymentDetailsMethod {
 
     final TenantShard tenantShard;
 
@@ -38,8 +38,8 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
-            final GetTenantDeploymentDashboardDeveloperRequest request) {
+    public Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
+            final GetTenantDeploymentDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -63,8 +63,8 @@ class GetTenantDeploymentDashboardMethodImpl implements GetTenantDeploymentDashb
                                                             permissionQualifier)
                                                     .flatMap(voidItem -> getTenantDeploymentData(tenantId,
                                                             tenantDeploymentId))
-                                                    .map(tenantDeploymentMapper::dataToDashboard)
-                                                    .map(GetTenantDeploymentDashboardDeveloperResponse::new);
+                                                    .map(tenantDeploymentMapper::dataToDetails)
+                                                    .map(GetTenantDeploymentDetailsDeveloperResponse::new);
                                         });
                             });
                 });

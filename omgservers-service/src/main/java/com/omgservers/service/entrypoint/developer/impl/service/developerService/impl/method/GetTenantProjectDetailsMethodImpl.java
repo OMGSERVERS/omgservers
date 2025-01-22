@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMethod {
+class GetTenantProjectDetailsMethodImpl implements GetTenantProjectDetailsMethod {
 
     final TenantShard tenantShard;
 
@@ -35,8 +35,8 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
-            final GetTenantProjectDashboardDeveloperRequest request) {
+    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
+            final GetTenantProjectDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -52,10 +52,10 @@ class GetTenantProjectDashboardMethodImpl implements GetTenantProjectDashboardMe
                                 return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
                                                 permissionQualifier)
                                         .flatMap(voidItem -> getTenantProjectData(tenantId, tenantProjectId))
-                                        .map(tenantProjectMapper::dataToDashboard);
+                                        .map(tenantProjectMapper::dataToDetails);
                             });
                 })
-                .map(GetTenantProjectDashboardDeveloperResponse::new);
+                .map(GetTenantProjectDetailsDeveloperResponse::new);
     }
 
     Uni<TenantProjectDataDto> getTenantProjectData(final Long tenantId, final Long tenantProjectId) {

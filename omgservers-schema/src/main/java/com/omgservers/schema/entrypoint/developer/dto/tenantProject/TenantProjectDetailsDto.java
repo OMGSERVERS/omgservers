@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TenantProjectDashboardDto {
+public class TenantProjectDetailsDto {
 
     TenantProjectDto project;
 

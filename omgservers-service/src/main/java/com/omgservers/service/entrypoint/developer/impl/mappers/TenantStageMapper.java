@@ -1,6 +1,6 @@
 package com.omgservers.service.entrypoint.developer.impl.mappers;
 
-import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDashboardDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDetailsDto;
 import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
@@ -16,5 +16,5 @@ public interface TenantStageMapper {
     @Mapping(target = "stage.aliases", source = "aliases")
     @Mapping(target = "permissions", source = "stagePermissions")
     @Mapping(target = "deployments", source = "stageDeployments")
-    TenantStageDashboardDto dataToDashboard(TenantStageDataDto data);
+    TenantStageDetailsDto dataToDetails(TenantStageDataDto data);
 }

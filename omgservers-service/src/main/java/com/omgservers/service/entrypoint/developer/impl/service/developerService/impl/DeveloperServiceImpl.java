@@ -30,16 +30,16 @@ import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
@@ -58,11 +58,11 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantStageMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantVersionMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeployTenantVersionMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantDashboardMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantDeploymentDashboardMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantProjectDashboardMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantStageDashboardMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantVersionDashboardMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantDeploymentDetailsMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantDetailsMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantProjectDetailsMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantStageDetailsMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantVersionDetailsMethod;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.UploadFilesArchiveMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -76,24 +76,24 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeveloperServiceImpl implements DeveloperService {
 
-    final GetTenantDeploymentDashboardMethod getTenantDeploymentDashboardMethod;
-    final GetTenantVersionDashboardMethod getTenantVersionDashboardMethod;
-    final GetTenantProjectDashboardMethod getTenantProjectDashboardMethod;
+    final GetTenantDeploymentDetailsMethod getTenantDeploymentDetailsMethod;
     final CreateTenantProjectAliasMethod createTenantProjectAliasMethod;
-    final GetTenantStageDashboardMethod getTenantStageDashboardMethod;
+    final GetTenantVersionDetailsMethod getTenantVersionDetailsMethod;
+    final GetTenantProjectDetailsMethod getTenantProjectDetailsMethod;
     final CreateMatchmakerRequestMethod createMatchmakerRequestMethod;
     final DeleteTenantDeploymentMethod deleteTenantDeploymentMethod;
     final CreateTenantStageAliasMethod createTenantStageAliasMethod;
+    final GetTenantStageDetailsMethod getTenantStageDetailsMethod;
     final CreateTenantVersionMethod createTenantVersionMethod;
     final CreateTenantProjectMethod createTenantProjectMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final DeleteTenantVersionMethod deleteTenantVersionMethod;
     final DeployTenantVersionMethod deployTenantVersionMethod;
     final UploadFilesArchiveMethod uploadFilesArchiveMethod;
-    final GetTenantDashboardMethod getTenantDashboardMethod;
     final CreateLobbyRequestMethod createLobbyRequestMethod;
     final DeleteTenantStageMethod deleteTenantStageMethod;
     final CreateTenantStageMethod createTenantStageMethod;
+    final GetTenantDetailsMethod getTenantDetailsMethod;
     final DeleteMatchmakerMethod deleteMatchmakerMethod;
     final CreateTokenMethod createTokenMethod;
     final DeleteLobbyMethod deleteLobbyMethod;
@@ -104,9 +104,9 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<GetTenantDashboardDeveloperResponse> execute(
-            @Valid final GetTenantDashboardDeveloperRequest request) {
-        return getTenantDashboardMethod.execute(request);
+    public Uni<GetTenantDetailsDeveloperResponse> execute(
+            @Valid final GetTenantDetailsDeveloperRequest request) {
+        return getTenantDetailsMethod.execute(request);
     }
 
     @Override
@@ -122,9 +122,9 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<GetTenantProjectDashboardDeveloperResponse> execute(
-            @Valid final GetTenantProjectDashboardDeveloperRequest request) {
-        return getTenantProjectDashboardMethod.execute(request);
+    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
+            @Valid final GetTenantProjectDetailsDeveloperRequest request) {
+        return getTenantProjectDetailsMethod.execute(request);
     }
 
     @Override
@@ -146,9 +146,9 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<GetTenantStageDashboardDeveloperResponse> execute(
-            @Valid final GetTenantStageDashboardDeveloperRequest request) {
-        return getTenantStageDashboardMethod.execute(request);
+    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
+            @Valid final GetTenantStageDetailsDeveloperRequest request) {
+        return getTenantStageDetailsMethod.execute(request);
     }
 
     @Override
@@ -169,9 +169,9 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<GetTenantVersionDashboardDeveloperResponse> execute(
-            @Valid final GetTenantVersionDashboardDeveloperRequest request) {
-        return getTenantVersionDashboardMethod.execute(request);
+    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
+            @Valid final GetTenantVersionDetailsDeveloperRequest request) {
+        return getTenantVersionDetailsMethod.execute(request);
     }
 
     @Override
@@ -187,9 +187,9 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<GetTenantDeploymentDashboardDeveloperResponse> execute(
-            @Valid final GetTenantDeploymentDashboardDeveloperRequest request) {
-        return getTenantDeploymentDashboardMethod.execute(request);
+    public Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
+            @Valid final GetTenantDeploymentDetailsDeveloperRequest request) {
+        return getTenantDeploymentDetailsMethod.execute(request);
     }
 
     @Override

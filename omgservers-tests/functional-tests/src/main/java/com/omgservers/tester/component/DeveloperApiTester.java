@@ -20,22 +20,22 @@ import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRe
 import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDashboardDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDashboardDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.dto.tenant.TenantDashboardDto;
-import com.omgservers.schema.entrypoint.developer.dto.tenantDeployment.TenantDeploymentDashboardDto;
-import com.omgservers.schema.entrypoint.developer.dto.tenantProject.TenantProjectDashboardDto;
-import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDashboardDto;
-import com.omgservers.schema.entrypoint.developer.dto.tenantVersion.TenantVersionDashboardDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenant.TenantDetailsDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenantDeployment.TenantDeploymentDetailsDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenantProject.TenantProjectDetailsDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDetailsDto;
+import com.omgservers.schema.entrypoint.developer.dto.tenantVersion.TenantVersionDetailsDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.tester.operation.createVersionArchive.CreateVersionArchiveOperation;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
@@ -76,8 +76,8 @@ public class DeveloperApiTester {
         return response.getRawToken();
     }
 
-    public TenantDashboardDto getTenantDashboard(final String token,
-                                                 final Long tenantId)
+    public TenantDetailsDto getTenantDetails(final String token,
+                                             final Long tenantId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -85,13 +85,13 @@ public class DeveloperApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new GetTenantDashboardDeveloperRequest(tenantId.toString())))
-                .when().post("/service/v1/entrypoint/developer/request/get-tenant-dashboard");
+                .body(objectMapper.writeValueAsString(new GetTenantDetailsDeveloperRequest(tenantId.toString())))
+                .when().post("/service/v1/entrypoint/developer/request/get-tenant-details");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
-                .as(GetTenantDashboardDeveloperResponse.class);
-        return response.getDashboard();
+                .as(GetTenantDetailsDeveloperResponse.class);
+        return response.getDetails();
     }
 
     /*
@@ -116,9 +116,9 @@ public class DeveloperApiTester {
         return response;
     }
 
-    public TenantProjectDashboardDto getTenantProjectDashboard(final String token,
-                                                               final Long tenantId,
-                                                               final Long tenantProjectId)
+    public TenantProjectDetailsDto getTenantProjectDetails(final String token,
+                                                           final Long tenantId,
+                                                           final Long tenantProjectId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -127,13 +127,13 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantProjectDashboardDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
-                .when().post("/service/v1/entrypoint/developer/request/get-project-dashboard");
+                        new GetTenantProjectDetailsDeveloperRequest(tenantId.toString(), tenantProjectId.toString())))
+                .when().post("/service/v1/entrypoint/developer/request/get-project-details");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
-                .as(GetTenantProjectDashboardDeveloperResponse.class);
-        return response.getDashboard();
+                .as(GetTenantProjectDetailsDeveloperResponse.class);
+        return response.getDetails();
     }
 
     public DeleteTenantProjectDeveloperResponse deleteTenantProject(final String token,
@@ -180,10 +180,10 @@ public class DeveloperApiTester {
         return response;
     }
 
-    public TenantStageDashboardDto getTenantStageDashboard(final String token,
-                                                           final Long tenantId,
-                                                           final Long tenantProjectId,
-                                                           final Long tenantStageId)
+    public TenantStageDetailsDto getTenantStageDetails(final String token,
+                                                       final Long tenantId,
+                                                       final Long tenantProjectId,
+                                                       final Long tenantStageId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -192,15 +192,15 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantStageDashboardDeveloperRequest(tenantId.toString(),
+                        new GetTenantStageDetailsDeveloperRequest(tenantId.toString(),
                                 tenantProjectId.toString(),
                                 tenantStageId.toString())))
-                .when().post("/service/v1/entrypoint/developer/request/get-stage-dashboard");
+                .when().post("/service/v1/entrypoint/developer/request/get-stage-details");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
-                .as(GetTenantStageDashboardDeveloperResponse.class);
-        return response.getDashboard();
+                .as(GetTenantStageDetailsDeveloperResponse.class);
+        return response.getDetails();
     }
 
     public DeleteTenantStageDeveloperResponse deleteTenantStage(final String token,
@@ -277,9 +277,9 @@ public class DeveloperApiTester {
         return response;
     }
 
-    public TenantVersionDashboardDto getTenantVersionDashboard(final String token,
-                                                               final Long tenantId,
-                                                               final Long tenantVersionId)
+    public TenantVersionDetailsDto getTenantVersionDetails(final String token,
+                                                           final Long tenantId,
+                                                           final Long tenantVersionId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -288,13 +288,13 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantVersionDashboardDeveloperRequest(tenantId.toString(), tenantVersionId)))
-                .when().post("/service/v1/entrypoint/developer/request/get-version-dashboard");
+                        new GetTenantVersionDetailsDeveloperRequest(tenantId.toString(), tenantVersionId)))
+                .when().post("/service/v1/entrypoint/developer/request/get-version-details");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
-                .as(GetTenantVersionDashboardDeveloperResponse.class);
-        return response.getDashboard();
+                .as(GetTenantVersionDetailsDeveloperResponse.class);
+        return response.getDetails();
     }
 
     public DeleteTenantVersionDeveloperResponse deleteTenantVersion(final String token,
@@ -346,9 +346,9 @@ public class DeveloperApiTester {
         return response;
     }
 
-    public TenantDeploymentDashboardDto getTenantDeploymentDashboard(final String token,
-                                                                     final Long tenantId,
-                                                                     final Long tenantDeploymentId)
+    public TenantDeploymentDetailsDto getTenantDeploymentDetails(final String token,
+                                                                 final Long tenantId,
+                                                                 final Long tenantDeploymentId)
             throws JsonProcessingException {
         final var responseSpecification = RestAssured
                 .with()
@@ -357,13 +357,13 @@ public class DeveloperApiTester {
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
                 .body(objectMapper.writeValueAsString(
-                        new GetTenantDeploymentDashboardDeveloperRequest(tenantId.toString(), tenantDeploymentId)))
-                .when().post("/service/v1/entrypoint/developer/request/get-deployment-dashboard");
+                        new GetTenantDeploymentDetailsDeveloperRequest(tenantId.toString(), tenantDeploymentId)))
+                .when().post("/service/v1/entrypoint/developer/request/get-deployment-details");
         responseSpecification.then().statusCode(200);
 
         final var response = responseSpecification.getBody()
-                .as(GetTenantDeploymentDashboardDeveloperResponse.class);
-        return response.getDashboard();
+                .as(GetTenantDeploymentDetailsDeveloperResponse.class);
+        return response.getDetails();
     }
 
     public DeleteTenantDeploymentDeveloperResponse deleteTenantDeployment(final String token,
