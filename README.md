@@ -23,7 +23,7 @@ OMGSERVERS is a backend for authoritative game servers.
 - Game runtimes execution in Docker containers.
 - Players assignment across lobbies and matches.
 - Players data storage and management.
-- Defold SDK support for both clients and servers.
+- [Defold SDK](https://github.com/OMGSERVERS/omgdefold) support for both clients and servers.
 - A command-line tool for administrative tasks.
 
 # User Roles
