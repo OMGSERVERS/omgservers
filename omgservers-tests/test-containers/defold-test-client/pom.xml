@@ -25,30 +25,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>cp</executable>
-                    <commandlineArgs>-r
-                        ${maven.multiModuleProjectDirectory}/omgservers-sdk/defold-sdk/src/main/resources/omgservers/omgservers
-                        ${maven.multiModuleProjectDirectory}/omgservers-tests/test-containers/defold-test-client/src/main/docker/defold-test-client
-                    </commandlineArgs>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

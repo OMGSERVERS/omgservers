@@ -21,7 +21,6 @@
     </properties>
 
     <modules>
-        <module>defold-sdk</module>
         <module>luajit-sdk</module>
     </modules>
 
