@@ -454,7 +454,7 @@ admin_createToken() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
@@ -504,7 +504,7 @@ admin_calculateShard() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${ADMIN_TOKEN}" \
@@ -555,7 +555,7 @@ admin_generateId() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${ADMIN_TOKEN}" \
@@ -606,7 +606,7 @@ admin_bcryptHash() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${ADMIN_TOKEN}" \
@@ -656,7 +656,7 @@ admin_pingDockerHost() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${ADMIN_TOKEN}" \
@@ -753,7 +753,7 @@ support_createToken() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
@@ -796,7 +796,7 @@ support_createTenant() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -851,7 +851,7 @@ support_createTenantAlias() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -894,7 +894,7 @@ support_deleteTenant() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -949,7 +949,7 @@ support_createProject() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1013,7 +1013,7 @@ support_createProjectAlias() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1058,7 +1058,7 @@ support_deleteProject() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1105,7 +1105,7 @@ support_createDeveloper() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1172,7 +1172,7 @@ support_createTenantPermission() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1223,7 +1223,7 @@ support_deleteTenantPermission() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1276,7 +1276,7 @@ support_createProjectPermission() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1329,7 +1329,7 @@ support_deleteProjectPermission() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1384,7 +1384,7 @@ support_createStagePermission() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1439,7 +1439,7 @@ support_deleteStagePermission() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
@@ -1519,7 +1519,7 @@ developer_createToken() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -d "${REQUEST}" \
@@ -1571,7 +1571,7 @@ developer_getTenantDetails() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1617,7 +1617,7 @@ developer_createProject() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1681,7 +1681,7 @@ developer_createProjectAlias() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1729,7 +1729,7 @@ developer_getProjectDetails() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1777,7 +1777,7 @@ developer_deleteProject() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1836,7 +1836,7 @@ developer_createStage() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1893,7 +1893,7 @@ developer_createStageAlias() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1942,7 +1942,7 @@ developer_getStageDetails() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -1991,7 +1991,7 @@ developer_deleteStage() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2064,7 +2064,7 @@ developer_createVersion() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2128,7 +2128,7 @@ developer_uploadFilesArchive() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-upload-files-archive_${TENANT}_${VERSION}.json"
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: multipart/form-data" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2185,7 +2185,7 @@ developer_getVersionDetails() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2233,7 +2233,7 @@ developer_deleteVersion() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2296,7 +2296,7 @@ developer_deployVersion() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2351,7 +2351,7 @@ developer_getDeploymentDetails() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2399,7 +2399,7 @@ developer_deleteDeployment() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2449,7 +2449,7 @@ developer_createLobbyRequest() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2495,7 +2495,7 @@ developer_deleteLobby() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2544,7 +2544,7 @@ developer_createMatchmakerRequest() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
@@ -2590,7 +2590,7 @@ developer_deleteMatchmaker() {
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
-  HTTP_CODE=$(curl -s -S -X PUT -w "%{http_code}" \
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
     "${ENDPOINT}" \
     -H "Content-type: application/json" \
     -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
