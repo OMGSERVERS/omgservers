@@ -9,12 +9,6 @@
 
 OMGSERVERS is a backend for authoritative game servers.
 
-# Principles
-
-- Monolithic Architecture.
-- Sharding Over Clustering.
-- No Vendor Lock-in.
-
 # Features
 
 - Developer account and permission management.
