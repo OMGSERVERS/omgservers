@@ -30,17 +30,17 @@ help() {
       echo "     - SERVICE_URL"
     fi
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment usePublic" ]; then
-    echo " ./omgserversctl.sh environment usePublic"
-    if [ "$1" = "environment usePublic" ]; then
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useDemoServer" ]; then
+    echo " ./omgserversctl.sh environment useDemoServer"
+    if [ "$1" = "environment useDemoServer" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
       echo "     - SERVICE_URL"
     fi
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocal" ]; then
-    echo " ./omgserversctl.sh environment useLocal"
-    if [ "$1" = "environment useLocal" ]; then
+  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocalServer" ]; then
+    echo " ./omgserversctl.sh environment useLocalServer"
+    if [ "$1" = "environment useLocalServer" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
       echo "     - SERVICE_URL"
@@ -383,11 +383,11 @@ environment_useEnvironment() {
   echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=${ENVIRONMENT_NAME}, SERVICE_URL=${SERVICE_URL}"
 }
 
-environment_usePublic() {
-  environment_useEnvironment public https://api.omgservers.com
+environment_useDemoServer() {
+  environment_useEnvironment demo https://demoserver.omgservers.com
 }
 
-environment_useLocal() {
+environment_useLocalServer() {
   environment_useEnvironment local http://localhost:8080
   admin_useCredentials admin admin
   support_useCredentials support support
@@ -2678,10 +2678,10 @@ if [ "$1" = "environment" ]; then
     environment_printVariable $3
   elif [ "$2" = "useEnvironment" ]; then
     environment_useEnvironment $3 $4 $5
-  elif [ "$2" = "usePublic" ]; then
-    environment_usePublic
-  elif [ "$2" = "useLocal" ]; then
-    environment_useLocal
+  elif [ "$2" = "useDemoServer" ]; then
+    environment_useDemoServer
+  elif [ "$2" = "useLocalServer" ]; then
+    environment_useLocalServer
   else
     help "environment"
   fi

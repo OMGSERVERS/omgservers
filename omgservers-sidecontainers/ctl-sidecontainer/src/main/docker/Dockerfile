@@ -4,8 +4,7 @@ RUN apk update \
     && mkdir -p /opt/omgserversctl
 
 WORKDIR /opt/omgserversctl
-COPY src/main/docker/*.sh .
-RUN chmod u+x *.sh
+
 COPY src/main/docker/omgserversctl.sh .
 RUN chmod u+x omgserversctl.sh
-ENTRYPOINT ["./bootstrap.sh"]
+ENTRYPOINT ["./omgserversctl.sh"]
