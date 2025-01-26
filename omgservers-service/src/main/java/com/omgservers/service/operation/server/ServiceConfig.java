@@ -13,10 +13,6 @@ public interface ServiceConfig {
 
     ServerConfig server();
 
-    InitializationConfig initialization();
-
-    BootstrapConfig bootstrap();
-
     ClientsConfig clients();
 
     DockerClientConfig dockerClient();
@@ -26,6 +22,12 @@ public interface ServiceConfig {
     BuilderConfig builder();
 
     RegistryConfig registry();
+
+    FeatureFlagsConfig featureFlags();
+
+    BootstrapConfig bootstrap();
+
+    InitializationConfig initialization();
 
     interface ServerConfig {
         long instanceId();
@@ -167,11 +169,15 @@ public interface ServiceConfig {
 
         String username();
 
-        String token();
+        Optional<String> token();
     }
 
     interface RegistryConfig {
         URI uri();
+    }
+
+    interface FeatureFlagsConfig {
+        boolean builderEnabled();
     }
 
     class UserHomeConverter implements Converter<String> {

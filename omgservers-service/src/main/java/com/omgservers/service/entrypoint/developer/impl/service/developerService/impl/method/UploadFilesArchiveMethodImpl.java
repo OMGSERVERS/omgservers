@@ -13,7 +13,9 @@ import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRespons
 import com.omgservers.service.entrypoint.developer.impl.operation.EncodeFilesOperation;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.exception.ServerSideBadRequestException;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -38,6 +40,7 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
     final TenantShard tenantShard;
 
     final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
     final EncodeFilesOperation encodeFilesOperation;
 
@@ -49,6 +52,11 @@ class UploadFilesArchiveMethodImpl implements UploadFilesArchiveMethod {
     @Override
     public Uni<UploadFilesArchiveDeveloperResponse> execute(final UploadFilesArchiveDeveloperRequest request) {
         log.info("Requested, {}", request);
+
+        if (!getServiceConfigOperation.getServiceConfig().featureFlags().builderEnabled()) {
+            throw new ServerSideConflictException(ExceptionQualifierEnum.FEATURE_DISABLED,
+                    "Builder feature is disabled");
+        }
 
         final var userId =
                 securityIdentity.<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
