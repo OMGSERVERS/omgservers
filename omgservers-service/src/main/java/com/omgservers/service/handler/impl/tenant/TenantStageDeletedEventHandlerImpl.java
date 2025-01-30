@@ -50,11 +50,8 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
                     return deleteTenantStagePermissionsOperation.execute(tenantId, tenantStageId)
                             .flatMap(voidItem -> deleteTenantDeploymentsByTenantStageIdOperation
                                     .execute(tenantId, tenantStageId))
-                            .flatMap(voidItem -> {
-                                final var tenantProjectId = tenantStage.getProjectId();
-                                return deleteAliasesByEntityIdOperation
-                                        .execute(tenantProjectId, tenantStageId);
-                            });
+                            .flatMap(voidItem -> deleteAliasesByEntityIdOperation
+                                    .execute(tenantId, tenantStageId));
                 })
                 .replaceWithVoid();
     }

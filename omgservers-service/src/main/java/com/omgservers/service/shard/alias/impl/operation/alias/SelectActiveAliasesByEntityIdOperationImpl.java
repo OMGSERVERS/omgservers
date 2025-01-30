@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectAliasesByEntityIdOperationImpl implements SelectAliasesByEntityIdOperation {
+class SelectActiveAliasesByEntityIdOperationImpl implements SelectActiveAliasesByEntityIdOperation {
 
     final SelectListOperation selectListOperation;
 
@@ -31,7 +31,7 @@ class SelectAliasesByEntityIdOperationImpl implements SelectAliasesByEntityIdOpe
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
                         from $schema.tab_alias
-                        where shard_key = $1 and entity_id = $2
+                        where shard_key = $1 and entity_id = $2 and deleted = false
                         order by id asc
                         """,
                 List.of(shardKey, entityId),

@@ -12,8 +12,12 @@ import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSu
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantStagePermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantStagePermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTokenSupportRequest;
@@ -28,6 +32,8 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportReques
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
@@ -38,6 +44,8 @@ import com.omgservers.service.entrypoint.support.impl.service.supportService.imp
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectAliasMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantProjectPermissionsMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantStageAliasMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantStageMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantStagePermissionsMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTokenMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteDeveloperMethod;
@@ -45,6 +53,7 @@ import com.omgservers.service.entrypoint.support.impl.service.supportService.imp
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantPermissionsMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantProjectMethod;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantStageMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.DeleteTenantStagePermissionsMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -65,9 +74,12 @@ class SupportServiceImpl implements SupportService {
     final CreateTenantProjectAliasMethod createTenantProjectAliasMethod;
     final CreateTenantPermissionsMethod createTenantPermissionsMethod;
     final DeleteTenantPermissionsMethod deleteTenantPermissionsMethod;
+    final CreateTenantStageAliasMethod createTenantStageAliasMethod;
     final CreateTenantProjectMethod createTenantProjectMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final CreateTenantAliasMethod createTenantAliasMethod;
+    final CreateTenantStageMethod createTenantStageMethod;
+    final DeleteTenantStageMethod deleteTenantStageMethod;
     final CreateDeveloperMethod createDeveloperMethod;
     final DeleteDeveloperMethod deleteDeveloperMethod;
     final CreateTenantMethod createTenantMethod;
@@ -117,6 +129,26 @@ class SupportServiceImpl implements SupportService {
     public Uni<DeleteTenantProjectSupportResponse> execute(
             @Valid final DeleteTenantProjectSupportRequest request) {
         return deleteTenantProjectMethod.execute(request);
+    }
+
+    /*
+    Stage
+     */
+
+    @Override
+    public Uni<CreateTenantStageSupportResponse> execute(@Valid final CreateTenantStageSupportRequest request) {
+        return createTenantStageMethod.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantStageAliasSupportResponse> execute(
+            @Valid final CreateTenantStageAliasSupportRequest request) {
+        return createTenantStageAliasMethod.execute(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantStageSupportResponse> execute(@Valid final DeleteTenantStageSupportRequest request) {
+        return deleteTenantStageMethod.execute(request);
     }
 
     /*

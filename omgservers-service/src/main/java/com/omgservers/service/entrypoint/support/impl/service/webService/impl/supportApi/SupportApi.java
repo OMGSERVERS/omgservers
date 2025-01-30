@@ -30,6 +30,12 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupp
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
@@ -78,6 +84,22 @@ public interface SupportApi {
     @POST
     @Path("/delete-project")
     Uni<DeleteTenantProjectSupportResponse> execute(@NotNull DeleteTenantProjectSupportRequest request);
+
+    /*
+    Stage
+     */
+
+    @POST
+    @Path("/create-stage")
+    Uni<CreateTenantStageSupportResponse> execute(@NotNull CreateTenantStageSupportRequest request);
+
+    @POST
+    @Path("/create-stage-alias")
+    Uni<CreateTenantStageAliasSupportResponse> execute(@NotNull CreateTenantStageAliasSupportRequest request);
+
+    @POST
+    @Path("/delete-stage")
+    Uni<DeleteTenantStageSupportResponse> execute(@NotNull DeleteTenantStageSupportRequest request);
 
     /*
     Developer

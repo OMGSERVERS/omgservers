@@ -30,11 +30,21 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupp
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
     Uni<CreateTokenSupportResponse> execute(CreateTokenSupportRequest request);
+
+    /*
+    Tenant
+     */
 
     Uni<CreateTenantSupportResponse> execute(CreateTenantSupportRequest request);
 
@@ -42,11 +52,29 @@ public interface WebService {
 
     Uni<DeleteTenantSupportResponse> execute(DeleteTenantSupportRequest request);
 
+    /*
+    Project
+     */
+
     Uni<CreateTenantProjectSupportResponse> execute(CreateTenantProjectSupportRequest request);
 
     Uni<CreateTenantProjectAliasSupportResponse> execute(CreateTenantProjectAliasSupportRequest request);
 
     Uni<DeleteTenantProjectSupportResponse> execute(DeleteTenantProjectSupportRequest request);
+
+    /*
+    Stage
+     */
+
+    Uni<CreateTenantStageSupportResponse> execute(CreateTenantStageSupportRequest request);
+
+    Uni<CreateTenantStageAliasSupportResponse> execute(CreateTenantStageAliasSupportRequest request);
+
+    Uni<DeleteTenantStageSupportResponse> execute(DeleteTenantStageSupportRequest request);
+
+    /*
+    Developer
+     */
 
     Uni<CreateDeveloperSupportResponse> execute(CreateDeveloperSupportRequest request);
 

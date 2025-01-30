@@ -3,7 +3,7 @@ package com.omgservers.service.shard.alias.impl.operation.alias;
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectAliasesByShardKeyOperationTestInterface;
+import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectActiveAliasesByShardKeyOperationTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class SelectAliasesByShardKeyOperationTest extends BaseTestClass {
+class SelectActiveAliasesByShardKeyOperationTest extends BaseTestClass {
 
     @Inject
-    SelectAliasesByShardKeyOperationTestInterface selectAliasesByShardKeyOperation;
+    SelectActiveAliasesByShardKeyOperationTestInterface selectActiveAliasesByShardKeyOperation;
 
     @Inject
     TestDataFactory testDataFactory;
@@ -36,7 +36,7 @@ class SelectAliasesByShardKeyOperationTest extends BaseTestClass {
         final var alias2 = testDataFactory.getAliasTestDataFactory()
                 .createAlias(tenant2, "tenant-" + UUID.randomUUID());
 
-        final var aliases = selectAliasesByShardKeyOperation
+        final var aliases = selectActiveAliasesByShardKeyOperation
                 .execute(DefaultAliasConfiguration.GLOBAL_SHARD_KEY).stream()
                 .map(AliasModel::getId)
                 .toList();
@@ -47,7 +47,7 @@ class SelectAliasesByShardKeyOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownShardKey_whenExecute_thenEmptyResult() {
-        final var aliases = selectAliasesByShardKeyOperation.execute(generateIdOperation.generateId());
+        final var aliases = selectActiveAliasesByShardKeyOperation.execute(generateIdOperation.generateId());
         assertTrue(aliases.isEmpty());
     }
 }

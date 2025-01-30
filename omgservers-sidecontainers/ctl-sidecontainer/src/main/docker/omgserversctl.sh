@@ -3,27 +3,31 @@ set -e
 
 # HELP
 
+print_command() {
+  printf "  %-85s %s\n" "$1" "$2"
+}
+
 help() {
   echo "OMGSERVERS ctl, v1.0.0"
   echo "Usage:"
   if [ -z "$1" -o "$1" = "help" ]; then
-    echo " ./omgserversctl.sh help"
+    print_command " $0 help" "Display this help message."
   fi
   if [ -z "$1" -o "$1" = "logs" ]; then
-    echo " ./omgserversctl.sh logs"
+    print_command " $0 logs" "Show ctl logs"
   fi
   # Environment
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment reset" ]; then
-    echo " ./omgserversctl.sh environment reset"
+    print_command " $0 environment reset" "Reset the current environment."
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printCurrent" ]; then
-    echo " ./omgserversctl.sh environment printCurrent"
+    print_command " $0 environment printCurrent" "Print all environment variables."
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printVariable" ]; then
-    echo " ./omgserversctl.sh environment printVariable <variable>"
+    print_command " $0 environment printVariable <variable>" "Print the value of a specific variable."
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useEnvironment" ]; then
-    echo " ./omgserversctl.sh environment useEnvironment <name> <service_url>"
+    print_command " $0 environment useEnvironment <name> <service_url>" "Set up an environment with the specified URL."
     if [ "$1" = "environment useEnvironment" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -31,7 +35,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useDemoServer" ]; then
-    echo " ./omgserversctl.sh environment useDemoServer"
+    print_command " $0 environment useDemoServer" "Use the demo server environment."
     if [ "$1" = "environment useDemoServer" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -39,7 +43,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocalServer" ]; then
-    echo " ./omgserversctl.sh environment useLocalServer"
+    print_command " $0 environment useLocalServer" "Use the local server environment."
     if [ "$1" = "environment useLocalServer" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -48,7 +52,7 @@ help() {
   fi
   # Admin
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin useCredentials" ]; then
-    echo " ./omgserversctl.sh admin useCredentials <user> <password>"
+    print_command " $0 admin useCredentials <user> <password>" "Authenticate as an admin using credentials."
     if [ "$1" = "admin useCredentials" ]; then
       echo "   produces:"
       echo "     - ADMIN_USER"
@@ -56,17 +60,17 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin printCurrent" ]; then
-    echo " ./omgserversctl.sh admin printCurrent"
+    print_command " $0 admin printCurrent" "Print the current admin user."
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createToken" ]; then
-    echo " ./omgserversctl.sh admin createToken"
+    print_command " $0 admin createToken" "Generate an authentication token for admin access."
     if [ "$1" = "admin createToken" ]; then
       echo "   produces:"
       echo "     - ADMIN_TOKEN"
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin calculateShard" ]; then
-    echo " ./omgserversctl.sh admin calculateShard <shard_key>"
+    print_command " $0 admin calculateShard <shard_key>" "Calculate the shard based on the provided shard key."
     if [ "$1" = "admin calculateShard" ]; then
       echo "   produces:"
       echo "     - SHARD_INDEX"
@@ -74,21 +78,21 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin generateId" ]; then
-    echo " ./omgserversctl.sh admin generateId"
+    print_command " $0 admin generateId" "Generate a unique identifier."
     if [ "$1" = "admin generateId" ]; then
       echo "   produces:"
       echo "     - GENERATED_ID"
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin bcryptHash" ]; then
-    echo " ./omgserversctl.sh admin bcryptHash <value>"
+    print_command " $0 admin bcryptHash <value>" "Generate a bcrypt hash of the given value."
     if [ "$1" = "admin bcryptHash" ]; then
       echo "   produces:"
       echo "     - BCRYPTED_HASH"
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin pingDockerHost" ]; then
-    echo " ./omgserversctl.sh admin pingDockerHost <docker_daemon_uri>"
+    print_command " $0 admin pingDockerHost <docker_daemon_uri>" "Check the status of the specified Docker daemon."
     if [ "$1" = "admin pingDockerHost" ]; then
       echo "   produces:"
       echo "     - SUCCESSFUL"
@@ -96,7 +100,7 @@ help() {
   fi
   # Support
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support useCredentials" ]; then
-    echo " ./omgserversctl.sh support useCredentials <user> <password>"
+    print_command " $0 support useCredentials <user> <password>" "Authenticate as a support user using credentials."
     if [ "$1" = "support useCredentials" ]; then
       echo "   produces:"
       echo "     - SUPPORT_USER"
@@ -104,34 +108,36 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support printCurrent" ]; then
-    echo " ./omgserversctl.sh support printCurrent"
+    print_command " $0 support printCurrent" "Print the current support user."
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createToken" ]; then
-    echo " ./omgserversctl.sh support createToken"
+    print_command " $0 support createToken" "Generate an authentication token for support access."
     if [ "$1" = "support createToken" ]; then
       echo "   produces:"
       echo "     - SUPPORT_TOKEN"
     fi
   fi
+  # Tenant
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenant" ]; then
-    echo " ./omgserversctl.sh support createTenant"
+    print_command " $0 support createTenant" "Create a new tenant."
     if [ "$1" = "support createTenant" ]; then
       echo "   produces:"
       echo "     - TENANT"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantAlias" ]; then
-    echo " ./omgserversctl.sh support createTenantAlias <tenant_id> <alias>"
+    print_command " $0 support createTenantAlias <tenant_id> <alias>" "Assign an alias to a tenant."
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenant" ]; then
-    echo " ./omgserversctl.sh support deleteTenant <tenant>"
+    print_command " $0 support deleteTenant <tenant>" "Delete the specified tenant."
     if [ "$1" = "support deleteTenant" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
+  # Project
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProject" ]; then
-    echo " ./omgserversctl.sh support createProject <tenant>"
+    print_command " $0 support createProject <tenant>" "Create a new project under the specified tenant."
     if [ "$1" = "support createProject" ]; then
       echo "   produces:"
       echo "     - PROJECT"
@@ -139,25 +145,45 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectAlias" ]; then
-    echo " ./omgserversctl.sh support createProjectAlias <tenant> <project_id> <alias>"
+    print_command " $0 support createProjectAlias <tenant> <project_id> <alias>" "Assign an alias to a project."
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProject" ]; then
-    echo " ./omgserversctl.sh support deleteProject <tenant> <project>"
+    print_command " $0 support deleteProject <tenant> <project>" "Delete the specified project."
     if [ "$1" = "support deleteProject" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
+  # Stage
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStage" ]; then
+    print_command " $0 support createStage <tenant> <project>" "Create a new stage for a project."
+    if [ "$1" = "support createStage" ]; then
+      echo "   produces:"
+      echo "     - STAGE"
+    fi
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStageAlias" ]; then
+    print_command " $0 support createStageAlias <tenant> <stage_id> <alias>" "Assign an alias to a stage."
+  fi
+  if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStage" ]; then
+    print_command " $0 support deleteStage <tenant> <project> <stage>" "Delete the specified stage."
+    if [ "$1" = "support deleteStage" ]; then
+      echo "   produces:"
+      echo "     - DELETED"
+    fi
+  fi
+  # Developer
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createDeveloper" ]; then
-    echo " ./omgserversctl.sh support createDeveloper"
+    print_command " $0 support createDeveloper" "Create a new developer account."
     if [ "$1" = "support createDeveloper" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_USER"
       echo "     - DEVELOPER_PASSWORD"
     fi
   fi
+  # Permission
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantPermission" ]; then
-    echo " ./omgserversctl.sh support createTenantPermission <tenant> <user> <permission>"
+    print_command " $0 support createTenantPermission <tenant> <user> <permission>" "Grant a user permission for a tenant."
     if [ "$1" = "support createTenantPermission" ]; then
       echo "   permission:"
       echo "     - PROJECT_MANAGER"
@@ -165,7 +191,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantPermission" ]; then
-    echo " ./omgserversctl.sh support deleteTenantPermission <tenant> <user> <permission>"
+    print_command " $0 support deleteTenantPermission <tenant> <user> <permission>" "Remove a user's tenant permission."
     if [ "$1" = "support deleteTenantPermission" ]; then
       echo "   permission:"
       echo "     - PROJECT_MANAGER"
@@ -173,7 +199,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
-    echo " ./omgserversctl.sh support createProjectPermission <tenant> <project> <user> <permission>"
+    print_command " $0 support createProjectPermission <tenant> <project> <user> <permission>" "Grant a user permission for a project."
     if [ "$1" = "support createProjectPermission" ]; then
       echo "   permission:"
       echo "     - STAGE_MANAGER"
@@ -182,7 +208,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
-    echo " ./omgserversctl.sh support deleteProjectPermission <tenant> <project> <user> <permission>"
+    print_command " $0 support deleteProjectPermission <tenant> <project> <user> <permission>" "Remove a user's project permission."
     if [ "$1" = "support deleteProjectPermission" ]; then
       echo "   permission:"
       echo "     - STAGE_MANAGER"
@@ -191,7 +217,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
-    echo " ./omgserversctl.sh support createStagePermission <tenant> <project> <stage> <user> <permission>"
+    print_command " $0 support createStagePermission <tenant> <project> <stage> <user> <permission>" "Grant a user permission for a stage."
     if [ "$1" = "support createStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGER"
@@ -199,7 +225,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
-    echo " ./omgserversctl.sh support deleteStagePermission <tenant> <project> <stage> <user> <permission>"
+    print_command " $0 support deleteStagePermission <tenant> <project> <stage> <user> <permission>" "Remove a user's stage permission."
     if [ "$1" = "support deleteStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGER"
@@ -208,7 +234,7 @@ help() {
   fi
   # Developer
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer useCredentials" ]; then
-    echo " ./omgserversctl.sh developer useCredentials <user> <password>"
+    print_command " $0 developer useCredentials <user> <password>" "Authenticate as a developer using credentials."
     if [ "$1" = "developer useCredentials" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_USER"
@@ -216,20 +242,20 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer printCurrent" ]; then
-    echo " ./omgserversctl.sh developer printCurrent"
+    print_command " $0 developer printCurrent" "Print the current developer user."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
-    echo " ./omgserversctl.sh developer createToken"
+    print_command " $0 developer createToken" "Generate an authentication token for developer access."
     if [ "$1" = "developer createToken" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_TOKEN"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDetails" ]; then
-    echo " ./omgserversctl.sh developer getTenantDetails <tenant>"
+    print_command " $0 developer getTenantDetails <tenant>" "Retrieve details of the specified tenant."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProject" ]; then
-    echo " ./omgserversctl.sh developer createProject <tenant>"
+    print_command " $0 developer createProject <tenant>" "Create a new project under the specified tenant."
     if [ "$1" = "developer createProject" ]; then
       echo "   produces:"
       echo "     - PROJECT"
@@ -237,94 +263,94 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProjectAlias" ]; then
-    echo " ./omgserversctl.sh developer createProjectAlias <tenant> <project_id> <alias>"
+    print_command " $0 developer createProjectAlias <tenant> <project_id> <alias>" "Assign an alias to a project."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getProjectDetails" ]; then
-    echo " ./omgserversctl.sh developer getProjectDetails <tenant> <project>"
+    print_command " $0 developer getProjectDetails <tenant> <project>" "Retrieve details of the specified project."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteProject" ]; then
-      echo " ./omgserversctl.sh developer deleteProject <tenant> <project>"
+      print_command " $0 developer deleteProject <tenant> <project>" "Delete the specified project."
       if [ "$1" = "developer deleteProject" ]; then
         echo "   produces:"
         echo "     - DELETED"
       fi
     fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStage" ]; then
-    echo " ./omgserversctl.sh developer createStage <tenant> <project>"
+    print_command " $0 developer createStage <tenant> <project>" "Create a new stage for a project."
     if [ "$1" = "developer createStage" ]; then
       echo "   produces:"
       echo "     - STAGE"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStageAlias" ]; then
-    echo " ./omgserversctl.sh developer createStageAlias <tenant> <stage_id> <alias>"
+    print_command " $0 developer createStageAlias <tenant> <stage_id> <alias>" "Assign an alias to a stage."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDetails" ]; then
-    echo " ./omgserversctl.sh developer getStageDetails <tenant> <project> <stage>"
+    print_command " $0 developer getStageDetails <tenant> <project> <stage>" "Retrieve details of the specified stage."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteStage" ]; then
-    echo " ./omgserversctl.sh developer deleteStage <tenant> <project> <stage>"
+    print_command " $0 developer deleteStage <tenant> <project> <stage>" "Delete the specified stage."
     if [ "$1" = "developer deleteStage" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createVersion" ]; then
-    echo " ./omgserversctl.sh developer createVersion <tenant> <project> <config_path>"
+    print_command " $0 developer createVersion <tenant> <project> <config_path>" "Create a new version using the specified configuration."
     if [ "$1" = "developer createVersion" ]; then
       echo "   produces:"
       echo "     - VERSION"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadFilesArchive" ]; then
-    echo " ./omgserversctl.sh developer uploadFilesArchive <tenant> <version> <files_directory_path>"
+    print_command " $0 developer uploadFilesArchive <tenant> <version> <files_directory_path>" "Upload an archive of files for a version."
     if [ "$1" = "developer uploadFilesArchive" ]; then
       echo "   produces:"
       echo "     - FILES_ARCHIVE"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getVersionDetails" ]; then
-    echo " ./omgserversctl.sh developer getVersionDetails <tenant> <version>"
+    print_command " $0 developer getVersionDetails <tenant> <version>" "Retrieve details of the specified version."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteVersion" ]; then
-    echo " ./omgserversctl.sh developer deleteVersion <tenant> <version>"
+    print_command " $0 developer deleteVersion <tenant> <version>" "Delete the specified version."
     if [ "$1" = "developer deleteVersion" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
-    echo " ./omgserversctl.sh developer deployVersion <tenant> <project> <stage> <version>"
+    print_command " $0 developer deployVersion <tenant> <project> <stage> <version>" "Deploy a version to the specified stage."
     if [ "$1" = "developer deployVersion" ]; then
       echo "   produces:"
       echo "     - DEPLOYMENT"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getDeploymentDetails" ]; then
-    echo " ./omgserversctl.sh developer getDeploymentDetails <tenant> <deployment>"
+    print_command " $0 developer getDeploymentDetails <tenant> <deployment>" "Retrieve details of the specified deployment."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteDeployment" ]; then
-    echo " ./omgserversctl.sh developer deleteDeployment <tenant> <deployment>"
+    print_command " $0 developer deleteDeployment <tenant> <deployment>" "Delete the specified deployment."
     if [ "$1" = "developer deleteDeployment" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createLobbyRequest" ]; then
-    echo " ./omgserversctl.sh developer createLobbyRequest <tenant> <deployment>"
+    print_command " $0 developer createLobbyRequest <tenant> <deployment>" "Create a lobby request for the specified deployment."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteLobby" ]; then
-    echo " ./omgserversctl.sh developer deleteLobby <lobby>"
+    print_command " $0 developer deleteLobby <lobby>" "Delete the specified lobby."
     if [ "$1" = "developer deleteLobby" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createMatchmakerRequest" ]; then
-    echo " ./omgserversctl.sh developer createMatchmakerRequest <tenant> <deployment>"
+    print_command " $0 developer createMatchmakerRequest <tenant> <deployment>" "Create a matchmaker request for the specified deployment."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteMatchmaker" ]; then
-    echo " ./omgserversctl.sh developer deleteMatchmaker <matchmaker>"
+    print_command " $0 developer deleteMatchmaker <matchmaker>" "Delete the specified matchmaker."
     if [ "$1" = "developer deleteMatchmaker" ]; then
       echo "   produces:"
       echo "     - DELETED"
@@ -361,7 +387,7 @@ environment_printVariable() {
   VARIABLE_NAME="OMGSERVERSCTL_${VARIABLE_NAME}"
 
   if [ -z "${!VARIABLE_NAME}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Variable was not found, VARIABLE_NAME=${VARIABLE_NAME}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Variable was not found, VARIABLE_NAME=${VARIABLE_NAME}" >&2
     exit 1
   else
     echo -n ${!VARIABLE_NAME}
@@ -380,7 +406,7 @@ environment_useEnvironment() {
   echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_SERVICE_URL=${SERVICE_URL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=${ENVIRONMENT_NAME}, SERVICE_URL=${SERVICE_URL}"
+  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=\"${ENVIRONMENT_NAME}\", SERVICE_URL=\"${SERVICE_URL}\""
 }
 
 environment_useDemoServer() {
@@ -409,7 +435,7 @@ admin_useCredentials() {
   echo "export OMGSERVERSCTL_ADMIN_USER=${ADMIN_USER}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_ADMIN_PASSWORD='${ADMIN_PASSWORD}'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin credentials were set, ADMIN_USER=${ADMIN_USER}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin credentials were set, ADMIN_USER=\"${ADMIN_USER}\""
 
   internal_useEnvironment
   admin_createToken
@@ -423,7 +449,7 @@ admin_printCurrent() {
   ADMIN_TOKEN=${OMGSERVERSCTL_ADMIN_TOKEN}
 
   if [ -z "${ADMIN_USER}" -o -z "${ADMIN_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin was not set"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin was not set" >&2
     exit 1
   fi
 
@@ -441,11 +467,11 @@ admin_createToken() {
   ADMIN_PASSWORD=${OMGSERVERSCTL_ADMIN_PASSWORD}
 
   if [ -z "${ADMIN_USER}" -o -z "${ADMIN_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin credentials were not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin credentials were not found" >&2
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, ADMIN_USER=${ADMIN_USER}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, ADMIN_USER=\"${ADMIN_USER}\""
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/create-token"
   REQUEST="{\"user\": \"${ADMIN_USER}\", \"password\": \"${ADMIN_PASSWORD}\"}"
@@ -464,14 +490,14 @@ admin_createToken() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   ADMIN_TOKEN=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-create-token_${ADMIN_USER}.json | jq -r .raw_token)
   if [ -z "$ADMIN_TOKEN" -o "$ADMIN_TOKEN" == "null" ]; then
-    echo "ERROR: ADMIN_TOKEN was not received"
+    echo "ERROR: ADMIN_TOKEN was not received" >&2
     exit 1
   fi
 
@@ -493,7 +519,7 @@ admin_calculateShard() {
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
@@ -515,21 +541,21 @@ admin_calculateShard() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   SHARD_INDEX=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-calculate_shard_${SHARD_KEY}.json | jq -r .shard_index)
   if [ -z "${SHARD_INDEX}" -o "${SHARD_INDEX}" == "null" ]; then
-    echo "ERROR: SHARD_INDEX was not received"
+    echo "ERROR: SHARD_INDEX was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_SHARD_INDEX=${SHARD_INDEX}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   SERVER_URI=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-calculate_shard_${SHARD_KEY}.json | jq -r .server_uri)
   if [ -z "${SERVER_URI}" -o "${SERVER_URI}" == "null" ]; then
-    echo "ERROR: SERVER_URI was not received"
+    echo "ERROR: SERVER_URI was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_SERVER_URI=${SERVER_URI}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -543,7 +569,7 @@ admin_generateId() {
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
@@ -566,14 +592,14 @@ admin_generateId() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   GENERATED_ID=$(cat ${RESPONSE_FILE} | jq -r .id)
   if [ -z "${GENERATED_ID}" -o "${GENERATED_ID}" == "null" ]; then
-    echo "ERROR: GENERATED_ID was not received"
+    echo "ERROR: GENERATED_ID was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_GENERATED_ID=${GENERATED_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -594,7 +620,7 @@ admin_bcryptHash() {
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
@@ -617,14 +643,14 @@ admin_bcryptHash() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   BCRYPTED_HASH=$(cat ${RESPONSE_FILE} | jq -r .hash)
   if [ -z "${BCRYPTED_HASH}" -o "${BCRYPTED_HASH}" == "null" ]; then
-    echo "ERROR: BCRYPTED_HASH was not received"
+    echo "ERROR: BCRYPTED_HASH was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_BCRYPTED_HASH=${BCRYPTED_HASH}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -645,7 +671,7 @@ admin_pingDockerHost() {
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
@@ -667,21 +693,21 @@ admin_pingDockerHost() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   SUCCESSFUL=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-ping-docker-host.json | jq -r .successful)
   if [ -z "${SUCCESSFUL}" -o "${SUCCESSFUL}" == "null" ]; then
-    echo "ERROR: SUCCESSFUL was not received"
+    echo "ERROR: SUCCESSFUL was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_SUCCESSFUL=${SUCCESSFUL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   FROM_SERVER=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/admin-ping-docker-host.json | jq -r .from_server)
   if [ -z "${FROM_SERVER}" -o "${FROM_SERVER}" == "null" ]; then
-    echo "ERROR: FROM_SERVER was not received"
+    echo "ERROR: FROM_SERVER was not received" >&2
     exit 1
   fi
 
@@ -708,7 +734,7 @@ support_useCredentials() {
   echo "export OMGSERVERSCTL_SUPPORT_USER=${SUPPORT_USER}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_SUPPORT_PASSWORD='${SUPPORT_PASSWORD}'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support credentials were set, SUPPORT_USER=${SUPPORT_USER}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support credentials were set, SUPPORT_USER=\"${SUPPORT_USER}\""
 
   internal_useEnvironment
   support_createToken
@@ -722,7 +748,7 @@ support_printCurrent() {
   SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
 
   if [ -z "${SUPPORT_USER}" -o -z "${SUPPORT_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support was not found" >&2
     exit 1
   fi
 
@@ -740,11 +766,11 @@ support_createToken() {
   SUPPORT_PASSWORD=$OMGSERVERSCTL_SUPPORT_PASSWORD
 
   if [ -z "${SUPPORT_USER}" -o -z "${SUPPORT_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support credentials were not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support credentials were not found" >&2
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, SUPPORT_USER=$SUPPORT_USER"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, SUPPORT_USER=\"$SUPPORT_USER\""
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-token"
   REQUEST="{\"user\": \"${SUPPORT_USER}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
@@ -763,14 +789,14 @@ support_createToken() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   RAW_TOKEN=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-token_${SUPPORT_USER}.json | jq -r .raw_token)
   if [ -z "$RAW_TOKEN" -o "$RAW_TOKEN" == "null" ]; then
-    echo "ERROR: RAW_TOKEN was not received"
+    echo "ERROR: RAW_TOKEN was not received" >&2
     exit 1
   fi
 
@@ -785,7 +811,7 @@ support_createTenant() {
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -807,19 +833,19 @@ support_createTenant() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   TENANT=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant.json | jq -r .id)
   if [ -z "$TENANT" -o "$TENANT" == "null" ]; then
-    echo "ERROR: TENANT was not received"
+    echo "ERROR: TENANT was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_TENANT=$TENANT" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT=$TENANT"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT=\"$TENANT\""
 }
 
 support_createTenantAlias() {
@@ -833,13 +859,13 @@ support_createTenantAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant id, TENANT_ID=${TENANT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant id, TENANT_ID=\"${TENANT_ID}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -862,7 +888,7 @@ support_createTenantAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -883,7 +909,7 @@ support_deleteTenant() {
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -905,14 +931,14 @@ support_deleteTenant() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant_${TENANT}.json | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -923,6 +949,8 @@ support_deleteTenant() {
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was not deleted, TENANT=${TENANT}"
   fi
 }
+
+# Project
 
 support_createProject() {
   internal_useEnvironment
@@ -937,7 +965,7 @@ support_createProject() {
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -960,26 +988,26 @@ support_createProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   PROJECT=$(cat ${RESPONSE_FILE} | jq -r .project_id)
   if [ -z "$PROJECT" -o "$PROJECT" == "null" ]; then
-    echo "ERROR: PROJECT was not received"
+    echo "ERROR: PROJECT was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_PROJECT=$PROJECT" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   STAGE=$(cat ${RESPONSE_FILE} | jq -r .stage_id)
   if [ -z "${STAGE}" -o "${STAGE}" == "null" ]; then
-    echo "ERROR: STAGE was not received"
+    echo "ERROR: STAGE was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_STAGE=${STAGE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
 }
 
 support_createProjectAlias() {
@@ -994,14 +1022,14 @@ support_createProjectAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=${PROJECT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1024,7 +1052,7 @@ support_createProjectAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1046,7 +1074,7 @@ support_deleteProject() {
   SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1069,14 +1097,14 @@ support_deleteProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -1088,13 +1116,182 @@ support_deleteProject() {
   fi
 }
 
+# Stage
+
+support_createStage() {
+  internal_useEnvironment
+
+  TENANT=$1
+
+  if [ -z "${TENANT}" ]; then
+    help "support createStage"
+    exit 1
+  fi
+
+  PROJECT=$2
+
+  if [ -z "${PROJECT}" ]; then
+    help "support createStage"
+    exit 1
+  fi
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-stage"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage_${TENANT}_${PROJECT}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  STAGE=$(cat ${RESPONSE_FILE} | jq -r .stage_id)
+  if [ -z "${STAGE}" -o "${STAGE}" == "null" ]; then
+    echo "ERROR: STAGE was not received" >&2
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_STAGE=${STAGE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=\"${STAGE}\""
+}
+
+support_createStageAlias() {
+  internal_useEnvironment
+
+  TENANT=$1
+  STAGE_ID=$2
+  ALIAS=$3
+
+  if [ -z "${TENANT}" -o -z "${STAGE_ID}" -o -z "${ALIAS}" ]; then
+    help "support createStageAlias"
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
+
+  SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-stage-alias"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"stage_id\": \"${STAGE_ID}\", \"alias\": \"${ALIAS}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-alias_${TENANT}_${STAGE_ID}_${ALIAS}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage alias was created"
+}
+
+support_deleteStage() {
+  internal_useEnvironment
+
+  TENANT=$1
+  PROJECT=$2
+  STAGE=$3
+
+  if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" ]; then
+    help "support deleteStage"
+    exit 1
+  fi
+
+  SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
+
+  if [ -z "${SUPPORT_TOKEN}" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    exit 1
+  fi
+
+  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/delete-stage"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\"}"
+  RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT}_${PROJECT}_${STAGE}.json"
+
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo $REQUEST >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${SUPPORT_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMGSERVERSCTL_DIRECTORY}/logs
+  echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    exit 1
+  fi
+
+  DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
+  if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
+    echo "ERROR: DELETED was not received" >&2
+    exit 1
+  fi
+  echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+
+  if [ "${DELETED}" == "true" ]; then
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was deleted"
+  else
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was not deleted"
+  fi
+}
+
+# Developer
+
 support_createDeveloper() {
   internal_useEnvironment
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1116,26 +1313,26 @@ support_createDeveloper() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   USER=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-developer_${TENANT}.json | jq -r .user_id)
   if [ -z "$USER" -o "$USER" == "null" ]; then
-    echo "ERROR: USER was not received"
+    echo "ERROR: USER was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DEVELOPER_USER=$USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   PASSWORD=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/support-create-developer_${TENANT}.json | jq -r .password)
   if [ -z "$PASSWORD" -o "$PASSWORD" == "null" ]; then
-    echo "ERROR: PASSWORD was not received"
+    echo "ERROR: PASSWORD was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD='$PASSWORD'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, DEVELOPER_USER=${USER}, DEVELOPER_PASSWORD=${PASSWORD}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, DEVELOPER_USER=\"${USER}\", DEVELOPER_PASSWORD=\"${PASSWORD}\""
 
   internal_useEnvironment
   developer_createToken ${USER} ${PASSWORD}
@@ -1153,14 +1350,14 @@ support_createTenantPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1183,7 +1380,7 @@ support_createTenantPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1204,14 +1401,14 @@ support_deleteTenantPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1234,7 +1431,7 @@ support_deleteTenantPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1256,15 +1453,15 @@ support_createProjectPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1287,7 +1484,7 @@ support_createProjectPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1309,15 +1506,15 @@ support_deleteProjectPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1340,7 +1537,7 @@ support_deleteProjectPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1363,16 +1560,16 @@ support_createStagePermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1395,7 +1592,7 @@ support_createStagePermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1418,16 +1615,16 @@ support_deleteStagePermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=${USER}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=${PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
@@ -1450,7 +1647,7 @@ support_deleteStagePermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1475,7 +1672,7 @@ developer_useCredentials() {
   echo "export OMGSERVERSCTL_DEVELOPER_USER=$DEVELOPER_USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD='$DEVELOPER_PASSWORD'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER=$DEVELOPER_USER"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer credentials were set, DEVELOPER_USER=\"$DEVELOPER_USER\""
 
   internal_useEnvironment
   developer_createToken ${DEVELOPER_USER} ${DEVELOPER_PASSWORD}
@@ -1489,7 +1686,7 @@ developer_printCurrent() {
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_USER}" -o -z "${DEVELOPER_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer was not found" >&2
     exit 1
   fi
 
@@ -1507,7 +1704,7 @@ developer_createToken() {
   DEVELOPER_PASSWORD=${OMGSERVERSCTL_DEVELOPER_PASSWORD}
 
   if [ -z "${DEVELOPER_USER}" -o -z "${DEVELOPER_PASSWORD}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer credentials were not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer credentials were not found" >&2
     exit 1
   fi
 
@@ -1529,14 +1726,14 @@ developer_createToken() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   RAW_TOKEN=$(cat ${RESPONSE_FILE} | jq -r .raw_token)
   if [ -z "$RAW_TOKEN" -o "$RAW_TOKEN" == "null" ]; then
-    echo "ERROR: RAW_TOKEN was not received"
+    echo "ERROR: RAW_TOKEN was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -1554,12 +1751,12 @@ developer_getTenantDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=$TENANT"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1582,7 +1779,7 @@ developer_getTenantDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1600,12 +1797,12 @@ developer_createProject() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=$TENANT"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1628,26 +1825,26 @@ developer_createProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   PROJECT=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .project_id)
   if [ -z "$PROJECT" -o "$PROJECT" == "null" ]; then
-    echo "ERROR: PROJECT was not received"
+    echo "ERROR: PROJECT was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_PROJECT=$PROJECT" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   STAGE=$(cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json | jq -r .stage_id)
   if [ -z "$STAGE" -o "$STAGE" == "null" ]; then
-    echo "ERROR: STAGE was not received"
+    echo "ERROR: STAGE was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=${PROJECT}, STAGE=${STAGE}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
 }
 
 developer_createProjectAlias() {
@@ -1662,14 +1859,14 @@ developer_createProjectAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=${PROJECT_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1692,7 +1889,7 @@ developer_createProjectAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1711,13 +1908,13 @@ developer_getProjectDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1740,7 +1937,7 @@ developer_getProjectDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1759,13 +1956,13 @@ developer_deleteProject() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1788,14 +1985,14 @@ developer_deleteProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -1818,13 +2015,13 @@ developer_createStage() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=$TENANT"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1847,19 +2044,19 @@ developer_createStage() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   STAGE=$(cat ${RESPONSE_FILE} | jq -r .stage_id)
   if [ -z "$STAGE" -o "$STAGE" == "null" ]; then
-    echo "ERROR: STAGE was not received"
+    echo "ERROR: STAGE was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=${STAGE}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=\"${STAGE}\""
 }
 
 developer_createStageAlias() {
@@ -1874,14 +2071,14 @@ developer_createStageAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=$TENANT"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=${STAGE_ID}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=${ALIAS}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1904,7 +2101,7 @@ developer_createStageAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1924,13 +2121,13 @@ developer_getStageDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -1953,7 +2150,7 @@ developer_getStageDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -1973,13 +2170,13 @@ developer_deleteStage() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2002,14 +2199,14 @@ developer_deleteStage() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -2033,26 +2230,26 @@ developer_createVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=${CONFIG_PATH}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=\"${CONFIG_PATH}\""
 
   if [ ! -f ${CONFIG_PATH} ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Config file was not found, CONFIG_PATH=${CONFIG_PATH}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Config file was not found, CONFIG_PATH=\"${CONFIG_PATH}\"" >&2
     exit 1
   fi
 
   CONFIG=$(cat ${CONFIG_PATH} | jq -c -r)
 
   if [ -z "${CONFIG}" -o "${CONFIG}" == "null" ]; then
-    echo "ERROR: Version config is empty"
+    echo "ERROR: Version config is empty" >&2
     exit 1
   fi
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2075,19 +2272,19 @@ developer_createVersion() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   VERSION=$(cat ${RESPONSE_FILE} | jq -r .version_id)
   if [ -z "$VERSION" -o "$VERSION" == "null" ]; then
-    echo "ERROR: VERSION was not received"
+    echo "ERROR: VERSION was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_VERSION=${VERSION}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION=${VERSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION=\"${VERSION}\""
 }
 
 developer_uploadFilesArchive() {
@@ -2102,19 +2299,19 @@ developer_uploadFilesArchive() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=${VERSION}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using filed directory path, FILES_DIRECTORY_PATH=${FILES_DIRECTORY_PATH}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using files directory path, FILES_DIRECTORY_PATH=\"${FILES_DIRECTORY_PATH}\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
   ARCHIVE_PATH=$(eval echo ${OMGSERVERSCTL_DIRECTORY}/versions/version_${TENANT}_${VERSION}.zip)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=${ARCHIVE_PATH}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=\"${ARCHIVE_PATH}\""
 
   pushd ${FILES_DIRECTORY_PATH}
 
@@ -2141,14 +2338,14 @@ developer_uploadFilesArchive() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   FILES_ARCHIVE=$(cat ${RESPONSE_FILE} | jq -r .files_archive_id)
   if [ -z "${FILES_ARCHIVE}" -o "${FILES_ARCHIVE}" == "null" ]; then
-    echo "ERROR: FILES_ARCHIVE was not received"
+    echo "ERROR: FILES_ARCHIVE was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_FILES_ARCHIVE=${FILES_ARCHIVE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -2167,13 +2364,13 @@ developer_getVersionDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=${VERSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2196,7 +2393,7 @@ developer_getVersionDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -2215,13 +2412,13 @@ developer_deleteVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=${VERSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2244,14 +2441,14 @@ developer_deleteVersion() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -2276,15 +2473,15 @@ developer_deployVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=${PROJECT}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=${STAGE}"
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=${VERSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2307,19 +2504,19 @@ developer_deployVersion() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DEPLOYMENT=$(cat ${RESPONSE_FILE} | jq -r .deployment_id)
   if [ -z "${DEPLOYMENT}" -o "${DEPLOYMENT}" == "null" ]; then
-    echo "ERROR: DEPLOYMENT was not received"
+    echo "ERROR: DEPLOYMENT was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DEPLOYMENT=${DEPLOYMENT}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=${DEPLOYMENT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\""
 }
 
 developer_getDeploymentDetails() {
@@ -2333,13 +2530,13 @@ developer_getDeploymentDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}"
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2362,7 +2559,7 @@ developer_getDeploymentDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -2381,13 +2578,13 @@ developer_deleteDeployment() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=${TENANT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}"
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2410,14 +2607,14 @@ developer_deleteDeployment() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -2460,7 +2657,7 @@ developer_createLobbyRequest() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -2478,12 +2675,12 @@ developer_deleteLobby() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using lobby, LOBBY_ID=${LOBBY_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using lobby, LOBBY_ID=\"${LOBBY_ID}\""
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2506,14 +2703,14 @@ developer_deleteLobby() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -2555,7 +2752,7 @@ developer_createMatchmakerRequest() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
@@ -2573,12 +2770,12 @@ developer_deleteMatchmaker() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using matchmaker, MATCHMAKER_ID=${MATCHMAKER_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using matchmaker, MATCHMAKER_ID=\"${MATCHMAKER_ID}\""
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found"
+    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
@@ -2601,14 +2798,14 @@ developer_deleteMatchmaker() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=${HTTP_CODE}, ${ENDPOINT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
     exit 1
   fi
 
   DELETED=$(cat ${RESPONSE_FILE} | jq -r .deleted)
   if [ -z "$DELETED" -o "$DELETED" == "null" ]; then
-    echo "ERROR: DELETED was not received"
+    echo "ERROR: DELETED was not received" >&2
     exit 1
   fi
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -2626,7 +2823,7 @@ internal_useEnvironment() {
   source ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ -z "${OMGSERVERSCTL_ENVIRONMENT_NAME}" ]; then
-    echo "$(date) $(echo unknown) ERROR: Environment was not configured"
+    echo "$(date) $(echo unknown) ERROR: Environment was not configured" >&2
     exit 1
   else
     source ${OMGSERVERSCTL_DIRECTORY}/environment
@@ -2721,14 +2918,24 @@ elif [ "$1" = "support" ]; then
     support_createTenantAlias $3 $4
   elif [ "$2" = "deleteTenant" ]; then
     support_deleteTenant $3
+  # Project
   elif [ "$2" = "createProject" ]; then
     support_createProject $3
   elif [ "$2" = "createProjectAlias" ]; then
     support_createProjectAlias $3 $4 $5
   elif [ "$2" = "deleteProject" ]; then
     support_deleteProject $3 $4
+  # Stage
+  elif [ "$2" = "createStage" ]; then
+    support_createStage $3 $4
+  elif [ "$2" = "createStageAlias" ]; then
+    support_createStageAlias $3 $4 $5
+  elif [ "$2" = "deleteStage" ]; then
+    support_deleteStage $3 $4 $5
+  # Developer
   elif [ "$2" = "createDeveloper" ]; then
     support_createDeveloper $3
+  # Permissions
   elif [ "$2" = "createTenantPermission" ]; then
     support_createTenantPermission $3 $4 $5
   elif [ "$2" = "deleteTenantPermission" ]; then

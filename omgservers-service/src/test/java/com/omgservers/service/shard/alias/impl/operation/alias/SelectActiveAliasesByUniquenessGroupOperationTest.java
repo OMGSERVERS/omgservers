@@ -3,7 +3,7 @@ package com.omgservers.service.shard.alias.impl.operation.alias;
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectAliasesByUniquenessGroupOperationTestInterface;
+import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectActiveAliasesByUniquenessGroupOperationTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class SelectAliasesByUniquenessGroupOperationTest extends BaseTestClass {
+class SelectActiveAliasesByUniquenessGroupOperationTest extends BaseTestClass {
 
     @Inject
-    SelectAliasesByUniquenessGroupOperationTestInterface selectAliasesByUniquenessGroupOperation;
+    SelectActiveAliasesByUniquenessGroupOperationTestInterface selectActiveAliasesByUniquenessGroupOperation;
 
     @Inject
     TestDataFactory testDataFactory;
@@ -36,7 +36,7 @@ class SelectAliasesByUniquenessGroupOperationTest extends BaseTestClass {
         final var alias2 = testDataFactory.getAliasTestDataFactory()
                 .createAlias(tenant2, "tenant-" + UUID.randomUUID());
 
-        final var aliases = selectAliasesByUniquenessGroupOperation
+        final var aliases = selectActiveAliasesByUniquenessGroupOperation
                 .execute(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
                         DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP).stream()
                 .map(AliasModel::getId)
@@ -48,7 +48,7 @@ class SelectAliasesByUniquenessGroupOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownUniquenessGroup_whenExecute_thenEmptyResult() {
-        final var aliases = selectAliasesByUniquenessGroupOperation
+        final var aliases = selectActiveAliasesByUniquenessGroupOperation
                 .execute(generateIdOperation.generateId(), generateIdOperation.generateId());
         assertTrue(aliases.isEmpty());
     }

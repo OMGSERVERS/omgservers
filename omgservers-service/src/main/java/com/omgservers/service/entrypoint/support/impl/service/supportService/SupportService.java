@@ -30,6 +30,12 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupp
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -37,11 +43,19 @@ public interface SupportService {
 
     Uni<CreateTokenSupportResponse> execute(@Valid CreateTokenSupportRequest request);
 
+    /*
+    Tenant
+     */
+
     Uni<CreateTenantSupportResponse> execute(@Valid CreateTenantSupportRequest request);
 
     Uni<CreateTenantAliasSupportResponse> execute(@Valid CreateTenantAliasSupportRequest request);
 
     Uni<DeleteTenantSupportResponse> execute(@Valid DeleteTenantSupportRequest request);
+
+    /*
+    Project
+     */
 
     Uni<CreateTenantProjectSupportResponse> execute(@Valid CreateTenantProjectSupportRequest request);
 
@@ -49,9 +63,27 @@ public interface SupportService {
 
     Uni<DeleteTenantProjectSupportResponse> execute(@Valid DeleteTenantProjectSupportRequest request);
 
+    /*
+    Stage
+     */
+
+    Uni<CreateTenantStageSupportResponse> execute(@Valid CreateTenantStageSupportRequest request);
+
+    Uni<CreateTenantStageAliasSupportResponse> execute(@Valid CreateTenantStageAliasSupportRequest request);
+
+    Uni<DeleteTenantStageSupportResponse> execute(@Valid DeleteTenantStageSupportRequest request);
+
+    /*
+    Developer
+     */
+
     Uni<CreateDeveloperSupportResponse> execute(@Valid CreateDeveloperSupportRequest request);
 
     Uni<DeleteDeveloperSupportResponse> execute(@Valid DeleteDeveloperSupportRequest request);
+
+    /*
+    Permissions
+     */
 
     Uni<CreateTenantPermissionsSupportResponse> execute(@Valid CreateTenantPermissionsSupportRequest request);
 

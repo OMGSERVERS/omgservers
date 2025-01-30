@@ -2,9 +2,9 @@ package com.omgservers.service.shard.alias.impl.service.aliasService.impl.method
 
 import com.omgservers.schema.module.alias.ViewAliasesRequest;
 import com.omgservers.schema.module.alias.ViewAliasesResponse;
-import com.omgservers.service.shard.alias.impl.operation.alias.SelectAliasesByEntityIdOperation;
-import com.omgservers.service.shard.alias.impl.operation.alias.SelectAliasesByShardKeyOperation;
-import com.omgservers.service.shard.alias.impl.operation.alias.SelectAliasesByUniquenessGroupOperation;
+import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByEntityIdOperation;
+import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByShardKeyOperation;
+import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByUniquenessGroupOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -19,9 +19,9 @@ import java.util.Objects;
 @AllArgsConstructor
 class ViewAliasesMethodImpl implements ViewAliasesMethod {
 
-    final SelectAliasesByUniquenessGroupOperation selectAliasesByUniquenessGroupOperation;
-    final SelectAliasesByShardKeyOperation selectAliasesByShardKeyOperation;
-    final SelectAliasesByEntityIdOperation selectAliasesByEntityIdOperation;
+    final SelectActiveAliasesByUniquenessGroupOperation selectActiveAliasesByUniquenessGroupOperation;
+    final SelectActiveAliasesByShardKeyOperation selectActiveAliasesByShardKeyOperation;
+    final SelectActiveAliasesByEntityIdOperation selectActiveAliasesByEntityIdOperation;
     final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
@@ -39,17 +39,17 @@ class ViewAliasesMethodImpl implements ViewAliasesMethod {
                                 final var uniquenessGroup = request.getUniquenessGroup();
                                 final var entityId = request.getEntityId();
                                 if (Objects.nonNull(entityId)) {
-                                    return selectAliasesByEntityIdOperation.execute(sqlConnection,
+                                    return selectActiveAliasesByEntityIdOperation.execute(sqlConnection,
                                             shard.shard(),
                                             shardKey,
                                             entityId);
                                 } else if (Objects.nonNull(uniquenessGroup)) {
-                                    return selectAliasesByUniquenessGroupOperation.execute(sqlConnection,
+                                    return selectActiveAliasesByUniquenessGroupOperation.execute(sqlConnection,
                                             shard.shard(),
                                             shardKey,
                                             uniquenessGroup);
                                 } else {
-                                    return selectAliasesByShardKeyOperation.execute(sqlConnection,
+                                    return selectActiveAliasesByShardKeyOperation.execute(sqlConnection,
                                             shard.shard(),
                                             shardKey);
                                 }

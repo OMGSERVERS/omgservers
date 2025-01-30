@@ -30,6 +30,12 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupp
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.support.impl.service.webService.WebService;
 import com.omgservers.service.operation.server.HandleApiRequestOperation;
@@ -93,6 +99,25 @@ public class SupportApiImpl implements SupportApi {
 
     @Override
     public Uni<DeleteTenantProjectSupportResponse> execute(@NotNull final DeleteTenantProjectSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    Stage
+     */
+
+    @Override
+    public Uni<CreateTenantStageSupportResponse> execute(@NotNull final CreateTenantStageSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<CreateTenantStageAliasSupportResponse> execute(@NotNull final CreateTenantStageAliasSupportRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<DeleteTenantStageSupportResponse> execute(@NotNull final DeleteTenantStageSupportRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 

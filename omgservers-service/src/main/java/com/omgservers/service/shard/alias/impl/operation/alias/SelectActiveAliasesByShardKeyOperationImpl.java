@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class SelectAliasesByUniquenessGroupOperationImpl implements SelectAliasesByUniquenessGroupOperation {
+class SelectActiveAliasesByShardKeyOperationImpl implements SelectActiveAliasesByShardKeyOperation {
 
     final SelectListOperation selectListOperation;
 
@@ -23,18 +23,17 @@ class SelectAliasesByUniquenessGroupOperationImpl implements SelectAliasesByUniq
     @Override
     public Uni<List<AliasModel>> execute(final SqlConnection sqlConnection,
                                          final int shard,
-                                         final Long shardKey,
-                                         final Long uniquenessGroup) {
+                                         final Long shardKey) {
         return selectListOperation.selectList(
                 sqlConnection,
                 shard,
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
                         from $schema.tab_alias
-                        where shard_key = $1 and uniqueness_group = $2
+                        where shard_key = $1 and deleted = false
                         order by id asc
                         """,
-                List.of(shardKey, uniquenessGroup),
+                List.of(shardKey),
                 "Alias",
                 aliasModelMapper::fromRow);
     }

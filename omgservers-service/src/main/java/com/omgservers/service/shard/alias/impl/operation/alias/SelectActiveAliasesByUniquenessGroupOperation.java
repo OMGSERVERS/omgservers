@@ -6,9 +6,9 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 import java.util.List;
 
-public interface SelectAliasesByEntityIdOperation {
+public interface SelectActiveAliasesByUniquenessGroupOperation {
     Uni<List<AliasModel>> execute(SqlConnection sqlConnection,
                                   int shard,
                                   Long shardKey,
-                                  Long entityId);
+                                  Long uniquenessGroup);
 }

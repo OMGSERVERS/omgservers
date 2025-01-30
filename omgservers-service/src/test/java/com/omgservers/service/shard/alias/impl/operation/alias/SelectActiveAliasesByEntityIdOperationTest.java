@@ -4,7 +4,7 @@ import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.service.factory.alias.AliasModelFactory;
-import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectAliasesByEntityIdOperationTestInterface;
+import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectActiveAliasesByEntityIdOperationTestInterface;
 import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.UpsertAliasOperationTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
@@ -16,10 +16,10 @@ import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
-class SelectAliasesByEntityIdOperationTest extends BaseTestClass {
+class SelectActiveAliasesByEntityIdOperationTest extends BaseTestClass {
 
     @Inject
-    SelectAliasesByEntityIdOperationTestInterface selectAliasesByEntityIdOperation;
+    SelectActiveAliasesByEntityIdOperationTestInterface selectActiveAliasesByEntityIdOperation;
 
     @Inject
     UpsertAliasOperationTestInterface upsertAliasOperation;
@@ -51,7 +51,7 @@ class SelectAliasesByEntityIdOperationTest extends BaseTestClass {
                 "tenant-" + UUID.randomUUID());
         upsertAliasOperation.execute(shard, alias2);
 
-        final var aliases = selectAliasesByEntityIdOperation
+        final var aliases = selectActiveAliasesByEntityIdOperation
                 .execute(shardKey, entityId).stream()
                 .map(AliasModel::getId)
                 .toList();
@@ -61,7 +61,7 @@ class SelectAliasesByEntityIdOperationTest extends BaseTestClass {
 
     @Test
     void givenAliases_whenExecute_thenEmptyResult() {
-        final var aliases = selectAliasesByEntityIdOperation.execute(generateIdOperation.generateId(),
+        final var aliases = selectActiveAliasesByEntityIdOperation.execute(generateIdOperation.generateId(),
                 generateIdOperation.generateId());
         assertTrue(aliases.isEmpty());
     }

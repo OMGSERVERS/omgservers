@@ -30,6 +30,12 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupp
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportResponse;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
 import com.omgservers.service.entrypoint.support.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -84,6 +90,25 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<DeleteTenantProjectSupportResponse> execute(final DeleteTenantProjectSupportRequest request) {
+        return supportService.execute(request);
+    }
+
+    /*
+    Stage
+     */
+
+    @Override
+    public Uni<CreateTenantStageSupportResponse> execute(final CreateTenantStageSupportRequest request) {
+        return supportService.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantStageAliasSupportResponse> execute(final CreateTenantStageAliasSupportRequest request) {
+        return supportService.execute(request);
+    }
+
+    @Override
+    public Uni<DeleteTenantStageSupportResponse> execute(final DeleteTenantStageSupportRequest request) {
         return supportService.execute(request);
     }
 
