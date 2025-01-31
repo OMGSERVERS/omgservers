@@ -4,6 +4,7 @@ import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Uni;
@@ -23,7 +24,7 @@ class CreateTenantAliasOperationImpl implements CreateTenantAliasOperation {
     @Override
     public Uni<AliasModel> execute(Long tenantId, String aliasValue) {
         final var alias = aliasModelFactory.create(AliasQualifierEnum.TENANT,
-                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
                 tenantId,
                 aliasValue);

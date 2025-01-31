@@ -25,6 +25,7 @@ import com.omgservers.schema.module.user.GetUserResponse;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.schema.module.user.SyncUserResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
@@ -33,14 +34,14 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.GenerateSecureStringOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.shard.user.UserShard;
-import com.omgservers.service.operation.server.CalculateShardOperation;
-import com.omgservers.service.operation.server.GenerateSecureStringOperation;
-import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -229,7 +230,7 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
     }
 
     Uni<AliasModel> findDefaultPoolAlias() {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
         return aliasShard.getService().execute(request)

@@ -10,15 +10,16 @@ import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -106,7 +107,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
     }
 
     Uni<AliasModel> findDefaultUserAlias(final String alias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.DEFAULT_USER_GROUP,
                 alias);
         return aliasShard.getService().execute(request)

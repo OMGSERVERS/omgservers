@@ -12,20 +12,21 @@ import com.omgservers.schema.module.root.rootEntityRef.FindRootEntityRefResponse
 import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.shard.alias.AliasShard;
-import com.omgservers.service.shard.root.RootShard;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.DeleteAliasesByEntityIdOperation;
 import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantPermissionsOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantProjectsOperation;
 import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.root.RootShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -70,7 +71,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> findAndDeleteRootTenantRef(tenantId))
                             .flatMap(voidItem -> findAndDeleteJobOperation.execute(tenantId, tenantId))
                             .flatMap(voidItem -> deleteAliasesByEntityIdOperation.execute(
-                                    DefaultAliasConfiguration.GLOBAL_SHARD_KEY, tenantId));
+                                    GlobalShardConfiguration.GLOBAL_SHARD_KEY, tenantId));
                 })
                 .replaceWithVoid();
     }
@@ -95,7 +96,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<AliasModel> findRootEntityAlias() {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
         return aliasShard.getService().execute(request)

@@ -2,9 +2,9 @@ package com.omgservers.service.shard.alias.impl.operation.alias;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectActiveAliasesByShardKeyOperationTestInterface;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.operation.server.GenerateIdOperation;
+import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectActiveAliasesByShardKeyOperationTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -37,7 +37,7 @@ class SelectActiveAliasesByShardKeyOperationTest extends BaseTestClass {
                 .createAlias(tenant2, "tenant-" + UUID.randomUUID());
 
         final var aliases = selectActiveAliasesByShardKeyOperation
-                .execute(DefaultAliasConfiguration.GLOBAL_SHARD_KEY).stream()
+                .execute(GlobalShardConfiguration.GLOBAL_SHARD_KEY).stream()
                 .map(AliasModel::getId)
                 .toList();
 

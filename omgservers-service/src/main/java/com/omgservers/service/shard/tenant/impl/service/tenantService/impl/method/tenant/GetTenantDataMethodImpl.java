@@ -5,12 +5,12 @@ import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.impl.operation.tenant.SelectTenantOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantPermission.SelectActiveTenantPermissionsByTenantIdOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantProject.SelectActiveTenantProjectsByTenantIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -101,7 +101,7 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
     Uni<Void> fillAliases(final Long tenantId,
                           final TenantDataDto tenantData) {
         final var request = new ViewAliasesRequest();
-        request.setShardKey(DefaultAliasConfiguration.GLOBAL_SHARD_KEY);
+        request.setShardKey(GlobalShardConfiguration.GLOBAL_SHARD_KEY);
         request.setEntityId(tenantId);
         return aliasShard.getService().execute(request)
                 .map(ViewAliasesResponse::getAliases)

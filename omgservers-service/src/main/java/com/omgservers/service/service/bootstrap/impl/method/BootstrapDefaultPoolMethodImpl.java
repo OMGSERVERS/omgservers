@@ -12,17 +12,18 @@ import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
-import com.omgservers.service.shard.alias.AliasShard;
-import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.operation.server.GetServersOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.server.ServiceConfig;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolResponse;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.pool.PoolShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -49,7 +50,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
 
     @Override
     public Uni<BootstrapDefaultPoolResponse> execute(final BootstrapDefaultPoolRequest request) {
-        log.debug("Bootstrap default pool");
+        log.debug("Bootstrapping default pool");
 
         return findDefaultPoolAlias()
                 .replaceWith(Boolean.FALSE)
@@ -64,7 +65,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
     }
 
     Uni<AliasModel> findDefaultPoolAlias() {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);
         return aliasShard.getService().execute(request)
@@ -94,7 +95,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
 
     Uni<AliasModel> createDefaultPoolAlias(final Long poolId) {
         final var alias = aliasModelFactory.create(AliasQualifierEnum.POOL,
-                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 poolId,
                 DefaultAliasConfiguration.DEFAULT_POOL_ALIAS);

@@ -4,6 +4,7 @@ import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.module.alias.FindAliasRequest;
 import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +30,7 @@ class GetIdByUserOperationImpl implements GetIdByUserOperation {
     }
 
     Uni<AliasModel> findUserAlias(final String userAlias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.DEFAULT_USER_GROUP,
                 userAlias);
         return aliasShard.getService().execute(request)

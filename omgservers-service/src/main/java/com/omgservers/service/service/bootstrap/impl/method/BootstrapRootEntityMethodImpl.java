@@ -8,14 +8,15 @@ import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.root.root.SyncRootRequest;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.root.RootModelFactory;
-import com.omgservers.service.shard.alias.AliasShard;
-import com.omgservers.service.shard.root.RootShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityResponse;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.root.RootShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
 
     @Override
     public Uni<BootstrapRootEntityResponse> execute(final BootstrapRootEntityRequest request) {
-        log.debug("Bootstrap of root entity");
+        log.debug("Bootstrapping root entity");
 
         return findRootAlias()
                 .replaceWith(Boolean.FALSE)
@@ -51,7 +52,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
     }
 
     Uni<AliasModel> findRootAlias() {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
         return aliasShard.getService().execute(request)
@@ -60,7 +61,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
 
     Uni<AliasModel> createRootAlias(final Long rootId) {
         final var alias = aliasModelFactory.create(AliasQualifierEnum.ROOT,
-                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
                 rootId,
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);

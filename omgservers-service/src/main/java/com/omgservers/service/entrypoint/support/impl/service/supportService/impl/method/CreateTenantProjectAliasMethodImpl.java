@@ -5,16 +5,14 @@ import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportR
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.factory.alias.AliasModelFactory;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,6 +27,8 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
     final TenantShard tenantShard;
     final AliasShard aliasShard;
 
+    final GetIdByTenantOperation getIdByTenantOperation;
+
     final AliasModelFactory aliasModelFactory;
     final SecurityIdentity securityIdentity;
 
@@ -40,7 +40,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = request.getTenant();
-        return getIdByTenant(tenant)
+        return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
                     final var tenantProjectId = request.getProjectId();
                     return getTenantProject(tenantId, tenantProjectId)
@@ -50,24 +50,6 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                             });
                 })
                 .replaceWith(new CreateTenantProjectAliasSupportResponse());
-    }
-
-    Uni<Long> getIdByTenant(final String tenant) {
-        try {
-            final var tenantId = Long.valueOf(tenant);
-            return Uni.createFrom().item(tenantId);
-        } catch (NumberFormatException e) {
-            return findTenantAlias(tenant)
-                    .map(AliasModel::getEntityId);
-        }
-    }
-
-    Uni<AliasModel> findTenantAlias(final String tenantAlias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
-                tenantAlias);
-        return aliasShard.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
     }
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {

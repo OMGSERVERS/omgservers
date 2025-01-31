@@ -2,50 +2,46 @@ package com.omgservers.service.service.task.impl.method.executeBootstrapTask;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.exception.ServerSideInternalException;
+import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.BootstrapService;
-import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolRequest;
-import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultPoolResponse;
-import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserRequest;
-import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserResponse;
-import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityRequest;
-import com.omgservers.service.service.bootstrap.dto.BootstrapRootEntityResponse;
+import com.omgservers.service.service.bootstrap.dto.*;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @ApplicationScoped
+@AllArgsConstructor
 public class BootstrapTaskImpl {
 
     final BootstrapService bootstrapService;
 
     final GetServiceConfigOperation getServiceConfigOperation;
-
-    final AtomicBoolean fullyFinished;
-
-    public BootstrapTaskImpl(final BootstrapService bootstrapService,
-                             final GetServiceConfigOperation getServiceConfigOperation) {
-        this.bootstrapService = bootstrapService;
-        this.getServiceConfigOperation = getServiceConfigOperation;
-        this.fullyFinished = new AtomicBoolean();
-    }
+    final CalculateShardOperation calculateShardOperation;
 
     public Uni<Boolean> execute() {
-        if (!getServiceConfigOperation.getServiceConfig().bootstrap().enabled()) {
-            log.debug("Bootstrap is not enabled, skip operation");
-            return Uni.createFrom().item(Boolean.TRUE);
-        }
+        return calculateShardOperation.calculateShard(String.valueOf(GlobalShardConfiguration.GLOBAL_SHARD_KEY))
+                .flatMap(shardModel -> {
+                    if (shardModel.foreign()) {
+                        log.info("Bootstrap is skipped; it is the responsibility of {}", shardModel.serverUri());
+                        return Uni.createFrom().item(Boolean.TRUE);
+                    } else {
+                        if (!getServiceConfigOperation.getServiceConfig().bootstrap().enabled()) {
+                            log.debug("Bootstrap is not enabled, skip operation");
+                            return Uni.createFrom().item(Boolean.TRUE);
+                        }
 
-        if (fullyFinished.get()) {
-            return Uni.createFrom().item(Boolean.TRUE);
-        }
+                        return bootstrap();
+                    }
+                });
+    }
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> bootstrapServiceRoot())
+    Uni<Boolean> bootstrap() {
+        return bootstrapServiceRoot()
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
                 .flatMap(voidItem -> bootstrapRegistryUser())
@@ -53,7 +49,6 @@ public class BootstrapTaskImpl {
                 .flatMap(voidItem -> bootstrapServiceUser())
                 .flatMap(voidItem -> bootstrapDispatcherUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
-                .invoke(voidItem -> fullyFinished.set(true))
                 .replaceWith(Boolean.TRUE)
                 .onFailure().transform(
                         t -> new ServerSideInternalException(ExceptionQualifierEnum.BOOTSTRAP_FAILED,

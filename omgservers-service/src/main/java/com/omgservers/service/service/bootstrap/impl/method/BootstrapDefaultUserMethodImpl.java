@@ -9,14 +9,15 @@ import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.alias.SyncAliasRequest;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.shard.alias.AliasShard;
-import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.service.bootstrap.dto.BootstrapDefaultUserResponse;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,7 +41,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
 
     @Override
     public Uni<BootstrapDefaultUserResponse> execute(final BootstrapDefaultUserRequest request) {
-        log.debug("Bootstrap of default user");
+        log.debug("Bootstrapping default user");
 
         final var userAlias = request.getAlias();
         return findDefaultUserAlias(userAlias)
@@ -60,7 +61,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
     }
 
     Uni<AliasModel> findDefaultUserAlias(final String alias) {
-        final var request = new FindAliasRequest(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.DEFAULT_USER_GROUP,
                 alias);
         return aliasShard.getService().execute(request)
@@ -69,7 +70,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
 
     Uni<AliasModel> createDefaultUserAlias(final Long userId, final String userAlias) {
         final var alias = aliasModelFactory.create(AliasQualifierEnum.USER,
-                DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                 DefaultAliasConfiguration.DEFAULT_USER_GROUP,
                 userId,
                 userAlias);

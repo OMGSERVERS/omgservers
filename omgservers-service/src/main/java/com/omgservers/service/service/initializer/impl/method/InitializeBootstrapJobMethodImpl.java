@@ -3,6 +3,7 @@ package com.omgservers.service.service.initializer.impl.method;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
+import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskResponse;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Uni;
@@ -35,6 +36,15 @@ class InitializeBootstrapJobMethodImpl implements InitializeBootstrapJobMethod {
                             .setAsyncTask(scheduledExecution -> {
                                 final var request = new ExecuteBootstrapTaskRequest();
                                 return taskService.execute(request)
+                                        .map(ExecuteBootstrapTaskResponse::getFinished)
+                                        .flatMap(finished -> {
+                                            if (finished) {
+                                                scheduler.unscheduleJob("bootstrap");
+                                                log.info("Bootstrap job was unscheduled after completion.");
+                                            }
+
+                                            return Uni.createFrom().voidItem();
+                                        })
                                         .replaceWithVoid();
                             })
                             .schedule();

@@ -3,8 +3,9 @@ package com.omgservers.service.shard.alias.impl.operation.alias;
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectActiveAliasesByUniquenessGroupOperationTestInterface;
+import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.operation.server.GenerateIdOperation;
+import com.omgservers.service.shard.alias.impl.operation.alias.testInterface.SelectActiveAliasesByUniquenessGroupOperationTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -37,7 +38,7 @@ class SelectActiveAliasesByUniquenessGroupOperationTest extends BaseTestClass {
                 .createAlias(tenant2, "tenant-" + UUID.randomUUID());
 
         final var aliases = selectActiveAliasesByUniquenessGroupOperation
-                .execute(DefaultAliasConfiguration.GLOBAL_SHARD_KEY,
+                .execute(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
                         DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP).stream()
                 .map(AliasModel::getId)
                 .toList();

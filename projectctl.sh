@@ -7,100 +7,100 @@ internal_help() {
   echo "PROJECT ctl, v1.0.0"
   echo "Usage:"
   if [ -z "$1" -o "$1" = "help" ]; then
-    echo " projectctl.sh help"
+    echo " $0 help"
   fi
   # Build
   if [ -z "$1" -o "$1" = "build" -o "$1" = "build printVersion" ]; then
-    echo " projectctl.sh build printVersion"
+    echo " $0 build printVersion"
   fi
   if [ -z "$1" -o "$1" = "build" -o "$1" = "build withTests" ]; then
-    echo " projectctl.sh build withTests"
+    echo " $0 build withTests"
   fi
   if [ -z "$1" -o "$1" = "build" -o "$1" = "build withoutTests" ]; then
-    echo " projectctl.sh build withoutTests"
+    echo " $0 build withoutTests"
   fi
   if [ -z "$1" -o "$1" = "build" -o "$1" = "build testWithSonar" ]; then
-    echo " projectctl.sh build testWithSonar"
+    echo " $0 build testWithSonar"
   fi
   if [ -z "$1" -o "$1" = "build" -o "$1" = "build beforeCommit" ]; then
-    echo " projectctl.sh build beforeCommit"
+    echo " $0 build beforeCommit"
   fi
   if [ -z "$1" -o "$1" = "build" -o "$1" = "build pushImages" ]; then
-    echo " projectctl.sh build pushImages"
+    echo " $0 build pushImages"
   fi
   # Environment
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printCurrent" ]; then
-    echo " projectctl.sh environment printCurrent"
+    echo " $0 environment printCurrent"
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment down" ]; then
-    echo " projectctl.sh environment down"
+    echo " $0 environment down"
   fi
   # Localtesting
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting up" ]; then
-    echo " projectctl.sh localtesting up"
+    echo " $0 localtesting up"
   fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ps" ]; then
-    echo " projectctl.sh localtesting ps"
+    echo " $0 localtesting ps"
   fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting reset" ]; then
-    echo " projectctl.sh localtesting reset"
+    echo " $0 localtesting reset"
   fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting test" ]; then
-    echo " projectctl.sh localtesting test"
+    echo " $0 localtesting test"
   fi
   # Development
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development up" ]; then
-    echo " projectctl.sh development up"
+    echo " $0 development up"
   fi
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development ps" ]; then
-    echo " projectctl.sh development ps"
+    echo " $0 development ps"
   fi
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development reset" ]; then
-    echo " projectctl.sh development reset"
+    echo " $0 development reset"
   fi
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development logs" ]; then
-    echo " projectctl.sh development logs"
+    echo " $0 development logs"
   fi
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development database" ]; then
-    echo " projectctl.sh development database"
+    echo " $0 development database"
   fi
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development ctl" ]; then
-    echo " projectctl.sh development ctl"
+    echo " $0 development ctl"
   fi
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development test" ]; then
-    echo " projectctl.sh development test"
+    echo " $0 development test"
   fi
   # Integration
   if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration up" ]; then
-    echo " projectctl.sh integration up"
+    echo " $0 integration up"
   fi
   if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration ps" ]; then
-    echo " projectctl.sh integration ps"
+    echo " $0 integration ps"
   fi
   if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration reset" ]; then
-    echo " projectctl.sh integration reset"
+    echo " $0 integration reset"
   fi
   if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration logs" ]; then
-    echo " projectctl.sh integration logs"
+    echo " $0 integration logs"
   fi
   if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration test" ]; then
-    echo " projectctl.sh integration test"
+    echo " $0 integration test"
   fi
   # Standalone
   if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone up" ]; then
-    echo " projectctl.sh standalone up"
+    echo " $0 standalone up"
   fi
   if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone ps" ]; then
-    echo " projectctl.sh standalone ps"
+    echo " $0 standalone ps"
   fi
   if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone reset" ]; then
-    echo " projectctl.sh standalone reset"
+    echo " $0 standalone reset"
   fi
   if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone logs" ]; then
-    echo " projectctl.sh standalone logs"
+    echo " $0 standalone logs"
   fi
   if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone test" ]; then
-    echo " projectctl.sh standalone test"
+    echo " $0 standalone test"
   fi
 }
 
