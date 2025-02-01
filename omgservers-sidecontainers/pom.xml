@@ -21,7 +21,6 @@
     <modules>
         <module>bob-sidecontainer</module>
         <module>builder-sidecontainer</module>
-        <module>ctl-sidecontainer</module>
         <module>luajit-sidecontainer</module>
     </modules>
 

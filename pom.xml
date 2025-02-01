@@ -29,6 +29,7 @@
     </properties>
 
     <modules>
+        <module>omgservers-ctl</module>
         <module>omgservers-dispatcher</module>
         <module>omgservers-environments</module>
         <module>omgservers-schema</module>
