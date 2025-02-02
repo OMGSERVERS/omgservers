@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 public class DockerRegistryRepositoryDto {
 
     String namespace;
-    Long tenantId;
-    Long tenantProjectId;
+    String tenant;
+    String project;
     DockerRegistryContainerQualifierEnum container;
 
     @Override
     public String toString() {
-        return String.format("%s/%d/%d/%s", namespace, tenantId, tenantProjectId, container.getQualifier());
+        return String.format("%s/%s/%s/%s", namespace, tenant, project, container.getQualifier());
     }
 }

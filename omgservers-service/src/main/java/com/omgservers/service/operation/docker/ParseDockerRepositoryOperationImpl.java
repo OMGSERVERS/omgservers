@@ -15,7 +15,7 @@ class ParseDockerRepositoryOperationImpl implements ParseDockerRepositoryOperati
 
     @Override
     public DockerRegistryRepositoryDto parseDockerRegistryRepository(final String repository) {
-        // omgservers/<tenant_id>/<project_id>/universal"
+        // omgservers/<tenant>/<project>/universal"
         final var parts = repository.split("/");
 
         if (parts.length != 4) {
@@ -25,11 +25,11 @@ class ParseDockerRepositoryOperationImpl implements ParseDockerRepositoryOperati
 
         try {
             final var namespace = parts[0];
-            final var tenantId = Long.parseLong(parts[1]);
-            final var tenantProjectId = Long.parseLong(parts[2]);
+            final var tenant = parts[1];
+            final var project = parts[2];
             final var qualifier = DockerRegistryContainerQualifierEnum.fromString(parts[3]);
 
-            return new DockerRegistryRepositoryDto(namespace, tenantId, tenantProjectId, qualifier);
+            return new DockerRegistryRepositoryDto(namespace, tenant, project, qualifier);
         } catch (IllegalArgumentException e) {
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, e.getMessage(), e);
         }

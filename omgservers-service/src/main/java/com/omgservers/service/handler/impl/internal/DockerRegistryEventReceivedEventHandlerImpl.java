@@ -11,11 +11,12 @@ import com.omgservers.service.event.body.internal.DockerRegistryEventReceivedEve
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.docker.BuildDockerImageIdOperation;
 import com.omgservers.service.operation.docker.ParseDockerRepositoryOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.registry.dto.DockerRegistryContainerQualifierEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -34,6 +35,7 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
     final ParseDockerRepositoryOperation parseDockerRepositoryOperation;
     final BuildDockerImageIdOperation buildDockerImageIdOperation;
     final GetServiceConfigOperation getServiceConfigOperation;
+    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantImageModelFactory tenantImageModelFactory;
 
@@ -68,16 +70,17 @@ public class DockerRegistryEventReceivedEventHandlerImpl implements EventHandler
 
         final var tag = event.getTarget().getTag();
         try {
-            final var tenantId = dockerRepository.getTenantId();
+            final var tenant = dockerRepository.getTenant();
             final var tenantVersionId = Long.valueOf(tag);
             final var imageId = buildDockerImageIdOperation.buildDockerImageId(dockerRepository, tenantVersionId);
 
-            return syncTenantImage(tenantId,
-                    tenantVersionId,
-                    imageId,
-                    dockerRepository.getContainer(),
-                    idempotencyKey)
-                    .replaceWithVoid();
+            return getIdByTenantOperation.execute(tenant)
+                    .flatMap(tenantId -> syncTenantImage(tenantId,
+                            tenantVersionId,
+                            imageId,
+                            dockerRepository.getContainer(),
+                            idempotencyKey)
+                            .replaceWithVoid());
         } catch (NumberFormatException e) {
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, e.getMessage(), e);
         }

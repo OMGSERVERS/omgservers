@@ -28,8 +28,8 @@ class ParseDockerRegistryScopeOperationTest extends BaseTestClass {
         assertEquals(DockerRegistryResourceTypeEnum.REPOSITORY, resourceScope1.getResourceType());
         assertNull(resourceScope1.getResourceName().getHostname());
         assertEquals("omgservers", resourceScope1.getResourceName().getRepository().getNamespace());
-        assertEquals(245515657456648192L, resourceScope1.getResourceName().getRepository().getTenantId());
-        assertEquals(231077687903387648L, resourceScope1.getResourceName().getRepository().getTenantProjectId());
+        assertEquals("245515657456648192", resourceScope1.getResourceName().getRepository().getTenant());
+        assertEquals("231077687903387648", resourceScope1.getResourceName().getRepository().getProject());
         assertEquals(DockerRegistryContainerQualifierEnum.UNIVERSAL,
                 resourceScope1.getResourceName().getRepository().getContainer());
         assertEquals(2, resourceScope1.getActions().size());
@@ -40,8 +40,8 @@ class ParseDockerRegistryScopeOperationTest extends BaseTestClass {
         assertEquals(DockerRegistryResourceTypeEnum.REPOSITORY_PLUGIN, resourceScope2.getResourceType());
         assertEquals("localhost:5000", resourceScope2.getResourceName().getHostname());
         assertEquals("omgservers", resourceScope2.getResourceName().getRepository().getNamespace());
-        assertEquals(245515657456648193L, resourceScope2.getResourceName().getRepository().getTenantId());
-        assertEquals(231077687903387649L, resourceScope2.getResourceName().getRepository().getTenantProjectId());
+        assertEquals("245515657456648193", resourceScope2.getResourceName().getRepository().getTenant());
+        assertEquals("231077687903387649", resourceScope2.getResourceName().getRepository().getProject());
         assertEquals(DockerRegistryContainerQualifierEnum.LOBBY,
                 resourceScope2.getResourceName().getRepository().getContainer());
         assertEquals(1, resourceScope2.getActions().size());
