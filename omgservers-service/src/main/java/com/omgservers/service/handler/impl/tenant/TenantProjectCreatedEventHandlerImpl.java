@@ -1,22 +1,18 @@
 package com.omgservers.service.handler.impl.tenant;
 
-import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.alias.GetIdByUserOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;
@@ -35,6 +31,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
     final AliasShard aliasShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
+    final GetIdByUserOperation getIdByUserOperation;
 
     final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
     final EventModelFactory eventModelFactory;
@@ -50,16 +47,24 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
         final var body = (TenantProjectCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
-        final var id = body.getId();
+        final var tenantProjectId = body.getId();
 
         final var idempotencyKey = event.getId().toString();
 
-        return getTenantProject(tenantId, id)
+        return getTenantProject(tenantId, tenantProjectId)
                 .flatMap(tenantProject -> {
                     log.debug("Created, {}", tenantProject);
 
-                    return syncBuilderPermission(tenantId, id, idempotencyKey)
-                            .flatMap(permission -> syncServicePermission(tenantId, id, idempotencyKey));
+                    return createServicePermission(tenantId, tenantProjectId, idempotencyKey)
+                            .flatMap(created -> createBuilderPermission(tenantId, tenantProjectId, idempotencyKey)
+                                    .onFailure()
+                                    .recoverWithUni(t -> {
+                                        log.warn("The builder user permission for project \"{}\" was not created, " +
+                                                        "{}:{}", tenantProjectId, t.getClass().getSimpleName(),
+                                                t.getMessage());
+                                        return Uni.createFrom().item(Boolean.FALSE);
+                                    })
+                            );
                 })
                 .replaceWithVoid();
     }
@@ -70,30 +75,12 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
-    Uni<TenantProjectPermissionModel> syncBuilderPermission(final Long tenantId,
-                                                            final Long tenantStageId,
-                                                            final String idempotencyKey) {
-        return findDefaultUserAlias(getServiceConfigOperation.getServiceConfig().bootstrap().builderUser().alias())
-                .flatMap(userAlias -> {
-                    final var builderUserId = userAlias.getEntityId();
-                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
-                    final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
-                            tenantStageId,
-                            builderUserId,
-                            permission,
-                            idempotencyKey + "/" + builderUserId + "/" + permission);
-                    final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-                    return tenantShard.getService().syncTenantProjectPermissionWithIdempotency(request)
-                            .replaceWith(projectPermission);
-                });
-    }
-
-    Uni<TenantProjectPermissionModel> syncServicePermission(final Long tenantId,
-                                                            final Long tenantStageId,
-                                                            final String idempotencyKey) {
-        return findDefaultUserAlias(getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().alias())
-                .flatMap(userAlias -> {
-                    final var serviceUserId = userAlias.getEntityId();
+    Uni<Boolean> createServicePermission(final Long tenantId,
+                                         final Long tenantStageId,
+                                         final String idempotencyKey) {
+        return getIdByUserOperation.execute(getServiceConfigOperation.getServiceConfig()
+                        .bootstrap().serviceUser().alias())
+                .flatMap(serviceUserId -> {
                     final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
                     final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
                             tenantStageId,
@@ -102,15 +89,25 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                             idempotencyKey + "/" + serviceUserId + "/" + permission);
                     final var request = new SyncTenantProjectPermissionRequest(projectPermission);
                     return tenantShard.getService().syncTenantProjectPermissionWithIdempotency(request)
-                            .replaceWith(projectPermission);
+                            .map(SyncTenantProjectPermissionResponse::getCreated);
                 });
     }
 
-    Uni<AliasModel> findDefaultUserAlias(final String alias) {
-        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.DEFAULT_USER_GROUP,
-                alias);
-        return aliasShard.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
+    Uni<Boolean> createBuilderPermission(final Long tenantId,
+                                         final Long tenantStageId,
+                                         final String idempotencyKey) {
+        return getIdByUserOperation.execute(getServiceConfigOperation.getServiceConfig()
+                        .bootstrap().builderUser().alias())
+                .flatMap(builderUserId -> {
+                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
+                    final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
+                            tenantStageId,
+                            builderUserId,
+                            permission,
+                            idempotencyKey + "/" + builderUserId + "/" + permission);
+                    final var request = new SyncTenantProjectPermissionRequest(projectPermission);
+                    return tenantShard.getService().syncTenantProjectPermissionWithIdempotency(request)
+                            .map(SyncTenantProjectPermissionResponse::getCreated);
+                });
     }
 }
