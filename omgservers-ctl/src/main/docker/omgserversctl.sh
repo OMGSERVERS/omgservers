@@ -2781,17 +2781,20 @@ fi
 
 # Env
 if [ "$1" = "environment" ]; then
-  if [ "$2" = "reset" ]; then
+  shift
+  if [ "$1" = "reset" ]; then
     environment_reset
-  elif [ "$2" = "printCurrent" ]; then
+  elif [ "$1" = "printCurrent" ]; then
     environment_printCurrent
-  elif [ "$2" = "printVariable" ]; then
-    environment_printVariable $3
-  elif [ "$2" = "useEnvironment" ]; then
-    environment_useEnvironment $3 $4 $5
-  elif [ "$2" = "useDemoServer" ]; then
+  elif [ "$1" = "printVariable" ]; then
+    shift
+    environment_printVariable $@
+  elif [ "$1" = "useEnvironment" ]; then
+    shift
+    environment_useEnvironment $@
+  elif [ "$1" = "useDemoServer" ]; then
     environment_useDemoServer
-  elif [ "$2" = "useLocalServer" ]; then
+  elif [ "$1" = "useLocalServer" ]; then
     environment_useLocalServer
   else
     help "environment"
@@ -2823,95 +2826,134 @@ if [ "$1" = "admin" ]; then
   fi
 # Support
 elif [ "$1" = "support" ]; then
-  if [ "$2" = "printCurrent" ]; then
+  shift
+  if [ "$1" = "printCurrent" ]; then
     support_printCurrent
-  elif [ "$2" = "createToken" ]; then
-    support_createToken
-  elif [ "$2" = "createTenant" ]; then
+  elif [ "$1" = "createToken" ]; then
+    shift
+    support_createToken $@
+  elif [ "$1" = "createTenant" ]; then
     support_createTenant
-  elif [ "$2" = "createTenantAlias" ]; then
-    support_createTenantAlias $3 $4
-  elif [ "$2" = "deleteTenant" ]; then
-    support_deleteTenant $3
+  elif [ "$1" = "createTenantAlias" ]; then
+    shift
+    support_createTenantAlias $@
+  elif [ "$1" = "deleteTenant" ]; then
+    shift
+    support_deleteTenant $@
   # Project
-  elif [ "$2" = "createProject" ]; then
-    support_createProject $3
-  elif [ "$2" = "createProjectAlias" ]; then
-    support_createProjectAlias $3 $4 $5
-  elif [ "$2" = "deleteProject" ]; then
-    support_deleteProject $3 $4
+  elif [ "$1" = "createProject" ]; then
+    shift
+    support_createProject $@
+  elif [ "$1" = "createProjectAlias" ]; then
+    shift
+    support_createProjectAlias $@
+  elif [ "$1" = "deleteProject" ]; then
+    shift
+    support_deleteProject $@
   # Stage
-  elif [ "$2" = "createStage" ]; then
-    support_createStage $3 $4
-  elif [ "$2" = "createStageAlias" ]; then
-    support_createStageAlias $3 $4 $5
-  elif [ "$2" = "deleteStage" ]; then
-    support_deleteStage $3 $4 $5
+  elif [ "$1" = "createStage" ]; then
+    shift
+    support_createStage $@
+  elif [ "$1" = "createStageAlias" ]; then
+    shift
+    support_createStageAlias $@
+  elif [ "$1" = "deleteStage" ]; then
+    shift
+    support_deleteStage $@
   # Developer
-  elif [ "$2" = "createDeveloper" ]; then
-    support_createDeveloper $3
+  elif [ "$1" = "createDeveloper" ]; then
+    shift
+    support_createDeveloper $@
   # Permissions
-  elif [ "$2" = "createTenantPermission" ]; then
-    support_createTenantPermission $3 $4 $5
-  elif [ "$2" = "deleteTenantPermission" ]; then
-    support_deleteTenantPermission $3 $4 $5
-  elif [ "$2" = "createProjectPermission" ]; then
-    support_createProjectPermission $3 $4 $5 $6
-  elif [ "$2" = "deleteProjectPermission" ]; then
-    support_deleteProjectPermission $3 $4 $5 $6
-  elif [ "$2" = "createStagePermission" ]; then
-    support_createStagePermission $3 $4 $5 $6 $7
-  elif [ "$2" = "deleteStagePermission" ]; then
-    support_deleteStagePermission $3 $4 $5 $6 $7
+  elif [ "$1" = "createTenantPermission" ]; then
+    shift
+    support_createTenantPermission $@
+  elif [ "$1" = "deleteTenantPermission" ]; then
+    shift
+    support_deleteTenantPermission $@
+  elif [ "$1" = "createProjectPermission" ]; then
+    shift
+    support_createProjectPermission $@
+  elif [ "$1" = "deleteProjectPermission" ]; then
+    shift
+    support_deleteProjectPermission $@
+  elif [ "$1" = "createStagePermission" ]; then
+    shift
+    support_createStagePermission $@
+  elif [ "$1" = "deleteStagePermission" ]; then
+    shift
+    support_deleteStagePermission $@
   else
     help "support"
   fi
 # Developer
 elif [ "$1" = "developer" ]; then
-  if [ "$2" = "printCurrent" ]; then
-      developer_printCurrent
-  elif [ "$2" = "createToken" ]; then
-    developer_createToken
-  elif [ "$2" = "getTenantDetails" ]; then
-    developer_getTenantDetails $3
-  elif [ "$2" = "createProject" ]; then
-    developer_createProject $3
-  elif [ "$2" = "createProjectAlias" ]; then
-    developer_createProjectAlias $3 $4 $5
-  elif [ "$2" = "getProjectDetails" ]; then
-    developer_getProjectDetails $3 $4
-  elif [ "$2" = "deleteProject" ]; then
-    developer_deleteProject $3 $4
-  elif [ "$2" = "createStage" ]; then
-    developer_createStage $3 $4
-  elif [ "$2" = "createStageAlias" ]; then
-    developer_createStageAlias $3 $4 $5
-  elif [ "$2" = "getStageDetails" ]; then
-    developer_getStageDetails $3 $4 $5
-  elif [ "$2" = "deleteStage" ]; then
-    developer_deleteStage $3 $4 $5
-  elif [ "$2" = "createVersion" ]; then
-    developer_createVersion $3 $4 $5
-  elif [ "$2" = "uploadFilesArchive" ]; then
-    developer_uploadFilesArchive $3 $4 $5
-  elif [ "$2" = "getVersionDetails" ]; then
-    developer_getVersionDetails $3 $4
-  elif [ "$2" = "deleteVersion" ]; then
-    developer_deleteVersion $3 $4
-  elif [ "$2" = "deployVersion" ]; then
-    developer_deployVersion $3 $4 $5 $6
-  elif [ "$2" = "getDeploymentDetails" ]; then
-    developer_getDeploymentDetails $3 $4
-  elif [ "$2" = "deleteDeployment" ]; then
-    developer_deleteDeployment $3 $4
-  elif [ "$2" = "createLobbyRequest" ]; then
-      developer_createLobbyRequest $3 $4
-  elif [ "$2" = "deleteLobby" ]; then
-    developer_deleteLobby $3
-  elif [ "$2" = "createMatchmakerRequest" ]; then
-    developer_createMatchmakerRequest $3 $4
-  elif [ "$2" = "deleteMatchmaker" ]; then
-    developer_deleteMatchmaker $3
+  shift
+  if [ "$1" = "printCurrent" ]; then
+    developer_printCurrent
+  elif [ "$1" = "createToken" ]; then
+    shift
+    developer_createToken $@
+  elif [ "$1" = "getTenantDetails" ]; then
+    shift
+    developer_getTenantDetails $@
+  elif [ "$1" = "createProject" ]; then
+    shift
+    developer_createProject $@
+  elif [ "$1" = "createProjectAlias" ]; then
+    shift
+    developer_createProjectAlias $@
+  elif [ "$1" = "getProjectDetails" ]; then
+    shift
+    developer_getProjectDetails $@
+  elif [ "$1" = "deleteProject" ]; then
+    shift
+    developer_deleteProject $@
+  elif [ "$1" = "createStage" ]; then
+    shift
+    developer_createStage $@
+  elif [ "$1" = "createStageAlias" ]; then
+    shift
+    developer_createStageAlias $@
+  elif [ "$1" = "getStageDetails" ]; then
+    shift
+    developer_getStageDetails $@
+  elif [ "$1" = "deleteStage" ]; then
+    shift
+    developer_deleteStage $@
+  elif [ "$1" = "createVersion" ]; then
+    shift
+    developer_createVersion $@
+  elif [ "$1" = "uploadFilesArchive" ]; then
+    shift
+    developer_uploadFilesArchive $@
+  elif [ "$1" = "getVersionDetails" ]; then
+    shift
+    developer_getVersionDetails $@
+  elif [ "$1" = "deleteVersion" ]; then
+    shift
+    developer_deleteVersion $@
+  elif [ "$1" = "deployVersion" ]; then
+    shift
+    developer_deployVersion $@
+  elif [ "$1" = "getDeploymentDetails" ]; then
+    shift
+    developer_getDeploymentDetails $@
+  elif [ "$1" = "deleteDeployment" ]; then
+    shift
+    developer_deleteDeployment $@
+  elif [ "$1" = "createLobbyRequest" ]; then
+      shift
+      developer_createLobbyRequest $@
+  elif [ "$1" = "deleteLobby" ]; then
+    shift
+    developer_deleteLobby $@
+  elif [ "$1" = "createMatchmakerRequest" ]; then
+    shift
+    developer_createMatchmakerRequest $@
+  elif [ "$1" = "deleteMatchmaker" ]; then
+    shift
+    developer_deleteMatchmaker $@
   else
     help "developer"
   fi
