@@ -398,7 +398,7 @@ environment_useEnvironment() {
 }
 
 environment_useDemoServer() {
-  environment_useEnvironment demo https://demoserver.omgservers.com
+  environment_useEnvironment demo https://demoserver.omgservers.dev
 }
 
 environment_useLocalServer() {
