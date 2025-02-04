@@ -31,18 +31,17 @@ class ParseRuntimeOutgoingMessageOperationImpl implements ParseRuntimeOutgoingMe
             return Optional.empty();
         }
 
-        final var clients = outgoingRuntimeMessage.getClients();
         final var encoding = outgoingRuntimeMessage.getEncoding();
         final var message = outgoingRuntimeMessage.getMessage();
 
-        if (Objects.isNull(clients) || Objects.isNull(encoding) || Objects.isNull(message)) {
-            log.warn("Wrong outgoing runtime message was received, some fields are null, runtimeId={}",
+        if (Objects.isNull(encoding)) {
+            log.warn("Wrong message was received, encoding is not set, runtimeId={}",
                     room.getRuntimeId());
             return Optional.empty();
         }
 
-        if (clients.isEmpty()) {
-            log.warn("Wrong outgoing runtime message was received, clients list is empty, runtimeId={}",
+        if (Objects.isNull(message)) {
+            log.warn("Wrong message was received, message is null, runtimeId={}",
                     room.getRuntimeId());
             return Optional.empty();
         }

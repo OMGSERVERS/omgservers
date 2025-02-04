@@ -35,7 +35,7 @@ class TransferWebSocketMessageOperationImpl implements TransferWebSocketMessageO
                     yield Uni.createFrom().item(Boolean.FALSE);
                 }
 
-                yield transferToPlayersOperation.execute(runtimeRoom, messageEncoding, message);
+                yield transferToPlayersOperation.execute(dispatcherConnection, runtimeRoom, messageEncoding, message);
             }
             case PLAYER -> {
                 final var playerRoom = dispatcherRooms.findPlayerRoom(dispatcherConnection);

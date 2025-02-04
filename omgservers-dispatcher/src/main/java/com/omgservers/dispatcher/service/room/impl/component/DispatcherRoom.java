@@ -68,6 +68,12 @@ public class DispatcherRoom {
                 .toList();
     }
 
+    public synchronized List<DispatcherConnection> getAllExceptOneConnection(final DispatcherConnection connection) {
+        return playerConnections.stream()
+                .filter(playerConnection -> !playerConnection.equals(connection))
+                .toList();
+    }
+
     public synchronized List<DispatcherConnection> getAllPlayerConnections() {
         return playerConnections.stream().toList();
     }

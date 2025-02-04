@@ -1,5 +1,6 @@
 package com.omgservers.dispatcher.service.room.impl.operation;
 
+import com.omgservers.dispatcher.service.handler.component.DispatcherConnection;
 import com.omgservers.dispatcher.service.room.dto.MessageEncodingEnum;
 import com.omgservers.dispatcher.service.room.dto.OutgoingRuntimeMessageDto;
 import com.omgservers.dispatcher.service.room.impl.component.DispatcherRoom;
@@ -9,6 +10,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -21,7 +24,8 @@ class TransferToPlayersOperationImpl implements TransferToPlayersOperation {
     final SendRuntimeTextMessageOperation sendRuntimeTextMessageOperation;
 
     @Override
-    public Uni<Boolean> execute(final DispatcherRoom room,
+    public Uni<Boolean> execute(final DispatcherConnection dispatcherConnection,
+                                final DispatcherRoom room,
                                 final MessageEncodingEnum messageEncoding,
                                 final String runtimeMessage) {
         if (messageEncoding.equals(MessageEncodingEnum.B64)) {
@@ -41,7 +45,14 @@ class TransferToPlayersOperationImpl implements TransferToPlayersOperation {
         final var encoding = outgoingMessage.getEncoding();
         final var message = outgoingMessage.getMessage();
 
-        final var playerConnections = room.filterPlayerConnections(clients);
+        final List<DispatcherConnection> playerConnections;
+        // Broadcast message
+        if (Objects.isNull(clients)) {
+            playerConnections = room.getAllExceptOneConnection(dispatcherConnection);
+        } else {
+            // Multicast of direct message
+            playerConnections = room.filterPlayerConnections(clients);
+        }
 
         return switch (encoding) {
             case TXT -> sendRuntimeTextMessageOperation.execute(room, playerConnections, message);
