@@ -4,7 +4,8 @@ create table if not exists tab_index (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     config json not null,
-    deleted boolean not null
+    deleted boolean not null,
+    unique(idempotency_key)
 );
 
 create table if not exists tab_job (
