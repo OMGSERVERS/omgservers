@@ -1,7 +1,7 @@
-FROM docker:dind
+FROM docker
 
 RUN apk update \
-    && apk add --no-cache curl jq docker-cli \
+    && apk add --no-cache curl jq \
     && mkdir -p /opt/omgservers
 
 WORKDIR /opt/omgservers

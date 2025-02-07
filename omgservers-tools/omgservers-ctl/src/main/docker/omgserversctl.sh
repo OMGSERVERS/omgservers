@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# INTERNAL
+
 internal_useEnvironment() {
   source ${OMGSERVERSCTL_DIRECTORY}/environment
 }
@@ -17,29 +19,29 @@ internal_print_command() {
   printf "  %-85s %s\n" "$1" "$2"
 }
 
-# HELP
+# HANDLERS
 
 help() {
   echo "OMGSERVERS ctl, v1.0.0"
   echo "Usage:"
   if [ -z "$1" -o "$1" = "help" ]; then
-    internal_print_command " $0 help" "Display this help message."
+    internal_print_command " help" "Display this help message."
   fi
   if [ -z "$1" -o "$1" = "logs" ]; then
-    internal_print_command " $0 logs" "Show ctl logs"
+    internal_print_command " logs" "Show ctl logs"
   fi
   # Environment
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment reset" ]; then
-    internal_print_command " $0 environment reset" "Reset the current environment."
+    internal_print_command " environment reset" "Reset the current environment."
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printCurrent" ]; then
-    internal_print_command " $0 environment printCurrent" "Print all environment variables."
+    internal_print_command " environment printCurrent" "Print all environment variables."
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printVariable" ]; then
-    internal_print_command " $0 environment printVariable <variable>" "Print the value of a specific variable."
+    internal_print_command " environment printVariable <variable>" "Print the value of a specific variable."
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useEnvironment" ]; then
-    internal_print_command " $0 environment useEnvironment <name> <service_url>" "Set up an environment with the specified URL."
+    internal_print_command " environment useEnvironment <name> <service_url>" "Set up an environment with the specified URL."
     if [ "$1" = "environment useEnvironment" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -47,7 +49,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useDemoServer" ]; then
-    internal_print_command " $0 environment useDemoServer" "Use the demo server environment."
+    internal_print_command " environment useDemoServer" "Use the demo server environment."
     if [ "$1" = "environment useDemoServer" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -55,7 +57,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocalServer" ]; then
-    internal_print_command " $0 environment useLocalServer" "Use the local server environment."
+    internal_print_command " environment useLocalServer" "Use the local server environment."
     if [ "$1" = "environment useLocalServer" ]; then
       echo "   produces:"
       echo "     - ENVIRONMENT_NAME"
@@ -64,17 +66,17 @@ help() {
   fi
   # Admin
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin printCurrent" ]; then
-    internal_print_command " $0 admin printCurrent" "Print the current admin user."
+    internal_print_command " admin printCurrent" "Print the current admin user."
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin createToken" ]; then
-    internal_print_command " $0 admin createToken <user> <password>" "Authenticate as an admin using credentials."
+    internal_print_command " admin createToken <user> <password>" "Authenticate as an admin using credentials."
     if [ "$1" = "admin createToken" ]; then
       echo "   produces:"
       echo "     - ADMIN_TOKEN"
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin calculateShard" ]; then
-    internal_print_command " $0 admin calculateShard <shard_key>" "Calculate the shard based on the provided shard key."
+    internal_print_command " admin calculateShard <shard_key>" "Calculate the shard based on the provided shard key."
     if [ "$1" = "admin calculateShard" ]; then
       echo "   produces:"
       echo "     - SHARD_INDEX"
@@ -82,21 +84,21 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin generateId" ]; then
-    internal_print_command " $0 admin generateId" "Generate a unique identifier."
+    internal_print_command " admin generateId" "Generate a unique identifier."
     if [ "$1" = "admin generateId" ]; then
       echo "   produces:"
       echo "     - GENERATED_ID"
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin bcryptHash" ]; then
-    internal_print_command " $0 admin bcryptHash <value>" "Generate a bcrypt hash of the given value."
+    internal_print_command " admin bcryptHash <value>" "Generate a bcrypt hash of the given value."
     if [ "$1" = "admin bcryptHash" ]; then
       echo "   produces:"
       echo "     - BCRYPTED_HASH"
     fi
   fi
   if [ -z "$1" -o "$1" = "admin" -o "$1" = "admin pingDockerHost" ]; then
-    internal_print_command " $0 admin pingDockerHost <docker_daemon_uri>" "Check the status of the specified Docker daemon."
+    internal_print_command " admin pingDockerHost <docker_daemon_uri>" "Check the status of the specified Docker daemon."
     if [ "$1" = "admin pingDockerHost" ]; then
       echo "   produces:"
       echo "     - SUCCESSFUL"
@@ -104,10 +106,10 @@ help() {
   fi
   # Support
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support printCurrent" ]; then
-    internal_print_command " $0 support printCurrent" "Print the current support user."
+    internal_print_command " support printCurrent" "Print the current support user."
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createToken" ]; then
-    internal_print_command " $0 support createToken <user> <password>" "Authenticate as a support user using credentials."
+    internal_print_command " support createToken <user> <password>" "Authenticate as a support user using credentials."
     if [ "$1" = "support createToken" ]; then
       echo "   produces:"
       echo "     - SUPPORT_TOKEN"
@@ -115,17 +117,17 @@ help() {
   fi
   # Tenant
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenant" ]; then
-    internal_print_command " $0 support createTenant" "Create a new tenant."
+    internal_print_command " support createTenant" "Create a new tenant."
     if [ "$1" = "support createTenant" ]; then
       echo "   produces:"
       echo "     - TENANT"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantAlias" ]; then
-    internal_print_command " $0 support createTenantAlias <tenant_id> <alias>" "Assign an alias to a tenant."
+    internal_print_command " support createTenantAlias <tenant_id> <alias>" "Assign an alias to a tenant."
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenant" ]; then
-    internal_print_command " $0 support deleteTenant <tenant>" "Delete the specified tenant."
+    internal_print_command " support deleteTenant <tenant>" "Delete the specified tenant."
     if [ "$1" = "support deleteTenant" ]; then
       echo "   produces:"
       echo "     - DELETED"
@@ -133,7 +135,7 @@ help() {
   fi
   # Project
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProject" ]; then
-    internal_print_command " $0 support createProject <tenant>" "Create a new project under the specified tenant."
+    internal_print_command " support createProject <tenant>" "Create a new project under the specified tenant."
     if [ "$1" = "support createProject" ]; then
       echo "   produces:"
       echo "     - PROJECT"
@@ -141,10 +143,10 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectAlias" ]; then
-    internal_print_command " $0 support createProjectAlias <tenant> <project_id> <alias>" "Assign an alias to a project."
+    internal_print_command " support createProjectAlias <tenant> <project_id> <alias>" "Assign an alias to a project."
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProject" ]; then
-    internal_print_command " $0 support deleteProject <tenant> <project>" "Delete the specified project."
+    internal_print_command " support deleteProject <tenant> <project>" "Delete the specified project."
     if [ "$1" = "support deleteProject" ]; then
       echo "   produces:"
       echo "     - DELETED"
@@ -152,17 +154,17 @@ help() {
   fi
   # Stage
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStage" ]; then
-    internal_print_command " $0 support createStage <tenant> <project>" "Create a new stage for a project."
+    internal_print_command " support createStage <tenant> <project>" "Create a new stage for a project."
     if [ "$1" = "support createStage" ]; then
       echo "   produces:"
       echo "     - STAGE"
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStageAlias" ]; then
-    internal_print_command " $0 support createStageAlias <tenant> <stage_id> <alias>" "Assign an alias to a stage."
+    internal_print_command " support createStageAlias <tenant> <stage_id> <alias>" "Assign an alias to a stage."
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStage" ]; then
-    internal_print_command " $0 support deleteStage <tenant> <project> <stage>" "Delete the specified stage."
+    internal_print_command " support deleteStage <tenant> <project> <stage>" "Delete the specified stage."
     if [ "$1" = "support deleteStage" ]; then
       echo "   produces:"
       echo "     - DELETED"
@@ -170,7 +172,7 @@ help() {
   fi
   # Developer
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createDeveloper" ]; then
-    internal_print_command " $0 support createDeveloper" "Create a new developer account."
+    internal_print_command " support createDeveloper" "Create a new developer account."
     if [ "$1" = "support createDeveloper" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_USER"
@@ -179,7 +181,7 @@ help() {
   fi
   # Permission
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createTenantPermission" ]; then
-    internal_print_command " $0 support createTenantPermission <tenant> <user> <permission>" "Grant a user permission for a tenant."
+    internal_print_command " support createTenantPermission <tenant> <user> <permission>" "Grant a user permission for a tenant."
     if [ "$1" = "support createTenantPermission" ]; then
       echo "   permission:"
       echo "     - PROJECT_MANAGER"
@@ -187,7 +189,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteTenantPermission" ]; then
-    internal_print_command " $0 support deleteTenantPermission <tenant> <user> <permission>" "Remove a user's tenant permission."
+    internal_print_command " support deleteTenantPermission <tenant> <user> <permission>" "Remove a user's tenant permission."
     if [ "$1" = "support deleteTenantPermission" ]; then
       echo "   permission:"
       echo "     - PROJECT_MANAGER"
@@ -195,7 +197,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createProjectPermission" ]; then
-    internal_print_command " $0 support createProjectPermission <tenant> <project> <user> <permission>" "Grant a user permission for a project."
+    internal_print_command " support createProjectPermission <tenant> <project> <user> <permission>" "Grant a user permission for a project."
     if [ "$1" = "support createProjectPermission" ]; then
       echo "   permission:"
       echo "     - STAGE_MANAGER"
@@ -204,7 +206,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteProjectPermission" ]; then
-    internal_print_command " $0 support deleteProjectPermission <tenant> <project> <user> <permission>" "Remove a user's project permission."
+    internal_print_command " support deleteProjectPermission <tenant> <project> <user> <permission>" "Remove a user's project permission."
     if [ "$1" = "support deleteProjectPermission" ]; then
       echo "   permission:"
       echo "     - STAGE_MANAGER"
@@ -213,7 +215,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support createStagePermission" ]; then
-    internal_print_command " $0 support createStagePermission <tenant> <project> <stage> <user> <permission>" "Grant a user permission for a stage."
+    internal_print_command " support createStagePermission <tenant> <project> <stage> <user> <permission>" "Grant a user permission for a stage."
     if [ "$1" = "support createStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGER"
@@ -221,7 +223,7 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "support" -o "$1" = "support deleteStagePermission" ]; then
-    internal_print_command " $0 support deleteStagePermission <tenant> <project> <stage> <user> <permission>" "Remove a user's stage permission."
+    internal_print_command " support deleteStagePermission <tenant> <project> <stage> <user> <permission>" "Remove a user's stage permission."
     if [ "$1" = "support deleteStagePermission" ]; then
       echo "   permission:"
       echo "     - DEPLOYMENT_MANAGER"
@@ -230,20 +232,20 @@ help() {
   fi
   # Developer
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer printCurrent" ]; then
-    internal_print_command " $0 developer printCurrent" "Print the current developer user."
+    internal_print_command " developer printCurrent" "Print the current developer user."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createToken" ]; then
-    internal_print_command " $0 developer createToken <user> <password>" "Authenticate as a developer using credentials."
+    internal_print_command " developer createToken <user> <password>" "Authenticate as a developer using credentials."
     if [ "$1" = "developer createToken" ]; then
       echo "   produces:"
       echo "     - DEVELOPER_TOKEN"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getTenantDetails" ]; then
-    internal_print_command " $0 developer getTenantDetails <tenant>" "Retrieve details of the specified tenant."
+    internal_print_command " developer getTenantDetails <tenant>" "Retrieve details of the specified tenant."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProject" ]; then
-    internal_print_command " $0 developer createProject <tenant>" "Create a new project under the specified tenant."
+    internal_print_command " developer createProject <tenant>" "Create a new project under the specified tenant."
     if [ "$1" = "developer createProject" ]; then
       echo "   produces:"
       echo "     - PROJECT"
@@ -251,94 +253,94 @@ help() {
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createProjectAlias" ]; then
-    internal_print_command " $0 developer createProjectAlias <tenant> <project_id> <alias>" "Assign an alias to a project."
+    internal_print_command " developer createProjectAlias <tenant> <project_id> <alias>" "Assign an alias to a project."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getProjectDetails" ]; then
-    internal_print_command " $0 developer getProjectDetails <tenant> <project>" "Retrieve details of the specified project."
+    internal_print_command " developer getProjectDetails <tenant> <project>" "Retrieve details of the specified project."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteProject" ]; then
-      internal_print_command " $0 developer deleteProject <tenant> <project>" "Delete the specified project."
+      internal_print_command " developer deleteProject <tenant> <project>" "Delete the specified project."
       if [ "$1" = "developer deleteProject" ]; then
         echo "   produces:"
         echo "     - DELETED"
       fi
     fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStage" ]; then
-    internal_print_command " $0 developer createStage <tenant> <project>" "Create a new stage for a project."
+    internal_print_command " developer createStage <tenant> <project>" "Create a new stage for a project."
     if [ "$1" = "developer createStage" ]; then
       echo "   produces:"
       echo "     - STAGE"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createStageAlias" ]; then
-    internal_print_command " $0 developer createStageAlias <tenant> <stage_id> <alias>" "Assign an alias to a stage."
+    internal_print_command " developer createStageAlias <tenant> <stage_id> <alias>" "Assign an alias to a stage."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getStageDetails" ]; then
-    internal_print_command " $0 developer getStageDetails <tenant> <project> <stage>" "Retrieve details of the specified stage."
+    internal_print_command " developer getStageDetails <tenant> <project> <stage>" "Retrieve details of the specified stage."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteStage" ]; then
-    internal_print_command " $0 developer deleteStage <tenant> <project> <stage>" "Delete the specified stage."
+    internal_print_command " developer deleteStage <tenant> <project> <stage>" "Delete the specified stage."
     if [ "$1" = "developer deleteStage" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createVersion" ]; then
-    internal_print_command " $0 developer createVersion <tenant> <project> <config_path>" "Create a new version using the specified configuration."
+    internal_print_command " developer createVersion <tenant> <project> <config_path>" "Create a new version using the specified configuration."
     if [ "$1" = "developer createVersion" ]; then
       echo "   produces:"
       echo "     - VERSION"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer uploadFilesArchive" ]; then
-    internal_print_command " $0 developer uploadFilesArchive <tenant> <version> <files_directory_path>" "Upload an archive of files for a version."
+    internal_print_command " developer uploadFilesArchive <tenant> <version> <files_directory_path>" "Upload an archive of files for a version."
     if [ "$1" = "developer uploadFilesArchive" ]; then
       echo "   produces:"
       echo "     - FILES_ARCHIVE"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getVersionDetails" ]; then
-    internal_print_command " $0 developer getVersionDetails <tenant> <version>" "Retrieve details of the specified version."
+    internal_print_command " developer getVersionDetails <tenant> <version>" "Retrieve details of the specified version."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteVersion" ]; then
-    internal_print_command " $0 developer deleteVersion <tenant> <version>" "Delete the specified version."
+    internal_print_command " developer deleteVersion <tenant> <version>" "Delete the specified version."
     if [ "$1" = "developer deleteVersion" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
-    internal_print_command " $0 developer deployVersion <tenant> <project> <stage> <version>" "Deploy a version to the specified stage."
+    internal_print_command " developer deployVersion <tenant> <project> <stage> <version>" "Deploy a version to the specified stage."
     if [ "$1" = "developer deployVersion" ]; then
       echo "   produces:"
       echo "     - DEPLOYMENT"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer getDeploymentDetails" ]; then
-    internal_print_command " $0 developer getDeploymentDetails <tenant> <deployment>" "Retrieve details of the specified deployment."
+    internal_print_command " developer getDeploymentDetails <tenant> <deployment>" "Retrieve details of the specified deployment."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteDeployment" ]; then
-    internal_print_command " $0 developer deleteDeployment <tenant> <deployment>" "Delete the specified deployment."
+    internal_print_command " developer deleteDeployment <tenant> <deployment>" "Delete the specified deployment."
     if [ "$1" = "developer deleteDeployment" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createLobbyRequest" ]; then
-    internal_print_command " $0 developer createLobbyRequest <tenant> <deployment>" "Create a lobby request for the specified deployment."
+    internal_print_command " developer createLobbyRequest <tenant> <deployment>" "Create a lobby request for the specified deployment."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteLobby" ]; then
-    internal_print_command " $0 developer deleteLobby <lobby>" "Delete the specified lobby."
+    internal_print_command " developer deleteLobby <lobby>" "Delete the specified lobby."
     if [ "$1" = "developer deleteLobby" ]; then
       echo "   produces:"
       echo "     - DELETED"
     fi
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createMatchmakerRequest" ]; then
-    internal_print_command " $0 developer createMatchmakerRequest <tenant> <deployment>" "Create a matchmaker request for the specified deployment."
+    internal_print_command " developer createMatchmakerRequest <tenant> <deployment>" "Create a matchmaker request for the specified deployment."
   fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deleteMatchmaker" ]; then
-    internal_print_command " $0 developer deleteMatchmaker <matchmaker>" "Delete the specified matchmaker."
+    internal_print_command " developer deleteMatchmaker <matchmaker>" "Delete the specified matchmaker."
     if [ "$1" = "developer deleteMatchmaker" ]; then
       echo "   produces:"
       echo "     - DELETED"
@@ -352,17 +354,17 @@ logs() {
 
 # ENVIRONMENT
 
-environment_reset() {
+handler_environment_reset() {
   rm -rf ${OMGSERVERSCTL_DIRECTORY}/environment
 }
 
-environment_printCurrent() {
+handler_environment_printCurrent() {
   internal_useEnvironment
 
   env | grep OMGSERVERSCTL_
 }
 
-environment_printVariable() {
+handler_environment_printVariable() {
   internal_useEnvironment
 
   VARIABLE_NAME=$1
@@ -382,7 +384,7 @@ environment_printVariable() {
   fi
 }
 
-environment_useEnvironment() {
+handler_environment_useEnvironment() {
   ENVIRONMENT_NAME=$1
   SERVICE_URL=$2
 
@@ -397,19 +399,19 @@ environment_useEnvironment() {
   echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=\"${ENVIRONMENT_NAME}\", SERVICE_URL=\"${SERVICE_URL}\""
 }
 
-environment_useDemoServer() {
-  environment_useEnvironment demo https://demoserver.omgservers.dev
+handler_environment_useDemoServer() {
+  handler_environment_useEnvironment demo https://demoserver.omgservers.dev
 }
 
-environment_useLocalServer() {
-  environment_useEnvironment local http://localhost:8080
-  admin_createToken admin admin
-  support_createToken support support
+handler_environment_useLocalServer() {
+  handler_environment_useEnvironment local http://localhost:8080
+  handler_admin_createToken admin admin
+  handler_support_createToken support support
 }
 
 # ADMIN
 
-admin_printCurrent() {
+handler_admin_printCurrent() {
   internal_useEnvironment
 
   ADMIN_USER=${OMGSERVERSCTL_ADMIN_USER}
@@ -427,7 +429,7 @@ admin_printCurrent() {
   fi
 }
 
-admin_createToken() {
+handler_admin_createToken() {
   internal_ensureEnvironment
 
   ADMIN_USER=$1
@@ -474,7 +476,7 @@ admin_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
 }
 
-admin_calculateShard() {
+handler_admin_calculateShard() {
   internal_ensureEnvironment
 
   SHARD_KEY=$1
@@ -531,7 +533,7 @@ admin_calculateShard() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Shard was calculated, SHARD_INDEX=${SHARD_INDEX}, SERVER_URI=${SERVER_URI}"
 }
 
-admin_generateId() {
+handler_admin_generateId() {
   internal_ensureEnvironment
 
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
@@ -575,7 +577,7 @@ admin_generateId() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Id was generated, GENERATED_ID=${GENERATED_ID}"
 }
 
-admin_bcryptHash() {
+handler_admin_bcryptHash() {
   internal_ensureEnvironment
 
   VALUE=$1
@@ -626,7 +628,7 @@ admin_bcryptHash() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Value was bcrypted, BCRYPTED_HASH=${BCRYPTED_HASH}"
 }
 
-admin_pingDockerHost() {
+handler_admin_pingDockerHost() {
   internal_ensureEnvironment
 
   DOCKER_DAEMON_URI=$1
@@ -688,7 +690,7 @@ admin_pingDockerHost() {
 
 # SUPPORT
 
-support_printCurrent() {
+handler_support_printCurrent() {
   internal_useEnvironment
 
   SUPPORT_USER=${OMGSERVERSCTL_SUPPORT_USER}
@@ -706,7 +708,7 @@ support_printCurrent() {
   fi
 }
 
-support_createToken() {
+handler_support_createToken() {
   internal_ensureEnvironment
 
   SUPPORT_USER=$1
@@ -753,7 +755,7 @@ support_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support token was created"
 }
 
-support_createTenant() {
+handler_support_createTenant() {
   internal_ensureEnvironment
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
@@ -796,7 +798,7 @@ support_createTenant() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT=\"$TENANT\""
 }
 
-support_createTenantAlias() {
+handler_support_createTenantAlias() {
   internal_ensureEnvironment
 
   TENANT_ID=$1
@@ -844,7 +846,7 @@ support_createTenantAlias() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant alias was created"
 }
 
-support_deleteTenant() {
+handler_support_deleteTenant() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -900,7 +902,7 @@ support_deleteTenant() {
 
 # Project
 
-support_createProject() {
+handler_support_createProject() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -958,7 +960,7 @@ support_createProject() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
 }
 
-support_createProjectAlias() {
+handler_support_createProjectAlias() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1008,7 +1010,7 @@ support_createProjectAlias() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project alias was created"
 }
 
-support_deleteProject() {
+handler_support_deleteProject() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1066,7 +1068,7 @@ support_deleteProject() {
 
 # Stage
 
-support_createStage() {
+handler_support_createStage() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1124,7 +1126,7 @@ support_createStage() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=\"${STAGE}\""
 }
 
-support_createStageAlias() {
+handler_support_createStageAlias() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1174,7 +1176,7 @@ support_createStageAlias() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage alias was created"
 }
 
-support_deleteStage() {
+handler_support_deleteStage() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1233,7 +1235,7 @@ support_deleteStage() {
 
 # Developer
 
-support_createDeveloper() {
+handler_support_createDeveloper() {
   internal_ensureEnvironment
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
@@ -1282,10 +1284,10 @@ support_createDeveloper() {
 
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, DEVELOPER_USER=\"${USER}\", DEVELOPER_PASSWORD=\"${PASSWORD}\""
 
-  developer_createToken ${USER} ${PASSWORD}
+  handler_developer_createToken ${USER} ${PASSWORD}
 }
 
-support_createTenantPermission() {
+handler_support_createTenantPermission() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1336,7 +1338,7 @@ support_createTenantPermission() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
-support_deleteTenantPermission() {
+handler_support_deleteTenantPermission() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1387,7 +1389,7 @@ support_deleteTenantPermission() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
-support_createProjectPermission() {
+handler_support_createProjectPermission() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1440,7 +1442,7 @@ support_createProjectPermission() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created tenant project permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
-support_deleteProjectPermission() {
+handler_support_deleteProjectPermission() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1493,7 +1495,7 @@ support_deleteProjectPermission() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted tenant project permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
-support_createStagePermission() {
+handler_support_createStagePermission() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1548,7 +1550,7 @@ support_createStagePermission() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created tenant stage permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
-support_deleteStagePermission() {
+handler_handler_support_deleteStagePermission() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1605,7 +1607,7 @@ support_deleteStagePermission() {
 
 # DEVELOPER
 
-developer_printCurrent() {
+handler_developer_printCurrent() {
   internal_useEnvironment
 
   DEVELOPER_USER=${OMGSERVERSCTL_DEVELOPER_USER}
@@ -1623,7 +1625,7 @@ developer_printCurrent() {
   fi
 }
 
-developer_createToken() {
+handler_developer_createToken() {
   internal_ensureEnvironment
 
   DEVELOPER_USER=$1
@@ -1668,7 +1670,7 @@ developer_createToken() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created"
 }
 
-developer_getTenantDetails() {
+handler_developer_getTenantDetails() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1714,7 +1716,7 @@ developer_getTenantDetails() {
   type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json | jq
 }
 
-developer_createProject() {
+handler_developer_createProject() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1774,7 +1776,7 @@ developer_createProject() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
 }
 
-developer_createProjectAlias() {
+handler_developer_createProjectAlias() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1824,7 +1826,7 @@ developer_createProjectAlias() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project alias was created"
 }
 
-developer_getProjectDetails() {
+handler_developer_getProjectDetails() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1872,7 +1874,7 @@ developer_getProjectDetails() {
   type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json | jq
 }
 
-developer_deleteProject() {
+handler_developer_deleteProject() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1931,7 +1933,7 @@ developer_deleteProject() {
   fi
 }
 
-developer_createStage() {
+handler_developer_createStage() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -1986,7 +1988,7 @@ developer_createStage() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=\"${STAGE}\""
 }
 
-developer_createStageAlias() {
+handler_developer_createStageAlias() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2036,7 +2038,7 @@ developer_createStageAlias() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage alias was created"
 }
 
-developer_getStageDetails() {
+handler_developer_getStageDetails() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2085,7 +2087,7 @@ developer_getStageDetails() {
   type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
 }
 
-developer_deleteStage() {
+handler_developer_deleteStage() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2145,7 +2147,7 @@ developer_deleteStage() {
   fi
 }
 
-developer_createVersion() {
+handler_developer_createVersion() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2214,7 +2216,7 @@ developer_createVersion() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION=\"${VERSION}\""
 }
 
-developer_uploadFilesArchive() {
+handler_developer_uploadFilesArchive() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2280,7 +2282,7 @@ developer_uploadFilesArchive() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Files archive was uploaded, FILES_ARCHIVE=${FILES_ARCHIVE}"
 }
 
-developer_getVersionDetails() {
+handler_developer_getVersionDetails() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2328,7 +2330,7 @@ developer_getVersionDetails() {
   type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
 }
 
-developer_deleteVersion() {
+handler_developer_deleteVersion() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2387,7 +2389,7 @@ developer_deleteVersion() {
   fi
 }
 
-developer_deployVersion() {
+handler_developer_deployVersion() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2446,7 +2448,7 @@ developer_deployVersion() {
   echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\""
 }
 
-developer_getDeploymentDetails() {
+handler_developer_getDeploymentDetails() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2494,7 +2496,7 @@ developer_getDeploymentDetails() {
   type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
 }
 
-developer_deleteDeployment() {
+handler_developer_deleteDeployment() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2553,7 +2555,7 @@ developer_deleteDeployment() {
   fi
 }
 
-developer_createLobbyRequest() {
+handler_developer_createLobbyRequest() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2592,7 +2594,7 @@ developer_createLobbyRequest() {
   echo "Lobby request created successfully."
 }
 
-developer_deleteLobby() {
+handler_developer_deleteLobby() {
   internal_ensureEnvironment
 
   LOBBY_ID=$1
@@ -2649,7 +2651,7 @@ developer_deleteLobby() {
   fi
 }
 
-developer_createMatchmakerRequest() {
+handler_developer_createMatchmakerRequest() {
   internal_ensureEnvironment
 
   TENANT=$1
@@ -2687,7 +2689,7 @@ developer_createMatchmakerRequest() {
   echo "Matchmaker request created successfully."
 }
 
-developer_deleteMatchmaker() {
+handler_developer_deleteMatchmaker() {
   internal_ensureEnvironment
 
   MATCHMAKER_ID=$1
@@ -2763,200 +2765,169 @@ if [ ! -f "${OMGSERVERSCTL_DIRECTORY}/logs" ]; then
   touch ${OMGSERVERSCTL_DIRECTORY}/logs
 fi
 
-if [ -z "$1" ]; then
+ARG=$1
+if [ -z "${ARG}" ]; then
   help
   exit 0
-fi
-
-if [ "$1" = "help" ]; then
-  shift
-  help "$*"
-  exit 0
-fi
-
-if [ "$1" = "logs" ]; then
-  logs
-  exit 0
-fi
-
-# Env
-if [ "$1" = "environment" ]; then
-  shift
-  if [ "$1" = "reset" ]; then
-    environment_reset
-  elif [ "$1" = "printCurrent" ]; then
-    environment_printCurrent
-  elif [ "$1" = "printVariable" ]; then
-    shift
-    environment_printVariable $@
-  elif [ "$1" = "useEnvironment" ]; then
-    shift
-    environment_useEnvironment $@
-  elif [ "$1" = "useDemoServer" ]; then
-    environment_useDemoServer
-  elif [ "$1" = "useLocalServer" ]; then
-    environment_useLocalServer
-  else
-    help "environment"
-  fi
-  exit 0
-fi
-
-# Admin
-if [ "$1" = "admin" ]; then
-  shift
-  if [ "$1" = "printCurrent" ]; then
-    admin_printCurrent
-  elif [ "$1" = "createToken" ]; then
-    shift
-    admin_createToken $@
-  elif [ "$1" = "calculateShard" ]; then
-    shift
-    admin_calculateShard $@
-  elif [ "$1" = "generateId" ]; then
-    admin_generateId
-  elif [ "$1" = "bcryptHash" ]; then
-    shift
-    admin_bcryptHash $@
-  elif [ "$1" = "pingDockerHost" ]; then
-    shift
-    admin_pingDockerHost $@
-  else
-    help "admin"
-  fi
-# Support
-elif [ "$1" = "support" ]; then
-  shift
-  if [ "$1" = "printCurrent" ]; then
-    support_printCurrent
-  elif [ "$1" = "createToken" ]; then
-    shift
-    support_createToken $@
-  elif [ "$1" = "createTenant" ]; then
-    support_createTenant
-  elif [ "$1" = "createTenantAlias" ]; then
-    shift
-    support_createTenantAlias $@
-  elif [ "$1" = "deleteTenant" ]; then
-    shift
-    support_deleteTenant $@
-  # Project
-  elif [ "$1" = "createProject" ]; then
-    shift
-    support_createProject $@
-  elif [ "$1" = "createProjectAlias" ]; then
-    shift
-    support_createProjectAlias $@
-  elif [ "$1" = "deleteProject" ]; then
-    shift
-    support_deleteProject $@
-  # Stage
-  elif [ "$1" = "createStage" ]; then
-    shift
-    support_createStage $@
-  elif [ "$1" = "createStageAlias" ]; then
-    shift
-    support_createStageAlias $@
-  elif [ "$1" = "deleteStage" ]; then
-    shift
-    support_deleteStage $@
-  # Developer
-  elif [ "$1" = "createDeveloper" ]; then
-    shift
-    support_createDeveloper $@
-  # Permissions
-  elif [ "$1" = "createTenantPermission" ]; then
-    shift
-    support_createTenantPermission $@
-  elif [ "$1" = "deleteTenantPermission" ]; then
-    shift
-    support_deleteTenantPermission $@
-  elif [ "$1" = "createProjectPermission" ]; then
-    shift
-    support_createProjectPermission $@
-  elif [ "$1" = "deleteProjectPermission" ]; then
-    shift
-    support_deleteProjectPermission $@
-  elif [ "$1" = "createStagePermission" ]; then
-    shift
-    support_createStagePermission $@
-  elif [ "$1" = "deleteStagePermission" ]; then
-    shift
-    support_deleteStagePermission $@
-  else
-    help "support"
-  fi
-# Developer
-elif [ "$1" = "developer" ]; then
-  shift
-  if [ "$1" = "printCurrent" ]; then
-    developer_printCurrent
-  elif [ "$1" = "createToken" ]; then
-    shift
-    developer_createToken $@
-  elif [ "$1" = "getTenantDetails" ]; then
-    shift
-    developer_getTenantDetails $@
-  elif [ "$1" = "createProject" ]; then
-    shift
-    developer_createProject $@
-  elif [ "$1" = "createProjectAlias" ]; then
-    shift
-    developer_createProjectAlias $@
-  elif [ "$1" = "getProjectDetails" ]; then
-    shift
-    developer_getProjectDetails $@
-  elif [ "$1" = "deleteProject" ]; then
-    shift
-    developer_deleteProject $@
-  elif [ "$1" = "createStage" ]; then
-    shift
-    developer_createStage $@
-  elif [ "$1" = "createStageAlias" ]; then
-    shift
-    developer_createStageAlias $@
-  elif [ "$1" = "getStageDetails" ]; then
-    shift
-    developer_getStageDetails $@
-  elif [ "$1" = "deleteStage" ]; then
-    shift
-    developer_deleteStage $@
-  elif [ "$1" = "createVersion" ]; then
-    shift
-    developer_createVersion $@
-  elif [ "$1" = "uploadFilesArchive" ]; then
-    shift
-    developer_uploadFilesArchive $@
-  elif [ "$1" = "getVersionDetails" ]; then
-    shift
-    developer_getVersionDetails $@
-  elif [ "$1" = "deleteVersion" ]; then
-    shift
-    developer_deleteVersion $@
-  elif [ "$1" = "deployVersion" ]; then
-    shift
-    developer_deployVersion $@
-  elif [ "$1" = "getDeploymentDetails" ]; then
-    shift
-    developer_getDeploymentDetails $@
-  elif [ "$1" = "deleteDeployment" ]; then
-    shift
-    developer_deleteDeployment $@
-  elif [ "$1" = "createLobbyRequest" ]; then
-      shift
-      developer_createLobbyRequest $@
-  elif [ "$1" = "deleteLobby" ]; then
-    shift
-    developer_deleteLobby $@
-  elif [ "$1" = "createMatchmakerRequest" ]; then
-    shift
-    developer_createMatchmakerRequest $@
-  elif [ "$1" = "deleteMatchmaker" ]; then
-    shift
-    developer_deleteMatchmaker $@
-  else
-    help "developer"
-  fi
 else
-  help
+  shift
+  if [ "${ARG}" = "help" ]; then
+    help "$*"
+  elif [ "${ARG}" = "logs" ]; then
+    logs $@
+  elif [ "${ARG}" = "environment" ]; then
+    ARG=$1
+    if [ -z "${ARG}" ]; then
+      help "environment"
+      exit 1
+    else
+      shift
+      if [ "${ARG}" = "reset" ]; then
+        handler_environment_reset $@
+      elif [ "${ARG}" = "printCurrent" ]; then
+        handler_environment_printCurrent $@
+      elif [ "${ARG}" = "printVariable" ]; then
+        handler_environment_printVariable $@
+      elif [ "${ARG}" = "useEnvironment" ]; then
+        handler_environment_useEnvironment $@
+      elif [ "${ARG}" = "useDemoServer" ]; then
+        handler_environment_useDemoServer $@
+      elif [ "${ARG}" = "useLocalServer" ]; then
+        handler_environment_useLocalServer $@
+      else
+        help "environment"
+      fi
+    fi
+  elif [ "${ARG}" = "admin" ]; then
+    ARG=$1
+    if [ -z "${ARG}" ]; then
+      help "admin"
+      exit 1
+    else
+      shift
+      if [ "${ARG}" = "printCurrent" ]; then
+        handler_admin_printCurrent $@
+      elif [ "${ARG}" = "createToken" ]; then
+        handler_admin_createToken $@
+      elif [ "${ARG}" = "calculateShard" ]; then
+        handler_admin_calculateShard $@
+      elif [ "${ARG}" = "generateId" ]; then
+        handler_admin_generateId $@
+      elif [ "${ARG}" = "bcryptHash" ]; then
+        handler_admin_bcryptHash $@
+      elif [ "${ARG}" = "pingDockerHost" ]; then
+        handler_admin_pingDockerHost $@
+      else
+        help "admin"
+      fi
+    fi
+  elif [ "${ARG}" = "support" ]; then
+    ARG=$1
+    if [ -z "${ARG}" ]; then
+      help "support"
+      exit 1
+    else
+      shift
+      if [ "${ARG}" = "printCurrent" ]; then
+        handler_support_printCurrent $@
+      elif [ "${ARG}" = "createToken" ]; then
+        handler_support_createToken $@
+      elif [ "${ARG}" = "createTenant" ]; then
+        handler_support_createTenant $@
+      elif [ "${ARG}" = "createTenantAlias" ]; then
+        handler_support_createTenantAlias $@
+      elif [ "${ARG}" = "deleteTenant" ]; then
+        handler_support_deleteTenant $@
+      # Project
+      elif [ "${ARG}" = "createProject" ]; then
+        handler_support_createProject $@
+      elif [ "${ARG}" = "createProjectAlias" ]; then
+        handler_support_createProjectAlias $@
+      elif [ "${ARG}" = "deleteProject" ]; then
+        handler_support_deleteProject $@
+      # Stage
+      elif [ "${ARG}" = "createStage" ]; then
+        handler_support_createStage $@
+      elif [ "${ARG}" = "createStageAlias" ]; then
+        handler_support_createStageAlias $@
+      elif [ "${ARG}" = "deleteStage" ]; then
+        handler_support_deleteStage $@
+      # Developer
+      elif [ "${ARG}" = "createDeveloper" ]; then
+        handler_support_createDeveloper $@
+      # Permissions
+      elif [ "${ARG}" = "createTenantPermission" ]; then
+        handler_support_createTenantPermission $@
+      elif [ "${ARG}" = "deleteTenantPermission" ]; then
+        handler_support_deleteTenantPermission $@
+      elif [ "${ARG}" = "createProjectPermission" ]; then
+        handler_support_createProjectPermission $@
+      elif [ "${ARG}" = "deleteProjectPermission" ]; then
+        handler_support_deleteProjectPermission $@
+      elif [ "${ARG}" = "createStagePermission" ]; then
+        handler_support_createStagePermission $@
+      elif [ "${ARG}" = "deleteStagePermission" ]; then
+        handler_handler_support_deleteStagePermission $@
+      else
+        help "support"
+      fi
+    fi
+  elif [ "${ARG}" = "developer" ]; then
+    ARG=$1
+    if [ -z "${ARG}" ]; then
+      help "developer"
+      exit 1
+    else
+      shift
+      if [ "${ARG}" = "printCurrent" ]; then
+        handler_developer_printCurrent $@
+      elif [ "${ARG}" = "createToken" ]; then
+        handler_developer_createToken $@
+      elif [ "${ARG}" = "getTenantDetails" ]; then
+        handler_developer_getTenantDetails $@
+      elif [ "${ARG}" = "createProject" ]; then
+        handler_developer_createProject $@
+      elif [ "${ARG}" = "createProjectAlias" ]; then
+        handler_developer_createProjectAlias $@
+      elif [ "${ARG}" = "getProjectDetails" ]; then
+        handler_developer_getProjectDetails $@
+      elif [ "${ARG}" = "deleteProject" ]; then
+        handler_developer_deleteProject $@
+      elif [ "${ARG}" = "createStage" ]; then
+        handler_developer_createStage $@
+      elif [ "${ARG}" = "createStageAlias" ]; then
+        handler_developer_createStageAlias $@
+      elif [ "${ARG}" = "getStageDetails" ]; then
+        handler_developer_getStageDetails $@
+      elif [ "${ARG}" = "deleteStage" ]; then
+        handler_developer_deleteStage $@
+      elif [ "${ARG}" = "createVersion" ]; then
+        handler_developer_createVersion $@
+      elif [ "${ARG}" = "uploadFilesArchive" ]; then
+        handler_developer_uploadFilesArchive $@
+      elif [ "${ARG}" = "getVersionDetails" ]; then
+        handler_developer_getVersionDetails $@
+      elif [ "${ARG}" = "deleteVersion" ]; then
+        handler_developer_deleteVersion $@
+      elif [ "${ARG}" = "deployVersion" ]; then
+        handler_developer_deployVersion $@
+      elif [ "${ARG}" = "getDeploymentDetails" ]; then
+        handler_developer_getDeploymentDetails $@
+      elif [ "${ARG}" = "deleteDeployment" ]; then
+        handler_developer_deleteDeployment $@
+      elif [ "${ARG}" = "createLobbyRequest" ]; then
+        handler_developer_createLobbyRequest $@
+      elif [ "${ARG}" = "deleteLobby" ]; then
+        handler_developer_deleteLobby $@
+      elif [ "${ARG}" = "createMatchmakerRequest" ]; then
+        handler_developer_createMatchmakerRequest $@
+      elif [ "${ARG}" = "deleteMatchmaker" ]; then
+        handler_developer_deleteMatchmaker $@
+      else
+        help "developer"
+      fi
+    fi
+  else
+    help
+  fi
 fi

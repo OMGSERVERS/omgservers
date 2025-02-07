@@ -21,7 +21,8 @@
     </properties>
 
     <modules>
-        <module>developer-tools</module>
+        <module>developer-tool</module>
+        <module>dind-environment</module>
         <module>omgservers-ctl</module>
     </modules>
 

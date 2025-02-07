@@ -10,7 +10,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>developer-tools</artifactId>
+    <artifactId>developer-tool</artifactId>
 
     <properties>
         <skipITs>true</skipITs>
