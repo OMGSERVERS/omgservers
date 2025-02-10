@@ -97,7 +97,7 @@ handler_localtesting_logs() {
   if [ -z "$1" ] || [ "$1" = "-f" ]; then
     docker logs "${DIND_CONTAINER_NAME}" $@
   else
-    docker exec -it "${DIND_CONTAINER_NAME}" docker compose -p omgservers logs $@
+    docker exec -it "${DIND_CONTAINER_NAME}" docker logs $@
   fi
 }
 
