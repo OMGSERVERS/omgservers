@@ -86,7 +86,7 @@ handler_localtesting_up() {
 }
 
 handler_localtesting_ps() {
-  docker exec -it "${DIND_CONTAINER_NAME}" docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Command}}"
+  docker exec -it "${DIND_CONTAINER_NAME}" docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Command}}" $@
 }
 
 handler_localtesting_stats() {
