@@ -19,6 +19,14 @@ internal_print_command() {
   printf "  %-85s %s\n" "$1" "$2"
 }
 
+internal_format_file() {
+  if [ -n "${FORMATTING}" ]; then
+    cat $1 | jq .
+  else
+    cat $1
+  fi
+}
+
 # HANDLERS
 
 help() {
@@ -396,7 +404,7 @@ handler_environment_useEnvironment() {
   echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_SERVICE_URL=${SERVICE_URL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=\"${ENVIRONMENT_NAME}\", SERVICE_URL=\"${SERVICE_URL}\""
+  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=\"${ENVIRONMENT_NAME}\", SERVICE_URL=\"${SERVICE_URL}\"" >&2
 }
 
 handler_environment_useDemoServer() {
@@ -440,7 +448,7 @@ handler_admin_createToken() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, ADMIN_USER=\"${ADMIN_USER}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, ADMIN_USER=\"${ADMIN_USER}\"" >&2
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/create-token"
   REQUEST="{\"user\": \"${ADMIN_USER}\", \"password\": \"${ADMIN_PASSWORD}\"}"
@@ -460,7 +468,7 @@ handler_admin_createToken() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
 
@@ -512,7 +520,7 @@ handler_admin_calculateShard() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
 
@@ -563,7 +571,7 @@ handler_admin_generateId() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
 
@@ -614,7 +622,7 @@ handler_admin_bcryptHash() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
 
@@ -664,7 +672,7 @@ handler_admin_pingDockerHost() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
 
@@ -719,7 +727,7 @@ handler_support_createToken() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, SUPPORT_USER=\"$SUPPORT_USER\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, SUPPORT_USER=\"$SUPPORT_USER\"" >&2
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-token"
   REQUEST="{\"user\": \"${SUPPORT_USER}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
@@ -739,7 +747,7 @@ handler_support_createToken() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
 
@@ -752,7 +760,7 @@ handler_support_createToken() {
   echo "export OMGSERVERSCTL_SUPPORT_USER=$SUPPORT_USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_SUPPORT_TOKEN=$RAW_TOKEN" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support token was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support token was created" >&2
 }
 
 handler_support_createTenant() {
@@ -784,7 +792,7 @@ handler_support_createTenant() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -795,7 +803,7 @@ handler_support_createTenant() {
   fi
   echo "export OMGSERVERSCTL_TENANT=$TENANT" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT=\"$TENANT\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT=\"$TENANT\"" >&2
 }
 
 handler_support_createTenantAlias() {
@@ -809,8 +817,8 @@ handler_support_createTenantAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant id, TENANT_ID=\"${TENANT_ID}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant id, TENANT_ID=\"${TENANT_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -839,7 +847,7 @@ handler_support_createTenantAlias() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -882,7 +890,7 @@ handler_support_deleteTenant() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -939,7 +947,7 @@ handler_support_createProject() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -972,9 +980,9 @@ handler_support_createProjectAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1003,7 +1011,7 @@ handler_support_createProjectAlias() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1048,7 +1056,7 @@ handler_support_deleteProject() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1112,7 +1120,7 @@ handler_support_createStage() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1138,9 +1146,9 @@ handler_support_createStageAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1169,7 +1177,7 @@ handler_support_createStageAlias() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1215,7 +1223,7 @@ handler_support_deleteStage() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1264,7 +1272,7 @@ handler_support_createDeveloper() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1299,9 +1307,9 @@ handler_support_createTenantPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1330,7 +1338,7 @@ handler_support_createTenantPermission() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1350,9 +1358,9 @@ handler_support_deleteTenantPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1381,7 +1389,7 @@ handler_support_deleteTenantPermission() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1402,10 +1410,10 @@ handler_support_createProjectPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1434,7 +1442,7 @@ handler_support_createProjectPermission() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1455,10 +1463,10 @@ handler_support_deleteProjectPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1487,7 +1495,7 @@ handler_support_deleteProjectPermission() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1509,11 +1517,11 @@ handler_support_createStagePermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1542,7 +1550,7 @@ handler_support_createStagePermission() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1564,11 +1572,11 @@ handler_handler_support_deleteStagePermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
@@ -1597,7 +1605,7 @@ handler_handler_support_deleteStagePermission() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1655,7 +1663,7 @@ handler_developer_createToken() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1667,7 +1675,7 @@ handler_developer_createToken() {
   echo "export OMGSERVERSCTL_DEVELOPER_USER=$DEVELOPER_USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created" >&2
 }
 
 handler_developer_getTenantDetails() {
@@ -1680,7 +1688,7 @@ handler_developer_getTenantDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -1709,11 +1717,11 @@ handler_developer_getTenantDetails() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json | jq
+  internal_format_file ${RESPONSE_FILE}
 }
 
 handler_developer_createProject() {
@@ -1726,7 +1734,7 @@ handler_developer_createProject() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -1755,7 +1763,7 @@ handler_developer_createProject() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1788,9 +1796,9 @@ handler_developer_createProjectAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -1819,7 +1827,7 @@ handler_developer_createProjectAlias() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1837,8 +1845,8 @@ handler_developer_getProjectDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -1867,11 +1875,11 @@ handler_developer_getProjectDetails() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  type open 2> /dev/null && open ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json || cat ${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json | jq
+  internal_format_file ${RESPONSE_FILE}
 }
 
 handler_developer_deleteProject() {
@@ -1885,8 +1893,8 @@ handler_developer_deleteProject() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -1915,7 +1923,7 @@ handler_developer_deleteProject() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -1944,8 +1952,8 @@ handler_developer_createStage() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -1974,7 +1982,7 @@ handler_developer_createStage() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2000,9 +2008,9 @@ handler_developer_createStageAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -2031,7 +2039,7 @@ handler_developer_createStageAlias() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2050,8 +2058,8 @@ handler_developer_getStageDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -2080,11 +2088,11 @@ handler_developer_getStageDetails() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
+  internal_format_file ${RESPONSE_FILE}
 }
 
 handler_developer_deleteStage() {
@@ -2099,8 +2107,8 @@ handler_developer_deleteStage() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -2129,7 +2137,7 @@ handler_developer_deleteStage() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2159,9 +2167,9 @@ handler_developer_createVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=\"${CONFIG_PATH}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=\"${CONFIG_PATH}\"" >&2
 
   if [ ! -f ${CONFIG_PATH} ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Config file was not found, CONFIG_PATH=\"${CONFIG_PATH}\"" >&2
@@ -2202,7 +2210,7 @@ handler_developer_createVersion() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2213,7 +2221,7 @@ handler_developer_createVersion() {
   fi
   echo "export OMGSERVERSCTL_VERSION=${VERSION}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION=\"${VERSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION=\"${VERSION}\"" >&2
 }
 
 handler_developer_uploadFilesArchive() {
@@ -2228,9 +2236,9 @@ handler_developer_uploadFilesArchive() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using files directory path, FILES_DIRECTORY_PATH=\"${FILES_DIRECTORY_PATH}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using files directory path, FILES_DIRECTORY_PATH=\"${FILES_DIRECTORY_PATH}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -2240,7 +2248,7 @@ handler_developer_uploadFilesArchive() {
   fi
 
   ARCHIVE_PATH=$(eval echo ${OMGSERVERSCTL_DIRECTORY}/versions/version_${TENANT}_${VERSION}.zip)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=\"${ARCHIVE_PATH}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=\"${ARCHIVE_PATH}\"" >&2
 
   pushd ${FILES_DIRECTORY_PATH}
 
@@ -2268,7 +2276,7 @@ handler_developer_uploadFilesArchive() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2293,8 +2301,8 @@ handler_developer_getVersionDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -2323,11 +2331,11 @@ handler_developer_getVersionDetails() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
+  internal_format_file ${RESPONSE_FILE}
 }
 
 handler_developer_deleteVersion() {
@@ -2341,8 +2349,8 @@ handler_developer_deleteVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -2352,7 +2360,7 @@ handler_developer_deleteVersion() {
   fi
 
   ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/delete-version"
-  REQUEST="{\"tenant\": \"${TENANT}\", \"version_id\": \"${VERSION}\" }"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"id\": \"${VERSION}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-tenant-version_${TENANT}_${VERSION}.json"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2371,7 +2379,7 @@ handler_developer_deleteVersion() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2402,10 +2410,10 @@ handler_developer_deployVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -2434,7 +2442,7 @@ handler_developer_deployVersion() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2445,7 +2453,7 @@ handler_developer_deployVersion() {
   fi
   echo "export OMGSERVERSCTL_DEPLOYMENT=${DEPLOYMENT}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\"" >&2
 }
 
 handler_developer_getDeploymentDetails() {
@@ -2459,8 +2467,8 @@ handler_developer_getDeploymentDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
@@ -2489,11 +2497,11 @@ handler_developer_getDeploymentDetails() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  type open 2> /dev/null && open ${RESPONSE_FILE} || cat ${RESPONSE_FILE} | jq
+  internal_format_file ${RESPONSE_FILE}
 }
 
 handler_developer_deleteDeployment() {
@@ -2507,8 +2515,8 @@ handler_developer_deleteDeployment() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\""
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}"
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -2537,7 +2545,7 @@ handler_developer_deleteDeployment() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2587,7 +2595,7 @@ handler_developer_createLobbyRequest() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2604,7 +2612,7 @@ handler_developer_deleteLobby() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using lobby, LOBBY_ID=\"${LOBBY_ID}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using lobby, LOBBY_ID=\"${LOBBY_ID}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -2633,7 +2641,7 @@ handler_developer_deleteLobby() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2682,7 +2690,7 @@ handler_developer_createMatchmakerRequest() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
@@ -2699,7 +2707,7 @@ handler_developer_deleteMatchmaker() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using matchmaker, MATCHMAKER_ID=\"${MATCHMAKER_ID}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using matchmaker, MATCHMAKER_ID=\"${MATCHMAKER_ID}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
@@ -2728,7 +2736,7 @@ handler_developer_deleteMatchmaker() {
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
     echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
-    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs
+    tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 

@@ -31,7 +31,7 @@ internal_print_command() {
 }
 
 internal_ctl() {
-  docker run --rm -it \
+  docker run --rm \
     --network=host \
     -v ${WORKING_DIR}/.omgserversctl:/opt/omgserversctl/.omgserversctl \
     -v ${WORKING_DIR}/config.json:/opt/omgserversctl/config.json:ro \
@@ -82,22 +82,22 @@ handler_help() {
 }
 
 handler_localtesting_up() {
-  docker run --privileged --rm -it --name "${DIND_CONTAINER_NAME}" --tmpfs /tmp -p 8080:8080 -d "omgservers/dind:${OMGSERVERS_VERSION}"
+  docker run --privileged --rm --name "${DIND_CONTAINER_NAME}" --tmpfs /tmp -p 8080:8080 -d "omgservers/dind:${OMGSERVERS_VERSION}"
 }
 
 handler_localtesting_ps() {
-  docker exec -it "${DIND_CONTAINER_NAME}" docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Command}}" $@
+  docker exec "${DIND_CONTAINER_NAME}" docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Command}}" $@
 }
 
 handler_localtesting_stats() {
-  docker exec -it "${DIND_CONTAINER_NAME}" docker stats
+  docker exec "${DIND_CONTAINER_NAME}" docker stats
 }
 
 handler_localtesting_logs() {
   if [ -z "$1" ] || [ "$1" = "-f" ]; then
     docker logs "${DIND_CONTAINER_NAME}" $@
   else
-    docker exec -it "${DIND_CONTAINER_NAME}" docker logs $@
+    docker exec "${DIND_CONTAINER_NAME}" docker logs $@
   fi
 }
 
@@ -126,13 +126,13 @@ handler_localtesting_init() {
     exit 1
   fi
 
-  echo "$(date) Using, TENANT_ALIAS=\"${TENANT_ALIAS}\""
-  echo "$(date) Using, PROJECT_ALIAS=\"${PROJECT_ALIAS}\""
-  echo "$(date) Using, STAGE_ALIAS=\"${STAGE_ALIAS}\""
+  echo "$(date) Using, TENANT_ALIAS=\"${TENANT_ALIAS}\"" >&2
+  echo "$(date) Using, PROJECT_ALIAS=\"${PROJECT_ALIAS}\"" >&2
+  echo "$(date) Using, STAGE_ALIAS=\"${STAGE_ALIAS}\"" >&2
 
   internal_ctl environment useEnvironment local "http://localhost:8080"
 
-  echo "$(date) Create a new tenant"
+  echo "$(date) Create a new tenant" >&2
 
   internal_ctl support createToken "support" "support"
   internal_ctl support createTenant
@@ -145,7 +145,7 @@ handler_localtesting_init() {
 
   internal_ctl support createTenantAlias ${TENANT} ${TENANT_ALIAS}
 
-  echo "$(date) Create a new project"
+  echo "$(date) Create a new project" >&2
 
   internal_ctl support createProject ${TENANT_ALIAS}
 
@@ -164,7 +164,7 @@ handler_localtesting_init() {
   internal_ctl support createProjectAlias ${TENANT_ALIAS} ${PROJECT} ${PROJECT_ALIAS}
   internal_ctl support createStageAlias ${TENANT_ALIAS} ${STAGE} ${STAGE_ALIAS}
 
-  echo "$(date) Create a new developer account"
+  echo "$(date) Create a new developer account" >&2
 
   internal_ctl support createDeveloper
 
@@ -180,7 +180,7 @@ handler_localtesting_init() {
     exit 1
   fi
 
-  echo "$(date) Configure developer permissions"
+  echo "$(date) Configure developer permissions" >&2
 
   internal_ctl support createTenantPermission ${TENANT_ALIAS} ${DEVELOPER_USER} TENANT_VIEWER
   internal_ctl support createProjectPermission ${TENANT_ALIAS} ${PROJECT_ALIAS} ${DEVELOPER_USER} VERSION_MANAGER
@@ -188,14 +188,14 @@ handler_localtesting_init() {
   internal_ctl support createStagePermission ${TENANT_ALIAS} ${PROJECT_ALIAS} ${STAGE} ${DEVELOPER_USER} DEPLOYMENT_MANAGER
   internal_ctl support createStagePermission ${TENANT_ALIAS} ${PROJECT_ALIAS} ${STAGE} ${DEVELOPER_USER} STAGE_VIEWER
 
-  echo "$(date) Login using developer account, DEVELOPER_USER=\"${DEVELOPER_USER}\", DEVELOPER_PASSWORD=\"${DEVELOPER_PASSWORD}\""
+  echo "$(date) Login using developer account, DEVELOPER_USER=\"${DEVELOPER_USER}\", DEVELOPER_PASSWORD=\"${DEVELOPER_PASSWORD}\"" >&2
 
   internal_ctl developer createToken ${DEVELOPER_USER} ${DEVELOPER_PASSWORD}
 
   echo "export OMGTOOLCTL_LOCALTESTING_DEVELOPER_USER=${DEVELOPER_USER}" >> ${OMGTOOLCTL_DIRECTORY}/environment
   echo "export OMGTOOLCTL_LOCALTESTING_DEVELOPER_PASSWORD=${DEVELOPER_PASSWORD}" >> ${OMGTOOLCTL_DIRECTORY}/environment
 
-  echo "$(date) All is done"
+  echo "$(date) All is done" >&2
 }
 
 handler_localtesting_cleanup() {
@@ -204,7 +204,7 @@ handler_localtesting_cleanup() {
     exit 1
   fi
 
-  echo "$(date) Using, TENANT_ALIAS=\"${TENANT_ALIAS}\""
+  echo "$(date) Using, TENANT_ALIAS=\"${TENANT_ALIAS}\"" >&2
 
   internal_ctl environment useEnvironment local "http://localhost:8080"
   internal_ctl support deleteTenant ${TENANT_ALIAS}
@@ -220,19 +220,19 @@ handler_installation_deploy() {
     exit 1
   fi
 
-  echo "$(date) Using, DOCKER_IMAGE=\"${DOCKER_IMAGE}\""
-  echo "$(date) Using, SERVICE_URL=\"${SERVICE_URL}\""
-  echo "$(date) Using, DEVELOPER_USER=\"${DEVELOPER_USER}\""
-  echo "$(date) Using, TENANT_ALIAS=\"${TENANT_ALIAS}\""
-  echo "$(date) Using, PROJECT_ALIAS=\"${PROJECT_ALIAS}\""
-  echo "$(date) Using, STAGE_ALIAS=\"${STAGE_ALIAS}\""
+  echo "$(date) Using, DOCKER_IMAGE=\"${DOCKER_IMAGE}\"" >&2
+  echo "$(date) Using, SERVICE_URL=\"${SERVICE_URL}\"" >&2
+  echo "$(date) Using, DEVELOPER_USER=\"${DEVELOPER_USER}\"" >&2
+  echo "$(date) Using, TENANT_ALIAS=\"${TENANT_ALIAS}\"" >&2
+  echo "$(date) Using, PROJECT_ALIAS=\"${PROJECT_ALIAS}\"" >&2
+  echo "$(date) Using, STAGE_ALIAS=\"${STAGE_ALIAS}\"" >&2
 
-  echo "$(date) Login using developer account"
+  echo "$(date) Login using developer account" >&2
 
   internal_ctl environment useEnvironment target "${SERVICE_URL}"
   internal_ctl developer createToken "${DEVELOPER_USER}" "${DEVELOPER_PASSWORD}"
 
-  echo "$(date) Create a new version"
+  echo "$(date) Create a new version" >&2
 
   internal_ctl developer createVersion ${TENANT_ALIAS} ${PROJECT_ALIAS} "./config.json"
   VERSION=$(internal_ctl environment printVariable VERSION)
@@ -241,18 +241,24 @@ handler_installation_deploy() {
     exit 1
   fi
 
-  echo "$(date) Push docker image"
+  echo "$(date) Push docker image" >&2
 
   REGISTRY_SERVER=$(echo ${SERVICE_URL} | sed 's/^https*:\/\///')
-  echo "$(date) Using, REGISTRY_SERVER=${REGISTRY_SERVER}"
+  echo "$(date) Using, REGISTRY_SERVER=${REGISTRY_SERVER}" >&2
 
   TARGET_IMAGE="${REGISTRY_SERVER}/omgservers/${TENANT_ALIAS}/${PROJECT_ALIAS}/universal:${VERSION}"
-  echo "Using, TARGET_IMAGE=${TARGET_IMAGE}"
-  docker login -u ${DEVELOPER_USER} -p ${DEVELOPER_PASSWORD} "${REGISTRY_SERVER}"
-  docker tag ${DOCKER_IMAGE} ${TARGET_IMAGE}
-  docker push ${TARGET_IMAGE}
+  echo "Using, TARGET_IMAGE=${TARGET_IMAGE}" >&2
+  docker login -u ${DEVELOPER_USER} -p ${DEVELOPER_PASSWORD} "${REGISTRY_SERVER}" >&2
+  docker tag ${DOCKER_IMAGE} ${TARGET_IMAGE} >&2
+  docker push ${TARGET_IMAGE} >&2
 
-  echo "$(date) Deploy a new version"
+  echo "$(date) Waiting for the Docker image to propagate..." >&2
+
+  while [ $(internal_ctl developer getVersionDetails ${TENANT_ALIAS} ${VERSION} | jq '.details.images | length') -eq 0 ]; do
+    sleep 1
+  done
+
+  echo "$(date) Deploy a new version" >&2
 
   internal_ctl developer deployVersion ${TENANT_ALIAS} ${PROJECT_ALIAS} ${STAGE_ALIAS} ${VERSION}
   DEPLOYMENT=$(internal_ctl environment printVariable DEPLOYMENT)
@@ -261,7 +267,7 @@ handler_installation_deploy() {
     exit 1
   fi
 
-  echo "$(date) All is done"
+  echo "$(date) All is done" >&2
 }
 
 handler_localtesting_install() {
