@@ -7,10 +7,10 @@ internal_useEnvironment() {
   source ${OMGSERVERSCTL_DIRECTORY}/environment
 }
 
-internal_ensureEnvironment() {
+internal_ensureInstallationUrl() {
   internal_useEnvironment
-  if [ -z "${OMGSERVERSCTL_SERVICE_URL}" ]; then
-    echo "$(date) unknown ERROR: Environment was not set" >&2
+  if [ -z "${OMGSERVERSCTL_INSTALLATION_URL}" ]; then
+    echo "$(date) unknown ERROR: Installation url was not set" >&2
     exit 1
   fi
 }
@@ -30,8 +30,8 @@ internal_format_file() {
 # HANDLERS
 
 help() {
-  echo "OMGSERVERS ctl, v1.0.0"
-  echo "Usage:"
+  echo "OMGSERVERS ctl, v${OMGSERVERS_VERSION}"
+  echo "Usage: $0"
   if [ -z "$1" -o "$1" = "help" ]; then
     internal_print_command " help" "Display this help message."
   fi
@@ -48,28 +48,29 @@ help() {
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment printVariable" ]; then
     internal_print_command " environment printVariable <variable>" "Print the value of a specific variable."
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useEnvironment" ]; then
-    internal_print_command " environment useEnvironment <name> <service_url>" "Set up an environment with the specified URL."
+  # Installation
+  if [ -z "$1" -o "$1" = "installation" -o "$1" = "installation useCustomUrl" ]; then
+    internal_print_command " installation useCustomUrl <name> <url>" "Set up an custom installation URL."
     if [ "$1" = "environment useEnvironment" ]; then
       echo "   produces:"
-      echo "     - ENVIRONMENT_NAME"
-      echo "     - SERVICE_URL"
+      echo "     - INSTALLATION_NAME"
+      echo "     - INSTALLATION_URL"
     fi
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useDemoServer" ]; then
-    internal_print_command " environment useDemoServer" "Use the demo server environment."
-    if [ "$1" = "environment useDemoServer" ]; then
+  if [ -z "$1" -o "$1" = "installation" -o "$1" = "installation useDemoServer" ]; then
+    internal_print_command " installation useDemoServer" "Use the demo server installation."
+    if [ "$1" = "installation useDemoServer" ]; then
       echo "   produces:"
-      echo "     - ENVIRONMENT_NAME"
-      echo "     - SERVICE_URL"
+      echo "     - INSTALLATION_NAME"
+      echo "     - INSTALLATION_URL"
     fi
   fi
-  if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment useLocalServer" ]; then
-    internal_print_command " environment useLocalServer" "Use the local server environment."
-    if [ "$1" = "environment useLocalServer" ]; then
+  if [ -z "$1" -o "$1" = "installation" -o "$1" = "installation useLocalServer" ]; then
+    internal_print_command " installation useLocalServer" "Use the local server installation."
+    if [ "$1" = "installation useLocalServer" ]; then
       echo "   produces:"
-      echo "     - ENVIRONMENT_NAME"
-      echo "     - SERVICE_URL"
+      echo "     - INSTALLATION_NAME"
+      echo "     - INSTALLATION_URL"
     fi
   fi
   # Admin
@@ -385,34 +386,36 @@ handler_environment_printVariable() {
   VARIABLE_NAME="OMGSERVERSCTL_${VARIABLE_NAME}"
 
   if [ -z "${!VARIABLE_NAME}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Variable was not found, VARIABLE_NAME=${VARIABLE_NAME}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Variable was not found, VARIABLE_NAME=${VARIABLE_NAME}" >&2
     exit 1
   else
     echo -n ${!VARIABLE_NAME}
   fi
 }
 
-handler_environment_useEnvironment() {
-  ENVIRONMENT_NAME=$1
-  SERVICE_URL=$2
+# Installation
 
-  if [ -z "${ENVIRONMENT_NAME}" -o -z "${SERVICE_URL}" ]; then
-    help "environment useEnvironment"
+handler_installation_useCustomUrl() {
+  INSTALLATION_NAME=$1
+  INSTALLATION_URL=$2
+
+  if [ -z "${INSTALLATION_NAME}" -o -z "${INSTALLATION_URL}" ]; then
+    help "installation useCustomUrl"
     exit 1
   fi
 
-  echo "export OMGSERVERSCTL_ENVIRONMENT_NAME=${ENVIRONMENT_NAME}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
-  echo "export OMGSERVERSCTL_SERVICE_URL=${SERVICE_URL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_INSTALLATION_NAME=${INSTALLATION_NAME}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
+  echo "export OMGSERVERSCTL_INSTALLATION_URL=${INSTALLATION_URL}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $ENVIRONMENT_NAME) Environment was set, NAME=\"${ENVIRONMENT_NAME}\", SERVICE_URL=\"${SERVICE_URL}\"" >&2
+  echo "$(date) $(echo $INSTALLATION_NAME) Installation was set, INSTALLATION_NAME=\"${INSTALLATION_NAME}\", INSTALLATION_URL=\"${INSTALLATION_URL}\"" >&2
 }
 
-handler_environment_useDemoServer() {
-  handler_environment_useEnvironment demo https://demoserver.omgservers.dev
+handler_installation_useDemoServer() {
+  handler_installation_useCustomUrl demoserver https://demoserver.omgservers.dev
 }
 
-handler_environment_useLocalServer() {
-  handler_environment_useEnvironment local http://localhost:8080
+handler_installation_useLocalServer() {
+  handler_installation_useCustomUrl localserver http://localhost:8080
   handler_admin_createToken admin admin
   handler_support_createToken support support
 }
@@ -426,19 +429,19 @@ handler_admin_printCurrent() {
   ADMIN_TOKEN=${OMGSERVERSCTL_ADMIN_TOKEN}
 
   if [ -z "${ADMIN_USER}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current admin was not found" >&2
     exit 1
   fi
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current admin was found, ADMIN_USER=${ADMIN_USER}, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Current admin was found, ADMIN_USER=${ADMIN_USER}, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current admin was found, ADMIN_USER=${ADMIN_USER}, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Current admin was found, ADMIN_USER=${ADMIN_USER}, (token exists)"
   fi
 }
 
 handler_admin_createToken() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   ADMIN_USER=$1
   ADMIN_PASSWORD=$2
@@ -448,9 +451,9 @@ handler_admin_createToken() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using admin, ADMIN_USER=\"${ADMIN_USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using admin, ADMIN_USER=\"${ADMIN_USER}\"" >&2
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/admin/request/create-token"
   REQUEST="{\"user\": \"${ADMIN_USER}\", \"password\": \"${ADMIN_PASSWORD}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -467,7 +470,7 @@ handler_admin_createToken() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
@@ -481,11 +484,11 @@ handler_admin_createToken() {
   echo "export OMGSERVERSCTL_ADMIN_USER=$ADMIN_USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_ADMIN_TOKEN=$ADMIN_TOKEN" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Admin token was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Admin token was created"
 }
 
 handler_admin_calculateShard() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   SHARD_KEY=$1
 
@@ -497,11 +500,11 @@ handler_admin_calculateShard() {
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/calculate-shard"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/admin/request/calculate-shard"
   REQUEST="{\"shard_key\": \"${SHARD_KEY}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -519,7 +522,7 @@ handler_admin_calculateShard() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
@@ -538,20 +541,20 @@ handler_admin_calculateShard() {
   fi
   echo "export OMGSERVERSCTL_SERVER_URI=${SERVER_URI}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Shard was calculated, SHARD_INDEX=${SHARD_INDEX}, SERVER_URI=${SERVER_URI}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Shard was calculated, SHARD_INDEX=${SHARD_INDEX}, SERVER_URI=${SERVER_URI}"
 }
 
 handler_admin_generateId() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/generate-id"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/admin/request/generate-id"
   REQUEST="{}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/admin-generate-id.json"
 
@@ -570,7 +573,7 @@ handler_admin_generateId() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
@@ -582,11 +585,11 @@ handler_admin_generateId() {
   fi
   echo "export OMGSERVERSCTL_GENERATED_ID=${GENERATED_ID}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Id was generated, GENERATED_ID=${GENERATED_ID}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Id was generated, GENERATED_ID=\"${GENERATED_ID}\""
 }
 
 handler_admin_bcryptHash() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   VALUE=$1
 
@@ -598,11 +601,11 @@ handler_admin_bcryptHash() {
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/bcrypt-hash"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/admin/request/bcrypt-hash"
   REQUEST="{ \"value\": \"${VALUE}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/admin-bcrypt-hash.json"
 
@@ -621,7 +624,7 @@ handler_admin_bcryptHash() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
@@ -633,11 +636,11 @@ handler_admin_bcryptHash() {
   fi
   echo "export OMGSERVERSCTL_BCRYPTED_HASH=${BCRYPTED_HASH}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Value was bcrypted, BCRYPTED_HASH=${BCRYPTED_HASH}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Value was bcrypted, BCRYPTED_HASH=${BCRYPTED_HASH}"
 }
 
 handler_admin_pingDockerHost() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   DOCKER_DAEMON_URI=$1
 
@@ -649,11 +652,11 @@ handler_admin_pingDockerHost() {
   ADMIN_TOKEN=$OMGSERVERSCTL_ADMIN_TOKEN
 
   if [ -z "${ADMIN_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current admin token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current admin token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/admin/request/ping-docker-host"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/admin/request/ping-docker-host"
   REQUEST="{\"docker_daemon_uri\": \"${DOCKER_DAEMON_URI}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -671,7 +674,7 @@ handler_admin_pingDockerHost() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
@@ -690,9 +693,9 @@ handler_admin_pingDockerHost() {
   fi
 
   if [ "${SUCCESSFUL}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Docker host was pinged, FROM_SERVER=${FROM_SERVER}, DOCKER_DAEMON_URI=${DOCKER_DAEMON_URI}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Docker host was pinged, FROM_SERVER=${FROM_SERVER}, DOCKER_DAEMON_URI=${DOCKER_DAEMON_URI}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Docker host was not pinged, FROM_SERVER=${FROM_SERVER}, DOCKER_DAEMON_URI=${DOCKER_DAEMON_URI}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Docker host was not pinged, FROM_SERVER=${FROM_SERVER}, DOCKER_DAEMON_URI=${DOCKER_DAEMON_URI}"
   fi
 }
 
@@ -705,19 +708,19 @@ handler_support_printCurrent() {
   SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
 
   if [ -z "${SUPPORT_USER}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support was not found" >&2
     exit 1
   fi
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current support was found, SUPPORT_USER=$SUPPORT_USER, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Current support was found, SUPPORT_USER=$SUPPORT_USER, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current support was found, SUPPORT_USER=$SUPPORT_USER, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Current support was found, SUPPORT_USER=$SUPPORT_USER, (token exists)"
   fi
 }
 
 handler_support_createToken() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   SUPPORT_USER=$1
   SUPPORT_PASSWORD=$2
@@ -727,9 +730,9 @@ handler_support_createToken() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using support, SUPPORT_USER=\"$SUPPORT_USER\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using support, SUPPORT_USER=\"$SUPPORT_USER\"" >&2
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-token"
   REQUEST="{\"user\": \"${SUPPORT_USER}\", \"password\": \"${SUPPORT_PASSWORD}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -746,7 +749,7 @@ handler_support_createToken() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2 >&2
     exit 1
   fi
@@ -760,20 +763,20 @@ handler_support_createToken() {
   echo "export OMGSERVERSCTL_SUPPORT_USER=$SUPPORT_USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_SUPPORT_TOKEN=$RAW_TOKEN" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Support token was created" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Support token was created" >&2
 }
 
 handler_support_createTenant() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-tenant"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-tenant"
   REQUEST="{}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -791,7 +794,7 @@ handler_support_createTenant() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -803,11 +806,11 @@ handler_support_createTenant() {
   fi
   echo "export OMGSERVERSCTL_TENANT=$TENANT" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was created, TENANT=\"$TENANT\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Tenant was created, TENANT=\"$TENANT\"" >&2
 }
 
 handler_support_createTenantAlias() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT_ID=$1
   ALIAS=$2
@@ -817,17 +820,17 @@ handler_support_createTenantAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant id, TENANT_ID=\"${TENANT_ID}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant id, TENANT_ID=\"${TENANT_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-tenant-alias"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-tenant-alias"
   REQUEST="{\"tenant_id\": ${TENANT_ID}, \"alias\": \"${ALIAS}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-alias_${TENANT_ID}_${ALIAS}.json"
 
@@ -846,16 +849,16 @@ handler_support_createTenantAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant alias was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Tenant alias was created"
 }
 
 handler_support_deleteTenant() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
 
@@ -867,11 +870,11 @@ handler_support_deleteTenant() {
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/delete-tenant"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/delete-tenant"
   REQUEST="{\"tenant\": \"${TENANT}\"}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -889,7 +892,7 @@ handler_support_deleteTenant() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -902,16 +905,16 @@ handler_support_deleteTenant() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was deleted, TENANT=${TENANT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Tenant was deleted, TENANT=${TENANT}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Tenant was not deleted, TENANT=${TENANT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Tenant was not deleted, TENANT=${TENANT}"
   fi
 }
 
 # Project
 
 handler_support_createProject() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
 
@@ -923,11 +926,11 @@ handler_support_createProject() {
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-project"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-project"
   REQUEST="{\"tenant\": \"${TENANT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project_${TENANT}.json"
 
@@ -946,7 +949,7 @@ handler_support_createProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -965,11 +968,11 @@ handler_support_createProject() {
   fi
   echo "export OMGSERVERSCTL_STAGE=${STAGE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
 }
 
 handler_support_createProjectAlias() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT_ID=$2
@@ -980,18 +983,18 @@ handler_support_createProjectAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-project-alias"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-project-alias"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project_id\": \"${PROJECT_ID}\", \"alias\": \"${ALIAS}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-alias_${TENANT}_${PROJECT_ID}_${ALIAS}.json"
 
@@ -1010,16 +1013,16 @@ handler_support_createProjectAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project alias was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project alias was created"
 }
 
 handler_support_deleteProject() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1032,11 +1035,11 @@ handler_support_deleteProject() {
   SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/delete-project"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/delete-project"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT}_${PROJECT}.json"
 
@@ -1055,7 +1058,7 @@ handler_support_deleteProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1068,16 +1071,16 @@ handler_support_deleteProject() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   fi
 }
 
 # Stage
 
 handler_support_createStage() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
 
@@ -1096,11 +1099,11 @@ handler_support_createStage() {
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-stage"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-stage"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage_${TENANT}_${PROJECT}.json"
 
@@ -1119,7 +1122,7 @@ handler_support_createStage() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1131,11 +1134,11 @@ handler_support_createStage() {
   fi
   echo "export OMGSERVERSCTL_STAGE=${STAGE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage was created, STAGE=\"${STAGE}\""
 }
 
 handler_support_createStageAlias() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   STAGE_ID=$2
@@ -1146,18 +1149,18 @@ handler_support_createStageAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-stage-alias"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-stage-alias"
   REQUEST="{\"tenant\": \"${TENANT}\", \"stage_id\": \"${STAGE_ID}\", \"alias\": \"${ALIAS}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-alias_${TENANT}_${STAGE_ID}_${ALIAS}.json"
 
@@ -1176,16 +1179,16 @@ handler_support_createStageAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage alias was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage alias was created"
 }
 
 handler_support_deleteStage() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1199,11 +1202,11 @@ handler_support_deleteStage() {
   SUPPORT_TOKEN=${OMGSERVERSCTL_SUPPORT_TOKEN}
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/delete-stage"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/delete-stage"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project_${TENANT}_${PROJECT}_${STAGE}.json"
 
@@ -1222,7 +1225,7 @@ handler_support_deleteStage() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1235,25 +1238,25 @@ handler_support_deleteStage() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was deleted"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage was deleted"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was not deleted"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage was not deleted"
   fi
 }
 
 # Developer
 
 handler_support_createDeveloper() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-developer"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-developer"
   REQUEST="{}"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -1271,7 +1274,7 @@ handler_support_createDeveloper() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1290,13 +1293,13 @@ handler_support_createDeveloper() {
   fi
   echo "export OMGSERVERSCTL_DEVELOPER_PASSWORD='$PASSWORD'" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer was created, DEVELOPER_USER=\"${USER}\", DEVELOPER_PASSWORD=\"${PASSWORD}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Developer was created, DEVELOPER_USER=\"${USER}\", DEVELOPER_PASSWORD=\"${PASSWORD}\""
 
   handler_developer_createToken ${USER} ${PASSWORD}
 }
 
 handler_support_createTenantPermission() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   USER=$2
@@ -1307,18 +1310,18 @@ handler_support_createTenantPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-tenant-permissions"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-tenant-permissions"
   REQUEST="{\"tenant\": \"${TENANT}\", \"user_id\": \"${USER}\", \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-tenant-permissions_${TENANT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1337,17 +1340,17 @@ handler_support_createTenantPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
   CREATED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .created_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Created permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
 handler_support_deleteTenantPermission() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   USER=$2
@@ -1358,18 +1361,18 @@ handler_support_deleteTenantPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/delete-tenant-permissions"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/delete-tenant-permissions"
   REQUEST="{\"tenant\": \"${TENANT}\", \"user_id\": \"${USER}\", \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-tenant-permissions_${TENANT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1388,17 +1391,17 @@ handler_support_deleteTenantPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
   DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .deleted_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Deleted permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
 handler_support_createProjectPermission() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1410,19 +1413,19 @@ handler_support_createProjectPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-project-permissions"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-project-permissions"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"user_id\": \"${USER}\", \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1441,17 +1444,17 @@ handler_support_createProjectPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
   CREATED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .created_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created tenant project permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Created tenant project permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
 handler_support_deleteProjectPermission() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1463,19 +1466,19 @@ handler_support_deleteProjectPermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/delete-project-permissions"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/delete-project-permissions"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"user_id\": \"${USER}\", \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-project-permissions_${TENANT}_${PROJECT}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1494,17 +1497,17 @@ handler_support_deleteProjectPermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
   DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .deleted_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted tenant project permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Deleted tenant project permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
 handler_support_createStagePermission() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1517,20 +1520,20 @@ handler_support_createStagePermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/create-stage-permissions"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/create-stage-permissions"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\", \"user_id\": \"${USER}\", \"permissions_to_create\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-create-stage-permissions_${TENANT}_${PROJECT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1549,17 +1552,17 @@ handler_support_createStagePermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
   CREATED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .created_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Created tenant stage permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Created tenant stage permissions, CREATED_PERMISSION=${CREATED_PERMISSION}"
 }
 
 handler_handler_support_deleteStagePermission() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1572,20 +1575,20 @@ handler_handler_support_deleteStagePermission() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using user, USER=\"${USER}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using user, USER=\"${USER}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using permission, PERMISSION=\"${PERMISSION}\"" >&2
 
   SUPPORT_TOKEN=$OMGSERVERSCTL_SUPPORT_TOKEN
 
   if [ -z "${SUPPORT_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current support token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current support token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/support/request/delete-stage-permissions"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/support/request/delete-stage-permissions"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\", \"user_id\": ${USER}, \"permissions_to_delete\": [\"${PERMISSION}\"]}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/support-delete-stage-permissions_${TENANT}_${PROJECT}_${STAGE}_${DEVELOPER_USER}_${PERMISSION}.json"
 
@@ -1604,13 +1607,13 @@ handler_handler_support_deleteStagePermission() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
   DELETED_PERMISSION=$(cat ${RESPONSE_FILE} | jq -c -r .deleted_permissions)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deleted tenant stage permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Deleted tenant stage permissions, DELETED_PERMISSION=${DELETED_PERMISSION}"
 }
 
 # DEVELOPER
@@ -1622,19 +1625,19 @@ handler_developer_printCurrent() {
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_USER}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer was not found" >&2
     exit 1
   fi
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current developer was found, DEVELOPER_USER=${DEVELOPER_USER}, (without token)"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Current developer was found, DEVELOPER_USER=${DEVELOPER_USER}, (without token)"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Current developer was found, DEVELOPER_USER=${DEVELOPER_USER}, (token exists)"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Current developer was found, DEVELOPER_USER=${DEVELOPER_USER}, (token exists)"
   fi
 }
 
 handler_developer_createToken() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   DEVELOPER_USER=$1
   DEVELOPER_PASSWORD=$2
@@ -1644,7 +1647,7 @@ handler_developer_createToken() {
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-token"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-token"
   REQUEST="{\"user_id\": \"${DEVELOPER_USER}\", \"password\": \"${DEVELOPER_PASSWORD}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-token_${DEVELOPER_USER}.json"
 
@@ -1662,7 +1665,7 @@ handler_developer_createToken() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1675,11 +1678,11 @@ handler_developer_createToken() {
   echo "export OMGSERVERSCTL_DEVELOPER_USER=$DEVELOPER_USER" >> ${OMGSERVERSCTL_DIRECTORY}/environment
   echo "export OMGSERVERSCTL_DEVELOPER_TOKEN=$RAW_TOKEN" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Developer token was created" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Developer token was created" >&2
 }
 
 handler_developer_getTenantDetails() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
 
@@ -1688,16 +1691,16 @@ handler_developer_getTenantDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-tenant-details"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/get-tenant-details"
   REQUEST="{\"tenant\": \"${TENANT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-tenant-details_${TENANT}.json"
 
@@ -1716,7 +1719,7 @@ handler_developer_getTenantDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1725,7 +1728,7 @@ handler_developer_getTenantDetails() {
 }
 
 handler_developer_createProject() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
 
@@ -1734,16 +1737,16 @@ handler_developer_createProject() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-project"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-project"
   REQUEST="{\"tenant\": \"${TENANT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project_${TENANT}.json"
 
@@ -1762,7 +1765,7 @@ handler_developer_createProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1781,11 +1784,11 @@ handler_developer_createProject() {
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project was created, PROJECT=\"${PROJECT}\", STAGE=\"${STAGE}\""
 }
 
 handler_developer_createProjectAlias() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT_ID=$2
@@ -1796,18 +1799,18 @@ handler_developer_createProjectAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project id, PROJECT_ID=\"${PROJECT_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-project-alias"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-project-alias"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project_id\": ${PROJECT_ID}, \"alias\": \"${ALIAS}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-project-alias_${TENANT}_${PROJECT_ID}_${ALIAS}.json"
 
@@ -1826,16 +1829,16 @@ handler_developer_createProjectAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project alias was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project alias was created"
 }
 
 handler_developer_getProjectDetails() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1845,17 +1848,17 @@ handler_developer_getProjectDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-project-details"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/get-project-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-project-details_${TENANT}_${PROJECT}.json"
 
@@ -1874,7 +1877,7 @@ handler_developer_getProjectDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1883,7 +1886,7 @@ handler_developer_getProjectDetails() {
 }
 
 handler_developer_deleteProject() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1893,17 +1896,17 @@ handler_developer_deleteProject() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/delete-project"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/delete-project"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-project_${TENANT}_${PROJECT}.json"
 
@@ -1922,7 +1925,7 @@ handler_developer_deleteProject() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1935,14 +1938,14 @@ handler_developer_deleteProject() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project was deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Project was not deleted, TENANT=${TENANT}, PROJECT=${PROJECT}"
   fi
 }
 
 handler_developer_createStage() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -1952,17 +1955,17 @@ handler_developer_createStage() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-stage"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-stage"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-stage_${TENANT}_${PROJECT}.json"
 
@@ -1981,7 +1984,7 @@ handler_developer_createStage() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -1993,11 +1996,11 @@ handler_developer_createStage() {
   fi
   echo "export OMGSERVERSCTL_STAGE=$STAGE" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was created, STAGE=\"${STAGE}\""
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage was created, STAGE=\"${STAGE}\""
 }
 
 handler_developer_createStageAlias() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   STAGE_ID=$2
@@ -2008,18 +2011,18 @@ handler_developer_createStageAlias() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"$TENANT\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using stage id, STAGE_ID=\"${STAGE_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using alias, ALIAS=\"${ALIAS}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-stage-alias"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-stage-alias"
   REQUEST="{\"tenant\": \"${TENANT}\", \"stage_id\": \"${STAGE_ID}\", \"alias\": \"${ALIAS}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-stage_${TENANT}_${STAGE_ID}_${ALIAS}.json"
 
@@ -2038,16 +2041,16 @@ handler_developer_createStageAlias() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage alias was created"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage alias was created"
 }
 
 handler_developer_getStageDetails() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -2058,17 +2061,17 @@ handler_developer_getStageDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-stage-details"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/get-stage-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-stage-details_${TENANT}_${PROJECT}_${STAGE}.json"
 
@@ -2087,7 +2090,7 @@ handler_developer_getStageDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2096,7 +2099,7 @@ handler_developer_getStageDetails() {
 }
 
 handler_developer_deleteStage() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -2107,17 +2110,17 @@ handler_developer_deleteStage() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/delete-stage"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/delete-stage"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-stage_${TENANT}_${PROJECT}_${STAGE}.json"
 
@@ -2136,7 +2139,7 @@ handler_developer_deleteStage() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2149,14 +2152,14 @@ handler_developer_deleteStage() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was deleted, TENANT=${TENANT}, STAGE=${STAGE}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage was deleted, TENANT=${TENANT}, STAGE=${STAGE}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Stage was not deleted, TENANT=${TENANT}, STAGE=${STAGE}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Stage was not deleted, TENANT=${TENANT}, STAGE=${STAGE}"
   fi
 }
 
 handler_developer_createVersion() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -2167,12 +2170,12 @@ handler_developer_createVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using config path, CONFIG_PATH=\"${CONFIG_PATH}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using config path, CONFIG_PATH=\"${CONFIG_PATH}\"" >&2
 
   if [ ! -f ${CONFIG_PATH} ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Config file was not found, CONFIG_PATH=\"${CONFIG_PATH}\"" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Config file was not found, CONFIG_PATH=\"${CONFIG_PATH}\"" >&2
     exit 1
   fi
 
@@ -2186,11 +2189,11 @@ handler_developer_createVersion() {
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-version"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-version"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"config\": ${CONFIG}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-create-version_${TENANT}_${PROJECT}.json"
 
@@ -2209,7 +2212,7 @@ handler_developer_createVersion() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2221,11 +2224,11 @@ handler_developer_createVersion() {
   fi
   echo "export OMGSERVERSCTL_VERSION=${VERSION}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was created, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Version was created, VERSION=\"${VERSION}\"" >&2
 }
 
 handler_developer_uploadFilesArchive() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   VERSION=$2
@@ -2236,19 +2239,19 @@ handler_developer_uploadFilesArchive() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using files directory path, FILES_DIRECTORY_PATH=\"${FILES_DIRECTORY_PATH}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using version, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using files directory path, FILES_DIRECTORY_PATH=\"${FILES_DIRECTORY_PATH}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
   ARCHIVE_PATH=$(eval echo ${OMGSERVERSCTL_DIRECTORY}/versions/version_${TENANT}_${VERSION}.zip)
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using archive path, ARCHIVE_PATH=\"${ARCHIVE_PATH}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using archive path, ARCHIVE_PATH=\"${ARCHIVE_PATH}\"" >&2
 
   pushd ${FILES_DIRECTORY_PATH}
 
@@ -2256,7 +2259,7 @@ handler_developer_uploadFilesArchive() {
 
   popd >> /dev/null
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/upload-files-archive"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/upload-files-archive"
 
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMGSERVERSCTL_DIRECTORY}/logs
@@ -2275,7 +2278,7 @@ handler_developer_uploadFilesArchive() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2287,11 +2290,11 @@ handler_developer_uploadFilesArchive() {
   fi
   echo "export OMGSERVERSCTL_FILES_ARCHIVE=${FILES_ARCHIVE}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Files archive was uploaded, FILES_ARCHIVE=${FILES_ARCHIVE}"
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Files archive was uploaded, FILES_ARCHIVE=${FILES_ARCHIVE}"
 }
 
 handler_developer_getVersionDetails() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   VERSION=$2
@@ -2301,17 +2304,17 @@ handler_developer_getVersionDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using version, VERSION=\"${VERSION}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-version-details"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/get-version-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"version_id\": ${VERSION}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-version-details_${TENANT}_${VERSION}.json"
 
@@ -2330,7 +2333,7 @@ handler_developer_getVersionDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2339,7 +2342,7 @@ handler_developer_getVersionDetails() {
 }
 
 handler_developer_deleteVersion() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   VERSION=$2
@@ -2349,17 +2352,17 @@ handler_developer_deleteVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using version, VERSION=\"${VERSION}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/delete-version"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/delete-version"
   REQUEST="{\"tenant\": \"${TENANT}\", \"id\": \"${VERSION}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-tenant-version_${TENANT}_${VERSION}.json"
 
@@ -2378,7 +2381,7 @@ handler_developer_deleteVersion() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2391,14 +2394,14 @@ handler_developer_deleteVersion() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was deleted, TENANT=${TENANT}, VERSION=${VERSION}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Version was deleted, TENANT=${TENANT}, VERSION=${VERSION}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Version was not deleted, TENANT=${TENANT}, VERSION=${VERSION}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Version was not deleted, TENANT=${TENANT}, VERSION=${VERSION}"
   fi
 }
 
 handler_developer_deployVersion() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   PROJECT=$2
@@ -2410,19 +2413,19 @@ handler_developer_deployVersion() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using version, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using project, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using stage, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using version, VERSION=\"${VERSION}\"" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/deploy-version"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/deploy-version"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\", \"version_id\": ${VERSION}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-deploy-version_${TENANT}_${PROJECT}_${STAGE}_${VERSION}.json"
 
@@ -2441,7 +2444,7 @@ handler_developer_deployVersion() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2453,11 +2456,11 @@ handler_developer_deployVersion() {
   fi
   echo "export OMGSERVERSCTL_DEPLOYMENT=${DEPLOYMENT}" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\"" >&2
 }
 
 handler_developer_getDeploymentDetails() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   DEPLOYMENT=$2
@@ -2467,17 +2470,17 @@ handler_developer_getDeploymentDetails() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}" >&2
 
   DEVELOPER_TOKEN=$OMGSERVERSCTL_DEVELOPER_TOKEN
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/get-deployment-details"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/get-deployment-details"
   REQUEST="{\"tenant\": \"${TENANT}\", \"deployment_id\": ${DEPLOYMENT}}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-get-deployment-details_${TENANT}_${DEPLOYMENT}.json"
 
@@ -2496,7 +2499,7 @@ handler_developer_getDeploymentDetails() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2505,7 +2508,7 @@ handler_developer_getDeploymentDetails() {
 }
 
 handler_developer_deleteDeployment() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   DEPLOYMENT=$2
@@ -2515,17 +2518,17 @@ handler_developer_deleteDeployment() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using tenant, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using deployment, DEPLOYMENT=${DEPLOYMENT}" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/delete-deployment"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/delete-deployment"
   REQUEST="{\"tenant\": \"${TENANT}\", \"id\": \"${DEPLOYMENT}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-deployment_${TENANT}_${DEPLOYMENT}.json"
 
@@ -2544,7 +2547,7 @@ handler_developer_deleteDeployment() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2557,14 +2560,14 @@ handler_developer_deleteDeployment() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Deployment was deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Deployment was not deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Deployment was not deleted, TENANT=${TENANT}, DEPLOYMENT=${DEPLOYMENT}"
   fi
 }
 
 handler_developer_createLobbyRequest() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   DEPLOYMENT=$2
@@ -2575,7 +2578,7 @@ handler_developer_createLobbyRequest() {
   fi
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-lobby-request"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-lobby-request"
   REQUEST="{\"tenant\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/create-lobby-request_${TENANT}_${DEPLOYMENT}.json"
 
@@ -2594,7 +2597,7 @@ handler_developer_createLobbyRequest() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2603,7 +2606,7 @@ handler_developer_createLobbyRequest() {
 }
 
 handler_developer_deleteLobby() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   LOBBY_ID=$1
 
@@ -2612,16 +2615,16 @@ handler_developer_deleteLobby() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using lobby, LOBBY_ID=\"${LOBBY_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using lobby, LOBBY_ID=\"${LOBBY_ID}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/delete-lobby"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/delete-lobby"
   REQUEST="{\"lobby_id\": \"${LOBBY_ID}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-lobby_${LOBBY_ID}.json"
 
@@ -2640,7 +2643,7 @@ handler_developer_deleteLobby() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2653,14 +2656,14 @@ handler_developer_deleteLobby() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Lobby was deleted, LOBBY_ID=${LOBBY_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Lobby was deleted, LOBBY_ID=${LOBBY_ID}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Lobby was not deleted, LOBBY_ID=${LOBBY_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Lobby was not deleted, LOBBY_ID=${LOBBY_ID}"
   fi
 }
 
 handler_developer_createMatchmakerRequest() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   TENANT=$1
   DEPLOYMENT=$2
@@ -2671,7 +2674,7 @@ handler_developer_createMatchmakerRequest() {
   fi
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/create-matchmaker-request"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-matchmaker-request"
   REQUEST="{\"tenant\": \"${TENANT}\", \"deployment_id\": \"${DEPLOYMENT}\"}"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/create-matchmaker-request_${TENANT}_${DEPLOYMENT}.json"
 
@@ -2689,7 +2692,7 @@ handler_developer_createMatchmakerRequest() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2698,7 +2701,7 @@ handler_developer_createMatchmakerRequest() {
 }
 
 handler_developer_deleteMatchmaker() {
-  internal_ensureEnvironment
+  internal_ensureInstallationUrl
 
   MATCHMAKER_ID=$1
 
@@ -2707,16 +2710,16 @@ handler_developer_deleteMatchmaker() {
     exit 1
   fi
 
-  echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Using matchmaker, MATCHMAKER_ID=\"${MATCHMAKER_ID}\"" >&2
+  echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Using matchmaker, MATCHMAKER_ID=\"${MATCHMAKER_ID}\"" >&2
 
   DEVELOPER_TOKEN=${OMGSERVERSCTL_DEVELOPER_TOKEN}
 
   if [ -z "${DEVELOPER_TOKEN}" ]; then
-    echo "$(date) $(echo ${OMGSERVERSCTL_ENVIRONMENT_NAME}) ERROR: Current developer token was not found" >&2
+    echo "$(date) $(echo ${OMGSERVERSCTL_INSTALLATION_NAME}) ERROR: Current developer token was not found" >&2
     exit 1
   fi
 
-  ENDPOINT="${OMGSERVERSCTL_SERVICE_URL}/service/v1/entrypoint/developer/request/delete-matchmaker"
+  ENDPOINT="${OMGSERVERSCTL_INSTALLATION_URL}/service/v1/entrypoint/developer/request/delete-matchmaker"
   REQUEST="{\"matchmaker_id\": \"${MATCHMAKER_ID}\" }"
   RESPONSE_FILE="${OMGSERVERSCTL_DIRECTORY}/temp/developer-delete-matchmaker_${MATCHMAKER_ID}.json"
 
@@ -2735,7 +2738,7 @@ handler_developer_deleteMatchmaker() {
   echo >> ${OMGSERVERSCTL_DIRECTORY}/logs
 
   if [ "${HTTP_CODE}" -ge 400 ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
     tail -2 ${OMGSERVERSCTL_DIRECTORY}/logs >&2
     exit 1
   fi
@@ -2748,9 +2751,9 @@ handler_developer_deleteMatchmaker() {
   echo "export OMGSERVERSCTL_DELETED=$DELETED" >> ${OMGSERVERSCTL_DIRECTORY}/environment
 
   if [ "${DELETED}" == "true" ]; then
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Matchmaker was deleted, MATCHMAKER_ID=${MATCHMAKER_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Matchmaker was deleted, MATCHMAKER_ID=${MATCHMAKER_ID}"
   else
-    echo "$(date) $(echo $OMGSERVERSCTL_ENVIRONMENT_NAME) Matchmaker was not deleted, MATCHMAKER_ID=${MATCHMAKER_ID}"
+    echo "$(date) $(echo $OMGSERVERSCTL_INSTALLATION_NAME) Matchmaker was not deleted, MATCHMAKER_ID=${MATCHMAKER_ID}"
   fi
 }
 
@@ -2796,14 +2799,25 @@ else
         handler_environment_printCurrent $@
       elif [ "${ARG}" = "printVariable" ]; then
         handler_environment_printVariable $@
-      elif [ "${ARG}" = "useEnvironment" ]; then
-        handler_environment_useEnvironment $@
-      elif [ "${ARG}" = "useDemoServer" ]; then
-        handler_environment_useDemoServer $@
-      elif [ "${ARG}" = "useLocalServer" ]; then
-        handler_environment_useLocalServer $@
       else
         help "environment"
+      fi
+    fi
+  elif [ "${ARG}" = "installation" ]; then
+    ARG=$1
+    if [ -z "${ARG}" ]; then
+      help "installation"
+      exit 1
+    else
+      shift
+      if [ "${ARG}" = "useCustomUrl" ]; then
+        handler_installation_useCustomUrl $@
+      elif [ "${ARG}" = "useDemoServer" ]; then
+        handler_installation_useDemoServer $@
+      elif [ "${ARG}" = "useLocalServer" ]; then
+        handler_installation_useLocalServer $@
+      else
+        help "installation"
       fi
     fi
   elif [ "${ARG}" = "admin" ]; then

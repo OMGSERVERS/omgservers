@@ -5,6 +5,9 @@ RUN apk update \
 
 WORKDIR /opt/omgserversctl
 
+ARG OMGSERVERS_VERSION
+ENV OMGSERVERS_VERSION=${OMGSERVERS_VERSION}
+
 COPY src/main/docker/omgserversctl.sh .
 RUN chmod u+x omgserversctl.sh
 ENTRYPOINT ["./omgserversctl.sh"]
