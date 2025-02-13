@@ -1,4 +1,4 @@
-local omgserver = require("omgservers.omgserver.omgserver")
+local omgruntime = require("omgservers.omgruntime.omgruntime")
 
 local GAME_MODE = "test"
 
@@ -8,26 +8,26 @@ local function handle_started(self, runtime_qualifier)
 end
 
 local function handle_command(self, command_qualifier, command_body)
-	if command_qualifier == omgserver.constants.INIT_RUNTIME then
+	if command_qualifier == omgruntime.constants.INIT_RUNTIME then
 		local runtime_config = command_body.runtime_config
 		print("Runtime config was received")
 		pprint(runtime_config)
 	end
 
-	if self.runtime_qualifier == omgserver.constants.LOBBY then
-		if command_qualifier == omgserver.constants.ADD_CLIENT then
+	if self.runtime_qualifier == omgruntime.constants.LOBBY then
+		if command_qualifier == omgruntime.constants.ADD_CLIENT then
 			local client_id = command_body.client_id
 			-- Request matchmaking
-			omgserver:request_matchmaking(client_id, GAME_MODE)
+			omgruntime:request_matchmaking(client_id, GAME_MODE)
 		end
 		
-	elseif self.runtime_qualifier == omgserver.constants.MATCH then
-		if command_qualifier == omgserver.constants.ADD_MATCH_CLIENT then
+	elseif self.runtime_qualifier == omgruntime.constants.MATCH then
+		if command_qualifier == omgruntime.constants.ADD_MATCH_CLIENT then
 			local client_id = command_body.client_id
 			
 			if self.supervisor_id then
 				-- makes other clients to use websockets
-				omgserver:upgrade_connection(client_id)
+				omgruntime:upgrade_connection(client_id)
 
 				print(socket.gettime() .. " [GAMESERVER] Client upgrade was requested, client_id=" .. client_id)
 			else
@@ -46,12 +46,12 @@ local function handle_message(self, client_id, message)
 	local decoded_message = json.decode(message)
 	
 	-- Resend to supervisor by using service commands
-	omgserver:respond_client(self.supervisor_id, json.encode({
+	omgruntime:respond_client(self.supervisor_id, json.encode({
 		text = decoded_message.text,
 	}))
 
 	if decoded_message.text == "hello_message" then
-		omgserver:respond_text_message(client_id, json.encode({
+		omgruntime:respond_text_message(client_id, json.encode({
 			text = "server_message",
 		}))
 	end
@@ -62,14 +62,14 @@ local function handle_server_event(self, event)
 	
 	local event_qualifier = event.qualifier
 	local event_body = event.body
-	if event_qualifier == omgserver.constants.SERVER_STARTED then
+	if event_qualifier == omgruntime.constants.SERVER_STARTED then
 		local runtime_qualifier = event_body.runtime_qualifier
 		handle_started(self, runtime_qualifier)
-	elseif event_qualifier == omgserver.constants.COMMAND_RECEIVED then
+	elseif event_qualifier == omgruntime.constants.COMMAND_RECEIVED then
 		local command_qualifier = event_body.qualifier
 		local command_body = event_body.body
 		handle_command(self, command_qualifier, command_body)
-	elseif event_qualifier == omgserver.constants.MESSAGE_RECEIVED then
+	elseif event_qualifier == omgruntime.constants.MESSAGE_RECEIVED then
 		local client_id = event_body.client_id
 		local message = event_body.message
 		handle_message(self, client_id, message)
@@ -84,10 +84,10 @@ function init(self)
 		debug_logging = true,
 		trace_logging = true,
 	}
-	omgserver:init(options)
-	omgserver:start()
+	omgruntime:init(options)
+	omgruntime:start()
 end
 
 function update(self, dt)
-	omgserver:update(dt)
+	omgruntime:update(dt)
 end

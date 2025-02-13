@@ -14,5 +14,5 @@ input_method = HiddenInputField
 [project]
 title = defold-test-client
 dependencies#0 = https://github.com/defold/extension-websocket/archive/refs/tags/4.0.0.zip
-dependencies#1 = https://github.com/OMGSERVERS/omgdefold/archive/refs/heads/main.zip
+dependencies#1 = https://github.com/OMGSERVERS/omgdefoldsdk/archive/refs/heads/main.zip
 
