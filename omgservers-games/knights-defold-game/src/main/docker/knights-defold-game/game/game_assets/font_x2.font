@@ -1,4 +1,0 @@
-font: "/game/game_assets/nokiafc22.ttf"
-material: "/builtins/fonts/font.material"
-size: 16
-characters: " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"

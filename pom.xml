@@ -36,7 +36,6 @@
         <module>omgservers-service</module>
         <module>omgservers-sidecontainers</module>
         <module>omgservers-tests</module>
-        <module>omgservers-games</module>
         <module>omgservers-tools</module>
     </modules>
 

@@ -1,9 +1,0 @@
-local core_manager = require("game.core_manager.core_manager")
-
-local CORE_MANAGER = "core_manager#core_manager"
-
-function init(self)
-	print(socket.gettime() .. " [GAME_ENTRYPOINT] Game started")
-	pprint(sys.get_engine_info())
-	core_manager:game_started(CORE_MANAGER)
-end
