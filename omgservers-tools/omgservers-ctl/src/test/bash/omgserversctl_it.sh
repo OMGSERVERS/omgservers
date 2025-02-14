@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-SCRIPT_PATH="src/main/docker/omgserversctl.sh"
+SCRIPT_PATH="src/main/docker/scripts/omgserversctl.sh"
 SCRIPT_NAME=$(basename $SCRIPT_PATH)
 
 run_integration_tests() {
