@@ -109,32 +109,35 @@ help() {
     internal_print_command " environment printVariable <variable>" "Print the value of a specific variable."
   fi
   # Localtesting
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting up" ]; then
-    internal_print_command " localtesting up" "Start the local environment."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting runServer" ]; then
+    internal_print_command " localtesting runServer" "Start the server in a Docker container."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ps" ]; then
-    internal_print_command " localtesting ps" "List running containers."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting stopServer" ]; then
+    internal_print_command " localtesting stopServer" "Stop the running server container."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting stats" ]; then
-    internal_print_command " localtesting stats" "Show container statistics."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting resetServer" ]; then
+    internal_print_command " localtesting resetServer" "Reset the server in a Docker container."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting logs" ]; then
-    internal_print_command " localtesting logs" "Display containers logs."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting initProject" ]; then
+    internal_print_command " localtesting initProject" "Initialize a new server project and developer account."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting down" ]; then
-    internal_print_command " localtesting down" "Stop the local environment."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting deployProject" ]; then
+    internal_print_command " localtesting deployProject" "Deploy a new project version locally."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting reset" ]; then
-    internal_print_command " localtesting reset" "Reset the local environment."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting cleanupProject" ]; then
+    internal_print_command " localtesting cleanupProject" "Remove the server project and related resources."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting init" ]; then
-    internal_print_command " localtesting init" "Initialize a project and developer account."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewContainers" ]; then
+    internal_print_command " localtesting viewContainers" "List all active Docker containers."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting cleanup" ]; then
-    internal_print_command " localtesting cleanup" "Clean up the local environment."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewDockerStats" ]; then
+    internal_print_command " localtesting viewDockerStats" "Show real-time resource usage for Docker containers."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting install" ]; then
-    internal_print_command " localtesting install" "Install a new version locally."
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewDockerLogs" ]; then
+    internal_print_command " localtesting viewDockerLogs [options]" "Display logs from Docker containers."
+  fi
+  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewLatestLogs" ]; then
+    internal_print_command " localtesting viewLatestLogs [options]" "Display the latest container logs."
   fi
   # Installation
   if [ -z "$1" -o "$1" = "installation" -o "$1" = "installation useCustomServer" ]; then
@@ -520,48 +523,26 @@ handler_environment_printVariable() {
 
 # Localtesting
 
-handler_localtesting_up() {
+handler_localtesting_runServer() {
   internal_ensureEnvironment
 
   docker run --privileged --rm --name "${OMG_LOCALTESTING_CONTAINER}" --tmpfs /tmp -p 8080:8080 -d "omgservers/dind:${OMGSERVERS_VERSION}"
 }
 
-handler_localtesting_ps() {
-  internal_ensureEnvironment
-
-  docker exec "${OMG_LOCALTESTING_CONTAINER}" docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Command}}" $@
-}
-
-handler_localtesting_stats() {
-  internal_ensureEnvironment
-
-  docker exec "${OMG_LOCALTESTING_CONTAINER}" docker stats
-}
-
-handler_localtesting_logs() {
-  internal_ensureEnvironment
-
-  if [ -z "$1" ] || [ "$1" = "-f" ]; then
-    docker logs "${OMG_LOCALTESTING_CONTAINER}" $@
-  else
-    docker exec "${OMG_LOCALTESTING_CONTAINER}" docker logs $@
-  fi
-}
-
-handler_localtesting_down() {
+handler_localtesting_stopServer() {
   internal_ensureEnvironment
 
   docker kill "${OMG_LOCALTESTING_CONTAINER}"
 }
 
-handler_localtesting_reset() {
+handler_localtesting_resetServer() {
   internal_ensureEnvironment
 
-  handler_localtesting_down || true
-  handler_localtesting_up
+  handler_localtesting_stopServer || true
+  handler_localtesting_runServer
 }
 
-handler_localtesting_init() {
+handler_localtesting_initProject() {
   handler_installation_useLocalServer
   internal_ensureEnvironment
 
@@ -595,21 +576,7 @@ handler_localtesting_init() {
   echo "$(date) [CTL/localtestingInit] (${OMG_INSTALLATION_NAME:-unknown}) Localtesting project and developer account were initialized, DEVELOPER_USER=\"${DEVELOPER_USER}\"" >&2
 }
 
-handler_localtesting_cleanup() {
-  handler_installation_useLocalServer
-  internal_ensureEnvironment
-
-  echo "$(date) [CTL/localtestingCleanup] (${OMG_INSTALLATION_NAME:-unknown}) Using, LOCALTESTING_TENANT=\"${OMG_LOCALTESTING_TENANT}\"" >&2
-
-  TENANT_ALIAS=${OMG_LOCALTESTING_TENANT}
-
-  handler_support_createToken support support
-  handler_support_deleteTenant ${TENANT_ALIAS}
-
-  echo "$(date) [CTL/localtestingCleanup] (${OMG_INSTALLATION_NAME:-unknown}) Localtesting project was deleted" >&2
-}
-
-handler_localtesting_install() {
+handler_localtesting_deployProject() {
   handler_installation_useLocalServer
   internal_ensureEnvironment
 
@@ -630,6 +597,48 @@ handler_localtesting_install() {
   fi
 
   handler_installation_deployVersion ${TENANT_ALIAS} ${PROJECT_ALIAS} ${STAGE_ALIAS} "${DEVELOPER_USER}" "${DEVELOPER_PASSWORD}"
+}
+
+handler_localtesting_cleanupProject() {
+  handler_installation_useLocalServer
+  internal_ensureEnvironment
+
+  echo "$(date) [CTL/localtestingCleanup] (${OMG_INSTALLATION_NAME:-unknown}) Using, LOCALTESTING_TENANT=\"${OMG_LOCALTESTING_TENANT}\"" >&2
+
+  TENANT_ALIAS=${OMG_LOCALTESTING_TENANT}
+
+  handler_support_createToken support support
+  handler_support_deleteTenant ${TENANT_ALIAS}
+
+  echo "$(date) [CTL/localtestingCleanup] (${OMG_INSTALLATION_NAME:-unknown}) Localtesting project was deleted" >&2
+}
+
+handler_localtesting_viewContainers() {
+  internal_ensureEnvironment
+
+  docker exec "${OMG_LOCALTESTING_CONTAINER}" docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Command}}" $@
+}
+
+handler_localtesting_viewDockerStats() {
+  internal_ensureEnvironment
+
+  docker exec "${OMG_LOCALTESTING_CONTAINER}" docker stats
+}
+
+handler_localtesting_viewDockerLogs() {
+  internal_ensureEnvironment
+
+  if [ -z "$1" ] || [ "$1" = "-f" ]; then
+    docker logs "${OMG_LOCALTESTING_CONTAINER}" $@
+  else
+    docker exec "${OMG_LOCALTESTING_CONTAINER}" docker logs $@
+  fi
+}
+
+handler_localtesting_viewLatestLogs() {
+  internal_ensureEnvironment
+
+  docker exec "${OMG_LOCALTESTING_CONTAINER}" sh -c "docker logs \$(docker ps -q -l) $@"
 }
 
 # Installation
@@ -3094,24 +3103,26 @@ else
       exit 1
     else
       shift
-      if [ "${ARG}" = "up" ]; then
-        handler_localtesting_up $@
-      elif [ "${ARG}" = "ps" ]; then
-        handler_localtesting_ps $@
-      elif [ "${ARG}" = "stats" ]; then
-        handler_localtesting_stats $@
-      elif [ "${ARG}" = "logs" ]; then
-        handler_localtesting_logs $@
-      elif [ "${ARG}" = "down" ]; then
-        handler_localtesting_down $@
-      elif [ "${ARG}" = "reset" ]; then
-        handler_localtesting_reset $@
-      elif [ "${ARG}" = "init" ]; then
-        handler_localtesting_init $@
-      elif [ "${ARG}" = "cleanup" ]; then
-        handler_localtesting_cleanup $@
-      elif [ "${ARG}" = "install" ]; then
-        handler_localtesting_install $@
+      if [ "${ARG}" = "runServer" ]; then
+        handler_localtesting_runServer $@
+      elif [ "${ARG}" = "stopServer" ]; then
+        handler_localtesting_stopServer $@
+      elif [ "${ARG}" = "resetServer" ]; then
+        handler_localtesting_resetServer $@
+      elif [ "${ARG}" = "initProject" ]; then
+        handler_localtesting_initProject $@
+      elif [ "${ARG}" = "deployProject" ]; then
+        handler_localtesting_deployProject $@
+      elif [ "${ARG}" = "cleanupProject" ]; then
+        handler_localtesting_cleanupProject $@
+      elif [ "${ARG}" = "viewContainers" ]; then
+        handler_localtesting_viewContainers $@
+      elif [ "${ARG}" = "viewDockerStats" ]; then
+        handler_localtesting_viewDockerStats $@
+      elif [ "${ARG}" = "viewDockerLogs" ]; then
+        handler_localtesting_viewDockerLogs $@
+      elif [ "${ARG}" = "viewLatestLogs" ]; then
+        handler_localtesting_viewLatestLogs $@
       else
         help "localtesting"
       fi
