@@ -2,6 +2,7 @@
 set -e
 
 # Environment Variables:
+# OMG_FORMATTING is "true" by default
 # OMG_LOCALTESTING_CONTAINER is "omgservers" by default
 # OMG_CONTEXT_DIRECTORY is ".omgserversctl" by default
 # OMG_DOCKER_IMAGE is "omgservers/localtesting:latest" by default
@@ -9,6 +10,7 @@ set -e
 # OMG_LOCALTESTING_PROJECT is "localtesting" by default
 # OMG_LOCALTESTING_STAGE is "default" by default
 
+OMG_FORMATTING=${OMG_FORMATTING:-"true"}
 OMG_LOCALTESTING_CONTAINER=${OMG_LOCALTESTING_CONTAINER:-"omgservers"}
 OMG_CONTEXT_DIRECTORY=${OMG_CONTEXT_DIRECTORY:-".omgserversctl"}
 OMG_DOCKER_IMAGE=${OMG_DOCKER_IMAGE:-"omgservers/localtesting:latest"}
@@ -78,7 +80,7 @@ internal_print_command() {
 }
 
 internal_format_file() {
-  if [ -n "${FORMATTING}" ]; then
+  if [ "${OMG_FORMATTING}" = "true" ]; then
     cat $1 | jq .
   else
     cat $1
