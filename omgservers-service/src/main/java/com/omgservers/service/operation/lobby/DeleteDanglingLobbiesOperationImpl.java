@@ -11,6 +11,7 @@ import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsRequest;
 import com.omgservers.schema.module.runtime.ViewRuntimeAssignmentsResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.lobby.LobbyShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.tenant.TenantShard;
@@ -20,6 +21,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 @Slf4j
@@ -30,6 +33,8 @@ class DeleteDanglingLobbiesOperationImpl implements DeleteDanglingLobbiesOperati
     final RuntimeShard runtimeShard;
     final TenantShard tenantShard;
     final LobbyShard lobbyShard;
+
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public Uni<Void> execute(final Long tenantId,
@@ -57,12 +62,23 @@ class DeleteDanglingLobbiesOperationImpl implements DeleteDanglingLobbiesOperati
                     return viewRuntimeAssignment(runtimeId)
                             .flatMap(runtimeAssignments -> {
                                 if (runtimeAssignments.isEmpty()) {
-                                    return deleteLobby(lobbyId)
-                                            .invoke(deleted -> {
-                                                if (deleted) {
-                                                    log.info("Dangling lobby \"{}\" was deleted", lobbyId);
-                                                }
-                                            });
+                                    final var minLifetime = getServiceConfigOperation.getServiceConfig()
+                                            .runtimes().lobby().minLifetime();
+                                    final var lifetime = Duration.between(lobby.getCreated(), Instant.now())
+                                            .toSeconds();
+
+                                    if (lifetime > minLifetime) {
+                                        return deleteLobby(lobbyId)
+                                                .invoke(deleted -> {
+                                                    if (deleted) {
+                                                        log.info("Dangling lobby \"{}\" was deleted, " +
+                                                                        "lifetime was {} seconds",
+                                                                lobbyId, lifetime);
+                                                    }
+                                                });
+                                    } else {
+                                        return Uni.createFrom().voidItem();
+                                    }
                                 } else {
                                     return Uni.createFrom().voidItem();
                                 }

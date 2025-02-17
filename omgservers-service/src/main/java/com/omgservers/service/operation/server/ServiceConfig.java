@@ -95,6 +95,8 @@ public interface ServiceConfig {
     interface RuntimesConfig {
         long inactiveInterval();
 
+        RuntimesLobbyConfig lobby();
+
         String dockerNetwork();
 
         RuntimesOverridingConfig overriding();
@@ -108,6 +110,10 @@ public interface ServiceConfig {
         boolean enabled();
 
         URI uri();
+    }
+
+    interface RuntimesLobbyConfig {
+        long minLifetime();
     }
 
     interface InitializationConfig {
