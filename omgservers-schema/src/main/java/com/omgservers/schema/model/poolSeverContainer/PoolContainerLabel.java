@@ -1,8 +1,15 @@
 package com.omgservers.schema.model.poolSeverContainer;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum PoolContainerLabel {
-    OMG_TENANT,
-    OMG_PROJECT,
-    OMG_STAGE,
-    OMG_VERSION
+    TENANT("com.omgservers.tenant"),
+    PROJECT("com.omgservers.project"),
+    STAGE("com.omgservers.stage"),
+    VERSION("com.omgservers.version");
+
+    final String qualifier;
 }

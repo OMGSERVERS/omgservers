@@ -78,7 +78,8 @@ class CreateRuntimeLabelsForContainerOperationImpl implements CreateRuntimeLabel
                                 final Long tenantId) {
         return viewTenantAliasesOperation.execute(tenantId)
                 .invoke(tenantAliases -> tenantAliases.stream().max(Comparator.comparingLong(AliasModel::getId))
-                        .ifPresent(item -> labels.put(PoolContainerLabel.OMG_TENANT, item.getValue())))
+                        .ifPresentOrElse(item -> labels.put(PoolContainerLabel.TENANT, item.getValue()),
+                                () -> labels.put(PoolContainerLabel.TENANT, tenantId.toString())))
                 .replaceWithVoid();
     }
 
@@ -87,7 +88,8 @@ class CreateRuntimeLabelsForContainerOperationImpl implements CreateRuntimeLabel
                                        final Long tenantProjectId) {
         return viewTenantProjectAliasesOperation.execute(tenantId, tenantProjectId)
                 .invoke(tenantAliases -> tenantAliases.stream().max(Comparator.comparingLong(AliasModel::getId))
-                        .ifPresent(alias -> labels.put(PoolContainerLabel.OMG_PROJECT, alias.getValue())))
+                        .ifPresentOrElse(alias -> labels.put(PoolContainerLabel.PROJECT, alias.getValue()),
+                                () -> labels.put(PoolContainerLabel.PROJECT, tenantProjectId.toString())))
                 .replaceWithVoid();
     }
 
@@ -96,13 +98,14 @@ class CreateRuntimeLabelsForContainerOperationImpl implements CreateRuntimeLabel
                                      final Long tenantStageId) {
         return viewTenantStageAliasesOperation.execute(tenantId, tenantStageId)
                 .invoke(tenantAliases -> tenantAliases.stream().max(Comparator.comparingLong(AliasModel::getId))
-                        .ifPresent(alias -> labels.put(PoolContainerLabel.OMG_STAGE, alias.getValue())))
+                        .ifPresentOrElse(alias -> labels.put(PoolContainerLabel.STAGE, alias.getValue()),
+                                () -> labels.put(PoolContainerLabel.PROJECT, tenantStageId.toString())))
                 .replaceWithVoid();
     }
 
     Uni<Void> fillByVersionLabel(final Map<PoolContainerLabel, String> labels,
                                  final Long tenantVersionId) {
         return Uni.createFrom().voidItem()
-                .invoke(voidItem -> labels.put(PoolContainerLabel.OMG_VERSION, tenantVersionId.toString()));
+                .invoke(voidItem -> labels.put(PoolContainerLabel.VERSION, tenantVersionId.toString()));
     }
 }

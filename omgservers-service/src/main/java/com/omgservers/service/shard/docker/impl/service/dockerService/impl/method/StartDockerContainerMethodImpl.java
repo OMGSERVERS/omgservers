@@ -43,7 +43,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                             .toList();
                     final var labels = poolContainer.getConfig().getLabels()
                             .entrySet().stream()
-                            .collect(Collectors.toMap(entry -> entry.getKey().name(),
+                            .collect(Collectors.toMap(entry -> entry.getKey().getQualifier(),
                                     Map.Entry::getValue));
 
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
