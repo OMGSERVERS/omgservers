@@ -3,6 +3,7 @@ package com.omgservers.service.operation.runtime;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.poolSeverContainer.PoolContainerLabel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
@@ -45,7 +46,7 @@ class CreateRuntimeLabelsForContainerOperationImpl implements CreateRuntimeLabel
                     return getTenantStage(tenantId, tenantStageId)
                             .flatMap(tenantStage -> {
                                 final var tenantProjectId = tenantStage.getProjectId();
-                                return createLabels(tenantId, tenantProjectId, tenantStageId, tenantVersionId);
+                                return createLabels(tenantId, tenantProjectId, tenantStageId, tenantVersionId, runtime.getQualifier());
                             });
                 });
     }
@@ -65,12 +66,14 @@ class CreateRuntimeLabelsForContainerOperationImpl implements CreateRuntimeLabel
     Uni<Map<PoolContainerLabel, String>> createLabels(final Long tenantId,
                                                       final Long tenantProjectId,
                                                       final Long tenantStageId,
-                                                      final Long tenantVersionId) {
+                                                      final Long tenantVersionId,
+                                                      final RuntimeQualifierEnum runtimeQualifier) {
         final var labels = new HashMap<PoolContainerLabel, String>();
         return fillByTenantLabel(labels, tenantId)
                 .flatMap(voidItem -> fillByTenantProjectLabel(labels, tenantId, tenantProjectId))
                 .flatMap(voidItem -> fillByTenantStageLabel(labels, tenantId, tenantStageId))
                 .flatMap(voidItem -> fillByVersionLabel(labels, tenantVersionId))
+                .flatMap(voidItem -> fillByQualifierLabel(labels, runtimeQualifier))
                 .replaceWith(labels);
     }
 
@@ -107,5 +110,11 @@ class CreateRuntimeLabelsForContainerOperationImpl implements CreateRuntimeLabel
                                  final Long tenantVersionId) {
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> labels.put(PoolContainerLabel.VERSION, tenantVersionId.toString()));
+    }
+
+    Uni<Void> fillByQualifierLabel(final Map<PoolContainerLabel, String> labels,
+                                   final RuntimeQualifierEnum runtimeQualifier) {
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> labels.put(PoolContainerLabel.QUALIFIER, runtimeQualifier.name()));
     }
 }
