@@ -4,6 +4,7 @@ import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolContainerLabel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
@@ -34,6 +35,7 @@ import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.pool.PoolRequestModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.runtime.CreateRuntimeLabelsForContainerOperation;
 import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
@@ -52,6 +54,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -65,9 +68,11 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
     final PoolShard poolShard;
     final UserShard userShard;
 
+    final CreateRuntimeLabelsForContainerOperation createRuntimeLabelsForContainerOperation;
+
     final GenerateSecureStringOperation generateSecureStringOperation;
-    final CalculateShardOperation calculateShardOperation;
     final GetServiceConfigOperation getServiceConfigOperation;
+    final CalculateShardOperation calculateShardOperation;
 
     final PoolRequestModelFactory poolRequestModelFactory;
     final UserModelFactory userModelFactory;
@@ -100,7 +105,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                                             final var idempotencyKey = event.getId().toString();
                                             final var imageId = tenantImage.getImageId();
                                             return createUser(userId, password, idempotencyKey)
-                                                    .flatMap(user -> syncPoolRequest(runtime, password, imageId));
+                                                    .flatMap(user -> createRuntimeLabelsForContainerOperation.execute(runtime)
+                                                            .flatMap(labels -> createPoolRequest(runtime, password, imageId, labels)));
                                         });
                             });
                 })
@@ -190,17 +196,24 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
                 });
     }
 
-    Uni<Boolean> syncPoolRequest(final RuntimeModel runtime,
-                                 final String password,
-                                 final String imageId) {
+    Uni<Boolean> createPoolRequest(final RuntimeModel runtime,
+                                   final String password,
+                                   final String imageId,
+                                   final Map<PoolContainerLabel, String> labels) {
+        // TODO: using idempotencyKey ?
+
         final var poolRequestConfig = new PoolRequestConfigDto();
         poolRequestConfig.setContainerConfig(new PoolRequestConfigDto.ContainerConfig());
         poolRequestConfig.getContainerConfig().setImageId(imageId);
+
+        poolRequestConfig.getContainerConfig().setLabels(labels);
+
         // TODO: get limits from version config
         final var defaultCpuLimit = getServiceConfigOperation.getServiceConfig().runtimes().defaultCpuLimit();
         poolRequestConfig.getContainerConfig().setCpuLimitInMilliseconds(defaultCpuLimit);
         final var defaultMemoryLimit = getServiceConfigOperation.getServiceConfig().runtimes().defaultMemoryLimit();
         poolRequestConfig.getContainerConfig().setMemoryLimitInMegabytes(defaultMemoryLimit);
+
         final var environment = new HashMap<String, String>();
         environment.put("OMGSERVERS_RUNTIME_ID", runtime.getId().toString());
         environment.put("OMGSERVERS_PASSWORD", password);
@@ -212,8 +225,8 @@ public class RuntimeDeploymentRequestedEventHandlerImpl implements EventHandler 
         } else {
             serviceUri = getServiceConfigOperation.getServiceConfig().server().uri();
         }
-
         environment.put("OMGSERVERS_SERVICE_URL", serviceUri.toString());
+
         poolRequestConfig.getContainerConfig().setEnvironment(environment);
 
         return findDefaultPoolAlias()

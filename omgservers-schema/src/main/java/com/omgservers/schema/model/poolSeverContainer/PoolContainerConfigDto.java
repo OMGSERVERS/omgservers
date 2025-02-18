@@ -21,6 +21,9 @@ public class PoolContainerConfigDto {
     String imageId;
 
     @NotNull
+    Map<PoolContainerLabel, String> labels;
+
+    @NotNull
     Long cpuLimitInMilliseconds;
 
     @NotNull

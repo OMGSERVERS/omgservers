@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 @ApplicationScoped
@@ -40,6 +41,10 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                     final var environment = poolContainer.getConfig().getEnvironment().entrySet().stream()
                             .map(entry -> entry.getKey() + "=" + entry.getValue())
                             .toList();
+                    final var labels = poolContainer.getConfig().getLabels()
+                            .entrySet().stream()
+                            .collect(Collectors.toMap(entry -> entry.getKey().name(),
+                                    Map.Entry::getValue));
 
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerDaemonClient = getDockerDaemonClientOperation
@@ -112,6 +117,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                                 .withName(containerName)
                                 .withEnv(environment)
                                 .withHostConfig(hostConfig)
+                                .withLabels(labels)
                                 .exec();
 
                         log.debug("Docker container was created, " +

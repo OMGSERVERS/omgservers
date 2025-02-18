@@ -50,6 +50,7 @@ class HandlePoolRequestsOperationImpl implements HandlePoolRequestsOperation {
         final var runtimeQualifier = poolRequest.getRuntimeQualifier();
         final var config = PoolContainerConfigDto.create();
         config.setImageId(poolRequest.getConfig().getContainerConfig().getImageId());
+        config.setLabels(poolRequest.getConfig().getContainerConfig().getLabels());
         config.setCpuLimitInMilliseconds(poolRequest.getConfig()
                 .getContainerConfig().getCpuLimitInMilliseconds());
         config.setMemoryLimitInMegabytes(poolRequest.getConfig()
