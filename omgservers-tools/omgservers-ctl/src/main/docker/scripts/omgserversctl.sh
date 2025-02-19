@@ -668,7 +668,7 @@ handler_installation_useDemoServer() {
 }
 
 handler_installation_useLocalServer() {
-  handler_installation_useCustomServer localserver http://localhost:8080
+  handler_installation_useCustomServer localserver http://host.docker.internal:8080
 }
 
 handler_installation_createTenant() {
@@ -794,7 +794,7 @@ handler_installation_deployVersion() {
 
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Push docker image" >&2
 
-  REGISTRY_SERVER=$(echo ${OMG_INSTALLATION_URL} | sed 's/^https*:\/\///')
+  REGISTRY_SERVER=$(echo ${OMG_INSTALLATION_URL} | sed 's/^https*:\/\///' | sed 's/host.docker.internal/localhost/')
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, REGISTRY_SERVER=\"${REGISTRY_SERVER}\"" >&2
 
   DOCKER_IMAGE=${OMG_DOCKER_IMAGE}

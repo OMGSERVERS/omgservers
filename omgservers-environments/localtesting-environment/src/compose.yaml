@@ -1,10 +1,26 @@
 name: localtesting
 
 services:
+  gateway:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway"
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "10000:10000"
+    networks:
+      - omgservers
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./gateway_config.yaml:/etc/envoy/gateway_config.yaml:ro
+    command: "-c /etc/envoy/gateway_config.yaml"
   docker:
     image: "alpine/socat"
     container_name: "docker"
     restart: unless-stopped
+    ports:
+      - "2375:2375"
     networks:
       - omgservers
     volumes:
@@ -48,6 +64,8 @@ services:
       - "5000:5000"
     networks:
       - omgservers
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command: "/etc/docker/registry/registry_config.yaml"
   builder:
     image: "omgservers/builder:${OMGSERVERS_VERSION}"
@@ -59,8 +77,8 @@ services:
       - omgservers
     environment:
       - JENKINS_URL=http://localhost:7070
-      - JENKINS_ADMIN_ID=builder
-      - JENKINS_ADMIN_PASSWORD=builder
+      - JENKINS_ADMIN_ID=omgservers
+      - JENKINS_ADMIN_PASSWORD=omgservers
       - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
       - OMGSERVERS_BUILDER_USERNAME=builder
       - OMGSERVERS_BUILDER_USER_PASSWORD=builder
