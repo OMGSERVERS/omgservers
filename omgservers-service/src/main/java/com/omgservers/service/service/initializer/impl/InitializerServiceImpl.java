@@ -4,11 +4,8 @@ import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.initializer.InitializerService;
-import com.omgservers.service.service.initializer.impl.method.InitializeBootstrapJobMethod;
-import com.omgservers.service.service.initializer.impl.method.InitializeDatabaseSchemaMethod;
-import com.omgservers.service.service.initializer.impl.method.InitializeRelayJobMethod;
-import com.omgservers.service.service.initializer.impl.method.InitializeSchedulerJobMethod;
-import com.omgservers.service.service.initializer.impl.method.InitializeServerIndexMethod;
+import com.omgservers.service.service.initializer.impl.method.*;
+import com.omgservers.service.service.initializer.impl.method.InitializeEventHandlerJobMethod;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
@@ -24,11 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class InitializerServiceImpl implements InitializerService {
 
+    final InitializeEventHandlerJobMethod initializeEventHandlerJobMethod;
     final InitializeDatabaseSchemaMethod initializeDatabaseSchemaMethod;
     final InitializeSchedulerJobMethod initializeSchedulerJobMethod;
     final InitializeBootstrapJobMethod initializeBootstrapJobMethod;
     final InitializeServerIndexMethod initializeServerIndexMethod;
-    final InitializeRelayJobMethod initializeRelayJobMethod;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -45,7 +42,7 @@ public class InitializerServiceImpl implements InitializerService {
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> initializeDatabaseSchema())
                 .flatMap(voidItem -> initializeServerIndex())
-                .flatMap(voidItem -> initializeRelayJob())
+                .flatMap(voidItem -> initializeEventHandlerJob())
                 .flatMap(voidItem -> initializeSchedulerJob())
                 .flatMap(voidItem -> initializeBootstrapJob());
     }
@@ -70,12 +67,12 @@ public class InitializerServiceImpl implements InitializerService {
         }
     }
 
-    Uni<Void> initializeRelayJob() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().relayJob().enabled()) {
-            return initializeRelayJobMethod.execute()
-                    .invoke(voidItem -> log.info("The relay job was initialized"));
+    Uni<Void> initializeEventHandlerJob() {
+        if (getServiceConfigOperation.getServiceConfig().initialization().eventHandlerJob().enabled()) {
+            return initializeEventHandlerJobMethod.execute()
+                    .invoke(voidItem -> log.info("The event handler job was initialized"));
         } else {
-            log.info("Relay job initialization is not enabled, skipping this step.");
+            log.info("Event handler job initialization is not enabled, skipping this step.");
             return Uni.createFrom().voidItem();
         }
     }

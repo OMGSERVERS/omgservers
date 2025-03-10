@@ -70,18 +70,6 @@ services:
       - POSTGRES_DB=omgservers
     networks:
       - omgservers
-  broker1:
-    image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "broker1"
-    restart: unless-stopped
-    environment:
-      - ARTEMIS_USER=omgservers
-      - ARTEMIS_PASSWORD=omgservers
-    networks:
-      - omgservers
-    volumes:
-      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
-      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   service1:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service1"
@@ -90,7 +78,6 @@ services:
       - omgservers
     depends_on:
       - database1
-      - broker1
     volumes:
       - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
       - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
@@ -102,8 +89,6 @@ services:
       - OMGSERVERS_SERVER_SERVICE_USER_PASSWORD=service
       - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/omgservers
       - OMGSERVERS_DATABASE_PASSWORD=omgservers
-      - OMGSERVERS_BROKER_HOST=broker1
-      - OMGSERVERS_BROKER_PASSWORD=omgservers
       - OMGSERVERS_BUILDER_TOKEN=1167db115da39e5c7776c661e463fe7933
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
       - OMGSERVERS_FEATURE_FLAGS_BUILDER_ENABLED=true
@@ -155,18 +140,6 @@ services:
       - POSTGRES_DB=omgservers
     networks:
       - omgservers
-  broker2:
-    image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "broker2"
-    restart: unless-stopped
-    environment:
-      - ARTEMIS_USER=omgservers
-      - ARTEMIS_PASSWORD=omgservers
-    networks:
-      - omgservers
-    volumes:
-      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
-      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   service2:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service2"
@@ -175,7 +148,6 @@ services:
       - omgservers
     depends_on:
       - database2
-      - broker2
     volumes:
       - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
       - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
@@ -187,8 +159,6 @@ services:
       - OMGSERVERS_SERVER_SERVICE_USER_PASSWORD=service
       - OMGSERVERS_DATABASE_URL=postgresql://database2:5432/omgservers
       - OMGSERVERS_DATABASE_PASSWORD=omgservers
-      - OMGSERVERS_BROKER_HOST=broker2
-      - OMGSERVERS_BROKER_PASSWORD=omgservers
       - OMGSERVERS_BUILDER_TOKEN=1167db115da39e5c7776c661e463fe7933
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
       - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS_0_=http://gateway1:8080
@@ -239,18 +209,6 @@ services:
       - POSTGRES_DB=omgservers
     networks:
       - omgservers
-  broker3:
-    image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "broker3"
-    restart: unless-stopped
-    environment:
-      - ARTEMIS_USER=omgservers
-      - ARTEMIS_PASSWORD=omgservers
-    networks:
-      - omgservers
-    volumes:
-      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
-      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   service3:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service3"
@@ -259,7 +217,6 @@ services:
       - omgservers
     depends_on:
       - database3
-      - broker3
     volumes:
       - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
       - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
@@ -271,8 +228,6 @@ services:
       - OMGSERVERS_SERVER_SERVICE_USER_PASSWORD=service
       - OMGSERVERS_DATABASE_URL=postgresql://database3:5432/omgservers
       - OMGSERVERS_DATABASE_PASSWORD=omgservers
-      - OMGSERVERS_BROKER_HOST=broker3
-      - OMGSERVERS_BROKER_PASSWORD=omgservers
       - OMGSERVERS_BUILDER_TOKEN=1167db115da39e5c7776c661e463fe7933
       - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
       - OMGSERVERS_INITIALIZATION_SERVER_INDEX_SERVERS_0_=http://gateway1:8080

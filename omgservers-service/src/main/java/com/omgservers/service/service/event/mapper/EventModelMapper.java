@@ -26,7 +26,6 @@ public class EventModelMapper {
         event.setIdempotencyKey(row.getString("idempotency_key"));
         event.setCreated(row.getOffsetDateTime("created").toInstant());
         event.setModified(row.getOffsetDateTime("modified").toInstant());
-        event.setDelayed(row.getOffsetDateTime("delayed").toInstant());
         final var qualifier = EventQualifierEnum.valueOf(row.getString("qualifier"));
         event.setQualifier(qualifier);
         try {

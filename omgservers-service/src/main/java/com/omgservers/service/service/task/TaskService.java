@@ -1,25 +1,7 @@
 package com.omgservers.service.service.task;
 
-import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
-import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
-import com.omgservers.service.service.task.dto.ExecutePoolTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteQueueTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteQueueTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteRelayTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteRelayTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteStageTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
+import com.omgservers.service.service.task.dto.*;
+import com.omgservers.service.service.task.dto.ExecuteEventHandlerTaskRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -37,7 +19,7 @@ public interface TaskService {
 
     Uni<ExecutePoolTaskResponse> execute(@Valid ExecutePoolTaskRequest request);
 
-    Uni<ExecuteRelayTaskResponse> execute(@Valid ExecuteRelayTaskRequest request);
+    Uni<ExecuteEventHandlerTaskResponse> execute(@Valid ExecuteEventHandlerTaskRequest request);
 
     Uni<ExecuteBuildRequestTaskResponse> execute(@Valid ExecuteBuildRequestTaskRequest request);
 

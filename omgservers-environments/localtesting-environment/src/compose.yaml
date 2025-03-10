@@ -38,21 +38,6 @@ services:
       - "5432:5432"
     networks:
       - omgservers
-  broker:
-    image: "apache/activemq-artemis:2.33.0-alpine"
-    container_name: "broker"
-    restart: unless-stopped
-    environment:
-      - ARTEMIS_USER=omgservers
-      - ARTEMIS_PASSWORD=omgservers
-    ports:
-      - "5672:5672"
-      - "8161:8161"
-    networks:
-      - omgservers
-    volumes:
-      - ./broker_config.xml:/var/lib/artemis-instance/etc-override/broker.xml
-      - ./broker_log4j2.properties:/var/lib/artemis-instance/etc-override/log4j2.properties
   registry:
     image: "registry:2.8.3"
     container_name: "registry"

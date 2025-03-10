@@ -31,9 +31,6 @@ public class EventModel {
     Instant modified;
 
     @NotNull
-    Instant delayed;
-
-    @NotNull
     EventQualifierEnum qualifier;
 
     @NotNull

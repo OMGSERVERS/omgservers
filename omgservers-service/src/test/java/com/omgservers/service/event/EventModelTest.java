@@ -24,7 +24,6 @@ class EventModelTest extends BaseTestClass {
         final var idempotencyKey = "idempotency_value";
         final var created = Instant.now();
         final var modified = Instant.now();
-        final var delayed = Instant.now();
         final var qualifier = EventQualifierEnum.TENANT_CREATED;
         final var tenantId = 2000L;
         final var body = new TenantCreatedEventBodyModel(tenantId);
@@ -34,7 +33,6 @@ class EventModelTest extends BaseTestClass {
                 idempotencyKey,
                 created,
                 modified,
-                delayed,
                 qualifier,
                 body,
                 EventStatusEnum.CREATED,

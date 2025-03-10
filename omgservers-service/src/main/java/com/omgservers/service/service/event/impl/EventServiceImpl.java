@@ -4,15 +4,11 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.service.event.EventService;
-import com.omgservers.service.service.event.dto.HandleEventRequest;
-import com.omgservers.service.service.event.dto.HandleEventResponse;
-import com.omgservers.service.service.event.dto.RelayEventsRequest;
-import com.omgservers.service.service.event.dto.RelayEventsResponse;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
-import com.omgservers.service.service.event.impl.method.handleEvent.HandleEventMethod;
-import com.omgservers.service.service.event.impl.method.relayEvents.RelayEventsMethod;
-import com.omgservers.service.service.event.impl.method.syncEvent.SyncEventMethod;
+import com.omgservers.service.service.event.dto.*;
+import com.omgservers.service.service.event.dto.HandleEventsResponse;
+import com.omgservers.service.service.event.impl.method.HandleEventMethod;
+import com.omgservers.service.service.event.impl.method.HandleEventsMethod;
+import com.omgservers.service.service.event.impl.method.SyncEventMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -25,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class EventServiceImpl implements EventService {
 
+    final HandleEventsMethod handleEventsMethod;
     final HandleEventMethod handleEventMethod;
-    final RelayEventsMethod relayEventsMethod;
     final SyncEventMethod syncEventMethod;
 
     @Override
@@ -51,8 +47,8 @@ class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Uni<RelayEventsResponse> relayEvents(@Valid final RelayEventsRequest request) {
-        return relayEventsMethod.relayEvents(request);
+    public Uni<HandleEventsResponse> handleEvents(@Valid final HandleEventsRequest request) {
+        return handleEventsMethod.execute(request);
     }
 
     @Override

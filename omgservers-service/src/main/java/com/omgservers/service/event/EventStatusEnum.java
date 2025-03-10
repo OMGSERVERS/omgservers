@@ -3,22 +3,17 @@ package com.omgservers.service.event;
 public enum EventStatusEnum {
 
     /**
-     * Event was only created.
+     * The event was just created.
      */
     CREATED,
 
     /**
-     * Event was relayed from database to message queue successfully.
+     * The event was processed successfully.
      */
-    RELAYED,
+    PROCESSED,
 
     /**
-     * Event was handled by handler successfully.
+     * The event processing failed.
      */
-    HANDLED,
-
-    /**
-     * Handling of event was failed.
-     */
-    FAILED
+    FAILED,
 }

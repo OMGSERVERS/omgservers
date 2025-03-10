@@ -1,32 +1,14 @@
 package com.omgservers.service.service.task.impl;
 
 import com.omgservers.service.service.task.TaskService;
-import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteBootstrapTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskResponse;
-import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
-import com.omgservers.service.service.task.dto.ExecutePoolTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteQueueTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteQueueTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteRelayTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteRelayTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteSchedulerTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteStageTaskResponse;
-import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteTenantTaskResponse;
+import com.omgservers.service.service.task.dto.*;
+import com.omgservers.service.service.task.dto.ExecuteEventHandlerTaskRequest;
 import com.omgservers.service.service.task.impl.method.executeBootstrapTask.ExecuteBootstrapTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeBuildRequestTask.ExecuteBuildRequestTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executePoolTask.ExecutePoolTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeQueueTask.ExecuteQueueTaskMethod;
-import com.omgservers.service.service.task.impl.method.executeRelayTask.ExecuteRelayTaskMethod;
+import com.omgservers.service.service.task.impl.method.executeEventHandlerTask.ExecuteEventHandlerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRuntimeTask.ExecuteRuntimeTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeSchedulerTask.ExecuteSchedulerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeStageTask.ExecuteStageTaskMethod;
@@ -50,7 +32,7 @@ class TaskServiceImpl implements TaskService {
     final ExecuteRuntimeTaskMethod executeRuntimeTaskMethod;
     final ExecuteTenantTaskMethod executeTenantTaskMethod;
     final ExecuteStageTaskMethod executeStageTaskMethod;
-    final ExecuteRelayTaskMethod executeRelayTaskMethod;
+    final ExecuteEventHandlerTaskMethod executeEventHandlerTaskMethod;
     final ExecuteQueueTaskMethod executeQueueTaskMethod;
     final ExecutePoolTaskMethod executePoolTaskMethod;
 
@@ -85,8 +67,8 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Uni<ExecuteRelayTaskResponse> execute(@Valid final ExecuteRelayTaskRequest request) {
-        return executeRelayTaskMethod.execute(request);
+    public Uni<ExecuteEventHandlerTaskResponse> execute(@Valid final ExecuteEventHandlerTaskRequest request) {
+        return executeEventHandlerTaskMethod.execute(request);
     }
 
     @Override

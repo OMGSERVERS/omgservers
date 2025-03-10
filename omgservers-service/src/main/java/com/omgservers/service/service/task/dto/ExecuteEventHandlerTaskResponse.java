@@ -1,4 +1,4 @@
-package com.omgservers.service.service.event.dto;
+package com.omgservers.service.service.task.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandleEventResponse {
+public class ExecuteEventHandlerTaskResponse {
 
-    Boolean processed;
+    Boolean finished;
 }

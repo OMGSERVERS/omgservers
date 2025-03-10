@@ -31,11 +31,7 @@ static_resources:
                         - "*"
                       routes:
                         - match:
-                            prefix: "/service/v1/entrypoint"
-                          route:
-                            cluster: gateway
-                        - match:
-                            prefix: "/dispatcher/v1/entrypoint"
+                            prefix: "/"
                           route:
                             cluster: gateway
                 http_filters:

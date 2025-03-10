@@ -61,7 +61,7 @@ public interface ServiceConfig {
         List<URI> servers();
     }
 
-    interface InitializationRelayJobConfig {
+    interface InitializationEventHandlerJobConfig {
         boolean enabled();
 
         String interval();
@@ -121,7 +121,7 @@ public interface ServiceConfig {
 
         InitializationServerIndexConfig serverIndex();
 
-        InitializationRelayJobConfig relayJob();
+        InitializationEventHandlerJobConfig eventHandlerJob();
 
         InitializationSchedulerJobConfig schedulerJob();
 

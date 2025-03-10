@@ -1,7 +1,5 @@
 package com.omgservers.service.service.event.dto;
 
-import com.omgservers.service.event.EventModel;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HandleEventRequest {
+public class HandleEventsResponse {
 
-    @NotNull
-    EventModel event;
+    // True if at least one event was selected, and handling should be requested again immediately.
+    Boolean result;
 }

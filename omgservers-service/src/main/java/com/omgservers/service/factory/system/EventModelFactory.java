@@ -40,7 +40,6 @@ public class EventModelFactory {
         event.setIdempotencyKey(idempotencyKey);
         event.setCreated(now);
         event.setModified(now);
-        event.setDelayed(now);
         event.setQualifier(body.getQualifier());
         event.setBody(body);
         event.setStatus(EventStatusEnum.CREATED);
