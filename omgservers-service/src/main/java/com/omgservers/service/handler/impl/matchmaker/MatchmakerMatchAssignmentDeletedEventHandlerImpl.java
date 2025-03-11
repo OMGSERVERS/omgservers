@@ -13,9 +13,9 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.queue.CreateQueueRequestOperation;
 import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
-import com.omgservers.service.operation.queue.CreateQueueRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -55,26 +55,11 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
                     return getMatchmaker(matchmakerId)
                             .flatMap(matchmaker -> {
                                 if (matchmaker.getDeleted()) {
-                                    log.warn("The matchmaker \"{}\" was already deleted, skip lobby assignment",
-                                            matchmakerId);
+                                    log.warn("The matchmaker \"{}\" was already deleted, skip operation", matchmakerId);
                                     return Uni.createFrom().voidItem();
                                 }
 
-                                return getClient(clientId)
-                                        .flatMap(client -> {
-                                            if (client.getDeleted()) {
-                                                log.warn("The client \"{}\" was already deleted, skip lobby assignment",
-                                                        clientId);
-                                                return Uni.createFrom().voidItem();
-                                            }
-
-                                            final var tenantId = client.getTenantId();
-                                            final var tenantDeploymentId = client.getDeploymentId();
-                                            return createQueueRequestOperation.execute(clientId,
-                                                    tenantId,
-                                                    tenantDeploymentId,
-                                                    idempotencyKey);
-                                        });
+                                return createQueueRequestOperation.execute(clientId, idempotencyKey);
                             });
                 })
                 .replaceWithVoid();

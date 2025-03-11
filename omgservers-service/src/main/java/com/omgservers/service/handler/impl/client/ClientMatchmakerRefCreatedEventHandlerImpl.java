@@ -53,19 +53,9 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                 .flatMap(clientMatchmakerRef -> {
                     log.debug("Created, {}", clientMatchmakerRef);
 
-                    return getClient(clientId)
-                            .flatMap(client -> {
-                                final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
-                                return createMatchmakerAssignmentMessage(clientId, matchmakerId, idempotencyKey)
-                                        .flatMap(created -> {
-                                            final var tenantId = client.getTenantId();
-                                            final var tenantDeploymentId = client.getDeploymentId();
-                                            return createQueueRequestOperation.execute(clientId,
-                                                    tenantId,
-                                                    tenantDeploymentId,
-                                                    idempotencyKey);
-                                        });
-                            });
+                    final var matchmakerId = clientMatchmakerRef.getMatchmakerId();
+                    return createMatchmakerAssignmentMessage(clientId, matchmakerId, idempotencyKey)
+                            .flatMap(created -> createQueueRequestOperation.execute(clientId, idempotencyKey));
                 })
                 .replaceWithVoid();
     }

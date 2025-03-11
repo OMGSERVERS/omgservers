@@ -17,13 +17,12 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
-import com.omgservers.service.factory.queue.QueueRequestModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.shard.client.ClientShard;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.assignment.AssignMatchmakerOperation;
 import com.omgservers.service.operation.assignment.SelectRandomMatchmakerOperation;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -43,7 +42,6 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
     final ClientMessageModelFactory clientMessageModelFactory;
-    final QueueRequestModelFactory queueRequestModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {

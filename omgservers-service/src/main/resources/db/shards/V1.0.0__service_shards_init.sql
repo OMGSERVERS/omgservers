@@ -176,14 +176,13 @@ create table if not exists tab_tenant (
 
 create table if not exists tab_tenant_permission (
     id bigint primary key,
-    idempotency_key text not null,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null,
-    unique(idempotency_key)
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_project (
@@ -197,15 +196,14 @@ create table if not exists tab_tenant_project (
 
 create table if not exists tab_tenant_project_permission (
     id bigint primary key,
-    idempotency_key text not null,
+    idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     user_id bigint not null,
     permission text not null,
-    deleted boolean not null,
-    unique(idempotency_key)
+    deleted boolean not null
 );
 
 create table if not exists tab_tenant_stage (

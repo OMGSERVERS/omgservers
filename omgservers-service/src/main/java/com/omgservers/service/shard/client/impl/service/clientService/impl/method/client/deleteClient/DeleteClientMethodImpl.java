@@ -28,8 +28,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
         log.trace("{}", request);
 
         final var id = request.getId();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+        return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                                 (changeContext, sqlConnection) -> deleteClientOperation
                                         .deleteClient(changeContext, sqlConnection, shardModel.shard(), id))

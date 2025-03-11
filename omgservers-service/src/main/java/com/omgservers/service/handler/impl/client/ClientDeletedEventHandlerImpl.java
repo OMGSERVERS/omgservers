@@ -68,7 +68,7 @@ public class ClientDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(client -> {
                     log.debug("Deleted, {}", client);
 
-                    // Remain client messages because users can come back to get disconnection reason
+                    // Keep client messages because users can come back to get disconnection reason
                     return handleClientMatchmakerRefs(clientId, idempotencyKey)
                             .flatMap(voidItem -> handleClientRuntimeRefs(clientId));
                 })
