@@ -33,6 +33,10 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
     public synchronized long generateId() {
         var timestamp = System.currentTimeMillis() - TIMESTAMP_EPOCH;
 
+        if (timestamp < lastTimestamp) {
+            timestamp = lastTimestamp;
+        }
+
         if (timestamp == lastTimestamp) {
             sequence += 1;
 
@@ -40,15 +44,11 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
                 throw new ServerSideInternalException(ExceptionQualifierEnum.ID_GENERATOR_FAILED,
                         String.format("sequence was overflowed, sequence=%d, timestamp=%d", sequence, timestamp));
             }
-        } else if (timestamp > lastTimestamp) {
+        } else {
             sequence = 0;
         }
 
-        if (timestamp < lastTimestamp) {
-            timestamp = lastTimestamp;
-        } else {
-            lastTimestamp = timestamp;
-        }
+        lastTimestamp = timestamp;
 
         return timestamp << TIMESTAMP_OFFSET |
                 instanceId << INSTANCE_ID_OFFSET |
