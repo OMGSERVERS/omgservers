@@ -1,5 +1,5 @@
 ARG OMGSERVERS_VERSION
-FROM --platform=linux/amd64 openjdk:21-jdk-bullseye
+FROM --platform=linux/amd64 openjdk:21-jdk-bookworm
 
 # Install dependencies
 # https://forum.defold.com/t/spine-4-1/72923/2
