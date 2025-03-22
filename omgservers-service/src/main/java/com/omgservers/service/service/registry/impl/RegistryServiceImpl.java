@@ -1,9 +1,9 @@
 package com.omgservers.service.service.registry.impl;
 
 import com.omgservers.service.service.registry.RegistryService;
-import com.omgservers.service.service.registry.dto.IssueTokenRequest;
-import com.omgservers.service.service.registry.dto.IssueTokenResponse;
-import com.omgservers.service.service.registry.impl.method.IssueTokenMethod;
+import com.omgservers.service.service.registry.dto.IssueRegistryTokensRequest;
+import com.omgservers.service.service.registry.dto.IssueRegistryTokensResponse;
+import com.omgservers.service.service.registry.impl.method.IssueRegistryTokensMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -16,10 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RegistryServiceImpl implements RegistryService {
 
-    final IssueTokenMethod issueTokenMethod;
+    final IssueRegistryTokensMethod issueRegistryTokensMethod;
 
     @Override
-    public Uni<IssueTokenResponse> issueToken(@Valid final IssueTokenRequest request) {
-        return issueTokenMethod.issueToken(request);
+    public Uni<IssueRegistryTokensResponse> execute(@Valid final IssueRegistryTokensRequest request) {
+        return issueRegistryTokensMethod.execute(request);
     }
 }

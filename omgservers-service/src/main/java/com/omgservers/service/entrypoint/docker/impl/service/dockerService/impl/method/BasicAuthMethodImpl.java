@@ -8,12 +8,12 @@ import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
-import com.omgservers.service.shard.alias.AliasShard;
-import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByUserOperation;
 import com.omgservers.service.operation.security.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
-import com.omgservers.service.service.registry.dto.IssueTokenRequest;
+import com.omgservers.service.service.registry.dto.IssueRegistryTokensRequest;
+import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,7 +39,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
 
     @Override
     public Uni<BasicAuthDockerResponse> basicAuth(final BasicAuthDockerRequest request) {
-        log.debug("Requested, {}", request);
+        log.info("Requested, {}", request);
 
         final var authorizationHeader = request.getAuthorizationHeader();
         if (Objects.isNull(authorizationHeader)) {
@@ -59,8 +59,8 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
                                 final var offlineToken = Objects.nonNull(request.getOfflineToken()) ?
                                         request.getOfflineToken() : Boolean.FALSE;
                                 final var scope = request.getScope();
-                                final var issueTokenRequest = new IssueTokenRequest(userId, offlineToken, scope);
-                                return registryService.issueToken(issueTokenRequest)
+                                final var issueTokenRequest = new IssueRegistryTokensRequest(userId, offlineToken, scope);
+                                return registryService.execute(issueTokenRequest)
                                         .map(getTokenResponse -> {
                                             final var response = new BasicAuthDockerResponse();
                                             response.setToken(getTokenResponse.getAccessToken());
@@ -69,6 +69,10 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
                                             response.setIssuedAt(getTokenResponse.getIssuedAt());
                                             // If server returns refresh token, docker registry uses OAuth2 refresh_token grant type
                                             response.setRefreshToken(getTokenResponse.getRefreshToken());
+
+                                            log.info("Registry tokens issued for account=\"{}\"",
+                                                    request.getAccount());
+
                                             return response;
                                         });
                             }));

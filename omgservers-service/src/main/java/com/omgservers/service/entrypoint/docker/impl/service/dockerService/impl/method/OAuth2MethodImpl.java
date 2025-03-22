@@ -6,7 +6,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
 import com.omgservers.service.operation.security.ParseBasicAuthorizationHeaderOperation;
 import com.omgservers.service.service.registry.RegistryService;
-import com.omgservers.service.service.registry.dto.IssueTokenRequest;
+import com.omgservers.service.service.registry.dto.IssueRegistryTokensRequest;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
@@ -31,7 +31,7 @@ class OAuth2MethodImpl implements OAuth2Method {
 
     @Override
     public Uni<OAuth2DockerResponse> oAuth2(final OAuth2DockerRequest request) {
-        log.debug("Requested, {}", request);
+        log.info("Requested, {}", request);
 
         final var grantType = request.getGrantType();
         if (grantType.equals("refresh_token")) {
@@ -45,8 +45,8 @@ class OAuth2MethodImpl implements OAuth2Method {
                 final var userId = Long.valueOf(jsonWebToken.getSubject());
 
                 final var scope = request.getScope();
-                final var issueTokenRequest = new IssueTokenRequest(userId, Boolean.FALSE, scope);
-                return registryService.issueToken(issueTokenRequest)
+                final var issueTokenRequest = new IssueRegistryTokensRequest(userId, Boolean.FALSE, scope);
+                return registryService.execute(issueTokenRequest)
                         .map(getTokenResponse -> {
                             final var response = new OAuth2DockerResponse();
                             response.setAccessToken(getTokenResponse.getAccessToken());
@@ -55,6 +55,9 @@ class OAuth2MethodImpl implements OAuth2Method {
                             response.setIssuedAt(getTokenResponse.getIssuedAt());
                             // Return the same refresh token
                             response.setRefreshToken(refreshToken);
+
+                            log.info("Registry access granted to user \"{}\" with scope=\"{}\"",
+                                    userId, response.getScope());
                             return response;
                         });
 

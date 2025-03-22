@@ -1,69 +1,8 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl;
 
-import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateLobbyRequestDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateMatchmakerRequestDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteLobbyDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteMatchmakerDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantDeploymentDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantStageDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantStageDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeployTenantVersionDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantDeploymentDetailsDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.UploadFilesArchiveDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.*;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateLobbyRequestMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateMatchmakerRequestMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantProjectAliasMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantProjectMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantStageAliasMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantStageMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTenantVersionMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.CreateTokenMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteLobbyMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteMatchmakerMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantDeploymentMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantProjectMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantStageMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeleteTenantVersionMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.DeployTenantVersionMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantDeploymentDetailsMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantDetailsMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantProjectDetailsMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantStageDetailsMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.GetTenantVersionDetailsMethod;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.UploadFilesArchiveMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.*;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -91,6 +30,7 @@ class DeveloperServiceImpl implements DeveloperService {
     final DeployTenantVersionMethod deployTenantVersionMethod;
     final UploadFilesArchiveMethod uploadFilesArchiveMethod;
     final CreateLobbyRequestMethod createLobbyRequestMethod;
+    final CreateTenantImageMethod createTenantImageMethod;
     final DeleteTenantStageMethod deleteTenantStageMethod;
     final CreateTenantStageMethod createTenantStageMethod;
     final GetTenantDetailsMethod getTenantDetailsMethod;
@@ -178,6 +118,11 @@ class DeveloperServiceImpl implements DeveloperService {
     public Uni<DeleteTenantVersionDeveloperResponse> execute(
             @Valid final DeleteTenantVersionDeveloperRequest request) {
         return deleteTenantVersionMethod.execute(request);
+    }
+
+    @Override
+    public Uni<CreateTenantImageDeveloperResponse> execute(@Valid final CreateTenantImageDeveloperRequest request) {
+        return createTenantImageMethod.execute(request);
     }
 
     @Override

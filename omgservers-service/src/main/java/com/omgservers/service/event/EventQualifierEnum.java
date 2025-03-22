@@ -103,7 +103,6 @@ public enum EventQualifierEnum {
     RUNTIME_POOL_CONTAINER_REF_CREATED(RuntimePoolContainerRefCreatedEventBodyModel.class),
     RUNTIME_POOL_CONTAINER_REF_DELETED(RuntimePoolContainerRefDeletedEventBodyModel.class),
     // Internal
-    DOCKER_REGISTRY_EVENT_RECEIVED(DockerRegistryEventReceivedEventBodyModel.class),
     VERSION_BUILDING_REQUESTED(VersionBuildingRequestedEventBodyModel.class),
     VERSION_BUILDING_FAILED(VersionBuildingFailedEventBodyModel.class),
     VERSION_BUILDING_FINISHED(VersionBuildingFinishedEventBodyModel.class),

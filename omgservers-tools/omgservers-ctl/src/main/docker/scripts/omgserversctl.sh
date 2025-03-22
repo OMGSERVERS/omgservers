@@ -443,6 +443,17 @@ help() {
       echo "     - DELETED"
     fi
   fi
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createImage" ]; then
+    internal_print_command " developer createImage <tenant> <project> <version> <qualifier> <image>" "Creates a new image for the version."
+    if [ "$1" = "developer createImage" ]; then
+      echo "   qualifier:"
+      echo "     - LOBBY"
+      echo "     - MATCH"
+      echo "     - UNIVERSAL"
+      echo "   produces:"
+      echo "     - CREATED"
+    fi
+  fi
   if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
     internal_print_command " developer deployVersion" ""
     internal_print_command "   <tenant> <project> <stage> <version>" "Deploy a version to the specified stage."
@@ -668,7 +679,7 @@ handler_installation_useDemoServer() {
 }
 
 handler_installation_useLocalServer() {
-  handler_installation_useCustomServer localserver http://host.docker.internal:8080
+  handler_installation_useCustomServer localserver http://localhost:8080
 }
 
 handler_installation_createTenant() {
@@ -794,22 +805,18 @@ handler_installation_deployVersion() {
 
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Push docker image" >&2
 
-  REGISTRY_SERVER=$(echo ${OMG_INSTALLATION_URL} | sed 's/^https*:\/\///' | sed 's/host.docker.internal/localhost/')
+  REGISTRY_SERVER=$(echo ${OMG_INSTALLATION_URL} | sed 's/^https*:\/\///')
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, REGISTRY_SERVER=\"${REGISTRY_SERVER}\"" >&2
 
   DOCKER_IMAGE=${OMG_DOCKER_IMAGE}
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, DOCKER_IMAGE=\"${DOCKER_IMAGE}\"" >&2
-  TARGET_IMAGE="${REGISTRY_SERVER}/omgservers/${TENANT_ALIAS}/${PROJECT_ALIAS}/universal:${VERSION}"
+  TARGET_IMAGE="${TENANT_ALIAS}/${PROJECT_ALIAS}:${VERSION}"
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, TARGET_IMAGE=\"${TARGET_IMAGE}\"" >&2
   echo ${DEVELOPER_PASSWORD} | docker login -u ${DEVELOPER_USER} --password-stdin "${REGISTRY_SERVER}" >&2
-  docker tag ${DOCKER_IMAGE} ${TARGET_IMAGE} >&2
-  docker push ${TARGET_IMAGE} >&2
+  docker tag ${DOCKER_IMAGE} "${REGISTRY_SERVER}/${TARGET_IMAGE}" >&2
+  docker push "${REGISTRY_SERVER}/${TARGET_IMAGE}" >&2
 
-  echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Waiting for the Docker image to propagate..." >&2
-
-  while [ $(handler_developer_getVersionDetails ${TENANT_ALIAS} ${VERSION} | jq '.details.images | length') -eq 0 ]; do
-    sleep 1
-  done
+  handler_developer_createImage ${TENANT_ALIAS} ${PROJECT_ALIAS} ${VERSION} UNIVERSAL ${TARGET_IMAGE}
 
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Deploy a new version" >&2
 
@@ -2721,6 +2728,68 @@ handler_developer_deleteVersion() {
   fi
 }
 
+handler_developer_createImage() {
+  internal_ensureEnvironment
+  internal_ensureInstallationUrl
+  internal_ensureDeveloperToken
+
+  TENANT=$1
+  PROJECT=$2
+  VERSION=$3
+  QUALIFIER=$4
+  IMAGE=$5
+
+  if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${VERSION}" -o -z "${QUALIFIER}" -o -z "${IMAGE}" ]; then
+    help "developer createImage"
+    exit 1
+  fi
+
+  echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) Using, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) Using, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) Using, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) Using, QUALIFIER=\"${QUALIFIER}\"" >&2
+  echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) Using, IMAGE=\"${IMAGE}\"" >&2
+
+  DEVELOPER_TOKEN=${OMG_DEVELOPER_TOKEN}
+
+  ENDPOINT="${OMG_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-image"
+  REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"version\": \"${VERSION}\", \"qualifier\": \"${QUALIFIER}\", \"image\": \"${IMAGE}\" }"
+  RESPONSE_FILE="${OMG_CONTEXT_DIRECTORY}/temp/developer-create-image_${TENANT}_${PROJECT}_${VERSION}_${QUALIFIER}.json"
+
+  echo >> ${OMG_CONTEXT_DIRECTORY}/logs
+  echo $ENDPOINT >> ${OMG_CONTEXT_DIRECTORY}/logs
+  echo $REQUEST >> ${OMG_CONTEXT_DIRECTORY}/logs
+
+  HTTP_CODE=$(curl -s -S -X POST -w "%{http_code}" \
+    "${ENDPOINT}" \
+    -H "Content-type: application/json" \
+    -H "Authorization: Bearer ${DEVELOPER_TOKEN}" \
+    -d "${REQUEST}" \
+    -o ${RESPONSE_FILE})
+
+  cat ${RESPONSE_FILE} >> ${OMG_CONTEXT_DIRECTORY}/logs
+  echo >> ${OMG_CONTEXT_DIRECTORY}/logs
+
+  if [ "${HTTP_CODE}" -ge 400 ]; then
+    echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) ERROR: Operation was failed, HTTP_CODE=\"${HTTP_CODE}\", ${ENDPOINT}" >&2
+    tail -2 ${OMG_CONTEXT_DIRECTORY}/logs >&2
+    exit 1
+  fi
+
+  CREATED=$(cat ${RESPONSE_FILE} | jq -r .created)
+  if [ -z "${CREATED}" -o "${CREATED}" == "null" ]; then
+    echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) ERROR: CREATED was not received" >&2
+    exit 1
+  fi
+  echo "export OMG_CREATED=$CREATED" >> ${OMG_CONTEXT_DIRECTORY}/environment
+
+  if [ "${CREATED}" == "true" ]; then
+    echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) Image was created, TENANT=${TENANT}, PROJECT=${PROJECT}, VERSION=${VERSION}, QUALIFIER=${QUALIFIER}, IMAGE=${IMAGE}"
+  else
+    echo "$(date) [CTL/developerCreateImage] (${OMG_INSTALLATION_NAME:-unknown}) Image was not create, TENANT=${TENANT}, PROJECT=${PROJECT}, VERSION=${VERSION}, QUALIFIER=${QUALIFIER}, IMAGE=${IMAGE}"
+  fi
+}
+
 handler_developer_deployVersion() {
   internal_ensureEnvironment
   internal_ensureInstallationUrl
@@ -3263,6 +3332,8 @@ else
         handler_developer_getVersionDetails $@
       elif [ "${ARG}" = "deleteVersion" ]; then
         handler_developer_deleteVersion $@
+      elif [ "${ARG}" = "createImage" ]; then
+        handler_developer_createImage $@
       elif [ "${ARG}" = "deployVersion" ]; then
         handler_developer_deployVersion $@
       elif [ "${ARG}" = "getDeploymentDetails" ]; then

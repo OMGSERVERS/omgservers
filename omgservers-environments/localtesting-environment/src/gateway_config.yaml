@@ -72,7 +72,7 @@ static_resources:
                   address:
                     socket_address:
                       address: "host.docker.internal"
-                      port_value: 9091
+                      port_value: 8082
     - name: registry
       type: STRICT_DNS
       dns_lookup_family: V4_ONLY
