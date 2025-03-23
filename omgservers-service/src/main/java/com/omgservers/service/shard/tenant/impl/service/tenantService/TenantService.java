@@ -8,7 +8,7 @@ import com.omgservers.schema.module.tenant.tenantImage.*;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.*;
 import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.*;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.*;
 import com.omgservers.schema.module.tenant.tenantPermission.*;
 import com.omgservers.schema.module.tenant.tenantProject.*;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
@@ -222,26 +222,20 @@ public interface TenantService {
     Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(@Valid DeleteTenantLobbyRefRequest request);
 
     /*
-    TenantMatchmakerRequest
+    TenantMatchmakerResource
      */
 
-    Uni<GetTenantMatchmakerRequestResponse> getTenantMatchmakerRequest(
-            @Valid GetTenantMatchmakerRequestRequest request);
+    Uni<GetTenantMatchmakerResourceResponse> execute(@Valid GetTenantMatchmakerResourceRequest request);
 
-    Uni<FindTenantMatchmakerRequestResponse> findTenantMatchmakerRequest(
-            @Valid FindTenantMatchmakerRequestRequest request);
+    Uni<FindTenantMatchmakerResourceResponse> execute(@Valid FindTenantMatchmakerResourceRequest request);
 
-    Uni<ViewTenantMatchmakerRequestsResponse> viewTenantMatchmakerRequests(
-            @Valid ViewTenantMatchmakerRequestsRequest request);
+    Uni<ViewTenantMatchmakerResourcesResponse> execute(@Valid ViewTenantMatchmakerResourcesRequest request);
 
-    Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequest(
-            @Valid SyncTenantMatchmakerRequestRequest request);
+    Uni<SyncTenantMatchmakerResourceResponse> execute(@Valid SyncTenantMatchmakerResourceRequest request);
 
-    Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequestWithIdempotency(
-            @Valid SyncTenantMatchmakerRequestRequest request);
+    Uni<SyncTenantMatchmakerResourceResponse> executeWithIdempotency(@Valid SyncTenantMatchmakerResourceRequest request);
 
-    Uni<DeleteTenantMatchmakerRequestResponse> deleteTenantMatchmakerRequest(
-            @Valid DeleteTenantMatchmakerRequestRequest request);
+    Uni<DeleteTenantMatchmakerResourceResponse> execute(@Valid DeleteTenantMatchmakerResourceRequest request);
 
     /*
     TenantMatchmakerRef

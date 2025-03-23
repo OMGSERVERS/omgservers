@@ -22,7 +22,7 @@ import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
 import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
-import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
+import com.omgservers.schema.model.tenantMatchmakerResource.TenantMatchmakerResourceModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
@@ -97,8 +97,8 @@ public class TestDataFactory {
 
         final var tenantLobbyResource = tenantTestDataFactory
                 .createTenantLobbyResource(tenantDeployment);
-        final var tenantMatchmakerRequest = tenantTestDataFactory
-                .createTenantMatchmakerRequest(tenantDeployment);
+        final var tenantMatchmakerResource = tenantTestDataFactory
+                .createTenantMatchmakerResource(tenantDeployment);
 
         final var lobby = lobbyTestDataFactory.createLobby(tenantDeployment);
         final var lobbyRuntime = runtimeTestDataFactory.createLobbyRuntime(tenant,
@@ -165,7 +165,7 @@ public class TestDataFactory {
                 .tenantImage(tenantImage)
 
                 .tenantLobbyResource(tenantLobbyResource)
-                .tenantMatchmakerRequest(tenantMatchmakerRequest)
+                .tenantMatchmakerResource(tenantMatchmakerResource)
 
                 .tenantLobbyRef(tenantLobbyRef)
                 .tenantMatchmakerRef(tenantMatchmakerRef)
@@ -218,7 +218,7 @@ public class TestDataFactory {
         TenantImageModel tenantImage;
 
         TenantLobbyResourceModel tenantLobbyResource;
-        TenantMatchmakerRequestModel tenantMatchmakerRequest;
+        TenantMatchmakerResourceModel tenantMatchmakerResource;
 
         TenantLobbyRefModel tenantLobbyRef;
         TenantMatchmakerRefModel tenantMatchmakerRef;

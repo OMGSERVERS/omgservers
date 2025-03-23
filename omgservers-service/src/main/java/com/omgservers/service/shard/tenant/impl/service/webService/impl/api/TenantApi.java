@@ -8,7 +8,7 @@ import com.omgservers.schema.module.tenant.tenantImage.*;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.*;
 import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.*;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.*;
 import com.omgservers.schema.module.tenant.tenantPermission.*;
 import com.omgservers.schema.module.tenant.tenantProject.*;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
@@ -328,30 +328,29 @@ public interface TenantApi {
     Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(DeleteTenantLobbyRefRequest request);
 
     /*
-    TenantMatchmakerRequest
+    TenantMatchmakerResource
      */
 
     @POST
-    @Path("/get-tenant-matchmaker-request")
-    Uni<GetTenantMatchmakerRequestResponse> getTenantMatchmakerRequest(GetTenantMatchmakerRequestRequest request);
+    @Path("/get-tenant-matchmaker-resource")
+    Uni<GetTenantMatchmakerResourceResponse> execute(GetTenantMatchmakerResourceRequest request);
 
     @POST
-    @Path("/find-tenant-matchmaker-request")
-    Uni<FindTenantMatchmakerRequestResponse> findTenantMatchmakerRequest(FindTenantMatchmakerRequestRequest request);
+    @Path("/find-tenant-matchmaker-resource")
+    Uni<FindTenantMatchmakerResourceResponse> execute(FindTenantMatchmakerResourceRequest request);
 
     @POST
-    @Path("/view-tenant-matchmaker-requests")
-    Uni<ViewTenantMatchmakerRequestsResponse> viewTenantMatchmakerRequests(
-            ViewTenantMatchmakerRequestsRequest request);
+    @Path("/view-tenant-matchmaker-resources")
+    Uni<ViewTenantMatchmakerResourcesResponse> execute(
+            ViewTenantMatchmakerResourcesRequest request);
 
     @POST
-    @Path("/sync-tenant-matchmaker-request")
-    Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequest(SyncTenantMatchmakerRequestRequest request);
+    @Path("/sync-tenant-matchmaker-resource")
+    Uni<SyncTenantMatchmakerResourceResponse> execute(SyncTenantMatchmakerResourceRequest request);
 
     @POST
-    @Path("/delete-tenant-matchmaker-request")
-    Uni<DeleteTenantMatchmakerRequestResponse> deleteTenantMatchmakerRequest(
-            DeleteTenantMatchmakerRequestRequest request);
+    @Path("/delete-tenant-matchmaker-resource")
+    Uni<DeleteTenantMatchmakerResourceResponse> execute(DeleteTenantMatchmakerResourceRequest request);
 
     /*
     TenantMatchmakerRef

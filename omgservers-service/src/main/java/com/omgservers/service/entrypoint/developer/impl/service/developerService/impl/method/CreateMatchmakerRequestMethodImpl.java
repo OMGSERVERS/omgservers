@@ -6,14 +6,14 @@ import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.SyncTenantMatchmakerResourceRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.SyncTenantMatchmakerResourceResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
-import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
-import com.omgservers.service.shard.lobby.LobbyShard;
-import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.factory.tenant.TenantMatchmakerResourceModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,7 +32,7 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
 
-    final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
+    final TenantMatchmakerResourceModelFactory tenantMatchmakerResourceModelFactory;
     final SecurityIdentity securityIdentity;
 
     @Override
@@ -60,7 +60,7 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
                                         .invoke(voidItem -> log.info(
                                                 "A new matchmaker was requested for deployment \"{}\" in tenant \"{}\"",
                                                 deploymentId, tenantId))
-                                        .flatMap(voidItem -> createTenantMatchmakerRequest(tenantId, deploymentId));
+                                        .flatMap(voidItem -> createTenantMatchmakerResource(tenantId, deploymentId));
                             });
                 })
                 .replaceWith(new CreateMatchmakerRequestDeveloperResponse());
@@ -72,13 +72,13 @@ class CreateMatchmakerRequestMethodImpl implements CreateMatchmakerRequestMethod
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
-    Uni<Boolean> createTenantMatchmakerRequest(final Long tenantId,
-                                               final Long tenantDeploymentId) {
-        final var tenantMatchmakerRequest = tenantMatchmakerRequestModelFactory
+    Uni<Boolean> createTenantMatchmakerResource(final Long tenantId,
+                                                final Long tenantDeploymentId) {
+        final var tenantMatchmakerResource = tenantMatchmakerResourceModelFactory
                 .create(tenantId, tenantDeploymentId);
-        final var request = new SyncTenantMatchmakerRequestRequest(tenantMatchmakerRequest);
-        return tenantShard.getService().syncTenantMatchmakerRequestWithIdempotency(request)
-                .map(SyncTenantMatchmakerRequestResponse::getCreated);
+        final var request = new SyncTenantMatchmakerResourceRequest(tenantMatchmakerResource);
+        return tenantShard.getService().executeWithIdempotency(request)
+                .map(SyncTenantMatchmakerResourceResponse::getCreated);
     }
 
 }

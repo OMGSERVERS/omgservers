@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 class TenantLobbyResourceCreatedEventHandlerImplTest extends BaseTestClass {
 
     @Inject
-    TenantLobbyResourceCreatedEventHandlerImplTestInterface versionLobbyRequestCreatedEventHandler;
+    TenantLobbyResourceCreatedEventHandlerImplTestInterface tenantLobbyRequestCreatedEventHandler;
 
     @Inject
     EventModelFactory eventModelFactory;
@@ -31,17 +31,17 @@ class TenantLobbyResourceCreatedEventHandlerImplTest extends BaseTestClass {
         final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
         final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
                 .createTenantDeployment(stage, version);
-        final var versionLobbyRequest = testDataFactory.getTenantTestDataFactory()
+        final var tenantLobbyResource = testDataFactory.getTenantTestDataFactory()
                 .createTenantLobbyResource(tenantDeployment);
 
-        final var tenantId = versionLobbyRequest.getTenantId();
-        final var id = versionLobbyRequest.getId();
+        final var tenantId = tenantLobbyResource.getTenantId();
+        final var id = tenantLobbyResource.getId();
 
         final var eventBody = new TenantLobbyResourceCreatedEventBodyModel(tenantId, id);
         final var eventModel = eventModelFactory.create(eventBody);
 
-        versionLobbyRequestCreatedEventHandler.handle(eventModel);
+        tenantLobbyRequestCreatedEventHandler.handle(eventModel);
         log.info("Retry");
-        versionLobbyRequestCreatedEventHandler.handle(eventModel);
+        tenantLobbyRequestCreatedEventHandler.handle(eventModel);
     }
 }

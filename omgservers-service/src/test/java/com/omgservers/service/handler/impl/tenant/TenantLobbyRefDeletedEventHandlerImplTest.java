@@ -36,9 +36,9 @@ class TenantLobbyRefDeletedEventHandlerImplTest extends BaseTestClass {
         final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
         final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
                 .createTenantDeployment(stage, version);
-        final var versionLobbyRequest = testDataFactory.getTenantTestDataFactory()
+        final var tenantLobbyResource = testDataFactory.getTenantTestDataFactory()
                 .createTenantLobbyResource(tenantDeployment);
-        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(versionLobbyRequest);
+        final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(tenantLobbyResource);
         final var versionLobbyRef = testDataFactory.getTenantTestDataFactory()
                 .createTenantLobbyRef(tenantDeployment, lobby);
 

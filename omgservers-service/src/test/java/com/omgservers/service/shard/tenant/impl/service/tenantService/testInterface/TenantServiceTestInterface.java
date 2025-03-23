@@ -8,7 +8,7 @@ import com.omgservers.schema.module.tenant.tenantImage.*;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.*;
 import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.*;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.*;
 import com.omgservers.schema.module.tenant.tenantPermission.*;
 import com.omgservers.schema.module.tenant.tenantProject.*;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
@@ -425,42 +425,36 @@ public class TenantServiceTestInterface {
     }
 
     /*
-    TenantMatchmakerRequest
+    TenantMatchmakerResource
      */
 
-    public GetTenantMatchmakerRequestResponse getTenantMatchmakerRequest(
-            final GetTenantMatchmakerRequestRequest request) {
-        return tenantService.getTenantMatchmakerRequest(request)
+    public GetTenantMatchmakerResourceResponse execute(final GetTenantMatchmakerResourceRequest request) {
+        return tenantService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public FindTenantMatchmakerRequestResponse findTenantMatchmakerRequest(
-            final FindTenantMatchmakerRequestRequest request) {
-        return tenantService.findTenantMatchmakerRequest(request)
+    public FindTenantMatchmakerResourceResponse execute(final FindTenantMatchmakerResourceRequest request) {
+        return tenantService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public ViewTenantMatchmakerRequestsResponse viewTenantMatchmakerRequests(
-            final ViewTenantMatchmakerRequestsRequest request) {
-        return tenantService.viewTenantMatchmakerRequests(request)
+    public ViewTenantMatchmakerResourcesResponse execute(final ViewTenantMatchmakerResourcesRequest request) {
+        return tenantService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncTenantMatchmakerRequestResponse syncTenantMatchmakerRequest(
-            final SyncTenantMatchmakerRequestRequest request) {
-        return tenantService.syncTenantMatchmakerRequest(request)
+    public SyncTenantMatchmakerResourceResponse execute(final SyncTenantMatchmakerResourceRequest request) {
+        return tenantService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public SyncTenantMatchmakerRequestResponse syncTenantMatchmakerRequestWithIdempotency(
-            final SyncTenantMatchmakerRequestRequest request) {
-        return tenantService.syncTenantMatchmakerRequestWithIdempotency(request)
+    public SyncTenantMatchmakerResourceResponse executeWithIdempotency(final SyncTenantMatchmakerResourceRequest request) {
+        return tenantService.executeWithIdempotency(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
-    public DeleteTenantMatchmakerRequestResponse deleteTenantMatchmakerRequest(
-            final DeleteTenantMatchmakerRequestRequest request) {
-        return tenantService.deleteTenantMatchmakerRequest(request)
+    public DeleteTenantMatchmakerResourceResponse execute(final DeleteTenantMatchmakerResourceRequest request) {
+        return tenantService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 

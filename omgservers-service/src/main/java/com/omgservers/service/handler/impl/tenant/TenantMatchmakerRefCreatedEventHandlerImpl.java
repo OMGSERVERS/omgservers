@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
-import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
+import com.omgservers.schema.model.tenantMatchmakerResource.TenantMatchmakerResourceModel;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.DeleteTenantMatchmakerResourceRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.DeleteTenantMatchmakerResourceResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.FindTenantMatchmakerResourceRequest;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.FindTenantMatchmakerResourceResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantMatchmakerRefCreatedEventBodyModel;
@@ -46,7 +46,7 @@ public class TenantMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                     final var matchmakerId = tenantMatchmakerRef.getMatchmakerId();
                     log.debug("Created, {}", tenantMatchmakerRef);
 
-                    return findAndDeleteTenantMatchmakerRequest(tenantId, deploymentId, matchmakerId);
+                    return findAndDeleteTenantMatchmakerResource(tenantId, deploymentId, matchmakerId);
                 })
                 .replaceWithVoid();
     }
@@ -57,27 +57,27 @@ public class TenantMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
                 .map(GetTenantMatchmakerRefResponse::getTenantMatchmakerRef);
     }
 
-    Uni<Boolean> findAndDeleteTenantMatchmakerRequest(final Long tenantId,
-                                                      final Long deploymentId,
-                                                      final Long matchmakerId) {
-        return findTenantMatchmakerRequest(tenantId, deploymentId, matchmakerId)
+    Uni<Boolean> findAndDeleteTenantMatchmakerResource(final Long tenantId,
+                                                       final Long deploymentId,
+                                                       final Long matchmakerId) {
+        return findTenantMatchmakerResource(tenantId, deploymentId, matchmakerId)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(tenantMatchmakerRequest ->
-                        deleteTenantMatchmakerRequest(tenantId, tenantMatchmakerRequest.getId()));
+                .onItem().ifNotNull().transformToUni(tenantMatchmakerResource ->
+                        deleteTenantMatchmakerResource(tenantId, tenantMatchmakerResource.getId()));
     }
 
-    Uni<TenantMatchmakerRequestModel> findTenantMatchmakerRequest(final Long tenantId,
-                                                                  final Long deploymentId,
-                                                                  final Long matchmakerId) {
-        final var request = new FindTenantMatchmakerRequestRequest(tenantId, deploymentId, matchmakerId);
-        return tenantShard.getService().findTenantMatchmakerRequest(request)
-                .map(FindTenantMatchmakerRequestResponse::getTenantMatchmakerRequest);
+    Uni<TenantMatchmakerResourceModel> findTenantMatchmakerResource(final Long tenantId,
+                                                                    final Long deploymentId,
+                                                                    final Long matchmakerId) {
+        final var request = new FindTenantMatchmakerResourceRequest(tenantId, deploymentId, matchmakerId);
+        return tenantShard.getService().execute(request)
+                .map(FindTenantMatchmakerResourceResponse::getTenantMatchmakerResource);
     }
 
-    Uni<Boolean> deleteTenantMatchmakerRequest(final Long tenantId, final Long id) {
-        final var request = new DeleteTenantMatchmakerRequestRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantMatchmakerRequest(request)
-                .map(DeleteTenantMatchmakerRequestResponse::getDeleted);
+    Uni<Boolean> deleteTenantMatchmakerResource(final Long tenantId, final Long id) {
+        final var request = new DeleteTenantMatchmakerResourceRequest(tenantId, id);
+        return tenantShard.getService().execute(request)
+                .map(DeleteTenantMatchmakerResourceResponse::getDeleted);
     }
 }

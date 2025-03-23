@@ -39,7 +39,7 @@ class SelectActiveMatchmakerRequestsByMatchmakerIdOperationImpl
                         order by id asc
                         """,
                 Collections.singletonList(matchmakerId),
-                "Matchmaker request",
+                "Matchmaker resource",
                 matchmakerRequestModelMapper::execute);
     }
 }

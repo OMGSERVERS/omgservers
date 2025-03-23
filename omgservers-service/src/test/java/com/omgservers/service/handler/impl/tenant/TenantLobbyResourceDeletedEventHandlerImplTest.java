@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 class TenantLobbyResourceDeletedEventHandlerImplTest extends BaseTestClass {
 
     @Inject
-    TenantLobbyResourceDeletedEventHandlerImplTestInterface versionLobbyRequestDeletedEventHandler;
+    TenantLobbyResourceDeletedEventHandlerImplTestInterface tenantLobbyResourceDeletedEventHandler;
 
     @Inject
     TenantServiceTestInterface tenantService;
@@ -36,11 +36,11 @@ class TenantLobbyResourceDeletedEventHandlerImplTest extends BaseTestClass {
         final var version = testDataFactory.getTenantTestDataFactory().createTenantVersion(project);
         final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
                 .createTenantDeployment(stage, version);
-        final var versionLobbyRequest = testDataFactory.getTenantTestDataFactory()
+        final var tenantLobbyResource = testDataFactory.getTenantTestDataFactory()
                 .createTenantLobbyResource(tenantDeployment);
 
-        final var tenantId = versionLobbyRequest.getTenantId();
-        final var id = versionLobbyRequest.getId();
+        final var tenantId = tenantLobbyResource.getTenantId();
+        final var id = tenantLobbyResource.getId();
 
         final var deleteTenantLobbyResourceRequest = new DeleteTenantLobbyResourceRequest(tenantId, id);
         tenantService.execute(deleteTenantLobbyResourceRequest);
@@ -48,8 +48,8 @@ class TenantLobbyResourceDeletedEventHandlerImplTest extends BaseTestClass {
         final var eventBody = new TenantLobbyResourceDeletedEventBodyModel(tenantId, id);
         final var eventModel = eventModelFactory.create(eventBody);
 
-        versionLobbyRequestDeletedEventHandler.handle(eventModel);
+        tenantLobbyResourceDeletedEventHandler.handle(eventModel);
         log.info("Retry");
-        versionLobbyRequestDeletedEventHandler.handle(eventModel);
+        tenantLobbyResourceDeletedEventHandler.handle(eventModel);
     }
 }

@@ -1,144 +1,25 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.tenant.tenant.DeleteTenantRequest;
-import com.omgservers.schema.module.tenant.tenant.DeleteTenantResponse;
-import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
-import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
-import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
-import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
-import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestRequest;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.DeleteTenantBuildRequestResponse;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestRequest;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.GetTenantBuildRequestResponse;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestRequest;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.SyncTenantBuildRequestResponse;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.ViewTenantBuildRequestsResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentDataResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.DeleteTenantFilesArchiveRequest;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.DeleteTenantFilesArchiveResponse;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.FindTenantFilesArchiveRequest;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.FindTenantFilesArchiveResponse;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.GetTenantFilesArchiveRequest;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.GetTenantFilesArchiveResponse;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.SyncTenantFilesArchiveRequest;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.SyncTenantFilesArchiveResponse;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.ViewTenantFilesArchivesRequest;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.ViewTenantFilesArchivesResponse;
-import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
-import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.FindTenantImageResponse;
-import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageResponse;
-import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.FindTenantLobbyRefResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
+import com.omgservers.schema.module.tenant.tenant.*;
+import com.omgservers.schema.module.tenant.tenantBuildRequest.*;
+import com.omgservers.schema.module.tenant.tenantDeployment.*;
+import com.omgservers.schema.module.tenant.tenantFilesArchive.*;
+import com.omgservers.schema.module.tenant.tenantImage.*;
+import com.omgservers.schema.module.tenant.tenantLobbyRef.*;
 import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
-import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.GetTenantMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.ViewTenantMatchmakerRefsResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.FindTenantMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.GetTenantMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsResponse;
-import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
-import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
-import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
-import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectResponse;
-import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsRequest;
-import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
-import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageResponse;
-import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesRequest;
-import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesResponse;
-import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
-import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
-import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
-import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
-import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionConfigResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
+import com.omgservers.schema.module.tenant.tenantMatchmakerRef.*;
+import com.omgservers.schema.module.tenant.tenantMatchmakerResource.*;
+import com.omgservers.schema.module.tenant.tenantPermission.*;
+import com.omgservers.schema.module.tenant.tenantProject.*;
+import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
+import com.omgservers.schema.module.tenant.tenantStage.*;
+import com.omgservers.schema.module.tenant.tenantStagePermission.*;
+import com.omgservers.schema.module.tenant.tenantVersion.*;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import com.omgservers.service.shard.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.shard.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.TenantService;
@@ -150,69 +31,28 @@ import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.metho
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.GetTenantBuildRequestMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.SyncTenantBuildRequestMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.ViewTenantBuildRequestsMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.DeleteTenantDeploymentMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.GetTenantDeploymentDataMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.GetTenantDeploymentMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.SelectTenantDeploymentMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.SyncTenantDeploymentMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.ViewTenantDeploymentMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantFilesArchive.DeleteTenantFilesArchiveMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantFilesArchive.FindTenantFilesArchiveMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantFilesArchive.GetTenantFilesArchiveMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantFilesArchive.SyncTenantFilesArchiveMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantFilesArchive.ViewTenantFilesArchivesMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage.DeleteTenantImageMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage.FindTenantImageMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage.GetTenantImageMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage.SyncTenantImageMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage.ViewTenantImagesMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.DeleteTenantLobbyRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.FindTenantLobbyRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.GetTenantLobbyRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.SyncTenantLobbyRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.ViewTenantLobbyRefsMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.*;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantFilesArchive.*;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage.*;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyResource.*;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyResource.SyncTenantLobbyResourceMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.DeleteTenantMatchmakerRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.FindTenantMatchmakerRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.GetTenantMatchmakerRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.SyncTenantMatchmakerRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.ViewTenantMatchmakerRefsMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRequest.DeleteTenantMatchmakerRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRequest.FindTenantMatchmakerRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRequest.GetTenantMatchmakerRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRequest.SyncTenantMatchmakerRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRequest.ViewTenantMatchmakerRequestsMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.*;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerResource.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission.DeleteTenantPermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission.SyncTenantPermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission.VerifyTenantPermissionExistsMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission.ViewTenantPermissionsMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject.DeleteTenantProjectMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject.GetTenantProjectDataMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject.GetTenantProjectMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject.SyncTenantProjectMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject.ViewTenantProjectsMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProjectPermission.DeleteTenantProjectPermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProjectPermission.SyncTenantProjectPermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProjectPermission.VerifyTenantProjectPermissionExistsMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProjectPermission.ViewTenantProjectPermissionsMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.DeleteTenantStageMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.GetTenantStageDataMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.GetTenantStageMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.SyncTenantStageMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.ViewTenantStagesMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.DeleteTenantStagePermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.SyncTenantStagePermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.VerifyTenantStagePermissionExistsMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.ViewTenantStagePermissionsMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.DeleteTenantVersionMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.GetTenantVersionConfigMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.GetTenantVersionDataMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.GetTenantVersionMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.SyncTenantVersionMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.ViewTenantVersionsMethod;
-import com.omgservers.service.operation.server.CalculateShardOperation;
-import com.omgservers.service.operation.server.HandleShardedRequestOperation;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.*;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -228,15 +68,15 @@ public class TenantServiceImpl implements TenantService {
     final VerifyTenantProjectPermissionExistsMethod verifyTenantProjectPermissionExistsMethod;
     final VerifyTenantStagePermissionExistsMethod verifyTenantStagePermissionExistsMethod;
     final DeleteTenantProjectPermissionMethod deleteTenantProjectPermissionMethod;
-    final ViewTenantMatchmakerRequestsMethod viewTenantMatchmakerRequestsMethod;
+    final ViewTenantMatchmakerResourcesMethod viewTenantMatchmakerResourcesMethod;
     final ViewTenantProjectPermissionsMethod viewTenantProjectPermissionsMethod;
     final VerifyTenantPermissionExistsMethod verifyTenantPermissionExistsMethod;
-    final DeleteTenantMatchmakerRequestMethod deleteTenantMatchmakerRequestMethod;
-    final FindTenantMatchmakerRequestMethod findTenantMatchmakerRequestMethod;
-    final SyncTenantMatchmakerRequestMethod syncTenantMatchmakerRequestMethod;
+    final DeleteTenantMatchmakerResourceMethod deleteTenantMatchmakerResourceMethod;
+    final FindTenantMatchmakerResourceMethod findTenantMatchmakerResourceMethod;
+    final SyncTenantMatchmakerResourceMethod syncTenantMatchmakerResourceMethod;
     final DeleteTenantStagePermissionMethod deleteTenantStagePermissionMethod;
     final SyncTenantProjectPermissionMethod syncTenantProjectPermissionMethod;
-    final GetTenantMatchmakerRequestMethod getTenantMatchmakerRequestMethod;
+    final GetTenantMatchmakerResourceMethod getTenantMatchmakerResourceMethod;
     final ViewTenantStagePermissionsMethod viewTenantStagePermissionsMethod;
     final DeleteTenantMatchmakerRefMethod deleteTenantMatchmakerRefMethod;
     final SyncTenantStagePermissionMethod syncTenantStagePermissionMethod;
@@ -984,56 +824,51 @@ public class TenantServiceImpl implements TenantService {
     }
 
     /*
-    TenantMatchmakerRequest
+    TenantMatchmakerResource
      */
 
     @Override
-    public Uni<GetTenantMatchmakerRequestResponse> getTenantMatchmakerRequest(
-            @Valid final GetTenantMatchmakerRequestRequest request) {
+    public Uni<GetTenantMatchmakerResourceResponse> execute(@Valid final GetTenantMatchmakerResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantMatchmakerRequest,
-                getTenantMatchmakerRequestMethod::execute);
+                TenantModuleClient::execute,
+                getTenantMatchmakerResourceMethod::execute);
     }
 
     @Override
-    public Uni<FindTenantMatchmakerRequestResponse> findTenantMatchmakerRequest(
-            @Valid final FindTenantMatchmakerRequestRequest request) {
+    public Uni<FindTenantMatchmakerResourceResponse> execute(@Valid final FindTenantMatchmakerResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findTenantMatchmakerRequest,
-                findTenantMatchmakerRequestMethod::execute);
+                TenantModuleClient::execute,
+                findTenantMatchmakerResourceMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantMatchmakerRequestsResponse> viewTenantMatchmakerRequests(
-            @Valid final ViewTenantMatchmakerRequestsRequest request) {
+    public Uni<ViewTenantMatchmakerResourcesResponse> execute(@Valid final ViewTenantMatchmakerResourcesRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantMatchmakerRequests,
-                viewTenantMatchmakerRequestsMethod::execute);
+                TenantModuleClient::execute,
+                viewTenantMatchmakerResourcesMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequest(
-            @Valid final SyncTenantMatchmakerRequestRequest request) {
+    public Uni<SyncTenantMatchmakerResourceResponse> execute(@Valid final SyncTenantMatchmakerResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantMatchmakerRequest,
-                syncTenantMatchmakerRequestMethod::execute);
+                TenantModuleClient::execute,
+                syncTenantMatchmakerResourceMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantMatchmakerRequestResponse> syncTenantMatchmakerRequestWithIdempotency(
-            @Valid final SyncTenantMatchmakerRequestRequest request) {
-        return syncTenantMatchmakerRequest(request)
+    public Uni<SyncTenantMatchmakerResourceResponse> executeWithIdempotency(@Valid final SyncTenantMatchmakerResourceRequest request) {
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getTenantMatchmakerRequest(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantMatchmakerResource(),
                                     t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantMatchmakerRequestResponse(Boolean.FALSE));
+                            return Uni.createFrom().item(new SyncTenantMatchmakerResourceResponse(Boolean.FALSE));
                         }
                     }
 
@@ -1042,12 +877,11 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantMatchmakerRequestResponse> deleteTenantMatchmakerRequest(
-            @Valid final DeleteTenantMatchmakerRequestRequest request) {
+    public Uni<DeleteTenantMatchmakerResourceResponse> execute(@Valid final DeleteTenantMatchmakerResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantMatchmakerRequest,
-                deleteTenantMatchmakerRequestMethod::execute);
+                TenantModuleClient::execute,
+                deleteTenantMatchmakerResourceMethod::execute);
     }
 
     /*

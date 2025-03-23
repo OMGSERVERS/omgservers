@@ -40,7 +40,7 @@ class SelectMatchmakerRequestOperationImpl implements SelectMatchmakerRequestOpe
                         matchmakerId,
                         id
                 ),
-                "Matchmaker request",
+                "Matchmaker resource",
                 matchmakerRequestModelMapper::execute);
     }
 }
