@@ -10,14 +10,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewTenantLobbyResourcesRequest implements ShardedRequest {
+public class UpdateTenantLobbyResourceStatusRequest implements ShardedRequest {
 
     @NotNull
     Long tenantId;
 
     @NotNull
-    Long tenantDeploymentId;
+    Long id;
 
+    @NotNull
     TenantLobbyResourceStatusEnum status;
 
     @Override

@@ -2,16 +2,16 @@ package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
 import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
+import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceStatusEnum;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.GetTenantLobbyRefResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyResource.DeleteTenantLobbyResourceRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyResource.DeleteTenantLobbyResourceResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyResource.FindTenantLobbyResourceRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyResource.FindTenantLobbyResourceResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.UpdateTenantLobbyResourceStatusRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.UpdateTenantLobbyResourceStatusResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefCreatedEventBodyModel;
-import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.shard.lobby.LobbyShard;
 import com.omgservers.service.shard.tenant.TenantShard;
@@ -44,12 +44,15 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
 
         return getTenantLobbyRef(tenantId, id)
                 .flatMap(tenantLobbyRef -> {
-                    final var deploymentId = tenantLobbyRef.getDeploymentId();
+                    final var tenantDeploymentId = tenantLobbyRef.getDeploymentId();
                     final var lobbyId = tenantLobbyRef.getLobbyId();
                     log.debug("Created, {}", tenantLobbyRef);
 
-                    // TODO: update lobby state status
-                    return findAndDeleteTenantLobbyResource(tenantId, deploymentId, lobbyId);
+                    return findTenantLobbyResource(tenantId, tenantDeploymentId, lobbyId)
+                            .flatMap(tenantLobbyResource -> {
+                                final var tenantLobbyResourceId = tenantLobbyResource.getId();
+                                return updateTenantLobbyResourceStatus(tenantId, tenantLobbyResourceId);
+                            });
                 })
                 .replaceWithVoid();
     }
@@ -60,16 +63,6 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
                 .map(GetTenantLobbyRefResponse::getTenantLobbyRef);
     }
 
-    Uni<Boolean> findAndDeleteTenantLobbyResource(final Long tenantId,
-                                                  final Long tenantDeploymentId,
-                                                  final Long lobbyId) {
-        return findTenantLobbyResource(tenantId, tenantDeploymentId, lobbyId)
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(tenantLobbyResource ->
-                        deleteTenantLobbyResource(tenantId, tenantLobbyResource.getId()));
-    }
-
     Uni<TenantLobbyResourceModel> findTenantLobbyResource(final Long tenantId,
                                                           final Long tenantDeploymentId,
                                                           final Long lobbyId) {
@@ -78,9 +71,11 @@ public class TenantLobbyRefCreatedEventHandlerImpl implements EventHandler {
                 .map(FindTenantLobbyResourceResponse::getTenantLobbyResource);
     }
 
-    Uni<Boolean> deleteTenantLobbyResource(final Long tenantId, final Long id) {
-        final var request = new DeleteTenantLobbyResourceRequest(tenantId, id);
+    Uni<Boolean> updateTenantLobbyResourceStatus(final Long tenantId,
+                                                 final Long id) {
+        final var request = new UpdateTenantLobbyResourceStatusRequest(tenantId, id,
+                TenantLobbyResourceStatusEnum.CREATED);
         return tenantShard.getService().execute(request)
-                .map(DeleteTenantLobbyResourceResponse::getDeleted);
+                .map(UpdateTenantLobbyResourceStatusResponse::getUpdated);
     }
 }

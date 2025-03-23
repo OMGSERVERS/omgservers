@@ -201,6 +201,8 @@ public interface TenantService {
 
     Uni<SyncTenantLobbyResourceResponse> execute(@Valid SyncTenantLobbyResourceRequest request);
 
+    Uni<UpdateTenantLobbyResourceStatusResponse> execute(@Valid UpdateTenantLobbyResourceStatusRequest request);
+
     Uni<SyncTenantLobbyResourceResponse> executeWithIdempotency(@Valid SyncTenantLobbyResourceRequest request);
 
     Uni<DeleteTenantLobbyResourceResponse> execute(@Valid DeleteTenantLobbyResourceRequest request);

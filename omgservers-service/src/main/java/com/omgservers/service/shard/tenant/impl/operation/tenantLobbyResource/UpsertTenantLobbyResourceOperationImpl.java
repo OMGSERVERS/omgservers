@@ -31,8 +31,8 @@ class UpsertTenantLobbyResourceOperationImpl implements UpsertTenantLobbyResourc
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_tenant_lobby_resource(
-                            id, idempotency_key, tenant_id, deployment_id, created, modified, lobby_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, tenant_id, deployment_id, created, modified, lobby_id, status, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -44,6 +44,7 @@ class UpsertTenantLobbyResourceOperationImpl implements UpsertTenantLobbyResourc
                         tenantLobbyResource.getCreated().atOffset(ZoneOffset.UTC),
                         tenantLobbyResource.getModified().atOffset(ZoneOffset.UTC),
                         tenantLobbyResource.getLobbyId(),
+                        tenantLobbyResource.getStatus(),
                         tenantLobbyResource.getDeleted()
                 ),
                 () -> new TenantLobbyResourceCreatedEventBodyModel(tenantLobbyResource.getTenantId(),

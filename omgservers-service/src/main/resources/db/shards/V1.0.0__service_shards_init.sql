@@ -294,6 +294,7 @@ create table if not exists tab_tenant_lobby_resource (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     lobby_id bigint not null,
+    status text not null,
     deleted boolean not null
 );
 

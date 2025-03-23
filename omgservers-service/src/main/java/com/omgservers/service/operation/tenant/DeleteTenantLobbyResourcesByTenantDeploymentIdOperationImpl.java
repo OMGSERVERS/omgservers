@@ -49,7 +49,9 @@ class DeleteTenantLobbyResourcesByTenantDeploymentIdOperationImpl
 
     Uni<List<TenantLobbyResourceModel>> viewTenantLobbyResources(final Long tenantId,
                                                                  final Long tenantDeploymentId) {
-        final var request = new ViewTenantLobbyResourcesRequest(tenantId, tenantDeploymentId);
+        final var request = new ViewTenantLobbyResourcesRequest();
+        request.setTenantId(tenantId);
+        request.setTenantDeploymentId(tenantDeploymentId);
         return tenantShard.getService().execute(request)
                 .map(ViewTenantLobbyResourcesResponse::getTenantLobbyResources);
     }

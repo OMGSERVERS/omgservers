@@ -67,11 +67,12 @@ public class TenantServiceImpl implements TenantService {
 
     final VerifyTenantProjectPermissionExistsMethod verifyTenantProjectPermissionExistsMethod;
     final VerifyTenantStagePermissionExistsMethod verifyTenantStagePermissionExistsMethod;
+    final UpdateTenantLobbyResourceStatusMethod updateTenantLobbyResourceStatusMethod;
+    final DeleteTenantMatchmakerResourceMethod deleteTenantMatchmakerResourceMethod;
     final DeleteTenantProjectPermissionMethod deleteTenantProjectPermissionMethod;
     final ViewTenantMatchmakerResourcesMethod viewTenantMatchmakerResourcesMethod;
     final ViewTenantProjectPermissionsMethod viewTenantProjectPermissionsMethod;
     final VerifyTenantPermissionExistsMethod verifyTenantPermissionExistsMethod;
-    final DeleteTenantMatchmakerResourceMethod deleteTenantMatchmakerResourceMethod;
     final FindTenantMatchmakerResourceMethod findTenantMatchmakerResourceMethod;
     final SyncTenantMatchmakerResourceMethod syncTenantMatchmakerResourceMethod;
     final DeleteTenantStagePermissionMethod deleteTenantStagePermissionMethod;
@@ -80,28 +81,28 @@ public class TenantServiceImpl implements TenantService {
     final ViewTenantStagePermissionsMethod viewTenantStagePermissionsMethod;
     final DeleteTenantMatchmakerRefMethod deleteTenantMatchmakerRefMethod;
     final SyncTenantStagePermissionMethod syncTenantStagePermissionMethod;
-    final ViewTenantMatchmakerRefsMethod viewTenantMatchmakerRefsMethod;
     final DeleteTenantLobbyResourceMethod deleteTenantLobbyResourceMethod;
+    final ViewTenantMatchmakerRefsMethod viewTenantMatchmakerRefsMethod;
     final DeleteTenantFilesArchiveMethod deleteTenantFilesArchiveMethod;
     final DeleteTenantBuildRequestMethod deleteTenantBuildRequestMethod;
+    final ViewTenantLobbyResourcesMethod viewTenantLobbyResourcesMethod;
     final ViewTenantBuildRequestsMethod viewTenantBuildRequestsMethod;
     final SyncTenantMatchmakerRefMethod syncTenantMatchmakerRefMethod;
     final FindTenantMatchmakerRefMethod findTenantMatchmakerRefMethod;
-    final ViewTenantLobbyResourcesMethod viewTenantLobbyResourcesMethod;
     final GetTenantDeploymentDataMethod getTenantDeploymentDataMethod;
     final ViewTenantFilesArchivesMethod viewTenantFilesArchivesMethod;
-    final FindTenantFilesArchiveMethod findTenantFilesArchiveMethod;
-    final SyncTenantFilesArchiveMethod syncTenantFilesArchiveMethod;
     final FindTenantLobbyResourceMethod findTenantLobbyResourceMethod;
     final SyncTenantLobbyResourceMethod syncTenantLobbyResourceMethod;
+    final FindTenantFilesArchiveMethod findTenantFilesArchiveMethod;
+    final SyncTenantFilesArchiveMethod syncTenantFilesArchiveMethod;
     final GetTenantMatchmakerRefMethod getTenantMatchmakerRefMethod;
     final DeleteTenantPermissionMethod deleteTenantPermissionMethod;
     final GetTenantVersionConfigMethod getTenantVersionConfigMethod;
     final DeleteTenantDeploymentMethod deleteTenantDeploymentMethod;
     final SelectTenantDeploymentMethod selectTenantDeploymentMethod;
     final SyncTenantBuildRequestMethod syncTenantBuildRequestMethod;
-    final GetTenantBuildRequestMethod getTenantBuildRequestMethod;
     final GetTenantLobbyResourceMethod getTenantLobbyResourceMethod;
+    final GetTenantBuildRequestMethod getTenantBuildRequestMethod;
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
     final GetTenantFilesArchiveMethod getTenantFilesArchiveMethod;
     final GetTenantProjectDataMethod getTenantProjectDataMethod;
@@ -733,6 +734,15 @@ public class TenantServiceImpl implements TenantService {
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::execute,
                 syncTenantLobbyResourceMethod::execute);
+    }
+
+    @Override
+    public Uni<UpdateTenantLobbyResourceStatusResponse> execute(
+            @Valid final UpdateTenantLobbyResourceStatusRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getTenantModuleClientOperation::getClient,
+                TenantModuleClient::execute,
+                updateTenantLobbyResourceStatusMethod::execute);
     }
 
     @Override

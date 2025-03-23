@@ -373,6 +373,11 @@ public class WebServiceImpl implements WebService {
     }
 
     @Override
+    public Uni<UpdateTenantLobbyResourceStatusResponse> execute(final UpdateTenantLobbyResourceStatusRequest request) {
+        return tenantService.execute(request);
+    }
+
+    @Override
     public Uni<DeleteTenantLobbyResourceResponse> execute(final DeleteTenantLobbyResourceRequest request) {
         return tenantService.execute(request);
     }

@@ -1,13 +1,10 @@
 package com.omgservers.service.handler.impl.client;
 
-import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
 import com.omgservers.schema.model.message.MessageQualifierEnum;
 import com.omgservers.schema.model.message.body.MatchmakerAssignmentMessageBodyDto;
 import com.omgservers.schema.module.client.GetClientMatchmakerRefRequest;
 import com.omgservers.schema.module.client.GetClientMatchmakerRefResponse;
-import com.omgservers.schema.module.client.GetClientRequest;
-import com.omgservers.schema.module.client.GetClientResponse;
 import com.omgservers.schema.module.client.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.SyncClientMessageResponse;
 import com.omgservers.service.event.EventModel;
@@ -15,8 +12,8 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientMatchmakerRefCreatedEventBodyModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.operation.queue.CreateQueueRequestOperation;
+import com.omgservers.service.shard.client.ClientShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -64,12 +61,6 @@ public class ClientMatchmakerRefCreatedEventHandlerImpl implements EventHandler 
         final var request = new GetClientMatchmakerRefRequest(clientId, id);
         return clientShard.getService().getClientMatchmakerRef(request)
                 .map(GetClientMatchmakerRefResponse::getClientMatchmakerRef);
-    }
-
-    Uni<ClientModel> getClient(final Long clientId) {
-        final var request = new GetClientRequest(clientId);
-        return clientShard.getService().getClient(request)
-                .map(GetClientResponse::getClient);
     }
 
     Uni<Boolean> createMatchmakerAssignmentMessage(final Long clientId,

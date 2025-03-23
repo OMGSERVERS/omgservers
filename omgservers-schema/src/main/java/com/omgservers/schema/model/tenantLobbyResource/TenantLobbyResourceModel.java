@@ -42,5 +42,8 @@ public class TenantLobbyResourceModel {
     Long lobbyId;
 
     @NotNull
+    TenantLobbyResourceStatusEnum status;
+
+    @NotNull
     Boolean deleted;
 }

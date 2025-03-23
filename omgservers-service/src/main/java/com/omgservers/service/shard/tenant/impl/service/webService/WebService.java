@@ -182,6 +182,8 @@ public interface WebService {
 
     Uni<SyncTenantLobbyResourceResponse> execute(SyncTenantLobbyResourceRequest request);
 
+    Uni<UpdateTenantLobbyResourceStatusResponse> execute(UpdateTenantLobbyResourceStatusRequest request);
+
     Uni<DeleteTenantLobbyResourceResponse> execute(DeleteTenantLobbyResourceRequest request);
 
     /*

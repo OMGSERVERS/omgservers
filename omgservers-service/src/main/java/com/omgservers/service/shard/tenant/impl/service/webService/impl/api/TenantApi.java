@@ -300,6 +300,10 @@ public interface TenantApi {
     Uni<SyncTenantLobbyResourceResponse> execute(SyncTenantLobbyResourceRequest request);
 
     @POST
+    @Path("/update-tenant-lobby-resource-status")
+    Uni<UpdateTenantLobbyResourceStatusResponse> execute(UpdateTenantLobbyResourceStatusRequest request);
+
+    @POST
     @Path("/delete-tenant-lobby-resource")
     Uni<DeleteTenantLobbyResourceResponse> execute(DeleteTenantLobbyResourceRequest request);
 

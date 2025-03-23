@@ -368,20 +368,22 @@ class TenantApiImpl implements TenantApi {
     }
 
     @Override
-    public Uni<ViewTenantLobbyResourcesResponse> execute(
-            final ViewTenantLobbyResourcesRequest request) {
+    public Uni<ViewTenantLobbyResourcesResponse> execute(final ViewTenantLobbyResourcesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantLobbyResourceResponse> execute(
-            final SyncTenantLobbyResourceRequest request) {
+    public Uni<SyncTenantLobbyResourceResponse> execute(final SyncTenantLobbyResourceRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantLobbyResourceResponse> execute(
-            final DeleteTenantLobbyResourceRequest request) {
+    public Uni<UpdateTenantLobbyResourceStatusResponse> execute(final UpdateTenantLobbyResourceStatusRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<DeleteTenantLobbyResourceResponse> execute(final DeleteTenantLobbyResourceRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 

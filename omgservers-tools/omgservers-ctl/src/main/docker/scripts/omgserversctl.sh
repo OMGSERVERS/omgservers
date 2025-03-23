@@ -556,7 +556,6 @@ handler_localtesting_resetServer() {
 }
 
 handler_localtesting_initProject() {
-  handler_installation_useLocalServer
   internal_ensureEnvironment
 
   echo "$(date) [CTL/localtestingInit] (${OMG_INSTALLATION_NAME:-unknown}) Using, LOCALTESTING_TENANT=\"${OMG_LOCALTESTING_TENANT}\"" >&2
@@ -590,7 +589,6 @@ handler_localtesting_initProject() {
 }
 
 handler_localtesting_deployProject() {
-  handler_installation_useLocalServer
   internal_ensureEnvironment
 
   echo "$(date) [CTL/localtestingInstall] (${OMG_INSTALLATION_NAME:-unknown}) Using, LOCALTESTING_TENANT=\"${OMG_LOCALTESTING_TENANT}\"" >&2
@@ -613,7 +611,6 @@ handler_localtesting_deployProject() {
 }
 
 handler_localtesting_cleanupProject() {
-  handler_installation_useLocalServer
   internal_ensureEnvironment
 
   echo "$(date) [CTL/localtestingCleanup] (${OMG_INSTALLATION_NAME:-unknown}) Using, LOCALTESTING_TENANT=\"${OMG_LOCALTESTING_TENANT}\"" >&2
@@ -805,7 +802,7 @@ handler_installation_deployVersion() {
 
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Push docker image" >&2
 
-  REGISTRY_SERVER=$(echo ${OMG_INSTALLATION_URL} | sed 's/^https*:\/\///')
+  REGISTRY_SERVER=$(echo ${OMG_INSTALLATION_URL} | sed 's/^https*:\/\///' | sed 's/host.docker.internal/localhost/')
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, REGISTRY_SERVER=\"${REGISTRY_SERVER}\"" >&2
 
   DOCKER_IMAGE=${OMG_DOCKER_IMAGE}

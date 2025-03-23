@@ -1,6 +1,7 @@
 package com.omgservers.service.shard.tenant.impl.mapper;
 
 import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
+import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceStatusEnum;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class TenantLobbyResourceModelMapper {
         tenantLobbyResource.setModified(row.getOffsetDateTime("modified").toInstant());
         tenantLobbyResource.setIdempotencyKey(row.getString("idempotency_key"));
         tenantLobbyResource.setLobbyId(row.getLong("lobby_id"));
+        tenantLobbyResource.setStatus(TenantLobbyResourceStatusEnum.valueOf(row.getString("status")));
         tenantLobbyResource.setDeleted(row.getBoolean("deleted"));
         return tenantLobbyResource;
     }

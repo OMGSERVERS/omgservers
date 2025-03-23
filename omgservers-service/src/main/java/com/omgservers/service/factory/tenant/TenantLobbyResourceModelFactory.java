@@ -1,6 +1,7 @@
 package com.omgservers.service.factory.tenant;
 
 import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
+import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceStatusEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,7 @@ public class TenantLobbyResourceModelFactory {
         tenantLobbyResource.setModified(now);
         tenantLobbyResource.setIdempotencyKey(idempotencyKey);
         tenantLobbyResource.setLobbyId(lobbyId);
+        tenantLobbyResource.setStatus(TenantLobbyResourceStatusEnum.PENDING);
         tenantLobbyResource.setDeleted(false);
         return tenantLobbyResource;
     }

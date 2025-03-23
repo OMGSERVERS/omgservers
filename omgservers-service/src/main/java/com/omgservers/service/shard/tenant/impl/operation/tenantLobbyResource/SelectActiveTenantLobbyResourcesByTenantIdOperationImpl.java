@@ -30,7 +30,7 @@ class SelectActiveTenantLobbyResourcesByTenantIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, tenant_id, deployment_id, created, modified, lobby_id, deleted
+                        select id, idempotency_key, tenant_id, deployment_id, created, modified, lobby_id, status, deleted
                         from $schema.tab_tenant_lobby_resource
                         where tenant_id = $1 and deleted = false
                         order by id asc
