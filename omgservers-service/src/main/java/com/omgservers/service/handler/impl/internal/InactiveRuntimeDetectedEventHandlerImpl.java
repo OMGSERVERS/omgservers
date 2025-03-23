@@ -8,13 +8,13 @@ import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
 import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
 import com.omgservers.schema.module.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerCommandModelFactory;
-import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyResourceModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.shard.lobby.LobbyShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
@@ -36,7 +36,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
     final TenantShard tenantShard;
     final LobbyShard lobbyShard;
 
-    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
+    final TenantLobbyResourceModelFactory tenantLobbyResourceModelFactory;
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
     @Override
@@ -66,7 +66,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                             final var tenantId = runtime.getTenantId();
                             final var deploymentId = runtime.getDeploymentId();
 
-                            yield syncTenantLobbyRequest(tenantId, deploymentId, idempotencyKey)
+                            yield syncTenantLobbyResource(tenantId, deploymentId, idempotencyKey)
                                     .flatMap(created -> deleteLobby(lobbyId));
                         }
                         case MATCH -> {
@@ -92,15 +92,15 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
                 .map(DeleteLobbyResponse::getDeleted);
     }
 
-    Uni<Boolean> syncTenantLobbyRequest(final Long tenantId,
-                                        final Long deploymentId,
-                                        final String idempotencyKey) {
-        final var tenantLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
+    Uni<Boolean> syncTenantLobbyResource(final Long tenantId,
+                                         final Long deploymentId,
+                                         final String idempotencyKey) {
+        final var tenantLobbyResource = tenantLobbyResourceModelFactory.create(tenantId,
                 deploymentId,
                 idempotencyKey);
-        final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        return tenantShard.getService().syncTenantLobbyRequestWithIdempotency(request)
-                .map(SyncTenantLobbyRequestResponse::getCreated);
+        final var request = new SyncTenantLobbyResourceRequest(tenantLobbyResource);
+        return tenantShard.getService().executeWithIdempotency(request)
+                .map(SyncTenantLobbyResourceResponse::getCreated);
     }
 
     Uni<Boolean> syncDeleteMatchMatchmakerCommand(final Long matchmakerId,

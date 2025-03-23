@@ -4,7 +4,7 @@ import com.omgservers.BaseTestClass;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.DeleteTenantLobbyRefRequest;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.handler.impl.tenant.testInterface.VersionLobbyRefDeletedEventHandlerImplTestInterface;
+import com.omgservers.service.handler.impl.tenant.testInterface.TenantLobbyRefDeletedEventHandlerImplTestInterface;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.testInterface.TenantServiceTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 class TenantLobbyRefDeletedEventHandlerImplTest extends BaseTestClass {
 
     @Inject
-    VersionLobbyRefDeletedEventHandlerImplTestInterface versionLobbyRefDeletedEventHandler;
+    TenantLobbyRefDeletedEventHandlerImplTestInterface versionLobbyRefDeletedEventHandler;
 
     @Inject
     TenantServiceTestInterface tenantService;
@@ -37,7 +37,7 @@ class TenantLobbyRefDeletedEventHandlerImplTest extends BaseTestClass {
         final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
                 .createTenantDeployment(stage, version);
         final var versionLobbyRequest = testDataFactory.getTenantTestDataFactory()
-                .createTenantLobbyRequest(tenantDeployment);
+                .createTenantLobbyResource(tenantDeployment);
         final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(versionLobbyRequest);
         final var versionLobbyRef = testDataFactory.getTenantTestDataFactory()
                 .createTenantLobbyRef(tenantDeployment, lobby);

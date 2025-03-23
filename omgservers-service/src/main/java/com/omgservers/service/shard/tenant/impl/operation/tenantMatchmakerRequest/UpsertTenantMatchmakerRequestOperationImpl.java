@@ -32,7 +32,7 @@ class UpsertTenantMatchmakerRequestOperationImpl implements UpsertTenantMatchmak
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_matchmaker_request(
+                        insert into $schema.tab_tenant_matchmaker_resource(
                             id, idempotency_key, tenant_id, deployment_id, created, modified, matchmaker_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

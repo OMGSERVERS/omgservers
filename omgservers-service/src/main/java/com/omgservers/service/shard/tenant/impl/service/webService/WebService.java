@@ -58,16 +58,8 @@ import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequ
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
@@ -300,18 +292,18 @@ public interface WebService {
     Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(DeleteTenantDeploymentRequest request);
 
     /*
-    TenantLobbyRequest
+    TenantLobbyResource
      */
 
-    Uni<GetTenantLobbyRequestResponse> getTenantLobbyRequest(GetTenantLobbyRequestRequest request);
+    Uni<GetTenantLobbyResourceResponse> execute(GetTenantLobbyResourceRequest request);
 
-    Uni<FindTenantLobbyRequestResponse> findTenantLobbyRequest(FindTenantLobbyRequestRequest request);
+    Uni<FindTenantLobbyResourceResponse> execute(FindTenantLobbyResourceRequest request);
 
-    Uni<ViewTenantLobbyRequestsResponse> viewTenantLobbyRequests(ViewTenantLobbyRequestsRequest request);
+    Uni<ViewTenantLobbyResourcesResponse> execute(ViewTenantLobbyResourcesRequest request);
 
-    Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequest(SyncTenantLobbyRequestRequest request);
+    Uni<SyncTenantLobbyResourceResponse> execute(SyncTenantLobbyResourceRequest request);
 
-    Uni<DeleteTenantLobbyRequestResponse> deleteTenantLobbyRequest(DeleteTenantLobbyRequestRequest request);
+    Uni<DeleteTenantLobbyResourceResponse> execute(DeleteTenantLobbyResourceRequest request);
 
     /*
     TenantLobbyRef

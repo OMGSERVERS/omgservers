@@ -11,7 +11,7 @@ import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
-import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
+import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
 import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
@@ -30,7 +30,7 @@ import com.omgservers.schema.module.tenant.tenantDeployment.SyncTenantDeployment
 import com.omgservers.schema.module.tenant.tenantFilesArchive.SyncTenantFilesArchiveRequest;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
 import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionRequest;
@@ -44,7 +44,7 @@ import com.omgservers.service.factory.tenant.TenantDeploymentModelFactory;
 import com.omgservers.service.factory.tenant.TenantFilesArchiveModelFactory;
 import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.factory.tenant.TenantLobbyRefModelFactory;
-import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyResourceModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
@@ -74,7 +74,7 @@ public class TenantTestDataFactory {
     final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
     final TenantBuildRequestModelFactory tenantBuildRequestModelFactory;
     final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
-    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
+    final TenantLobbyResourceModelFactory tenantLobbyResourceModelFactory;
     final TenantFilesArchiveModelFactory tenantFilesArchiveModelFactory;
     final TenantDeploymentModelFactory tenantDeploymentModelFactory;
     final TenantPermissionModelFactory tenantPermissionModelFactory;
@@ -194,14 +194,14 @@ public class TenantTestDataFactory {
         return tenantImage;
     }
 
-    public TenantLobbyRequestModel createTenantLobbyRequest(final TenantDeploymentModel tenantDeployment) {
+    public TenantLobbyResourceModel createTenantLobbyResource(final TenantDeploymentModel tenantDeployment) {
         final var tenantId = tenantDeployment.getTenantId();
         final var tenantDeploymentId = tenantDeployment.getId();
-        final var tenantLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
+        final var tenantLobbyResource = tenantLobbyResourceModelFactory.create(tenantId,
                 tenantDeploymentId);
-        final var syncTenantLobbyRequestRequest = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        tenantService.syncTenantLobbyRequest(syncTenantLobbyRequestRequest);
-        return tenantLobbyRequest;
+        final var syncTenantLobbyResourceRequest = new SyncTenantLobbyResourceRequest(tenantLobbyResource);
+        tenantService.execute(syncTenantLobbyResourceRequest);
+        return tenantLobbyResource;
     }
 
     public TenantLobbyRefModel createTenantLobbyRef(final TenantDeploymentModel tenantDeployment,

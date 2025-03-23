@@ -59,16 +59,8 @@ import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequ
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
@@ -179,11 +171,8 @@ import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.metho
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.GetTenantLobbyRefMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.SyncTenantLobbyRefMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.ViewTenantLobbyRefsMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRequest.DeleteTenantLobbyRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRequest.FindTenantLobbyRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRequest.GetTenantLobbyRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRequest.SyncTenantLobbyRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRequest.ViewTenantLobbyRequestsMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyResource.*;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyResource.SyncTenantLobbyResourceMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.DeleteTenantMatchmakerRefMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.FindTenantMatchmakerRefMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.GetTenantMatchmakerRefMethod;
@@ -252,19 +241,19 @@ public class TenantServiceImpl implements TenantService {
     final DeleteTenantMatchmakerRefMethod deleteTenantMatchmakerRefMethod;
     final SyncTenantStagePermissionMethod syncTenantStagePermissionMethod;
     final ViewTenantMatchmakerRefsMethod viewTenantMatchmakerRefsMethod;
-    final DeleteTenantLobbyRequestMethod deleteTenantLobbyRequestMethod;
+    final DeleteTenantLobbyResourceMethod deleteTenantLobbyResourceMethod;
     final DeleteTenantFilesArchiveMethod deleteTenantFilesArchiveMethod;
     final DeleteTenantBuildRequestMethod deleteTenantBuildRequestMethod;
     final ViewTenantBuildRequestsMethod viewTenantBuildRequestsMethod;
     final SyncTenantMatchmakerRefMethod syncTenantMatchmakerRefMethod;
     final FindTenantMatchmakerRefMethod findTenantMatchmakerRefMethod;
-    final ViewTenantLobbyRequestsMethod viewTenantLobbyRequestsMethod;
+    final ViewTenantLobbyResourcesMethod viewTenantLobbyResourcesMethod;
     final GetTenantDeploymentDataMethod getTenantDeploymentDataMethod;
     final ViewTenantFilesArchivesMethod viewTenantFilesArchivesMethod;
     final FindTenantFilesArchiveMethod findTenantFilesArchiveMethod;
     final SyncTenantFilesArchiveMethod syncTenantFilesArchiveMethod;
-    final FindTenantLobbyRequestMethod findTenantLobbyRequestMethod;
-    final SyncTenantLobbyRequestMethod syncTenantLobbyRequestMethod;
+    final FindTenantLobbyResourceMethod findTenantLobbyResourceMethod;
+    final SyncTenantLobbyResourceMethod syncTenantLobbyResourceMethod;
     final GetTenantMatchmakerRefMethod getTenantMatchmakerRefMethod;
     final DeleteTenantPermissionMethod deleteTenantPermissionMethod;
     final GetTenantVersionConfigMethod getTenantVersionConfigMethod;
@@ -272,7 +261,7 @@ public class TenantServiceImpl implements TenantService {
     final SelectTenantDeploymentMethod selectTenantDeploymentMethod;
     final SyncTenantBuildRequestMethod syncTenantBuildRequestMethod;
     final GetTenantBuildRequestMethod getTenantBuildRequestMethod;
-    final GetTenantLobbyRequestMethod getTenantLobbyRequestMethod;
+    final GetTenantLobbyResourceMethod getTenantLobbyResourceMethod;
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
     final GetTenantFilesArchiveMethod getTenantFilesArchiveMethod;
     final GetTenantProjectDataMethod getTenantProjectDataMethod;
@@ -867,56 +856,56 @@ public class TenantServiceImpl implements TenantService {
     }
 
     /*
-    TenantLobbyRequest
+    TenantLobbyResource
      */
 
     @Override
-    public Uni<GetTenantLobbyRequestResponse> getTenantLobbyRequest(
-            @Valid final GetTenantLobbyRequestRequest request) {
+    public Uni<GetTenantLobbyResourceResponse> execute(
+            @Valid final GetTenantLobbyResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantLobbyRequest,
-                getTenantLobbyRequestMethod::execute);
+                TenantModuleClient::execute,
+                getTenantLobbyResourceMethod::execute);
     }
 
     @Override
-    public Uni<FindTenantLobbyRequestResponse> findTenantLobbyRequest(
-            @Valid final FindTenantLobbyRequestRequest request) {
+    public Uni<FindTenantLobbyResourceResponse> execute(
+            @Valid final FindTenantLobbyResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findTenantLobbyRequest,
-                findTenantLobbyRequestMethod::execute);
+                TenantModuleClient::execute,
+                findTenantLobbyResourceMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantLobbyRequestsResponse> viewTenantLobbyRequests(
-            @Valid final ViewTenantLobbyRequestsRequest request) {
+    public Uni<ViewTenantLobbyResourcesResponse> execute(
+            @Valid final ViewTenantLobbyResourcesRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantLobbyRequests,
-                viewTenantLobbyRequestsMethod::execute);
+                TenantModuleClient::execute,
+                viewTenantLobbyResourcesMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequest(
-            @Valid final SyncTenantLobbyRequestRequest request) {
+    public Uni<SyncTenantLobbyResourceResponse> execute(
+            @Valid final SyncTenantLobbyResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantLobbyRequest,
-                syncTenantLobbyRequestMethod::execute);
+                TenantModuleClient::execute,
+                syncTenantLobbyResourceMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequestWithIdempotency(
-            @Valid final SyncTenantLobbyRequestRequest request) {
-        return syncTenantLobbyRequest(request)
+    public Uni<SyncTenantLobbyResourceResponse> executeWithIdempotency(
+            @Valid final SyncTenantLobbyResourceRequest request) {
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
                         if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getTenantLobbyRequest(),
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantLobbyResource(),
                                     t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantLobbyRequestResponse(Boolean.FALSE));
+                            return Uni.createFrom().item(new SyncTenantLobbyResourceResponse(Boolean.FALSE));
                         }
                     }
 
@@ -925,12 +914,12 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantLobbyRequestResponse> deleteTenantLobbyRequest(
-            @Valid final DeleteTenantLobbyRequestRequest request) {
+    public Uni<DeleteTenantLobbyResourceResponse> execute(
+            @Valid final DeleteTenantLobbyResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantLobbyRequest,
-                deleteTenantLobbyRequestMethod::execute);
+                TenantModuleClient::execute,
+                deleteTenantLobbyResourceMethod::execute);
     }
 
     /*

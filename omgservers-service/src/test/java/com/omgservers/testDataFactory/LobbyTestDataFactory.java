@@ -4,7 +4,7 @@ import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
+import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
 import com.omgservers.schema.module.lobby.SyncLobbyRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.service.factory.lobby.LobbyModelFactory;
@@ -34,10 +34,10 @@ public class LobbyTestDataFactory {
         return lobby;
     }
 
-    public LobbyModel createLobby(final TenantLobbyRequestModel tenantLobbyRequest) {
-        final var tenantId = tenantLobbyRequest.getTenantId();
-        final var tenantDeploymentId = tenantLobbyRequest.getDeploymentId();
-        final var lobbyId = tenantLobbyRequest.getLobbyId();
+    public LobbyModel createLobby(final TenantLobbyResourceModel tenantLobbyResource) {
+        final var tenantId = tenantLobbyResource.getTenantId();
+        final var tenantDeploymentId = tenantLobbyResource.getDeploymentId();
+        final var lobbyId = tenantLobbyResource.getLobbyId();
 
         final var lobby = lobbyModelFactory.create(lobbyId, tenantId, tenantDeploymentId);
         final var syncLobbyRequest = new SyncLobbyRequest(lobby);

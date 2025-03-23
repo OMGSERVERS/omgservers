@@ -6,14 +6,14 @@ import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
-import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
-import com.omgservers.service.shard.lobby.LobbyShard;
-import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.factory.tenant.TenantLobbyResourceModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.lobby.LobbyShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,7 +32,7 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
     final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
 
-    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
+    final TenantLobbyResourceModelFactory tenantLobbyResourceModelFactory;
     final SecurityIdentity securityIdentity;
 
     @Override
@@ -56,7 +56,7 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
                                                 stageId,
                                                 userId,
                                                 permissionQualifier)
-                                        .flatMap(voidItem -> createTenantLobbyRequest(tenantId, deploymentId));
+                                        .flatMap(voidItem -> createTenantLobbyResource(tenantId, deploymentId));
                             })
                             .invoke(voidItem -> log.info(
                                     "A new lobby was requested for deployment \"{}\" in tenant \"{}\"",
@@ -71,13 +71,13 @@ class CreateLobbyRequestMethodImpl implements CreateLobbyRequestMethod {
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
-    Uni<Boolean> createTenantLobbyRequest(final Long tenantId,
-                                          final Long deploymentId) {
-        final var tenantLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
+    Uni<Boolean> createTenantLobbyResource(final Long tenantId,
+                                           final Long deploymentId) {
+        final var tenantLobbyResource = tenantLobbyResourceModelFactory.create(tenantId,
                 deploymentId);
-        final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        return tenantShard.getService().syncTenantLobbyRequestWithIdempotency(request)
-                .map(SyncTenantLobbyRequestResponse::getCreated);
+        final var request = new SyncTenantLobbyResourceRequest(tenantLobbyResource);
+        return tenantShard.getService().executeWithIdempotency(request)
+                .map(SyncTenantLobbyResourceResponse::getCreated);
     }
 
 }

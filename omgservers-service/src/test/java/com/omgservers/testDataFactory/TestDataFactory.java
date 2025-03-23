@@ -20,7 +20,7 @@ import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
 import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
-import com.omgservers.schema.model.tenantLobbyRequest.TenantLobbyRequestModel;
+import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
 import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
 import com.omgservers.schema.model.tenantMatchmakerRequest.TenantMatchmakerRequestModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
@@ -95,8 +95,8 @@ public class TestDataFactory {
                 tenantVersion);
         final var tenantImage = tenantTestDataFactory.createTenantImage(tenantVersion);
 
-        final var tenantLobbyRequest = tenantTestDataFactory
-                .createTenantLobbyRequest(tenantDeployment);
+        final var tenantLobbyResource = tenantTestDataFactory
+                .createTenantLobbyResource(tenantDeployment);
         final var tenantMatchmakerRequest = tenantTestDataFactory
                 .createTenantMatchmakerRequest(tenantDeployment);
 
@@ -164,7 +164,7 @@ public class TestDataFactory {
                 .tenantDeployment(tenantDeployment)
                 .tenantImage(tenantImage)
 
-                .tenantLobbyRequest(tenantLobbyRequest)
+                .tenantLobbyResource(tenantLobbyResource)
                 .tenantMatchmakerRequest(tenantMatchmakerRequest)
 
                 .tenantLobbyRef(tenantLobbyRef)
@@ -217,7 +217,7 @@ public class TestDataFactory {
         TenantDeploymentModel tenantDeployment;
         TenantImageModel tenantImage;
 
-        TenantLobbyRequestModel tenantLobbyRequest;
+        TenantLobbyResourceModel tenantLobbyResource;
         TenantMatchmakerRequestModel tenantMatchmakerRequest;
 
         TenantLobbyRefModel tenantLobbyRef;

@@ -286,7 +286,7 @@ create table if not exists tab_tenant_deployment (
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_lobby_request (
+create table if not exists tab_tenant_lobby_resource (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -308,7 +308,7 @@ create table if not exists tab_tenant_lobby_ref (
     deleted boolean not null
 );
 
-create table if not exists tab_tenant_matchmaker_request (
+create table if not exists tab_tenant_matchmaker_resource (
     id bigint primary key,
     idempotency_key text not null unique,
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
@@ -352,12 +352,12 @@ create index if not exists idx_tenant_image_version_id on tab_tenant_image(versi
 create index if not exists idx_tenant_deployment_tenant_id on tab_tenant_deployment(tenant_id);
 create index if not exists idx_tenant_deployment_stage_id on tab_tenant_deployment(stage_id);
 create index if not exists idx_tenant_deployment_version_id on tab_tenant_deployment(version_id);
-create index if not exists idx_tenant_lobby_request_tenant_id on tab_tenant_lobby_request(tenant_id);
-create index if not exists idx_tenant_lobby_request_deployment_id on tab_tenant_lobby_request(deployment_id);
+create index if not exists idx_tenant_lobby_resource_tenant_id on tab_tenant_lobby_resource(tenant_id);
+create index if not exists idx_tenant_lobby_resource_deployment_id on tab_tenant_lobby_resource(deployment_id);
 create index if not exists idx_tenant_lobby_ref_tenant_id on tab_tenant_lobby_ref(tenant_id);
 create index if not exists idx_tenant_lobby_ref_deployment_id on tab_tenant_lobby_ref(deployment_id);
-create index if not exists idx_tenant_matchmaker_request_tenant_id on tab_tenant_matchmaker_request(tenant_id);
-create index if not exists idx_tenant_matchmaker_request_deployment_id on tab_tenant_matchmaker_request(deployment_id);
+create index if not exists idx_tenant_matchmaker_resource_tenant_id on tab_tenant_matchmaker_resource(tenant_id);
+create index if not exists idx_tenant_matchmaker_resource_deployment_id on tab_tenant_matchmaker_resource(deployment_id);
 create index if not exists idx_tenant_matchmaker_ref_tenant_id on tab_tenant_matchmaker_ref(tenant_id);
 create index if not exists idx_tenant_matchmaker_ref_deployment_id on tab_tenant_matchmaker_ref(deployment_id);
 

@@ -59,16 +59,8 @@ import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefRequ
 import com.omgservers.schema.module.tenant.tenantLobbyRef.SyncTenantLobbyRefResponse;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsRequest;
 import com.omgservers.schema.module.tenant.tenantLobbyRef.ViewTenantLobbyRefsResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.DeleteTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.FindTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.GetTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.ViewTenantLobbyRequestsResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.DeleteTenantMatchmakerRefResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRef.FindTenantMatchmakerRefRequest;
@@ -483,35 +475,35 @@ class TenantApiImpl implements TenantApi {
     }
 
     /*
-    TenantLobbyRequest
+    TenantLobbyResource
      */
 
     @Override
-    public Uni<GetTenantLobbyRequestResponse> getTenantLobbyRequest(final GetTenantLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantLobbyRequest);
+    public Uni<GetTenantLobbyResourceResponse> execute(final GetTenantLobbyResourceRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindTenantLobbyRequestResponse> findTenantLobbyRequest(final FindTenantLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantLobbyRequest);
+    public Uni<FindTenantLobbyResourceResponse> execute(final FindTenantLobbyResourceRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewTenantLobbyRequestsResponse> viewTenantLobbyRequests(
-            final ViewTenantLobbyRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantLobbyRequests);
+    public Uni<ViewTenantLobbyResourcesResponse> execute(
+            final ViewTenantLobbyResourcesRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantLobbyRequestResponse> syncTenantLobbyRequest(
-            final SyncTenantLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantLobbyRequest);
+    public Uni<SyncTenantLobbyResourceResponse> execute(
+            final SyncTenantLobbyResourceRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantLobbyRequestResponse> deleteTenantLobbyRequest(
-            final DeleteTenantLobbyRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantLobbyRequest);
+    public Uni<DeleteTenantLobbyResourceResponse> execute(
+            final DeleteTenantLobbyResourceRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*

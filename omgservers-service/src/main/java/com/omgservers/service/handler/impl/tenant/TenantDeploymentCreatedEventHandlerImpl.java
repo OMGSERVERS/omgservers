@@ -5,15 +5,15 @@ import com.omgservers.schema.module.queue.queue.SyncQueueRequest;
 import com.omgservers.schema.module.queue.queue.SyncQueueResponse;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
 import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestRequest;
-import com.omgservers.schema.module.tenant.tenantLobbyRequest.SyncTenantLobbyRequestResponse;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceRequest;
+import com.omgservers.schema.module.tenant.tenantLobbyResource.SyncTenantLobbyResourceResponse;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestRequest;
 import com.omgservers.schema.module.tenant.tenantMatchmakerRequest.SyncTenantMatchmakerRequestResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentCreatedEventBodyModel;
 import com.omgservers.service.factory.queue.QueueModelFactory;
-import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyResourceModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.shard.queue.QueueShard;
@@ -33,7 +33,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
     final QueueShard queueShard;
 
     final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
-    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
+    final TenantLobbyResourceModelFactory tenantLobbyResourceModelFactory;
     final QueueModelFactory queueModelFactory;
 
     @Override
@@ -56,7 +56,7 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
                     log.debug("Created, {}", tenantDeployment);
 
                     // TODO: creating lobby/matchmaker requests only if developer requested it
-                    return createTenantLobbyRequest(tenantId, id, idempotencyKey)
+                    return createTenantLobbyResource(tenantId, id, idempotencyKey)
                             .flatMap(created -> createTenantMatchmakerRequest(tenantId, id, idempotencyKey))
                             .flatMap(created -> {
                                 final var queueId = tenantDeployment.getQueueId();
@@ -72,15 +72,15 @@ public class TenantDeploymentCreatedEventHandlerImpl implements EventHandler {
                 .map(GetTenantDeploymentResponse::getTenantDeployment);
     }
 
-    Uni<Boolean> createTenantLobbyRequest(final Long tenantId,
-                                          final Long tenantDeploymentId,
-                                          final String idempotencyKey) {
-        final var tenantLobbyRequest = tenantLobbyRequestModelFactory.create(tenantId,
+    Uni<Boolean> createTenantLobbyResource(final Long tenantId,
+                                           final Long tenantDeploymentId,
+                                           final String idempotencyKey) {
+        final var tenantLobbyResource = tenantLobbyResourceModelFactory.create(tenantId,
                 tenantDeploymentId,
                 idempotencyKey);
-        final var request = new SyncTenantLobbyRequestRequest(tenantLobbyRequest);
-        return tenantShard.getService().syncTenantLobbyRequestWithIdempotency(request)
-                .map(SyncTenantLobbyRequestResponse::getCreated);
+        final var request = new SyncTenantLobbyResourceRequest(tenantLobbyResource);
+        return tenantShard.getService().executeWithIdempotency(request)
+                .map(SyncTenantLobbyResourceResponse::getCreated);
     }
 
     Uni<Boolean> createTenantMatchmakerRequest(final Long tenantId,

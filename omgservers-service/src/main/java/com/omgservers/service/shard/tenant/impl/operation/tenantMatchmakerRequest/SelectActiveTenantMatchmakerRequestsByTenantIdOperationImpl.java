@@ -31,7 +31,7 @@ class SelectActiveTenantMatchmakerRequestsByTenantIdOperationImpl
                 shard,
                 """
                         select id, idempotency_key, tenant_id, deployment_id, created, modified, matchmaker_id, deleted
-                        from $schema.tab_tenant_matchmaker_request
+                        from $schema.tab_tenant_matchmaker_resource
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,

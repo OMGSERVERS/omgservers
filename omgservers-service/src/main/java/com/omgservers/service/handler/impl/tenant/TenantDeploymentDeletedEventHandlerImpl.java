@@ -8,13 +8,13 @@ import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentR
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentDeletedEventBodyModel;
-import com.omgservers.service.factory.tenant.TenantLobbyRequestModelFactory;
+import com.omgservers.service.factory.tenant.TenantLobbyResourceModelFactory;
 import com.omgservers.service.factory.tenant.TenantMatchmakerRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.shard.queue.QueueShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.tenant.DeleteTenantLobbiesByTenantDeploymentIdOperation;
-import com.omgservers.service.operation.tenant.DeleteTenantLobbyRequestsByTenantDeploymentIdOperation;
+import com.omgservers.service.operation.tenant.DeleteTenantLobbyResourcesByTenantDeploymentIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantMatchmakerRequestsByTenantDeploymentIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantMatchmakersByTenantDeploymentIdOperation;
 import io.smallrye.mutiny.Uni;
@@ -31,8 +31,8 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
     final TenantShard tenantShard;
     final QueueShard queueShard;
 
-    final DeleteTenantLobbyRequestsByTenantDeploymentIdOperation
-            deleteTenantLobbyRequestsByTenantDeploymentIdOperation;
+    final DeleteTenantLobbyResourcesByTenantDeploymentIdOperation
+            deleteTenantLobbyResourcesByTenantDeploymentIdOperation;
     final DeleteTenantMatchmakersByTenantDeploymentIdOperation
             deleteTenantMatchmakersByTenantDeploymentIdOperation;
     final DeleteTenantLobbiesByTenantDeploymentIdOperation
@@ -41,7 +41,7 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
             deleteTenantMatchmakerRequestsByTenantDeploymentIdOperation;
 
     final TenantMatchmakerRequestModelFactory tenantMatchmakerRequestModelFactory;
-    final TenantLobbyRequestModelFactory tenantLobbyRequestModelFactory;
+    final TenantLobbyResourceModelFactory tenantLobbyResourceModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -60,7 +60,7 @@ public class TenantDeploymentDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(tenantDeployment -> {
                     log.debug("Deleted, {}", tenantDeployment);
 
-                    return deleteTenantLobbyRequestsByTenantDeploymentIdOperation.execute(tenantId, tenantDeploymentId)
+                    return deleteTenantLobbyResourcesByTenantDeploymentIdOperation.execute(tenantId, tenantDeploymentId)
                             .flatMap(voidItem -> deleteTenantLobbiesByTenantDeploymentIdOperation
                                     .execute(tenantId, tenantDeploymentId))
                             .flatMap(voidItem -> deleteTenantMatchmakerRequestsByTenantDeploymentIdOperation

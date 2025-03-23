@@ -3,7 +3,7 @@ package com.omgservers.service.handler.impl.tenant;
 import com.omgservers.BaseTestClass;
 import com.omgservers.service.event.body.module.tenant.TenantLobbyRefCreatedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.handler.impl.tenant.testInterface.VersionLobbyRefCreatedEventHandlerImplTestInterface;
+import com.omgservers.service.handler.impl.tenant.testInterface.TenantLobbyRefCreatedEventHandlerImplTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 class TenantLobbyRefCreatedEventHandlerImplTest extends BaseTestClass {
 
     @Inject
-    VersionLobbyRefCreatedEventHandlerImplTestInterface versionLobbyRefCreatedEventHandler;
+    TenantLobbyRefCreatedEventHandlerImplTestInterface versionLobbyRefCreatedEventHandler;
 
     @Inject
     EventModelFactory eventModelFactory;
@@ -32,7 +32,7 @@ class TenantLobbyRefCreatedEventHandlerImplTest extends BaseTestClass {
         final var tenantDeployment = testDataFactory.getTenantTestDataFactory()
                 .createTenantDeployment(stage, version);
         final var versionLobbyRequest = testDataFactory.getTenantTestDataFactory()
-                .createTenantLobbyRequest(tenantDeployment);
+                .createTenantLobbyResource(tenantDeployment);
         final var lobby = testDataFactory.getLobbyTestDataFactory().createLobby(versionLobbyRequest);
         final var versionLobbyRef = testDataFactory.getTenantTestDataFactory()
                 .createTenantLobbyRef(tenantDeployment, lobby);

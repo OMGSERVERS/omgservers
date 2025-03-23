@@ -31,7 +31,7 @@ class DeleteTenantMatchmakerRequestOperationImpl implements DeleteTenantMatchmak
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_tenant_matchmaker_request
+                        update $schema.tab_tenant_matchmaker_resource
                         set modified = $3, deleted = true
                         where tenant_id = $1 and id = $2 and deleted = false
                         """,
