@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerRequest;
 
-import com.omgservers.schema.model.request.MatchmakerRequestModel;
-import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerRequestModelMapper;
+import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerRequestModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,8 +30,7 @@ class SelectMatchmakerRequestOperationImpl implements SelectMatchmakerRequestOpe
                 shard,
                 """
                         select
-                            id, idempotency_key, matchmaker_id, created, modified, user_id, client_id, mode, config, 
-                            deleted
+                            id, idempotency_key, matchmaker_id, created, modified, client_id, mode, config, deleted
                         from $schema.tab_matchmaker_request
                         where matchmaker_id = $1 and id = $2
                         limit 1
@@ -40,7 +39,7 @@ class SelectMatchmakerRequestOperationImpl implements SelectMatchmakerRequestOpe
                         matchmakerId,
                         id
                 ),
-                "Matchmaker resource",
+                "Matchmaker request",
                 matchmakerRequestModelMapper::execute);
     }
 }

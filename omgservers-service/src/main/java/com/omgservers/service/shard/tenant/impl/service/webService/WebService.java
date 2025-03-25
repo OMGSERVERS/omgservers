@@ -1,14 +1,9 @@
 package com.omgservers.service.shard.tenant.impl.service.webService;
 
 import com.omgservers.schema.module.tenant.tenant.*;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.*;
-import com.omgservers.schema.module.tenant.tenantDeployment.*;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.*;
+import com.omgservers.schema.module.tenant.tenantDeploymentRef.*;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.*;
 import com.omgservers.schema.module.tenant.tenantImage.*;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.*;
-import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerResource.*;
 import com.omgservers.schema.module.tenant.tenantPermission.*;
 import com.omgservers.schema.module.tenant.tenantProject.*;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
@@ -23,208 +18,135 @@ public interface WebService {
     Tenant
      */
 
-    Uni<GetTenantResponse> getTenant(GetTenantRequest request);
+    Uni<GetTenantResponse> execute(GetTenantRequest request);
 
-    Uni<GetTenantDataResponse> getTenantData(GetTenantDataRequest request);
+    Uni<GetTenantDataResponse> execute(GetTenantDataRequest request);
 
-    Uni<SyncTenantResponse> syncTenant(SyncTenantRequest request);
+    Uni<SyncTenantResponse> execute(SyncTenantRequest request);
 
-    Uni<DeleteTenantResponse> deleteTenant(DeleteTenantRequest request);
+    Uni<DeleteTenantResponse> execute(DeleteTenantRequest request);
 
     /*
     TenantPermission
      */
 
-    Uni<ViewTenantPermissionsResponse> viewTenantPermissions(ViewTenantPermissionsRequest request);
+    Uni<ViewTenantPermissionsResponse> execute(ViewTenantPermissionsRequest request);
 
-    Uni<VerifyTenantPermissionExistsResponse> verifyTenantPermissionExists(VerifyTenantPermissionExistsRequest request);
+    Uni<VerifyTenantPermissionExistsResponse> execute(VerifyTenantPermissionExistsRequest request);
 
-    Uni<SyncTenantPermissionResponse> syncTenantPermission(SyncTenantPermissionRequest request);
+    Uni<SyncTenantPermissionResponse> execute(SyncTenantPermissionRequest request);
 
-    Uni<DeleteTenantPermissionResponse> deleteTenantPermission(DeleteTenantPermissionRequest request);
+    Uni<DeleteTenantPermissionResponse> execute(DeleteTenantPermissionRequest request);
 
     /*
     TenantProject
      */
 
-    Uni<GetTenantProjectResponse> getTenantProject(GetTenantProjectRequest request);
+    Uni<GetTenantProjectResponse> execute(GetTenantProjectRequest request);
 
-    Uni<GetTenantProjectDataResponse> getTenantProjectData(GetTenantProjectDataRequest request);
+    Uni<GetTenantProjectDataResponse> execute(GetTenantProjectDataRequest request);
 
-    Uni<SyncTenantProjectResponse> syncTenantProject(SyncTenantProjectRequest request);
+    Uni<SyncTenantProjectResponse> execute(SyncTenantProjectRequest request);
 
-    Uni<ViewTenantProjectsResponse> viewTenantProjects(ViewTenantProjectsRequest request);
+    Uni<ViewTenantProjectsResponse> execute(ViewTenantProjectsRequest request);
 
-    Uni<DeleteTenantProjectResponse> deleteTenantProject(DeleteTenantProjectRequest request);
+    Uni<DeleteTenantProjectResponse> execute(DeleteTenantProjectRequest request);
 
     /*
     TenantProjectPermission
      */
 
-    Uni<ViewTenantProjectPermissionsResponse> viewTenantProjectPermissions(ViewTenantProjectPermissionsRequest request);
+    Uni<ViewTenantProjectPermissionsResponse> execute(ViewTenantProjectPermissionsRequest request);
 
-    Uni<VerifyTenantProjectPermissionExistsResponse> verifyTenantProjectPermissionExists(
-            VerifyTenantProjectPermissionExistsRequest request);
+    Uni<VerifyTenantProjectPermissionExistsResponse> execute(VerifyTenantProjectPermissionExistsRequest request);
 
-    Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(SyncTenantProjectPermissionRequest request);
+    Uni<SyncTenantProjectPermissionResponse> execute(SyncTenantProjectPermissionRequest request);
 
-    Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
-            DeleteTenantProjectPermissionRequest request);
+    Uni<DeleteTenantProjectPermissionResponse> execute(DeleteTenantProjectPermissionRequest request);
 
     /*
     TenantStage
      */
 
-    Uni<GetTenantStageResponse> getTenantStage(GetTenantStageRequest request);
+    Uni<GetTenantStageResponse> execute(GetTenantStageRequest request);
 
-    Uni<GetTenantStageDataResponse> getTenantStageData(GetTenantStageDataRequest request);
+    Uni<GetTenantStageDataResponse> execute(GetTenantStageDataRequest request);
 
-    Uni<SyncTenantStageResponse> syncTenantStage(SyncTenantStageRequest request);
+    Uni<SyncTenantStageResponse> execute(SyncTenantStageRequest request);
 
-    Uni<ViewTenantStagesResponse> viewTenantStages(ViewTenantStagesRequest request);
+    Uni<ViewTenantStagesResponse> execute(ViewTenantStagesRequest request);
 
-    Uni<DeleteTenantStageResponse> deleteTenantStage(DeleteTenantStageRequest request);
+    Uni<DeleteTenantStageResponse> execute(DeleteTenantStageRequest request);
 
     /*
     TenantStagePermission
      */
 
-    Uni<ViewTenantStagePermissionsResponse> viewTenantStagePermissions(ViewTenantStagePermissionsRequest request);
+    Uni<ViewTenantStagePermissionsResponse> execute(ViewTenantStagePermissionsRequest request);
 
-    Uni<VerifyTenantStagePermissionExistsResponse> verifyTenantStagePermissionExists(
-            VerifyTenantStagePermissionExistsRequest request);
+    Uni<VerifyTenantStagePermissionExistsResponse> execute(VerifyTenantStagePermissionExistsRequest request);
 
-    Uni<SyncTenantStagePermissionResponse> syncTenantStagePermission(SyncTenantStagePermissionRequest request);
+    Uni<SyncTenantStagePermissionResponse> execute(SyncTenantStagePermissionRequest request);
 
-    Uni<DeleteTenantStagePermissionResponse> deleteTenantStagePermission(DeleteTenantStagePermissionRequest request);
+    Uni<DeleteTenantStagePermissionResponse> execute(DeleteTenantStagePermissionRequest request);
 
     /*
     TenantVersion
      */
 
-    Uni<GetTenantVersionResponse> getTenantVersion(GetTenantVersionRequest request);
+    Uni<GetTenantVersionResponse> execute(GetTenantVersionRequest request);
 
-    Uni<GetTenantVersionConfigResponse> getTenantVersionConfig(GetTenantVersionConfigRequest request);
+    Uni<GetTenantVersionConfigResponse> execute(GetTenantVersionConfigRequest request);
 
-    Uni<GetTenantVersionDataResponse> getTenantVersionData(GetTenantVersionDataRequest request);
+    Uni<GetTenantVersionDataResponse> execute(GetTenantVersionDataRequest request);
 
-    Uni<SyncTenantVersionResponse> syncTenantVersion(SyncTenantVersionRequest request);
+    Uni<SyncTenantVersionResponse> execute(SyncTenantVersionRequest request);
 
-    Uni<ViewTenantVersionsResponse> viewTenantVersions(ViewTenantVersionsRequest request);
+    Uni<ViewTenantVersionsResponse> execute(ViewTenantVersionsRequest request);
 
-    Uni<DeleteTenantVersionResponse> deleteTenantVersion(DeleteTenantVersionRequest request);
-
-    /*
-    TenantFilesArchive
-     */
-
-    Uni<GetTenantFilesArchiveResponse> getTenantFilesArchive(GetTenantFilesArchiveRequest request);
-
-    Uni<FindTenantFilesArchiveResponse> findTenantFilesArchive(FindTenantFilesArchiveRequest request);
-
-    Uni<ViewTenantFilesArchivesResponse> viewTenantFilesArchives(ViewTenantFilesArchivesRequest request);
-
-    Uni<SyncTenantFilesArchiveResponse> syncTenantFilesArchive(SyncTenantFilesArchiveRequest request);
-
-    Uni<DeleteTenantFilesArchiveResponse> deleteTenantFilesArchive(DeleteTenantFilesArchiveRequest request);
-
-    /*
-    TenantBuildRequest
-     */
-
-    Uni<GetTenantBuildRequestResponse> getTenantBuildRequest(GetTenantBuildRequestRequest request);
-
-    Uni<ViewTenantBuildRequestsResponse> viewTenantBuildRequests(ViewTenantBuildRequestsRequest request);
-
-    Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequest(SyncTenantBuildRequestRequest request);
-
-    Uni<DeleteTenantBuildRequestResponse> deleteTenantBuildRequest(DeleteTenantBuildRequestRequest request);
+    Uni<DeleteTenantVersionResponse> execute(DeleteTenantVersionRequest request);
 
     /*
     TenantImage
      */
 
-    Uni<GetTenantImageResponse> getTenantImage(GetTenantImageRequest request);
+    Uni<GetTenantImageResponse> execute(GetTenantImageRequest request);
 
-    Uni<FindTenantImageResponse> findTenantImage(FindTenantImageRequest request);
+    Uni<FindTenantImageResponse> execute(FindTenantImageRequest request);
 
-    Uni<ViewTenantImagesResponse> viewTenantImages(ViewTenantImagesRequest request);
+    Uni<ViewTenantImagesResponse> execute(ViewTenantImagesRequest request);
 
-    Uni<SyncTenantImageResponse> syncTenantImage(SyncTenantImageRequest request);
+    Uni<SyncTenantImageResponse> execute(SyncTenantImageRequest request);
 
-    Uni<DeleteTenantImageResponse> deleteTenantImage(DeleteTenantImageRequest request);
-
-    /*
-    TenantDeployment
-     */
-
-    Uni<GetTenantDeploymentResponse> getTenantDeployment(GetTenantDeploymentRequest request);
-
-    Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(GetTenantDeploymentDataRequest request);
-
-    Uni<SelectTenantDeploymentResponse> selectTenantDeployment(SelectTenantDeploymentRequest request);
-
-    Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(ViewTenantDeploymentsRequest request);
-
-    Uni<SyncTenantDeploymentResponse> syncTenantDeployment(SyncTenantDeploymentRequest request);
-
-    Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(DeleteTenantDeploymentRequest request);
+    Uni<DeleteTenantImageResponse> execute(DeleteTenantImageRequest request);
 
     /*
-    TenantLobbyResource
+    TenantDeploymentResource
      */
 
-    Uni<GetTenantLobbyResourceResponse> execute(GetTenantLobbyResourceRequest request);
+    Uni<GetTenantDeploymentResourceResponse> execute(GetTenantDeploymentResourceRequest request);
 
-    Uni<FindTenantLobbyResourceResponse> execute(FindTenantLobbyResourceRequest request);
+    Uni<FindTenantDeploymentResourceResponse> execute(FindTenantDeploymentResourceRequest request);
 
-    Uni<ViewTenantLobbyResourcesResponse> execute(ViewTenantLobbyResourcesRequest request);
+    Uni<ViewTenantDeploymentResourcesResponse> execute(ViewTenantDeploymentResourcesRequest request);
 
-    Uni<SyncTenantLobbyResourceResponse> execute(SyncTenantLobbyResourceRequest request);
+    Uni<SyncTenantDeploymentResourceResponse> execute(SyncTenantDeploymentResourceRequest request);
 
-    Uni<UpdateTenantLobbyResourceStatusResponse> execute(UpdateTenantLobbyResourceStatusRequest request);
+    Uni<UpdateTenantDeploymentResourceStatusResponse> execute(UpdateTenantDeploymentResourceStatusRequest request);
 
-    Uni<DeleteTenantLobbyResourceResponse> execute(DeleteTenantLobbyResourceRequest request);
+    Uni<DeleteTenantDeploymentResourceResponse> execute(DeleteTenantDeploymentResourceRequest request);
 
     /*
-    TenantLobbyRef
+    TenantDeploymentRef
      */
 
-    Uni<GetTenantLobbyRefResponse> getTenantLobbyRef(GetTenantLobbyRefRequest request);
+    Uni<GetTenantDeploymentRefResponse> execute(GetTenantDeploymentRefRequest request);
 
-    Uni<FindTenantLobbyRefResponse> findTenantLobbyRef(FindTenantLobbyRefRequest request);
+    Uni<FindTenantDeploymentRefResponse> execute(FindTenantDeploymentRefRequest request);
 
-    Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(ViewTenantLobbyRefsRequest request);
+    Uni<ViewTenantDeploymentRefsResponse> execute(ViewTenantDeploymentRefsRequest request);
 
-    Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(SyncTenantLobbyRefRequest request);
+    Uni<SyncTenantDeploymentRefResponse> execute(SyncTenantDeploymentRefRequest request);
 
-    Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(DeleteTenantLobbyRefRequest request);
-
-    /*
-    TenantMatchmakerResource
-     */
-
-    Uni<GetTenantMatchmakerResourceResponse> execute(GetTenantMatchmakerResourceRequest request);
-
-    Uni<FindTenantMatchmakerResourceResponse> execute(FindTenantMatchmakerResourceRequest request);
-
-    Uni<ViewTenantMatchmakerResourcesResponse> execute(ViewTenantMatchmakerResourcesRequest request);
-
-    Uni<SyncTenantMatchmakerResourceResponse> execute(SyncTenantMatchmakerResourceRequest request);
-
-    Uni<DeleteTenantMatchmakerResourceResponse> execute(DeleteTenantMatchmakerResourceRequest request);
-
-    /*
-    TenantMatchmakerRef
-     */
-
-    Uni<GetTenantMatchmakerRefResponse> getTenantMatchmakerRef(GetTenantMatchmakerRefRequest request);
-
-    Uni<FindTenantMatchmakerRefResponse> findTenantMatchmakerRef(FindTenantMatchmakerRefRequest request);
-
-    Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(ViewTenantMatchmakerRefsRequest request);
-
-    Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(SyncTenantMatchmakerRefRequest request);
-
-    Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(DeleteTenantMatchmakerRefRequest request);
+    Uni<DeleteTenantDeploymentRefResponse> execute(DeleteTenantDeploymentRefRequest request);
 }

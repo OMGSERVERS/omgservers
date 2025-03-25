@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerRequest;
 
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.ViewMatchmakerRequestsRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.ViewMatchmakerRequestsResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface ViewMatchmakerRequestsMethod {

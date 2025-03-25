@@ -1,15 +1,11 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
-import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
 import com.omgservers.schema.module.lobby.SyncLobbyRequest;
-import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
 import com.omgservers.service.factory.lobby.LobbyModelFactory;
-import com.omgservers.service.factory.lobby.LobbyRuntimeRefModelFactory;
-import com.omgservers.service.shard.lobby.impl.service.lobbyService.testInterface.LobbyServiceTestInterface;
+import com.omgservers.service.factory.match.MatchModelFactory;
+import com.omgservers.service.shard.lobby.service.testInterface.LobbyServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,38 +17,15 @@ public class LobbyTestDataFactory {
 
     final LobbyServiceTestInterface lobbyService;
 
-    final LobbyRuntimeRefModelFactory lobbyRuntimeRefModelFactory;
     final LobbyModelFactory lobbyModelFactory;
 
-    public LobbyModel createLobby(final TenantDeploymentModel tenantDeployment) {
-        final var tenantId = tenantDeployment.getTenantId();
-        final var tenantDeploymentId = tenantDeployment.getId();
+    public LobbyModel createLobby(final DeploymentLobbyResourceModel deploymentLobbyResource) {
+        final var deploymentId = deploymentLobbyResource.getDeploymentId();
+        final var lobbyId = deploymentLobbyResource.getLobbyId();
 
-        final var lobby = lobbyModelFactory.create(tenantId, tenantDeploymentId);
+        final var lobby = lobbyModelFactory.create(lobbyId, deploymentId);
         final var syncLobbyRequest = new SyncLobbyRequest(lobby);
         lobbyService.syncLobby(syncLobbyRequest);
         return lobby;
-    }
-
-    public LobbyModel createLobby(final TenantLobbyResourceModel tenantLobbyResource) {
-        final var tenantId = tenantLobbyResource.getTenantId();
-        final var tenantDeploymentId = tenantLobbyResource.getDeploymentId();
-        final var lobbyId = tenantLobbyResource.getLobbyId();
-
-        final var lobby = lobbyModelFactory.create(lobbyId, tenantId, tenantDeploymentId);
-        final var syncLobbyRequest = new SyncLobbyRequest(lobby);
-        lobbyService.syncLobby(syncLobbyRequest);
-        return lobby;
-    }
-
-    public LobbyRuntimeRefModel createLobbyRuntimeRef(final LobbyModel lobby,
-                                                      final RuntimeModel runtime) {
-        final var lobbyId = lobby.getId();
-        final var runtimeId = runtime.getId();
-
-        final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId);
-        final var syncLobbyRuntimeRefRequest = new SyncLobbyRuntimeRefRequest(lobbyRuntimeRef);
-        lobbyService.syncLobbyRuntimeRef(syncLobbyRuntimeRefRequest);
-        return lobbyRuntimeRef;
     }
 }

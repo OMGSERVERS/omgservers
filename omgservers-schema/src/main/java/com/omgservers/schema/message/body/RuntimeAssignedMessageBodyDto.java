@@ -1,0 +1,33 @@
+package com.omgservers.schema.message.body;
+
+import com.omgservers.schema.message.MessageBodyDto;
+import com.omgservers.schema.message.MessageQualifierEnum;
+import com.omgservers.schema.model.runtime.RuntimeConfigDto;
+import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class RuntimeAssignedMessageBodyDto extends MessageBodyDto {
+
+    @NotNull
+    Long runtimeId;
+
+    @NotNull
+    RuntimeQualifierEnum runtimeQualifier;
+
+    @NotNull
+    RuntimeConfigDto runtimeConfig;
+
+    @Override
+    public MessageQualifierEnum getQualifier() {
+        return MessageQualifierEnum.RUNTIME_ASSIGNED;
+    }
+}

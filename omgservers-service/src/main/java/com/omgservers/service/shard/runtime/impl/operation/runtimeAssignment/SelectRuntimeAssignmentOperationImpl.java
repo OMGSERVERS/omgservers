@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment;
 
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.service.shard.runtime.impl.mapper.RuntimeAssignmentModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.runtime.impl.mapper.RuntimeAssignmentModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,15 +29,12 @@ class SelectRuntimeAssignmentOperationImpl implements SelectRuntimeAssignmentOpe
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, runtime_id, created, modified, client_id, last_activity, config, deleted
+                        select id, idempotency_key, runtime_id, created, modified, client_id, config, deleted
                         from $schema.tab_runtime_assignment
                         where runtime_id = $1 and id = $2
                         limit 1
                         """,
-                List.of(
-                        runtimeId,
-                        id
-                ),
+                List.of(runtimeId, id),
                 "Runtime assignment",
                 runtimeAssignmentModelMapper::execute);
     }

@@ -6,8 +6,8 @@ import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerRequest;
+import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerResponse;
 import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
 import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import io.smallrye.mutiny.Uni;
@@ -22,5 +22,5 @@ public interface WebService {
 
     Uni<CreateClientPlayerResponse> execute(CreateClientPlayerRequest request);
 
-    Uni<InterchangePlayerResponse> execute(InterchangePlayerRequest request);
+    Uni<InterchangeMessagesPlayerResponse> execute(InterchangeMessagesPlayerRequest request);
 }

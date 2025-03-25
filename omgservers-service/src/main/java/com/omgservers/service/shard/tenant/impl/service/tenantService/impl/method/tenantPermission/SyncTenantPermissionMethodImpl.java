@@ -4,7 +4,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionRequest;
 import com.omgservers.schema.module.tenant.tenantPermission.SyncTenantPermissionResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.shard.tenant.impl.operation.tenant.VerifyTenantExistsOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantPermission.UpsertTenantPermissionOperation;
 import com.omgservers.service.operation.server.ChangeContext;

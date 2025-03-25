@@ -2,7 +2,7 @@ package com.omgservers.service.service.job.operation.upsertJob;
 
 import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.event.body.system.JobCreatedEventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

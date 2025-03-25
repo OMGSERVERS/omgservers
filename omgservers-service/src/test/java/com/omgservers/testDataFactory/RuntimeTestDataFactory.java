@@ -1,19 +1,22 @@
 package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.match.MatchModel;
+import com.omgservers.schema.message.body.RuntimeCreatedMessageBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.SyncRuntimeRequest;
+import com.omgservers.schema.model.runtimeMessage.RuntimeMessageModel;
+import com.omgservers.schema.module.runtime.runtime.SyncRuntimeRequest;
+import com.omgservers.schema.module.runtime.runtimeAssignment.SyncRuntimeAssignmentRequest;
+import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageRequest;
 import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
+import com.omgservers.service.factory.runtime.RuntimeMessageModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
-import com.omgservers.service.shard.runtime.impl.service.runtimeService.testInterface.RuntimeServiceTestInterface;
+import com.omgservers.service.shard.runtime.service.testInterface.RuntimeServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,21 +29,19 @@ public class RuntimeTestDataFactory {
     final RuntimeServiceTestInterface runtimeService;
 
     final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
+    final RuntimeMessageModelFactory runtimeMessageModelFactory;
+
     final RuntimeModelFactory runtimeModelFactory;
 
-    public RuntimeModel createLobbyRuntime(final TenantModel tenant,
-                                           final TenantDeploymentModel tenantDeployment,
+    public RuntimeModel createLobbyRuntime(final DeploymentModel deployment,
                                            final LobbyModel lobby) {
-        final var tenantId = tenant.getId();
-        final var tenantDeploymentId = tenantDeployment.getId();
-
+        final var deploymentId = deployment.getId();
         final var runtimeId = lobby.getRuntimeId();
 
         final var config = RuntimeConfigDto.create();
-        config.setLobbyConfig(new RuntimeConfigDto.LobbyConfigDto(lobby.getId()));
+        config.setLobby(new RuntimeConfigDto.LobbyConfigDto(lobby.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
-                tenantId,
-                tenantDeploymentId,
+                deploymentId,
                 RuntimeQualifierEnum.LOBBY,
                 config);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
@@ -48,24 +49,30 @@ public class RuntimeTestDataFactory {
         return runtime;
     }
 
-    public RuntimeModel createMatchRuntime(final TenantModel tenant,
-                                           final TenantDeploymentModel tenantDeployment,
-                                           final MatchmakerMatchModel match) {
-        final var tenantId = tenant.getId();
-        final var tenantDeploymentId = tenantDeployment.getId();
+    public RuntimeModel createMatchRuntime(final DeploymentModel deployment,
+                                           final MatchModel match) {
+        final var deploymentId = deployment.getId();
 
         final var runtimeId = match.getRuntimeId();
 
         final var config = RuntimeConfigDto.create();
-        config.setMatchConfig(new RuntimeConfigDto.MatchConfigDto(match.getMatchmakerId(), match.getId()));
+        config.setMatch(new RuntimeConfigDto.MatchConfigDto(match.getMatchmakerId(), match.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
-                tenantId,
-                tenantDeploymentId,
+                deploymentId,
                 RuntimeQualifierEnum.MATCH,
                 config);
         final var syncRuntimeRequest = new SyncRuntimeRequest(runtime);
         runtimeService.execute(syncRuntimeRequest);
         return runtime;
+    }
+
+    public RuntimeMessageModel createRuntimeCreatedRuntimeMessage(final RuntimeModel runtime) {
+        final var messageBody = new RuntimeCreatedMessageBodyDto(runtime.getConfig());
+        final var runtimeMessage = runtimeMessageModelFactory.create(runtime.getId(), messageBody);
+
+        final var syncRuntimeMessageRequest = new SyncRuntimeMessageRequest(runtimeMessage);
+        runtimeService.execute(syncRuntimeMessageRequest);
+        return runtimeMessage;
     }
 
     public RuntimeAssignmentModel createRuntimeAssignment(final RuntimeModel runtime,

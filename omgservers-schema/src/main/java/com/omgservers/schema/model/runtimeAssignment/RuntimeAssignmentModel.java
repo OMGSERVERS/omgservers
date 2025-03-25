@@ -2,11 +2,7 @@ package com.omgservers.schema.model.runtimeAssignment;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.Instant;
 
@@ -37,9 +33,6 @@ public class RuntimeAssignmentModel {
 
     @NotNull
     Long clientId;
-
-    @NotNull
-    Instant lastActivity;
 
     @NotNull
     @ToString.Exclude

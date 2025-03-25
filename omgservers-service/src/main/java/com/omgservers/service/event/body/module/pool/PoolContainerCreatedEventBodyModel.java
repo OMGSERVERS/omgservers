@@ -18,9 +18,6 @@ public class PoolContainerCreatedEventBodyModel extends EventBodyModel {
     Long poolId;
 
     @NotNull
-    Long serverId;
-
-    @NotNull
     Long id;
 
     @Override

@@ -47,7 +47,7 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
 
     Uni<TenantModel> getTenant(final Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantShard.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().execute(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 }

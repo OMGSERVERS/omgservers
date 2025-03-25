@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
@@ -41,7 +41,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateTenantStageDeveloperResponse> execute(final CreateTenantStageDeveloperRequest request) {
+    public Uni<CreateStageDeveloperResponse> execute(final CreateStageDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -63,10 +63,10 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
                                                 .map(tenantStage -> {
                                                     final var tenantStageId = tenantStage.getId();
 
-                                                    log.info("The new stage \"{}\" was created in tenant \"{}\"",
+                                                    log.info("New stage \"{}\" created in tenant \"{}\"",
                                                             tenantStageId, tenantId);
 
-                                                    return new CreateTenantStageDeveloperResponse(tenantStageId);
+                                                    return new CreateStageDeveloperResponse(tenantStageId);
                                                 }));
                             });
                 });
@@ -78,7 +78,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var tenantStageId = tenantStage.getId();
         final var request = new SyncTenantStageRequest(tenantStage);
-        return tenantShard.getService().syncTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER))
                 .replaceWith(tenantStage);

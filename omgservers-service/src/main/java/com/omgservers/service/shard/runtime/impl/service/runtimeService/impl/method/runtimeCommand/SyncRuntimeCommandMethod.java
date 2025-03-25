@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeCommand;
 
-import com.omgservers.schema.module.runtime.SyncRuntimeCommandRequest;
-import com.omgservers.schema.module.runtime.SyncRuntimeCommandResponse;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandRequest;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncRuntimeCommandMethod {

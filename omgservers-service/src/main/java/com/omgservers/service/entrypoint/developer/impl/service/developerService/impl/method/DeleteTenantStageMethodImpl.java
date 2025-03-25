@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.DeleteTenantStageDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantStageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteStageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteStageDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageRequest;
@@ -38,7 +38,7 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<DeleteTenantStageDeveloperResponse> execute(final DeleteTenantStageDeveloperRequest request) {
+    public Uni<DeleteStageDeveloperResponse> execute(final DeleteStageDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -68,7 +68,7 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
                                                                     tenantStageId, tenantId);
                                                         }
                                                     })
-                                                    .map(DeleteTenantStageDeveloperResponse::new);
+                                                    .map(DeleteStageDeveloperResponse::new);
                                         });
                             });
                 });
@@ -76,14 +76,14 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantShard.getService().getTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<Boolean> deleteTenantStage(final Long tenantId,
                                    final Long id) {
         final var request = new DeleteTenantStageRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantStageResponse::getDeleted);
     }
 }

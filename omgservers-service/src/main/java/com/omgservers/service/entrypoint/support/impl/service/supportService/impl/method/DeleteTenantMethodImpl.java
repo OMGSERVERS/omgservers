@@ -38,7 +38,7 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
                     final var deleteTenantRequest = new DeleteTenantRequest(tenantId);
-                    return tenantShard.getService().deleteTenant(deleteTenantRequest)
+                    return tenantShard.getService().execute(deleteTenantRequest)
                             .map(deleteTenantResponse -> {
                                 final var deleted = deleteTenantResponse.getDeleted();
 

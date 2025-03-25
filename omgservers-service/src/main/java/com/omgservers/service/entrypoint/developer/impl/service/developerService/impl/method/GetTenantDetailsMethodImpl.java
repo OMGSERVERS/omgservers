@@ -54,7 +54,7 @@ class GetTenantDetailsMethodImpl implements GetTenantDetailsMethod {
 
     Uni<TenantDataDto> getTenantData(final Long tenantId) {
         final var request = new GetTenantDataRequest(tenantId);
-        return tenantShard.getService().getTenantData(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantDataResponse::getTenantData);
     }
 }

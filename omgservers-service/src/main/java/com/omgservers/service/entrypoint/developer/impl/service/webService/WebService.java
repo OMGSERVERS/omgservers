@@ -17,59 +17,49 @@ public interface WebService {
     Tenant project
      */
 
-    Uni<CreateTenantProjectDeveloperResponse> execute(CreateTenantProjectDeveloperRequest request);
+    Uni<CreateProjectDeveloperResponse> execute(CreateProjectDeveloperRequest request);
 
-    Uni<CreateTenantProjectAliasDeveloperResponse> execute(CreateTenantProjectAliasDeveloperRequest request);
+    Uni<CreateProjectAliasDeveloperResponse> execute(CreateProjectAliasDeveloperRequest request);
 
-    Uni<GetTenantProjectDetailsDeveloperResponse> execute(GetTenantProjectDetailsDeveloperRequest request);
+    Uni<GetProjectDetailsDeveloperResponse> execute(GetProjectDetailsDeveloperRequest request);
 
-    Uni<DeleteTenantProjectDeveloperResponse> execute(DeleteTenantProjectDeveloperRequest request);
+    Uni<DeleteProjectDeveloperResponse> execute(DeleteProjectDeveloperRequest request);
 
     /*
     Tenant stage
      */
 
-    Uni<CreateTenantStageDeveloperResponse> execute(CreateTenantStageDeveloperRequest request);
+    Uni<CreateStageDeveloperResponse> execute(CreateStageDeveloperRequest request);
 
-    Uni<CreateTenantStageAliasDeveloperResponse> execute(CreateTenantStageAliasDeveloperRequest request);
+    Uni<CreateStageAliasDeveloperResponse> execute(CreateStageAliasDeveloperRequest request);
 
-    Uni<GetTenantStageDetailsDeveloperResponse> execute(GetTenantStageDetailsDeveloperRequest request);
+    Uni<GetStageDetailsDeveloperResponse> execute(GetStageDetailsDeveloperRequest request);
 
-    Uni<DeleteTenantStageDeveloperResponse> execute(DeleteTenantStageDeveloperRequest request);
+    Uni<DeleteStageDeveloperResponse> execute(DeleteStageDeveloperRequest request);
 
     /*
     Tenant version
      */
 
-    Uni<CreateTenantVersionDeveloperResponse> execute(CreateTenantVersionDeveloperRequest request);
+    Uni<CreateVersionDeveloperResponse> execute(CreateVersionDeveloperRequest request);
 
-    Uni<UploadFilesArchiveDeveloperResponse> execute(UploadFilesArchiveDeveloperRequest request);
+    Uni<GetVersionDetailsDeveloperResponse> execute(GetVersionDetailsDeveloperRequest request);
 
-    Uni<GetTenantVersionDetailsDeveloperResponse> execute(GetTenantVersionDetailsDeveloperRequest request);
-
-    Uni<DeleteTenantVersionDeveloperResponse> execute(DeleteTenantVersionDeveloperRequest request);
+    Uni<DeleteVersionDeveloperResponse> execute(DeleteVersionDeveloperRequest request);
 
     /*
     Tenant image
      */
 
-    Uni<CreateTenantImageDeveloperResponse> execute(CreateTenantImageDeveloperRequest request);
+    Uni<CreateImageDeveloperResponse> execute(CreateImageDeveloperRequest request);
 
     /*
     Tenant deployment
      */
 
-    Uni<DeployTenantVersionDeveloperResponse> execute(DeployTenantVersionDeveloperRequest request);
+    Uni<CreateDeploymentDeveloperResponse> execute(CreateDeploymentDeveloperRequest request);
 
-    Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(GetTenantDeploymentDetailsDeveloperRequest request);
+    Uni<GetDeploymentDetailsDeveloperResponse> execute(GetDeploymentDetailsDeveloperRequest request);
 
-    Uni<DeleteTenantDeploymentDeveloperResponse> execute(DeleteTenantDeploymentDeveloperRequest request);
-
-    Uni<CreateLobbyRequestDeveloperResponse> execute(CreateLobbyRequestDeveloperRequest request);
-
-    Uni<DeleteLobbyDeveloperResponse> execute(DeleteLobbyDeveloperRequest request);
-
-    Uni<CreateMatchmakerRequestDeveloperResponse> execute(CreateMatchmakerRequestDeveloperRequest request);
-
-    Uni<DeleteMatchmakerDeveloperResponse> execute(DeleteMatchmakerDeveloperRequest request);
+    Uni<DeleteDeploymentDeveloperResponse> execute(DeleteDeploymentDeveloperRequest request);
 }

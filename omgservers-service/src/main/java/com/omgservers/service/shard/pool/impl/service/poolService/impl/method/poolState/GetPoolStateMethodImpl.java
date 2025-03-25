@@ -3,11 +3,12 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 import com.omgservers.schema.model.poolState.PoolStateDto;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.pool.impl.operation.pool.SelectPoolOperation;
+import com.omgservers.service.shard.pool.impl.operation.poolCommand.SelectActivePoolCommandsByPoolIdOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolContainer.SelectActivePoolContainersByPoolIdOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectActivePoolRequestsByPoolIdOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolServer.SelectActivePoolServersByPoolIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 class GetPoolStateMethodImpl implements GetPoolStateMethod {
 
     final SelectActivePoolContainersByPoolIdOperation selectActivePoolContainersByPoolIdOperation;
+    final SelectActivePoolCommandsByPoolIdOperation selectActivePoolCommandsByPoolIdOperation;
     final SelectActivePoolRequestsByPoolIdOperation selectActivePoolRequestsByPoolIdOperation;
     final SelectActivePoolServersByPoolIdOperation selectActivePoolServersByPoolIdOperation;
     final SelectPoolOperation selectPoolOperation;
@@ -36,28 +38,25 @@ class GetPoolStateMethodImpl implements GetPoolStateMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     final var poolId = request.getPoolId();
-                    return pgPool.withTransaction(sqlConnection -> selectPoolOperation
-                            .execute(sqlConnection,
-                                    shard,
-                                    poolId)
-                            .flatMap(pool -> selectActivePoolServersByPoolIdOperation
-                                    .execute(sqlConnection,
-                                            shard,
-                                            poolId)
-                                    .flatMap(poolServers -> selectActivePoolContainersByPoolIdOperation
-                                            .execute(sqlConnection,
-                                                    shard,
-                                                    poolId)
-                                            .flatMap(
-                                                    poolContainers -> selectActivePoolRequestsByPoolIdOperation
-                                                            .execute(sqlConnection,
-                                                                    shard,
-                                                                    poolId)
-                                                            .map(poolRequests -> new PoolStateDto(
-                                                                    pool, poolServers,
-                                                                    poolContainers,
-                                                                    poolRequests)))))
-                    );
+                    final var poolState = new PoolStateDto();
+
+                    return pgPool.withTransaction(sqlConnection ->
+                                    selectPoolOperation.execute(sqlConnection, shard, poolId)
+                                            .invoke(poolState::setPool)
+                                            .flatMap(pool -> selectActivePoolCommandsByPoolIdOperation
+                                                    .execute(sqlConnection, shard, poolId)
+                                                    .invoke(poolState::setPoolCommands))
+                                            .flatMap(pool -> selectActivePoolRequestsByPoolIdOperation
+                                                    .execute(sqlConnection, shard, poolId)
+                                                    .invoke(poolState::setPoolRequests))
+                                            .flatMap(pool -> selectActivePoolServersByPoolIdOperation
+                                                    .execute(sqlConnection, shard, poolId)
+                                                    .invoke(poolState::setPoolServers))
+                                            .flatMap(poolServers -> selectActivePoolContainersByPoolIdOperation
+                                                    .execute(sqlConnection, shard, poolId)
+                                                    .invoke(poolState::setPoolContainers))
+                            )
+                            .replaceWith(poolState);
                 })
                 .map(GetPoolStateResponse::new);
     }

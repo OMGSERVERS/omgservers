@@ -101,26 +101,26 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantShard.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().execute(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantShard.getService().getTenantProject(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
     Uni<List<TenantProjectPermissionModel>> viewTenantProjectPermissions(final Long tenantId,
                                                                          final Long tenantProjectId) {
         final var request = new ViewTenantProjectPermissionsRequest(tenantId, tenantProjectId);
-        return tenantShard.getService().viewTenantProjectPermissions(request)
+        return tenantShard.getService().execute(request)
                 .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }
 
     Uni<Boolean> deleteTenantProjectPermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantProjectPermissionRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantProjectPermission(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantProjectPermissionResponse::getDeleted);
     }
 }

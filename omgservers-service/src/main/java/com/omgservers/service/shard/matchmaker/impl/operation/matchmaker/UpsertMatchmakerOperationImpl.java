@@ -2,7 +2,7 @@ package com.omgservers.service.shard.matchmaker.impl.operation.matchmaker;
 
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -31,8 +31,8 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker(
-                            id, idempotency_key, created, modified, tenant_id, deployment_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, created, modified, deployment_id, deleted)
+                        values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do
                         nothing
                         """,
@@ -41,7 +41,6 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                         matchmaker.getIdempotencyKey(),
                         matchmaker.getCreated().atOffset(ZoneOffset.UTC),
                         matchmaker.getModified().atOffset(ZoneOffset.UTC),
-                        matchmaker.getTenantId(),
                         matchmaker.getDeploymentId(),
                         matchmaker.getDeleted()
                 ),

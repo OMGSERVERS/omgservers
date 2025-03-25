@@ -15,4 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 class PoolShardImpl implements PoolShard {
 
     final PoolService poolService;
+
+    @Override
+    public PoolService getService() {
+        return poolService;
+    }
 }

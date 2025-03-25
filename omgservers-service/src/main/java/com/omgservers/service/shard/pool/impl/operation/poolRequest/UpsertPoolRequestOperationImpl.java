@@ -3,7 +3,6 @@ package com.omgservers.service.shard.pool.impl.operation.poolRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
-import com.omgservers.service.event.body.module.pool.PoolRequestCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
@@ -34,7 +33,8 @@ class UpsertPoolRequestOperationImpl implements UpsertPoolRequestOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_pool_request(
-                            id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config, deleted)
+                            id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config,
+                            deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
@@ -50,9 +50,7 @@ class UpsertPoolRequestOperationImpl implements UpsertPoolRequestOperation {
                         getConfigString(poolRequest),
                         poolRequest.getDeleted()
                 ),
-                () -> new PoolRequestCreatedEventBodyModel(
-                        poolRequest.getPoolId(),
-                        poolRequest.getId()),
+                () -> null,
                 () -> null
         );
     }

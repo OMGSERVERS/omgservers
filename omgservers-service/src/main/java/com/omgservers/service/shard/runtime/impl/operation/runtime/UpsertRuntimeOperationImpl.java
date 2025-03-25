@@ -5,7 +5,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -37,9 +37,8 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime(
-                            id, idempotency_key, created, modified, tenant_id, deployment_id, qualifier, user_id, 
-                            last_activity, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+                            id, idempotency_key, created, modified, deployment_id, qualifier, user_id, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -48,11 +47,9 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                         runtime.getIdempotencyKey(),
                         runtime.getCreated().atOffset(ZoneOffset.UTC),
                         runtime.getModified().atOffset(ZoneOffset.UTC),
-                        runtime.getTenantId(),
                         runtime.getDeploymentId(),
                         runtime.getQualifier(),
                         runtime.getUserId(),
-                        runtime.getLastActivity().atOffset(ZoneOffset.UTC),
                         getConfigString(runtime),
                         runtime.getDeleted()
                 ),

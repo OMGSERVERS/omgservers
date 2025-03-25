@@ -45,7 +45,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
                                     .map(tenantStage -> {
                                         final var tenantStageId = tenantStage.getId();
 
-                                        log.info("The new stage \"{}\" was created in tenant \"{}\"",
+                                        log.info("New stage \"{}\" created in tenant \"{}\"",
                                                 tenantStageId, tenantId);
 
                                         return new CreateTenantStageSupportResponse(tenantStageId);
@@ -57,7 +57,7 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
                                             final Long tenantProjectId) {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var syncStageInternalRequest = new SyncTenantStageRequest(tenantStage);
-        return tenantShard.getService().syncTenantStage(syncStageInternalRequest)
+        return tenantShard.getService().execute(syncStageInternalRequest)
                 .replaceWith(tenantStage);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperResponse;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
@@ -33,7 +33,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<DeleteTenantProjectDeveloperResponse> execute(final DeleteTenantProjectDeveloperRequest request) {
+    public Uni<DeleteProjectDeveloperResponse> execute(final DeleteProjectDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -59,13 +59,13 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
                                         });
                             });
                 })
-                .map(DeleteTenantProjectDeveloperResponse::new);
+                .map(DeleteProjectDeveloperResponse::new);
     }
 
     Uni<Boolean> deleteTenantProject(final Long tenantId,
                                      final Long id) {
         final var request = new DeleteTenantProjectRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantProject(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantProjectResponse::getDeleted);
     }
 }

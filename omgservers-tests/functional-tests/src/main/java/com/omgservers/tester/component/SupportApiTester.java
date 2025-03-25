@@ -2,7 +2,7 @@ package com.omgservers.tester.component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
@@ -77,7 +77,7 @@ public class SupportApiTester {
                 .when().post("/service/v1/entrypoint/support/request/delete-tenant");
         responseSpecification.then().statusCode(200);
 
-        final var response = responseSpecification.getBody().as(DeleteTenantVersionDeveloperResponse.class);
+        final var response = responseSpecification.getBody().as(DeleteVersionDeveloperResponse.class);
         return response.getDeleted();
     }
 

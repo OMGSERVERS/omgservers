@@ -2,8 +2,8 @@ package com.omgservers.service.shard.matchmaker.impl.mappers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.request.MatchmakerRequestConfigDto;
-import com.omgservers.schema.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestConfigDto;
+import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +26,6 @@ public class MatchmakerRequestModelMapper {
         matchmakerRequest.setMatchmakerId(row.getLong("matchmaker_id"));
         matchmakerRequest.setCreated(row.getOffsetDateTime("created").toInstant());
         matchmakerRequest.setModified(row.getOffsetDateTime("modified").toInstant());
-        matchmakerRequest.setUserId(row.getLong("user_id"));
         matchmakerRequest.setClientId(row.getLong("client_id"));
         matchmakerRequest.setMode(row.getString("mode"));
         matchmakerRequest.setDeleted(row.getBoolean("deleted"));

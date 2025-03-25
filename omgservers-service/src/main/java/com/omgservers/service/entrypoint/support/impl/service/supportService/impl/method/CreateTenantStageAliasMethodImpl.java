@@ -55,7 +55,7 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantShard.getService().getTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 

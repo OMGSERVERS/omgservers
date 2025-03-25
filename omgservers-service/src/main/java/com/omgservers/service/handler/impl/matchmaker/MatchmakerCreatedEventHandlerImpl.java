@@ -1,24 +1,20 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
+import com.omgservers.schema.model.deploymentCommand.body.OpenMatchmakerDeploymentCommandBodyDto;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefRequest;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.SyncTenantMatchmakerRefResponse;
+import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandRequest;
+import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandResponse;
+import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
-import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.system.JobModelFactory;
-import com.omgservers.service.factory.tenant.TenantMatchmakerRefModelFactory;
+import com.omgservers.service.factory.deployment.DeploymentCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.shard.deployment.DeploymentShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.service.job.JobService;
-import com.omgservers.service.service.job.dto.SyncJobRequest;
-import com.omgservers.service.service.job.dto.SyncJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -31,13 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
 
     final MatchmakerShard matchmakerShard;
-    final TenantShard tenantShard;
+    final DeploymentShard deploymentShard;
 
-    final JobService jobService;
+    final CreateJobOperation createJobOperation;
 
-    final TenantMatchmakerRefModelFactory tenantMatchmakerRefModelFactory;
-    final EventModelFactory eventModelFactory;
-    final JobModelFactory jobModelFactory;
+    final DeploymentCommandModelFactory deploymentCommandModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -51,13 +45,18 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var body = (MatchmakerCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return getMatchmaker(matchmakerId)
                 .flatMap(matchmaker -> {
                     log.debug("Created, {}", matchmaker);
 
-                    final var idempotencyKey = event.getId().toString();
-                    return syncTenantMatchmakerRef(matchmaker, idempotencyKey)
-                            .flatMap(created -> syncMatchmakerJob(matchmakerId, idempotencyKey));
+                    final var deploymentId = matchmaker.getDeploymentId();
+
+                    return createOpenMatchmakerDeploymentCommand(deploymentId, matchmakerId, idempotencyKey)
+                            .flatMap(created -> createJobOperation.execute(JobQualifierEnum.MATCHMAKER,
+                                    matchmakerId,
+                                    idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -68,27 +67,16 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                 .map(GetMatchmakerResponse::getMatchmaker);
     }
 
-    Uni<Boolean> syncTenantMatchmakerRef(final MatchmakerModel matchmaker, final String idempotencyKey) {
-        final var tenantId = matchmaker.getTenantId();
-        final var deploymentId = matchmaker.getDeploymentId();
-        final var matchmakerId = matchmaker.getId();
-        final var tenantMatchmakerRef = tenantMatchmakerRefModelFactory.create(tenantId,
-                deploymentId,
-                matchmakerId,
+    Uni<Boolean> createOpenMatchmakerDeploymentCommand(final Long deploymentId,
+                                                       final Long matchmakerId,
+                                                       final String idempotencyKey) {
+        final var commandBody = new OpenMatchmakerDeploymentCommandBodyDto(matchmakerId);
+        final var deploymentCommand = deploymentCommandModelFactory.create(deploymentId,
+                commandBody,
                 idempotencyKey);
-        final var request = new SyncTenantMatchmakerRefRequest(tenantMatchmakerRef);
-        return tenantShard.getService().syncTenantMatchmakerRefWithIdempotency(request)
-                .map(SyncTenantMatchmakerRefResponse::getCreated)
-                .onFailure(ServerSideNotFoundException.class)
-                .recoverWithItem(Boolean.FALSE);
-    }
 
-    Uni<Boolean> syncMatchmakerJob(final Long matchmakerId,
-                                   final String idempotencyKey) {
-        final var job = jobModelFactory.create(JobQualifierEnum.MATCHMAKER, matchmakerId, matchmakerId, idempotencyKey);
-
-        final var syncEventRequest = new SyncJobRequest(job);
-        return jobService.syncJobWithIdempotency(syncEventRequest)
-                .map(SyncJobResponse::getCreated);
+        final var request = new SyncDeploymentCommandRequest(deploymentCommand);
+        return deploymentShard.getService().executeWithIdempotency(request)
+                .map(SyncDeploymentCommandResponse::getCreated);
     }
 }

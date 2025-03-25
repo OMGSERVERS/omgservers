@@ -9,7 +9,7 @@ import com.omgservers.schema.module.user.SyncPlayerRequest;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.shard.user.impl.service.userService.testInterface.UserServiceTestInterface;
+import com.omgservers.service.shard.user.service.testInterface.UserServiceTestInterface;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

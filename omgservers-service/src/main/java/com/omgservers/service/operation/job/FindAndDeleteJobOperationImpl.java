@@ -29,6 +29,11 @@ class FindAndDeleteJobOperationImpl implements FindAndDeleteJobOperation {
                 .replaceWithVoid();
     }
 
+    @Override
+    public Uni<Void> execute(Long entityId) {
+        return execute(entityId, entityId);
+    }
+
     Uni<JobModel> findJob(final Long shardKey, final Long entityId) {
         final var request = new FindJobRequest(shardKey, entityId);
         return jobService.findJob(request)

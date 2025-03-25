@@ -88,13 +88,13 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantShard.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().execute(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantShard.getService().getTenantProject(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
@@ -128,7 +128,7 @@ class CreateTenantProjectPermissionsMethodImpl implements CreateTenantProjectPer
                 .create(tenantId, tenantProjectId, userId, permission);
 
         final var request = new SyncTenantProjectPermissionRequest(tenantProjectPermission);
-        return tenantShard.getService().syncTenantProjectPermission(request)
+        return tenantShard.getService().execute(request)
                 .map(SyncTenantProjectPermissionResponse::getCreated);
     }
 }

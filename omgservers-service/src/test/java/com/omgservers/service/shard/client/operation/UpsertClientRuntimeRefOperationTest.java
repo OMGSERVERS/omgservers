@@ -7,9 +7,9 @@ import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.client.ClientRuntimeRefModelFactory;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.shard.client.operation.testInterface.UpsertClientOperationTestInterface;
 import com.omgservers.service.shard.client.operation.testInterface.UpsertClientRuntimeRefOperationTestInterface;
-import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ class UpsertClientRuntimeRefOperationTest extends BaseTestClass {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenInserted() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
@@ -49,7 +49,7 @@ class UpsertClientRuntimeRefOperationTest extends BaseTestClass {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenUpdated() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
@@ -71,7 +71,7 @@ class UpsertClientRuntimeRefOperationTest extends BaseTestClass {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenIdempotencyViolation() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), tenantId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef1 = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());

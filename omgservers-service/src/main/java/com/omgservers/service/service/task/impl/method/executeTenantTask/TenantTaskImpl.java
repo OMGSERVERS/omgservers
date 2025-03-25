@@ -39,7 +39,7 @@ public class TenantTaskImpl {
 
     Uni<TenantModel> getTenant(final Long id) {
         final var request = new GetTenantRequest(id);
-        return tenantShard.getService().getTenant(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -55,7 +55,7 @@ public class TenantTaskImpl {
 
     Uni<List<TenantProjectModel>> viewTenantProjects(final Long tenantId) {
         final var request = new ViewTenantProjectsRequest(tenantId);
-        return tenantShard.getService().viewTenantProjects(request)
+        return tenantShard.getService().execute(request)
                 .map(ViewTenantProjectsResponse::getTenantProjects);
     }
 
@@ -72,7 +72,7 @@ public class TenantTaskImpl {
 
     Uni<List<TenantStageModel>> viewTenantStages(final Long tenantId, final Long tenantProjectId) {
         final var request = new ViewTenantStagesRequest(tenantId, tenantProjectId);
-        return tenantShard.getService().viewTenantStages(request)
+        return tenantShard.getService().execute(request)
                 .map(ViewTenantStagesResponse::getTenantStages);
     }
 

@@ -1,5 +1,6 @@
 package com.omgservers.service.handler.impl.tenant;
 
+import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
@@ -7,6 +8,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantStageCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.job.CreateJobOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,6 +23,8 @@ public class TenantStageCreatedEventHandlerImpl implements EventHandler {
 
     final TenantShard tenantShard;
 
+    final CreateJobOperation createJobOperation;
+
     @Override
     public EventQualifierEnum getQualifier() {
         return EventQualifierEnum.TENANT_STAGE_CREATED;
@@ -32,19 +36,25 @@ public class TenantStageCreatedEventHandlerImpl implements EventHandler {
 
         final var body = (TenantStageCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();
-        final var id = body.getId();
+        final var tenantStageId = body.getId();
 
-        return getTenantStage(tenantId, id)
+        final var idempotencyKey = event.getId().toString();
+
+        return getTenantStage(tenantId, tenantStageId)
                 .flatMap(tenantStage -> {
                     log.debug("Created, {}", tenantStage);
-                    return Uni.createFrom().voidItem();
+
+                    return createJobOperation.execute(JobQualifierEnum.STAGE,
+                            tenantId,
+                            tenantStageId,
+                            idempotencyKey);
                 })
                 .replaceWithVoid();
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantShard.getService().getTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 }

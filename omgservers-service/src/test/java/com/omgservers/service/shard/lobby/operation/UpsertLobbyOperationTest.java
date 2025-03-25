@@ -4,12 +4,13 @@ import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.lobby.LobbyModelFactory;
-import com.omgservers.service.shard.lobby.operation.testInterface.UpsertLobbyOperationTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
+import com.omgservers.service.shard.lobby.operation.testInterface.UpsertLobbyOperationTestInterface;
+import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
@@ -20,48 +21,45 @@ class UpsertLobbyOperationTest extends BaseTestClass {
     UpsertLobbyOperationTestInterface upsertLobbyOperation;
 
     @Inject
-    LobbyModelFactory lobbyModelFactory;
-
-    @Inject
     GenerateIdOperation generateIdOperation;
 
+    @Inject
+    TestDataFactory testDataFactory;
+
+    TestDataFactory.DefaultTestData testData;
+
+    @BeforeEach
+    void beforeEach() {
+        testData = testDataFactory.createDefaultTestData();
+    }
+
     @Test
-    void whenUpsertLobby_thenInserted() {
-        final var shard = 0;
-        final var lobby = lobbyModelFactory.create(tenantId(), versionId());
-        final var changeContext = upsertLobbyOperation.upsertLobby(shard, lobby);
+    void givenModel_whenExecute_thenInserted() {
+        final var model = testData.getLobby();
+        model.setId(generateIdOperation.generateId());
+        model.setIdempotencyKey(generateIdOperation.generateStringId());
+
+        final var changeContext = upsertLobbyOperation.upsertLobby(model);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.LOBBY_CREATED));
     }
 
     @Test
-    void givenLobby_whenUpsertLobby_thenUpdated() {
-        final var shard = 0;
-        final var lobby = lobbyModelFactory.create(tenantId(), versionId());
-        upsertLobbyOperation.upsertLobby(shard, lobby);
+    void givenModel_whenExecute_thenUpdated() {
+        final var model = testData.getLobby();
 
-        final var changeContext = upsertLobbyOperation.upsertLobby(shard, lobby);
+        final var changeContext = upsertLobbyOperation.upsertLobby(model);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.LOBBY_CREATED));
     }
 
     @Test
-    void givenLobby_whenUpsertLobby_thenIdempotencyViolation() {
-        final var shard = 0;
-        final var lobby1 = lobbyModelFactory.create(tenantId(), versionId());
-        upsertLobbyOperation.upsertLobby(shard, lobby1);
+    void givenModel_whenExecute_thenIdempotencyViolation() {
+        final var model = testData.getLobby();
+        model.setId(generateIdOperation.generateId());
 
-        final var lobby2 = lobbyModelFactory.create(tenantId(), versionId(), lobby1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertLobbyOperation.upsertLobby(shard, lobby2));
+                upsertLobbyOperation.upsertLobby(model));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
-    }
-
-    Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long versionId() {
-        return generateIdOperation.generateId();
     }
 }

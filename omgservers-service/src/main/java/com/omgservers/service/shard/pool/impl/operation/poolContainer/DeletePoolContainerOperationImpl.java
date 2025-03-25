@@ -25,22 +25,20 @@ class DeletePoolContainerOperationImpl implements DeletePoolContainerOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final Long poolId,
-                                final Long serverId,
                                 final Long id) {
         return changeObjectOperation.changeObject(
                 changeContext, sqlConnection, shard,
                 """
                         update $schema.tab_pool_container
-                        set modified = $4, deleted = true
-                        where pool_id = $1 and server_id = $2 and id = $3 and deleted = false
+                        set modified = $3, deleted = true
+                        where pool_id = $1 and id = $2 and deleted = false
                         """,
                 List.of(
                         poolId,
-                        serverId,
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
-                () -> new PoolContainerDeletedEventBodyModel(poolId, serverId, id),
+                () -> new PoolContainerDeletedEventBodyModel(poolId, id),
                 () -> null
         );
     }

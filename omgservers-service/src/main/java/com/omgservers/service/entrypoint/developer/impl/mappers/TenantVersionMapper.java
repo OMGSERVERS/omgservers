@@ -13,7 +13,6 @@ public interface TenantVersionMapper {
     TenantVersionDto modelToDto(TenantVersionModel model);
 
     @Mapping(source = "tenantVersion", target = "version")
-    @Mapping(source = "tenantBuildRequests", target = "buildRequests")
     @Mapping(source = "tenantImages", target = "images")
     TenantVersionDetailsDto dataToDetails(TenantVersionDataDto data);
 }

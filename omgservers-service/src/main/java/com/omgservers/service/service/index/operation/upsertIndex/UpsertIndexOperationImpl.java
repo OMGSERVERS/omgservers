@@ -5,7 +5,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.service.event.body.system.IndexCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

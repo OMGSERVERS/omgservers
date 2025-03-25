@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.runtime.impl.service.webService.impl.a
 
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
-import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeRequest;
-import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
+import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeRequest;
+import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeResponse;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +22,6 @@ public interface RuntimeApi {
     Uni<CreateTokenRuntimeResponse> execute(@NotNull CreateTokenRuntimeRequest request);
 
     @POST
-    @Path("/interchange")
-    Uni<InterchangeRuntimeResponse> execute(@NotNull InterchangeRuntimeRequest request);
+    @Path("/interchange-messages")
+    Uni<InterchangeMessagesRuntimeResponse> execute(@NotNull InterchangeMessagesRuntimeRequest request);
 }

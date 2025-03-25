@@ -3,6 +3,9 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.*;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.*;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deployment.CreateDeploymentMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deployment.DeleteDeploymentMethod;
+import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deployment.GetDeploymentDetailsMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -15,28 +18,23 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeveloperServiceImpl implements DeveloperService {
 
-    final GetTenantDeploymentDetailsMethod getTenantDeploymentDetailsMethod;
+    final GetDeploymentDetailsMethod getDeploymentDetailsMethod;
     final CreateTenantProjectAliasMethod createTenantProjectAliasMethod;
     final GetTenantVersionDetailsMethod getTenantVersionDetailsMethod;
     final GetTenantProjectDetailsMethod getTenantProjectDetailsMethod;
-    final CreateMatchmakerRequestMethod createMatchmakerRequestMethod;
-    final DeleteTenantDeploymentMethod deleteTenantDeploymentMethod;
+    final DeleteDeploymentMethod deleteDeploymentMethod;
     final CreateTenantStageAliasMethod createTenantStageAliasMethod;
     final GetTenantStageDetailsMethod getTenantStageDetailsMethod;
     final CreateTenantVersionMethod createTenantVersionMethod;
     final CreateTenantProjectMethod createTenantProjectMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final DeleteTenantVersionMethod deleteTenantVersionMethod;
-    final DeployTenantVersionMethod deployTenantVersionMethod;
-    final UploadFilesArchiveMethod uploadFilesArchiveMethod;
-    final CreateLobbyRequestMethod createLobbyRequestMethod;
+    final CreateDeploymentMethod createDeploymentMethod;
     final CreateTenantImageMethod createTenantImageMethod;
     final DeleteTenantStageMethod deleteTenantStageMethod;
     final CreateTenantStageMethod createTenantStageMethod;
     final GetTenantDetailsMethod getTenantDetailsMethod;
-    final DeleteMatchmakerMethod deleteMatchmakerMethod;
     final CreateTokenMethod createTokenMethod;
-    final DeleteLobbyMethod deleteLobbyMethod;
 
     @Override
     public Uni<CreateTokenDeveloperResponse> execute(@Valid final CreateTokenDeveloperRequest request) {
@@ -50,119 +48,92 @@ class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Uni<CreateTenantProjectDeveloperResponse> execute(
-            @Valid final CreateTenantProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> execute(
+            @Valid final CreateProjectDeveloperRequest request) {
         return createTenantProjectMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantProjectAliasDeveloperResponse> execute(
-            @Valid final CreateTenantProjectAliasDeveloperRequest request) {
+    public Uni<CreateProjectAliasDeveloperResponse> execute(
+            @Valid final CreateProjectAliasDeveloperRequest request) {
         return createTenantProjectAliasMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
-            @Valid final GetTenantProjectDetailsDeveloperRequest request) {
+    public Uni<GetProjectDetailsDeveloperResponse> execute(
+            @Valid final GetProjectDetailsDeveloperRequest request) {
         return getTenantProjectDetailsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantProjectDeveloperResponse> execute(
-            @Valid final DeleteTenantProjectDeveloperRequest request) {
+    public Uni<DeleteProjectDeveloperResponse> execute(
+            @Valid final DeleteProjectDeveloperRequest request) {
         return deleteTenantProjectMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantStageDeveloperResponse> execute(
-            @Valid final CreateTenantStageDeveloperRequest request) {
+    public Uni<CreateStageDeveloperResponse> execute(
+            @Valid final CreateStageDeveloperRequest request) {
         return createTenantStageMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantStageAliasDeveloperResponse> execute(
-            @Valid final CreateTenantStageAliasDeveloperRequest request) {
+    public Uni<CreateStageAliasDeveloperResponse> execute(
+            @Valid final CreateStageAliasDeveloperRequest request) {
         return createTenantStageAliasMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
-            @Valid final GetTenantStageDetailsDeveloperRequest request) {
+    public Uni<GetStageDetailsDeveloperResponse> execute(
+            @Valid final GetStageDetailsDeveloperRequest request) {
         return getTenantStageDetailsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantStageDeveloperResponse> execute(
-            @Valid final DeleteTenantStageDeveloperRequest request) {
+    public Uni<DeleteStageDeveloperResponse> execute(
+            @Valid final DeleteStageDeveloperRequest request) {
         return deleteTenantStageMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantVersionDeveloperResponse> execute(
-            @Valid final CreateTenantVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> execute(
+            @Valid final CreateVersionDeveloperRequest request) {
         return createTenantVersionMethod.execute(request);
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> execute(@Valid final UploadFilesArchiveDeveloperRequest request) {
-        return uploadFilesArchiveMethod.execute(request);
-    }
-
-    @Override
-    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
-            @Valid final GetTenantVersionDetailsDeveloperRequest request) {
+    public Uni<GetVersionDetailsDeveloperResponse> execute(
+            @Valid final GetVersionDetailsDeveloperRequest request) {
         return getTenantVersionDetailsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantVersionDeveloperResponse> execute(
-            @Valid final DeleteTenantVersionDeveloperRequest request) {
+    public Uni<DeleteVersionDeveloperResponse> execute(
+            @Valid final DeleteVersionDeveloperRequest request) {
         return deleteTenantVersionMethod.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantImageDeveloperResponse> execute(@Valid final CreateTenantImageDeveloperRequest request) {
+    public Uni<CreateImageDeveloperResponse> execute(@Valid final CreateImageDeveloperRequest request) {
         return createTenantImageMethod.execute(request);
     }
 
+    /*
+    Tenant deployment
+     */
+
     @Override
-    public Uni<DeployTenantVersionDeveloperResponse> execute(
-            @Valid final DeployTenantVersionDeveloperRequest request) {
-        return deployTenantVersionMethod.execute(request);
+    public Uni<CreateDeploymentDeveloperResponse> execute(@Valid final CreateDeploymentDeveloperRequest request) {
+        return createDeploymentMethod.execute(request);
     }
 
     @Override
-    public Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
-            @Valid final GetTenantDeploymentDetailsDeveloperRequest request) {
-        return getTenantDeploymentDetailsMethod.execute(request);
+    public Uni<GetDeploymentDetailsDeveloperResponse> execute(@Valid final GetDeploymentDetailsDeveloperRequest request) {
+        return getDeploymentDetailsMethod.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantDeploymentDeveloperResponse> execute(
-            @Valid final DeleteTenantDeploymentDeveloperRequest request) {
-        return deleteTenantDeploymentMethod.execute(request);
-    }
-
-    @Override
-    public Uni<CreateLobbyRequestDeveloperResponse> execute(
-            @Valid final CreateLobbyRequestDeveloperRequest request) {
-        return createLobbyRequestMethod.execute(request);
-    }
-
-    @Override
-    public Uni<DeleteLobbyDeveloperResponse> execute(@Valid final DeleteLobbyDeveloperRequest request) {
-        return deleteLobbyMethod.execute(request);
-    }
-
-    @Override
-    public Uni<CreateMatchmakerRequestDeveloperResponse> execute(
-            @Valid final CreateMatchmakerRequestDeveloperRequest request) {
-        return createMatchmakerRequestMethod.execute(request);
-    }
-
-    @Override
-    public Uni<DeleteMatchmakerDeveloperResponse> execute(
-            @Valid final DeleteMatchmakerDeveloperRequest request) {
-        return deleteMatchmakerMethod.execute(request);
+    public Uni<DeleteDeploymentDeveloperResponse> execute(@Valid final DeleteDeploymentDeveloperRequest request) {
+        return deleteDeploymentMethod.execute(request);
     }
 }

@@ -1,75 +1,87 @@
 package com.omgservers.schema.model.poolChangeOfState;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class PoolChangeOfStateDto {
 
     @NotNull
-    Set<PoolServerModel> serversToSync;
+    List<Long> poolCommandsToDelete;
 
     @NotNull
-    Set<PoolServerModel> serversToDelete;
+    List<Long> poolRequestsToDelete;
+
+    @Valid
+    @NotNull
+    List<PoolServerModel> poolServersToSync;
 
     @NotNull
-    Set<PoolContainerModel> containersToSync;
+    List<Long> poolServersToDelete;
+
+    @Valid
+    @NotNull
+    List<PoolContainerModel> poolContainersToSync;
 
     @NotNull
-    Set<PoolContainerModel> containersToDelete;
-
-    @NotNull
-    Set<PoolRequestModel> requestsToDelete;
+    List<Long> poolContainersToDelete;
 
     public PoolChangeOfStateDto() {
-        serversToSync = new HashSet<>();
-        serversToDelete = new HashSet<>();
-        containersToSync = new HashSet<>();
-        containersToDelete = new HashSet<>();
-        requestsToDelete = new HashSet<>();
+        poolCommandsToDelete = new ArrayList<>();
+        poolRequestsToDelete = new ArrayList<>();
+        poolServersToSync = new ArrayList<>();
+        poolServersToDelete = new ArrayList<>();
+        poolContainersToSync = new ArrayList<>();
+        poolContainersToDelete = new ArrayList<>();
     }
 
     @JsonIgnore
     public boolean isNotEmpty() {
-        return serversToSync.size() > 0 ||
-                serversToDelete.size() > 0 ||
-                containersToSync.size() > 0 ||
-                containersToDelete.size() > 0 ||
-                requestsToDelete.size() > 0;
+        return !poolCommandsToDelete.isEmpty() ||
+                !poolRequestsToDelete.isEmpty() ||
+                !poolServersToSync.isEmpty() ||
+                !poolServersToDelete.isEmpty() ||
+                !poolContainersToSync.isEmpty() ||
+                !poolContainersToDelete.isEmpty();
     }
 
     @ToString.Include
-    public int serversToSync() {
-        return serversToSync.size();
+    public int poolCommandsToDelete() {
+        return poolCommandsToDelete.size();
     }
 
     @ToString.Include
-    public int serversToDelete() {
-        return serversToDelete.size();
+    public int poolRequestsToDelete() {
+        return poolRequestsToDelete.size();
     }
 
     @ToString.Include
-    public int containersToSync() {
-        return containersToSync.size();
+    public int poolServersToSync() {
+        return poolServersToSync.size();
     }
 
     @ToString.Include
-    public int containersToDelete() {
-        return containersToDelete.size();
+    public int poolServersToDelete() {
+        return poolServersToDelete.size();
     }
 
     @ToString.Include
-    public int requestsToDelete() {
-        return requestsToDelete.size();
+    public int poolContainersToSync() {
+        return poolContainersToSync.size();
+    }
+
+    @ToString.Include
+    public int poolContainersToDelete() {
+        return poolContainersToDelete.size();
     }
 }

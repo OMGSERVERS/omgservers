@@ -13,7 +13,5 @@ public class TenantVersionDetailsDto {
 
     TenantVersionDto version;
 
-    List<TenantBuildRequestDto> buildRequests;
-
     List<TenantImageDto> images;
 }

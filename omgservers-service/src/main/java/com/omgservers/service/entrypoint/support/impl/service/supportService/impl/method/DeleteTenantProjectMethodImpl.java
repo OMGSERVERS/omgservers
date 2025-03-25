@@ -41,7 +41,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
                             .flatMap(tenantProjectId -> {
                                 final var deleteTenantRequest = new DeleteTenantProjectRequest(tenantId,
                                         tenantProjectId);
-                                return tenantShard.getService().deleteTenantProject(deleteTenantRequest)
+                                return tenantShard.getService().execute(deleteTenantRequest)
                                         .map(DeleteTenantProjectResponse::getDeleted)
                                         .invoke(deleted -> {
                                             if (deleted) {

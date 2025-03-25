@@ -1,74 +1,45 @@
 package com.omgservers.service.shard.client.impl.service.webService;
 
-import com.omgservers.schema.module.client.DeleteClientMatchmakerRefRequest;
-import com.omgservers.schema.module.client.DeleteClientMatchmakerRefResponse;
-import com.omgservers.schema.module.client.DeleteClientMessagesRequest;
-import com.omgservers.schema.module.client.DeleteClientMessagesResponse;
-import com.omgservers.schema.module.client.DeleteClientRequest;
-import com.omgservers.schema.module.client.DeleteClientResponse;
-import com.omgservers.schema.module.client.DeleteClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.DeleteClientRuntimeRefResponse;
-import com.omgservers.schema.module.client.FindClientMatchmakerRefRequest;
-import com.omgservers.schema.module.client.FindClientMatchmakerRefResponse;
-import com.omgservers.schema.module.client.FindClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.FindClientRuntimeRefResponse;
-import com.omgservers.schema.module.client.GetClientMatchmakerRefRequest;
-import com.omgservers.schema.module.client.GetClientMatchmakerRefResponse;
-import com.omgservers.schema.module.client.GetClientRequest;
-import com.omgservers.schema.module.client.GetClientResponse;
-import com.omgservers.schema.module.client.GetClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.GetClientRuntimeRefResponse;
-import com.omgservers.schema.module.client.InterchangeRequest;
-import com.omgservers.schema.module.client.InterchangeResponse;
-import com.omgservers.schema.module.client.SyncClientMatchmakerRefRequest;
-import com.omgservers.schema.module.client.SyncClientMatchmakerRefResponse;
-import com.omgservers.schema.module.client.SyncClientMessageRequest;
-import com.omgservers.schema.module.client.SyncClientMessageResponse;
-import com.omgservers.schema.module.client.SyncClientRequest;
-import com.omgservers.schema.module.client.SyncClientResponse;
-import com.omgservers.schema.module.client.SyncClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.SyncClientRuntimeRefResponse;
-import com.omgservers.schema.module.client.ViewClientMatchmakerRefsRequest;
-import com.omgservers.schema.module.client.ViewClientMatchmakerRefsResponse;
-import com.omgservers.schema.module.client.ViewClientMessagesRequest;
-import com.omgservers.schema.module.client.ViewClientMessagesResponse;
-import com.omgservers.schema.module.client.ViewClientRuntimeRefsRequest;
-import com.omgservers.schema.module.client.ViewClientRuntimeRefsResponse;
+import com.omgservers.schema.module.client.client.*;
+import com.omgservers.schema.module.client.clientMessage.*;
+import com.omgservers.schema.module.client.clientRuntimeRef.*;
 import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<GetClientResponse> getClient(GetClientRequest request);
+    /*
+    Client
+     */
 
-    Uni<SyncClientResponse> syncClient(SyncClientRequest request);
+    Uni<GetClientResponse> execute(GetClientRequest request);
 
-    Uni<DeleteClientResponse> deleteClient(DeleteClientRequest request);
+    Uni<SyncClientResponse> execute(SyncClientRequest request);
 
-    Uni<InterchangeResponse> interchange(InterchangeRequest request);
+    Uni<DeleteClientResponse> execute(DeleteClientRequest request);
 
-    Uni<ViewClientMessagesResponse> viewClientMessages(ViewClientMessagesRequest request);
+    /*
+    ClientMessages
+     */
 
-    Uni<SyncClientMessageResponse> syncClientMessage(SyncClientMessageRequest request);
+    Uni<ViewClientMessagesResponse> execute(ViewClientMessagesRequest request);
 
-    Uni<DeleteClientMessagesResponse> deleteClientMessages(DeleteClientMessagesRequest request);
+    Uni<SyncClientMessageResponse> execute(SyncClientMessageRequest request);
 
-    Uni<GetClientRuntimeRefResponse> getClientRuntimeRef(GetClientRuntimeRefRequest request);
+    Uni<DeleteClientMessagesResponse> execute(DeleteClientMessagesRequest request);
 
-    Uni<FindClientRuntimeRefResponse> findClientRuntimeRef(FindClientRuntimeRefRequest request);
+    Uni<InterchangeMessagesResponse> execute(InterchangeMessagesRequest request);
 
-    Uni<ViewClientRuntimeRefsResponse> viewClientRuntimeRefs(ViewClientRuntimeRefsRequest request);
+    /*
+    ClientRuntimeRef
+     */
 
-    Uni<SyncClientRuntimeRefResponse> syncClientRuntimeRef(SyncClientRuntimeRefRequest request);
+    Uni<GetClientRuntimeRefResponse> execute(GetClientRuntimeRefRequest request);
 
-    Uni<DeleteClientRuntimeRefResponse> deleteClientRuntimeRef(DeleteClientRuntimeRefRequest request);
+    Uni<FindClientRuntimeRefResponse> execute(FindClientRuntimeRefRequest request);
 
-    Uni<GetClientMatchmakerRefResponse> getClientMatchmakerRef(GetClientMatchmakerRefRequest request);
+    Uni<ViewClientRuntimeRefsResponse> execute(ViewClientRuntimeRefsRequest request);
 
-    Uni<FindClientMatchmakerRefResponse> findClientMatchmakerRef(FindClientMatchmakerRefRequest request);
+    Uni<SyncClientRuntimeRefResponse> execute(SyncClientRuntimeRefRequest request);
 
-    Uni<ViewClientMatchmakerRefsResponse> viewClientMatchmakerRefs(ViewClientMatchmakerRefsRequest request);
-
-    Uni<SyncClientMatchmakerRefResponse> syncClientMatchmakerRef(SyncClientMatchmakerRefRequest request);
-
-    Uni<DeleteClientMatchmakerRefResponse> deleteClientMatchmakerRef(DeleteClientMatchmakerRefRequest request);
+    Uni<DeleteClientRuntimeRefResponse> execute(DeleteClientRuntimeRefRequest request);
 }

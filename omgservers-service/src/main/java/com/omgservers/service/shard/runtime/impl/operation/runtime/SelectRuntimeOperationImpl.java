@@ -29,8 +29,8 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
                 shard,
                 """
                         select
-                            id, idempotency_key, created, modified, tenant_id, deployment_id, qualifier, user_id, 
-                            last_activity, config, deleted
+                            id, idempotency_key, created, modified, deployment_id, qualifier, user_id, 
+                            config, deleted
                         from $schema.tab_runtime
                         where id = $1
                         limit 1

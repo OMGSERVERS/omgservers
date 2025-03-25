@@ -15,9 +15,6 @@ public class GetPoolContainerRequest implements ShardedRequest {
     Long poolId;
 
     @NotNull
-    Long serverId;
-
-    @NotNull
     Long id;
 
     @Override

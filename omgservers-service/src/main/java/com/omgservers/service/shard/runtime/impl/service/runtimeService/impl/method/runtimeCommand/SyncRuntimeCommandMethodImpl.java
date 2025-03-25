@@ -1,14 +1,14 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeCommand;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.runtime.SyncRuntimeCommandRequest;
-import com.omgservers.schema.module.runtime.SyncRuntimeCommandResponse;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandRequest;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.runtime.impl.operation.runtime.HasRuntimeOperation;
-import com.omgservers.service.shard.runtime.impl.operation.runtimeCommand.UpsertRuntimeCommandOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.runtime.impl.operation.runtime.VerifyRuntimeExistsOperation;
+import com.omgservers.service.shard.runtime.impl.operation.runtimeCommand.UpsertRuntimeCommandOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
     final UpsertRuntimeCommandOperation upsertRuntimeCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final HasRuntimeOperation hasRuntimeOperation;
+    final VerifyRuntimeExistsOperation verifyRuntimeExistsOperation;
 
     final PgPool pgPool;
 
@@ -35,15 +35,14 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
         final var runtimeCommand = request.getRuntimeCommand();
         final var runtimeId = runtimeCommand.getRuntimeId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+        return checkShardOperation.checkShard(shardKey)
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> hasRuntimeOperation
+                                    (changeContext, sqlConnection) -> verifyRuntimeExistsOperation
                                             .execute(sqlConnection, shard, runtimeId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertRuntimeCommandOperation.execute(
                                                             changeContext,
                                                             sqlConnection,

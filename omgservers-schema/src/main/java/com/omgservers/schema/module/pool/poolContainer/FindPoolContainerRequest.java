@@ -15,9 +15,6 @@ public class FindPoolContainerRequest implements ShardedRequest {
     Long poolId;
 
     @NotNull
-    Long serverId;
-
-    @NotNull
     Long runtimeId;
 
     @Override

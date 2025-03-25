@@ -4,10 +4,9 @@ import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.*;
 import com.omgservers.service.service.task.dto.ExecuteEventHandlerTaskRequest;
 import com.omgservers.service.service.task.impl.method.executeBootstrapTask.ExecuteBootstrapTaskMethod;
-import com.omgservers.service.service.task.impl.method.executeBuildRequestTask.ExecuteBuildRequestTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.ExecuteMatchmakerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executePoolTask.ExecutePoolTaskMethod;
-import com.omgservers.service.service.task.impl.method.executeQueueTask.ExecuteQueueTaskMethod;
+import com.omgservers.service.service.task.impl.method.executeDeploymentTask.ExecuteDeploymentTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeEventHandlerTask.ExecuteEventHandlerTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeRuntimeTask.ExecuteRuntimeTaskMethod;
 import com.omgservers.service.service.task.impl.method.executeSchedulerTask.ExecuteSchedulerTaskMethod;
@@ -25,15 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class TaskServiceImpl implements TaskService {
 
-    final ExecuteBuildRequestTaskMethod executeBuildRequestTaskMethod;
+    final ExecuteEventHandlerTaskMethod executeEventHandlerTaskMethod;
+    final ExecuteDeploymentTaskMethod executeDeploymentTaskMethod;
     final ExecuteMatchmakerTaskMethod executeMatchmakerTaskMethod;
     final ExecuteBootstrapTaskMethod executeBootstrapTaskMethod;
     final ExecuteSchedulerTaskMethod executeSchedulerTaskMethod;
     final ExecuteRuntimeTaskMethod executeRuntimeTaskMethod;
     final ExecuteTenantTaskMethod executeTenantTaskMethod;
     final ExecuteStageTaskMethod executeStageTaskMethod;
-    final ExecuteEventHandlerTaskMethod executeEventHandlerTaskMethod;
-    final ExecuteQueueTaskMethod executeQueueTaskMethod;
     final ExecutePoolTaskMethod executePoolTaskMethod;
 
     @Override
@@ -49,6 +47,11 @@ class TaskServiceImpl implements TaskService {
     @Override
     public Uni<ExecuteStageTaskResponse> execute(@Valid final ExecuteStageTaskRequest request) {
         return executeStageTaskMethod.execute(request);
+    }
+
+    @Override
+    public Uni<ExecuteDeploymentTaskResponse> execute(@Valid final ExecuteDeploymentTaskRequest request) {
+        return executeDeploymentTaskMethod.execute(request);
     }
 
     @Override
@@ -72,17 +75,7 @@ class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Uni<ExecuteBuildRequestTaskResponse> execute(@Valid final ExecuteBuildRequestTaskRequest request) {
-        return executeBuildRequestTaskMethod.execute(request);
-    }
-
-    @Override
     public Uni<ExecuteBootstrapTaskResponse> execute(@Valid final ExecuteBootstrapTaskRequest request) {
         return executeBootstrapTaskMethod.execute(request);
-    }
-
-    @Override
-    public Uni<ExecuteQueueTaskResponse> execute(@Valid final ExecuteQueueTaskRequest request) {
-        return executeQueueTaskMethod.execute(request);
     }
 }

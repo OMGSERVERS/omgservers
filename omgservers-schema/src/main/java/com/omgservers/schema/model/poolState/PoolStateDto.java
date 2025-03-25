@@ -1,6 +1,7 @@
 package com.omgservers.schema.model.poolState;
 
 import com.omgservers.schema.model.pool.PoolModel;
+import com.omgservers.schema.model.poolCommand.PoolCommandModel;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
@@ -20,11 +21,14 @@ public class PoolStateDto {
     PoolModel pool;
 
     @NotNull
-    List<PoolServerModel> servers;
+    List<PoolCommandModel> poolCommands;
 
     @NotNull
-    List<PoolContainerModel> containers;
+    List<PoolRequestModel> poolRequests;
 
     @NotNull
-    List<PoolRequestModel> requests;
+    List<PoolServerModel> poolServers;
+
+    @NotNull
+    List<PoolContainerModel> poolContainers;
 }

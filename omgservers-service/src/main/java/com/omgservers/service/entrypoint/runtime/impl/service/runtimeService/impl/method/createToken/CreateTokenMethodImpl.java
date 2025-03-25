@@ -4,8 +4,8 @@ import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.module.runtime.GetRuntimeRequest;
-import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.runtime.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.shard.runtime.RuntimeShard;
@@ -44,7 +44,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                                 final var wsToken = issueJwtTokenOperation
                                         .issueWsJwtToken(userId, runtimeId, UserRoleEnum.RUNTIME);
 
-                                log.info("A token was issued to use by runtime \"{}\"", runtimeId);
+                                log.info("Token issued to use by runtime \"{}\"", runtimeId);
 
                                 return new CreateTokenRuntimeResponse(apiToken, wsToken);
                             });

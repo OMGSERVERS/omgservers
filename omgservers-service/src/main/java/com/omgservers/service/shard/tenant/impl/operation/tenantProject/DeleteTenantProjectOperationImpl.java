@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenantProject;
 
 import com.omgservers.service.event.body.module.tenant.TenantProjectDeletedEventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

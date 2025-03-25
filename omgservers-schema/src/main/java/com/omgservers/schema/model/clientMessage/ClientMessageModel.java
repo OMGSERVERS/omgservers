@@ -1,8 +1,8 @@
 package com.omgservers.schema.model.clientMessage;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.omgservers.schema.model.message.MessageBodyDto;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.message.MessageBodyDto;
+import com.omgservers.schema.message.MessageQualifierEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -4,12 +4,7 @@ import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.service.job.JobService;
 import com.omgservers.service.service.job.dto.ViewJobsRequest;
 import com.omgservers.service.service.task.TaskService;
-import com.omgservers.service.service.task.dto.ExecuteBuildRequestTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteMatchmakerTaskRequest;
-import com.omgservers.service.service.task.dto.ExecutePoolTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteQueueTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteRuntimeTaskRequest;
-import com.omgservers.service.service.task.dto.ExecuteTenantTaskRequest;
+import com.omgservers.service.service.task.dto.*;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -41,17 +36,16 @@ public class SchedulerTaskImpl {
         return (switch (job.getQualifier()) {
             case TENANT -> taskService
                     .execute(new ExecuteTenantTaskRequest(job.getEntityId()));
+            case STAGE -> taskService
+                    .execute(new ExecuteStageTaskRequest(job.getShardKey(), job.getEntityId()));
+            case DEPLOYMENT -> taskService
+                    .execute(new ExecuteDeploymentTaskRequest(job.getEntityId()));
             case MATCHMAKER -> taskService
                     .execute(new ExecuteMatchmakerTaskRequest(job.getEntityId()));
             case RUNTIME -> taskService
                     .execute(new ExecuteRuntimeTaskRequest(job.getEntityId()));
             case POOL -> taskService
                     .execute(new ExecutePoolTaskRequest(job.getEntityId()));
-            case BUILD_REQUEST -> taskService
-                    .execute(new ExecuteBuildRequestTaskRequest(job.getShardKey(),
-                            job.getEntityId()));
-            case QUEUE -> taskService
-                    .execute(new ExecuteQueueTaskRequest(job.getEntityId()));
         }).replaceWithVoid();
     }
 }

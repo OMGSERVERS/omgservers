@@ -2,14 +2,9 @@ package com.omgservers.service.shard.tenant.impl.service.tenantService.impl;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenant.*;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.*;
-import com.omgservers.schema.module.tenant.tenantDeployment.*;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.*;
+import com.omgservers.schema.module.tenant.tenantDeploymentRef.*;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.*;
 import com.omgservers.schema.module.tenant.tenantImage.*;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.*;
-import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerResource.*;
 import com.omgservers.schema.module.tenant.tenantPermission.*;
 import com.omgservers.schema.module.tenant.tenantProject.*;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
@@ -27,17 +22,9 @@ import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.metho
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenant.GetTenantDataMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenant.GetTenantMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenant.SyncTenantMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.DeleteTenantBuildRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.GetTenantBuildRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.SyncTenantBuildRequestMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantBuildRequest.ViewTenantBuildRequestsMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeployment.*;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantFilesArchive.*;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentRef.*;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentResource.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage.*;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyRef.*;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantLobbyResource.*;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerRef.*;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantMatchmakerResource.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission.DeleteTenantPermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission.SyncTenantPermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission.VerifyTenantPermissionExistsMethod;
@@ -65,62 +52,37 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class TenantServiceImpl implements TenantService {
 
+    final UpdateTenantDeploymentResourceStatusMethod updateTenantDeploymentResourceStatusMethod;
     final VerifyTenantProjectPermissionExistsMethod verifyTenantProjectPermissionExistsMethod;
     final VerifyTenantStagePermissionExistsMethod verifyTenantStagePermissionExistsMethod;
-    final UpdateTenantLobbyResourceStatusMethod updateTenantLobbyResourceStatusMethod;
-    final DeleteTenantMatchmakerResourceMethod deleteTenantMatchmakerResourceMethod;
+    final DeleteTenantDeploymentResourceMethod deleteTenantDeploymentResourceMethod;
+    final ViewTenantDeploymentResourcesMethod viewTenantDeploymentResourcesMethod;
     final DeleteTenantProjectPermissionMethod deleteTenantProjectPermissionMethod;
-    final ViewTenantMatchmakerResourcesMethod viewTenantMatchmakerResourcesMethod;
+    final FindTenantDeploymentResourceMethod findTenantDeploymentResourceMethod;
+    final SyncTenantDeploymentResourceMethod syncTenantDeploymentResourceMethod;
     final ViewTenantProjectPermissionsMethod viewTenantProjectPermissionsMethod;
     final VerifyTenantPermissionExistsMethod verifyTenantPermissionExistsMethod;
-    final FindTenantMatchmakerResourceMethod findTenantMatchmakerResourceMethod;
-    final SyncTenantMatchmakerResourceMethod syncTenantMatchmakerResourceMethod;
+    final GetTenantDeploymentResourceMethod getTenantDeploymentResourceMethod;
     final DeleteTenantStagePermissionMethod deleteTenantStagePermissionMethod;
     final SyncTenantProjectPermissionMethod syncTenantProjectPermissionMethod;
-    final GetTenantMatchmakerResourceMethod getTenantMatchmakerResourceMethod;
     final ViewTenantStagePermissionsMethod viewTenantStagePermissionsMethod;
-    final DeleteTenantMatchmakerRefMethod deleteTenantMatchmakerRefMethod;
     final SyncTenantStagePermissionMethod syncTenantStagePermissionMethod;
-    final DeleteTenantLobbyResourceMethod deleteTenantLobbyResourceMethod;
-    final ViewTenantMatchmakerRefsMethod viewTenantMatchmakerRefsMethod;
-    final DeleteTenantFilesArchiveMethod deleteTenantFilesArchiveMethod;
-    final DeleteTenantBuildRequestMethod deleteTenantBuildRequestMethod;
-    final ViewTenantLobbyResourcesMethod viewTenantLobbyResourcesMethod;
-    final ViewTenantBuildRequestsMethod viewTenantBuildRequestsMethod;
-    final SyncTenantMatchmakerRefMethod syncTenantMatchmakerRefMethod;
-    final FindTenantMatchmakerRefMethod findTenantMatchmakerRefMethod;
-    final GetTenantDeploymentDataMethod getTenantDeploymentDataMethod;
-    final ViewTenantFilesArchivesMethod viewTenantFilesArchivesMethod;
-    final FindTenantLobbyResourceMethod findTenantLobbyResourceMethod;
-    final SyncTenantLobbyResourceMethod syncTenantLobbyResourceMethod;
-    final FindTenantFilesArchiveMethod findTenantFilesArchiveMethod;
-    final SyncTenantFilesArchiveMethod syncTenantFilesArchiveMethod;
-    final GetTenantMatchmakerRefMethod getTenantMatchmakerRefMethod;
+    final DeleteTenantDeploymentRefMethod deleteTenantDeploymentRefMethod;
+    final ViewTenantDeploymentRefsMethod viewTenantDeploymentRefsMethod;
+    final FindTenantDeploymentRefMethod findTenantDeploymentRefMethod;
+    final SyncTenantDeploymentRefMethod syncTenantDeploymentRefMethod;
     final DeleteTenantPermissionMethod deleteTenantPermissionMethod;
     final GetTenantVersionConfigMethod getTenantVersionConfigMethod;
-    final DeleteTenantDeploymentMethod deleteTenantDeploymentMethod;
-    final SelectTenantDeploymentMethod selectTenantDeploymentMethod;
-    final SyncTenantBuildRequestMethod syncTenantBuildRequestMethod;
-    final GetTenantLobbyResourceMethod getTenantLobbyResourceMethod;
-    final GetTenantBuildRequestMethod getTenantBuildRequestMethod;
+    final GetTenantDeploymentRefMethod getTenantDeploymentRefMethod;
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
-    final GetTenantFilesArchiveMethod getTenantFilesArchiveMethod;
     final GetTenantProjectDataMethod getTenantProjectDataMethod;
-    final DeleteTenantLobbyRefMethod deleteTenantLobbyRefMethod;
     final SyncTenantPermissionMethod syncTenantPermissionMethod;
     final GetTenantVersionDataMethod getTenantVersionDataMethod;
-    final SyncTenantDeploymentMethod syncTenantDeploymentMethod;
-    final ViewTenantDeploymentMethod viewTenantDeploymentMethod;
-    final ViewTenantLobbyRefsMethod viewTenantLobbyRefsMethod;
     final DeleteTenantVersionMethod deleteTenantVersionMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
-    final GetTenantDeploymentMethod getTenantDeploymentMethod;
-    final SyncTenantLobbyRefMethod syncTenantLobbyRefMethod;
-    final FindTenantLobbyRefMethod findTenantLobbyRefMethod;
     final GetTenantStageDataMethod getTenantStageDataMethod;
     final ViewTenantVersionsMethod viewTenantVersionsMethod;
     final ViewTenantProjectsMethod viewTenantProjectsMethod;
-    final GetTenantLobbyRefMethod getTenantLobbyRefMethod;
     final SyncTenantVersionMethod syncTenantVersionMethod;
     final DeleteTenantStageMethod deleteTenantStageMethod;
     final SyncTenantProjectMethod syncTenantProjectMethod;
@@ -148,34 +110,34 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<GetTenantResponse> getTenant(@Valid final GetTenantRequest request) {
+    public Uni<GetTenantResponse> execute(@Valid final GetTenantRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenant,
+                TenantModuleClient::execute,
                 getTenantMethod::getTenant);
     }
 
     @Override
-    public Uni<GetTenantDataResponse> getTenantData(@Valid final GetTenantDataRequest request) {
+    public Uni<GetTenantDataResponse> execute(@Valid final GetTenantDataRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantData,
+                TenantModuleClient::execute,
                 getTenantDataMethod::getTenantData);
     }
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(@Valid final SyncTenantRequest request) {
+    public Uni<SyncTenantResponse> execute(@Valid final SyncTenantRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenant,
+                TenantModuleClient::execute,
                 syncTenantMethod::syncTenant);
     }
 
     @Override
-    public Uni<DeleteTenantResponse> deleteTenant(@Valid final DeleteTenantRequest request) {
+    public Uni<DeleteTenantResponse> execute(@Valid final DeleteTenantRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenant,
+                TenantModuleClient::execute,
                 deleteTenantMethod::deleteTenant);
     }
 
@@ -184,36 +146,36 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<ViewTenantPermissionsResponse> viewTenantPermissions(@Valid final ViewTenantPermissionsRequest request) {
+    public Uni<ViewTenantPermissionsResponse> execute(@Valid final ViewTenantPermissionsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantPermissions,
+                TenantModuleClient::execute,
                 viewTenantPermissionsMethod::execute);
     }
 
     @Override
-    public Uni<VerifyTenantPermissionExistsResponse> verifyTenantPermissionExists(
+    public Uni<VerifyTenantPermissionExistsResponse> execute(
             @Valid final VerifyTenantPermissionExistsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::verifyTenantPermissionExists,
+                TenantModuleClient::execute,
                 verifyTenantPermissionExistsMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(@Valid final SyncTenantPermissionRequest request) {
+    public Uni<SyncTenantPermissionResponse> execute(@Valid final SyncTenantPermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantPermission,
+                TenantModuleClient::execute,
                 syncTenantPermissionMethod::execute);
     }
 
     @Override
-    public Uni<DeleteTenantPermissionResponse> deleteTenantPermission(
+    public Uni<DeleteTenantPermissionResponse> execute(
             @Valid final DeleteTenantPermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantPermission,
+                TenantModuleClient::execute,
                 deleteTenantPermissionMethod::execute);
     }
 
@@ -222,42 +184,42 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<GetTenantProjectResponse> getTenantProject(@Valid final GetTenantProjectRequest request) {
+    public Uni<GetTenantProjectResponse> execute(@Valid final GetTenantProjectRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantProject,
+                TenantModuleClient::execute,
                 getTenantProjectMethod::execute);
     }
 
     @Override
-    public Uni<GetTenantProjectDataResponse> getTenantProjectData(@Valid final GetTenantProjectDataRequest request) {
+    public Uni<GetTenantProjectDataResponse> execute(@Valid final GetTenantProjectDataRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantProjectData,
+                TenantModuleClient::execute,
                 getTenantProjectDataMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantProjectResponse> syncTenantProject(@Valid final SyncTenantProjectRequest request) {
+    public Uni<SyncTenantProjectResponse> execute(@Valid final SyncTenantProjectRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantProject,
+                TenantModuleClient::execute,
                 syncTenantProjectMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantProjectsResponse> viewTenantProjects(@Valid final ViewTenantProjectsRequest request) {
+    public Uni<ViewTenantProjectsResponse> execute(@Valid final ViewTenantProjectsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantProjects,
+                TenantModuleClient::execute,
                 viewTenantProjectsMethod::execute);
     }
 
     @Override
-    public Uni<DeleteTenantProjectResponse> deleteTenantProject(@Valid final DeleteTenantProjectRequest request) {
+    public Uni<DeleteTenantProjectResponse> execute(@Valid final DeleteTenantProjectRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantProject,
+                TenantModuleClient::execute,
                 deleteTenantProjectMethod::execute);
     }
 
@@ -266,36 +228,36 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<ViewTenantProjectPermissionsResponse> viewTenantProjectPermissions(
+    public Uni<ViewTenantProjectPermissionsResponse> execute(
             @Valid final ViewTenantProjectPermissionsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantProjectPermissions,
+                TenantModuleClient::execute,
                 viewTenantProjectPermissionsMethod::execute);
     }
 
     @Override
-    public Uni<VerifyTenantProjectPermissionExistsResponse> verifyTenantProjectPermissionExists(
+    public Uni<VerifyTenantProjectPermissionExistsResponse> execute(
             @Valid final VerifyTenantProjectPermissionExistsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::verifyTenantProjectPermissionExists,
+                TenantModuleClient::execute,
                 verifyTenantProjectPermissionExistsMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(
+    public Uni<SyncTenantProjectPermissionResponse> execute(
             @Valid final SyncTenantProjectPermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantProjectPermission,
+                TenantModuleClient::execute,
                 syncTenantProjectPermissionMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermissionWithIdempotency(
+    public Uni<SyncTenantProjectPermissionResponse> executeWithIdempotency(
             SyncTenantProjectPermissionRequest request) {
-        return syncTenantProjectPermission(request)
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -311,11 +273,11 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
+    public Uni<DeleteTenantProjectPermissionResponse> execute(
             @Valid final DeleteTenantProjectPermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantProjectPermission,
+                TenantModuleClient::execute,
                 deleteTenantProjectPermissionMethod::execute);
     }
 
@@ -324,42 +286,42 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<GetTenantStageResponse> getTenantStage(@Valid final GetTenantStageRequest request) {
+    public Uni<GetTenantStageResponse> execute(@Valid final GetTenantStageRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantStage,
+                TenantModuleClient::execute,
                 getTenantStageMethod::execute);
     }
 
     @Override
-    public Uni<GetTenantStageDataResponse> getTenantStageData(@Valid final GetTenantStageDataRequest request) {
+    public Uni<GetTenantStageDataResponse> execute(@Valid final GetTenantStageDataRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantStageData,
+                TenantModuleClient::execute,
                 getTenantStageDataMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantStageResponse> syncTenantStage(@Valid final SyncTenantStageRequest request) {
+    public Uni<SyncTenantStageResponse> execute(@Valid final SyncTenantStageRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantStage,
+                TenantModuleClient::execute,
                 syncTenantStageMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantStagesResponse> viewTenantStages(@Valid final ViewTenantStagesRequest request) {
+    public Uni<ViewTenantStagesResponse> execute(@Valid final ViewTenantStagesRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantStages,
+                TenantModuleClient::execute,
                 viewTenantStagesMethod::execute);
     }
 
     @Override
-    public Uni<DeleteTenantStageResponse> deleteTenantStage(@Valid final DeleteTenantStageRequest request) {
+    public Uni<DeleteTenantStageResponse> execute(@Valid final DeleteTenantStageRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantStage,
+                TenantModuleClient::execute,
                 deleteTenantStageMethod::execute);
     }
 
@@ -368,36 +330,36 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<ViewTenantStagePermissionsResponse> viewTenantStagePermissions(
+    public Uni<ViewTenantStagePermissionsResponse> execute(
             @Valid final ViewTenantStagePermissionsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantStagePermissions,
+                TenantModuleClient::execute,
                 viewTenantStagePermissionsMethod::execute);
     }
 
     @Override
-    public Uni<VerifyTenantStagePermissionExistsResponse> verifyTenantStagePermissionExists(
+    public Uni<VerifyTenantStagePermissionExistsResponse> execute(
             @Valid final VerifyTenantStagePermissionExistsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::verifyTenantStagePermissionExists,
+                TenantModuleClient::execute,
                 verifyTenantStagePermissionExistsMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantStagePermissionResponse> syncTenantStagePermission(
+    public Uni<SyncTenantStagePermissionResponse> execute(
             @Valid final SyncTenantStagePermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantStagePermission,
+                TenantModuleClient::execute,
                 syncTenantStagePermissionMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantStagePermissionResponse> syncTenantStagePermissionWithIdempotency(
+    public Uni<SyncTenantStagePermissionResponse> executeWithIdempotency(
             @Valid final SyncTenantStagePermissionRequest request) {
-        return syncTenantStagePermission(request)
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -413,11 +375,11 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantStagePermissionResponse> deleteTenantStagePermission(
+    public Uni<DeleteTenantStagePermissionResponse> execute(
             @Valid final DeleteTenantStagePermissionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantStagePermission,
+                TenantModuleClient::execute,
                 deleteTenantStagePermissionMethod::execute);
     }
 
@@ -426,158 +388,52 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<GetTenantVersionResponse> getTenantVersion(@Valid final GetTenantVersionRequest request) {
+    public Uni<GetTenantVersionResponse> execute(@Valid final GetTenantVersionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantVersion,
+                TenantModuleClient::execute,
                 getTenantVersionMethod::execute);
     }
 
     @Override
-    public Uni<GetTenantVersionConfigResponse> getTenantVersionConfig(
+    public Uni<GetTenantVersionConfigResponse> execute(
             @Valid final GetTenantVersionConfigRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantVersionConfig,
+                TenantModuleClient::execute,
                 getTenantVersionConfigMethod::execute);
     }
 
     @Override
-    public Uni<GetTenantVersionDataResponse> getTenantVersionData(GetTenantVersionDataRequest request) {
+    public Uni<GetTenantVersionDataResponse> execute(GetTenantVersionDataRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantVersionData,
+                TenantModuleClient::execute,
                 getTenantVersionDataMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantVersionsResponse> viewTenantVersions(@Valid final ViewTenantVersionsRequest request) {
+    public Uni<ViewTenantVersionsResponse> execute(@Valid final ViewTenantVersionsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantVersions,
+                TenantModuleClient::execute,
                 viewTenantVersionsMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantVersionResponse> syncTenantVersion(@Valid final SyncTenantVersionRequest request) {
+    public Uni<SyncTenantVersionResponse> execute(@Valid final SyncTenantVersionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantVersion,
+                TenantModuleClient::execute,
                 syncTenantVersionMethod::execute);
     }
 
     @Override
-    public Uni<DeleteTenantVersionResponse> deleteTenantVersion(@Valid final DeleteTenantVersionRequest request) {
+    public Uni<DeleteTenantVersionResponse> execute(@Valid final DeleteTenantVersionRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantVersion,
+                TenantModuleClient::execute,
                 deleteTenantVersionMethod::execute);
-    }
-
-    /*
-    TenantFilesArchive
-     */
-
-    @Override
-    public Uni<GetTenantFilesArchiveResponse> getTenantFilesArchive(@Valid final GetTenantFilesArchiveRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantFilesArchive,
-                getTenantFilesArchiveMethod::execute);
-    }
-
-    @Override
-    public Uni<FindTenantFilesArchiveResponse> findTenantFilesArchive(
-            @Valid final FindTenantFilesArchiveRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findTenantFilesArchive,
-                findTenantFilesArchiveMethod::execute);
-    }
-
-    @Override
-    public Uni<ViewTenantFilesArchivesResponse> viewTenantFilesArchives(
-            @Valid final ViewTenantFilesArchivesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantFilesArchives,
-                viewTenantFilesArchivesMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantFilesArchiveResponse> syncTenantFilesArchive(
-            @Valid final SyncTenantFilesArchiveRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantFilesArchive,
-                syncTenantFilesArchiveMethod::execute);
-    }
-
-    @Override
-    public Uni<DeleteTenantFilesArchiveResponse> deleteTenantFilesArchive(
-            @Valid final DeleteTenantFilesArchiveRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantFilesArchive,
-                deleteTenantFilesArchiveMethod::execute);
-    }
-
-    /*
-    TenantBuildRequest
-     */
-
-    @Override
-    public Uni<GetTenantBuildRequestResponse> getTenantBuildRequest(
-            @Valid final GetTenantBuildRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantBuildRequest,
-                getTenantBuildRequestMethod::execute);
-    }
-
-    @Override
-    public Uni<ViewTenantBuildRequestsResponse> viewTenantBuildRequests(
-            @Valid final ViewTenantBuildRequestsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantBuildRequests,
-                viewTenantBuildRequestsMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequest(
-            @Valid final SyncTenantBuildRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantBuildRequest,
-                syncTenantBuildRequestMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequestWithIdempotency(
-            @Valid final SyncTenantBuildRequestRequest request) {
-        return syncTenantBuildRequest(request)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getTenantBuildRequest(),
-                                    t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantBuildRequestResponse(Boolean.FALSE));
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
-    }
-
-    @Override
-    public Uni<DeleteTenantBuildRequestResponse> deleteTenantBuildRequest(
-            @Valid final DeleteTenantBuildRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantBuildRequest,
-                deleteTenantBuildRequestMethod::execute);
     }
 
     /*
@@ -585,41 +441,41 @@ public class TenantServiceImpl implements TenantService {
      */
 
     @Override
-    public Uni<GetTenantImageResponse> getTenantImage(@Valid final GetTenantImageRequest request) {
+    public Uni<GetTenantImageResponse> execute(@Valid final GetTenantImageRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantImage,
+                TenantModuleClient::execute,
                 getTenantImageMethod::execute);
     }
 
     @Override
-    public Uni<FindTenantImageResponse> findTenantImage(@Valid final FindTenantImageRequest request) {
+    public Uni<FindTenantImageResponse> execute(@Valid final FindTenantImageRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findTenantImage,
+                TenantModuleClient::execute,
                 findTenantImageMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantImagesResponse> viewTenantImages(@Valid final ViewTenantImagesRequest request) {
+    public Uni<ViewTenantImagesResponse> execute(@Valid final ViewTenantImagesRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantImages,
+                TenantModuleClient::execute,
                 viewTenantImagesMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantImageResponse> syncTenantImage(@Valid final SyncTenantImageRequest request) {
+    public Uni<SyncTenantImageResponse> execute(@Valid final SyncTenantImageRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantImage,
+                TenantModuleClient::execute,
                 syncTenantImageMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantImageResponse> syncTenantImageWithIdempotency(
+    public Uni<SyncTenantImageResponse> executeWithIdempotency(
             @Valid final SyncTenantImageRequest request) {
-        return syncTenantImage(request)
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -635,331 +491,107 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantImageResponse> deleteTenantImage(@Valid final DeleteTenantImageRequest request) {
+    public Uni<DeleteTenantImageResponse> execute(@Valid final DeleteTenantImageRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantImage,
+                TenantModuleClient::execute,
                 deleteTenantImageMethod::execute);
     }
 
     /*
-    TenantDeployment
+    TenantDeploymentResource
      */
 
     @Override
-    public Uni<GetTenantDeploymentResponse> getTenantDeployment(@Valid final GetTenantDeploymentRequest request) {
+    public Uni<GetTenantDeploymentResourceResponse> execute(
+            @Valid final GetTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantDeployment,
-                getTenantDeploymentMethod::execute);
+                TenantModuleClient::execute,
+                getTenantDeploymentResourceMethod::execute);
     }
 
     @Override
-    public Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(GetTenantDeploymentDataRequest request) {
+    public Uni<FindTenantDeploymentResourceResponse> execute(@Valid final FindTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantDeploymentData,
-                getTenantDeploymentDataMethod::execute);
+                TenantModuleClient::execute,
+                findTenantDeploymentResourceMethod::execute);
     }
 
     @Override
-    public Uni<SelectTenantDeploymentResponse> selectTenantDeployment(
-            @Valid final SelectTenantDeploymentRequest request) {
+    public Uni<ViewTenantDeploymentResourcesResponse> execute(@Valid final ViewTenantDeploymentResourcesRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::selectTenantDeployment,
-                selectTenantDeploymentMethod::execute);
+                TenantModuleClient::execute,
+                viewTenantDeploymentResourcesMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(@Valid final ViewTenantDeploymentsRequest request) {
+    public Uni<SyncTenantDeploymentResourceResponse> execute(@Valid final SyncTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantDeployments,
-                viewTenantDeploymentMethod::execute);
+                TenantModuleClient::execute,
+                syncTenantDeploymentResourceMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantDeploymentResponse> syncTenantDeployment(@Valid final SyncTenantDeploymentRequest request) {
+    public Uni<UpdateTenantDeploymentResourceStatusResponse> execute(@Valid final UpdateTenantDeploymentResourceStatusRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantDeployment,
-                syncTenantDeploymentMethod::execute);
+                TenantModuleClient::execute,
+                updateTenantDeploymentResourceStatusMethod::execute);
     }
 
     @Override
-    public Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(
-            @Valid final DeleteTenantDeploymentRequest request) {
+    public Uni<DeleteTenantDeploymentResourceResponse> execute(@Valid final DeleteTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantDeployment,
-                deleteTenantDeploymentMethod::execute);
+                TenantModuleClient::execute,
+                deleteTenantDeploymentResourceMethod::execute);
     }
 
     /*
-    TenantLobbyResource
+    TenantDeploymentRef
      */
 
     @Override
-    public Uni<GetTenantLobbyResourceResponse> execute(
-            @Valid final GetTenantLobbyResourceRequest request) {
+    public Uni<GetTenantDeploymentRefResponse> execute(@Valid final GetTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::execute,
-                getTenantLobbyResourceMethod::execute);
+                getTenantDeploymentRefMethod::execute);
     }
 
     @Override
-    public Uni<FindTenantLobbyResourceResponse> execute(
-            @Valid final FindTenantLobbyResourceRequest request) {
+    public Uni<FindTenantDeploymentRefResponse> execute(@Valid final FindTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::execute,
-                findTenantLobbyResourceMethod::execute);
+                findTenantDeploymentRefMethod::execute);
     }
 
     @Override
-    public Uni<ViewTenantLobbyResourcesResponse> execute(
-            @Valid final ViewTenantLobbyResourcesRequest request) {
+    public Uni<ViewTenantDeploymentRefsResponse> execute(@Valid final ViewTenantDeploymentRefsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::execute,
-                viewTenantLobbyResourcesMethod::execute);
+                viewTenantDeploymentRefsMethod::execute);
     }
 
     @Override
-    public Uni<SyncTenantLobbyResourceResponse> execute(
-            @Valid final SyncTenantLobbyResourceRequest request) {
+    public Uni<SyncTenantDeploymentRefResponse> execute(@Valid final SyncTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::execute,
-                syncTenantLobbyResourceMethod::execute);
+                syncTenantDeploymentRefMethod::execute);
     }
 
     @Override
-    public Uni<UpdateTenantLobbyResourceStatusResponse> execute(
-            @Valid final UpdateTenantLobbyResourceStatusRequest request) {
+    public Uni<DeleteTenantDeploymentRefResponse> execute(@Valid final DeleteTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getTenantModuleClientOperation::getClient,
                 TenantModuleClient::execute,
-                updateTenantLobbyResourceStatusMethod::execute);
+                deleteTenantDeploymentRefMethod::execute);
     }
-
-    @Override
-    public Uni<SyncTenantLobbyResourceResponse> executeWithIdempotency(
-            @Valid final SyncTenantLobbyResourceRequest request) {
-        return execute(request)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getTenantLobbyResource(),
-                                    t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantLobbyResourceResponse(Boolean.FALSE));
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
-    }
-
-    @Override
-    public Uni<DeleteTenantLobbyResourceResponse> execute(
-            @Valid final DeleteTenantLobbyResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::execute,
-                deleteTenantLobbyResourceMethod::execute);
-    }
-
-    /*
-    TenantLobbyRef
-     */
-
-    @Override
-    public Uni<GetTenantLobbyRefResponse> getTenantLobbyRef(@Valid final GetTenantLobbyRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantLobbyRef,
-                getTenantLobbyRefMethod::execute);
-    }
-
-    @Override
-    public Uni<FindTenantLobbyRefResponse> findTenantLobbyRef(@Valid final FindTenantLobbyRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findTenantLobbyRef,
-                findTenantLobbyRefMethod::execute);
-    }
-
-    @Override
-    public Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(@Valid final ViewTenantLobbyRefsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantLobbyRefs,
-                viewTenantLobbyRefsMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(@Valid final SyncTenantLobbyRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantLobbyRef,
-                syncTenantLobbyRefMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRefWithIdempotency(SyncTenantLobbyRefRequest request) {
-        return syncTenantLobbyRef(request)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getTenantLobbyRef(),
-                                    t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantLobbyRefResponse(Boolean.FALSE));
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
-    }
-
-    @Override
-    public Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(@Valid final DeleteTenantLobbyRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantLobbyRef,
-                deleteTenantLobbyRefMethod::execute);
-    }
-
-    /*
-    TenantMatchmakerResource
-     */
-
-    @Override
-    public Uni<GetTenantMatchmakerResourceResponse> execute(@Valid final GetTenantMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::execute,
-                getTenantMatchmakerResourceMethod::execute);
-    }
-
-    @Override
-    public Uni<FindTenantMatchmakerResourceResponse> execute(@Valid final FindTenantMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::execute,
-                findTenantMatchmakerResourceMethod::execute);
-    }
-
-    @Override
-    public Uni<ViewTenantMatchmakerResourcesResponse> execute(@Valid final ViewTenantMatchmakerResourcesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::execute,
-                viewTenantMatchmakerResourcesMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantMatchmakerResourceResponse> execute(@Valid final SyncTenantMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::execute,
-                syncTenantMatchmakerResourceMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantMatchmakerResourceResponse> executeWithIdempotency(@Valid final SyncTenantMatchmakerResourceRequest request) {
-        return execute(request)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getTenantMatchmakerResource(),
-                                    t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantMatchmakerResourceResponse(Boolean.FALSE));
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
-    }
-
-    @Override
-    public Uni<DeleteTenantMatchmakerResourceResponse> execute(@Valid final DeleteTenantMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::execute,
-                deleteTenantMatchmakerResourceMethod::execute);
-    }
-
-    /*
-    TenantMatchmakerRef
-     */
-
-    @Override
-    public Uni<GetTenantMatchmakerRefResponse> getTenantMatchmakerRef(
-            @Valid final GetTenantMatchmakerRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::getTenantMatchmakerRef,
-                getTenantMatchmakerRefMethod::execute);
-    }
-
-    @Override
-    public Uni<FindTenantMatchmakerRefResponse> findTenantMatchmakerRef(
-            @Valid final FindTenantMatchmakerRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::findTenantMatchmakerRef,
-                findTenantMatchmakerRefMethod::execute);
-    }
-
-    @Override
-    public Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(
-            @Valid final ViewTenantMatchmakerRefsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::viewTenantMatchmakerRefs,
-                viewTenantMatchmakerRefsMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(
-            @Valid final SyncTenantMatchmakerRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::syncTenantMatchmakerRef,
-                syncTenantMatchmakerRefMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRefWithIdempotency(
-            SyncTenantMatchmakerRefRequest request) {
-        return syncTenantMatchmakerRef(request)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getTenantMatchmakerRef(),
-                                    t.getMessage());
-                            return Uni.createFrom().item(new SyncTenantMatchmakerRefResponse(Boolean.FALSE));
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
-    }
-
-    @Override
-    public Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(
-            @Valid final DeleteTenantMatchmakerRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getTenantModuleClientOperation::getClient,
-                TenantModuleClient::deleteTenantMatchmakerRef,
-                deleteTenantMatchmakerRefMethod::execute);
-    }
-
-
 }

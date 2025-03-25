@@ -27,7 +27,7 @@ class CheckTenantStagePermissionOperationImpl implements CheckTenantStagePermiss
                 tenantStageId,
                 userId,
                 permissionQualifier);
-        return tenantShard.getService().verifyTenantStagePermissionExists(request)
+        return tenantShard.getService().execute(request)
                 .map(VerifyTenantStagePermissionExistsResponse::getExists)
                 .invoke(exists -> {
                     if (!exists) {

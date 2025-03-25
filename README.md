@@ -34,8 +34,8 @@ OMGSERVERS is a backend for authoritative game servers.
 - The developer creates and sets up a new project within the tenant.
 - The developer creates a new version of the project.
 - The developer pushes game runtime Docker images to the registry under the created version.
-- The developer initiates the deployment of the new version.
-- When the first players connect, the backend starts and assigns lobbies to them within the deployment.
+- The developer initiates the fetchDeploymentResult of the new version.
+- When the first players connect, the backend starts and assigns lobbies to them within the fetchDeploymentResult.
 - To enable multiplayer gameplay, the backend runs matches.
 - Lobbies and matches use the OMGSERVER SDK to execute backend-specific commands.
 - Players use the OMGPLAYER SDK to interact with the backend.

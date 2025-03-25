@@ -5,7 +5,7 @@ import com.omgservers.schema.module.root.root.GetRootRequest;
 import com.omgservers.schema.module.root.root.SyncRootRequest;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.root.RootModelFactory;
-import com.omgservers.service.shard.root.impl.service.rootService.testInterface.RootServiceTestInterface;
+import com.omgservers.service.shard.root.service.testInterface.RootServiceTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import jakarta.enterprise.context.ApplicationScoped;

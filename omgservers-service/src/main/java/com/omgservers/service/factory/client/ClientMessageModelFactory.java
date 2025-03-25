@@ -1,8 +1,8 @@
 package com.omgservers.service.factory.client;
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
-import com.omgservers.schema.model.message.MessageBodyDto;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.message.MessageBodyDto;
+import com.omgservers.schema.message.MessageQualifierEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -19,24 +19,21 @@ public class ClientMessageModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public ClientMessageModel create(final Long clientId,
-                                     final MessageQualifierEnum qualifier,
                                      final MessageBodyDto body) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, clientId, qualifier, body, idempotencyKey);
+        return create(id, clientId, body, idempotencyKey);
     }
 
     public ClientMessageModel create(final Long clientId,
-                                     final MessageQualifierEnum qualifier,
                                      final MessageBodyDto body,
                                      final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, clientId, qualifier, body, idempotencyKey);
+        return create(id, clientId, body, idempotencyKey);
     }
 
     public ClientMessageModel create(final Long id,
                                      final Long clientId,
-                                     final MessageQualifierEnum qualifier,
                                      final MessageBodyDto body,
                                      final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -47,7 +44,7 @@ public class ClientMessageModelFactory {
         clientMessage.setClientId(clientId);
         clientMessage.setCreated(now);
         clientMessage.setModified(now);
-        clientMessage.setQualifier(qualifier);
+        clientMessage.setQualifier(body.getQualifier());
         clientMessage.setBody(body);
         clientMessage.setDeleted(false);
 

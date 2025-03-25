@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.runtime.impl.service.webService.impl.a
 
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
-import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeRequest;
-import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
+import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeRequest;
+import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.entrypoint.runtime.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -30,7 +30,7 @@ class RuntimeApiImpl implements RuntimeApi {
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.RUNTIME})
-    public Uni<InterchangeRuntimeResponse> execute(@NotNull final InterchangeRuntimeRequest request) {
+    public Uni<InterchangeMessagesRuntimeResponse> execute(@NotNull final InterchangeMessagesRuntimeRequest request) {
         return webService.execute(request);
     }
 }

@@ -1,29 +1,19 @@
 package com.omgservers.service.handler.impl.runtime;
 
-import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.message.body.ClientRemovedMessageBodyDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.model.runtimeCommand.body.DeleteClientRuntimeCommandBodyDto;
-import com.omgservers.schema.module.client.DeleteClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.DeleteClientRuntimeRefResponse;
-import com.omgservers.schema.module.client.FindClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.FindClientRuntimeRefResponse;
-import com.omgservers.schema.module.runtime.GetRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.GetRuntimeAssignmentResponse;
-import com.omgservers.schema.module.runtime.GetRuntimeRequest;
-import com.omgservers.schema.module.runtime.GetRuntimeResponse;
-import com.omgservers.schema.module.runtime.SyncRuntimeCommandRequest;
-import com.omgservers.schema.module.runtime.SyncRuntimeCommandResponse;
+import com.omgservers.schema.model.runtimeMessage.RuntimeMessageModel;
+import com.omgservers.schema.module.runtime.runtimeAssignment.GetRuntimeAssignmentRequest;
+import com.omgservers.schema.module.runtime.runtimeAssignment.GetRuntimeAssignmentResponse;
+import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageRequest;
+import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
+import com.omgservers.service.factory.runtime.RuntimeMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.client.FindAndDeleteClientRuntimeRefOperation;
 import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
@@ -40,7 +30,9 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
     final RuntimeShard runtimeShard;
     final ClientShard clientShard;
 
-    final RuntimeCommandModelFactory runtimeCommandModelFactory;
+    final FindAndDeleteClientRuntimeRefOperation findAndDeleteClientRuntimeRefOperation;
+
+    final RuntimeMessageModelFactory runtimeMessageModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -55,24 +47,25 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
         final var runtimeId = body.getRuntimeId();
         final var id = body.getId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return getRuntimeAssignment(runtimeId, id)
                 .flatMap(runtimeAssignment -> {
                     log.debug("Deleted, {}", runtimeAssignment);
 
                     final var clientId = runtimeAssignment.getClientId();
 
-                    return findAndDeleteClientRuntimeRef(clientId, runtimeId)
-                            .flatMap(voidItem -> getRuntime(runtimeId)
-                                    .flatMap(runtime -> {
-                                        if (runtime.getDeleted()) {
-                                            log.debug("Runtime was already deleted, runtimeId={}", runtimeId);
-                                            return Uni.createFrom().voidItem();
-                                        }
+                    return findAndDeleteClientRuntimeRefOperation.execute(clientId, runtimeId)
+                            .flatMap(voidItem -> {
+                                final var messageBody = new ClientRemovedMessageBodyDto();
+                                messageBody.setClientId(clientId);
 
-                                        return syncDeleteClientRuntimeCommand(runtimeId,
-                                                clientId,
-                                                event.getIdempotencyKey());
-                                    }));
+                                final var runtimeMessage = runtimeMessageModelFactory.create(runtimeId,
+                                        messageBody,
+                                        idempotencyKey);
+
+                                return syncRuntimeMessage(runtimeMessage);
+                            });
                 })
                 .replaceWithVoid();
     }
@@ -83,55 +76,11 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
-    Uni<RuntimeModel> getRuntime(final Long runtimeId) {
-        final var request = new GetRuntimeRequest(runtimeId);
-        return runtimeShard.getService().execute(request)
-                .map(GetRuntimeResponse::getRuntime);
-    }
-
-    Uni<Boolean> syncDeleteClientRuntimeCommand(final Long runtimeId,
-                                                final Long clientId,
-                                                final String idempotencyKey) {
-        final var runtimeCommandBody = new DeleteClientRuntimeCommandBodyDto(clientId);
-        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, runtimeCommandBody, idempotencyKey);
-        return syncRuntimeCommand(runtimeCommand);
-    }
-
-    Uni<Boolean> syncRuntimeCommand(final RuntimeCommandModel runtimeCommand) {
-        final var request = new SyncRuntimeCommandRequest(runtimeCommand);
-        return runtimeShard.getService().execute(request)
-                .map(SyncRuntimeCommandResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", runtimeCommand, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
-    }
-
-    Uni<Void> findAndDeleteClientRuntimeRef(final Long clientId, final Long runtimeId) {
-        return findClientRuntimeRef(clientId, runtimeId)
+    Uni<Boolean> syncRuntimeMessage(final RuntimeMessageModel runtimeMessage) {
+        final var request = new SyncRuntimeMessageRequest(runtimeMessage);
+        return runtimeShard.getService().executeWithIdempotency(request)
+                .map(SyncRuntimeMessageResponse::getCreated)
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(clientRuntimeRef ->
-                        deleteClientRuntimeRef(clientId, clientRuntimeRef.getId()))
-                .replaceWithVoid();
-    }
-
-    Uni<ClientRuntimeRefModel> findClientRuntimeRef(final Long clientId, final Long runtimeId) {
-        final var request = new FindClientRuntimeRefRequest(clientId, runtimeId);
-        return clientShard.getService().findClientRuntimeRef(request)
-                .map(FindClientRuntimeRefResponse::getClientRuntimeRef);
-    }
-
-    Uni<Boolean> deleteClientRuntimeRef(final Long clientId, final Long id) {
-        final var request = new DeleteClientRuntimeRefRequest(clientId, id);
-        return clientShard.getService().deleteClientRuntimeRef(request)
-                .map(DeleteClientRuntimeRefResponse::getDeleted);
+                .recoverWithItem(Boolean.FALSE);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
@@ -50,7 +50,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateTenantProjectDeveloperResponse> execute(final CreateTenantProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> execute(final CreateProjectDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -70,7 +70,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                                                 log.info("Project \"{}\" was created in tenant \"{}\"",
                                                         tenantProjectId, tenantId);
 
-                                                return new CreateTenantProjectDeveloperResponse(tenantProjectId,
+                                                return new CreateProjectDeveloperResponse(tenantProjectId,
                                                         tenantStageId);
                                             })));
                 });
@@ -80,7 +80,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var tenantProject = tenantProjectModelFactory.create(tenantId);
         final var tenantProjectId = tenantProject.getId();
         final var request = new SyncTenantProjectRequest(tenantProject);
-        return tenantShard.getService().syncTenantProject(request)
+        return tenantShard.getService().execute(request)
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
                         TenantProjectPermissionQualifierEnum.STAGE_MANAGER))
                 .flatMap(response -> createTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
@@ -96,7 +96,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var tenantStageId = tenantStage.getId();
         final var request = new SyncTenantStageRequest(tenantStage);
-        return tenantShard.getService().syncTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .flatMap(response -> createTenantStagePermissionOperation.execute(tenantId, tenantStageId, userId,
                         TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER))
                 .replaceWith(tenantStage);

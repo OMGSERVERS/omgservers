@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment;
 
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
-import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerMatchAssignmentModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerMatchAssignmentModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,8 +30,9 @@ class SelectMatchmakerMatchAssignmentByMatchmakerIdAndClientIdOperationImpl
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, matchmaker_id, match_id, created, modified, user_id, client_id, 
-                            group_name, config, deleted
+                        select
+                            id, idempotency_key, matchmaker_id, created, modified, match_id, client_id, group_name,
+                            config, deleted
                         from $schema.tab_matchmaker_match_assignment
                         where matchmaker_id = $1 and client_id = $2 and deleted = false
                         order by id desc

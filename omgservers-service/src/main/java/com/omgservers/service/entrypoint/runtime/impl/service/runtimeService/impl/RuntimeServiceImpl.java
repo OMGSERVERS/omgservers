@@ -2,11 +2,11 @@ package com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.im
 
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
-import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeRequest;
-import com.omgservers.schema.entrypoint.runtime.InterchangeRuntimeResponse;
+import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeRequest;
+import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeResponse;
 import com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.RuntimeService;
 import com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.impl.method.createToken.CreateTokenMethod;
-import com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.impl.method.interchangeMethod.InterchangeMethod;
+import com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.impl.method.interchangeMessagesMethod.InterchangeMessagesMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class RuntimeServiceImpl implements RuntimeService {
 
-    final InterchangeMethod interchangeMethod;
+    final InterchangeMessagesMethod interchangeMessagesMethod;
     final CreateTokenMethod createTokenMethod;
 
     @Override
@@ -28,7 +28,7 @@ class RuntimeServiceImpl implements RuntimeService {
     }
 
     @Override
-    public Uni<InterchangeRuntimeResponse> execute(@Valid final InterchangeRuntimeRequest request) {
-        return interchangeMethod.execute(request);
+    public Uni<InterchangeMessagesRuntimeResponse> execute(@Valid final InterchangeMessagesRuntimeRequest request) {
+        return interchangeMessagesMethod.execute(request);
     }
 }

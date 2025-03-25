@@ -1,7 +1,6 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerRequest;
 
-import com.omgservers.service.event.body.module.matchmaker.MatchmakerRequestDeletedEventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -41,7 +40,7 @@ class DeleteMatchmakerRequestOperationImpl implements DeleteMatchmakerRequestOpe
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
-                () -> new MatchmakerRequestDeletedEventBodyModel(matchmakerId, id),
+                () -> null,
                 () -> null
         );
     }

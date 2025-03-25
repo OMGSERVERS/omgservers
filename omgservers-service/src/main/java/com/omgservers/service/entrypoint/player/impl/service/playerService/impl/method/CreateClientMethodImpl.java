@@ -3,24 +3,27 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
 import com.omgservers.schema.model.client.ClientModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.player.PlayerModel;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.module.client.SyncClientRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.SelectTenantDeploymentResponse;
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceStatusEnum;
+import com.omgservers.schema.module.client.client.SyncClientRequest;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesRequest;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesResponse;
 import com.omgservers.schema.module.user.FindPlayerRequest;
 import com.omgservers.schema.module.user.FindPlayerResponse;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
+import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientModelFactory;
 import com.omgservers.service.factory.user.PlayerModelFactory;
-import com.omgservers.service.shard.client.ClientShard;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -66,8 +69,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                             return createClient(userId, playerId, tenantId, tenantStageId)
                                                     .map(client -> {
                                                         final var clientId = client.getId();
-                                                        log.info("The new client \"{}\" was created",
-                                                                clientId);
+                                                        log.info("New client \"{}\" created", clientId);
                                                         return clientId;
                                                     });
                                         }))
@@ -103,25 +105,32 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long playerId,
                                   final Long tenantId,
                                   final Long tenantStageId) {
-        return selectTenantDeployment(tenantId, tenantStageId)
-                .flatMap(tenantDeployment -> {
-                    final var tenantDeploymentId = tenantDeployment.getId();
+        return selectTenantDeploymentResource(tenantId, tenantStageId)
+                .flatMap(tenantDeploymentResource -> {
+                    final var deploymentId = tenantDeploymentResource.getDeploymentId();
                     final var client = clientModelFactory.create(userId,
                             playerId,
-                            tenantId,
-                            tenantDeploymentId);
+                            deploymentId);
 
                     final var request = new SyncClientRequest(client);
-                    return clientShard.getService().syncClient(request)
+                    return clientShard.getService().execute(request)
                             .replaceWith(client);
                 });
     }
 
-    Uni<TenantDeploymentModel> selectTenantDeployment(final Long tenantId, final Long tenantStageId) {
-        final var request = new SelectTenantDeploymentRequest(tenantId,
-                tenantStageId,
-                SelectTenantDeploymentRequest.StrategyEnum.LATEST);
-        return tenantShard.getService().selectTenantDeployment(request)
-                .map(SelectTenantDeploymentResponse::getTenantDeployment);
+    Uni<TenantDeploymentResourceModel> selectTenantDeploymentResource(final Long tenantId,
+                                                                      final Long tenantStageId) {
+        final var request = new ViewTenantDeploymentResourcesRequest(tenantId, tenantStageId,
+                TenantDeploymentResourceStatusEnum.CREATED);
+        return tenantShard.getService().execute(request)
+                .map(ViewTenantDeploymentResourcesResponse::getTenantDeploymentResources)
+                .map(tenantDeploymentResources -> {
+                    if (tenantDeploymentResources.isEmpty()) {
+                        throw new ServerSideConflictException(ExceptionQualifierEnum.DEPLOYMENT_NOT_FOUND,
+                                "Deployment not found");
+                    } else {
+                        return tenantDeploymentResources.getLast();
+                    }
+                });
     }
 }

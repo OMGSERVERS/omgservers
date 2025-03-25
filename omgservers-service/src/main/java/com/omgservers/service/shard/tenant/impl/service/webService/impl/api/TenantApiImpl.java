@@ -2,14 +2,9 @@ package com.omgservers.service.shard.tenant.impl.service.webService.impl.api;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.tenant.tenant.*;
-import com.omgservers.schema.module.tenant.tenantBuildRequest.*;
-import com.omgservers.schema.module.tenant.tenantDeployment.*;
-import com.omgservers.schema.module.tenant.tenantFilesArchive.*;
+import com.omgservers.schema.module.tenant.tenantDeploymentRef.*;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.*;
 import com.omgservers.schema.module.tenant.tenantImage.*;
-import com.omgservers.schema.module.tenant.tenantLobbyRef.*;
-import com.omgservers.schema.module.tenant.tenantLobbyResource.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerRef.*;
-import com.omgservers.schema.module.tenant.tenantMatchmakerResource.*;
 import com.omgservers.schema.module.tenant.tenantPermission.*;
 import com.omgservers.schema.module.tenant.tenantProject.*;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
@@ -39,23 +34,23 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<GetTenantResponse> getTenant(final GetTenantRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenant);
+    public Uni<GetTenantResponse> execute(final GetTenantRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantDataResponse> getTenantData(final GetTenantDataRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantData);
+    public Uni<GetTenantDataResponse> execute(final GetTenantDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantResponse> syncTenant(final SyncTenantRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenant);
+    public Uni<SyncTenantResponse> execute(final SyncTenantRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantResponse> deleteTenant(final DeleteTenantRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenant);
+    public Uni<DeleteTenantResponse> execute(final DeleteTenantRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
@@ -63,24 +58,24 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<ViewTenantPermissionsResponse> viewTenantPermissions(final ViewTenantPermissionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantPermissions);
+    public Uni<ViewTenantPermissionsResponse> execute(final ViewTenantPermissionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<VerifyTenantPermissionExistsResponse> verifyTenantPermissionExists(
+    public Uni<VerifyTenantPermissionExistsResponse> execute(
             final VerifyTenantPermissionExistsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::verifyTenantPermissionExists);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantPermissionResponse> syncTenantPermission(final SyncTenantPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantPermission);
+    public Uni<SyncTenantPermissionResponse> execute(final SyncTenantPermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantPermissionResponse> deleteTenantPermission(final DeleteTenantPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantPermission);
+    public Uni<DeleteTenantPermissionResponse> execute(final DeleteTenantPermissionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
@@ -88,28 +83,28 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<GetTenantProjectResponse> getTenantProject(final GetTenantProjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantProject);
+    public Uni<GetTenantProjectResponse> execute(final GetTenantProjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantProjectDataResponse> getTenantProjectData(final GetTenantProjectDataRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantProjectData);
+    public Uni<GetTenantProjectDataResponse> execute(final GetTenantProjectDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantProjectResponse> syncTenantProject(final SyncTenantProjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantProject);
+    public Uni<SyncTenantProjectResponse> execute(final SyncTenantProjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewTenantProjectsResponse> viewTenantProjects(ViewTenantProjectsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantProjects);
+    public Uni<ViewTenantProjectsResponse> execute(ViewTenantProjectsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantProjectResponse> deleteTenantProject(final DeleteTenantProjectRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantProject);
+    public Uni<DeleteTenantProjectResponse> execute(final DeleteTenantProjectRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
@@ -117,28 +112,28 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<ViewTenantProjectPermissionsResponse> viewTenantProjectPermissions(
+    public Uni<ViewTenantProjectPermissionsResponse> execute(
             final ViewTenantProjectPermissionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantProjectPermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<VerifyTenantProjectPermissionExistsResponse> verifyTenantProjectPermissionExists(
+    public Uni<VerifyTenantProjectPermissionExistsResponse> execute(
             final VerifyTenantProjectPermissionExistsRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request,
-                webService::verifyTenantProjectPermissionExists);
+                webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantProjectPermissionResponse> syncTenantProjectPermission(
+    public Uni<SyncTenantProjectPermissionResponse> execute(
             final SyncTenantProjectPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantProjectPermission);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantProjectPermissionResponse> deleteTenantProjectPermission(
+    public Uni<DeleteTenantProjectPermissionResponse> execute(
             final DeleteTenantProjectPermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantProjectPermission);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
@@ -146,28 +141,28 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<GetTenantStageResponse> getTenantStage(final GetTenantStageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantStage);
+    public Uni<GetTenantStageResponse> execute(final GetTenantStageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantStageDataResponse> getTenantStageData(final GetTenantStageDataRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantStageData);
+    public Uni<GetTenantStageDataResponse> execute(final GetTenantStageDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantStageResponse> syncTenantStage(final SyncTenantStageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantStage);
+    public Uni<SyncTenantStageResponse> execute(final SyncTenantStageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewTenantStagesResponse> viewTenantStages(ViewTenantStagesRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantStages);
+    public Uni<ViewTenantStagesResponse> execute(ViewTenantStagesRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantStageResponse> deleteTenantStage(final DeleteTenantStageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantStage);
+    public Uni<DeleteTenantStageResponse> execute(final DeleteTenantStageRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
@@ -175,27 +170,27 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<ViewTenantStagePermissionsResponse> viewTenantStagePermissions(
+    public Uni<ViewTenantStagePermissionsResponse> execute(
             final ViewTenantStagePermissionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantStagePermissions);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<VerifyTenantStagePermissionExistsResponse> verifyTenantStagePermissionExists(
+    public Uni<VerifyTenantStagePermissionExistsResponse> execute(
             final VerifyTenantStagePermissionExistsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::verifyTenantStagePermissionExists);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantStagePermissionResponse> syncTenantStagePermission(
+    public Uni<SyncTenantStagePermissionResponse> execute(
             final SyncTenantStagePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantStagePermission);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantStagePermissionResponse> deleteTenantStagePermission(
+    public Uni<DeleteTenantStagePermissionResponse> execute(
             final DeleteTenantStagePermissionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantStagePermission);
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
@@ -203,91 +198,33 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<GetTenantVersionResponse> getTenantVersion(final GetTenantVersionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantVersion);
+    public Uni<GetTenantVersionResponse> execute(final GetTenantVersionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantVersionConfigResponse> getTenantVersionConfig(final GetTenantVersionConfigRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantVersionConfig);
+    public Uni<GetTenantVersionConfigResponse> execute(final GetTenantVersionConfigRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantVersionDataResponse> getTenantVersionData(final GetTenantVersionDataRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantVersionData);
+    public Uni<GetTenantVersionDataResponse> execute(final GetTenantVersionDataRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantVersionResponse> syncTenantVersion(final SyncTenantVersionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantVersion);
+    public Uni<SyncTenantVersionResponse> execute(final SyncTenantVersionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewTenantVersionsResponse> viewTenantVersions(final ViewTenantVersionsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantVersions);
+    public Uni<ViewTenantVersionsResponse> execute(final ViewTenantVersionsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantVersionResponse> deleteTenantVersion(final DeleteTenantVersionRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantVersion);
-    }
-
-    /*
-    TenantFilesArchive
-     */
-
-    @Override
-    public Uni<GetTenantFilesArchiveResponse> getTenantFilesArchive(final GetTenantFilesArchiveRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantFilesArchive);
-    }
-
-    @Override
-    public Uni<FindTenantFilesArchiveResponse> findTenantFilesArchive(final FindTenantFilesArchiveRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantFilesArchive);
-    }
-
-    @Override
-    public Uni<ViewTenantFilesArchivesResponse> viewTenantFilesArchives(final ViewTenantFilesArchivesRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantFilesArchives);
-    }
-
-    @Override
-    public Uni<SyncTenantFilesArchiveResponse> syncTenantFilesArchive(final SyncTenantFilesArchiveRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantFilesArchive);
-    }
-
-    @Override
-    public Uni<DeleteTenantFilesArchiveResponse> deleteTenantFilesArchive(
-            final DeleteTenantFilesArchiveRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantFilesArchive);
-    }
-
-    /*
-    TenantBuildRequest
-     */
-
-    @Override
-    public Uni<GetTenantBuildRequestResponse> getTenantBuildRequest(
-            final GetTenantBuildRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantBuildRequest);
-    }
-
-    @Override
-    public Uni<ViewTenantBuildRequestsResponse> viewTenantBuildRequests(
-            final ViewTenantBuildRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantBuildRequests);
-    }
-
-    @Override
-    public Uni<SyncTenantBuildRequestResponse> syncTenantBuildRequest(
-            final SyncTenantBuildRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantBuildRequest);
-    }
-
-    @Override
-    public Uni<DeleteTenantBuildRequestResponse> deleteTenantBuildRequest(
-            final DeleteTenantBuildRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantBuildRequest);
+    public Uni<DeleteTenantVersionResponse> execute(final DeleteTenantVersionRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
@@ -295,186 +232,90 @@ class TenantApiImpl implements TenantApi {
      */
 
     @Override
-    public Uni<GetTenantImageResponse> getTenantImage(final GetTenantImageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantImage);
-    }
-
-    @Override
-    public Uni<FindTenantImageResponse> findTenantImage(final FindTenantImageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantImage);
-    }
-
-    @Override
-    public Uni<ViewTenantImagesResponse> viewTenantImages(final ViewTenantImagesRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantImages);
-    }
-
-    @Override
-    public Uni<SyncTenantImageResponse> syncTenantImage(final SyncTenantImageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantImage);
-    }
-
-    @Override
-    public Uni<DeleteTenantImageResponse> deleteTenantImage(final DeleteTenantImageRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantImage);
-    }
-
-    /*
-    TenantDeployment
-     */
-
-    @Override
-    public Uni<GetTenantDeploymentResponse> getTenantDeployment(final GetTenantDeploymentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDeployment);
-    }
-
-    @Override
-    public Uni<GetTenantDeploymentDataResponse> getTenantDeploymentData(final GetTenantDeploymentDataRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantDeploymentData);
-    }
-
-    @Override
-    public Uni<SelectTenantDeploymentResponse> selectTenantDeployment(final SelectTenantDeploymentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::selectTenantDeployment);
-    }
-
-    @Override
-    public Uni<ViewTenantDeploymentsResponse> viewTenantDeployments(final ViewTenantDeploymentsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantDeployments);
-    }
-
-    @Override
-    public Uni<SyncTenantDeploymentResponse> syncTenantDeployment(final SyncTenantDeploymentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantDeployment);
-    }
-
-    @Override
-    public Uni<DeleteTenantDeploymentResponse> deleteTenantDeployment(final DeleteTenantDeploymentRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantDeployment);
-    }
-
-    /*
-    TenantLobbyResource
-     */
-
-    @Override
-    public Uni<GetTenantLobbyResourceResponse> execute(final GetTenantLobbyResourceRequest request) {
+    public Uni<GetTenantImageResponse> execute(final GetTenantImageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindTenantLobbyResourceResponse> execute(final FindTenantLobbyResourceRequest request) {
+    public Uni<FindTenantImageResponse> execute(final FindTenantImageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewTenantLobbyResourcesResponse> execute(final ViewTenantLobbyResourcesRequest request) {
+    public Uni<ViewTenantImagesResponse> execute(final ViewTenantImagesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantLobbyResourceResponse> execute(final SyncTenantLobbyResourceRequest request) {
+    public Uni<SyncTenantImageResponse> execute(final SyncTenantImageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<UpdateTenantLobbyResourceStatusResponse> execute(final UpdateTenantLobbyResourceStatusRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<DeleteTenantLobbyResourceResponse> execute(final DeleteTenantLobbyResourceRequest request) {
+    public Uni<DeleteTenantImageResponse> execute(final DeleteTenantImageRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
-    TenantLobbyRef
+    TenantDeploymentResource
      */
 
     @Override
-    public Uni<GetTenantLobbyRefResponse> getTenantLobbyRef(final GetTenantLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantLobbyRef);
-    }
-
-    @Override
-    public Uni<FindTenantLobbyRefResponse> findTenantLobbyRef(final FindTenantLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantLobbyRef);
-    }
-
-    @Override
-    public Uni<ViewTenantLobbyRefsResponse> viewTenantLobbyRefs(final ViewTenantLobbyRefsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantLobbyRefs);
-    }
-
-    @Override
-    public Uni<SyncTenantLobbyRefResponse> syncTenantLobbyRef(final SyncTenantLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantLobbyRef);
-    }
-
-    @Override
-    public Uni<DeleteTenantLobbyRefResponse> deleteTenantLobbyRef(final DeleteTenantLobbyRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantLobbyRef);
-    }
-
-    /*
-    TenantMatchmakerResource
-     */
-
-    @Override
-    public Uni<GetTenantMatchmakerResourceResponse> execute(final GetTenantMatchmakerResourceRequest request) {
+    public Uni<GetTenantDeploymentResourceResponse> execute(final GetTenantDeploymentResourceRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindTenantMatchmakerResourceResponse> execute(final FindTenantMatchmakerResourceRequest request) {
+    public Uni<FindTenantDeploymentResourceResponse> execute(final FindTenantDeploymentResourceRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewTenantMatchmakerResourcesResponse> execute(final ViewTenantMatchmakerResourcesRequest request) {
+    public Uni<ViewTenantDeploymentResourcesResponse> execute(final ViewTenantDeploymentResourcesRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantMatchmakerResourceResponse> execute(final SyncTenantMatchmakerResourceRequest request) {
+    public Uni<SyncTenantDeploymentResourceResponse> execute(final SyncTenantDeploymentResourceRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantMatchmakerResourceResponse> execute(final DeleteTenantMatchmakerResourceRequest request) {
+    public Uni<UpdateTenantDeploymentResourceStatusResponse> execute(final UpdateTenantDeploymentResourceStatusRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<DeleteTenantDeploymentResourceResponse> execute(final DeleteTenantDeploymentResourceRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     /*
-    TenantMatchmakerRef
+    TenantDeploymentRef
      */
 
     @Override
-    public Uni<GetTenantMatchmakerRefResponse> getTenantMatchmakerRef(GetTenantMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getTenantMatchmakerRef);
+    public Uni<GetTenantDeploymentRefResponse> execute(final GetTenantDeploymentRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindTenantMatchmakerRefResponse> findTenantMatchmakerRef(
-            final FindTenantMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findTenantMatchmakerRef);
+    public Uni<FindTenantDeploymentRefResponse> execute(final FindTenantDeploymentRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewTenantMatchmakerRefsResponse> viewTenantMatchmakerRefs(
-            final ViewTenantMatchmakerRefsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewTenantMatchmakerRefs);
+    public Uni<ViewTenantDeploymentRefsResponse> execute(final ViewTenantDeploymentRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncTenantMatchmakerRefResponse> syncTenantMatchmakerRef(
-            final SyncTenantMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncTenantMatchmakerRef);
+    public Uni<SyncTenantDeploymentRefResponse> execute(final SyncTenantDeploymentRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantMatchmakerRefResponse> deleteTenantMatchmakerRef(
-            final DeleteTenantMatchmakerRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteTenantMatchmakerRef);
+    public Uni<DeleteTenantDeploymentRefResponse> execute(final DeleteTenantDeploymentRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

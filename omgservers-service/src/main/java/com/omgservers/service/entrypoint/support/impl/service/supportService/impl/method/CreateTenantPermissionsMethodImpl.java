@@ -81,7 +81,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
 
     Uni<TenantModel> getTenant(Long tenantId) {
         final var getTenantRequest = new GetTenantRequest(tenantId);
-        return tenantShard.getService().getTenant(getTenantRequest)
+        return tenantShard.getService().execute(getTenantRequest)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -111,7 +111,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
                 .create(tenantId, userId, permission);
 
         final var syncTenantPermissionServiceRequest = new SyncTenantPermissionRequest(tenantPermission);
-        return tenantShard.getService().syncTenantPermission(syncTenantPermissionServiceRequest)
+        return tenantShard.getService().execute(syncTenantPermissionServiceRequest)
                 .map(SyncTenantPermissionResponse::getCreated);
     }
 }

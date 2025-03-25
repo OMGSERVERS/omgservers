@@ -24,10 +24,9 @@ public class MatchmakerMatchAssignmentModelMapper {
         matchmakerMatchAssignment.setId(row.getLong("id"));
         matchmakerMatchAssignment.setIdempotencyKey(row.getString("idempotency_key"));
         matchmakerMatchAssignment.setMatchmakerId(row.getLong("matchmaker_id"));
-        matchmakerMatchAssignment.setMatchId(row.getLong("match_id"));
         matchmakerMatchAssignment.setCreated(row.getOffsetDateTime("created").toInstant());
         matchmakerMatchAssignment.setModified(row.getOffsetDateTime("modified").toInstant());
-        matchmakerMatchAssignment.setUserId(row.getLong("user_id"));
+        matchmakerMatchAssignment.setMatchId(row.getLong("match_id"));
         matchmakerMatchAssignment.setClientId(row.getLong("client_id"));
         matchmakerMatchAssignment.setGroupName(row.getString("group_name"));
         matchmakerMatchAssignment.setDeleted(row.getBoolean("deleted"));

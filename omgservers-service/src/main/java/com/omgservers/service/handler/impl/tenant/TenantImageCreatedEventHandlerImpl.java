@@ -45,7 +45,7 @@ public class TenantImageCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantImageModel> getTenantImage(final Long tenantId, final Long id) {
         final var request = new GetTenantImageRequest(tenantId, id);
-        return tenantShard.getService().getTenantImage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantImageResponse::getTenantImage);
     }
 }

@@ -1,7 +1,7 @@
 package com.omgservers.service.service.index.operation.deleteIndex;
 
 import com.omgservers.service.event.body.system.IndexDeletedEventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

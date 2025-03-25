@@ -7,8 +7,8 @@ import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.runtime.RuntimeModelFactory;
-import com.omgservers.service.shard.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
+import com.omgservers.service.shard.runtime.operation.testInterface.UpsertRuntimeOperationTestInterface;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +28,9 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void whenExecute_thenInserted() {
+    void givenRuntime_whenExecute_thenInserted() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(),
-                versionId(),
+        final var runtime = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
         final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
@@ -40,10 +39,9 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenLobby_whenExecute_thenUpdated() {
+    void givenRuntime_whenExecute_thenUpdated() {
         final var shard = 0;
-        final var runtime = runtimeModelFactory.create(tenantId(),
-                versionId(),
+        final var runtime = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime);
@@ -54,16 +52,14 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenLobby_whenExecute_thenIdempotencyViolation() {
+    void givenRuntime_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
-        final var runtime1 = runtimeModelFactory.create(tenantId(),
-                versionId(),
+        final var runtime1 = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
         upsertRuntimeOperation.upsertRuntime(shard, runtime1);
 
-        final var runtime2 = runtimeModelFactory.create(tenantId(),
-                versionId(),
+        final var runtime2 = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto(),
                 runtime1.getIdempotencyKey());
@@ -72,11 +68,7 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 
-    Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long versionId() {
+    Long deploymentId() {
         return generateIdOperation.generateId();
     }
 }

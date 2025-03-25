@@ -17,7 +17,6 @@ public class MatchmakerModelMapper {
         matchmaker.setIdempotencyKey(row.getString("idempotency_key"));
         matchmaker.setCreated(row.getOffsetDateTime("created").toInstant());
         matchmaker.setModified(row.getOffsetDateTime("modified").toInstant());
-        matchmaker.setTenantId(row.getLong("tenant_id"));
         matchmaker.setDeploymentId(row.getLong("deployment_id"));
         matchmaker.setDeleted(row.getBoolean("deleted"));
         return matchmaker;

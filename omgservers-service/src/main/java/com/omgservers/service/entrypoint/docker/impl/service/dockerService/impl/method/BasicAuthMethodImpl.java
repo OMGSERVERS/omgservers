@@ -70,8 +70,8 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
                                             // If server returns refresh token, docker registry uses OAuth2 refresh_token grant type
                                             response.setRefreshToken(getTokenResponse.getRefreshToken());
 
-                                            log.info("Registry tokens issued for account=\"{}\"",
-                                                    request.getAccount());
+                                            log.info("Registry tokens issued for account=\"{}\" with scope=\"{}\"",
+                                                    request.getAccount(), getTokenResponse.getScope());
 
                                             return response;
                                         });

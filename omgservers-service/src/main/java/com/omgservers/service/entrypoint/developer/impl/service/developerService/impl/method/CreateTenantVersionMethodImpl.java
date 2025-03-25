@@ -1,8 +1,8 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
@@ -36,7 +36,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
     final ObjectMapper objectMapper;
 
     @Override
-    public Uni<CreateTenantVersionDeveloperResponse> execute(final CreateTenantVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> execute(final CreateVersionDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -64,7 +64,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
                                                 tenantVersionId, tenantId));
                             });
                 })
-                .map(CreateTenantVersionDeveloperResponse::new);
+                .map(CreateVersionDeveloperResponse::new);
     }
 
     Uni<TenantVersionModel> createTenantVersion(final Long tenantId,
@@ -74,7 +74,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
                 tenantProjectId,
                 tenantVersionConfigDto);
         final var request = new SyncTenantVersionRequest(tenantVersion);
-        return tenantShard.getService().syncTenantVersion(request)
+        return tenantShard.getService().execute(request)
                 .replaceWith(tenantVersion);
     }
 }

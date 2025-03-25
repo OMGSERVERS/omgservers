@@ -16,12 +16,9 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
-import com.omgservers.service.factory.system.JobModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.job.CreateJobOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
-import com.omgservers.service.service.job.JobService;
-import com.omgservers.service.service.job.dto.SyncJobRequest;
-import com.omgservers.service.service.job.dto.SyncJobResponse;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.root.RootShard;
 import com.omgservers.service.shard.tenant.TenantShard;
@@ -40,12 +37,10 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
     final AliasShard aliasShard;
     final RootShard rootShard;
 
-    final JobService jobService;
-
     final GetServiceConfigOperation getServiceConfigOperation;
+    final CreateJobOperation createJobOperation;
 
     final RootEntityRefModelFactory rootEntityRefModelFactory;
-    final JobModelFactory jobModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -59,21 +54,23 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
         final var body = (TenantCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getId();
 
+        final var idempotencyKey = event.getId().toString();
+
         return getTenant(tenantId)
                 .flatMap(tenant -> {
                     log.debug("Created, {}", tenant);
 
-                    final var idempotencyKey = event.getId().toString();
-
                     return syncRootEntityRef(tenantId, idempotencyKey)
-                            .flatMap(created -> syncTenantJob(tenantId, idempotencyKey));
+                            .flatMap(created -> createJobOperation.execute(JobQualifierEnum.TENANT,
+                                    tenantId,
+                                    idempotencyKey));
                 })
                 .replaceWithVoid();
     }
 
     Uni<TenantModel> getTenant(final Long id) {
         final var request = new GetTenantRequest(id);
-        return tenantShard.getService().getTenant(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantResponse::getTenant);
     }
 
@@ -98,17 +95,5 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                 DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
         return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
-    }
-
-    Uni<Boolean> syncTenantJob(final Long tenantId,
-                               final String idempotencyKey) {
-        final var job = jobModelFactory.create(JobQualifierEnum.TENANT,
-                tenantId,
-                tenantId,
-                idempotencyKey);
-
-        final var syncEventRequest = new SyncJobRequest(job);
-        return jobService.syncJobWithIdempotency(syncEventRequest)
-                .map(SyncJobResponse::getCreated);
     }
 }

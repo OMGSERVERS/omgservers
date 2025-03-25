@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperResponse;
-import com.omgservers.schema.entrypoint.developer.GetTenantVersionDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperRequest;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
@@ -35,8 +35,8 @@ class GetTenantVersionDetailsMethodImpl implements GetTenantVersionDetailsMethod
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
-            final GetTenantVersionDetailsDeveloperRequest request) {
+    public Uni<GetVersionDetailsDeveloperResponse> execute(
+            final GetVersionDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -60,18 +60,18 @@ class GetTenantVersionDetailsMethodImpl implements GetTenantVersionDetailsMethod
 
                             });
                 })
-                .map(GetTenantVersionDetailsDeveloperResponse::new);
+                .map(GetVersionDetailsDeveloperResponse::new);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantShard.getService().getTenantVersion(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<TenantVersionDataDto> getTenantVersionData(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionDataRequest(tenantId, tenantVersionId);
-        return tenantShard.getService().getTenantVersionData(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantVersionDataResponse::getTenantVersionData);
     }
 }

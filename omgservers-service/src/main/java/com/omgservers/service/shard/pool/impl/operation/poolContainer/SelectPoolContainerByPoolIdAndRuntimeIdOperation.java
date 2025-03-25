@@ -8,6 +8,5 @@ public interface SelectPoolContainerByPoolIdAndRuntimeIdOperation {
     Uni<PoolContainerModel> execute(SqlConnection sqlConnection,
                                     int shard,
                                     Long poolId,
-                                    Long serverId,
                                     Long runtimeId);
 }

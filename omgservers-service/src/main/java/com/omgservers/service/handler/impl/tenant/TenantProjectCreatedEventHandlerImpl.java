@@ -71,7 +71,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
-        return tenantShard.getService().getTenantProject(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantProjectResponse::getTenantProject);
     }
 
@@ -88,7 +88,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                             permission,
                             idempotencyKey + "/" + serviceUserId + "/" + permission);
                     final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-                    return tenantShard.getService().syncTenantProjectPermissionWithIdempotency(request)
+                    return tenantShard.getService().executeWithIdempotency(request)
                             .map(SyncTenantProjectPermissionResponse::getCreated);
                 });
     }
@@ -106,7 +106,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                             permission,
                             idempotencyKey + "/" + builderUserId + "/" + permission);
                     final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-                    return tenantShard.getService().syncTenantProjectPermissionWithIdempotency(request)
+                    return tenantShard.getService().executeWithIdempotency(request)
                             .map(SyncTenantProjectPermissionResponse::getCreated);
                 });
     }

@@ -46,7 +46,7 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
                                         .flatMap(tenantStageId -> {
                                             final var deleteTenantStageRequest = new DeleteTenantStageRequest(tenantId,
                                                     tenantStageId);
-                                            return tenantShard.getService().deleteTenantStage(deleteTenantStageRequest)
+                                            return tenantShard.getService().execute(deleteTenantStageRequest)
                                                     .map(DeleteTenantStageResponse::getDeleted)
                                                     .invoke(deleted -> {
                                                         if (deleted) {

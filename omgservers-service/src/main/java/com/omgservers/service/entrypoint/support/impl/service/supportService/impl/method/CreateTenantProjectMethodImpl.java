@@ -47,7 +47,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                                     .map(tenantStage -> {
                                         final var tenantStageId = tenantStage.getId();
 
-                                        log.info("The new project \"{}\" was created in tenant \"{}\"",
+                                        log.info("New project \"{}\" created in tenant \"{}\"",
                                                 tenantProjectId, tenantId);
 
                                         return new CreateTenantProjectSupportResponse(tenantProjectId, tenantStageId);
@@ -58,7 +58,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     Uni<TenantProjectModel> createTenantProject(final Long tenantId) {
         final var tenantProject = tenantProjectModelFactory.create(tenantId);
         final var syncProjectInternalRequest = new SyncTenantProjectRequest(tenantProject);
-        return tenantShard.getService().syncTenantProject(syncProjectInternalRequest)
+        return tenantShard.getService().execute(syncProjectInternalRequest)
                 .replaceWith(tenantProject);
     }
 
@@ -66,7 +66,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                                             final Long tenantProjectId) {
         final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
         final var syncStageInternalRequest = new SyncTenantStageRequest(tenantStage);
-        return tenantShard.getService().syncTenantStage(syncStageInternalRequest)
+        return tenantShard.getService().execute(syncStageInternalRequest)
                 .replaceWith(tenantStage);
     }
 }

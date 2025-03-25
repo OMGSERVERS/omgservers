@@ -18,38 +18,34 @@ public class RuntimeModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public RuntimeModel create(final Long tenantId,
-                               final Long deploymentId,
+    public RuntimeModel create(final Long deploymentId,
                                final RuntimeQualifierEnum qualifier,
                                final RuntimeConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var userId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, deploymentId, qualifier, userId, config, idempotencyKey);
+        return create(id, deploymentId, qualifier, userId, config, idempotencyKey);
     }
 
     public RuntimeModel create(final Long id,
-                               final Long tenantId,
                                final Long deploymentId,
                                final RuntimeQualifierEnum qualifier,
                                final RuntimeConfigDto config) {
         final var userId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, deploymentId, qualifier, userId, config, idempotencyKey);
+        return create(id, deploymentId, qualifier, userId, config, idempotencyKey);
     }
 
-    public RuntimeModel create(final Long tenantId,
-                               final Long deploymentId,
+    public RuntimeModel create(final Long deploymentId,
                                final RuntimeQualifierEnum qualifier,
                                final RuntimeConfigDto config,
                                final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         final var userId = generateIdOperation.generateId();
-        return create(id, tenantId, deploymentId, qualifier, userId, config, idempotencyKey);
+        return create(id, deploymentId, qualifier, userId, config, idempotencyKey);
     }
 
     public RuntimeModel create(final Long id,
-                               final Long tenantId,
                                final Long deploymentId,
                                final RuntimeQualifierEnum qualifier,
                                final Long userId,
@@ -62,11 +58,9 @@ public class RuntimeModelFactory {
         runtime.setIdempotencyKey(idempotencyKey);
         runtime.setCreated(now);
         runtime.setModified(now);
-        runtime.setTenantId(tenantId);
         runtime.setDeploymentId(deploymentId);
         runtime.setQualifier(qualifier);
         runtime.setUserId(userId);
-        runtime.setLastActivity(now);
         runtime.setConfig(config);
         runtime.setDeleted(Boolean.FALSE);
         return runtime;

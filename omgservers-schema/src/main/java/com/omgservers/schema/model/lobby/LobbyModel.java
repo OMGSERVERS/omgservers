@@ -33,9 +33,6 @@ public class LobbyModel {
     Instant modified;
 
     @NotNull
-    Long tenantId;
-
-    @NotNull
     Long deploymentId;
 
     @NotNull

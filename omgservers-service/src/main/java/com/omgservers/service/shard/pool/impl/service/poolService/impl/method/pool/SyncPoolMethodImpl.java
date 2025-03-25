@@ -2,10 +2,10 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
-import com.omgservers.service.shard.pool.impl.operation.pool.UpsertPoolOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.pool.impl.operation.pool.UpsertPoolOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -25,8 +25,7 @@ class SyncPoolMethodImpl implements SyncPoolMethod {
         log.trace("{}", request);
 
         final var pool = request.getPool();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+        return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(

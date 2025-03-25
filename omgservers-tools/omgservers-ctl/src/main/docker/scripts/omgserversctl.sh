@@ -454,10 +454,10 @@ help() {
       echo "     - CREATED"
     fi
   fi
-  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer deployVersion" ]; then
-    internal_print_command " developer deployVersion" ""
-    internal_print_command "   <tenant> <project> <stage> <version>" "Deploy a version to the specified stage."
-    if [ "$1" = "developer deployVersion" ]; then
+  if [ -z "$1" -o "$1" = "developer" -o "$1" = "developer createDeployment" ]; then
+    internal_print_command " developer createDeployment" ""
+    internal_print_command "   <tenant> <project> <stage> <version>" "Deploy a specific version to the specified stage."
+    if [ "$1" = "developer createDeployment" ]; then
       echo "   produces:"
       echo "     - DEPLOYMENT"
     fi
@@ -817,7 +817,7 @@ handler_installation_deployVersion() {
 
   echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Deploy a new version" >&2
 
-  handler_developer_deployVersion ${TENANT_ALIAS} ${PROJECT_ALIAS} ${STAGE_ALIAS} ${VERSION}
+  handler_developer_createDeployment ${TENANT_ALIAS} ${PROJECT_ALIAS} ${STAGE_ALIAS} ${VERSION}
   DEPLOYMENT=$(handler_environment_printVariable DEPLOYMENT)
   if [ -z "${DEPLOYMENT}" -o "${DEPLOYMENT}" = "null" ]; then
     echo "$(date) [CTL/installationDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) ERROR: DEPLOYMENT was not found" >&2
@@ -2787,7 +2787,7 @@ handler_developer_createImage() {
   fi
 }
 
-handler_developer_deployVersion() {
+handler_developer_createDeployment() {
   internal_ensureEnvironment
   internal_ensureInstallationUrl
   internal_ensureDeveloperToken
@@ -2798,20 +2798,20 @@ handler_developer_deployVersion() {
   VERSION=$4
 
   if [ -z "${TENANT}" -o -z "${PROJECT}" -o -z "${STAGE}" -o -z "${VERSION}" ]; then
-    help "developer deployVersion"
+    help "developer createDeployment"
     exit 1
   fi
 
-  echo "$(date) [CTL/developerDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, TENANT=\"${TENANT}\"" >&2
-  echo "$(date) [CTL/developerDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, PROJECT=\"${PROJECT}\"" >&2
-  echo "$(date) [CTL/developerDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, STAGE=\"${STAGE}\"" >&2
-  echo "$(date) [CTL/developerDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Using, VERSION=\"${VERSION}\"" >&2
+  echo "$(date) [CTL/developerCreateDeployment] (${OMG_INSTALLATION_NAME:-unknown}) Using, TENANT=\"${TENANT}\"" >&2
+  echo "$(date) [CTL/developerCreateDeployment] (${OMG_INSTALLATION_NAME:-unknown}) Using, PROJECT=\"${PROJECT}\"" >&2
+  echo "$(date) [CTL/developerCreateDeployment] (${OMG_INSTALLATION_NAME:-unknown}) Using, STAGE=\"${STAGE}\"" >&2
+  echo "$(date) [CTL/developerCreateDeployment] (${OMG_INSTALLATION_NAME:-unknown}) Using, VERSION=\"${VERSION}\"" >&2
 
   DEVELOPER_TOKEN=$OMG_DEVELOPER_TOKEN
 
-  ENDPOINT="${OMG_INSTALLATION_URL}/service/v1/entrypoint/developer/request/deploy-version"
+  ENDPOINT="${OMG_INSTALLATION_URL}/service/v1/entrypoint/developer/request/create-deployment"
   REQUEST="{\"tenant\": \"${TENANT}\", \"project\": \"${PROJECT}\", \"stage\": \"${STAGE}\", \"version_id\": ${VERSION}}"
-  RESPONSE_FILE="${OMG_CONTEXT_DIRECTORY}/temp/developer-deploy-version_${TENANT}_${PROJECT}_${STAGE}_${VERSION}.json"
+  RESPONSE_FILE="${OMG_CONTEXT_DIRECTORY}/temp/developer-create-deployment_${TENANT}_${PROJECT}_${STAGE}_${VERSION}.json"
 
   echo >> ${OMG_CONTEXT_DIRECTORY}/logs
   echo $ENDPOINT >> ${OMG_CONTEXT_DIRECTORY}/logs
@@ -2835,12 +2835,12 @@ handler_developer_deployVersion() {
 
   DEPLOYMENT=$(cat ${RESPONSE_FILE} | jq -r .deployment_id)
   if [ -z "${DEPLOYMENT}" -o "${DEPLOYMENT}" == "null" ]; then
-    echo "$(date) [CTL/developerDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) ERROR: DEPLOYMENT was not received" >&2
+    echo "$(date) [CTL/developerCreateDeployment] (${OMG_INSTALLATION_NAME:-unknown}) ERROR: DEPLOYMENT was not received" >&2
     exit 1
   fi
   echo "export OMG_DEPLOYMENT=${DEPLOYMENT}" >> ${OMG_CONTEXT_DIRECTORY}/environment
 
-  echo "$(date) [CTL/developerDeployVersion] (${OMG_INSTALLATION_NAME:-unknown}) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\"" >&2
+  echo "$(date) [CTL/developerCreateDeployment] (${OMG_INSTALLATION_NAME:-unknown}) Deployment was created, DEPLOYMENT=\"${DEPLOYMENT}\"" >&2
 }
 
 handler_developer_getDeploymentDetails() {
@@ -3331,8 +3331,8 @@ else
         handler_developer_deleteVersion $@
       elif [ "${ARG}" = "createImage" ]; then
         handler_developer_createImage $@
-      elif [ "${ARG}" = "deployVersion" ]; then
-        handler_developer_deployVersion $@
+      elif [ "${ARG}" = "createDeployment" ]; then
+        handler_developer_createDeployment $@
       elif [ "${ARG}" = "getDeploymentDetails" ]; then
         handler_developer_getDeploymentDetails $@
       elif [ "${ARG}" = "deleteDeployment" ]; then

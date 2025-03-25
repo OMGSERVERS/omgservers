@@ -19,30 +19,27 @@ public class MatchmakerMatchAssignmentModelFactory {
 
     public MatchmakerMatchAssignmentModel create(final Long matchmakerId,
                                                  final Long matchId,
-                                                 final Long userId,
                                                  final Long clientId,
                                                  final String groupName,
                                                  final MatchmakerMatchAssignmentConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, matchmakerId, matchId, userId, clientId, groupName, config, idempotencyKey);
+        return create(id, matchmakerId, matchId, clientId, groupName, config, idempotencyKey);
     }
 
     public MatchmakerMatchAssignmentModel create(final Long matchmakerId,
                                                  final Long matchId,
-                                                 final Long userId,
                                                  final Long clientId,
                                                  final String groupName,
                                                  final MatchmakerMatchAssignmentConfigDto config,
                                                  final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, matchmakerId, matchId, userId, clientId, groupName, config, idempotencyKey);
+        return create(id, matchmakerId, matchId, clientId, groupName, config, idempotencyKey);
     }
 
     public MatchmakerMatchAssignmentModel create(final Long id,
                                                  final Long matchmakerId,
                                                  final Long matchId,
-                                                 final Long userId,
                                                  final Long clientId,
                                                  final String groupName,
                                                  final MatchmakerMatchAssignmentConfigDto config,
@@ -53,10 +50,9 @@ public class MatchmakerMatchAssignmentModelFactory {
         matchmakerMatchAssignment.setId(id);
         matchmakerMatchAssignment.setIdempotencyKey(idempotencyKey);
         matchmakerMatchAssignment.setMatchmakerId(matchmakerId);
-        matchmakerMatchAssignment.setMatchId(matchId);
         matchmakerMatchAssignment.setCreated(now);
         matchmakerMatchAssignment.setModified(now);
-        matchmakerMatchAssignment.setUserId(userId);
+        matchmakerMatchAssignment.setMatchId(matchId);
         matchmakerMatchAssignment.setClientId(clientId);
         matchmakerMatchAssignment.setGroupName(groupName);
         matchmakerMatchAssignment.setConfig(config);

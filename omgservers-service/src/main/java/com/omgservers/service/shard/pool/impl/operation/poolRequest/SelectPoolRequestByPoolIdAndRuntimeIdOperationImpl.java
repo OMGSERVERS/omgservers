@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.pool.impl.operation.poolRequest;
 
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
-import com.omgservers.service.shard.pool.impl.mappers.PoolRequestModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.pool.impl.mappers.PoolRequestModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,7 +32,8 @@ class SelectPoolRequestByPoolIdAndRuntimeIdOperationImpl
                 shard,
                 """
                         select
-                            id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config, deleted
+                            id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config, 
+                            deleted
                         from $schema.tab_pool_request
                         where pool_id = $1 and runtime_id = $2
                         order by id desc

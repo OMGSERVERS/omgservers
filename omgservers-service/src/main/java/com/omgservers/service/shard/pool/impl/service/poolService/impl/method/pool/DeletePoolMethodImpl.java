@@ -2,10 +2,10 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 
 import com.omgservers.schema.module.pool.pool.DeletePoolRequest;
 import com.omgservers.schema.module.pool.pool.DeletePoolResponse;
-import com.omgservers.service.shard.pool.impl.operation.pool.DeletePoolOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.pool.impl.operation.pool.DeletePoolOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -25,8 +25,7 @@ class DeletePoolMethodImpl implements DeletePoolMethod {
         log.trace("{}", request);
 
         final var id = request.getId();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+        return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                                 (changeContext, sqlConnection) -> deletePoolOperation.execute(changeContext,
                                         sqlConnection,

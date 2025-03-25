@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.pool.impl.operation.poolServer;
 
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.service.shard.pool.impl.mappers.PoolServerModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.pool.impl.mappers.PoolServerModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +29,8 @@ class SelectPoolServerOperationImpl implements SelectPoolServerOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, pool_id, created, modified, qualifier, config, deleted
+                        select
+                            id, idempotency_key, pool_id, created, modified, qualifier, config, deleted
                         from $schema.tab_pool_server
                         where id = $1
                         limit 1

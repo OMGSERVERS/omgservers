@@ -34,50 +34,50 @@ public class RuntimeCommandDeserializer extends StdDeserializer<RuntimeCommandMo
         final var mapper = (ObjectMapper) parser.getCodec();
         final var root = (JsonNode) mapper.readTree(parser);
 
-        final var commandModel = new RuntimeCommandModel();
+        final var runtimeCommandModel = new RuntimeCommandModel();
 
         final var idNode = root.get("id");
         if (idNode != null) {
-            commandModel.setId(Long.valueOf(idNode.asText()));
+            runtimeCommandModel.setId(Long.valueOf(idNode.asText()));
         }
 
         final var idempotencyKeyNode = root.get("idempotency_key");
         if (idempotencyKeyNode != null) {
-            commandModel.setIdempotencyKey(idempotencyKeyNode.asText());
+            runtimeCommandModel.setIdempotencyKey(idempotencyKeyNode.asText());
         }
 
-        final var runtimeIdNode = root.get("runtime_id");
+        final var runtimeIdNode = root.get("runtimeId");
         if (runtimeIdNode != null) {
-            commandModel.setRuntimeId(Long.valueOf(runtimeIdNode.asText()));
+            runtimeCommandModel.setRuntimeId(Long.valueOf(runtimeIdNode.asText()));
         }
 
         final var createdNode = root.get("created");
         if (createdNode != null) {
-            commandModel.setCreated(Instant.parse(createdNode.asText()));
+            runtimeCommandModel.setCreated(Instant.parse(createdNode.asText()));
         }
 
         final var modifiedNode = root.get("modified");
         if (modifiedNode != null) {
-            commandModel.setModified(Instant.parse(modifiedNode.asText()));
+            runtimeCommandModel.setModified(Instant.parse(modifiedNode.asText()));
         }
 
         final var qualifierNode = root.get("qualifier");
         if (qualifierNode != null) {
             final var qualifier = RuntimeCommandQualifierEnum.valueOf(qualifierNode.asText());
-            commandModel.setQualifier(qualifier);
+            runtimeCommandModel.setQualifier(qualifier);
 
             final var bodyNode = root.get("body");
             if (bodyNode != null) {
                 final var body = mapper.treeToValue(bodyNode, qualifier.getBodyClass());
-                commandModel.setBody(body);
+                runtimeCommandModel.setBody(body);
             }
         }
 
         final var deletedNode = root.get("deleted");
         if (deletedNode != null) {
-            commandModel.setDeleted(Boolean.valueOf(deletedNode.asText()));
+            runtimeCommandModel.setDeleted(Boolean.valueOf(deletedNode.asText()));
         }
 
-        return commandModel;
+        return runtimeCommandModel;
     }
 }

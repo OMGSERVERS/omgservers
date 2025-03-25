@@ -1,15 +1,6 @@
 package com.omgservers.service.entrypoint.player.impl.service.webService.impl.playerApi;
 
-import com.omgservers.schema.entrypoint.player.CreateClientPlayerRequest;
-import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
-import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
-import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
-import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
-import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
-import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
-import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
+import com.omgservers.schema.entrypoint.player.*;
 import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.constraints.NotNull;
@@ -40,6 +31,6 @@ public interface PlayerApi {
     Uni<CreateClientPlayerResponse> execute(@NotNull CreateClientPlayerRequest request);
 
     @POST
-    @Path("/interchange")
-    Uni<InterchangePlayerResponse> execute(@NotNull InterchangePlayerRequest request);
+    @Path("/interchange-messages")
+    Uni<InterchangeMessagesPlayerResponse> execute(@NotNull InterchangeMessagesPlayerRequest request);
 }

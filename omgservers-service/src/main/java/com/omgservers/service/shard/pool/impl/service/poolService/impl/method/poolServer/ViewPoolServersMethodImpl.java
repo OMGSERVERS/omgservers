@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolServer;
 
-import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
+import com.omgservers.schema.module.pool.poolServer.ViewPoolServersResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
 import com.omgservers.service.shard.pool.impl.operation.poolServer.SelectActivePoolServersByPoolIdOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
@@ -21,7 +21,7 @@ class ViewPoolServersMethodImpl implements ViewPoolServersMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewPoolServerResponse> execute(final ViewPoolServersRequest request) {
+    public Uni<ViewPoolServersResponse> execute(final ViewPoolServersRequest request) {
         log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())
@@ -32,6 +32,6 @@ class ViewPoolServersMethodImpl implements ViewPoolServersMethod {
                                     shard.shard(),
                                     poolId));
                 })
-                .map(ViewPoolServerResponse::new);
+                .map(ViewPoolServersResponse::new);
     }
 }

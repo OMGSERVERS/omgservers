@@ -4,11 +4,11 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.pool.impl.operation.poolContainer.UpsertPoolContainerOperation;
-import com.omgservers.service.shard.pool.impl.operation.poolServer.HasPoolServerOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.pool.impl.operation.poolContainer.UpsertPoolContainerOperation;
+import com.omgservers.service.shard.pool.impl.operation.poolServer.VerifyPoolServerExistsOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ class SyncPoolContainerMethodImpl implements SyncPoolContainerMethod {
 
     final UpsertPoolContainerOperation upsertPoolContainerOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final HasPoolServerOperation hasPoolServerOperation;
+    final VerifyPoolServerExistsOperation verifyPoolServerExistsOperation;
     final CheckShardOperation checkShardOperation;
 
     @Override
@@ -38,10 +38,10 @@ class SyncPoolContainerMethodImpl implements SyncPoolContainerMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (context, sqlConnection) -> hasPoolServerOperation
+                                    (context, sqlConnection) -> verifyPoolServerExistsOperation
                                             .execute(sqlConnection, shard, poolId, serverId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertPoolContainerOperation
                                                             .execute(
                                                                     context,

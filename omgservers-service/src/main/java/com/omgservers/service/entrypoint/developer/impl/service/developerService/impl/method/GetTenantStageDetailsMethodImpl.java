@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantStageDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
@@ -39,8 +39,8 @@ class GetTenantStageDetailsMethodImpl implements GetTenantStageDetailsMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
-            final GetTenantStageDetailsDeveloperRequest request) {
+    public Uni<GetStageDetailsDeveloperResponse> execute(
+            final GetStageDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -70,18 +70,18 @@ class GetTenantStageDetailsMethodImpl implements GetTenantStageDetailsMethod {
                                                 }));
                             });
                 })
-                .map(GetTenantStageDetailsDeveloperResponse::new);
+                .map(GetStageDetailsDeveloperResponse::new);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantShard.getService().getTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<TenantStageDataDto> getTenantStageData(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageDataRequest(tenantId, tenantStageId);
-        return tenantShard.getService().getTenantStageData(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageDataResponse::getTenantStageData);
     }
 }

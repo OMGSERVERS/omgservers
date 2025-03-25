@@ -51,13 +51,13 @@ class DeleteTenantProjectPermissionsOperationImpl implements DeleteTenantProject
 
     Uni<List<TenantProjectPermissionModel>> viewProjectPermissions(final Long tenantId, final Long tenantProjectId) {
         final var request = new ViewTenantProjectPermissionsRequest(tenantId, tenantProjectId);
-        return tenantShard.getService().viewTenantProjectPermissions(request)
+        return tenantShard.getService().execute(request)
                 .map(ViewTenantProjectPermissionsResponse::getTenantProjectPermissions);
     }
 
     Uni<Boolean> deleteProjectPermission(final Long tenantId, final Long id) {
         final var request = new DeleteTenantProjectPermissionRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantProjectPermission(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantProjectPermissionResponse::getDeleted);
     }
 }

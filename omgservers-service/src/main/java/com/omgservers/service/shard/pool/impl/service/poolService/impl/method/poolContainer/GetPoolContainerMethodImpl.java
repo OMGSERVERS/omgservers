@@ -2,8 +2,8 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 
 import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.GetPoolContainerResponse;
-import com.omgservers.service.shard.pool.impl.operation.poolContainer.SelectPoolContainerOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.pool.impl.operation.poolContainer.SelectPoolContainerOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,10 +28,9 @@ class GetPoolContainerMethodImpl implements GetPoolContainerMethod {
         return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shard -> {
                     final var poolId = request.getPoolId();
-                    final var serverId = request.getServerId();
                     final var id = request.getId();
                     return pgPool.withTransaction(sqlConnection -> selectPoolContainerOperation
-                            .execute(sqlConnection, shard.shard(), poolId, serverId, id));
+                            .execute(sqlConnection, shard.shard(), poolId, id));
                 })
                 .map(GetPoolContainerResponse::new);
     }

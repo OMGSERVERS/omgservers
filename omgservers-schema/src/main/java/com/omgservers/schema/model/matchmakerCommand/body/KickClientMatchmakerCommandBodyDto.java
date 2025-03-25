@@ -18,7 +18,7 @@ public class KickClientMatchmakerCommandBodyDto extends MatchmakerCommandBodyDto
     Long clientId;
 
     @NotNull
-    Long matchmakerMatchId;
+    Long matchId;
 
     @Override
     public MatchmakerCommandQualifierEnum getQualifier() {

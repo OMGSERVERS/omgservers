@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeCommand;
 
-import com.omgservers.schema.module.runtime.ViewRuntimeCommandsRequest;
-import com.omgservers.schema.module.runtime.ViewRuntimeCommandsResponse;
-import com.omgservers.service.shard.runtime.impl.operation.runtimeCommand.SelectActiveRuntimeCommandsByRuntimeIdOperation;
+import com.omgservers.schema.module.runtime.runtimeCommand.ViewRuntimeCommandsRequest;
+import com.omgservers.schema.module.runtime.runtimeCommand.ViewRuntimeCommandsResponse;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.runtime.impl.operation.runtimeCommand.SelectActiveRuntimeCommandsByRuntimeIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ class ViewRuntimeCommandsMethodImpl implements ViewRuntimeCommandsMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewRuntimeCommandsResponse> execute(ViewRuntimeCommandsRequest request) {
+    public Uni<ViewRuntimeCommandsResponse> execute(final ViewRuntimeCommandsRequest request) {
         log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())

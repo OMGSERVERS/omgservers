@@ -1,0 +1,38 @@
+package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchResource;
+
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.ViewMatchmakerMatchResourcesRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.ViewMatchmakerMatchResourcesResponse;
+import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource.SelectActiveMatchmakerMatchResourcesByMatchmakerIdOperation;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor
+class ViewMatchmakerMatchResourcesMethodImpl implements ViewMatchmakerMatchResourcesMethod {
+
+    final SelectActiveMatchmakerMatchResourcesByMatchmakerIdOperation
+            selectActiveMatchmakerMatchResourcesByMatchmakerIdOperation;
+    final CheckShardOperation checkShardOperation;
+
+    final PgPool pgPool;
+
+    @Override
+    public Uni<ViewMatchmakerMatchResourcesResponse> execute(final ViewMatchmakerMatchResourcesRequest request) {
+        log.trace("{}", request);
+
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shard -> {
+                    final var matchmakerId = request.getMatchmakerId();
+                    return pgPool.withTransaction(sqlConnection ->
+                            selectActiveMatchmakerMatchResourcesByMatchmakerIdOperation
+                            .execute(sqlConnection, shard.shard(), matchmakerId));
+                })
+                .map(ViewMatchmakerMatchResourcesResponse::new);
+
+    }
+}

@@ -23,7 +23,7 @@ class CheckTenantPermissionOperationImpl implements CheckTenantPermissionOperati
                              final Long userId,
                              final TenantPermissionQualifierEnum permissionQualifier) {
         final var request = new VerifyTenantPermissionExistsRequest(tenantId, userId, permissionQualifier);
-        return tenantShard.getService().verifyTenantPermissionExists(request)
+        return tenantShard.getService().execute(request)
                 .map(VerifyTenantPermissionExistsResponse::getExists)
                 .invoke(exists -> {
                     if (!exists) {

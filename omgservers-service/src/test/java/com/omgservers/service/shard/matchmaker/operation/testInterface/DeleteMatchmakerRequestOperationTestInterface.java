@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.matchmaker.operation.testInterface;
 
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerRequest.DeleteMatchmakerRequestOperation;
 import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerRequest.DeleteMatchmakerRequestOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,13 +20,12 @@ public class DeleteMatchmakerRequestOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> deleteMatchmakerRequest(final int shard,
-                                                          final Long matchmakerId,
+    public ChangeContext<Boolean> deleteMatchmakerRequest(final Long matchmakerId,
                                                           final Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deleteMatchmakerRequestOperation
-                                    .execute(changeContext, sqlConnection, shard, matchmakerId, id))
+                                    .execute(changeContext, sqlConnection, 0, matchmakerId, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

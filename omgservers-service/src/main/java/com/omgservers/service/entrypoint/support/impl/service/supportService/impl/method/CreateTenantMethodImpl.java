@@ -34,10 +34,10 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
 
         final var tenant = tenantModelFactory.create();
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);
-        return tenantShard.getService().syncTenant(syncTenantInternalRequest)
+        return tenantShard.getService().execute(syncTenantInternalRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
-                        log.info("The new tenant \"{}\" was created", tenant.getId());
+                        log.info("New tenant \"{}\" created", tenant.getId());
                     }
                 })
                 .replaceWith(new CreateTenantSupportResponse(tenant.getId()));

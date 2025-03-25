@@ -5,7 +5,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -37,8 +37,8 @@ class UpsertRuntimeAssignmentOperationImpl implements UpsertRuntimeAssignmentOpe
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_runtime_assignment(
-                            id, idempotency_key, runtime_id, created, modified, client_id, last_activity, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                            id, idempotency_key, runtime_id, created, modified, client_id, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
@@ -49,7 +49,6 @@ class UpsertRuntimeAssignmentOperationImpl implements UpsertRuntimeAssignmentOpe
                         runtimeAssignment.getCreated().atOffset(ZoneOffset.UTC),
                         runtimeAssignment.getModified().atOffset(ZoneOffset.UTC),
                         runtimeAssignment.getClientId(),
-                        runtimeAssignment.getLastActivity().atOffset(ZoneOffset.UTC),
                         getConfigString(runtimeAssignment),
                         runtimeAssignment.getDeleted()
                 ),

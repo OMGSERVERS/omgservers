@@ -16,9 +16,9 @@ public class RuntimeConfigDto {
         return runtimeConfig;
     }
 
-    LobbyConfigDto lobbyConfig;
-    MatchConfigDto matchConfig;
-    TenantVersionConfigDto versionConfig;
+    LobbyConfigDto lobby;
+    MatchConfigDto match;
+    TenantVersionConfigDto version;
 
     @Data
     @Builder

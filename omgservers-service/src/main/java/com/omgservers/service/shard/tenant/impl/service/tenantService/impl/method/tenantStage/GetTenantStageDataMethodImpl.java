@@ -5,11 +5,11 @@ import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataResponse;
 import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
+import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.alias.AliasShard;
-import com.omgservers.service.shard.tenant.impl.operation.tenantDeployment.SelectActiveTenantDeploymentsByTenantStageIdOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenantDeploymentResource.SelectActiveTenantDeploymentResourcesByStageIdOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantStage.SelectTenantStageOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantStagePermission.SelectActiveTenantStagePermissionsByTenantStageIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -26,8 +26,8 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
 
     final SelectActiveTenantStagePermissionsByTenantStageIdOperation
             selectActiveTenantStagePermissionsByTenantStageIdOperation;
-    final SelectActiveTenantDeploymentsByTenantStageIdOperation
-            selectActiveTenantDeploymentsByTenantStageIdOperation;
+    final SelectActiveTenantDeploymentResourcesByStageIdOperation
+            selectActiveTenantDeploymentResourcesByStageIdOperation;
     final SelectTenantStageOperation selectTenantStageOperation;
     final CheckShardOperation checkShardOperation;
 
@@ -63,12 +63,12 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
                                      final Long tenantStageId,
                                      final TenantStageDataDto tenantStageData) {
         return fillStage(sqlConnection, shard, tenantId, tenantStageId, tenantStageData)
-                .flatMap(voidItem -> fillStagePermissions(sqlConnection,
+                .flatMap(voidItem -> fillPermissions(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId,
                         tenantStageData))
-                .flatMap(voidItem -> fillStageDeployments(sqlConnection,
+                .flatMap(voidItem -> fillDeployments(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId,
@@ -89,29 +89,29 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillStagePermissions(final SqlConnection sqlConnection,
-                                   final int shard,
-                                   final Long tenantId,
-                                   final Long tenantStageId,
-                                   final TenantStageDataDto stageData) {
+    Uni<Void> fillPermissions(final SqlConnection sqlConnection,
+                              final int shard,
+                              final Long tenantId,
+                              final Long tenantStageId,
+                              final TenantStageDataDto stageData) {
         return selectActiveTenantStagePermissionsByTenantStageIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId)
-                .invoke(stageData::setStagePermissions)
+                .invoke(stageData::setPermissions)
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillStageDeployments(final SqlConnection sqlConnection,
-                                   final int shard,
-                                   final Long tenantId,
-                                   final Long tenantStageId,
-                                   final TenantStageDataDto stageData) {
-        return selectActiveTenantDeploymentsByTenantStageIdOperation.execute(sqlConnection,
+    Uni<Void> fillDeployments(final SqlConnection sqlConnection,
+                              final int shard,
+                              final Long tenantId,
+                              final Long tenantStageId,
+                              final TenantStageDataDto stageData) {
+        return selectActiveTenantDeploymentResourcesByStageIdOperation.execute(sqlConnection,
                         shard,
                         tenantId,
                         tenantStageId)
-                .invoke(stageData::setStageDeployments)
+                .invoke(stageData::setDeployments)
                 .replaceWithVoid();
     }
 

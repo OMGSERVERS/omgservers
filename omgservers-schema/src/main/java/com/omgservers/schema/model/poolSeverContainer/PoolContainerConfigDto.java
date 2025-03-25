@@ -30,5 +30,5 @@ public class PoolContainerConfigDto {
     Long memoryLimitInMegabytes;
 
     @NotNull
-    Map<String, String> environment;
+    Map<PoolContainerEnvironment, String> environment;
 }

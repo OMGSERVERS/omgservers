@@ -7,10 +7,8 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.tenant.DeleteTenantBuildRequestsByTenantVersionIdOperation;
-import com.omgservers.service.operation.tenant.DeleteTenantFilesArchivesByTenantVersionIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantImagesByTenantVersionIdOperation;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -24,8 +22,6 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
 
     final TenantShard tenantShard;
 
-    final DeleteTenantBuildRequestsByTenantVersionIdOperation deleteTenantBuildRequestsByTenantVersionIdOperation;
-    final DeleteTenantFilesArchivesByTenantVersionIdOperation deleteTenantFilesArchivesByTenantVersionIdOperation;
     final DeleteTenantImagesByTenantVersionIdOperation deleteTenantImagesByTenantVersionIdOperation;
 
     @Override
@@ -45,18 +41,14 @@ public class TenantVersionDeletedEventHandlerImpl implements EventHandler {
                 .flatMap(tenantVersion -> {
                     log.debug("Deleted, {}", tenantVersion);
 
-                    return deleteTenantFilesArchivesByTenantVersionIdOperation.execute(tenantId, tenantVersionId)
-                            .flatMap(voidItem -> deleteTenantBuildRequestsByTenantVersionIdOperation.execute(tenantId,
-                                    tenantVersionId))
-                            .flatMap(voidItem -> deleteTenantImagesByTenantVersionIdOperation.execute(tenantId,
-                                    tenantVersionId));
+                    return deleteTenantImagesByTenantVersionIdOperation.execute(tenantId, tenantVersionId);
                 })
                 .replaceWithVoid();
     }
 
     Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionRequest(tenantId, tenantVersionId);
-        return tenantShard.getService().getTenantVersion(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 }

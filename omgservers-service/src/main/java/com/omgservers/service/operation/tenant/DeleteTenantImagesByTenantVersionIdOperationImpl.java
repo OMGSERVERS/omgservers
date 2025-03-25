@@ -50,13 +50,13 @@ class DeleteTenantImagesByTenantVersionIdOperationImpl implements DeleteTenantIm
 
     Uni<List<TenantImageModel>> viewTenantImages(final Long tenantId, final Long tenantVersionId) {
         final var request = new ViewTenantImagesRequest(tenantId, tenantVersionId);
-        return tenantShard.getService().viewTenantImages(request)
+        return tenantShard.getService().execute(request)
                 .map(ViewTenantImagesResponse::getTenantImages);
     }
 
     Uni<Boolean> deleteTenantImage(final Long tenantId, final Long id) {
         final var request = new DeleteTenantImageRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantImage(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantImageResponse::getDeleted);
     }
 }

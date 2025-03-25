@@ -6,6 +6,14 @@ import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandResponse;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
 import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
@@ -32,8 +40,8 @@ import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
+import com.omgservers.schema.module.pool.poolServer.ViewPoolServersResponse;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
@@ -73,6 +81,59 @@ class WebServiceImpl implements WebService {
     }
 
     /*
+    PoolCommand
+     */
+
+    @Override
+    public Uni<GetPoolCommandResponse> execute(final GetPoolCommandRequest request) {
+        return poolService.execute(request);
+    }
+
+    @Override
+    public Uni<ViewPoolCommandResponse> execute(final ViewPoolCommandRequest request) {
+        return poolService.execute(request);
+    }
+
+    @Override
+    public Uni<SyncPoolCommandResponse> execute(final SyncPoolCommandRequest request) {
+        return poolService.execute(request);
+    }
+
+    @Override
+    public Uni<DeletePoolCommandResponse> execute(final DeletePoolCommandRequest request) {
+        return poolService.execute(request);
+    }
+
+    /*
+    PoolRequest
+     */
+
+    @Override
+    public Uni<GetPoolRequestResponse> execute(final GetPoolRequestRequest request) {
+        return poolService.execute(request);
+    }
+
+    @Override
+    public Uni<FindPoolRequestResponse> execute(final FindPoolRequestRequest request) {
+        return poolService.execute(request);
+    }
+
+    @Override
+    public Uni<ViewPoolRequestsResponse> execute(final ViewPoolRequestsRequest request) {
+        return poolService.execute(request);
+    }
+
+    @Override
+    public Uni<SyncPoolRequestResponse> execute(final SyncPoolRequestRequest request) {
+        return poolService.execute(request);
+    }
+
+    @Override
+    public Uni<DeletePoolRequestResponse> execute(final DeletePoolRequestRequest request) {
+        return poolService.execute(request);
+    }
+
+    /*
     PoolServer
      */
 
@@ -82,7 +143,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<ViewPoolServerResponse> execute(final ViewPoolServersRequest request) {
+    public Uni<ViewPoolServersResponse> execute(final ViewPoolServersRequest request) {
         return poolService.execute(request);
     }
 
@@ -122,35 +183,6 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<DeletePoolContainerResponse> execute(final DeletePoolContainerRequest request) {
-        return poolService.execute(request);
-    }
-
-    /*
-    PoolRequest
-     */
-
-    @Override
-    public Uni<GetPoolRequestResponse> execute(final GetPoolRequestRequest request) {
-        return poolService.execute(request);
-    }
-
-    @Override
-    public Uni<FindPoolRequestResponse> execute(final FindPoolRequestRequest request) {
-        return poolService.execute(request);
-    }
-
-    @Override
-    public Uni<ViewPoolRequestsResponse> execute(final ViewPoolRequestsRequest request) {
-        return poolService.execute(request);
-    }
-
-    @Override
-    public Uni<SyncPoolRequestResponse> execute(final SyncPoolRequestRequest request) {
-        return poolService.execute(request);
-    }
-
-    @Override
-    public Uni<DeletePoolRequestResponse> execute(final DeletePoolRequestRequest request) {
         return poolService.execute(request);
     }
 

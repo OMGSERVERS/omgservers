@@ -2,163 +2,73 @@ package com.omgservers.service.shard.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchConfigDto;
-import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentConfigDto;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.matchmaker.MatchmakerMatchAssignmentModelFactory;
-import com.omgservers.service.factory.matchmaker.MatchmakerMatchModelFactory;
-import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
-import com.omgservers.service.shard.matchmaker.operation.testInterface.UpsertMatchmakerMatchAssignmentOperationTestInterface;
-import com.omgservers.service.shard.matchmaker.operation.testInterface.UpsertMatchmakerMatchOperationTestInterface;
-import com.omgservers.service.shard.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
 import com.omgservers.service.operation.server.GenerateIdOperation;
+import com.omgservers.service.shard.matchmaker.operation.testInterface.UpsertMatchmakerMatchAssignmentOperationTestInterface;
+import com.omgservers.testDataFactory.TestDataFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 @Slf4j
 @QuarkusTest
 class UpsertMatchmakerMatchAssignmentOperationTest extends BaseTestClass {
 
     @Inject
-    UpsertMatchmakerOperationTestInterface upsertMatchmakerOperation;
-
-    @Inject
-    UpsertMatchmakerMatchOperationTestInterface upsertMatchmakerMatchOperation;
-
-    @Inject
     UpsertMatchmakerMatchAssignmentOperationTestInterface upsertMatchmakerMatchAssignmentOperation;
-
-    @Inject
-    MatchmakerModelFactory matchmakerModelFactory;
-
-    @Inject
-    MatchmakerMatchModelFactory matchmakerMatchModelFactory;
-
-    @Inject
-    MatchmakerMatchAssignmentModelFactory matchmakerMatchAssignmentModelFactory;
 
     @Inject
     GenerateIdOperation generateIdOperation;
 
+    @Inject
+    TestDataFactory testDataFactory;
+
+    TestDataFactory.DefaultTestData testData;
+
+    @BeforeEach
+    void beforeEach() {
+        testData = testDataFactory.createDefaultTestData();
+    }
+
     @Test
-    void givenMatchmakerMatchAssignment_whenExecute_thenInserted() {
-        final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+    void givenModel_whenExecute_thenInserted() {
+        final var model = testData.getMatchmakerMatchAssignment();
+        model.setId(generateIdOperation.generateId());
+        model.setIdempotencyKey(generateIdOperation.generateStringId());
 
-        final var matchmakerMatch =
-                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigDto());
-        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
-
-        final var matchmakerMatchAssignment = matchmakerMatchAssignmentModelFactory.create(matchmaker.getId(),
-                matchmakerMatch.getId(),
-                userId(),
-                clientId(),
-                groupName(),
-                new MatchmakerMatchAssignmentConfigDto());
-        final var changeContext = upsertMatchmakerMatchAssignmentOperation.execute(shard, matchmakerMatchAssignment);
+        final var changeContext = upsertMatchmakerMatchAssignmentOperation.execute(model);
         assertTrue(changeContext.getResult());
     }
 
     @Test
-    void givenMatchmakerMatchAssignment_whenExecute_thenUpdated() {
-        final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+    void givenModel_whenExecute_thenUpdated() {
+        final var model = testData.getMatchmakerMatchAssignment();
 
-        final var matchmakerMatch =
-                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigDto());
-        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
-
-        final var matchmakerMatchAssignment = matchmakerMatchAssignmentModelFactory.create(matchmaker.getId(),
-                matchmakerMatch.getId(),
-                userId(),
-                clientId(),
-                groupName(),
-                new MatchmakerMatchAssignmentConfigDto());
-        upsertMatchmakerMatchAssignmentOperation.execute(shard, matchmakerMatchAssignment);
-
-        final var changeContext = upsertMatchmakerMatchAssignmentOperation.execute(shard, matchmakerMatchAssignment);
+        final var changeContext = upsertMatchmakerMatchAssignmentOperation.execute(model);
         assertFalse(changeContext.getResult());
     }
 
     @Test
-    void givenUnknownIds_whenExecute_thenException() {
-        final var shard = 0;
-        final var matchmakerMatchAssignment = matchmakerMatchAssignmentModelFactory.create(matchmakerId(),
-                matchId(),
-                userId(),
-                clientId(),
-                groupName(),
-                new MatchmakerMatchAssignmentConfigDto());
+    void givenModel_whenExecute_thenException() {
+        final var model = testData.getMatchmakerMatchAssignment();
+        model.setId(generateIdOperation.generateId());
+        model.setIdempotencyKey(generateIdOperation.generateStringId());
+        model.setMatchmakerId(generateIdOperation.generateId());
 
         assertThrows(ServerSideBadRequestException.class, () ->
-                upsertMatchmakerMatchAssignmentOperation.execute(shard, matchmakerMatchAssignment));
+                upsertMatchmakerMatchAssignmentOperation.execute(model));
     }
 
     @Test
-    void givenMatchmakerMatchAssignment_whenUpsertMatchmakerMatchAssignment_thenIdempotencyViolation() {
-        final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
-
-        final var matchmakerMatch =
-                matchmakerMatchModelFactory.create(matchmaker.getId(), new MatchmakerMatchConfigDto());
-        upsertMatchmakerMatchOperation.upsertMatchmakerMatch(shard, matchmakerMatch);
-
-        final var matchmakerMatchAssignment1 = matchmakerMatchAssignmentModelFactory
-                .create(matchmaker.getId(),
-                        matchmakerMatch.getId(),
-                        userId(),
-                        clientId(),
-                        groupName(),
-                        new MatchmakerMatchAssignmentConfigDto());
-        upsertMatchmakerMatchAssignmentOperation.execute(shard, matchmakerMatchAssignment1);
-
-        final var matchmakerMatchAssignment2 = matchmakerMatchAssignmentModelFactory
-                .create(matchmaker.getId(),
-                        matchmakerMatch.getId(),
-                        userId(),
-                        clientId(),
-                        groupName(),
-                        new MatchmakerMatchAssignmentConfigDto(),
-                        matchmakerMatchAssignment1.getIdempotencyKey());
+    void givenModel_whenExecute_thenIdempotencyViolation() {
+        final var model = testData.getMatchmakerMatchAssignment();
+        model.setId(generateIdOperation.generateId());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertMatchmakerMatchAssignmentOperation.execute(shard, matchmakerMatchAssignment2));
+                upsertMatchmakerMatchAssignmentOperation.execute(model));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
-    }
-
-    Long tenantId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long versionId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long matchmakerId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long matchId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long userId() {
-        return generateIdOperation.generateId();
-    }
-
-    Long clientId() {
-        return generateIdOperation.generateId();
-    }
-
-    String groupName() {
-        return "group-" + UUID.randomUUID();
     }
 }

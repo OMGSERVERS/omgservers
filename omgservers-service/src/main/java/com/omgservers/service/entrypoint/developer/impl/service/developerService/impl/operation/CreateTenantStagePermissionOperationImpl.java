@@ -29,7 +29,7 @@ class CreateTenantStagePermissionOperationImpl implements CreateTenantStagePermi
                 userId,
                 permissionQualifier);
         final var request = new SyncTenantStagePermissionRequest(stagePermission);
-        return tenantShard.getService().syncTenantStagePermission(request)
+        return tenantShard.getService().execute(request)
                 .replaceWith(stagePermission);
     }
 }

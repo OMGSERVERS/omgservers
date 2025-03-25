@@ -1,0 +1,38 @@
+package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentLobbyResource;
+
+import com.omgservers.schema.module.deployment.deploymentLobbyResource.FindDeploymentLobbyResourceRequest;
+import com.omgservers.schema.module.deployment.deploymentLobbyResource.FindDeploymentLobbyResourceResponse;
+import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyResource.SelectDeploymentLobbyResourceByLobbyIdOperation;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.pgclient.PgPool;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor
+class FindDeploymentLobbyResourceMethodImpl implements FindDeploymentLobbyResourceMethod {
+
+    final SelectDeploymentLobbyResourceByLobbyIdOperation selectDeploymentLobbyResourceByLobbyIdOperation;
+    final CheckShardOperation checkShardOperation;
+    final PgPool pgPool;
+
+    @Override
+    public Uni<FindDeploymentLobbyResourceResponse> execute(final FindDeploymentLobbyResourceRequest request) {
+        log.trace("{}", request);
+
+        return checkShardOperation.checkShard(request.getRequestShardKey())
+                .flatMap(shardModel -> {
+                    final var deploymentId = request.getDeploymentId();
+                    final var lobbyId = request.getLobbyId();
+                    return pgPool.withTransaction(sqlConnection -> selectDeploymentLobbyResourceByLobbyIdOperation
+                            .execute(sqlConnection,
+                                    shardModel.shard(),
+                                    deploymentId,
+                                    lobbyId));
+                })
+                .map(FindDeploymentLobbyResourceResponse::new);
+    }
+}

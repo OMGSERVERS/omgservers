@@ -6,6 +6,14 @@ import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandResponse;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
 import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
@@ -32,8 +40,8 @@ import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
+import com.omgservers.schema.module.pool.poolServer.ViewPoolServersResponse;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
@@ -53,12 +61,38 @@ public interface WebService {
     Uni<DeletePoolResponse> execute(DeletePoolRequest request);
 
     /*
+    PoolCommand
+     */
+
+    Uni<GetPoolCommandResponse> execute(GetPoolCommandRequest request);
+
+    Uni<ViewPoolCommandResponse> execute(ViewPoolCommandRequest request);
+
+    Uni<SyncPoolCommandResponse> execute(SyncPoolCommandRequest request);
+
+    Uni<DeletePoolCommandResponse> execute(DeletePoolCommandRequest request);
+
+    /*
+    PoolRequest
+     */
+
+    Uni<GetPoolRequestResponse> execute(GetPoolRequestRequest request);
+
+    Uni<FindPoolRequestResponse> execute(FindPoolRequestRequest request);
+
+    Uni<ViewPoolRequestsResponse> execute(ViewPoolRequestsRequest request);
+
+    Uni<SyncPoolRequestResponse> execute(SyncPoolRequestRequest request);
+
+    Uni<DeletePoolRequestResponse> execute(DeletePoolRequestRequest request);
+
+    /*
     PoolServer
      */
 
     Uni<GetPoolServerResponse> execute(GetPoolServerRequest request);
 
-    Uni<ViewPoolServerResponse> execute(ViewPoolServersRequest request);
+    Uni<ViewPoolServersResponse> execute(ViewPoolServersRequest request);
 
     Uni<SyncPoolServerResponse> execute(SyncPoolServerRequest request);
 
@@ -77,20 +111,6 @@ public interface WebService {
     Uni<SyncPoolContainerResponse> execute(SyncPoolContainerRequest request);
 
     Uni<DeletePoolContainerResponse> execute(DeletePoolContainerRequest request);
-
-    /*
-    PoolRequest
-     */
-
-    Uni<GetPoolRequestResponse> execute(GetPoolRequestRequest request);
-
-    Uni<FindPoolRequestResponse> execute(FindPoolRequestRequest request);
-
-    Uni<ViewPoolRequestsResponse> execute(ViewPoolRequestsRequest request);
-
-    Uni<SyncPoolRequestResponse> execute(SyncPoolRequestRequest request);
-
-    Uni<DeletePoolRequestResponse> execute(DeletePoolRequestRequest request);
 
     /*
     PoolState

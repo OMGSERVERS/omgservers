@@ -1,0 +1,9 @@
+package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentLobbyAsignment;
+
+import com.omgservers.schema.module.deployment.deploymentLobbyAssignment.FindDeploymentLobbyAssignmentRequest;
+import com.omgservers.schema.module.deployment.deploymentLobbyAssignment.FindDeploymentLobbyAssignmentResponse;
+import io.smallrye.mutiny.Uni;
+
+public interface FindDeploymentLobbyAssignmentMethod {
+    Uni<FindDeploymentLobbyAssignmentResponse> execute(FindDeploymentLobbyAssignmentRequest request);
+}

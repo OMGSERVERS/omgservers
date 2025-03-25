@@ -44,7 +44,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
         final var password = generateSecureStringOperation.generateSecureString();
         return createDeveloperUser(password)
                 .invoke(developerUser -> {
-                    log.info("The new developer user \"{}\" was created by {}", developerUser.getId(), userId);
+                    log.info("New developer user \"{}\" created by {}", developerUser.getId(), userId);
                 })
                 .map(user -> new CreateDeveloperSupportResponse(user.getId(), password));
     }

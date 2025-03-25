@@ -1,21 +1,22 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
-import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.model.matchmaker.MatchmakerModel;
+import com.omgservers.schema.model.match.MatchModel;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
-import com.omgservers.schema.module.client.GetClientRequest;
-import com.omgservers.schema.module.client.GetClientResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
+import com.omgservers.schema.model.runtimeCommand.body.RemoveClientRuntimeCommandBodyDto;
+import com.omgservers.schema.module.match.GetMatchRequest;
+import com.omgservers.schema.module.match.GetMatchResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.GetMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.GetMatchmakerMatchAssignmentResponse;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandRequest;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentDeletedEventBodyModel;
+import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.queue.CreateQueueRequestOperation;
-import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.match.MatchShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
+import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -28,9 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerShard matchmakerShard;
-    final ClientShard clientShard;
+    final RuntimeShard runtimeShard;
+    final MatchShard matchShard;
 
-    final CreateQueueRequestOperation createQueueRequestOperation;
+    final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -43,32 +45,27 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
 
         final var body = (MatchmakerMatchAssignmentDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
-        final var id = body.getId();
+        final var matchmakerMatchAssignmentId = body.getId();
 
         final var idempotencyKey = event.getId().toString();
 
-        return getMatchmakerMatchAssignment(matchmakerId, id)
+        return getMatchmakerMatchAssignment(matchmakerId, matchmakerMatchAssignmentId)
                 .flatMap(matchmakerMatchAssignment -> {
                     log.debug("Deleted, {}", matchmakerMatchAssignment);
 
-                    final var clientId = matchmakerMatchAssignment.getClientId();
-                    return getMatchmaker(matchmakerId)
-                            .flatMap(matchmaker -> {
-                                if (matchmaker.getDeleted()) {
-                                    log.warn("The matchmaker \"{}\" was already deleted, skip operation", matchmakerId);
-                                    return Uni.createFrom().voidItem();
-                                }
+                    final var matchId = matchmakerMatchAssignment.getMatchId();
 
-                                return createQueueRequestOperation.execute(clientId, idempotencyKey);
+                    return getMatch(matchId)
+                            .flatMap(match -> {
+                                final var runtimeId = match.getRuntimeId();
+                                final var clientId = matchmakerMatchAssignment.getClientId();
+
+                                return createRemoveClientRuntimeCommand(runtimeId,
+                                        clientId,
+                                        idempotencyKey);
                             });
                 })
                 .replaceWithVoid();
-    }
-
-    Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerShard.getService().execute(request)
-                .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<MatchmakerMatchAssignmentModel> getMatchmakerMatchAssignment(final Long matchmakerId, final Long id) {
@@ -77,9 +74,20 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
                 .map(GetMatchmakerMatchAssignmentResponse::getMatchmakerMatchAssignment);
     }
 
-    Uni<ClientModel> getClient(final Long clientId) {
-        final var request = new GetClientRequest(clientId);
-        return clientShard.getService().getClient(request)
-                .map(GetClientResponse::getClient);
+    Uni<MatchModel> getMatch(final Long id) {
+        final var request = new GetMatchRequest(id);
+        return matchShard.getService().execute(request)
+                .map(GetMatchResponse::getMatch);
+    }
+
+    Uni<Boolean> createRemoveClientRuntimeCommand(final Long runtimeId,
+                                                  final Long clientId,
+                                                  final String idempotencyKey) {
+        final var commandBody = new RemoveClientRuntimeCommandBodyDto(clientId);
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, commandBody, idempotencyKey);
+
+        final var request = new SyncRuntimeCommandRequest(runtimeCommand);
+        return runtimeShard.getService().executeWithIdempotency(request)
+                .map(SyncRuntimeCommandResponse::getCreated);
     }
 }

@@ -9,6 +9,5 @@ public interface DeletePoolContainerOperation {
                          SqlConnection sqlConnection,
                          int shard,
                          Long poolId,
-                         Long serverId,
                          Long id);
 }

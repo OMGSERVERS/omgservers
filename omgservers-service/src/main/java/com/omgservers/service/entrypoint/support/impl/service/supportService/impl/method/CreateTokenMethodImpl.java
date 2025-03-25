@@ -32,7 +32,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                 .flatMap(userId -> {
                     final var password = request.getPassword();
                     return createToken(userId, password)
-                            .invoke(token -> log.info("A token was issued for support user \"{}\"", user))
+                            .invoke(token -> log.info("Token issued for support user \"{}\"", user))
                             .map(CreateTokenSupportResponse::new);
                 });
     }

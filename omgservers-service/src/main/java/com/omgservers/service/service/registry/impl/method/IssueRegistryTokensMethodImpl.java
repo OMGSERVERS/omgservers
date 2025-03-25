@@ -85,7 +85,7 @@ class IssueRegistryTokensMethodImpl implements IssueRegistryTokensMethod {
             return Stream.of(requestedScope.split(" "))
                     .map(resourceScope -> {
                         try {
-                            return parseResourceScopeOperation.execute(requestedScope);
+                            return parseResourceScopeOperation.execute(resourceScope);
                         } catch (ServerSideBadRequestException e) {
                             log.warn("Scope \"{}\" is invalid, skipping, {}", resourceScope, e.getMessage());
                             return null;

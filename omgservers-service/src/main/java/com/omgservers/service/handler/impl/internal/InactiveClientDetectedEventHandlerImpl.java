@@ -1,16 +1,15 @@
 package com.omgservers.service.handler.impl.internal;
 
+import com.omgservers.schema.message.body.ClientDeletedMessageBodyDto;
+import com.omgservers.schema.message.body.DisconnectionReasonEnum;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.DisconnectionReasonEnum;
-import com.omgservers.schema.model.message.body.DisconnectionReasonMessageBodyDto;
-import com.omgservers.schema.module.client.DeleteClientRequest;
-import com.omgservers.schema.module.client.DeleteClientResponse;
-import com.omgservers.schema.module.client.GetClientRequest;
-import com.omgservers.schema.module.client.GetClientResponse;
-import com.omgservers.schema.module.client.SyncClientMessageRequest;
-import com.omgservers.schema.module.client.SyncClientMessageResponse;
+import com.omgservers.schema.module.client.client.DeleteClientRequest;
+import com.omgservers.schema.module.client.client.DeleteClientResponse;
+import com.omgservers.schema.module.client.client.GetClientRequest;
+import com.omgservers.schema.module.client.client.GetClientResponse;
+import com.omgservers.schema.module.client.clientMessage.SyncClientMessageRequest;
+import com.omgservers.schema.module.client.clientMessage.SyncClientMessageResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
@@ -62,14 +61,13 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientShard.getService().getClient(request)
+        return clientShard.getService().execute(request)
                 .map(GetClientResponse::getClient);
     }
 
     Uni<Boolean> syncDisconnectionMessage(final Long clientId, final String idempotencyKey) {
-        final var messageBody = new DisconnectionReasonMessageBodyDto(DisconnectionReasonEnum.CLIENT_INACTIVITY);
+        final var messageBody = new ClientDeletedMessageBodyDto(DisconnectionReasonEnum.CLIENT_INACTIVITY);
         final var disconnectionMessage = clientMessageModelFactory.create(clientId,
-                MessageQualifierEnum.DISCONNECTION_REASON_MESSAGE,
                 messageBody,
                 idempotencyKey);
         return syncClientMessage(disconnectionMessage);
@@ -77,13 +75,13 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncClientMessage(final ClientMessageModel clientMessage) {
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientShard.getService().syncClientMessageWithIdempotency(request)
+        return clientShard.getService().executeWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
     }
 
     Uni<Boolean> deleteClient(final Long clientId) {
         final var request = new DeleteClientRequest(clientId);
-        return clientShard.getService().deleteClient(request)
+        return clientShard.getService().execute(request)
                 .map(DeleteClientResponse::getDeleted);
     }
 }

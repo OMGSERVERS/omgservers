@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class CloseMatchMatchmakerCommandBodyDto extends MatchmakerCommandBodyDto {
 
     @NotNull
-    Long matchmakerMatchId;
+    Long matchId;
 
     @Override
     public MatchmakerCommandQualifierEnum getQualifier() {

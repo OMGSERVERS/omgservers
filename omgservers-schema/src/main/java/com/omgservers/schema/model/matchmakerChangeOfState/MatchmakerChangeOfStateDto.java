@@ -1,117 +1,99 @@
 package com.omgservers.schema.model.matchmakerChangeOfState;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
-import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
-import com.omgservers.schema.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class MatchmakerChangeOfStateDto {
 
     @NotNull
-    Set<MatchmakerAssignmentModel> assignmentsToSync;
+    List<Long> matchmakerCommandsToDelete;
 
     @NotNull
-    Set<MatchmakerAssignmentModel> assignmentsToDelete;
+    List<Long> matchmakerRequestsToDelete;
+
+    @Valid
+    @NotNull
+    List<MatchmakerMatchResourceModel> matchmakerMatchResourcesToSync;
+
+    @Valid
+    @NotNull
+    List<MatchmakerMatchResourceToUpdateStatusDto> matchmakerMatchResourcesToUpdateStatus;
 
     @NotNull
-    Set<MatchmakerCommandModel> commandsToDelete;
+    List<Long> matchmakerMatchResourcesToDelete;
+
+    @Valid
+    @NotNull
+    List<MatchmakerMatchAssignmentModel> matchmakerMatchAssignmentsToSync;
 
     @NotNull
-    Set<MatchmakerRequestModel> requestsToDelete;
-
-    @NotNull
-    Set<MatchmakerMatchModel> matchesToSync;
-
-    @NotNull
-    Set<MatchmakerMatchModel> matchesToUpdateStatus;
-
-    @NotNull
-    Set<MatchmakerMatchModel> matchesToDelete;
-
-    @NotNull
-    Set<MatchmakerMatchAssignmentModel> matchAssignmentsToSync;
-
-    @NotNull
-    Set<MatchmakerMatchAssignmentModel> matchAssignmentsToDelete;
+    List<Long> matchmakerMatchAssignmentsToDelete;
 
     public MatchmakerChangeOfStateDto() {
-        assignmentsToSync = new HashSet<>();
-        assignmentsToDelete = new HashSet<>();
-        commandsToDelete = new HashSet<>();
-        requestsToDelete = new HashSet<>();
-        matchesToSync = new HashSet<>();
-        matchesToUpdateStatus = new HashSet<>();
-        matchesToDelete = new HashSet<>();
-        matchAssignmentsToSync = new HashSet<>();
-        matchAssignmentsToDelete = new HashSet<>();
+        matchmakerCommandsToDelete = new ArrayList<>();
+        matchmakerRequestsToDelete = new ArrayList<>();
+        matchmakerMatchResourcesToSync = new ArrayList<>();
+        matchmakerMatchResourcesToUpdateStatus = new ArrayList<>();
+        matchmakerMatchResourcesToDelete = new ArrayList<>();
+        matchmakerMatchAssignmentsToSync = new ArrayList<>();
+        matchmakerMatchAssignmentsToDelete = new ArrayList<>();
     }
 
     @JsonIgnore
     public boolean isNotEmpty() {
-        return !commandsToDelete.isEmpty() ||
-                !requestsToDelete.isEmpty() ||
-                !assignmentsToSync.isEmpty() ||
-                !assignmentsToDelete.isEmpty() ||
-                !matchesToSync.isEmpty() ||
-                !matchesToUpdateStatus.isEmpty() ||
-                !matchesToDelete.isEmpty() ||
-                !matchAssignmentsToSync.isEmpty() ||
-                !matchAssignmentsToDelete.isEmpty();
+        return !matchmakerCommandsToDelete.isEmpty() ||
+                !matchmakerRequestsToDelete.isEmpty() ||
+                !matchmakerMatchResourcesToSync.isEmpty() ||
+                !matchmakerMatchResourcesToUpdateStatus.isEmpty() ||
+                !matchmakerMatchResourcesToDelete.isEmpty() ||
+                !matchmakerMatchAssignmentsToSync.isEmpty() ||
+                !matchmakerMatchAssignmentsToDelete.isEmpty();
     }
 
     @ToString.Include
-    public int commandsToDelete() {
-        return commandsToDelete.size();
+    public int matchmakerCommandsToDelete() {
+        return matchmakerCommandsToDelete.size();
     }
 
     @ToString.Include
-    public int requestsToDelete() {
-        return requestsToDelete.size();
+    public int matchmakerRequestsToDelete() {
+        return matchmakerRequestsToDelete.size();
+    }
+
+
+    @ToString.Include
+    public int matchmakerMatchResourcesToSync() {
+        return matchmakerMatchResourcesToSync.size();
     }
 
     @ToString.Include
-    public int assignmentsToSync() {
-        return assignmentsToSync.size();
+    public int matchmakerMatchResourcesToUpdateStatus() {
+        return matchmakerMatchResourcesToUpdateStatus.size();
     }
 
     @ToString.Include
-    public int assignmentsToDelete() {
-        return assignmentsToDelete.size();
+    public int matchmakerMatchResourcesToDelete() {
+        return matchmakerMatchResourcesToDelete.size();
     }
 
     @ToString.Include
-    public int matchesToSync() {
-        return matchesToSync.size();
+    public int matchmakerMatchAssignmentsToSync() {
+        return matchmakerMatchAssignmentsToSync.size();
     }
 
     @ToString.Include
-    public int matchesToUpdateStatus() {
-        return matchesToUpdateStatus.size();
-    }
-
-    @ToString.Include
-    public int matchesToDelete() {
-        return matchesToDelete.size();
-    }
-
-    @ToString.Include
-    public int matchAssignmentsToSync() {
-        return matchAssignmentsToSync.size();
-    }
-
-    @ToString.Include
-    public int matchAssignmentsToDelete() {
-        return matchAssignmentsToDelete.size();
+    public int matchmakerMatchAssignmentsToDelete() {
+        return matchmakerMatchAssignmentsToDelete.size();
     }
 }

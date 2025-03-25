@@ -4,11 +4,11 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.pool.impl.operation.pool.HasPoolOperation;
-import com.omgservers.service.shard.pool.impl.operation.poolServer.UpsertPoolServerOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.pool.impl.operation.pool.VerifyPoolExistsOperation;
+import com.omgservers.service.shard.pool.impl.operation.poolServer.UpsertPoolServerOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ class SyncPoolServerMethodImpl implements SyncPoolServerMethod {
     final UpsertPoolServerOperation upsertPoolServerOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final HasPoolOperation hasPoolOperation;
+    final VerifyPoolExistsOperation verifyPoolExistsOperation;
 
     @Override
     public Uni<SyncPoolServerResponse> execute(final SyncPoolServerRequest request) {
@@ -32,15 +32,14 @@ class SyncPoolServerMethodImpl implements SyncPoolServerMethod {
         final var poolServer = request.getPoolServer();
         final var poolId = poolServer.getPoolId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
+        return checkShardOperation.checkShard(shardKey)
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (context, sqlConnection) -> hasPoolOperation
+                                    (context, sqlConnection) -> verifyPoolExistsOperation
                                             .execute(sqlConnection, shard, poolId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertPoolServerOperation.execute(context,
                                                             sqlConnection,
                                                             shard,

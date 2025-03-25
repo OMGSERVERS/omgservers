@@ -7,6 +7,14 @@ import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandResponse;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
 import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
@@ -33,14 +41,14 @@ import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
+import com.omgservers.schema.module.pool.poolServer.ViewPoolServersResponse;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
-import com.omgservers.service.shard.pool.impl.service.webService.WebService;
 import com.omgservers.service.operation.server.HandleApiRequestOperation;
+import com.omgservers.service.shard.pool.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -77,6 +85,59 @@ public class PoolApiImpl implements PoolApi {
     }
 
     /*
+    PoolCommand
+     */
+
+    @Override
+    public Uni<GetPoolCommandResponse> execute(final GetPoolCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<ViewPoolCommandResponse> execute(final ViewPoolCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<SyncPoolCommandResponse> execute(final SyncPoolCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<DeletePoolCommandResponse> execute(final DeletePoolCommandRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
+    PoolRequest
+     */
+
+    @Override
+    public Uni<GetPoolRequestResponse> execute(final GetPoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<FindPoolRequestResponse> execute(final FindPoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<ViewPoolRequestsResponse> execute(final ViewPoolRequestsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<SyncPoolRequestResponse> execute(final SyncPoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    @Override
+    public Uni<DeletePoolRequestResponse> execute(final DeletePoolRequestRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
+    }
+
+    /*
     PoolServer
      */
 
@@ -86,7 +147,7 @@ public class PoolApiImpl implements PoolApi {
     }
 
     @Override
-    public Uni<ViewPoolServerResponse> execute(final ViewPoolServersRequest request) {
+    public Uni<ViewPoolServersResponse> execute(final ViewPoolServersRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -129,35 +190,6 @@ public class PoolApiImpl implements PoolApi {
     @Override
     public Uni<DeletePoolContainerResponse> execute(
             final DeletePoolContainerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    /*
-    PoolRequest
-     */
-
-    @Override
-    public Uni<GetPoolRequestResponse> execute(final GetPoolRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<FindPoolRequestResponse> execute(final FindPoolRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<ViewPoolRequestsResponse> execute(final ViewPoolRequestsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<SyncPoolRequestResponse> execute(final SyncPoolRequestRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<DeletePoolRequestResponse> execute(final DeletePoolRequestRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 

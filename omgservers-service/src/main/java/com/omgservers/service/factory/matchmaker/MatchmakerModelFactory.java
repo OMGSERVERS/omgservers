@@ -16,22 +16,25 @@ public class MatchmakerModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public MatchmakerModel create(final Long tenantId,
-                                  final Long deploymentId) {
+    public MatchmakerModel create(final Long deploymentId) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, deploymentId, idempotencyKey);
+        return create(id, deploymentId, idempotencyKey);
     }
 
-    public MatchmakerModel create(final Long tenantId,
-                                  final Long deploymentId,
+    public MatchmakerModel create(final Long deploymentId,
                                   final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, deploymentId, idempotencyKey);
+        return create(id, deploymentId, idempotencyKey);
     }
 
     public MatchmakerModel create(final Long id,
-                                  final Long tenantId,
+                                  final Long deploymentId) {
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, deploymentId, idempotencyKey);
+    }
+
+    public MatchmakerModel create(final Long id,
                                   final Long deploymentId,
                                   final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -41,7 +44,6 @@ public class MatchmakerModelFactory {
         matchmaker.setIdempotencyKey(idempotencyKey);
         matchmaker.setCreated(now);
         matchmaker.setModified(now);
-        matchmaker.setTenantId(tenantId);
         matchmaker.setDeploymentId(deploymentId);
         matchmaker.setDeleted(false);
         return matchmaker;

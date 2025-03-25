@@ -1,6 +1,5 @@
 package com.omgservers.service.shard.pool.impl.operation.poolRequest;
 
-import com.omgservers.service.event.body.module.pool.PoolRequestDeletedEventBodyModel;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -38,7 +37,7 @@ class DeletePoolRequestOperationImpl implements DeletePoolRequestOperation {
                         id,
                         Instant.now().atOffset(ZoneOffset.UTC)
                 ),
-                () -> new PoolRequestDeletedEventBodyModel(poolId, id),
+                () -> null,
                 () -> null
         );
     }

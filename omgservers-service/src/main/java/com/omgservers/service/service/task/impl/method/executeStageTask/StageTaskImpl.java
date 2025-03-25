@@ -1,11 +1,12 @@
 package com.omgservers.service.service.task.impl.method.executeStageTask;
 
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceStatusEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.DeleteTenantDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.ViewTenantDeploymentsResponse;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.UpdateTenantDeploymentResourceStatusRequest;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.UpdateTenantDeploymentResourceStatusResponse;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesRequest;
+import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.shard.runtime.RuntimeShard;
@@ -34,7 +35,7 @@ public class StageTaskImpl {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantShard.getService().getTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
@@ -42,23 +43,14 @@ public class StageTaskImpl {
         final var tenantId = tenantStage.getTenantId();
         final var tenantStageId = tenantStage.getId();
 
-        return viewTenantDeployments(tenantId, tenantStageId)
-                .flatMap(tenantDeployments -> {
-                    if (tenantDeployments.size() > 1) {
-                        final var previouslyCreatedDeployments = tenantDeployments
-                                .subList(0, tenantDeployments.size() - 1);
-                        // TODO: delete only deployments without clients
+        return viewTenantDeploymentResources(tenantId, tenantStageId)
+                .flatMap(tenantDeploymentResources -> {
+                    if (tenantDeploymentResources.size() > 1) {
+                        final var previouslyCreatedDeployments = tenantDeploymentResources
+                                .subList(0, tenantDeploymentResources.size() - 1);
                         return Multi.createFrom().iterable(previouslyCreatedDeployments)
-                                .onItem().transformToUniAndConcatenate(this::deletePreviouslyCreatedDeployment)
+                                .onItem().transformToUniAndConcatenate(this::closePreviouslyCreatedDeployment)
                                 .collect().asList()
-                                .invoke(results -> {
-                                    final var deleted = results.stream().filter(Boolean.TRUE::equals).count();
-                                    if (deleted > 0) {
-                                        log.info("The \"{}\" previously created deployments " +
-                                                        "in stage \"{}\" of tenant \"{}\" were deleted",
-                                                deleted, tenantStageId, tenantId);
-                                    }
-                                })
                                 .replaceWithVoid();
                     } else {
                         return Uni.createFrom().voidItem();
@@ -66,17 +58,22 @@ public class StageTaskImpl {
                 });
     }
 
-    Uni<List<TenantDeploymentModel>> viewTenantDeployments(final Long tenantId, final Long tenantStageId) {
-        final var request = new ViewTenantDeploymentsRequest(tenantId, tenantStageId);
-        return tenantShard.getService().viewTenantDeployments(request)
-                .map(ViewTenantDeploymentsResponse::getTenantDeployments);
+    Uni<List<TenantDeploymentResourceModel>> viewTenantDeploymentResources(final Long tenantId, final Long tenantStageId) {
+        final var request = new ViewTenantDeploymentResourcesRequest();
+        request.setTenantId(tenantId);
+        request.setTenantStageId(tenantStageId);
+        request.setStatus(TenantDeploymentResourceStatusEnum.CREATED);
+        return tenantShard.getService().execute(request)
+                .map(ViewTenantDeploymentResourcesResponse::getTenantDeploymentResources);
     }
 
-    Uni<Boolean> deletePreviouslyCreatedDeployment(final TenantDeploymentModel tenantDeployment) {
-        final var tenantId = tenantDeployment.getTenantId();
-        final var tenantDeploymentId = tenantDeployment.getId();
-        final var request = new DeleteTenantDeploymentRequest(tenantId, tenantDeploymentId);
-        return tenantShard.getService().deleteTenantDeployment(request)
-                .map(DeleteTenantDeploymentResponse::getDeleted);
+    Uni<Boolean> closePreviouslyCreatedDeployment(final TenantDeploymentResourceModel tenantDeploymentResource) {
+        final var tenantId = tenantDeploymentResource.getTenantId();
+        final var tenantDeploymentResourceId = tenantDeploymentResource.getId();
+        final var request = new UpdateTenantDeploymentResourceStatusRequest(tenantId,
+                tenantDeploymentResourceId,
+                TenantDeploymentResourceStatusEnum.CLOSED);
+        return tenantShard.getService().execute(request)
+                .map(UpdateTenantDeploymentResourceStatusResponse::getUpdated);
     }
 }

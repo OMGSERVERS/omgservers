@@ -14,7 +14,7 @@ public interface TenantStageMapper {
 
     @Mapping(target = "stage", source = "stage")
     @Mapping(target = "stage.aliases", source = "aliases")
-    @Mapping(target = "permissions", source = "stagePermissions")
-    @Mapping(target = "deployments", source = "stageDeployments")
+    @Mapping(target = "permissions", source = "permissions")
+    @Mapping(target = "deployments", source = "deployments")
     TenantStageDetailsDto dataToDetails(TenantStageDataDto data);
 }

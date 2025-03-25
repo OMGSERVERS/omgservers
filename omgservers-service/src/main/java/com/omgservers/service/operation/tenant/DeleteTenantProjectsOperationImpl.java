@@ -49,13 +49,13 @@ class DeleteTenantProjectsOperationImpl implements DeleteTenantProjectsOperation
 
     Uni<List<TenantProjectModel>> viewProjects(final Long tenantId) {
         final var request = new ViewTenantProjectsRequest(tenantId);
-        return tenantShard.getService().viewTenantProjects(request)
+        return tenantShard.getService().execute(request)
                 .map(ViewTenantProjectsResponse::getTenantProjects);
     }
 
     Uni<Boolean> deleteProject(final Long tenantId, final Long id) {
         final var request = new DeleteTenantProjectRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantProject(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantProjectResponse::getDeleted);
     }
 }

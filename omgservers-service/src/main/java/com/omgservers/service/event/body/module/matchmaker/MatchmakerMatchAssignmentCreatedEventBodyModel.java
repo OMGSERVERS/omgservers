@@ -18,9 +18,6 @@ public class MatchmakerMatchAssignmentCreatedEventBodyModel extends EventBodyMod
     Long matchmakerId;
 
     @NotNull
-    Long matchId;
-
-    @NotNull
     Long id;
 
     @Override

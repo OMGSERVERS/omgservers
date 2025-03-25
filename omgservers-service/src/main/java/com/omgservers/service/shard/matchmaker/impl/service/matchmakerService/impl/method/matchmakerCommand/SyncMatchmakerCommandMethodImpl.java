@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.SyncMatchmakerCommandResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.HasMatchmakerOperation;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.VerifyMatchmakerExistsOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerCommand.UpsertMatchmakerCommandOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
@@ -21,7 +21,7 @@ class SyncMatchmakerCommandMethodImpl implements SyncMatchmakerCommandMethod {
 
     final UpsertMatchmakerCommandOperation upsertMatchmakerCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final HasMatchmakerOperation hasMatchmakerOperation;
+    final VerifyMatchmakerExistsOperation verifyMatchmakerExistsOperation;
     final CheckShardOperation checkShardOperation;
 
     @Override
@@ -36,7 +36,7 @@ class SyncMatchmakerCommandMethodImpl implements SyncMatchmakerCommandMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> hasMatchmakerOperation
+                                    (changeContext, sqlConnection) -> verifyMatchmakerExistsOperation
                                             .execute(sqlConnection, shard, matchmakerId)
                                             .flatMap(has -> {
                                                 if (has) {

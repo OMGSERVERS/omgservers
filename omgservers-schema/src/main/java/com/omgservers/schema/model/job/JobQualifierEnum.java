@@ -7,6 +7,16 @@ public enum JobQualifierEnum {
     TENANT,
 
     /**
+     * Stage job.
+     */
+    STAGE,
+
+    /**
+     * Deployment job.
+     */
+    DEPLOYMENT,
+
+    /**
      * Matchmaker job.
      */
     MATCHMAKER,
@@ -20,14 +30,4 @@ public enum JobQualifierEnum {
      * Pool job.
      */
     POOL,
-
-    /**
-     * Build request job.
-     */
-    BUILD_REQUEST,
-
-    /**
-     * Queue job.
-     */
-    QUEUE,
 }

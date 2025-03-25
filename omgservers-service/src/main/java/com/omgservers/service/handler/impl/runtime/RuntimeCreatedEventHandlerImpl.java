@@ -1,42 +1,23 @@
 package com.omgservers.service.handler.impl.runtime;
 
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefRequest;
-import com.omgservers.schema.module.lobby.SyncLobbyRuntimeRefResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.schema.module.runtime.GetRuntimeRequest;
-import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.deployment.deployment.GetDeploymentRequest;
+import com.omgservers.schema.module.deployment.deployment.GetDeploymentResponse;
+import com.omgservers.schema.module.runtime.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.internal.RuntimeDeploymentRequestedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyModel;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.lobby.LobbyRuntimeRefModelFactory;
-import com.omgservers.service.factory.matchmaker.MatchmakerMatchRuntimeRefModelFactory;
-import com.omgservers.service.factory.pool.PoolRequestModelFactory;
-import com.omgservers.service.factory.runtime.RuntimePermissionModelFactory;
-import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.system.JobModelFactory;
-import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.shard.lobby.LobbyShard;
-import com.omgservers.service.shard.matchmaker.MatchmakerShard;
-import com.omgservers.service.shard.pool.PoolShard;
+import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.operation.pool.CreatePoolRequestOperation;
+import com.omgservers.service.operation.runtime.CreateOpenRuntimeCommandOperation;
+import com.omgservers.service.operation.runtime.CreateRuntimeCreatedRuntimeMessageOperation;
+import com.omgservers.service.service.cache.CacheService;
+import com.omgservers.service.shard.deployment.DeploymentShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
-import com.omgservers.service.shard.user.UserShard;
-import com.omgservers.service.operation.server.GenerateSecureStringOperation;
-import com.omgservers.service.operation.server.GetServiceConfigOperation;
-import com.omgservers.service.service.event.EventService;
-import com.omgservers.service.service.event.dto.SyncEventRequest;
-import com.omgservers.service.service.event.dto.SyncEventResponse;
-import com.omgservers.service.service.job.JobService;
-import com.omgservers.service.service.job.dto.SyncJobRequest;
-import com.omgservers.service.service.job.dto.SyncJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -48,25 +29,15 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerShard matchmakerShard;
+    final DeploymentShard deploymentShard;
     final RuntimeShard runtimeShard;
-    final LobbyShard lobbyShard;
-    final UserShard userShard;
-    final PoolShard poolShard;
 
-    final EventService eventService;
-    final JobService jobService;
+    final CacheService cacheService;
 
-    final GenerateSecureStringOperation generateSecureStringOperation;
-    final GetServiceConfigOperation getServiceConfigOperation;
-
-    final MatchmakerMatchRuntimeRefModelFactory matchmakerMatchRuntimeRefModelFactory;
-    final RuntimePermissionModelFactory runtimePermissionModelFactory;
-    final LobbyRuntimeRefModelFactory lobbyRuntimeRefModelFactory;
-    final PoolRequestModelFactory poolRequestModelFactory;
-    final EventModelFactory eventModelFactory;
-    final UserModelFactory userModelFactory;
-    final JobModelFactory jobModelFactory;
+    final CreateRuntimeCreatedRuntimeMessageOperation createRuntimeCreatedRuntimeMessageOperation;
+    final CreateOpenRuntimeCommandOperation createOpenRuntimeCommandOperation;
+    final CreatePoolRequestOperation createPoolRequestOperation;
+    final CreateJobOperation createJobOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -86,9 +57,17 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(runtime -> {
                     log.debug("Created, {}", runtime);
 
-                    return syncRuntimeRef(runtime, idempotencyKey)
-                            .flatMap(created -> requestRuntimeDeployment(runtimeId, idempotencyKey))
-                            .flatMap(created -> syncRuntimeJob(runtimeId, idempotencyKey));
+                    final var deploymentId = runtime.getDeploymentId();
+                    return getDeployment(deploymentId)
+                            .flatMap(deployment -> createRuntimeCreatedRuntimeMessageOperation
+                                    .execute(runtime, idempotencyKey)
+                                    .flatMap(created -> createOpenRuntimeCommandOperation
+                                            .execute(runtime, idempotencyKey))
+                                    .flatMap(created -> createPoolRequestOperation
+                                            .execute(runtime, deployment, idempotencyKey))
+                                    .flatMap(created -> createJobOperation
+                                            .execute(JobQualifierEnum.RUNTIME, runtimeId, idempotencyKey))
+                            );
                 })
                 .replaceWithVoid();
     }
@@ -99,74 +78,9 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Boolean> syncRuntimeRef(final RuntimeModel runtime, final String idempotencyKey) {
-        final var runtimeId = runtime.getId();
-        return switch (runtime.getQualifier()) {
-            case LOBBY -> {
-                final var lobbyId = runtime.getConfig().getLobbyConfig().getLobbyId();
-                final var lobbyRuntimeRef = lobbyRuntimeRefModelFactory.create(lobbyId, runtimeId, idempotencyKey);
-                final var request = new SyncLobbyRuntimeRefRequest(lobbyRuntimeRef);
-                yield lobbyShard.getService().syncLobbyRuntimeRef(request)
-                        .map(SyncLobbyRuntimeRefResponse::getCreated)
-                        .onFailure(ServerSideNotFoundException.class)
-                        .recoverWithItem(Boolean.FALSE)
-                        .onFailure(ServerSideConflictException.class)
-                        .recoverWithUni(t -> {
-                            if (t instanceof final ServerSideBaseException exception) {
-                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                                    log.debug("Idempotency was violated, object={}, {}", lobbyRuntimeRef,
-                                            t.getMessage());
-                                    return Uni.createFrom().item(Boolean.FALSE);
-                                }
-                            }
-
-                            return Uni.createFrom().failure(t);
-                        });
-            }
-            case MATCH -> {
-                final var matchConfig = runtime.getConfig().getMatchConfig();
-                final var matchmakerId = matchConfig.getMatchmakerId();
-                final var matchId = matchConfig.getMatchId();
-                final var matchRuntimeRef = matchmakerMatchRuntimeRefModelFactory
-                        .create(matchmakerId, matchId, runtimeId, idempotencyKey);
-                final var request = new SyncMatchmakerMatchRuntimeRefRequest(matchRuntimeRef);
-                yield matchmakerShard.getService().execute(request)
-                        .map(SyncMatchmakerMatchRuntimeRefResponse::getCreated)
-                        .onFailure(ServerSideNotFoundException.class)
-                        .recoverWithItem(Boolean.FALSE)
-                        .onFailure(ServerSideConflictException.class)
-                        .recoverWithUni(t -> {
-                            if (t instanceof final ServerSideBaseException exception) {
-                                if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                                    log.debug("Idempotency was violated, object={}, {}", matchRuntimeRef,
-                                            t.getMessage());
-                                    return Uni.createFrom().item(Boolean.FALSE);
-                                }
-                            }
-
-                            return Uni.createFrom().failure(t);
-                        });
-            }
-        };
-    }
-
-    Uni<Boolean> requestRuntimeDeployment(final Long runtimeId,
-                                          final String idempotencyKey) {
-        final var eventBody = new RuntimeDeploymentRequestedEventBodyModel(runtimeId);
-        final var eventModel = eventModelFactory.create(eventBody,
-                idempotencyKey + "/" + eventBody.getQualifier());
-
-        final var syncEventRequest = new SyncEventRequest(eventModel);
-        return eventService.syncEventWithIdempotency(syncEventRequest)
-                .map(SyncEventResponse::getCreated);
-    }
-
-    Uni<Boolean> syncRuntimeJob(final Long runtimeId,
-                                final String idempotencyKey) {
-        final var job = jobModelFactory.create(JobQualifierEnum.RUNTIME, runtimeId, runtimeId, idempotencyKey);
-
-        final var syncEventRequest = new SyncJobRequest(job);
-        return jobService.syncJobWithIdempotency(syncEventRequest)
-                .map(SyncJobResponse::getCreated);
+    Uni<DeploymentModel> getDeployment(final Long deploymentId) {
+        final var request = new GetDeploymentRequest(deploymentId);
+        return deploymentShard.getService().execute(request)
+                .map(GetDeploymentResponse::getDeployment);
     }
 }

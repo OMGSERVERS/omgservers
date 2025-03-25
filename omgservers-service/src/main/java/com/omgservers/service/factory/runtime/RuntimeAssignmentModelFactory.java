@@ -20,7 +20,7 @@ public class RuntimeAssignmentModelFactory {
     public RuntimeAssignmentModel create(final Long runtimeId,
                                          final Long clientId) {
         final var id = generateIdOperation.generateId();
-        final var config = RuntimeAssignmentConfigDto.create();
+        final var config = new RuntimeAssignmentConfigDto();
         final var idempotencyKey = generateIdOperation.generateStringId();
         return create(id, runtimeId, clientId, config, idempotencyKey);
     }
@@ -29,7 +29,7 @@ public class RuntimeAssignmentModelFactory {
                                          final Long clientId,
                                          final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        final var config = RuntimeAssignmentConfigDto.create();
+        final var config = new RuntimeAssignmentConfigDto();
         return create(id, runtimeId, clientId, config, idempotencyKey);
     }
 
@@ -63,7 +63,6 @@ public class RuntimeAssignmentModelFactory {
         runtimeAssignment.setCreated(now);
         runtimeAssignment.setModified(now);
         runtimeAssignment.setClientId(clientId);
-        runtimeAssignment.setLastActivity(now);
         runtimeAssignment.setConfig(config);
         runtimeAssignment.setDeleted(false);
         return runtimeAssignment;

@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageAliasDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperResponse;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
@@ -40,8 +40,8 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateTenantStageAliasDeveloperResponse> execute(
-            final CreateTenantStageAliasDeveloperRequest request) {
+    public Uni<CreateStageAliasDeveloperResponse> execute(
+            final CreateStageAliasDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -69,12 +69,12 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
                                         });
                             });
                 })
-                .replaceWith(new CreateTenantStageAliasDeveloperResponse());
+                .replaceWith(new CreateStageAliasDeveloperResponse());
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantShard.getService().getTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 

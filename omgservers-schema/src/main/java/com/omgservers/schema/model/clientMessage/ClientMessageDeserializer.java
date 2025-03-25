@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
+import com.omgservers.schema.message.MessageQualifierEnum;
 
 import java.io.IOException;
 import java.time.Instant;

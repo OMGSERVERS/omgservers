@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.machmaker;
 
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerResponse;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.UpsertMatchmakerOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;

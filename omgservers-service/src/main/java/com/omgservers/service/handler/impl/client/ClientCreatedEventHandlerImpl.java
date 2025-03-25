@@ -1,27 +1,27 @@
 package com.omgservers.service.handler.impl.client;
 
+import com.omgservers.schema.message.body.ClientGreetedMessageBodyDto;
 import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyDto;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.client.GetClientRequest;
-import com.omgservers.schema.module.client.GetClientResponse;
-import com.omgservers.schema.module.client.SyncClientMessageRequest;
-import com.omgservers.schema.module.client.SyncClientMessageResponse;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentRequest;
-import com.omgservers.schema.module.tenant.tenantDeployment.GetTenantDeploymentResponse;
+import com.omgservers.schema.module.client.client.GetClientRequest;
+import com.omgservers.schema.module.client.client.GetClientResponse;
+import com.omgservers.schema.module.client.clientMessage.SyncClientMessageRequest;
+import com.omgservers.schema.module.client.clientMessage.SyncClientMessageResponse;
+import com.omgservers.schema.module.deployment.deployment.GetDeploymentRequest;
+import com.omgservers.schema.module.deployment.deployment.GetDeploymentResponse;
+import com.omgservers.schema.module.deployment.deploymentRequest.SyncDeploymentRequestRequest;
+import com.omgservers.schema.module.deployment.deploymentRequest.SyncDeploymentRequestResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
-import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
+import com.omgservers.service.factory.deployment.DeploymentRequestModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.assignment.AssignMatchmakerOperation;
-import com.omgservers.service.operation.assignment.SelectRandomMatchmakerOperation;
 import com.omgservers.service.shard.client.ClientShard;
+import com.omgservers.service.shard.deployment.DeploymentShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,13 +34,11 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ClientCreatedEventHandlerImpl implements EventHandler {
 
+    final DeploymentShard deploymentShard;
     final ClientShard clientShard;
     final TenantShard tenantShard;
 
-    final SelectRandomMatchmakerOperation selectRandomMatchmakerOperation;
-    final AssignMatchmakerOperation assignMatchmakerOperation;
-
-    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
+    final DeploymentRequestModelFactory deploymentRequestModelFactory;
     final ClientMessageModelFactory clientMessageModelFactory;
 
     @Override
@@ -61,16 +59,19 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(client -> {
                     log.debug("Created, {}", client);
 
-                    final var tenantId = client.getTenantId();
                     final var deploymentId = client.getDeploymentId();
 
-                    return getTenantDeployment(tenantId, deploymentId)
-                            .flatMap(tenantDeployment -> {
-                                final var deploymentVersionId = tenantDeployment.getVersionId();
-                                return getTenantVersion(tenantId, deploymentVersionId)
-                                        .flatMap(tenantVersion -> handleEvent(client,
+                    return getDeployment(deploymentId)
+                            .flatMap(deployment -> {
+                                final var tenantId = deployment.getTenantId();
+                                final var tenantVersionId = deployment.getVersionId();
+                                return getTenantVersion(tenantId, tenantVersionId)
+                                        .flatMap(tenantVersion -> createClientGreetedMessage(client,
                                                 tenantVersion,
-                                                idempotencyKey));
+                                                idempotencyKey)
+                                                .flatMap(created -> createDeploymentRequest(deploymentId,
+                                                        clientId,
+                                                        idempotencyKey)));
                             });
                 })
                 .replaceWithVoid();
@@ -78,53 +79,49 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
     Uni<ClientModel> getClient(final Long clientId) {
         final var request = new GetClientRequest(clientId);
-        return clientShard.getService().getClient(request)
+        return clientShard.getService().execute(request)
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<TenantDeploymentModel> getTenantDeployment(final Long tenantId, final Long id) {
-        final var request = new GetTenantDeploymentRequest(tenantId, id);
-        return tenantShard.getService().getTenantDeployment(request)
-                .map(GetTenantDeploymentResponse::getTenantDeployment);
+    Uni<DeploymentModel> getDeployment(final Long deploymentId) {
+        final var request = new GetDeploymentRequest(deploymentId);
+        return deploymentShard.getService().execute(request)
+                .map(GetDeploymentResponse::getDeployment);
     }
 
     Uni<TenantVersionModel> getTenantVersion(final Long tenantId, final Long tenantVersionId) {
         final var request = new GetTenantVersionRequest(tenantId, tenantVersionId);
-        return tenantShard.getService().getTenantVersion(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
-    Uni<Void> handleEvent(final ClientModel client,
-                          final TenantVersionModel tenantVersion,
-                          final String idempotencyKey) {
+    Uni<Boolean> createClientGreetedMessage(final ClientModel client,
+                                            final TenantVersionModel tenantVersion,
+                                            final String idempotencyKey) {
         final var clientId = client.getId();
-        final var tenantId = client.getTenantId();
-        final var tenantDeploymentId = client.getDeploymentId();
 
-        return createWelcomeMessage(client, tenantVersion, idempotencyKey)
-                .flatMap(created -> selectRandomMatchmakerOperation.execute(tenantId, tenantDeploymentId)
-                        .flatMap(randomSelectedMatchmaker -> assignMatchmakerOperation.execute(clientId,
-                                randomSelectedMatchmaker.getId(),
-                                idempotencyKey)))
-                .replaceWithVoid();
-    }
-
-    Uni<Boolean> createWelcomeMessage(final ClientModel client,
-                                      final TenantVersionModel tenantVersion,
-                                      final String idempotencyKey) {
-        final var clientId = client.getId();
-        final var tenantId = client.getTenantId();
+        final var tenantId = tenantVersion.getTenantId();
         final var tenantVersionId = tenantVersion.getId();
         final var tenantVersionCreated = tenantVersion.getCreated();
-        final var messageBody = new ServerWelcomeMessageBodyDto(tenantId, tenantVersionId, tenantVersionCreated);
+
+        final var messageBody = new ClientGreetedMessageBodyDto(tenantId, tenantVersionId, tenantVersionCreated);
         final var clientMessage = clientMessageModelFactory.create(clientId,
-                MessageQualifierEnum.SERVER_WELCOME_MESSAGE,
                 messageBody,
                 idempotencyKey);
 
         final var request = new SyncClientMessageRequest(clientMessage);
-        return clientShard.getService().syncClientMessageWithIdempotency(request)
+        return clientShard.getService().executeWithIdempotency(request)
                 .map(SyncClientMessageResponse::getCreated);
+    }
+
+    Uni<Boolean> createDeploymentRequest(final Long deploymentId,
+                                         final Long clientId,
+                                         final String idempotencyKey) {
+        final var deploymentRequest = deploymentRequestModelFactory.create(deploymentId, clientId, idempotencyKey);
+
+        final var request = new SyncDeploymentRequestRequest(deploymentRequest);
+        return deploymentShard.getService().executeWithIdempotency(request)
+                .map(SyncDeploymentRequestResponse::getCreated);
     }
 }
 

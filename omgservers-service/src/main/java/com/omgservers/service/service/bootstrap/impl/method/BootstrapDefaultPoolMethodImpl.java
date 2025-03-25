@@ -75,7 +75,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
     Uni<PoolModel> createDefaultPool() {
         final var defaultPool = poolModelFactory.create();
         final var request = new SyncPoolRequest(defaultPool);
-        return poolShard.getPoolService().execute(request)
+        return poolShard.getService().execute(request)
                 .replaceWith(defaultPool);
     }
 
@@ -119,7 +119,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
                 poolServerConfig);
 
         final var request = new SyncPoolServerRequest(poolServer);
-        return poolShard.getPoolService().execute(request)
+        return poolShard.getService().execute(request)
                 .map(SyncPoolServerResponse::getCreated);
     }
 }

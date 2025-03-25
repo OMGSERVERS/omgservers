@@ -2,8 +2,8 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestResponse;
-import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectPoolRequestOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectPoolRequestOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,8 +21,7 @@ class GetPoolRequestMethodImpl implements GetPoolRequestMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<GetPoolRequestResponse> execute(
-            final GetPoolRequestRequest request) {
+    public Uni<GetPoolRequestResponse> execute(final GetPoolRequestRequest request) {
         log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())

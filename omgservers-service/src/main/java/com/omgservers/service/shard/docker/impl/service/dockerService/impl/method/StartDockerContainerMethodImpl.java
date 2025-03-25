@@ -39,7 +39,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
                     final var imageId = poolContainer.getConfig().getImageId();
                     final var containerName = poolContainer.getContainerName();
                     final var environment = poolContainer.getConfig().getEnvironment().entrySet().stream()
-                            .map(entry -> entry.getKey() + "=" + entry.getValue())
+                            .map(entry -> entry.getKey().getVariable() + "=" + entry.getValue())
                             .toList();
                     final var labels = poolContainer.getConfig().getLabels()
                             .entrySet().stream()

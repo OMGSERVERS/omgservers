@@ -1,0 +1,45 @@
+package com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerResource;
+
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
+import com.omgservers.service.operation.server.SelectListOperation;
+import com.omgservers.service.shard.deployment.impl.mapper.DeploymentMatchmakerResourceModelMapper;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.sqlclient.SqlConnection;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor
+class SelectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperationImpl
+        implements SelectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperation {
+
+    final SelectListOperation selectListOperation;
+
+    final DeploymentMatchmakerResourceModelMapper deploymentMatchmakerResourceModelMapper;
+
+    @Override
+    public Uni<List<DeploymentMatchmakerResourceModel>> execute(
+            final SqlConnection sqlConnection,
+            final int shard,
+            final Long deploymentId,
+            final DeploymentMatchmakerResourceStatusEnum status) {
+        return selectListOperation.selectList(
+                sqlConnection,
+                shard,
+                """
+                        select
+                            id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, deleted
+                        from $schema.tab_deployment_matchmaker_resource
+                        where deployment_id = $1 and status = $2 and deleted = false
+                        order by id asc
+                        """,
+                List.of(deploymentId, status),
+                "Deployment matchmaker resource",
+                deploymentMatchmakerResourceModelMapper::execute);
+    }
+}

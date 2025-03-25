@@ -46,26 +46,26 @@ class DeveloperApiImpl implements DeveloperApi {
      */
 
     @Override
-    public Uni<CreateTenantProjectDeveloperResponse> execute(
-            @NotNull final CreateTenantProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> execute(
+            @NotNull final CreateProjectDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantProjectAliasDeveloperResponse> execute(
-            @NotNull final CreateTenantProjectAliasDeveloperRequest request) {
+    public Uni<CreateProjectAliasDeveloperResponse> execute(
+            @NotNull final CreateProjectAliasDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
-            @NotNull final GetTenantProjectDetailsDeveloperRequest request) {
+    public Uni<GetProjectDetailsDeveloperResponse> execute(
+            @NotNull final GetProjectDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantProjectDeveloperResponse> execute(
-            @NotNull final DeleteTenantProjectDeveloperRequest request) {
+    public Uni<DeleteProjectDeveloperResponse> execute(
+            @NotNull final DeleteProjectDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -74,26 +74,26 @@ class DeveloperApiImpl implements DeveloperApi {
      */
 
     @Override
-    public Uni<CreateTenantStageDeveloperResponse> execute(
-            @NotNull final CreateTenantStageDeveloperRequest request) {
+    public Uni<CreateStageDeveloperResponse> execute(
+            @NotNull final CreateStageDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTenantStageAliasDeveloperResponse> execute(
-            @NotNull final CreateTenantStageAliasDeveloperRequest request) {
+    public Uni<CreateStageAliasDeveloperResponse> execute(
+            @NotNull final CreateStageAliasDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
-            @NotNull final GetTenantStageDetailsDeveloperRequest request) {
+    public Uni<GetStageDetailsDeveloperResponse> execute(
+            @NotNull final GetStageDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantStageDeveloperResponse> execute(
-            @NotNull final DeleteTenantStageDeveloperRequest request) {
+    public Uni<DeleteStageDeveloperResponse> execute(
+            @NotNull final DeleteStageDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -102,28 +102,20 @@ class DeveloperApiImpl implements DeveloperApi {
      */
 
     @Override
-    public Uni<CreateTenantVersionDeveloperResponse> execute(
-            @NotNull final CreateTenantVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> execute(
+            @NotNull final CreateVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> execute(final String tenant,
-                                                            final Long tenantVersionId,
-                                                            final List<FileUpload> files) {
-        final var request = new UploadFilesArchiveDeveloperRequest(tenant, tenantVersionId, files);
+    public Uni<GetVersionDetailsDeveloperResponse> execute(
+            final GetVersionDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
-            final GetTenantVersionDetailsDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<DeleteTenantVersionDeveloperResponse> execute(
-            @NotNull final DeleteTenantVersionDeveloperRequest request) {
+    public Uni<DeleteVersionDeveloperResponse> execute(
+            @NotNull final DeleteVersionDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -132,7 +124,7 @@ class DeveloperApiImpl implements DeveloperApi {
      */
 
     @Override
-    public Uni<CreateTenantImageDeveloperResponse> execute(@NotNull final CreateTenantImageDeveloperRequest request) {
+    public Uni<CreateImageDeveloperResponse> execute(@NotNull final CreateImageDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
@@ -141,43 +133,18 @@ class DeveloperApiImpl implements DeveloperApi {
      */
 
     @Override
-    public Uni<DeployTenantVersionDeveloperResponse> execute(
-            @NotNull final DeployTenantVersionDeveloperRequest request) {
+    public Uni<CreateDeploymentDeveloperResponse> execute(@NotNull final CreateDeploymentDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
-            @NotNull final GetTenantDeploymentDetailsDeveloperRequest request) {
+    public Uni<GetDeploymentDetailsDeveloperResponse> execute(
+            @NotNull final GetDeploymentDetailsDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteTenantDeploymentDeveloperResponse> execute(
-            @NotNull final DeleteTenantDeploymentDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<CreateLobbyRequestDeveloperResponse> execute(
-            @NotNull final CreateLobbyRequestDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<DeleteLobbyDeveloperResponse> execute(@NotNull final DeleteLobbyDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<CreateMatchmakerRequestDeveloperResponse> execute(
-            @NotNull final CreateMatchmakerRequestDeveloperRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
-    }
-
-    @Override
-    public Uni<DeleteMatchmakerDeveloperResponse> execute(
-            @NotNull final DeleteMatchmakerDeveloperRequest request) {
+    public Uni<DeleteDeploymentDeveloperResponse> execute(@NotNull final DeleteDeploymentDeveloperRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

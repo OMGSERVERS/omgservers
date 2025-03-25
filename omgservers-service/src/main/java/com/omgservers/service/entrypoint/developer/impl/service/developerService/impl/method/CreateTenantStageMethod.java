@@ -1,9 +1,9 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantStageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateTenantStageMethod {
-    Uni<CreateTenantStageDeveloperResponse> execute(CreateTenantStageDeveloperRequest request);
+    Uni<CreateStageDeveloperResponse> execute(CreateStageDeveloperRequest request);
 }

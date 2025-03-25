@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.poolRequest;
 
+import com.omgservers.schema.model.poolSeverContainer.PoolContainerEnvironment;
 import com.omgservers.schema.model.poolSeverContainer.PoolContainerLabel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class PoolRequestConfigDto {
     public static class ContainerConfig {
 
         @NotNull
-        String imageId;
+        String image;
 
         @NotNull
         Map<PoolContainerLabel, String> labels;
@@ -40,6 +41,6 @@ public class PoolRequestConfigDto {
         Long memoryLimitInMegabytes;
 
         @NotNull
-        Map<String, String> environment;
+        Map<PoolContainerEnvironment, String> environment;
     }
 }

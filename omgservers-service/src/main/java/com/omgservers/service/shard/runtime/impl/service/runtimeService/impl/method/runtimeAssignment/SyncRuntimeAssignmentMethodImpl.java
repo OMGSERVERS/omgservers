@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeAssignment;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentResponse;
+import com.omgservers.schema.module.runtime.runtimeAssignment.SyncRuntimeAssignmentRequest;
+import com.omgservers.schema.module.runtime.runtimeAssignment.SyncRuntimeAssignmentResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.runtime.impl.operation.runtime.HasRuntimeOperation;
+import com.omgservers.service.shard.runtime.impl.operation.runtime.VerifyRuntimeExistsOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment.UpsertRuntimeAssignmentOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
@@ -22,7 +22,7 @@ class SyncRuntimeAssignmentMethodImpl implements SyncRuntimeAssignmentMethod {
     final UpsertRuntimeAssignmentOperation upsertRuntimeAssignmentOperation;
     final ChangeWithContextOperation changeWithContextOperation;
     final CheckShardOperation checkShardOperation;
-    final HasRuntimeOperation hasRuntimeOperation;
+    final VerifyRuntimeExistsOperation verifyRuntimeExistsOperation;
 
     @Override
     public Uni<SyncRuntimeAssignmentResponse> execute(final SyncRuntimeAssignmentRequest request) {
@@ -37,7 +37,7 @@ class SyncRuntimeAssignmentMethodImpl implements SyncRuntimeAssignmentMethod {
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> hasRuntimeOperation
+                                    (changeContext, sqlConnection) -> verifyRuntimeExistsOperation
                                             .execute(sqlConnection, shard, runtimeId)
                                             .flatMap(has -> {
                                                 if (has) {

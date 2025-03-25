@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.matchmaker.operation.testInterface;
 
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatch.UpsertMatchmakerMatchOperation;
+import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource.UpsertMatchmakerMatchResourceOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,16 +17,15 @@ import java.time.Duration;
 public class UpsertMatchmakerMatchOperationTestInterface {
     private static final long TIMEOUT = 1L;
 
-    final UpsertMatchmakerMatchOperation upsertMatchmakerMatchOperation;
+    final UpsertMatchmakerMatchResourceOperation operation;
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> upsertMatchmakerMatch(final int shard,
-                                                        final MatchmakerMatchModel matchmakerMatch) {
+    public ChangeContext<Boolean> execute(final MatchmakerMatchResourceModel model) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
-                    return pgPool.withTransaction(sqlConnection -> upsertMatchmakerMatchOperation
-                                    .execute(changeContext, sqlConnection, shard, matchmakerMatch))
+                    return pgPool.withTransaction(sqlConnection -> operation
+                                    .execute(changeContext, sqlConnection, 0, model))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

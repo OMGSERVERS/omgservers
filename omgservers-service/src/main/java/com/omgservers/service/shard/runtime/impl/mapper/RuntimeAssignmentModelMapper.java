@@ -27,7 +27,6 @@ public class RuntimeAssignmentModelMapper {
         runtimeAssignment.setCreated(row.getOffsetDateTime("created").toInstant());
         runtimeAssignment.setModified(row.getOffsetDateTime("modified").toInstant());
         runtimeAssignment.setClientId(row.getLong("client_id"));
-        runtimeAssignment.setLastActivity(row.getOffsetDateTime("last_activity").toInstant());
         try {
             runtimeAssignment.setConfig(objectMapper.readValue(row.getString("config"),
                     RuntimeAssignmentConfigDto.class));

@@ -2,9 +2,9 @@ package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerRequest
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.request.MatchmakerRequestModel;
+import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -35,9 +35,8 @@ class UpsertMatchmakerRequestOperationImpl implements UpsertMatchmakerRequestOpe
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_request(
-                            id, idempotency_key, matchmaker_id, created, modified, user_id, client_id, mode, config, 
-                            deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                            id, idempotency_key, matchmaker_id, created, modified, client_id, mode, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,7 +46,6 @@ class UpsertMatchmakerRequestOperationImpl implements UpsertMatchmakerRequestOpe
                         matchmakerRequest.getMatchmakerId(),
                         matchmakerRequest.getCreated().atOffset(ZoneOffset.UTC),
                         matchmakerRequest.getModified().atOffset(ZoneOffset.UTC),
-                        matchmakerRequest.getUserId(),
                         matchmakerRequest.getClientId(),
                         matchmakerRequest.getMode(),
                         getConfigString(matchmakerRequest),

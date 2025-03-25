@@ -1,65 +1,47 @@
 package com.omgservers.service.shard.matchmaker.impl.service.webService.impl;
 
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerRequestRequest;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerRequestResponse;
-import com.omgservers.schema.module.matchmaker.DeleteMatchmakerResponse;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.schema.module.matchmaker.FindMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerStateRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerStateResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerCommandResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchRuntimeRefResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequestRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerRequestResponse;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.schema.module.matchmaker.UpdateMatchmakerMatchStatusRequest;
-import com.omgservers.schema.module.matchmaker.UpdateMatchmakerMatchStatusResponse;
-import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateRequest;
-import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerAssignmentsResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerCommandsResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchAssignmentsResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerMatchesResponse;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsRequest;
-import com.omgservers.schema.module.matchmaker.ViewMatchmakerRequestsResponse;
+import com.omgservers.schema.module.matchmaker.matchmaker.DeleteMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.matchmaker.DeleteMatchmakerResponse;
+import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerResponse;
+import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.DeleteMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.DeleteMatchmakerCommandResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.SyncMatchmakerCommandResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.ViewMatchmakerCommandsRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerCommand.ViewMatchmakerCommandsResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.DeleteMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.DeleteMatchmakerMatchAssignmentResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.FindMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.FindMatchmakerMatchAssignmentResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.GetMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.GetMatchmakerMatchAssignmentResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.SyncMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.SyncMatchmakerMatchAssignmentResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.ViewMatchmakerMatchAssignmentsRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.ViewMatchmakerMatchAssignmentsResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.DeleteMatchmakerMatchResourceRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.DeleteMatchmakerMatchResourceResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.GetMatchmakerMatchResourceRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.GetMatchmakerMatchResourceResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.SyncMatchmakerMatchResourceRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.SyncMatchmakerMatchResourceResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.ViewMatchmakerMatchResourcesRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.ViewMatchmakerMatchResourcesResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.DeleteMatchmakerRequestRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.DeleteMatchmakerRequestResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.SyncMatchmakerRequestRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.SyncMatchmakerRequestResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.ViewMatchmakerRequestsRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerRequest.ViewMatchmakerRequestsResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.UpdateMatchmakerMatchResourceStatusRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.UpdateMatchmakerMatchResourceStatusResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateResponse;
 import com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.MatchmakerService;
 import com.omgservers.service.shard.matchmaker.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -91,35 +73,6 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<DeleteMatchmakerResponse> execute(final DeleteMatchmakerRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    /*
-    MatchmakerAssignment
-     */
-
-    @Override
-    public Uni<GetMatchmakerAssignmentResponse> execute(final GetMatchmakerAssignmentRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    @Override
-    public Uni<FindMatchmakerAssignmentResponse> execute(final FindMatchmakerAssignmentRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    @Override
-    public Uni<ViewMatchmakerAssignmentsResponse> execute(final ViewMatchmakerAssignmentsRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    @Override
-    public Uni<SyncMatchmakerAssignmentResponse> execute(final SyncMatchmakerAssignmentRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    @Override
-    public Uni<DeleteMatchmakerAssignmentResponse> execute(final DeleteMatchmakerAssignmentRequest request) {
         return matchmakerService.execute(request);
     }
 
@@ -162,31 +115,31 @@ class WebServiceImpl implements WebService {
     }
 
     /*
-    MatchmakerMatch
+    MatchmakerMatchResource
      */
 
     @Override
-    public Uni<GetMatchmakerMatchResponse> execute(final GetMatchmakerMatchRequest request) {
+    public Uni<GetMatchmakerMatchResourceResponse> execute(final GetMatchmakerMatchResourceRequest request) {
         return matchmakerService.execute(request);
     }
 
     @Override
-    public Uni<ViewMatchmakerMatchesResponse> execute(final ViewMatchmakerMatchesRequest request) {
+    public Uni<ViewMatchmakerMatchResourcesResponse> execute(final ViewMatchmakerMatchResourcesRequest request) {
         return matchmakerService.execute(request);
     }
 
     @Override
-    public Uni<SyncMatchmakerMatchResponse> execute(final SyncMatchmakerMatchRequest request) {
+    public Uni<SyncMatchmakerMatchResourceResponse> execute(final SyncMatchmakerMatchResourceRequest request) {
         return matchmakerService.execute(request);
     }
 
     @Override
-    public Uni<UpdateMatchmakerMatchStatusResponse> execute(final UpdateMatchmakerMatchStatusRequest request) {
+    public Uni<UpdateMatchmakerMatchResourceStatusResponse> execute(final UpdateMatchmakerMatchResourceStatusRequest request) {
         return matchmakerService.execute(request);
     }
 
     @Override
-    public Uni<DeleteMatchmakerMatchResponse> execute(final DeleteMatchmakerMatchRequest request) {
+    public Uni<DeleteMatchmakerMatchResourceResponse> execute(final DeleteMatchmakerMatchResourceRequest request) {
         return matchmakerService.execute(request);
     }
 
@@ -216,30 +169,6 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<DeleteMatchmakerMatchAssignmentResponse> execute(final DeleteMatchmakerMatchAssignmentRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    /*
-    MatchmakerMatchRuntimeRef
-     */
-
-    @Override
-    public Uni<GetMatchmakerMatchRuntimeRefResponse> execute(final GetMatchmakerMatchRuntimeRefRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    @Override
-    public Uni<FindMatchmakerMatchRuntimeRefResponse> execute(final FindMatchmakerMatchRuntimeRefRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    @Override
-    public Uni<SyncMatchmakerMatchRuntimeRefResponse> execute(final SyncMatchmakerMatchRuntimeRefRequest request) {
-        return matchmakerService.execute(request);
-    }
-
-    @Override
-    public Uni<DeleteMatchmakerMatchRuntimeRefResponse> execute(final DeleteMatchmakerMatchRuntimeRefRequest request) {
         return matchmakerService.execute(request);
     }
 

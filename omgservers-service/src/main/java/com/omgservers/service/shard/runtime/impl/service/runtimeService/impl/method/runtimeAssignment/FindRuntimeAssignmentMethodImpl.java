@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeAssignment;
 
-import com.omgservers.schema.module.runtime.FindRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.FindRuntimeAssignmentResponse;
+import com.omgservers.schema.module.runtime.runtimeAssignment.FindRuntimeAssignmentRequest;
+import com.omgservers.schema.module.runtime.runtimeAssignment.FindRuntimeAssignmentResponse;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment.SelectRuntimeAssignmentByRuntimeIdAndClientIdOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

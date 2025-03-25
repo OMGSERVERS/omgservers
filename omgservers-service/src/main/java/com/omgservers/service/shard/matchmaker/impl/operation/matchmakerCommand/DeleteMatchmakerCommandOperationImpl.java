@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerCommand;
 
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

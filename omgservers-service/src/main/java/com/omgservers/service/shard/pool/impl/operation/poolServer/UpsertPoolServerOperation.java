@@ -9,5 +9,5 @@ public interface UpsertPoolServerOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
                          int shard,
-                         PoolServerModel poolServerRef);
+                         PoolServerModel poolServer);
 }

@@ -5,7 +5,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -37,9 +37,9 @@ class UpsertMatchmakerMatchAssignmentOperationImpl implements UpsertMatchmakerMa
                 changeContext, sqlConnection, shard,
                 """
                         insert into $schema.tab_matchmaker_match_assignment(
-                            id, idempotency_key, matchmaker_id, match_id, created, modified, user_id, client_id, 
-                            group_name, config, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+                            id, idempotency_key, matchmaker_id, created, modified, match_id, client_id, group_name,
+                            config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,10 +47,9 @@ class UpsertMatchmakerMatchAssignmentOperationImpl implements UpsertMatchmakerMa
                         matchmakerMatchAssignment.getId(),
                         matchmakerMatchAssignment.getIdempotencyKey(),
                         matchmakerMatchAssignment.getMatchmakerId(),
-                        matchmakerMatchAssignment.getMatchId(),
                         matchmakerMatchAssignment.getCreated().atOffset(ZoneOffset.UTC),
                         matchmakerMatchAssignment.getModified().atOffset(ZoneOffset.UTC),
-                        matchmakerMatchAssignment.getUserId(),
+                        matchmakerMatchAssignment.getMatchId(),
                         matchmakerMatchAssignment.getClientId(),
                         matchmakerMatchAssignment.getGroupName(),
                         getConfigString(matchmakerMatchAssignment),
@@ -58,7 +57,6 @@ class UpsertMatchmakerMatchAssignmentOperationImpl implements UpsertMatchmakerMa
                 ),
                 () -> new MatchmakerMatchAssignmentCreatedEventBodyModel(
                         matchmakerMatchAssignment.getMatchmakerId(),
-                        matchmakerMatchAssignment.getMatchId(),
                         matchmakerMatchAssignment.getId()),
                 () -> null
         );

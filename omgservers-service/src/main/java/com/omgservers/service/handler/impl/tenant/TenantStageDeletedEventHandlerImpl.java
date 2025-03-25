@@ -7,11 +7,12 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.alias.DeleteAliasesByEntityIdOperation;
+import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
+import com.omgservers.service.operation.tenant.DeleteTenantStageDeploymentResourcesOperation;
+import com.omgservers.service.operation.tenant.DeleteTenantStagePermissionsOperation;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.alias.DeleteAliasesByEntityIdOperation;
-import com.omgservers.service.operation.tenant.DeleteTenantDeploymentsByTenantStageIdOperation;
-import com.omgservers.service.operation.tenant.DeleteTenantStagePermissionsOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -26,9 +27,10 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
     final MatchmakerShard matchmakerShard;
     final TenantShard tenantShard;
 
-    final DeleteTenantDeploymentsByTenantStageIdOperation deleteTenantDeploymentsByTenantStageIdOperation;
+    final DeleteTenantStageDeploymentResourcesOperation deleteTenantStageDeploymentResourcesOperation;
     final DeleteTenantStagePermissionsOperation deleteTenantStagePermissionsOperation;
     final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
+    final FindAndDeleteJobOperation findAndDeleteJobOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -48,9 +50,11 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
                     log.debug("Deleted, {}", tenantStage);
 
                     return deleteTenantStagePermissionsOperation.execute(tenantId, tenantStageId)
-                            .flatMap(voidItem -> deleteTenantDeploymentsByTenantStageIdOperation
+                            .flatMap(voidItem -> deleteTenantStageDeploymentResourcesOperation
                                     .execute(tenantId, tenantStageId))
                             .flatMap(voidItem -> deleteAliasesByEntityIdOperation
+                                    .execute(tenantId, tenantStageId))
+                            .flatMap(voidItem -> findAndDeleteJobOperation
                                     .execute(tenantId, tenantStageId));
                 })
                 .replaceWithVoid();
@@ -58,7 +62,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {
         final var request = new GetTenantStageRequest(tenantId, id);
-        return tenantShard.getService().getTenantStage(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
     }
 }

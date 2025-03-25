@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class RemoveClientMatchmakerCommandBodyDto extends MatchmakerCommandBodyDto {
 
     @NotNull
-    Long id;
+    Long clientId;
 
     @Override
     public MatchmakerCommandQualifierEnum getQualifier() {

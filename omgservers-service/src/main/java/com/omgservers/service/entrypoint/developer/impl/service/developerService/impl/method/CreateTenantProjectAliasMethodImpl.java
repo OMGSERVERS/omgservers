@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantProjectAliasDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperResponse;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
@@ -37,8 +37,8 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateTenantProjectAliasDeveloperResponse> execute(
-            final CreateTenantProjectAliasDeveloperRequest request) {
+    public Uni<CreateProjectAliasDeveloperResponse> execute(
+            final CreateProjectAliasDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -56,7 +56,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                                 return createTenantProjectAlias(tenantId, tenantProjectId, aliasValue, userId);
                             });
                 })
-                .replaceWith(new CreateTenantProjectAliasDeveloperResponse());
+                .replaceWith(new CreateProjectAliasDeveloperResponse());
 
 
     }

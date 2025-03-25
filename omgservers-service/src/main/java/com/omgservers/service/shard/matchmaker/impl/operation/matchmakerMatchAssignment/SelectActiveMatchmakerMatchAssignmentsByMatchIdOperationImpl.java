@@ -31,7 +31,7 @@ class SelectActiveMatchmakerMatchAssignmentsByMatchIdOperationImpl
                 shard,
                 """
                         select
-                            id, idempotency_key, matchmaker_id, match_id, created, modified, user_id, client_id, 
+                            id, idempotency_key, matchmaker_id, created, modified, match_id, client_id,
                             group_name, config, deleted
                         from $schema.tab_matchmaker_match_assignment
                         where matchmaker_id = $1 and match_id = $2 and deleted = false

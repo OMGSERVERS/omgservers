@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.CreateTenantImageDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.CreateTenantImageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperResponse;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
@@ -37,7 +37,7 @@ class CreateTenantImageMethodImpl implements CreateTenantImageMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateTenantImageDeveloperResponse> execute(final CreateTenantImageDeveloperRequest request) {
+    public Uni<CreateImageDeveloperResponse> execute(final CreateImageDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var tenant = request.getTenant();
@@ -58,7 +58,7 @@ class CreateTenantImageMethodImpl implements CreateTenantImageMethod {
                                     log.info("A new image was created in tenant \"{}\"", tenant);
                                 }
                             })
-                            .map(CreateTenantImageDeveloperResponse::new);
+                            .map(CreateImageDeveloperResponse::new);
                 });
     }
 
@@ -75,7 +75,7 @@ class CreateTenantImageMethodImpl implements CreateTenantImageMethod {
                 image,
                 idempotencyKey);
         final var request = new SyncTenantImageRequest(tenantImage);
-        return tenantShard.getService().syncTenantImageWithIdempotency(request)
+        return tenantShard.getService().executeWithIdempotency(request)
                 .map(SyncTenantImageResponse::getCreated);
     }
 }

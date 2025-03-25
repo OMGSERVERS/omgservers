@@ -3,7 +3,7 @@ package com.omgservers.service.shard.tenant.impl.operation.tenant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

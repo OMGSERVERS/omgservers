@@ -28,115 +28,89 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<CreateTenantProjectDeveloperResponse> execute(
-            final CreateTenantProjectDeveloperRequest request) {
+    public Uni<CreateProjectDeveloperResponse> execute(
+            final CreateProjectDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantProjectAliasDeveloperResponse> execute(
-            final CreateTenantProjectAliasDeveloperRequest request) {
+    public Uni<CreateProjectAliasDeveloperResponse> execute(
+            final CreateProjectAliasDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
-            final GetTenantProjectDetailsDeveloperRequest request) {
+    public Uni<GetProjectDetailsDeveloperResponse> execute(
+            final GetProjectDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantProjectDeveloperResponse> execute(
-            final DeleteTenantProjectDeveloperRequest request) {
+    public Uni<DeleteProjectDeveloperResponse> execute(
+            final DeleteProjectDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantStageDeveloperResponse> execute(final CreateTenantStageDeveloperRequest request) {
+    public Uni<CreateStageDeveloperResponse> execute(final CreateStageDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantStageAliasDeveloperResponse> execute(final CreateTenantStageAliasDeveloperRequest request) {
+    public Uni<CreateStageAliasDeveloperResponse> execute(final CreateStageAliasDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<GetTenantStageDetailsDeveloperResponse> execute(
-            final GetTenantStageDetailsDeveloperRequest request) {
+    public Uni<GetStageDetailsDeveloperResponse> execute(
+            final GetStageDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantStageDeveloperResponse> execute(final DeleteTenantStageDeveloperRequest request) {
+    public Uni<DeleteStageDeveloperResponse> execute(final DeleteStageDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantVersionDeveloperResponse> execute(
-            final CreateTenantVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> execute(
+            final CreateVersionDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<UploadFilesArchiveDeveloperResponse> execute(final UploadFilesArchiveDeveloperRequest request) {
+    public Uni<GetVersionDetailsDeveloperResponse> execute(
+            final GetVersionDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<GetTenantVersionDetailsDeveloperResponse> execute(
-            final GetTenantVersionDetailsDeveloperRequest request) {
+    public Uni<DeleteVersionDeveloperResponse> execute(
+            final DeleteVersionDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<DeleteTenantVersionDeveloperResponse> execute(
-            final DeleteTenantVersionDeveloperRequest request) {
+    public Uni<CreateImageDeveloperResponse> execute(final CreateImageDeveloperRequest request) {
+        return developerService.execute(request);
+    }
+
+    /*
+    Tenant deployment
+     */
+
+    @Override
+    public Uni<CreateDeploymentDeveloperResponse> execute(final CreateDeploymentDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<CreateTenantImageDeveloperResponse> execute(final CreateTenantImageDeveloperRequest request) {
+    public Uni<GetDeploymentDetailsDeveloperResponse> execute(final GetDeploymentDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<DeployTenantVersionDeveloperResponse> execute(
-            final DeployTenantVersionDeveloperRequest request) {
-        return developerService.execute(request);
-    }
-
-    @Override
-    public Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
-            final GetTenantDeploymentDetailsDeveloperRequest request) {
-        return developerService.execute(request);
-    }
-
-    @Override
-    public Uni<DeleteTenantDeploymentDeveloperResponse> execute(
-            final DeleteTenantDeploymentDeveloperRequest request) {
-        return developerService.execute(request);
-    }
-
-    @Override
-    public Uni<CreateLobbyRequestDeveloperResponse> execute(
-            final CreateLobbyRequestDeveloperRequest request) {
-        return developerService.execute(request);
-    }
-
-    @Override
-    public Uni<DeleteLobbyDeveloperResponse> execute(final DeleteLobbyDeveloperRequest request) {
-        return developerService.execute(request);
-    }
-
-    @Override
-    public Uni<CreateMatchmakerRequestDeveloperResponse> execute(
-            final CreateMatchmakerRequestDeveloperRequest request) {
-        return developerService.execute(request);
-    }
-
-    @Override
-    public Uni<DeleteMatchmakerDeveloperResponse> execute(final DeleteMatchmakerDeveloperRequest request) {
+    public Uni<DeleteDeploymentDeveloperResponse> execute(final DeleteDeploymentDeveloperRequest request) {
         return developerService.execute(request);
     }
 }

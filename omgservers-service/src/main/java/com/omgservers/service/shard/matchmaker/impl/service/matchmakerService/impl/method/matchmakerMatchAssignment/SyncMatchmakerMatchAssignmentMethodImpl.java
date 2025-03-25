@@ -1,14 +1,14 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchAssignment;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.SyncMatchmakerMatchAssignmentResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.SyncMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.SyncMatchmakerMatchAssignmentResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatch.HasMatchmakerMatchOperation;
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment.UpsertMatchmakerMatchAssignmentOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment.UpsertMatchmakerMatchAssignmentOperation;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource.VerifyMatchmakerMatchResourceExistsOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,32 +22,31 @@ class SyncMatchmakerMatchAssignmentMethodImpl implements SyncMatchmakerMatchAssi
     final ChangeWithContextOperation changeWithContextOperation;
     final UpsertMatchmakerMatchAssignmentOperation upsertMatchmakerMatchAssignmentOperation;
     final CheckShardOperation checkShardOperation;
-    final HasMatchmakerMatchOperation hasMatchmakerMatchOperation;
+    final VerifyMatchmakerMatchResourceExistsOperation verifyMatchmakerMatchResourceExistsOperation;
 
     @Override
     public Uni<SyncMatchmakerMatchAssignmentResponse> execute(
             final SyncMatchmakerMatchAssignmentRequest request) {
         log.trace("{}", request);
 
-        final var matchClient = request.getMatchmakerMatchAssignment();
-        final var matchmakerId = matchClient.getMatchmakerId();
-        final var matchId = matchClient.getMatchId();
+        final var matchmakerMatchAssignment = request.getMatchmakerMatchAssignment();
+        final var matchmakerId = matchmakerMatchAssignment.getMatchmakerId();
+        final var matchId = matchmakerMatchAssignment.getMatchId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+        return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     final var shard = shardModel.shard();
                     return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (context, sqlConnection) -> hasMatchmakerMatchOperation
+                                    (context, sqlConnection) -> verifyMatchmakerMatchResourceExistsOperation
                                             .execute(sqlConnection, shard, matchmakerId, matchId)
-                                            .flatMap(has -> {
-                                                if (has) {
+                                            .flatMap(exists -> {
+                                                if (exists) {
                                                     return upsertMatchmakerMatchAssignmentOperation
                                                             .execute(
                                                                     context,
                                                                     sqlConnection,
                                                                     shard,
-                                                                    matchClient);
+                                                                    matchmakerMatchAssignment);
                                                 } else {
                                                     throw new ServerSideNotFoundException(
                                                             ExceptionQualifierEnum.PARENT_NOT_FOUND,

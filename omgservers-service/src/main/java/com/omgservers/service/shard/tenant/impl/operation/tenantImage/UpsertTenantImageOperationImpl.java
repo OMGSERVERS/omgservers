@@ -2,7 +2,7 @@ package com.omgservers.service.shard.tenant.impl.operation.tenantImage;
 
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageCreatedEventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;

@@ -1,21 +1,8 @@
 package com.omgservers.service.entrypoint.player.impl.service.playerService.impl;
 
-import com.omgservers.schema.entrypoint.player.CreateClientPlayerRequest;
-import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
-import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
-import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
-import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
-import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
-import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
-import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
+import com.omgservers.schema.entrypoint.player.*;
 import com.omgservers.service.entrypoint.player.impl.service.playerService.PlayerService;
-import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.CreateClientMethod;
-import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.CreateTokenMethod;
-import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.CreateUserMethod;
-import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.InterchangeMethod;
-import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.PingServiceMethod;
+import com.omgservers.service.entrypoint.player.impl.service.playerService.impl.method.*;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -28,8 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class PlayerServiceImpl implements PlayerService {
 
+    final InterchangeMessagesMethod interchangeMessagesMethod;
     final CreateClientMethod createClientMethod;
-    final InterchangeMethod interchangeMethod;
     final CreateTokenMethod createTokenMethod;
     final PingServiceMethod pingServiceMethod;
     final CreateUserMethod createUserMethod;
@@ -55,7 +42,7 @@ class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Uni<InterchangePlayerResponse> execute(@Valid final InterchangePlayerRequest request) {
-        return interchangeMethod.execute(request);
+    public Uni<InterchangeMessagesPlayerResponse> execute(@Valid final InterchangeMessagesPlayerRequest request) {
+        return interchangeMessagesMethod.execute(request);
     }
 }

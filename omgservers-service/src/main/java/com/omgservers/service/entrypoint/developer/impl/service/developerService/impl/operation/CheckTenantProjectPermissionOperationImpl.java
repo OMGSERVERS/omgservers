@@ -27,7 +27,7 @@ class CheckTenantProjectPermissionOperationImpl implements CheckTenantProjectPer
                 tenantProjectId,
                 userId,
                 permissionQualifier);
-        return tenantShard.getService().verifyTenantProjectPermissionExists(request)
+        return tenantShard.getService().execute(request)
                 .map(VerifyTenantProjectPermissionExistsResponse::getExists)
                 .invoke(exists -> {
                     if (!exists) {

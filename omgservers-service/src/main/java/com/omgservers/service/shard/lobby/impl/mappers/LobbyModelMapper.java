@@ -17,7 +17,6 @@ public class LobbyModelMapper {
         lobby.setIdempotencyKey(row.getString("idempotency_key"));
         lobby.setCreated(row.getOffsetDateTime("created").toInstant());
         lobby.setModified(row.getOffsetDateTime("modified").toInstant());
-        lobby.setTenantId(row.getLong("tenant_id"));
         lobby.setDeploymentId(row.getLong("deployment_id"));
         lobby.setRuntimeId(row.getLong("runtime_id"));
         lobby.setDeleted(row.getBoolean("deleted"));

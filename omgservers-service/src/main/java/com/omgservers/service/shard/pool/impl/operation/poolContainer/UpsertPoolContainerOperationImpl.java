@@ -53,7 +53,6 @@ class UpsertPoolContainerOperationImpl implements UpsertPoolContainerOperation {
                 ),
                 () -> new PoolContainerCreatedEventBodyModel(
                         poolContainer.getPoolId(),
-                        poolContainer.getServerId(),
                         poolContainer.getId()),
                 () -> null
         );

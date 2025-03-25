@@ -6,6 +6,14 @@ import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandResponse;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
 import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
@@ -32,8 +40,8 @@ import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
+import com.omgservers.schema.module.pool.poolServer.ViewPoolServersResponse;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
@@ -56,12 +64,42 @@ public interface PoolService {
     Uni<DeletePoolResponse> execute(@Valid DeletePoolRequest request);
 
     /*
+    PoolCommand
+     */
+
+    Uni<GetPoolCommandResponse> execute(@Valid GetPoolCommandRequest request);
+
+    Uni<ViewPoolCommandResponse> execute(@Valid ViewPoolCommandRequest request);
+
+    Uni<SyncPoolCommandResponse> execute(@Valid SyncPoolCommandRequest request);
+
+    Uni<SyncPoolCommandResponse> executeWithIdempotency(@Valid SyncPoolCommandRequest request);
+
+    Uni<DeletePoolCommandResponse> execute(@Valid DeletePoolCommandRequest request);
+
+    /*
+    PoolRequest
+     */
+
+    Uni<GetPoolRequestResponse> execute(@Valid GetPoolRequestRequest request);
+
+    Uni<FindPoolRequestResponse> execute(@Valid FindPoolRequestRequest request);
+
+    Uni<ViewPoolRequestsResponse> execute(@Valid ViewPoolRequestsRequest request);
+
+    Uni<SyncPoolRequestResponse> execute(@Valid SyncPoolRequestRequest request);
+
+    Uni<SyncPoolRequestResponse> executeWithIdempotency(@Valid SyncPoolRequestRequest request);
+
+    Uni<DeletePoolRequestResponse> execute(@Valid DeletePoolRequestRequest request);
+
+    /*
     PoolServer
      */
 
     Uni<GetPoolServerResponse> execute(@Valid GetPoolServerRequest request);
 
-    Uni<ViewPoolServerResponse> execute(@Valid ViewPoolServersRequest request);
+    Uni<ViewPoolServersResponse> execute(@Valid ViewPoolServersRequest request);
 
     Uni<SyncPoolServerResponse> execute(@Valid SyncPoolServerRequest request);
 
@@ -84,22 +122,6 @@ public interface PoolService {
     Uni<SyncPoolContainerResponse> executeWithIdempotency(@Valid SyncPoolContainerRequest request);
 
     Uni<DeletePoolContainerResponse> execute(@Valid DeletePoolContainerRequest request);
-
-    /*
-    PoolRequest
-     */
-
-    Uni<GetPoolRequestResponse> execute(@Valid GetPoolRequestRequest request);
-
-    Uni<FindPoolRequestResponse> execute(@Valid FindPoolRequestRequest request);
-
-    Uni<ViewPoolRequestsResponse> execute(@Valid ViewPoolRequestsRequest request);
-
-    Uni<SyncPoolRequestResponse> execute(@Valid SyncPoolRequestRequest request);
-
-    Uni<SyncPoolRequestResponse> executeWithIdempotency(@Valid SyncPoolRequestRequest request);
-
-    Uni<DeletePoolRequestResponse> execute(@Valid DeletePoolRequestRequest request);
 
     /*
     PoolState

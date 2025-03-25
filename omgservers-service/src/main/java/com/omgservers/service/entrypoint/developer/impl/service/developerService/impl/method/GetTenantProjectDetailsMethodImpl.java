@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.GetTenantProjectDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetProjectDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
@@ -35,8 +35,8 @@ class GetTenantProjectDetailsMethodImpl implements GetTenantProjectDetailsMethod
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetTenantProjectDetailsDeveloperResponse> execute(
-            final GetTenantProjectDetailsDeveloperRequest request) {
+    public Uni<GetProjectDetailsDeveloperResponse> execute(
+            final GetProjectDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -55,12 +55,12 @@ class GetTenantProjectDetailsMethodImpl implements GetTenantProjectDetailsMethod
                                         .map(tenantProjectMapper::dataToDetails);
                             });
                 })
-                .map(GetTenantProjectDetailsDeveloperResponse::new);
+                .map(GetProjectDetailsDeveloperResponse::new);
     }
 
     Uni<TenantProjectDataDto> getTenantProjectData(final Long tenantId, final Long tenantProjectId) {
         final var request = new GetTenantProjectDataRequest(tenantId, tenantProjectId);
-        return tenantShard.getService().getTenantProjectData(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantProjectDataResponse::getTenantProjectData);
     }
 }

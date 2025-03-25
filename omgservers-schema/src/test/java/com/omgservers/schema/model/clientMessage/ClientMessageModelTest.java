@@ -1,8 +1,8 @@
 package com.omgservers.schema.model.clientMessage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ServerWelcomeMessageBodyDto;
+import com.omgservers.schema.message.MessageQualifierEnum;
+import com.omgservers.schema.message.body.ClientGreetedMessageBodyDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +26,10 @@ class ClientMessageModelTest extends Assertions {
         final var clientId = 2000L;
         final var created = Instant.now();
         final var modified = Instant.now();
-        final var qualifier = MessageQualifierEnum.SERVER_WELCOME_MESSAGE;
+        final var qualifier = MessageQualifierEnum.CLIENT_GREETED;
         final var tenantId = 3000L;
         final var versionId = 4000L;
-        final var body = new ServerWelcomeMessageBodyDto(tenantId, versionId, created);
+        final var body = new ClientGreetedMessageBodyDto(tenantId, versionId, created);
         final var deleted = false;
 
         final var clientMessageModel = new ClientMessageModel(id,

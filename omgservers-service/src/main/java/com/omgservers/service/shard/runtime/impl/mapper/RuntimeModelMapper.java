@@ -26,12 +26,10 @@ public class RuntimeModelMapper {
         runtime.setIdempotencyKey(row.getString("idempotency_key"));
         runtime.setCreated(row.getOffsetDateTime("created").toInstant());
         runtime.setModified(row.getOffsetDateTime("modified").toInstant());
-        runtime.setTenantId(row.getLong("tenant_id"));
         runtime.setDeploymentId(row.getLong("deployment_id"));
         runtime.setQualifier(RuntimeQualifierEnum.valueOf(row.getString("qualifier")));
         runtime.setDeleted(row.getBoolean("deleted"));
         runtime.setUserId(row.getLong("user_id"));
-        runtime.setLastActivity(row.getOffsetDateTime("last_activity").toInstant());
         try {
             runtime.setConfig(objectMapper.readValue(row.getString("config"), RuntimeConfigDto.class));
         } catch (IOException e) {

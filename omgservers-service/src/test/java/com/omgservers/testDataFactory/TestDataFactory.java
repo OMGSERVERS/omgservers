@@ -2,27 +2,26 @@ package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.model.clientMatchmakerRef.ClientMatchmakerRefModel;
+import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
+import com.omgservers.schema.model.deployment.DeploymentModel;
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.model.lobbyRuntimeRef.LobbyRuntimeRefModel;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.model.matchmakerAssignment.MatchmakerAssignmentModel;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
-import com.omgservers.schema.model.matchmakerMatchRuntimeRef.MatchmakerMatchRuntimeRefModel;
+import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
+import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
 import com.omgservers.schema.model.player.PlayerModel;
+import com.omgservers.schema.model.pool.PoolModel;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
+import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.queue.QueueModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.model.runtimeMessage.RuntimeMessageModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
-import com.omgservers.schema.model.tenantFilesArchive.TenantFilesArchiveModel;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
-import com.omgservers.schema.model.tenantLobbyRef.TenantLobbyRefModel;
-import com.omgservers.schema.model.tenantLobbyResource.TenantLobbyResourceModel;
-import com.omgservers.schema.model.tenantMatchmakerRef.TenantMatchmakerRefModel;
-import com.omgservers.schema.model.tenantMatchmakerResource.TenantMatchmakerResourceModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
@@ -48,11 +47,12 @@ import java.util.UUID;
 public class TestDataFactory {
 
     final MatchmakerTestDataFactory matchmakerTestDataFactory;
+    final DeploymentTestDataFactory deploymentTestDataFactory;
     final RuntimeTestDataFactory runtimeTestDataFactory;
     final TenantTestDataFactory tenantTestDataFactory;
     final ClientTestDataFactory clientTestDataFactory;
     final LobbyTestDataFactory lobbyTestDataFactory;
-    final QueueTestDataFactory queueTestDataFactory;
+    final MatchTestDataFactory matchTestDataFactory;
     final AliasTestDataFactory aliasTestDataFactory;
     final RootTestDataFactory rootTestDataFactory;
     final PoolTestDataFactory poolTestDataFactory;
@@ -65,17 +65,17 @@ public class TestDataFactory {
         final var tenantAlias = aliasTestDataFactory.createAlias(tenant,
                 "tenant-" + UUID.randomUUID());
 
-        final var tenantProjectManagerPermission = tenantTestDataFactory
-                .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.PROJECT_MANAGER);
-        final var tenantViewerPermission = tenantTestDataFactory
-                .createTenantPermission(tenant, developerUser, TenantPermissionQualifierEnum.TENANT_VIEWER);
+        final var tenantProjectManagerPermission = tenantTestDataFactory.createTenantPermission(tenant, developerUser,
+                TenantPermissionQualifierEnum.PROJECT_MANAGER);
+        final var tenantViewerPermission = tenantTestDataFactory.createTenantPermission(tenant, developerUser,
+                TenantPermissionQualifierEnum.TENANT_VIEWER);
 
         final var tenantProject = tenantTestDataFactory.createTenantProject(tenant);
-        final var tenantProjectStageManagerPermission = tenantTestDataFactory
-                .createTenantProjectPermission(tenantProject, developerUser,
+        final var tenantProjectStageManagerPermission =
+                tenantTestDataFactory.createTenantProjectPermission(tenantProject, developerUser,
                         TenantProjectPermissionQualifierEnum.STAGE_MANAGER);
-        final var tenantProjectVersionManagerPermission = tenantTestDataFactory
-                .createTenantProjectPermission(tenantProject, developerUser,
+        final var tenantProjectVersionManagerPermission =
+                tenantTestDataFactory.createTenantProjectPermission(tenantProject, developerUser,
                         TenantProjectPermissionQualifierEnum.VERSION_MANAGER);
         final var tenantProjectViewerPermission = tenantTestDataFactory
                 .createTenantProjectPermission(tenantProject, developerUser,
@@ -90,57 +90,45 @@ public class TestDataFactory {
                         TenantStagePermissionQualifierEnum.STAGE_VIEWER);
 
         final var tenantVersion = tenantTestDataFactory.createTenantVersion(tenantProject);
-        final var tenantFilesArchive = tenantTestDataFactory.createTenantFilesArchive(tenantVersion);
-        final var tenantDeployment = tenantTestDataFactory.createTenantDeployment(tenantStage,
-                tenantVersion);
         final var tenantImage = tenantTestDataFactory.createTenantImage(tenantVersion);
 
-        final var tenantLobbyResource = tenantTestDataFactory
-                .createTenantLobbyResource(tenantDeployment);
-        final var tenantMatchmakerResource = tenantTestDataFactory
-                .createTenantMatchmakerResource(tenantDeployment);
 
-        final var lobby = lobbyTestDataFactory.createLobby(tenantDeployment);
-        final var lobbyRuntime = runtimeTestDataFactory.createLobbyRuntime(tenant,
-                tenantDeployment,
-                lobby);
-        final var lobbyRuntimeRef = lobbyTestDataFactory.createLobbyRuntimeRef(lobby,
-                lobbyRuntime);
+        final var deployment = deploymentTestDataFactory.createDeployment(tenantStage, tenantVersion);
+        final var deploymentLobbyResource = deploymentTestDataFactory.createDeploymentLobbyResource(deployment);
+        final var deploymentMatchmakerResource =
+                deploymentTestDataFactory.createDeploymentMatchmakerResource(deployment);
 
-        final var tenantLobbyRef = tenantTestDataFactory
-                .createTenantLobbyRef(tenantDeployment, lobby);
+        final var lobby = lobbyTestDataFactory.createLobby(deploymentLobbyResource);
+        final var lobbyRuntime = runtimeTestDataFactory.createLobbyRuntime(deployment, lobby);
+        final var lobbyRuntimeCreatedRuntimeMessage =
+                runtimeTestDataFactory.createRuntimeCreatedRuntimeMessage(lobbyRuntime);
 
-        final var matchmaker = matchmakerTestDataFactory.createMatchmaker(tenant,
-                tenantDeployment);
+        final var matchmaker = matchmakerTestDataFactory.createMatchmaker(deploymentMatchmakerResource);
+        final var matchmakerMatchResource = matchmakerTestDataFactory.createMatchmakerMatchResource(matchmaker);
 
-        final var matchmakerMatch = matchmakerTestDataFactory.createMatchmakerMatch(matchmaker);
-
-        final var matchRuntime = runtimeTestDataFactory
-                .createMatchRuntime(tenant, tenantDeployment, matchmakerMatch);
-        final var matchmakerMatchRuntimeRef = matchmakerTestDataFactory
-                .createMatchmakerMatchRuntimeRef(matchmakerMatch, matchRuntime);
-
-        final var tenantMatchmakerRef = tenantTestDataFactory
-                .createTenantMatchmakerRef(tenantDeployment, matchmaker);
-
-        final var queue = queueTestDataFactory.createQueue(tenantDeployment);
+        final var match = matchTestDataFactory.createMatch(matchmakerMatchResource);
+        final var matchRuntime = runtimeTestDataFactory.createMatchRuntime(deployment, match);
 
         final var user = getUserTestDataFactory().createPlayerUser("password");
         final var player = getUserTestDataFactory().createUserPlayer(user, tenant, tenantStage);
         final var client = getClientTestDataFactory().createClient(player,
-                tenant,
-                tenantDeployment);
+                deployment);
 
-        final var matchmakerAssignment = getMatchmakerTestDataFactory()
-                .createMatchmakerAssignment(matchmaker, client);
+        final var lobbyRuntimeAssignment = runtimeTestDataFactory.createRuntimeAssignment(lobbyRuntime, client);
+        final var clientRuntimeRef = clientTestDataFactory.createClientRuntimeRef(client, lobbyRuntime);
+
+        final var matchmakerRequest = matchmakerTestDataFactory.createMatchmakerRequest(matchmaker, client);
 
         final var matchmakerMatchAssignment = matchmakerTestDataFactory
-                .createMatchmakerMatchAssignment(matchmakerMatch, client);
+                .createMatchmakerMatchAssignment(matchmakerMatchResource, matchmakerRequest, client);
         final var matchRuntimeAssignment = runtimeTestDataFactory
                 .createRuntimeAssignment(matchRuntime, client);
 
-        final var clientMatchmakerRef = getClientTestDataFactory()
-                .createClientMatchmakerRef(client, matchmaker);
+        final var defaultPool = poolTestDataFactory.createDefaultPool();
+        final var defaultPoolServer = poolTestDataFactory.createPoolServer(defaultPool);
+        final var lobbyPoolRequest = poolTestDataFactory.createPoolRequest(defaultPool, lobbyRuntime);
+        final var lobbyPoolContainer = poolTestDataFactory
+                .createPoolContainer(defaultPoolServer, lobbyRuntime);
 
         return DefaultTestData.builder()
                 .developerUser(developerUser)
@@ -160,35 +148,34 @@ public class TestDataFactory {
                 .tenantStageViewerPermission(tenantStageViewerPermission)
 
                 .tenantVersion(tenantVersion)
-                .tenantFilesArchive(tenantFilesArchive)
-                .tenantDeployment(tenantDeployment)
                 .tenantImage(tenantImage)
 
-                .tenantLobbyResource(tenantLobbyResource)
-                .tenantMatchmakerResource(tenantMatchmakerResource)
-
-                .tenantLobbyRef(tenantLobbyRef)
-                .tenantMatchmakerRef(tenantMatchmakerRef)
+                .deployment(deployment)
+                .deploymentLobbyResource(deploymentLobbyResource)
+                .deploymentMatchmakerResource(deploymentMatchmakerResource)
 
                 .lobby(lobby)
                 .lobbyRuntime(lobbyRuntime)
-                .lobbyRuntimeRef(lobbyRuntimeRef)
+                .lobbyRuntimeCreatedRuntimeMessage(lobbyRuntimeCreatedRuntimeMessage)
+                .lobbyRuntimeAssignment(lobbyRuntimeAssignment)
 
                 .matchmaker(matchmaker)
-                .matchmakerMatch(matchmakerMatch)
-                .matchmakerAssignment(matchmakerAssignment)
-                .matchmakerMatchRuntimeRef(matchmakerMatchRuntimeRef)
+                .matchmakerRequest(matchmakerRequest)
+                .matchmakerMatchResource(matchmakerMatchResource)
                 .matchmakerMatchAssignment(matchmakerMatchAssignment)
 
                 .matchRuntime(matchRuntime)
                 .matchRuntimeAssignment(matchRuntimeAssignment)
 
-                .queue(queue)
-
                 .user(user)
                 .player(player)
                 .client(client)
-                .clientMatchmakerRef(clientMatchmakerRef)
+                .clientRuntimeRef(clientRuntimeRef)
+
+                .defaultPool(defaultPool)
+                .defaultPoolServer(defaultPoolServer)
+                .lobbyPoolRequest(lobbyPoolRequest)
+                .lobbyPoolContainer(lobbyPoolContainer)
 
                 .build();
     }
@@ -213,34 +200,33 @@ public class TestDataFactory {
         TenantStagePermissionModel tenantStageViewerPermission;
 
         TenantVersionModel tenantVersion;
-        TenantFilesArchiveModel tenantFilesArchive;
-        TenantDeploymentModel tenantDeployment;
         TenantImageModel tenantImage;
 
-        TenantLobbyResourceModel tenantLobbyResource;
-        TenantMatchmakerResourceModel tenantMatchmakerResource;
-
-        TenantLobbyRefModel tenantLobbyRef;
-        TenantMatchmakerRefModel tenantMatchmakerRef;
+        DeploymentModel deployment;
+        DeploymentLobbyResourceModel deploymentLobbyResource;
+        DeploymentMatchmakerResourceModel deploymentMatchmakerResource;
 
         LobbyModel lobby;
         RuntimeModel lobbyRuntime;
-        LobbyRuntimeRefModel lobbyRuntimeRef;
+        RuntimeMessageModel lobbyRuntimeCreatedRuntimeMessage;
+        RuntimeAssignmentModel lobbyRuntimeAssignment;
 
         MatchmakerModel matchmaker;
-        MatchmakerMatchModel matchmakerMatch;
-        MatchmakerAssignmentModel matchmakerAssignment;
-        MatchmakerMatchRuntimeRefModel matchmakerMatchRuntimeRef;
+        MatchmakerRequestModel matchmakerRequest;
+        MatchmakerMatchResourceModel matchmakerMatchResource;
         MatchmakerMatchAssignmentModel matchmakerMatchAssignment;
 
         RuntimeModel matchRuntime;
         RuntimeAssignmentModel matchRuntimeAssignment;
 
-        QueueModel queue;
-
         UserModel user;
         PlayerModel player;
         ClientModel client;
-        ClientMatchmakerRefModel clientMatchmakerRef;
+        ClientRuntimeRefModel clientRuntimeRef;
+
+        PoolModel defaultPool;
+        PoolServerModel defaultPoolServer;
+        PoolRequestModel lobbyPoolRequest;
+        PoolContainerModel lobbyPoolContainer;
     }
 }

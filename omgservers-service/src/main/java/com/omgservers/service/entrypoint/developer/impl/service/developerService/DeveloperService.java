@@ -10,44 +10,38 @@ public interface DeveloperService {
 
     Uni<GetTenantDetailsDeveloperResponse> execute(@Valid GetTenantDetailsDeveloperRequest request);
 
-    Uni<CreateTenantProjectDeveloperResponse> execute(@Valid CreateTenantProjectDeveloperRequest request);
+    Uni<CreateProjectDeveloperResponse> execute(@Valid CreateProjectDeveloperRequest request);
 
-    Uni<CreateTenantProjectAliasDeveloperResponse> execute(@Valid CreateTenantProjectAliasDeveloperRequest request);
+    Uni<CreateProjectAliasDeveloperResponse> execute(@Valid CreateProjectAliasDeveloperRequest request);
 
-    Uni<GetTenantProjectDetailsDeveloperResponse> execute(@Valid GetTenantProjectDetailsDeveloperRequest request);
+    Uni<GetProjectDetailsDeveloperResponse> execute(@Valid GetProjectDetailsDeveloperRequest request);
 
-    Uni<DeleteTenantProjectDeveloperResponse> execute(@Valid DeleteTenantProjectDeveloperRequest request);
+    Uni<DeleteProjectDeveloperResponse> execute(@Valid DeleteProjectDeveloperRequest request);
 
-    Uni<CreateTenantStageDeveloperResponse> execute(@Valid CreateTenantStageDeveloperRequest request);
+    Uni<CreateStageDeveloperResponse> execute(@Valid CreateStageDeveloperRequest request);
 
-    Uni<CreateTenantStageAliasDeveloperResponse> execute(@Valid CreateTenantStageAliasDeveloperRequest request);
+    Uni<CreateStageAliasDeveloperResponse> execute(@Valid CreateStageAliasDeveloperRequest request);
 
-    Uni<GetTenantStageDetailsDeveloperResponse> execute(@Valid GetTenantStageDetailsDeveloperRequest request);
+    Uni<GetStageDetailsDeveloperResponse> execute(@Valid GetStageDetailsDeveloperRequest request);
 
-    Uni<DeleteTenantStageDeveloperResponse> execute(@Valid DeleteTenantStageDeveloperRequest request);
+    Uni<DeleteStageDeveloperResponse> execute(@Valid DeleteStageDeveloperRequest request);
 
-    Uni<CreateTenantVersionDeveloperResponse> execute(@Valid CreateTenantVersionDeveloperRequest request);
+    Uni<CreateVersionDeveloperResponse> execute(@Valid CreateVersionDeveloperRequest request);
 
-    Uni<UploadFilesArchiveDeveloperResponse> execute(@Valid UploadFilesArchiveDeveloperRequest request);
+    Uni<GetVersionDetailsDeveloperResponse> execute(@Valid GetVersionDetailsDeveloperRequest request);
 
-    Uni<GetTenantVersionDetailsDeveloperResponse> execute(@Valid GetTenantVersionDetailsDeveloperRequest request);
+    Uni<DeleteVersionDeveloperResponse> execute(@Valid DeleteVersionDeveloperRequest request);
 
-    Uni<DeleteTenantVersionDeveloperResponse> execute(@Valid DeleteTenantVersionDeveloperRequest request);
+    Uni<CreateImageDeveloperResponse> execute(@Valid CreateImageDeveloperRequest request);
 
-    Uni<CreateTenantImageDeveloperResponse> execute(@Valid CreateTenantImageDeveloperRequest request);
+    /*
+    Tenant deployment
+     */
 
-    Uni<DeployTenantVersionDeveloperResponse> execute(@Valid DeployTenantVersionDeveloperRequest request);
+    Uni<CreateDeploymentDeveloperResponse> execute(@Valid CreateDeploymentDeveloperRequest request);
 
-    Uni<GetTenantDeploymentDetailsDeveloperResponse> execute(
-            @Valid GetTenantDeploymentDetailsDeveloperRequest request);
+    Uni<GetDeploymentDetailsDeveloperResponse> execute(@Valid GetDeploymentDetailsDeveloperRequest request);
 
-    Uni<DeleteTenantDeploymentDeveloperResponse> execute(@Valid DeleteTenantDeploymentDeveloperRequest request);
+    Uni<DeleteDeploymentDeveloperResponse> execute(@Valid DeleteDeploymentDeveloperRequest request);
 
-    Uni<CreateLobbyRequestDeveloperResponse> execute(@Valid CreateLobbyRequestDeveloperRequest request);
-
-    Uni<DeleteLobbyDeveloperResponse> execute(@Valid DeleteLobbyDeveloperRequest request);
-
-    Uni<CreateMatchmakerRequestDeveloperResponse> execute(@Valid CreateMatchmakerRequestDeveloperRequest request);
-
-    Uni<DeleteMatchmakerDeveloperResponse> execute(@Valid DeleteMatchmakerDeveloperRequest request);
 }

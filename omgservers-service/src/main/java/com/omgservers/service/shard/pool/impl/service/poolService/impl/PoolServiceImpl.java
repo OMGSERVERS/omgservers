@@ -7,6 +7,14 @@ import com.omgservers.schema.module.pool.pool.GetPoolRequest;
 import com.omgservers.schema.module.pool.pool.GetPoolResponse;
 import com.omgservers.schema.module.pool.pool.SyncPoolRequest;
 import com.omgservers.schema.module.pool.pool.SyncPoolResponse;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.DeletePoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.GetPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.SyncPoolCommandResponse;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandRequest;
+import com.omgservers.schema.module.pool.poolCommand.ViewPoolCommandResponse;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.DeletePoolContainerResponse;
 import com.omgservers.schema.module.pool.poolContainer.FindPoolContainerRequest;
@@ -33,19 +41,25 @@ import com.omgservers.schema.module.pool.poolServer.GetPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.GetPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerRequest;
 import com.omgservers.schema.module.pool.poolServer.SyncPoolServerResponse;
-import com.omgservers.schema.module.pool.poolServer.ViewPoolServerResponse;
 import com.omgservers.schema.module.pool.poolServer.ViewPoolServersRequest;
+import com.omgservers.schema.module.pool.poolServer.ViewPoolServersResponse;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import com.omgservers.service.shard.pool.impl.operation.getPoolModuleClient.GetPoolModuleClientOperation;
 import com.omgservers.service.shard.pool.impl.service.poolService.PoolService;
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.pool.DeletePoolMethod;
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.pool.GetPoolMethod;
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.pool.SyncPoolMethod;
+import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolCommand.DeletePoolCommandMethod;
+import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolCommand.GetPoolCommandMethod;
+import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolCommand.SyncPoolCommandMethod;
+import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolCommand.ViewPoolCommandsMethod;
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolContainer.DeletePoolContainerMethod;
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolContainer.FindPoolContainerMethod;
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolContainer.GetPoolContainerMethod;
@@ -63,8 +77,6 @@ import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.po
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolState.GetPoolStateMethod;
 import com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolState.UpdatePoolStateMethod;
 import com.omgservers.service.shard.pool.impl.service.webService.impl.api.PoolApi;
-import com.omgservers.service.operation.server.CalculateShardOperation;
-import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -82,13 +94,17 @@ class PoolServiceImpl implements PoolService {
     final FindPoolContainerMethod findPoolContainerMethod;
     final SyncPoolContainerMethod syncPoolContainerMethod;
     final DeletePoolRequestMethod deletePoolRequestMethod;
+    final DeletePoolCommandMethod deletePoolCommandMethod;
     final GetPoolContainerMethod getPoolContainerMethod;
     final ViewPoolRequestsMethod viewPoolRequestsMethod;
     final DeletePoolServerMethod deletePoolServerMethod;
+    final ViewPoolCommandsMethod viewPoolCommandsMethod;
+    final SyncPoolCommandMethod syncPoolCommandMethod;
     final FindPoolRequestMethod findPoolRequestMethod;
     final SyncPoolRequestMethod syncPoolRequestMethod;
     final ViewPoolServersMethod viewPoolServersMethod;
     final UpdatePoolStateMethod updatePoolStateMethod;
+    final GetPoolCommandMethod getPoolCommandMethod;
     final GetPoolRequestMethod getPoolRequestMethod;
     final SyncPoolServerMethod syncPoolServerMethod;
     final GetPoolServerMethod getPoolServerMethod;
@@ -146,6 +162,120 @@ class PoolServiceImpl implements PoolService {
     }
 
     /*
+    PoolCommand
+     */
+
+    @Override
+    public Uni<GetPoolCommandResponse> execute(@Valid final GetPoolCommandRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                getPoolCommandMethod::execute);
+    }
+
+    @Override
+    public Uni<ViewPoolCommandResponse> execute(@Valid final ViewPoolCommandRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                viewPoolCommandsMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncPoolCommandResponse> execute(@Valid final SyncPoolCommandRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                syncPoolCommandMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncPoolCommandResponse> executeWithIdempotency(SyncPoolCommandRequest request) {
+        return execute(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.debug("Idempotency was violated, object={}, {}", request.getPoolCommand(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncPoolCommandResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
+    public Uni<DeletePoolCommandResponse> execute(@Valid final DeletePoolCommandRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                deletePoolCommandMethod::execute);
+    }
+
+    /*
+    PoolRequest
+     */
+
+    @Override
+    public Uni<GetPoolRequestResponse> execute(@Valid final GetPoolRequestRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                getPoolRequestMethod::execute);
+    }
+
+    @Override
+    public Uni<FindPoolRequestResponse> execute(@Valid final FindPoolRequestRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                findPoolRequestMethod::execute);
+    }
+
+    @Override
+    public Uni<ViewPoolRequestsResponse> execute(@Valid final ViewPoolRequestsRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                viewPoolRequestsMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncPoolRequestResponse> execute(@Valid final SyncPoolRequestRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                syncPoolRequestMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncPoolRequestResponse> executeWithIdempotency(@Valid final SyncPoolRequestRequest request) {
+        return execute(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.debug("Idempotency was violated, object={}, {}", request.getPoolRequest(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncPoolRequestResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
+    public Uni<DeletePoolRequestResponse> execute(@Valid final DeletePoolRequestRequest request) {
+        return handleShardedRequestOperation.handleShardedRequest(log, request,
+                getPoolModuleClientOperation::getClient,
+                PoolApi::execute,
+                deletePoolRequestMethod::execute);
+    }
+
+    /*
     PoolServer
      */
 
@@ -158,7 +288,7 @@ class PoolServiceImpl implements PoolService {
     }
 
     @Override
-    public Uni<ViewPoolServerResponse> execute(@Valid final ViewPoolServersRequest request) {
+    public Uni<ViewPoolServersResponse> execute(@Valid final ViewPoolServersRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getPoolModuleClientOperation::getClient,
                 PoolApi::execute,
@@ -257,67 +387,6 @@ class PoolServiceImpl implements PoolService {
                 getPoolModuleClientOperation::getClient,
                 PoolApi::execute,
                 deletePoolContainerMethod::execute);
-    }
-
-    /*
-    PoolRequest
-     */
-
-    @Override
-    public Uni<GetPoolRequestResponse> execute(@Valid final GetPoolRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getPoolModuleClientOperation::getClient,
-                PoolApi::execute,
-                getPoolRequestMethod::execute);
-    }
-
-    @Override
-    public Uni<FindPoolRequestResponse> execute(@Valid final FindPoolRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getPoolModuleClientOperation::getClient,
-                PoolApi::execute,
-                findPoolRequestMethod::execute);
-    }
-
-    @Override
-    public Uni<ViewPoolRequestsResponse> execute(@Valid final ViewPoolRequestsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getPoolModuleClientOperation::getClient,
-                PoolApi::execute,
-                viewPoolRequestsMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncPoolRequestResponse> execute(@Valid final SyncPoolRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getPoolModuleClientOperation::getClient,
-                PoolApi::execute,
-                syncPoolRequestMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncPoolRequestResponse> executeWithIdempotency(@Valid final SyncPoolRequestRequest request) {
-        return execute(request)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", request.getPoolRequest(),
-                                    t.getMessage());
-                            return Uni.createFrom().item(new SyncPoolRequestResponse(Boolean.FALSE));
-                        }
-                    }
-
-                    return Uni.createFrom().failure(t);
-                });
-    }
-
-    @Override
-    public Uni<DeletePoolRequestResponse> execute(@Valid final DeletePoolRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
-                getPoolModuleClientOperation::getClient,
-                PoolApi::execute,
-                deletePoolRequestMethod::execute);
     }
 
     /*

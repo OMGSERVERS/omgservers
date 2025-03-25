@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtime;
 
-import com.omgservers.schema.module.runtime.GetRuntimeRequest;
-import com.omgservers.schema.module.runtime.GetRuntimeResponse;
+import com.omgservers.schema.module.runtime.runtime.GetRuntimeRequest;
+import com.omgservers.schema.module.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.service.shard.runtime.impl.operation.runtime.SelectRuntimeOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;

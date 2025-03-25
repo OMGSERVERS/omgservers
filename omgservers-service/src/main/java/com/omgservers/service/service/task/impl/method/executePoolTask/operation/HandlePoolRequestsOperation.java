@@ -1,9 +1,9 @@
 package com.omgservers.service.service.task.impl.method.executePoolTask.operation;
 
-import com.omgservers.schema.model.poolChangeOfState.PoolChangeOfStateDto;
-import com.omgservers.schema.model.poolState.PoolStateDto;
+import com.omgservers.service.service.task.impl.method.executePoolTask.dto.FetchPoolResult;
+import com.omgservers.service.service.task.impl.method.executePoolTask.dto.HandlePoolResult;
 
 public interface HandlePoolRequestsOperation {
-    void execute(PoolStateDto poolState,
-                 PoolChangeOfStateDto poolChangeOfState);
+    void execute(FetchPoolResult fetchPoolResult,
+                 HandlePoolResult handlePoolResult);
 }

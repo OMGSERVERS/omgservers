@@ -2,7 +2,7 @@ package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.log.LogModel;
 import com.omgservers.service.event.EventBodyModel;
-import com.omgservers.service.factory.lobby.LogModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;

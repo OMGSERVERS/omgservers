@@ -6,8 +6,8 @@ import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
+import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerRequest;
+import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerResponse;
 import com.omgservers.schema.entrypoint.player.PingServicePlayerRequest;
 import com.omgservers.schema.entrypoint.player.PingServicePlayerResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -57,7 +57,7 @@ class PlayerApiImpl implements PlayerApi {
 
     @Override
     @RolesAllowed({UserRoleEnum.Names.PLAYER})
-    public Uni<InterchangePlayerResponse> execute(@NotNull final InterchangePlayerRequest request) {
+    public Uni<InterchangeMessagesPlayerResponse> execute(@NotNull final InterchangeMessagesPlayerRequest request) {
         return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

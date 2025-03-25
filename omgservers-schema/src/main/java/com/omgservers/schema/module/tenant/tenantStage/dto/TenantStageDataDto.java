@@ -1,7 +1,7 @@
 package com.omgservers.schema.module.tenant.tenantStage.dto;
 
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.model.tenantDeployment.TenantDeploymentModel;
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import jakarta.validation.constraints.NotNull;
@@ -23,8 +23,8 @@ public class TenantStageDataDto {
     List<AliasModel> aliases;
 
     @NotNull
-    List<TenantStagePermissionModel> stagePermissions;
+    List<TenantStagePermissionModel> permissions;
 
     @NotNull
-    List<TenantDeploymentModel> stageDeployments;
+    List<TenantDeploymentResourceModel> deployments;
 }

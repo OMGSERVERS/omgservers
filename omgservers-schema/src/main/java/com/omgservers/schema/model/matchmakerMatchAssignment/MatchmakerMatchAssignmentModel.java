@@ -26,9 +26,6 @@ public class MatchmakerMatchAssignmentModel {
     Long matchmakerId;
 
     @NotNull
-    Long matchId;
-
-    @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant created;
@@ -39,7 +36,7 @@ public class MatchmakerMatchAssignmentModel {
     Instant modified;
 
     @NotNull
-    Long userId;
+    Long matchId;
 
     @NotNull
     Long clientId;

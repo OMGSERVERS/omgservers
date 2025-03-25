@@ -2,8 +2,8 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestResponse;
-import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectPoolRequestByPoolIdAndRuntimeIdOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectPoolRequestByPoolIdAndRuntimeIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +22,7 @@ class FindPoolRequestMethodImpl implements FindPoolRequestMethod {
     final PgPool pgPool;
 
     @Override
-    public Uni<FindPoolRequestResponse> execute(
-            final FindPoolRequestRequest request) {
+    public Uni<FindPoolRequestResponse> execute(final FindPoolRequestRequest request) {
         log.trace("{}", request);
 
         return checkShardOperation.checkShard(request.getRequestShardKey())

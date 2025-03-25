@@ -51,13 +51,13 @@ class DeleteTenantVersionsByTenantProjectIdOperationImpl implements DeleteTenant
     Uni<List<TenantVersionProjectionModel>> viewTenantVersionProjections(final Long tenantId,
                                                                          final Long tenantProjectId) {
         final var request = new ViewTenantVersionsRequest(tenantId, tenantProjectId);
-        return tenantShard.getService().viewTenantVersions(request)
+        return tenantShard.getService().execute(request)
                 .map(ViewTenantVersionsResponse::getTenantVersionProjections);
     }
 
     Uni<Boolean> deleteTenantVersion(final Long tenantId, final Long id) {
         final var request = new DeleteTenantVersionRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantVersion(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

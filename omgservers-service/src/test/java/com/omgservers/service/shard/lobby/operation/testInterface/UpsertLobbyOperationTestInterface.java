@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.lobby.operation.testInterface;
 
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.service.shard.lobby.impl.operation.lobby.upsertLobby.UpsertLobbyOperation;
 import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.shard.lobby.impl.operation.lobby.UpsertLobbyOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +21,11 @@ public class UpsertLobbyOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> upsertLobby(final int shard,
-                                              final LobbyModel lobby) {
+    public ChangeContext<Boolean> upsertLobby(final LobbyModel lobby) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertLobbyOperation
-                                    .upsertLobby(changeContext, sqlConnection, shard, lobby))
+                                    .execute(changeContext, sqlConnection, 0, lobby))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerState;
 
-import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateRequest;
-import com.omgservers.schema.module.matchmaker.UpdateMatchmakerStateResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface UpdateMatchmakerStateMethod {

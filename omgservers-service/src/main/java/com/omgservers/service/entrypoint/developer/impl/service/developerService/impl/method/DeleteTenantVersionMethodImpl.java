@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method;
 
-import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperRequest;
-import com.omgservers.schema.entrypoint.developer.DeleteTenantVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
@@ -34,7 +34,7 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<DeleteTenantVersionDeveloperResponse> execute(final DeleteTenantVersionDeveloperRequest request) {
+    public Uni<DeleteVersionDeveloperResponse> execute(final DeleteVersionDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -62,19 +62,19 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
                                         });
                             });
                 })
-                .map(DeleteTenantVersionDeveloperResponse::new);
+                .map(DeleteVersionDeveloperResponse::new);
     }
 
     Uni<TenantVersionModel> getTenantVersion(Long tenantId, Long id) {
         final var request = new GetTenantVersionRequest(tenantId, id);
-        return tenantShard.getService().getTenantVersion(request)
+        return tenantShard.getService().execute(request)
                 .map(GetTenantVersionResponse::getTenantVersion);
     }
 
     Uni<Boolean> deleteTenantVersion(final Long tenantId,
                                      final Long id) {
         final var request = new DeleteTenantVersionRequest(tenantId, id);
-        return tenantShard.getService().deleteTenantVersion(request)
+        return tenantShard.getService().execute(request)
                 .map(DeleteTenantVersionResponse::getDeleted);
     }
 }

@@ -2,10 +2,10 @@ package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.meth
 
 import com.omgservers.schema.module.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.module.tenant.tenant.SyncTenantResponse;
-import com.omgservers.service.shard.tenant.impl.operation.tenant.UpsertTenantOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenant.UpsertTenantOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,8 +28,7 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
         log.trace("{}", request);
 
         final var tenant = request.getTenant();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
+        return checkShardOperation.checkShard(request.getRequestShardKey())
                 .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
                                 (changeContext, sqlConnection) -> upsertTenantOperation
                                         .execute(changeContext, sqlConnection, shardModel.shard(), tenant))

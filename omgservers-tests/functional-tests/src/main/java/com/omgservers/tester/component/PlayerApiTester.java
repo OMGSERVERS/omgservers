@@ -8,11 +8,12 @@ import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerRequest;
-import com.omgservers.schema.entrypoint.player.InterchangePlayerResponse;
-import com.omgservers.schema.model.message.MessageModel;
-import com.omgservers.schema.model.message.MessageQualifierEnum;
-import com.omgservers.schema.model.message.body.ClientOutgoingMessageBodyDto;
+import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerRequest;
+import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerResponse;
+import com.omgservers.schema.message.MessageModel;
+import com.omgservers.schema.message.MessageQualifierEnum;
+import com.omgservers.schema.message.body.MessageProducedMessageBodyDto;
+import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.tester.dto.TestClientDto;
 import com.omgservers.tester.operation.getConfig.GetConfigOperation;
 import io.restassured.RestAssured;
@@ -86,34 +87,33 @@ public class PlayerApiTester {
         return response.getClientId();
     }
 
-    public void sendMessage(TestClientDto testClient, Object data) throws JsonProcessingException {
-        final var messageModel = new MessageModel(idGenerator.getAndIncrement(),
-                MessageQualifierEnum.CLIENT_OUTGOING_MESSAGE,
-                new ClientOutgoingMessageBodyDto(data));
+    public void sendMessage(TestClientDto testClient, Object message) throws JsonProcessingException {
+        final var messageModel = new MessageModel(MessageQualifierEnum.MESSAGE_PRODUCED,
+                new MessageProducedMessageBodyDto(message));
         interchange(testClient, Collections.singletonList(messageModel), new ArrayList<>());
     }
 
-    public MessageModel waitMessage(final TestClientDto testClient,
+    public ClientMessageModel waitMessage(final TestClientDto testClient,
                                     final MessageQualifierEnum messageQualifier)
             throws InterruptedException, JsonProcessingException {
         return waitMessage(testClient, message -> message.getQualifier().equals(messageQualifier), new ArrayList<>());
     }
 
-    public MessageModel waitMessage(final TestClientDto testClient,
-                                    final Predicate<MessageModel> filter)
+    public ClientMessageModel waitMessage(final TestClientDto testClient,
+                                          final Predicate<ClientMessageModel> filter)
             throws InterruptedException, JsonProcessingException {
         return waitMessage(testClient, filter, new ArrayList<>());
     }
 
-    public MessageModel waitMessage(final TestClientDto testClient,
+    public ClientMessageModel waitMessage(final TestClientDto testClient,
                                     final MessageQualifierEnum messageQualifier,
                                     final List<Long> consumedMessages)
             throws InterruptedException, JsonProcessingException {
         return waitMessage(testClient, message -> message.getQualifier().equals(messageQualifier), consumedMessages);
     }
 
-    public MessageModel waitMessage(final TestClientDto testClient,
-                                    final Predicate<MessageModel> filter,
+    public ClientMessageModel waitMessage(final TestClientDto testClient,
+                                          final Predicate<ClientMessageModel> filter,
                                     final List<Long> consumedMessages)
             throws InterruptedException, JsonProcessingException {
         final var maxAttempts = 21;
@@ -139,9 +139,9 @@ public class PlayerApiTester {
         throw new IllegalStateException("message was not consumed");
     }
 
-    public List<MessageModel> interchange(final TestClientDto testClient,
-                                          final List<MessageModel> messagesToHandle,
-                                          final List<Long> consumedMessages)
+    public List<ClientMessageModel> interchange(final TestClientDto testClient,
+                                                final List<MessageModel> messagesToHandle,
+                                                final List<Long> consumedMessages)
             throws JsonProcessingException {
         final var token = testClient.getRawToken();
         final var clientId = testClient.getClientId();
@@ -152,13 +152,13 @@ public class PlayerApiTester {
                 .baseUri(getConfigOperation.getConfig().externalUri().toString())
                 .auth().oauth2(token)
                 .contentType(ContentType.JSON)
-                .body(objectMapper.writeValueAsString(new InterchangePlayerRequest(clientId,
+                .body(objectMapper.writeValueAsString(new InterchangeMessagesPlayerRequest(clientId,
                         messagesToHandle,
                         consumedMessages)))
                 .when().post("/service/v1/entrypoint/player/request/interchange");
         responseSpecification.then().statusCode(200);
 
-        final var response = responseSpecification.getBody().as(InterchangePlayerResponse.class);
+        final var response = responseSpecification.getBody().as(InterchangeMessagesPlayerResponse.class);
         return response.getIncomingMessages();
     }
 }

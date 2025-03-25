@@ -1,22 +1,24 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
-import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.model.matchmakerMatch.MatchmakerMatchModel;
+import com.omgservers.schema.model.match.MatchModel;
+import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
-import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentConfigDto;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchAssignmentResponse;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchRequest;
-import com.omgservers.schema.module.matchmaker.GetMatchmakerMatchResponse;
-import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.SyncRuntimeAssignmentResponse;
+import com.omgservers.schema.model.runtimeCommand.body.AssignClientRuntimeCommandBodyDto;
+import com.omgservers.schema.module.match.GetMatchRequest;
+import com.omgservers.schema.module.match.GetMatchResponse;
+import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerRequest;
+import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerResponse;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.GetMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.GetMatchmakerMatchAssignmentResponse;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandRequest;
+import com.omgservers.schema.module.runtime.runtimeCommand.SyncRuntimeCommandResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentCreatedEventBodyModel;
-import com.omgservers.service.exception.ServerSideBaseException;
-import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.factory.runtime.RuntimeAssignmentModelFactory;
+import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.deployment.CreateKickClientDeploymentCommandOperation;
+import com.omgservers.service.shard.match.MatchShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
@@ -32,8 +34,11 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
 
     final MatchmakerShard matchmakerShard;
     final RuntimeShard runtimeShard;
+    final MatchShard matchShard;
 
-    final RuntimeAssignmentModelFactory runtimeAssignmentModelFactory;
+    final RuntimeCommandModelFactory runtimeCommandModelFactory;
+
+    final CreateKickClientDeploymentCommandOperation createKickClientDeploymentCommandOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -46,21 +51,28 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
 
         final var body = (MatchmakerMatchAssignmentCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();
-        final var matchId = body.getMatchId();
         final var matchmakerMatchAssignmentId = body.getId();
+
+        final var idempotencyKey = event.getId().toString();
 
         return getMatchmakerMatchAssignment(matchmakerId, matchmakerMatchAssignmentId)
                 .flatMap(matchmakerMatchAssignment -> {
                     log.debug("Created, {}", matchmakerMatchAssignment);
 
                     final var clientId = matchmakerMatchAssignment.getClientId();
-                    return getMatch(matchmakerId, matchId)
-                            .flatMap(match -> {
-                                final var runtimeId = match.getRuntimeId();
+                    return createKickClientDeploymentCommandOperation.execute(clientId, idempotencyKey)
+                            .flatMap(created -> {
+                                final var matchId = matchmakerMatchAssignment.getMatchId();
+                                return getMatch(matchId)
+                                        .flatMap(match -> {
+                                            final var runtimeId = match.getRuntimeId();
+                                            final var groupName = matchmakerMatchAssignment.getGroupName();
 
-                                final var idempotencyKey = event.getId().toString();
-                                return syncRuntimeAssignment(runtimeId, clientId, matchmakerMatchAssignment,
-                                        idempotencyKey);
+                                            return createAssignClientRuntimeCommand(runtimeId,
+                                                    clientId,
+                                                    groupName,
+                                                    idempotencyKey);
+                                        });
                             });
                 })
                 .replaceWithVoid();
@@ -72,35 +84,29 @@ public class MatchmakerMatchAssignmentCreatedEventHandlerImpl implements EventHa
                 .map(GetMatchmakerMatchAssignmentResponse::getMatchmakerMatchAssignment);
     }
 
-    Uni<MatchmakerMatchModel> getMatch(final Long matchmakerId, final Long id) {
-        final var request = new GetMatchmakerMatchRequest(matchmakerId, id);
+    Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
+        final var request = new GetMatchmakerRequest(matchmakerId);
         return matchmakerShard.getService().execute(request)
-                .map(GetMatchmakerMatchResponse::getMatchmakerMatch);
+                .map(GetMatchmakerResponse::getMatchmaker);
     }
 
-    Uni<Boolean> syncRuntimeAssignment(final Long runtimeId,
-                                       final Long clientId,
-                                       final MatchmakerMatchAssignmentModel matchmakerMatchAssignment,
-                                       final String idempotencyKey) {
-        final var runtimeAssignmentConfig = RuntimeAssignmentConfigDto.create();
-        runtimeAssignmentConfig.setMatchmakerMatchAssignment(matchmakerMatchAssignment);
-        final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtimeId,
-                clientId,
-                runtimeAssignmentConfig,
-                idempotencyKey);
-        final var request = new SyncRuntimeAssignmentRequest(runtimeAssignment);
-        return runtimeShard.getService().execute(request)
-                .map(SyncRuntimeAssignmentResponse::getCreated)
-                .onFailure(ServerSideConflictException.class)
-                .recoverWithUni(t -> {
-                    if (t instanceof final ServerSideBaseException exception) {
-                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
-                            log.debug("Idempotency was violated, object={}, {}", runtimeAssignment, t.getMessage());
-                            return Uni.createFrom().item(Boolean.FALSE);
-                        }
-                    }
+    Uni<MatchModel> getMatch(final Long id) {
+        final var request = new GetMatchRequest(id);
+        return matchShard.getService().execute(request)
+                .map(GetMatchResponse::getMatch);
+    }
 
-                    return Uni.createFrom().failure(t);
-                });
+    Uni<Boolean> createAssignClientRuntimeCommand(final Long runtimeId,
+                                                  final Long clientId,
+                                                  final String groupName,
+                                                  final String idempotencyKey) {
+        final var commandBody = new AssignClientRuntimeCommandBodyDto();
+        commandBody.setClientId(clientId);
+        commandBody.setGroupName(groupName);
+        final var runtimeCommand = runtimeCommandModelFactory.create(runtimeId, commandBody, idempotencyKey);
+
+        final var request = new SyncRuntimeCommandRequest(runtimeCommand);
+        return runtimeShard.getService().executeWithIdempotency(request)
+                .map(SyncRuntimeCommandResponse::getCreated);
     }
 }
