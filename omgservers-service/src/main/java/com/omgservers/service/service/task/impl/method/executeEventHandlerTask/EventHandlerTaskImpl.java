@@ -3,6 +3,7 @@ package com.omgservers.service.service.task.impl.method.executeEventHandlerTask;
 import com.omgservers.service.service.event.EventService;
 import com.omgservers.service.service.event.dto.HandleEventsRequest;
 import com.omgservers.service.service.event.dto.HandleEventsResponse;
+import com.omgservers.service.service.task.Task;
 import io.quarkus.scheduler.Scheduler;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -16,13 +17,13 @@ import java.time.Duration;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class EventHandlerTaskImpl {
+public class EventHandlerTaskImpl implements Task<EventHandlerTaskArguments> {
 
     final EventService eventService;
 
     final Scheduler scheduler;
 
-    public Uni<Boolean> execute() {
+    public Uni<Boolean> execute(final EventHandlerTaskArguments taskArguments) {
         return Multi.createBy().repeating()
                 .uni(this::handleEvents)
                 .whilst(Boolean.TRUE::equals)

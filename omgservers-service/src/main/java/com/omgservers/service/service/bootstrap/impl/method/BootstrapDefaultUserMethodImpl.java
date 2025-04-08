@@ -85,7 +85,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
         final var user = userModelFactory.create(role, passwordHash);
 
         final var request = new SyncUserRequest(user);
-        return userShard.getService().syncUser(request)
+        return userShard.getService().execute(request)
                 .replaceWith(user);
     }
 }

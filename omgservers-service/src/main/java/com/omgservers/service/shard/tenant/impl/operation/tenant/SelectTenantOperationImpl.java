@@ -35,6 +35,6 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
                         """,
                 List.of(id),
                 "Tenant",
-                tenantModelMapper::fromRow);
+                tenantModelMapper::execute);
     }
 }

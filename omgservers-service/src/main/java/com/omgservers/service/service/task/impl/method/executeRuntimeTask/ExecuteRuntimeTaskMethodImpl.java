@@ -22,8 +22,8 @@ public class ExecuteRuntimeTaskMethodImpl implements ExecuteRuntimeTaskMethod {
         log.trace("{}", request);
 
         final var runtimeId = request.getRuntimeId();
-
-        return executeTaskOperation.execute(runtimeTask.execute(runtimeId))
+        final var taskArguments = new RuntimeTaskArguments(runtimeId);
+        return executeTaskOperation.executeFailSafe(runtimeTask, taskArguments)
                 .map(ExecuteRuntimeTaskResponse::new);
     }
 }

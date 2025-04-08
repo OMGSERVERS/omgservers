@@ -37,6 +37,6 @@ class SelectTenantImageOperationImpl implements SelectTenantImageOperation {
                         """,
                 List.of(tenantId, id),
                 "Tenant image",
-                tenantImageModelMapper::fromRow);
+                tenantImageModelMapper::execute);
     }
 }

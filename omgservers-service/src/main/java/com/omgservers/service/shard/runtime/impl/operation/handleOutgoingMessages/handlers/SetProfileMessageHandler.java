@@ -78,7 +78,7 @@ public class SetProfileMessageHandler implements OutgoingMessageHandler {
                                      final Long playerId,
                                      final Object profile) {
         final var request = new UpdatePlayerProfileRequest(userId, playerId, profile);
-        return userShard.getService().updatePlayerProfile(request)
+        return userShard.getService().execute(request)
                 .map(UpdatePlayerProfileResponse::getUpdated);
     }
 }

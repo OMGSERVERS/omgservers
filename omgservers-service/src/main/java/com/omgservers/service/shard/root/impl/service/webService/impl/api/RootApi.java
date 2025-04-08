@@ -27,33 +27,33 @@ public interface RootApi {
 
     @POST
     @Path("/get-root")
-    Uni<GetRootResponse> getRoot(GetRootRequest request);
+    Uni<GetRootResponse> execute(GetRootRequest request);
 
     @POST
     @Path("/sync-root")
-    Uni<SyncRootResponse> syncRoot(SyncRootRequest request);
+    Uni<SyncRootResponse> execute(SyncRootRequest request);
 
     @POST
     @Path("/delete-root")
-    Uni<DeleteRootResponse> deleteRoot(DeleteRootRequest request);
+    Uni<DeleteRootResponse> execute(DeleteRootRequest request);
 
     @POST
     @Path("/get-root-entity-ref")
-    Uni<GetRootEntityRefResponse> getRootEntityRef(GetRootEntityRefRequest request);
+    Uni<GetRootEntityRefResponse> execute(GetRootEntityRefRequest request);
 
     @POST
     @Path("/find-root-entity-ref")
-    Uni<FindRootEntityRefResponse> findRootEntityRef(FindRootEntityRefRequest request);
+    Uni<FindRootEntityRefResponse> execute(FindRootEntityRefRequest request);
 
     @POST
     @Path("/view-root-entity-refs")
-    Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(ViewRootEntityRefsRequest request);
+    Uni<ViewRootEntityRefsResponse> execute(ViewRootEntityRefsRequest request);
 
     @POST
     @Path("/sync-root-entity-ref")
-    Uni<SyncRootEntityRefResponse> syncRootEntityRef(SyncRootEntityRefRequest request);
+    Uni<SyncRootEntityRefResponse> execute(SyncRootEntityRefRequest request);
 
     @POST
     @Path("/delete-root-entity-ref")
-    Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(DeleteRootEntityRefRequest request);
+    Uni<DeleteRootEntityRefResponse> execute(DeleteRootEntityRefRequest request);
 }

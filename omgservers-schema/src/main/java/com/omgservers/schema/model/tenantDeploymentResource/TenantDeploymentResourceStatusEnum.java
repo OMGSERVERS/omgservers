@@ -17,9 +17,4 @@ public enum TenantDeploymentResourceStatusEnum {
      */
     CLOSED,
 
-    /**
-     * The deployment has been marked as failed and no longer accepts new client entries.
-     */
-    FAILED,
-
 }

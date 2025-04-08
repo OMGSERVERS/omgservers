@@ -3,11 +3,11 @@ package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.i
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerMatchResourceToUpdateStatusDto;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateRequest;
 import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerCommand.DeleteMatchmakerCommandOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment.DeleteMatchmakerMatchAssignmentOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment.UpsertMatchmakerMatchAssignmentOperation;
@@ -38,60 +38,57 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
     final DeleteMatchmakerRequestOperation deleteMatchmakerRequestOperation;
     final DeleteMatchmakerCommandOperation deleteMatchmakerCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<UpdateMatchmakerStateResponse> execute(final UpdateMatchmakerStateRequest request) {
+    public Uni<UpdateMatchmakerStateResponse> execute(final ShardModel shardModel,
+                                                      final UpdateMatchmakerStateRequest request) {
         log.trace("{}", request);
 
+        final var shard = shardModel.shard();
         final var matchmakerChangeOfState = request.getMatchmakerChangeOfState();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var matchmakerId = request.getMatchmakerId();
-                    return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
-                            deleteMatchmakerCommands(
-                                    changeContext,
-                                    sqlConnection,
-                                    shard,
-                                    matchmakerId,
-                                    matchmakerChangeOfState.getMatchmakerCommandsToDelete())
-                                    .flatMap(voidItem -> deleteMatchmakerRequests(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            matchmakerId,
-                                            matchmakerChangeOfState.getMatchmakerRequestsToDelete()))
-                                    .flatMap(voiItem -> upsertMatchmakerMatches(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            matchmakerChangeOfState.getMatchmakerMatchResourcesToSync()))
-                                    .flatMap(voidItem -> updateMatchmakerMatchResourcesStatus(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            matchmakerId,
-                                            matchmakerChangeOfState.getMatchmakerMatchResourcesToUpdateStatus()))
-                                    .flatMap(voidItem -> deleteMatchmakerMatchResources(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            matchmakerId,
-                                            matchmakerChangeOfState.getMatchmakerMatchResourcesToDelete()))
-                                    .flatMap(voidItem -> upsertMatchmakerMatchAssignments(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            matchmakerChangeOfState.getMatchmakerMatchAssignmentsToSync()))
-                                    .flatMap(voidItem -> deleteMatchmakerMatchAssignments(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            matchmakerId,
-                                            matchmakerChangeOfState.getMatchmakerMatchAssignmentsToDelete()))
-                    );
-                })
+        final var matchmakerId = request.getMatchmakerId();
+        return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
+                        deleteMatchmakerCommands(
+                                changeContext,
+                                sqlConnection,
+                                shard,
+                                matchmakerId,
+                                matchmakerChangeOfState.getMatchmakerCommandsToDelete())
+                                .flatMap(voidItem -> deleteMatchmakerRequests(
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        matchmakerId,
+                                        matchmakerChangeOfState.getMatchmakerRequestsToDelete()))
+                                .flatMap(voiItem -> upsertMatchmakerMatches(
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        matchmakerChangeOfState.getMatchmakerMatchResourcesToSync()))
+                                .flatMap(voidItem -> updateMatchmakerMatchResourcesStatus(
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        matchmakerId,
+                                        matchmakerChangeOfState.getMatchmakerMatchResourcesToUpdateStatus()))
+                                .flatMap(voidItem -> deleteMatchmakerMatchResources(
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        matchmakerId,
+                                        matchmakerChangeOfState.getMatchmakerMatchResourcesToDelete()))
+                                .flatMap(voidItem -> upsertMatchmakerMatchAssignments(
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        matchmakerChangeOfState.getMatchmakerMatchAssignmentsToSync()))
+                                .flatMap(voidItem -> deleteMatchmakerMatchAssignments(
+                                        changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        matchmakerId,
+                                        matchmakerChangeOfState.getMatchmakerMatchAssignmentsToDelete()))
+                )
                 .replaceWith(Boolean.TRUE)
                 .map(UpdateMatchmakerStateResponse::new);
     }

@@ -41,6 +41,6 @@ class SelectActiveTenantVersionProjectionsByTenantProjectIdOperationImpl
                         tenantProjectId
                 ),
                 "Tenant version projection",
-                tenantVersionProjectionModelMapper::fromRow);
+                tenantVersionProjectionModelMapper::execute);
     }
 }

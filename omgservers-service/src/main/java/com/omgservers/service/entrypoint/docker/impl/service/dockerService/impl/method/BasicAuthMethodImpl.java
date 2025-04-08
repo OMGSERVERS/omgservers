@@ -83,7 +83,7 @@ class BasicAuthMethodImpl implements BasicAuthMethod {
 
     Uni<String> createToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userShard.getService().createToken(createTokenRequest)
+        return userShard.getService().execute(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken)
                 .onFailure(ServerSideNotFoundException.class)
                 .transform(t -> new ServerSideUnauthorizedException(ExceptionQualifierEnum.WRONG_CREDENTIALS,

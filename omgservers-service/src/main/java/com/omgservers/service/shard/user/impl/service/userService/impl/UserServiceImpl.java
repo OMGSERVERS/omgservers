@@ -23,21 +23,21 @@ import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
+import com.omgservers.service.operation.server.CalculateShardOperation;
+import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import com.omgservers.service.shard.user.impl.operation.getUserModuleClient.GetUserModuleClientOperation;
 import com.omgservers.service.shard.user.impl.operation.getUserModuleClient.UserModuleClient;
 import com.omgservers.service.shard.user.impl.service.userService.UserService;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.deletePlayer.DeletePlayerMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.findPlayer.FindPlayerMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.getPlayer.GetPlayerMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.getPlayerProfile.GetPlayerProfileMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.syncPlayer.SyncPlayerMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.updatePlayerProfile.UpdatePlayerProfileMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.createToken.CreateTokenMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.deleteUser.DeleteUserMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.getUser.GetUserMethod;
-import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.syncUser.SyncUserMethod;
-import com.omgservers.service.operation.server.CalculateShardOperation;
-import com.omgservers.service.operation.server.HandleShardedRequestOperation;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.DeletePlayerMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.FindPlayerMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.GetPlayerMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.GetPlayerProfileMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.SyncPlayerMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.player.UpdatePlayerProfileMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.CreateTokenMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.DeleteUserMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.GetUserMethod;
+import com.omgservers.service.shard.user.impl.service.userService.impl.method.user.SyncUserMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -66,24 +66,24 @@ class UserServiceImpl implements UserService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetUserResponse> getUser(@Valid final GetUserRequest request) {
+    public Uni<GetUserResponse> execute(@Valid final GetUserRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::getUser,
+                UserModuleClient::execute,
                 getUserMethod::getUser);
     }
 
     @Override
-    public Uni<SyncUserResponse> syncUser(@Valid final SyncUserRequest request) {
+    public Uni<SyncUserResponse> execute(@Valid final SyncUserRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::syncUser,
+                UserModuleClient::execute,
                 syncUserMethod::syncUser);
     }
 
     @Override
-    public Uni<SyncUserResponse> syncUserWithIdempotency(@Valid final SyncUserRequest request) {
-        return syncUser(request)
+    public Uni<SyncUserResponse> executeWithIdempotency(@Valid final SyncUserRequest request) {
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -98,66 +98,66 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Uni<DeleteUserResponse> deleteUser(@Valid final DeleteUserRequest request) {
+    public Uni<DeleteUserResponse> execute(@Valid final DeleteUserRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::deleteUser,
+                UserModuleClient::execute,
                 deleteUserMethod::deleteUser);
     }
 
     @Override
-    public Uni<CreateTokenResponse> createToken(@Valid final CreateTokenRequest request) {
+    public Uni<CreateTokenResponse> execute(@Valid final CreateTokenRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::createToken,
+                UserModuleClient::execute,
                 createTokenMethod::createToken);
     }
 
     @Override
-    public Uni<GetPlayerResponse> getPlayer(@Valid final GetPlayerRequest request) {
+    public Uni<GetPlayerResponse> execute(@Valid final GetPlayerRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::getPlayer,
+                UserModuleClient::execute,
                 getPlayerMethod::getPlayer);
     }
 
     @Override
-    public Uni<GetPlayerProfileResponse> getPlayerProfile(@Valid final GetPlayerProfileRequest request) {
+    public Uni<GetPlayerProfileResponse> execute(@Valid final GetPlayerProfileRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::getPlayerProfile,
+                UserModuleClient::execute,
                 getPlayerProfileMethod::getPlayerProfile);
     }
 
     @Override
-    public Uni<FindPlayerResponse> findPlayer(@Valid final FindPlayerRequest request) {
+    public Uni<FindPlayerResponse> execute(@Valid final FindPlayerRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::findPlayer,
+                UserModuleClient::execute,
                 findPlayerMethod::findPlayer);
     }
 
     @Override
-    public Uni<SyncPlayerResponse> syncPlayer(@Valid final SyncPlayerRequest request) {
+    public Uni<SyncPlayerResponse> execute(@Valid final SyncPlayerRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::syncPlayer,
+                UserModuleClient::execute,
                 syncPlayerMethod::syncPlayer);
     }
 
     @Override
-    public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(@Valid final UpdatePlayerProfileRequest request) {
+    public Uni<UpdatePlayerProfileResponse> execute(@Valid final UpdatePlayerProfileRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::updatePlayerProfile,
+                UserModuleClient::execute,
                 updatePlayerProfileMethod::updatePlayerProfile);
     }
 
     @Override
-    public Uni<DeletePlayerResponse> deletePlayer(@Valid final DeletePlayerRequest request) {
+    public Uni<DeletePlayerResponse> execute(@Valid final DeletePlayerRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getUserModuleClientOperation::getClient,
-                UserModuleClient::deletePlayer,
+                UserModuleClient::execute,
                 deletePlayerMethod::deletePlayer);
     }
 }

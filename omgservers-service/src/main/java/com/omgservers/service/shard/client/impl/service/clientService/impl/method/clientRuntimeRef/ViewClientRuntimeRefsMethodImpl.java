@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientRuntimeRef;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.clientRuntimeRef.ViewClientRuntimeRefsRequest;
 import com.omgservers.schema.module.client.clientRuntimeRef.ViewClientRuntimeRefsResponse;
 import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.SelectActiveClientRuntimeRefsByClientIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,23 +16,20 @@ import lombok.extern.slf4j.Slf4j;
 class ViewClientRuntimeRefsMethodImpl implements ViewClientRuntimeRefsMethod {
 
     final SelectActiveClientRuntimeRefsByClientIdOperation selectActiveClientRuntimeRefsByClientIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewClientRuntimeRefsResponse> execute(final ViewClientRuntimeRefsRequest request) {
+    public Uni<ViewClientRuntimeRefsResponse> execute(final ShardModel shardModel,
+                                                      final ViewClientRuntimeRefsRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var clientId = request.getClientId();
-                    return pgPool.withTransaction(sqlConnection -> selectActiveClientRuntimeRefsByClientIdOperation
-                            .selectActiveClientRuntimeRefsByClientId(sqlConnection,
-                                    shard.shard(),
-                                    clientId
-                            ));
-                })
+        final var clientId = request.getClientId();
+        return pgPool.withTransaction(sqlConnection -> selectActiveClientRuntimeRefsByClientIdOperation
+                        .selectActiveClientRuntimeRefsByClientId(sqlConnection,
+                                shardModel.shard(),
+                                clientId
+                        ))
                 .map(ViewClientRuntimeRefsResponse::new);
 
     }

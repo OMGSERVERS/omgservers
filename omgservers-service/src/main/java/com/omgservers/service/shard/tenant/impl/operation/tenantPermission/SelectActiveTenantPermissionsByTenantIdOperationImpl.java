@@ -36,6 +36,6 @@ class SelectActiveTenantPermissionsByTenantIdOperationImpl implements SelectActi
                         """,
                 Collections.singletonList(tenantId),
                 "Tenant permission",
-                tenantPermissionModelMapper::fromRow);
+                tenantPermissionModelMapper::execute);
     }
 }

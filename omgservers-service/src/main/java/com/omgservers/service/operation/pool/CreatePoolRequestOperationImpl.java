@@ -83,7 +83,7 @@ class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(id, UserRoleEnum.RUNTIME, passwordHash, idempotencyKey);
         final var request = new SyncUserRequest(user);
-        return userShard.getService().syncUserWithIdempotency(request)
+        return userShard.getService().executeWithIdempotency(request)
                 .map(SyncUserResponse::getCreated);
     }
 

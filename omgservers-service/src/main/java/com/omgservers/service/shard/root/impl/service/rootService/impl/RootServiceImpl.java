@@ -21,14 +21,14 @@ import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.shard.root.impl.operation.getRootModuleClient.GetRootModuleClientOperation;
 import com.omgservers.service.shard.root.impl.service.rootService.RootService;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.root.deleteRoot.DeleteRootMethod;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.root.getRoot.GetRootMethod;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.root.syncRoot.SyncRootMethod;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.deleteRootEntityRef.DeleteRootEntityRefMethod;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.findRootEntityRef.FindRootEntityRefMethod;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.getRootEntityRef.GetRootEntityRefMethod;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.syncRootEntityRef.SyncRootEntityRefMethod;
-import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.viewRootEntityRefs.ViewRootEntityRefsMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.root.DeleteRootMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.root.GetRootMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.root.SyncRootMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.DeleteRootEntityRefMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.FindRootEntityRefMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.GetRootEntityRefMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.SyncRootEntityRefMethod;
+import com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef.ViewRootEntityRefsMethod;
 import com.omgservers.service.shard.root.impl.service.webService.impl.api.RootApi;
 import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.HandleShardedRequestOperation;
@@ -58,24 +58,24 @@ class RootServiceImpl implements RootService {
     final CalculateShardOperation calculateShardOperation;
 
     @Override
-    public Uni<GetRootResponse> getRoot(@Valid final GetRootRequest request) {
+    public Uni<GetRootResponse> execute(@Valid final GetRootRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::getRoot,
-                getRootMethod::getRoot);
+                RootApi::execute,
+                getRootMethod::execute);
     }
 
     @Override
-    public Uni<SyncRootResponse> syncRoot(@Valid final SyncRootRequest request) {
+    public Uni<SyncRootResponse> execute(@Valid final SyncRootRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::syncRoot,
-                syncRootMethod::syncRoot);
+                RootApi::execute,
+                syncRootMethod::execute);
     }
 
     @Override
-    public Uni<SyncRootResponse> syncRootWithIdempotency(SyncRootRequest request) {
-        return syncRoot(request)
+    public Uni<SyncRootResponse> executeWithIdempotency(SyncRootRequest request) {
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -90,49 +90,49 @@ class RootServiceImpl implements RootService {
     }
 
     @Override
-    public Uni<DeleteRootResponse> deleteRoot(@Valid final DeleteRootRequest request) {
+    public Uni<DeleteRootResponse> execute(@Valid final DeleteRootRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::deleteRoot,
-                deleteRootMethod::deleteRoot);
+                RootApi::execute,
+                deleteRootMethod::execute);
     }
 
     @Override
-    public Uni<GetRootEntityRefResponse> getRootEntityRef(@Valid final GetRootEntityRefRequest request) {
+    public Uni<GetRootEntityRefResponse> execute(@Valid final GetRootEntityRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::getRootEntityRef,
-                getRootEntityRefMethod::getRootEntityRef);
+                RootApi::execute,
+                getRootEntityRefMethod::execute);
     }
 
     @Override
-    public Uni<FindRootEntityRefResponse> findRootEntityRef(@Valid final FindRootEntityRefRequest request) {
+    public Uni<FindRootEntityRefResponse> execute(@Valid final FindRootEntityRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::findRootEntityRef,
-                findRootEntityRefMethod::findRootEntityRef);
+                RootApi::execute,
+                findRootEntityRefMethod::execute);
     }
 
     @Override
-    public Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(@Valid final ViewRootEntityRefsRequest request) {
+    public Uni<ViewRootEntityRefsResponse> execute(@Valid final ViewRootEntityRefsRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::viewRootEntityRefs,
-                viewRootEntityRefsMethod::viewRootEntityRefs);
+                RootApi::execute,
+                viewRootEntityRefsMethod::execute);
     }
 
     @Override
-    public Uni<SyncRootEntityRefResponse> syncRootEntityRef(@Valid final SyncRootEntityRefRequest request) {
+    public Uni<SyncRootEntityRefResponse> execute(@Valid final SyncRootEntityRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::syncRootEntityRef,
-                syncRootEntityRefMethod::syncRootEntityRef);
+                RootApi::execute,
+                syncRootEntityRefMethod::execute);
     }
 
     @Override
-    public Uni<SyncRootEntityRefResponse> syncRootEntityRefWithIdempotency(
+    public Uni<SyncRootEntityRefResponse> executeWithIdempotency(
             @Valid final SyncRootEntityRefRequest request) {
-        return syncRootEntityRef(request)
+        return execute(request)
                 .onFailure(ServerSideConflictException.class)
                 .recoverWithUni(t -> {
                     if (t instanceof final ServerSideBaseException exception) {
@@ -148,10 +148,10 @@ class RootServiceImpl implements RootService {
     }
 
     @Override
-    public Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(@Valid final DeleteRootEntityRefRequest request) {
+    public Uni<DeleteRootEntityRefResponse> execute(@Valid final DeleteRootEntityRefRequest request) {
         return handleShardedRequestOperation.handleShardedRequest(log, request,
                 getRootModuleClientOperation::getClient,
-                RootApi::deleteRootEntityRef,
-                deleteRootEntityRefMethod::deleteRootEntityRef);
+                RootApi::execute,
+                deleteRootEntityRefMethod::execute);
     }
 }

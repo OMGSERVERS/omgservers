@@ -21,9 +21,7 @@ import com.omgservers.schema.module.user.SyncUserResponse;
 import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
 import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
 import io.smallrye.mutiny.Uni;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
@@ -33,41 +31,41 @@ public interface UserApi {
 
     @POST
     @Path("/get-user")
-    Uni<GetUserResponse> getUser(GetUserRequest request);
+    Uni<GetUserResponse> execute(GetUserRequest request);
 
     @POST
     @Path("/sync-user")
-    Uni<SyncUserResponse> syncUser(SyncUserRequest request);
+    Uni<SyncUserResponse> execute(SyncUserRequest request);
 
     @POST
     @Path("/delete-user")
-    Uni<DeleteUserResponse> deleteUser(DeleteUserRequest request);
+    Uni<DeleteUserResponse> execute(DeleteUserRequest request);
 
     @POST
     @Path("/create-token")
-    Uni<CreateTokenResponse> createToken(CreateTokenRequest request);
+    Uni<CreateTokenResponse> execute(CreateTokenRequest request);
 
     @POST
     @Path("/get-player")
-    Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
+    Uni<GetPlayerResponse> execute(GetPlayerRequest request);
 
     @POST
     @Path("/get-player-profile")
-    Uni<GetPlayerProfileResponse> getPlayerProfile(GetPlayerProfileRequest request);
+    Uni<GetPlayerProfileResponse> execute(GetPlayerProfileRequest request);
 
     @POST
     @Path("/find-player")
-    Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request);
+    Uni<FindPlayerResponse> execute(FindPlayerRequest request);
 
     @POST
     @Path("/sync-player")
-    Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request);
+    Uni<SyncPlayerResponse> execute(SyncPlayerRequest request);
 
     @POST
     @Path("/update-player-profile")
-    Uni<UpdatePlayerProfileResponse> updatePlayerProfile(@Valid final UpdatePlayerProfileRequest request);
+    Uni<UpdatePlayerProfileResponse> execute(UpdatePlayerProfileRequest request);
 
     @POST
     @Path("/delete-player")
-    Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request);
+    Uni<DeletePlayerResponse> execute(DeletePlayerRequest request);
 }

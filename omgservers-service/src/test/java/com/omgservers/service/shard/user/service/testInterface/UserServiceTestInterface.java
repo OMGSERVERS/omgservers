@@ -36,52 +36,52 @@ public class UserServiceTestInterface {
     final UserService userService;
 
     public GetUserResponse getUser(final GetUserRequest request) {
-        return userService.getUser(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public SyncUserResponse syncUser(final SyncUserRequest request) {
-        return userService.syncUser(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public DeleteUserResponse deleteUser(final DeleteUserRequest request) {
-        return userService.deleteUser(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public CreateTokenResponse createToken(final CreateTokenRequest request) {
-        return userService.createToken(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public GetPlayerResponse getPlayer(final GetPlayerRequest request) {
-        return userService.getPlayer(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public GetPlayerProfileResponse getPlayerProfile(final GetPlayerProfileRequest request) {
-        return userService.getPlayerProfile(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public FindPlayerResponse findPlayer(final FindPlayerRequest request) {
-        return userService.findPlayer(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public SyncPlayerResponse syncPlayer(final SyncPlayerRequest request) {
-        return userService.syncPlayer(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public UpdatePlayerProfileResponse updatePlayerProfile(final UpdatePlayerProfileRequest request) {
-        return userService.updatePlayerProfile(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public DeletePlayerResponse deletePlayer(final DeletePlayerRequest request) {
-        return userService.deletePlayer(request)
+        return userService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

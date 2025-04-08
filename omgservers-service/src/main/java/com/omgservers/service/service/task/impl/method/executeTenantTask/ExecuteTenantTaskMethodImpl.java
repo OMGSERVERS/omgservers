@@ -22,8 +22,8 @@ public class ExecuteTenantTaskMethodImpl implements ExecuteTenantTaskMethod {
         log.trace("{}", request);
 
         final var tenantId = request.getTenantId();
-
-        return executeTaskOperation.execute(tenantTask.execute(tenantId))
+        final var taskArgument = new TenantTaskArguments(tenantId);
+        return executeTaskOperation.executeFailSafe(tenantTask, taskArgument)
                 .map(ExecuteTenantTaskResponse::new);
     }
 }

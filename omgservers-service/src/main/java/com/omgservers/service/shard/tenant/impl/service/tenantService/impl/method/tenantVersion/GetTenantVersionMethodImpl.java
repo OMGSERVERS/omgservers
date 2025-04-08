@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantVersion.SelectTenantVersionOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,22 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 class GetTenantVersionMethodImpl implements GetTenantVersionMethod {
 
     final SelectTenantVersionOperation selectTenantVersionOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetTenantVersionResponse> execute(GetTenantVersionRequest request) {
+    public Uni<GetTenantVersionResponse> execute(final ShardModel shardModel,
+                                                 final GetTenantVersionRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var tenantId = request.getTenantId();
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectTenantVersionOperation
-                            .execute(sqlConnection, shard, tenantId, id));
-                })
+        final var shard = shardModel.shard();
+        final var tenantId = request.getTenantId();
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectTenantVersionOperation
+                        .execute(sqlConnection, shard, tenantId, id))
                 .map(GetTenantVersionResponse::new);
     }
 }

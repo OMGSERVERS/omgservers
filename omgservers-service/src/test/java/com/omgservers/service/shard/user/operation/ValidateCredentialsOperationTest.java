@@ -23,14 +23,14 @@ class ValidateCredentialsOperationTest extends BaseTestClass {
     UserModelFactory userModelFactory;
 
     @Test
-    void givenUser_whenValidateCredentials_thenOk() {
+    void givenUser_whenExecute_thenOk() {
         final var user1 = userModelFactory.create(UserRoleEnum.PLAYER, BcryptUtil.bcryptHash("password"));
         final var user2 = validateCredentialsOperation.validateCredentials(user1, "password");
         assertEquals(user1, user2);
     }
 
     @Test
-    void givenUser_whenValidateCredentials_thenException() {
+    void givenUser_whenExecute_thenException() {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, BcryptUtil.bcryptHash("password"));
 
         final var exception = assertThrows(ServerSideUnauthorizedException.class, () ->
@@ -39,7 +39,7 @@ class ValidateCredentialsOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenDeletedUser_whenValidateCredentials_thenException() {
+    void givenDeletedUser_whenExecute_thenException() {
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         user.setDeleted(true);
 

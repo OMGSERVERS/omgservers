@@ -1,14 +1,14 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.tenant.impl.operation.tenant.VerifyTenantExistsOperation;
-import com.omgservers.service.shard.tenant.impl.operation.tenantProject.UpsertTenantProjectOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenant.VerifyTenantExistsOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenantProject.UpsertTenantProjectOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,42 +20,34 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncTenantProjectMethodImpl implements SyncTenantProjectMethod {
 
-    final ChangeWithContextOperation changeWithContextOperation;
     final UpsertTenantProjectOperation upsertTenantProjectOperation;
-    final CheckShardOperation checkShardOperation;
     final VerifyTenantExistsOperation verifyTenantExistsOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantProjectResponse> execute(final SyncTenantProjectRequest request) {
+    public Uni<SyncTenantProjectResponse> execute(final ShardModel shardModel,
+                                                  final SyncTenantProjectRequest request) {
         log.trace("{}", request);
 
         final var project = request.getTenantProject();
         final var tenantId = project.getTenantId();
-
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> verifyTenantExistsOperation
-                                            .execute(sqlConnection, shard, tenantId)
-                                            .flatMap(exists -> {
-                                                if (exists) {
-                                                    return upsertTenantProjectOperation.execute(changeContext,
-                                                            sqlConnection,
-                                                            shard,
-                                                            project);
-                                                } else {
-                                                    throw new ServerSideNotFoundException(
-                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "tenant does not exist or was deleted, id=" + tenantId);
-                                                }
-                                            })
-                            )
-                            .map(ChangeContext::getResult);
-                })
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        verifyTenantExistsOperation.execute(sqlConnection, shardModel.shard(), tenantId)
+                                .flatMap(exists -> {
+                                    if (exists) {
+                                        return upsertTenantProjectOperation.execute(changeContext,
+                                                sqlConnection,
+                                                shardModel.shard(),
+                                                project);
+                                    } else {
+                                        throw new ServerSideNotFoundException(
+                                                ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                "tenant does not exist or was deleted, id=" + tenantId);
+                                    }
+                                }))
+                .map(ChangeContext::getResult)
                 .map(SyncTenantProjectResponse::new);
     }
 }

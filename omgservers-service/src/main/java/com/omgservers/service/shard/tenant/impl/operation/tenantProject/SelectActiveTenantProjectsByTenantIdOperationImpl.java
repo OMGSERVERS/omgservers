@@ -36,6 +36,6 @@ class SelectActiveTenantProjectsByTenantIdOperationImpl implements SelectActiveT
                         """,
                 Collections.singletonList(tenantId),
                 "Tenant project",
-                tenantProjectModelMapper::fromRow);
+                tenantProjectModelMapper::execute);
     }
 }

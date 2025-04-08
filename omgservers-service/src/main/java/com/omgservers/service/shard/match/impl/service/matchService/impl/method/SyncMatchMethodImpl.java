@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.match.impl.service.matchService.impl.method;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.match.SyncMatchRequest;
 import com.omgservers.schema.module.match.SyncMatchResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.match.impl.operation.match.UpsertMatchOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,24 +18,20 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
     final UpsertMatchOperation matchOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncMatchResponse> execute(final SyncMatchRequest request) {
+    public Uni<SyncMatchResponse> execute(final ShardModel shardModel,
+                                          final SyncMatchRequest request) {
         log.trace("{}", request);
 
         final var match = request.getMatch();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> matchOperation.execute(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            match))
-                            .map(ChangeContext::getResult);
-                })
+        return changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> matchOperation.execute(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                match))
+                .map(ChangeContext::getResult)
                 .map(SyncMatchResponse::new);
     }
 }

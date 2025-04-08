@@ -30,7 +30,7 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
 
         final var developerUserId = request.getUserId();
         final var deleteUserRequest = new DeleteUserRequest(developerUserId);
-        return userShard.getService().deleteUser(deleteUserRequest)
+        return userShard.getService().execute(deleteUserRequest)
                 .map(DeleteUserResponse::getDeleted)
                 .invoke(deleted -> {
                     if (deleted) {

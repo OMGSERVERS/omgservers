@@ -23,7 +23,7 @@ class UpsertUserOperationTest extends BaseTestClass {
     UserModelFactory userModelFactory;
 
     @Test
-    void givenUser_whenUpsertUser_thenInserted() {
+    void givenUser_whenExecute_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
 
@@ -33,7 +33,7 @@ class UpsertUserOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUser_whenUpsertUser_thenUpdated() {
+    void givenUser_whenExecute_thenUpdated() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user);
@@ -44,7 +44,7 @@ class UpsertUserOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUser_whenUpsertUser_thenIdempotencyViolation() {
+    void givenUser_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var user1 = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user1);

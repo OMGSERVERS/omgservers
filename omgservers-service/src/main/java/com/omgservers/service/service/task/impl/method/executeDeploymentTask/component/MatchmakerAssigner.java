@@ -8,7 +8,7 @@ public class MatchmakerAssigner extends DeploymentAssigner<DeploymentMatchmakerR
         DeploymentMatchmakerAssignmentModel,
         DeploymentRequestModel> {
 
-    public MatchmakerAssigner(int maxAssignments) {
+    public MatchmakerAssigner(final int maxAssignments) {
         super(maxAssignments);
     }
 }

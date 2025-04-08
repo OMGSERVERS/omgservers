@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.user.operation.testInterface;
 
-import com.omgservers.service.shard.user.impl.operation.userPlayer.deletePlayer.DeletePlayerOperation;
+import com.omgservers.service.shard.user.impl.operation.userPlayer.DeletePlayerOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,7 +26,7 @@ public class DeletePlayerOperationTestInterface {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deletePlayerOperation
-                                    .deletePlayer(changeContext, sqlConnection, shard, userId, id))
+                                    .execute(changeContext, sqlConnection, shard, userId, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

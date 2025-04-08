@@ -75,7 +75,7 @@ class CreateTenantPermissionsMethodImpl implements CreateTenantPermissionsMethod
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userShard.getService().getUser(request)
+        return userShard.getService().execute(request)
                 .map(GetUserResponse::getUser);
     }
 

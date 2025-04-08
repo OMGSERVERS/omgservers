@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.user.operation.testInterface;
 
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.service.shard.user.impl.operation.user.upsertUser.UpsertUserOperation;
+import com.omgservers.service.shard.user.impl.operation.user.UpsertUserOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -26,7 +26,7 @@ public class UpsertUserOperationTestInterface {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertUserOperation
-                                    .upsertUser(changeContext, sqlConnection, shard, user))
+                                    .execute(changeContext, sqlConnection, shard, user))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

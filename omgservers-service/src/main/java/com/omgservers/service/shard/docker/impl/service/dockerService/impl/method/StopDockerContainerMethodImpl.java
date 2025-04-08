@@ -3,6 +3,7 @@ package com.omgservers.service.shard.docker.impl.service.dockerService.impl.meth
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.exception.NotModifiedException;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.docker.StopDockerContainerRequest;
 import com.omgservers.schema.module.docker.StopDockerContainerResponse;
 import com.omgservers.service.operation.docker.GetDockerDaemonClientOperation;
@@ -22,7 +23,8 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
     final GetDockerDaemonClientOperation getDockerDaemonClientOperation;
 
     @Override
-    public Uni<StopDockerContainerResponse> execute(final StopDockerContainerRequest request) {
+    public Uni<StopDockerContainerResponse> execute(final ShardModel shardModel,
+                                                    final StopDockerContainerRequest request) {
         log.trace("{}", request);
 
         final var poolServer = request.getPoolServer();

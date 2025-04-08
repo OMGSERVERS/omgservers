@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientRuntimeRef;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.clientRuntimeRef.FindClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.clientRuntimeRef.FindClientRuntimeRefResponse;
 import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.SelectClientRuntimeRefByClientIdAndRuntimeIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,24 +16,21 @@ import lombok.extern.slf4j.Slf4j;
 class FindClientRuntimeRefMethodImpl implements FindClientRuntimeRefMethod {
 
     final SelectClientRuntimeRefByClientIdAndRuntimeIdOperation selectClientRuntimeRefByClientIdAndRuntimeIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<FindClientRuntimeRefResponse> execute(final FindClientRuntimeRefRequest request) {
+    public Uni<FindClientRuntimeRefResponse> execute(final ShardModel shardModel,
+                                                     final FindClientRuntimeRefRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var clientId = request.getClientId();
-                    final var runtimeId = request.getRuntimeId();
-                    return pgPool.withTransaction(sqlConnection -> selectClientRuntimeRefByClientIdAndRuntimeIdOperation
-                            .selectClientRuntimeRefByClientIdAndRuntimeId(sqlConnection,
-                                    shard.shard(),
-                                    clientId,
-                                    runtimeId));
-                })
+        final var clientId = request.getClientId();
+        final var runtimeId = request.getRuntimeId();
+        return pgPool.withTransaction(sqlConnection -> selectClientRuntimeRefByClientIdAndRuntimeIdOperation
+                        .selectClientRuntimeRefByClientIdAndRuntimeId(sqlConnection,
+                                shardModel.shard(),
+                                clientId,
+                                runtimeId))
                 .map(FindClientRuntimeRefResponse::new);
     }
 }

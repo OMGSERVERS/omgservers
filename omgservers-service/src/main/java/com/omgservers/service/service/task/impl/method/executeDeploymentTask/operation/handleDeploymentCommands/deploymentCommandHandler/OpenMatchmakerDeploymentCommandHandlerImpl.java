@@ -46,11 +46,10 @@ class OpenMatchmakerDeploymentCommandHandlerImpl implements DeploymentCommandHan
                             deploymentMatchmakerResourceId,
                             DeploymentMatchmakerResourceStatusEnum.CREATED);
 
-                    handleDeploymentResult.deploymentChangeOfState()
-                            .getDeploymentMatchmakerResourcesToUpdateStatus()
+                    handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToUpdateStatus()
                             .add(dtoToUpdateStatus);
 
-                    log.info("Matchmaker resource \"{}\" of deployment \"{}\" marked as created",
+                    log.info("Matchmaker resource \"{}\" of deployment \"{}\" is opened and marked as created",
                             deploymentMatchmakerResourceId,
                             deploymentId);
                 });

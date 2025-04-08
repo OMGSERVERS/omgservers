@@ -21,7 +21,8 @@ public class ExecuteEventHandlerTaskMethodImpl implements ExecuteEventHandlerTas
     public Uni<ExecuteEventHandlerTaskResponse> execute(final ExecuteEventHandlerTaskRequest request) {
         log.trace("{}", request);
 
-        return executeTaskOperation.execute(eventHandlerTask.execute())
+        final var taskArguments = new EventHandlerTaskArguments();
+        return executeTaskOperation.executeFailSafe(eventHandlerTask, taskArguments)
                 .map(ExecuteEventHandlerTaskResponse::new);
     }
 }

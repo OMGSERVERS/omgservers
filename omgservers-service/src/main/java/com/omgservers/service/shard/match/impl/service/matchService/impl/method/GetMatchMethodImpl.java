@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.match.impl.service.matchService.impl.method;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.match.GetMatchRequest;
 import com.omgservers.schema.module.match.GetMatchResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.match.impl.operation.match.SelectMatchOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,20 +16,17 @@ import lombok.extern.slf4j.Slf4j;
 class GetMatchMethodImpl implements GetMatchMethod {
 
     final SelectMatchOperation selectMatchOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetMatchResponse> execute(final GetMatchRequest request) {
+    public Uni<GetMatchResponse> execute(final ShardModel shardModel,
+                                         final GetMatchRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectMatchOperation
-                            .execute(sqlConnection, shard.shard(), id));
-                })
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectMatchOperation
+                        .execute(sqlConnection, shardModel.shard(), id))
                 .map(GetMatchResponse::new);
     }
 }

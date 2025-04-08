@@ -32,42 +32,42 @@ class WebServiceImpl implements WebService {
     final RootService rootService;
 
     @Override
-    public Uni<GetRootResponse> getRoot(final GetRootRequest request) {
-        return rootService.getRoot(request);
+    public Uni<GetRootResponse> execute(final GetRootRequest request) {
+        return rootService.execute(request);
     }
 
     @Override
-    public Uni<SyncRootResponse> syncRoot(final SyncRootRequest request) {
-        return rootService.syncRoot(request);
+    public Uni<SyncRootResponse> execute(final SyncRootRequest request) {
+        return rootService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRootResponse> deleteRoot(final DeleteRootRequest request) {
-        return rootService.deleteRoot(request);
+    public Uni<DeleteRootResponse> execute(final DeleteRootRequest request) {
+        return rootService.execute(request);
     }
 
     @Override
-    public Uni<GetRootEntityRefResponse> getRootEntityRef(final GetRootEntityRefRequest request) {
-        return rootService.getRootEntityRef(request);
+    public Uni<GetRootEntityRefResponse> execute(final GetRootEntityRefRequest request) {
+        return rootService.execute(request);
     }
 
     @Override
-    public Uni<FindRootEntityRefResponse> findRootEntityRef(final FindRootEntityRefRequest request) {
-        return rootService.findRootEntityRef(request);
+    public Uni<FindRootEntityRefResponse> execute(final FindRootEntityRefRequest request) {
+        return rootService.execute(request);
     }
 
     @Override
-    public Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(final ViewRootEntityRefsRequest request) {
-        return rootService.viewRootEntityRefs(request);
+    public Uni<ViewRootEntityRefsResponse> execute(final ViewRootEntityRefsRequest request) {
+        return rootService.execute(request);
     }
 
     @Override
-    public Uni<SyncRootEntityRefResponse> syncRootEntityRef(final SyncRootEntityRefRequest request) {
-        return rootService.syncRootEntityRef(request);
+    public Uni<SyncRootEntityRefResponse> execute(final SyncRootEntityRefRequest request) {
+        return rootService.execute(request);
     }
 
     @Override
-    public Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(final DeleteRootEntityRefRequest request) {
-        return rootService.deleteRootEntityRef(request);
+    public Uni<DeleteRootEntityRefResponse> execute(final DeleteRootEntityRefRequest request) {
+        return rootService.execute(request);
     }
 }

@@ -9,6 +9,7 @@ import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDe
 import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesResponse;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.service.service.task.Task;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
@@ -22,12 +23,15 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class StageTaskImpl {
+public class StageTaskImpl implements Task<StageTaskArguments> {
 
     final RuntimeShard runtimeShard;
     final TenantShard tenantShard;
 
-    public Uni<Boolean> execute(final Long tenantId, final Long tenantStageId) {
+    public Uni<Boolean> execute(final StageTaskArguments taskArguments) {
+        final var tenantId = taskArguments.tenantId();
+        final var tenantStageId = taskArguments.tenantStageId();
+
         return getTenantStage(tenantId, tenantStageId)
                 .flatMap(tenantStage -> handleTenantStage(tenantStage)
                         .replaceWith(Boolean.TRUE));

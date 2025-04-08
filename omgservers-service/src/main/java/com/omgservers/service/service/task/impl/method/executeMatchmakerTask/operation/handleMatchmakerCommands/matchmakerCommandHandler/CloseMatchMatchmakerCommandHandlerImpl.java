@@ -50,7 +50,7 @@ class CloseMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
                             .getMatchmakerMatchResourcesToUpdateStatus()
                             .add(dtoToUpdateStatus);
 
-                    log.info("Match resource \"{}\" of matchmaker \"{}\" marked as closed, matchId={}",
+                    log.info("Match resource \"{}\" from matchmaker \"{}\" marked as closed, matchId={}",
                             matchmakerMatchResourceId,
                             matchmakerId,
                             matchId);

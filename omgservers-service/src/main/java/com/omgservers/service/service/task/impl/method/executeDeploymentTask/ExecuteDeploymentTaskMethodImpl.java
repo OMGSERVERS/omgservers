@@ -23,7 +23,8 @@ public class ExecuteDeploymentTaskMethodImpl implements ExecuteDeploymentTaskMet
 
         final var deploymentId = request.getDeploymentId();
 
-        return executeTaskOperation.execute(deploymentTask.execute(deploymentId))
+        final var taskArguments = new DeploymentTaskArguments(deploymentId);
+        return executeTaskOperation.executeFailSafe(deploymentTask, taskArguments)
                 .map(ExecuteDeploymentTaskResponse::new);
     }
 }

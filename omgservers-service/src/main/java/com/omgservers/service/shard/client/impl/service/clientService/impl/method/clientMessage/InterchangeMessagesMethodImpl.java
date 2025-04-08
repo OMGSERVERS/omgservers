@@ -6,6 +6,7 @@ import com.omgservers.schema.message.body.MessageReceivedMessageBodyDto;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.client.GetClientRequest;
 import com.omgservers.schema.module.client.client.GetClientResponse;
 import com.omgservers.schema.module.client.clientMessage.InterchangeMessagesRequest;
@@ -18,7 +19,6 @@ import com.omgservers.service.factory.runtime.RuntimeMessageModelFactory;
 import com.omgservers.service.operation.client.SelectClientRuntimeOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.service.cache.CacheService;
 import com.omgservers.service.service.cache.dto.SetClientLastActivityRequest;
 import com.omgservers.service.shard.client.ClientShard;
@@ -48,34 +48,33 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
     final DeleteClientMessagesByIdsOperation deleteClientMessagesByIdsOperation;
     final SelectClientRuntimeOperation selectClientRuntimeOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     final RuntimeMessageModelFactory runtimeMessageModelFactory;
     final MessageModelFactory messageModelFactory;
 
     @Override
-    public Uni<InterchangeMessagesResponse> execute(final InterchangeMessagesRequest request) {
+    public Uni<InterchangeMessagesResponse> execute(final ShardModel shardModel,
+                                                    final InterchangeMessagesRequest request) {
         log.trace("{}", request);
 
         final var clientId = request.getClientId();
         final var consumedMessages = request.getConsumedMessages();
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> getClient(clientId)
-                        .flatMap(client -> {
-                            final var shard = shardModel.shard();
-                            if (client.getDeleted()) {
-                                // If client was deleted then only receiving is available
-                                return receiveMessages(shard, clientId, consumedMessages);
-                            } else {
-                                return setClientLastActivity(clientId)
-                                        .flatMap(voidItem -> {
-                                            final var outgoingMessages = request.getOutgoingMessages();
-                                            return deliverMessages(clientId, outgoingMessages);
-                                        })
-                                        .flatMap(voidItem2 -> receiveMessages(shard, clientId, consumedMessages));
-                            }
-                        }))
+        return getClient(clientId)
+                .flatMap(client -> {
+                    final var shard = shardModel.shard();
+                    if (client.getDeleted()) {
+                        // If client was deleted then only receiving is available
+                        return receiveMessages(shard, clientId, consumedMessages);
+                    } else {
+                        return setClientLastActivity(clientId)
+                                .flatMap(voidItem -> {
+                                    final var outgoingMessages = request.getOutgoingMessages();
+                                    return deliverMessages(clientId, outgoingMessages);
+                                })
+                                .flatMap(voidItem2 -> receiveMessages(shard, clientId, consumedMessages));
+                    }
+                })
                 .map(InterchangeMessagesResponse::new);
     }
 

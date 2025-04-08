@@ -36,52 +36,52 @@ class WebServiceImpl implements WebService {
     final UserService userService;
 
     @Override
-    public Uni<GetUserResponse> getUser(GetUserRequest request) {
-        return userService.getUser(request);
+    public Uni<GetUserResponse> execute(GetUserRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
-        return userService.syncUser(request);
+    public Uni<SyncUserResponse> execute(final SyncUserRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<DeleteUserResponse> deleteUser(final DeleteUserRequest request) {
-        return userService.deleteUser(request);
+    public Uni<DeleteUserResponse> execute(final DeleteUserRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<CreateTokenResponse> createToken(final CreateTokenRequest request) {
-        return userService.createToken(request);
+    public Uni<CreateTokenResponse> execute(final CreateTokenRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<GetPlayerResponse> getPlayer(final GetPlayerRequest request) {
-        return userService.getPlayer(request);
+    public Uni<GetPlayerResponse> execute(final GetPlayerRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<GetPlayerProfileResponse> getPlayerProfile(final GetPlayerProfileRequest request) {
-        return userService.getPlayerProfile(request);
+    public Uni<GetPlayerProfileResponse> execute(final GetPlayerProfileRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<FindPlayerResponse> findPlayer(final FindPlayerRequest request) {
-        return userService.findPlayer(request);
+    public Uni<FindPlayerResponse> execute(final FindPlayerRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<SyncPlayerResponse> syncPlayer(final SyncPlayerRequest request) {
-        return userService.syncPlayer(request);
+    public Uni<SyncPlayerResponse> execute(final SyncPlayerRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(final UpdatePlayerProfileRequest request) {
-        return userService.updatePlayerProfile(request);
+    public Uni<UpdatePlayerProfileResponse> execute(final UpdatePlayerProfileRequest request) {
+        return userService.execute(request);
     }
 
     @Override
-    public Uni<DeletePlayerResponse> deletePlayer(final DeletePlayerRequest request) {
-        return userService.deletePlayer(request);
+    public Uni<DeletePlayerResponse> execute(final DeletePlayerRequest request) {
+        return userService.execute(request);
     }
 }

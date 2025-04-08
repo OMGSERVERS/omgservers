@@ -39,6 +39,6 @@ class SelectTenantProjectOperationImpl implements SelectTenantProjectOperation {
                         id
                 ),
                 "Tenant project",
-                tenantProjectModelMapper::fromRow);
+                tenantProjectModelMapper::execute);
     }
 }

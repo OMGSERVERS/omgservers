@@ -1,9 +1,10 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProjectPermission;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionRequest;
 import com.omgservers.schema.module.tenant.tenantProjectPermission.DeleteTenantProjectPermissionResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteTenantProjectPermissionMethod {
-    Uni<DeleteTenantProjectPermissionResponse> execute(DeleteTenantProjectPermissionRequest request);
+    Uni<DeleteTenantProjectPermissionResponse> execute(ShardModel shardModel, DeleteTenantProjectPermissionRequest request);
 }

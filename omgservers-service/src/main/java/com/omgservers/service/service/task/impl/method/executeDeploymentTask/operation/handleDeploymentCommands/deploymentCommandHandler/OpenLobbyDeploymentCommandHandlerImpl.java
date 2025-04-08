@@ -49,9 +49,10 @@ class OpenLobbyDeploymentCommandHandlerImpl implements DeploymentCommandHandler 
                             .getDeploymentLobbyResourcesToUpdateStatus()
                             .add(dtoToUpdateStatus);
 
-                    log.info("Lobby resource \"{}\" of deployment \"{}\" marked as created",
+                    log.info("Lobby resource \"{}\" from deployment \"{}\" is opened marked as created, lobbyId={}",
                             deploymentLobbyResourceId,
-                            deploymentId);
+                            deploymentId,
+                            lobbyId);
                 });
 
         return true;

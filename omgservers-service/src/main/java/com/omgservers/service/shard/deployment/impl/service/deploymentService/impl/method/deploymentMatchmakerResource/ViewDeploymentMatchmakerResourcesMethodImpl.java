@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentMatchmakerResource;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.ViewDeploymentMatchmakerResourcesRequest;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.ViewDeploymentMatchmakerResourcesResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerResource.SelectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerResource.SelectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation;
 import io.smallrye.mutiny.Uni;
@@ -22,33 +22,30 @@ class ViewDeploymentMatchmakerResourcesMethodImpl implements ViewDeploymentMatch
             selectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperation;
     final SelectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation
             selectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewDeploymentMatchmakerResourcesResponse> execute(final ViewDeploymentMatchmakerResourcesRequest request) {
+    public Uni<ViewDeploymentMatchmakerResourcesResponse> execute(final ShardModel shardModel,
+                                                                  final ViewDeploymentMatchmakerResourcesRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var deploymentId = request.getDeploymentId();
-                    return pgPool.withTransaction(
-                            sqlConnection -> {
-                                final var status = request.getStatus();
-                                if (Objects.nonNull(status)) {
-                                    return selectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperation
-                                            .execute(sqlConnection,
-                                                    shard.shard(),
-                                                    deploymentId,
-                                                    status);
-                                } else {
-                                    return selectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation
-                                            .execute(sqlConnection,
-                                                    shard.shard(),
-                                                    deploymentId);
-                                }
-                            });
+        final var deploymentId = request.getDeploymentId();
+        return pgPool.withTransaction(
+                        sqlConnection -> {
+                            final var status = request.getStatus();
+                            if (Objects.nonNull(status)) {
+                                return selectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperation
+                                        .execute(sqlConnection,
+                                                shardModel.shard(),
+                                                deploymentId,
+                                                status);
+                            } else {
+                                return selectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation
+                                        .execute(sqlConnection,
+                                                shardModel.shard(),
+                                                deploymentId);
+                            }
                 })
                 .map(ViewDeploymentMatchmakerResourcesResponse::new);
 

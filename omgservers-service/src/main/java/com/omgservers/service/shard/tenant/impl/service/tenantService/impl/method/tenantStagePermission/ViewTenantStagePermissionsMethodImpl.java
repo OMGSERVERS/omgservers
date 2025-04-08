@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantStagePermission.SelectActiveTenantStagePermissionsByTenantStageIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,26 +17,21 @@ class ViewTenantStagePermissionsMethodImpl implements ViewTenantStagePermissions
 
     final SelectActiveTenantStagePermissionsByTenantStageIdOperation
             selectActiveTenantStagePermissionsByTenantStageIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewTenantStagePermissionsResponse> execute(final ViewTenantStagePermissionsRequest request) {
+    public Uni<ViewTenantStagePermissionsResponse> execute(final ShardModel shardModel,
+                                                           final ViewTenantStagePermissionsRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var tenantId = request.getTenantId();
-                    final var tenantStageId = request.getTenantStageId();
-                    return pgPool.withTransaction(
-                            sqlConnection -> selectActiveTenantStagePermissionsByTenantStageIdOperation
-                                    .execute(sqlConnection,
-                                            shard.shard(),
-                                            tenantId,
-                                            tenantStageId
-                                    ));
-                })
+        final var tenantId = request.getTenantId();
+        final var tenantStageId = request.getTenantStageId();
+        return pgPool.withTransaction(sqlConnection ->
+                        selectActiveTenantStagePermissionsByTenantStageIdOperation.execute(sqlConnection,
+                                shardModel.shard(),
+                                tenantId,
+                                tenantStageId))
                 .map(ViewTenantStagePermissionsResponse::new);
 
     }

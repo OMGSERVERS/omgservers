@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeDeploymentTask.operation;
 
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.task.impl.method.executeDeploymentTask.dto.FetchDeploymentResult;
@@ -8,10 +9,15 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class DeleteClosedLobbiesOperationImpl implements DeleteClosedLobbiesOperation {
+
+    static private final long GRACEFUL_INTERVAL = 16;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -22,26 +28,33 @@ class DeleteClosedLobbiesOperationImpl implements DeleteClosedLobbiesOperation {
 
         final var deploymentState = fetchDeploymentResult.deploymentState();
 
-        deploymentState.getDeploymentLobbyResources().stream()
+        final var deploymentLobbyResourcesToDelete = deploymentState.getDeploymentLobbyResources().stream()
                 .filter(deploymentLobbyResource -> deploymentLobbyResource.getStatus()
                         .equals(DeploymentLobbyResourceStatusEnum.CLOSED))
-                .forEach(deploymentLobbyResource -> {
-
+                .filter(deploymentLobbyResource -> {
                     final var lobbyId = deploymentLobbyResource.getLobbyId();
-                    final var noLobbyAssignments = deploymentState.getDeploymentLobbyAssignments().stream()
-                            .noneMatch(deploymentLobbyAssignment ->
-                                    deploymentLobbyAssignment.getLobbyId().equals(lobbyId));
+                    return deploymentState.getDeploymentLobbyAssignments().stream()
+                            .noneMatch(deploymentLobbyAssignment -> deploymentLobbyAssignment.getLobbyId()
+                                    .equals(lobbyId));
+                })
+                .filter(deploymentLobbyResource -> {
+                    final var lobbyResourceModified = deploymentLobbyResource.getModified();
+                    final var lobbyCurrentInterval = Duration.between(lobbyResourceModified, Instant.now());
+                    return lobbyCurrentInterval.toSeconds() > GRACEFUL_INTERVAL;
+                })
+                .peek(deploymentLobbyResource -> {
+                    final var deploymentLobbyResourceId = deploymentLobbyResource.getId();
+                    final var lobbyId = deploymentLobbyResource.getLobbyId();
+                    log.info("Lobby resource \"{}\" from deployment \"{}\" " +
+                                    "is closed and queued for deletion, lobbyId=\"{}\"",
+                            deploymentLobbyResourceId,
+                            deploymentId,
+                            lobbyId);
+                })
+                .map(DeploymentLobbyResourceModel::getId)
+                .toList();
 
-                    if (noLobbyAssignments) {
-                        final var deploymentLobbyResourceId = deploymentLobbyResource.getId();
-
-                        handleDeploymentResult.deploymentChangeOfState()
-                                .getDeploymentLobbyResourcesToDelete()
-                                .add(deploymentLobbyResourceId);
-
-                        log.info("Lobby resource \"{}\" of deployment \"{}\" is closed and marked to be deleted, " +
-                                "lobbyId=\"{}\"", deploymentLobbyResourceId, deploymentId, lobbyId);
-                    }
-                });
+        handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToDelete()
+                .addAll(deploymentLobbyResourcesToDelete);
     }
 }

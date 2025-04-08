@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentMatchmakerAssignment;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerAssignment.DeleteDeploymentMatchmakerAssignmentRequest;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerAssignment.DeleteDeploymentMatchmakerAssignmentResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerAssignment.DeleteDeploymentMatchmakerAssignmentOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,24 +18,23 @@ class DeleteDeploymentMatchmakerAssignmentMethodImpl implements DeleteDeployment
 
     final DeleteDeploymentMatchmakerAssignmentOperation deleteDeploymentMatchmakerAssignmentOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeleteDeploymentMatchmakerAssignmentResponse> execute(final DeleteDeploymentMatchmakerAssignmentRequest request) {
+    public Uni<DeleteDeploymentMatchmakerAssignmentResponse> execute(final ShardModel shardModel,
+                                                                     final DeleteDeploymentMatchmakerAssignmentRequest request) {
         log.trace("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
-                                (changeContext, sqlConnection) ->
-                                        deleteDeploymentMatchmakerAssignmentOperation.execute(changeContext,
-                                                sqlConnection,
-                                                shardModel.shard(),
-                                                deploymentId,
-                                                id))
-                        .map(ChangeContext::getResult))
+        return changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) ->
+                                deleteDeploymentMatchmakerAssignmentOperation.execute(changeContext,
+                                        sqlConnection,
+                                        shardModel.shard(),
+                                        deploymentId,
+                                        id))
+                .map(ChangeContext::getResult)
                 .map(DeleteDeploymentMatchmakerAssignmentResponse::new);
     }
 }

@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeMatchmakerTask;
 
+import com.omgservers.service.service.task.Task;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.FetchMatchmakerOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.HandleMatchmakerOperation;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.operation.UpdateMatchmakerOperation;
@@ -12,13 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class MatchmakerTaskImpl {
+public class MatchmakerTaskImpl implements Task<MatchmakerTaskArguments> {
 
     final HandleMatchmakerOperation handleMatchmakerOperation;
     final UpdateMatchmakerOperation updateMatchmakerOperation;
     final FetchMatchmakerOperation fetchMatchmakerOperation;
 
-    public Uni<Boolean> execute(final Long matchmakerId) {
+    public Uni<Boolean> execute(final MatchmakerTaskArguments taskArguments) {
+        final var matchmakerId = taskArguments.matchmakerId();
+
         return fetchMatchmakerOperation.execute(matchmakerId)
                 .map(handleMatchmakerOperation::execute)
                 .flatMap(updateMatchmakerOperation::execute)

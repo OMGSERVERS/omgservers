@@ -41,6 +41,6 @@ class SelectActiveTenantProjectPermissionsByTenantProjectIdOperationImpl
                         tenantProjectId
                 ),
                 "Project permission",
-                tenantProjectPermissionModelMapper::fromRow);
+                tenantProjectPermissionModelMapper::execute);
     }
 }

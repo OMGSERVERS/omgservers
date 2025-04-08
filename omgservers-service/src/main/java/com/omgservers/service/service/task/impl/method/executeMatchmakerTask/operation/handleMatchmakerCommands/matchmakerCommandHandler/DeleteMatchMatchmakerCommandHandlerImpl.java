@@ -4,7 +4,7 @@ import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerMatchResour
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandQualifierEnum;
 import com.omgservers.schema.model.matchmakerCommand.body.DeleteMatchMatchmakerCommandBodyDto;
-import com.omgservers.schema.model.matchmakerCommand.body.OpenMatchMatchmakerCommandBodyDto;
+import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceStatusEnum;
 import com.omgservers.service.service.task.impl.method.executeMatchmakerTask.dto.FetchMatchmakerResult;
@@ -40,18 +40,33 @@ class DeleteMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandle
 
         matchmakerState.getMatchmakerMatchResources().stream()
                 .filter(matchmakerMatchResource -> matchmakerMatchResource.getMatchId().equals(matchId))
+                .filter(matchmakerMatchResource -> matchmakerMatchResource.getStatus()
+                        .equals(MatchmakerMatchResourceStatusEnum.CREATED))
                 .map(MatchmakerMatchResourceModel::getId)
                 .forEach(matchmakerMatchResourceId -> {
+                    final var dtoToUpdateStatus = new MatchmakerMatchResourceToUpdateStatusDto(
+                            matchmakerMatchResourceId,
+                            MatchmakerMatchResourceStatusEnum.CLOSED);
 
                     handleMatchmakerResult.matchmakerChangeOfState()
-                            .getMatchmakerMatchResourcesToDelete()
-                            .add(matchmakerMatchResourceId);
+                            .getMatchmakerMatchResourcesToUpdateStatus()
+                            .add(dtoToUpdateStatus);
 
-                    log.info("Match resource \"{}\" of matchmaker \"{}\" marked to be deleted with reason={}, matchId={}",
+                    log.info("Match resource \"{}\" from matchmaker \"{}\" " +
+                                    "must be deleted due to \"{}\" and marked as closed, matchId={}",
                             matchmakerMatchResourceId,
                             matchmakerId,
                             reason,
                             matchId);
+
+                    final var matchmakerMatchAssignmentToDelete = fetchMatchmakerResult
+                            .matchmakerState().getMatchmakerMatchAssignments().stream()
+                            .filter(matchmakerMatchAssignment -> matchmakerMatchAssignment.getMatchId().equals(matchId))
+                            .map(MatchmakerMatchAssignmentModel::getId)
+                            .toList();
+
+                    handleMatchmakerResult.matchmakerChangeOfState().getMatchmakerMatchAssignmentsToDelete()
+                            .addAll(matchmakerMatchAssignmentToDelete);
                 });
 
         return true;

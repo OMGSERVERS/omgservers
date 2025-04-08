@@ -36,6 +36,6 @@ class SelectTenantStageOperationImpl implements SelectTenantStageOperation {
                         """,
                 List.of(tenantId, id),
                 "Stage",
-                tenantStageModelMapper::fromRow);
+                tenantStageModelMapper::execute);
     }
 }

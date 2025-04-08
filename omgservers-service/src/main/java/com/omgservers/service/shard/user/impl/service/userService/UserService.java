@@ -25,25 +25,25 @@ import jakarta.validation.Valid;
 
 public interface UserService {
 
-    Uni<GetUserResponse> getUser(@Valid GetUserRequest request);
+    Uni<GetUserResponse> execute(@Valid GetUserRequest request);
 
-    Uni<SyncUserResponse> syncUser(@Valid SyncUserRequest request);
+    Uni<SyncUserResponse> execute(@Valid SyncUserRequest request);
 
-    Uni<SyncUserResponse> syncUserWithIdempotency(@Valid SyncUserRequest request);
+    Uni<SyncUserResponse> executeWithIdempotency(@Valid SyncUserRequest request);
 
-    Uni<DeleteUserResponse> deleteUser(@Valid DeleteUserRequest request);
+    Uni<DeleteUserResponse> execute(@Valid DeleteUserRequest request);
 
-    Uni<CreateTokenResponse> createToken(@Valid CreateTokenRequest request);
+    Uni<CreateTokenResponse> execute(@Valid CreateTokenRequest request);
 
-    Uni<GetPlayerResponse> getPlayer(@Valid GetPlayerRequest request);
+    Uni<GetPlayerResponse> execute(@Valid GetPlayerRequest request);
 
-    Uni<GetPlayerProfileResponse> getPlayerProfile(@Valid GetPlayerProfileRequest request);
+    Uni<GetPlayerProfileResponse> execute(@Valid GetPlayerProfileRequest request);
 
-    Uni<FindPlayerResponse> findPlayer(@Valid FindPlayerRequest request);
+    Uni<FindPlayerResponse> execute(@Valid FindPlayerRequest request);
 
-    Uni<SyncPlayerResponse> syncPlayer(@Valid SyncPlayerRequest request);
+    Uni<SyncPlayerResponse> execute(@Valid SyncPlayerRequest request);
 
-    Uni<UpdatePlayerProfileResponse> updatePlayerProfile(@Valid UpdatePlayerProfileRequest request);
+    Uni<UpdatePlayerProfileResponse> execute(@Valid UpdatePlayerProfileRequest request);
 
-    Uni<DeletePlayerResponse> deletePlayer(@Valid DeletePlayerRequest request);
+    Uni<DeletePlayerResponse> execute(@Valid DeletePlayerRequest request);
 }

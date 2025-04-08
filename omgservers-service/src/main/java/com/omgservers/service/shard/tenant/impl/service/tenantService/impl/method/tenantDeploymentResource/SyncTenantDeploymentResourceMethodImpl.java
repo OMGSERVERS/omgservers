@@ -1,12 +1,12 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentResource;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantDeploymentResource.SyncTenantDeploymentResourceRequest;
 import com.omgservers.schema.module.tenant.tenantDeploymentResource.SyncTenantDeploymentResourceResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantDeploymentResource.UpsertTenantDeploymentResourceOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantStage.VerifyTenantStageExistsOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantVersion.VerifyTenantVersionExistsOperation;
@@ -25,55 +25,50 @@ class SyncTenantDeploymentResourceMethodImpl implements SyncTenantDeploymentReso
     final VerifyTenantVersionExistsOperation verifyTenantVersionExistsOperation;
     final VerifyTenantStageExistsOperation verifyTenantStageExistsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantDeploymentResourceResponse> execute(final SyncTenantDeploymentResourceRequest request) {
+    public Uni<SyncTenantDeploymentResourceResponse> execute(final ShardModel shardModel,
+                                                             final SyncTenantDeploymentResourceRequest request) {
         log.trace("{}", request);
 
-        final var shardKey = request.getRequestShardKey();
         final var tenantDeploymentResource = request.getTenantDeploymentResource();
         final var tenantId = tenantDeploymentResource.getTenantId();
         final var tenantStageId = tenantDeploymentResource.getStageId();
         final var tenantVersionId = tenantDeploymentResource.getVersionId();
 
-        return checkShardOperation.checkShard(shardKey)
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> verifyTenantStageExistsOperation
-                                            .execute(sqlConnection, shard, tenantId, tenantStageId)
-                                            .flatMap(stageExists -> {
-                                                if (stageExists) {
-                                                    return verifyTenantVersionExistsOperation
-                                                            .execute(sqlConnection, shard, tenantId, tenantVersionId)
-                                                            .flatMap(versionExists -> {
-                                                                if (versionExists) {
-                                                                    return upsertTenantDeploymentResourceOperation
-                                                                            .execute(changeContext,
-                                                                                    sqlConnection,
-                                                                                    shardModel.shard(),
-                                                                                    tenantDeploymentResource);
-                                                                } else {
-                                                                    throw new ServerSideNotFoundException(
-                                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                                            "version does not exist or was deleted, id=" +
-                                                                                    tenantVersionId);
-                                                                }
-                                                            });
-                                                } else {
-                                                    throw new ServerSideNotFoundException(
-                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "stage does not exist or was deleted, id=" +
-                                                                    tenantStageId);
-                                                }
-                                            })
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        verifyTenantStageExistsOperation
+                                .execute(sqlConnection, shardModel.shard(), tenantId, tenantStageId)
+                                .flatMap(stageExists -> {
+                                    if (stageExists) {
+                                        return verifyTenantVersionExistsOperation
+                                                .execute(sqlConnection, shardModel.shard(), tenantId, tenantVersionId)
+                                                .flatMap(versionExists -> {
+                                                    if (versionExists) {
+                                                        return upsertTenantDeploymentResourceOperation
+                                                                .execute(changeContext,
+                                                                        sqlConnection,
+                                                                        shardModel.shard(),
+                                                                        tenantDeploymentResource);
+                                                    } else {
+                                                        throw new ServerSideNotFoundException(
+                                                                ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                                "version does not exist or was deleted, id=" +
+                                                                        tenantVersionId);
+                                                    }
+                                                });
+                                    } else {
+                                        throw new ServerSideNotFoundException(
+                                                ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                "stage does not exist or was deleted, id=" +
+                                                        tenantStageId);
+                                    }
+                                })
 
-                            )
-                            .map(ChangeContext::getResult);
-                })
+                )
+                .map(ChangeContext::getResult)
                 .map(SyncTenantDeploymentResourceResponse::new);
     }
 }

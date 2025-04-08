@@ -1,9 +1,10 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientRuntimeRef;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.clientRuntimeRef.SyncClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.clientRuntimeRef.SyncClientRuntimeRefResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncClientRuntimeRefMethod {
-    Uni<SyncClientRuntimeRefResponse> execute(SyncClientRuntimeRefRequest request);
+    Uni<SyncClientRuntimeRefResponse> execute(ShardModel shardModel, SyncClientRuntimeRefRequest request);
 }

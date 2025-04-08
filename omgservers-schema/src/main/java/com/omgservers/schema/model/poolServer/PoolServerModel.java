@@ -43,5 +43,8 @@ public class PoolServerModel {
     PoolServerConfigDto config;
 
     @NotNull
+    PoolServerStatusEnum status;
+
+    @NotNull
     Boolean deleted;
 }

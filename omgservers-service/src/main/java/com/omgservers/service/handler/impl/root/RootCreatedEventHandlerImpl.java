@@ -49,7 +49,7 @@ public class RootCreatedEventHandlerImpl implements EventHandler {
 
     Uni<RootModel> getRoot(final Long id) {
         final var request = new GetRootRequest(id);
-        return rootShard.getService().getRoot(request)
+        return rootShard.getService().execute(request)
                 .map(GetRootResponse::getRoot);
     }
 }

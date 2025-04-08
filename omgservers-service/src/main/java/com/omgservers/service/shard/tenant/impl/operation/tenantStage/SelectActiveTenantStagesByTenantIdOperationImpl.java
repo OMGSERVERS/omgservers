@@ -36,6 +36,6 @@ class SelectActiveTenantStagesByTenantIdOperationImpl implements SelectActiveTen
                         """,
                 Collections.singletonList(tenantId),
                 "Tenant stage",
-                tenantStageModelMapper::fromRow);
+                tenantStageModelMapper::execute);
     }
 }

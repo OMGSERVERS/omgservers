@@ -3,10 +3,9 @@ package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
-import com.omgservers.service.shard.tenant.impl.operation.tenantVersion.DeleteTenantVersionOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenantVersion.DeleteTenantVersionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,26 +17,24 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
 
-    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteTenantVersionOperation deleteTenantVersionOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteTenantVersionResponse> execute(final DeleteTenantVersionRequest request) {
+    public Uni<DeleteTenantVersionResponse> execute(final ShardModel shardModel,
+                                                    final DeleteTenantVersionRequest request) {
         log.trace("{}", request);
         final var tenantId = request.getTenantId();
         final var id = request.getId();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, tenantId, id))
-                .map(DeleteTenantVersionResponse::new);
-    }
-
-    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        deleteTenantVersionOperation.execute(changeContext, sqlConnection, shardModel.shard(), tenantId, id))
-                .map(ChangeContext::getResult);
+                        deleteTenantVersionOperation.execute(changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                tenantId,
+                                id))
+                .map(ChangeContext::getResult)
+                .map(DeleteTenantVersionResponse::new);
     }
 }

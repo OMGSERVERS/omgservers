@@ -20,19 +20,19 @@ import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<GetRootResponse> getRoot(GetRootRequest request);
+    Uni<GetRootResponse> execute(GetRootRequest request);
 
-    Uni<SyncRootResponse> syncRoot(SyncRootRequest request);
+    Uni<SyncRootResponse> execute(SyncRootRequest request);
 
-    Uni<DeleteRootResponse> deleteRoot(DeleteRootRequest request);
+    Uni<DeleteRootResponse> execute(DeleteRootRequest request);
 
-    Uni<GetRootEntityRefResponse> getRootEntityRef(GetRootEntityRefRequest request);
+    Uni<GetRootEntityRefResponse> execute(GetRootEntityRefRequest request);
 
-    Uni<FindRootEntityRefResponse> findRootEntityRef(FindRootEntityRefRequest request);
+    Uni<FindRootEntityRefResponse> execute(FindRootEntityRefRequest request);
 
-    Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(ViewRootEntityRefsRequest request);
+    Uni<ViewRootEntityRefsResponse> execute(ViewRootEntityRefsRequest request);
 
-    Uni<SyncRootEntityRefResponse> syncRootEntityRef(SyncRootEntityRefRequest request);
+    Uni<SyncRootEntityRefResponse> execute(SyncRootEntityRefRequest request);
 
-    Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(DeleteRootEntityRefRequest request);
+    Uni<DeleteRootEntityRefResponse> execute(DeleteRootEntityRefRequest request);
 }

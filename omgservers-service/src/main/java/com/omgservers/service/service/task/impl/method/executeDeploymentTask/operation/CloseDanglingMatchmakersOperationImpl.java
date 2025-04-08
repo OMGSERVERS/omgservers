@@ -28,36 +28,39 @@ class CloseDanglingMatchmakersOperationImpl implements CloseDanglingMatchmakersO
 
         final var deploymentState = fetchDeploymentResult.deploymentState();
 
-        deploymentState.getDeploymentMatchmakerResources().stream()
+        final var deploymentMatchmakerResourcesToUpdateStatus = deploymentState
+                .getDeploymentMatchmakerResources().stream()
                 .filter(deploymentMatchmakerResource -> deploymentMatchmakerResource.getStatus()
                         .equals(DeploymentMatchmakerResourceStatusEnum.CREATED))
-                .forEach(deploymentMatchmakerResource -> {
-
+                .filter(deploymentMatchmakerResource -> {
                     final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
-                    final var noMatchmakerAssignments = deploymentState.getDeploymentMatchmakerAssignments().stream()
+                    return deploymentState.getDeploymentMatchmakerAssignments().stream()
                             .noneMatch(deploymentMatchmakerAssignment ->
                                     deploymentMatchmakerAssignment.getMatchmakerId().equals(matchmakerId));
+                })
+                .filter(deploymentMatchmakerResource -> {
+                    final var matchmakerResourceCreated = deploymentMatchmakerResource.getCreated();
+                    final var matchmakerCurrentLifetime = Duration
+                            .between(matchmakerResourceCreated, Instant.now());
+                    return matchmakerCurrentLifetime.toSeconds() > MATCHMAKER_MIN_LIFETIME;
+                })
+                .map(deploymentMatchmakerResource -> {
+                    final var deploymentMatchmakerResourceId = deploymentMatchmakerResource.getId();
+                    final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
 
-                    if (noMatchmakerAssignments) {
-                        final var matchmakerResourceCreated = deploymentMatchmakerResource.getCreated();
-                        final var matchmakerCurrentLifetime = Duration
-                                .between(matchmakerResourceCreated, Instant.now());
-                        if (matchmakerCurrentLifetime.toSeconds() > MATCHMAKER_MIN_LIFETIME) {
-                            final var deploymentMatchmakerResourceId = deploymentMatchmakerResource.getId();
+                    log.info("Matchmaker resource \"{}\" of deployment \"{}\" " +
+                                    "is dangling and marked as closed, matchmakerId=\"{}\"",
+                            deploymentMatchmakerResourceId, deploymentId, matchmakerId);
 
-                            final var dtoToUpdateStatus = new DeploymentMatchmakerResourceToUpdateStatusDto(
-                                    deploymentMatchmakerResourceId,
-                                    DeploymentMatchmakerResourceStatusEnum.CLOSED);
+                    final var dtoToUpdateStatus = new DeploymentMatchmakerResourceToUpdateStatusDto(
+                            deploymentMatchmakerResourceId,
+                            DeploymentMatchmakerResourceStatusEnum.CLOSED);
 
-                            handleDeploymentResult.deploymentChangeOfState()
-                                    .getDeploymentMatchmakerResourcesToUpdateStatus()
-                                    .add(dtoToUpdateStatus);
+                    return dtoToUpdateStatus;
+                })
+                .toList();
 
-                            log.info("Matchmaker resource \"{}\" of deployment \"{}\" " +
-                                            "is dangling and marked as closed, matchmakerId=\"{}\"",
-                                    deploymentMatchmakerResourceId, deploymentId, matchmakerId);
-                        }
-                    }
-                });
+        handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToUpdateStatus()
+                .addAll(deploymentMatchmakerResourcesToUpdateStatus);
     }
 }

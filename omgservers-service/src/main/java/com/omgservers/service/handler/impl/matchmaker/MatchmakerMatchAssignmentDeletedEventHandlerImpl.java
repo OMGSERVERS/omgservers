@@ -14,6 +14,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchAssignmentDeletedEventBodyModel;
 import com.omgservers.service.factory.runtime.RuntimeCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.deployment.CreateDeploymentRequestOperation;
 import com.omgservers.service.shard.match.MatchShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
@@ -31,6 +32,8 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
     final MatchmakerShard matchmakerShard;
     final RuntimeShard runtimeShard;
     final MatchShard matchShard;
+
+    final CreateDeploymentRequestOperation createDeploymentRequestOperation;
 
     final RuntimeCommandModelFactory runtimeCommandModelFactory;
 
@@ -60,9 +63,9 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
                                 final var runtimeId = match.getRuntimeId();
                                 final var clientId = matchmakerMatchAssignment.getClientId();
 
-                                return createRemoveClientRuntimeCommand(runtimeId,
-                                        clientId,
-                                        idempotencyKey);
+                                return createRemoveClientRuntimeCommand(runtimeId, clientId, idempotencyKey)
+                                        .flatMap(created -> createDeploymentRequestOperation.execute(clientId,
+                                                idempotencyKey));
                             });
                 })
                 .replaceWithVoid();

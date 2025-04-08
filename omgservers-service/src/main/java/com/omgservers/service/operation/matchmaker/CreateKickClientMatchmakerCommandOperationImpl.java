@@ -21,9 +21,9 @@ class CreateKickClientMatchmakerCommandOperationImpl implements CreateKickClient
     final MatchmakerCommandModelFactory matchmakerCommandModelFactory;
 
     @Override
-    public Uni<Boolean> execute(final Long matchmakerId,
-                                final Long matchId,
-                                final Long clientId) {
+    public Uni<Boolean> executeFailSafe(final Long matchmakerId,
+                                        final Long matchId,
+                                        final Long clientId) {
         final var commandBody = new KickClientMatchmakerCommandBodyDto(clientId, matchId);
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmakerId, commandBody);
         final var request = new SyncMatchmakerCommandRequest(matchmakerCommand);

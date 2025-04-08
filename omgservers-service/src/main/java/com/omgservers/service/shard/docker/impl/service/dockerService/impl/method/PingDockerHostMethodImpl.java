@@ -1,5 +1,6 @@
 package com.omgservers.service.shard.docker.impl.service.dockerService.impl.method;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.docker.PingDockerHostRequest;
 import com.omgservers.schema.module.docker.PingDockerHostResponse;
 import com.omgservers.service.operation.docker.GetDockerDaemonClientOperation;
@@ -19,7 +20,8 @@ class PingDockerHostMethodImpl implements PingDockerHostMethod {
     final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
-    public Uni<PingDockerHostResponse> execute(final PingDockerHostRequest request) {
+    public Uni<PingDockerHostResponse> execute(final ShardModel shardModel,
+                                               final PingDockerHostRequest request) {
         log.trace("{}", request);
 
         final var poolServer = request.getPoolServer();

@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.client;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.client.DeleteClientRequest;
 import com.omgservers.schema.module.client.client.DeleteClientResponse;
-import com.omgservers.service.shard.client.impl.operation.client.DeleteClientOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.client.impl.operation.client.DeleteClientOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,20 +19,19 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
     final DeleteClientOperation deleteClientOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteClientResponse> execute(final DeleteClientRequest request) {
+    public Uni<DeleteClientResponse> execute(final ShardModel shardModel,
+                                             final DeleteClientRequest request) {
         log.trace("{}", request);
 
         final var id = request.getId();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
-                                (changeContext, sqlConnection) -> deleteClientOperation
-                                        .deleteClient(changeContext, sqlConnection, shardModel.shard(), id))
-                        .map(ChangeContext::getResult))
+        return changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> deleteClientOperation
+                                .deleteClient(changeContext, sqlConnection, shardModel.shard(), id))
+                .map(ChangeContext::getResult)
                 .map(DeleteClientResponse::new);
     }
 }

@@ -8,7 +8,7 @@ public class LobbyAssigner extends DeploymentAssigner<DeploymentLobbyResourceMod
         DeploymentLobbyAssignmentModel,
         DeploymentRequestModel> {
 
-    public LobbyAssigner(int maxAssignments) {
+    public LobbyAssigner(final int maxAssignments) {
         super(maxAssignments);
     }
 }

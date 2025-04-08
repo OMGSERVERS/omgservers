@@ -1,12 +1,12 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolContainer;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerRequest;
 import com.omgservers.schema.module.pool.poolContainer.SyncPoolContainerResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolContainer.UpsertPoolContainerOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolServer.VerifyPoolServerExistsOperation;
 import io.smallrye.mutiny.Uni;
@@ -19,14 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SyncPoolContainerMethodImpl implements SyncPoolContainerMethod {
 
+    final VerifyPoolServerExistsOperation verifyPoolServerExistsOperation;
     final UpsertPoolContainerOperation upsertPoolContainerOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final VerifyPoolServerExistsOperation verifyPoolServerExistsOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncPoolContainerResponse> execute(
-            final SyncPoolContainerRequest request) {
+    public Uni<SyncPoolContainerResponse> execute(final ShardModel shardModel,
+                                                  final SyncPoolContainerRequest request) {
         log.trace("{}", request);
 
         final var shardKey = request.getRequestShardKey();
@@ -34,29 +33,23 @@ class SyncPoolContainerMethodImpl implements SyncPoolContainerMethod {
         final var poolId = poolContainer.getPoolId();
         final var serverId = poolContainer.getServerId();
 
-        return checkShardOperation.checkShard(shardKey)
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (context, sqlConnection) -> verifyPoolServerExistsOperation
-                                            .execute(sqlConnection, shard, poolId, serverId)
-                                            .flatMap(exists -> {
-                                                if (exists) {
-                                                    return upsertPoolContainerOperation
-                                                            .execute(
-                                                                    context,
-                                                                    sqlConnection,
-                                                                    shard,
-                                                                    poolContainer);
-                                                } else {
-                                                    throw new ServerSideNotFoundException(
-                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "pool server does not exist or was deleted, " +
-                                                                    "serverId=" + serverId);
-                                                }
-                                            }))
-                            .map(ChangeContext::getResult);
-                })
+        return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
+                        verifyPoolServerExistsOperation.execute(sqlConnection, shardModel.shard(), poolId, serverId)
+                                .flatMap(exists -> {
+                                    if (exists) {
+                                        return upsertPoolContainerOperation.execute(
+                                                context,
+                                                sqlConnection,
+                                                shardModel.shard(),
+                                                poolContainer);
+                                    } else {
+                                        throw new ServerSideNotFoundException(
+                                                ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                "pool server does not exist or was deleted, " +
+                                                        "serverId=" + serverId);
+                                    }
+                                }))
+                .map(ChangeContext::getResult)
                 .map(SyncPoolContainerResponse::new);
     }
 }

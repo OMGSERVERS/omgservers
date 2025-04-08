@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchAssignment;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.ViewMatchmakerMatchAssignmentsRequest;
 import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.ViewMatchmakerMatchAssignmentsResponse;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment.SelectActiveMatchmakerMatchAssignmentsByMatchIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,25 +17,21 @@ class ViewMatchmakerMatchAssignmentsMethodImpl implements ViewMatchmakerMatchAss
 
     final SelectActiveMatchmakerMatchAssignmentsByMatchIdOperation
             selectActiveMatchmakerMatchAssignmentsByMatchIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewMatchmakerMatchAssignmentsResponse> execute(
-            final ViewMatchmakerMatchAssignmentsRequest request) {
+    public Uni<ViewMatchmakerMatchAssignmentsResponse> execute(final ShardModel shardModel,
+                                                               final ViewMatchmakerMatchAssignmentsRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var matchmakerId = request.getMatchmakerId();
-                    final var matchId = request.getMatchId();
-                    return pgPool.withTransaction(sqlConnection -> selectActiveMatchmakerMatchAssignmentsByMatchIdOperation
-                            .execute(sqlConnection,
-                                    shard.shard(),
-                                    matchmakerId,
-                                    matchId));
-                })
+        final var matchmakerId = request.getMatchmakerId();
+        final var matchId = request.getMatchId();
+        return pgPool.withTransaction(sqlConnection -> selectActiveMatchmakerMatchAssignmentsByMatchIdOperation
+                        .execute(sqlConnection,
+                                shardModel.shard(),
+                                matchmakerId,
+                                matchId))
                 .map(ViewMatchmakerMatchAssignmentsResponse::new);
 
     }

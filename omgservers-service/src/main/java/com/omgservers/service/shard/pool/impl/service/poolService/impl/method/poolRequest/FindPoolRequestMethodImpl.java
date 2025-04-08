@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolRequest;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.FindPoolRequestResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectPoolRequestByPoolIdAndRuntimeIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,25 +17,21 @@ class FindPoolRequestMethodImpl implements FindPoolRequestMethod {
 
     final SelectPoolRequestByPoolIdAndRuntimeIdOperation
             selectPoolRequestByPoolIdAndRuntimeIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<FindPoolRequestResponse> execute(final FindPoolRequestRequest request) {
+    public Uni<FindPoolRequestResponse> execute(final ShardModel shardModel,
+                                                final FindPoolRequestRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var lobbyId = request.getPoolId();
-                    final var runtimeId = request.getRuntimeId();
-                    return pgPool.withTransaction(sqlConnection ->
-                            selectPoolRequestByPoolIdAndRuntimeIdOperation
-                                    .execute(sqlConnection,
-                                            shard.shard(),
-                                            lobbyId,
-                                            runtimeId));
-                })
+        final var lobbyId = request.getPoolId();
+        final var runtimeId = request.getRuntimeId();
+        return pgPool.withTransaction(sqlConnection -> selectPoolRequestByPoolIdAndRuntimeIdOperation
+                        .execute(sqlConnection,
+                                shardModel.shard(),
+                                lobbyId,
+                                runtimeId))
                 .map(FindPoolRequestResponse::new);
     }
 }

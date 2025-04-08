@@ -1,6 +1,8 @@
 ### Useful links
+
 - Distribution Registry Token Authentication - https://distribution.github.io/distribution/spec/auth/
-- Docker Auth Flow - https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/sso-protocols/docker.html
+- Docker Auth
+  Flow - https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/sso-protocols/docker.html
 - Resource Scope Grammar - https://distribution.github.io/distribution/spec/auth/scope/#resource-scope-grammar
 
 ### Docker Authentication Flow

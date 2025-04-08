@@ -53,7 +53,7 @@ create table if not exists tab_pool_command (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null,
+    body jsonb not null,
     deleted boolean not null
 );
 
@@ -65,7 +65,7 @@ create table if not exists tab_pool_request (
     modified timestamp with time zone not null,
     runtime_id bigint not null,
     runtime_qualifier text not null,
-    config json not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -76,7 +76,8 @@ create table if not exists tab_pool_server (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    config json not null,
+    config jsonb not null,
+    status text not null,
     deleted boolean not null
 );
 
@@ -89,7 +90,7 @@ create table if not exists tab_pool_container (
     modified timestamp with time zone not null,
     runtime_id bigint not null,
     runtime_qualifier text not null,
-    config json not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -113,7 +114,7 @@ create table if not exists tab_user_player (
     modified timestamp with time zone not null,
     tenant_id bigint not null,
     stage_id bigint not null,
-    profile json not null,
+    profile jsonb not null,
     deleted boolean not null
 );
 
@@ -137,7 +138,7 @@ create table if not exists tab_client_message (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null,
+    body jsonb not null,
     deleted boolean not null
 );
 
@@ -222,7 +223,7 @@ create table if not exists tab_tenant_version (
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
-    config json not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -287,7 +288,7 @@ create table if not exists tab_deployment_command (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null,
+    body jsonb not null,
     deleted boolean not null
 );
 
@@ -375,7 +376,7 @@ create table if not exists tab_matchmaker_command (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null,
+    body jsonb not null,
     deleted boolean not null
 );
 
@@ -387,7 +388,7 @@ create table if not exists tab_matchmaker_request (
     modified timestamp with time zone not null,
     client_id bigint not null,
     mode text not null,
-    config json not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -412,7 +413,7 @@ create table if not exists tab_matchmaker_match_assignment (
     match_id bigint not null,
     client_id bigint not null,
     group_name varchar(64) not null,
-    config json not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -438,7 +439,7 @@ create table if not exists tab_runtime (
     deployment_id bigint not null,
     qualifier text not null,
     user_id bigint not null,
-    config json not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -449,7 +450,7 @@ create table if not exists tab_runtime_command (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null,
+    body jsonb not null,
     deleted boolean not null
 );
 
@@ -460,7 +461,7 @@ create table if not exists tab_runtime_message (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    body json not null,
+    body jsonb not null,
     deleted boolean not null
 );
 
@@ -471,6 +472,6 @@ create table if not exists tab_runtime_assignment (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     client_id bigint not null,
-    config json not null,
+    config jsonb not null,
     deleted boolean not null
 );

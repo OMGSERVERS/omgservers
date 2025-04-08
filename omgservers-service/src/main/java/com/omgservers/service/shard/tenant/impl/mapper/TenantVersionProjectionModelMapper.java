@@ -14,14 +14,14 @@ public class TenantVersionProjectionModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public TenantVersionProjectionModel fromRow(final Row row) {
-        final var versionProjection = new TenantVersionProjectionModel();
-        versionProjection.setId(row.getLong("id"));
-        versionProjection.setTenantId(row.getLong("tenant_id"));
-        versionProjection.setProjectId(row.getLong("project_id"));
-        versionProjection.setCreated(row.getOffsetDateTime("created").toInstant());
-        versionProjection.setModified(row.getOffsetDateTime("modified").toInstant());
-        versionProjection.setDeleted(row.getBoolean("deleted"));
-        return versionProjection;
+    public TenantVersionProjectionModel execute(final Row row) {
+        final var tenantVersionProjection = new TenantVersionProjectionModel();
+        tenantVersionProjection.setId(row.getLong("id"));
+        tenantVersionProjection.setTenantId(row.getLong("tenant_id"));
+        tenantVersionProjection.setProjectId(row.getLong("project_id"));
+        tenantVersionProjection.setCreated(row.getOffsetDateTime("created").toInstant());
+        tenantVersionProjection.setModified(row.getOffsetDateTime("modified").toInstant());
+        tenantVersionProjection.setDeleted(row.getBoolean("deleted"));
+        return tenantVersionProjection;
     }
 }

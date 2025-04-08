@@ -74,7 +74,7 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
         final var root = rootModelFactory.create();
 
         final var request = new SyncRootRequest(root);
-        return rootShard.getService().syncRoot(request)
+        return rootShard.getService().execute(request)
                 .replaceWith(root);
     }
 }

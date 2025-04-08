@@ -9,10 +9,11 @@ import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsReque
 import com.omgservers.schema.module.tenant.tenantProject.ViewTenantProjectsResponse;
 import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesRequest;
 import com.omgservers.schema.module.tenant.tenantStage.ViewTenantStagesResponse;
-import com.omgservers.service.shard.runtime.RuntimeShard;
-import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.service.task.Task;
 import com.omgservers.service.service.task.TaskService;
 import com.omgservers.service.service.task.dto.ExecuteStageTaskRequest;
+import com.omgservers.service.shard.runtime.RuntimeShard;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,14 +25,16 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class TenantTaskImpl {
+public class TenantTaskImpl implements Task<TenantTaskArguments> {
 
     final RuntimeShard runtimeShard;
     final TenantShard tenantShard;
 
     final TaskService taskService;
 
-    public Uni<Boolean> execute(final Long tenantId) {
+    public Uni<Boolean> execute(final TenantTaskArguments taskArguments) {
+        final var tenantId = taskArguments.tenantId();
+
         return getTenant(tenantId)
                 .flatMap(tenant -> handleTenant(tenant)
                         .replaceWith(Boolean.TRUE));

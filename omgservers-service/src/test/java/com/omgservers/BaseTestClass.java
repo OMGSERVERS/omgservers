@@ -1,5 +1,6 @@
 package com.omgservers;
 
+import com.omgservers.service.service.task.impl.method.executeBootstrapTask.BootstrapTaskArguments;
 import com.omgservers.service.service.task.impl.method.executeBootstrapTask.BootstrapTaskImpl;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -16,7 +17,7 @@ public class BaseTestClass extends Assertions {
 
     @BeforeEach
     void beforeEach() {
-        bootstrapTask.execute()
+        bootstrapTask.execute(new BootstrapTaskArguments())
                 .await().indefinitely();
     }
 }

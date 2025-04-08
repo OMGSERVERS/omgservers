@@ -42,7 +42,7 @@ class CreateUserMethodImpl implements CreateUserMethod {
         final var passwordHash = BcryptUtil.bcryptHash(password);
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
         final var request = new SyncUserRequest(user);
-        return userShard.getService().syncUser(request)
+        return userShard.getService().execute(request)
                 .replaceWith(user);
     }
 }

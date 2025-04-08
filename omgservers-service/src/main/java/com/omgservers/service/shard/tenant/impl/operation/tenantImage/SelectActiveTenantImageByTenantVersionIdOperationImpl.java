@@ -39,6 +39,6 @@ class SelectActiveTenantImageByTenantVersionIdOperationImpl
                         """,
                 List.of(tenantId, tenantVersionId),
                 "Tenant image",
-                tenantImageModelMapper::fromRow);
+                tenantImageModelMapper::execute);
     }
 }

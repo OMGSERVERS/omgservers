@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.machmaker;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerResponse;
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.UpsertMatchmakerOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.UpsertMatchmakerOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,21 +18,19 @@ class SyncMatchmakerMethodImpl implements SyncMatchmakerMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
     final UpsertMatchmakerOperation upsertMatchmakerOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncMatchmakerResponse> execute(SyncMatchmakerRequest request) {
+    public Uni<SyncMatchmakerResponse> execute(final ShardModel shardModel,
+                                               final SyncMatchmakerRequest request) {
         log.trace("{}", request);
 
         final var matchmaker = request.getMatchmaker();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
-                                upsertMatchmakerOperation.execute(context,
-                                        sqlConnection,
-                                        shardModel.shard(),
-                                        matchmaker))
-                        .map(ChangeContext::getResult))
+        return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
+                        upsertMatchmakerOperation.execute(context,
+                                sqlConnection,
+                                shardModel.shard(),
+                                matchmaker))
+                .map(ChangeContext::getResult)
                 .map(SyncMatchmakerResponse::new);
     }
 }

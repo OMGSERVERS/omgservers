@@ -37,7 +37,7 @@ class SelectPlayerOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenPlayer_whenSelectPlayer_thenSelected() {
+    void givenPlayer_whenExecute_thenSelected() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         final var userId = user.getId();
@@ -51,7 +51,7 @@ class SelectPlayerOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenSelectPlayer_thenException() {
+    void givenUnknownIds_whenExecute_thenException() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
         final var playerId = generateIdOperation.generateId();

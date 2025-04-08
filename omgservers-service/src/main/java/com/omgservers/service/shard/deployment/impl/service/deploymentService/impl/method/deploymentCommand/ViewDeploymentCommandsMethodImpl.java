@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentCommand;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deploymentCommand.ViewDeploymentCommandsRequest;
 import com.omgservers.schema.module.deployment.deploymentCommand.ViewDeploymentCommandsResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentDeploymentCommand.SelectActiveDeploymentCommandsByDeploymentIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,23 +17,21 @@ class ViewDeploymentCommandsMethodImpl implements ViewDeploymentCommandsMethod {
 
     final SelectActiveDeploymentCommandsByDeploymentIdOperation
             selectActiveDeploymentCommandsByDeploymentIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewDeploymentCommandsResponse> execute(final ViewDeploymentCommandsRequest request) {
+    public Uni<ViewDeploymentCommandsResponse> execute(final ShardModel shardModel,
+                                                       final ViewDeploymentCommandsRequest request) {
         log.trace("{}", request);
 
         final var deploymentId = request.getDeploymentId();
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> pgPool.withTransaction(
-                        sqlConnection -> selectActiveDeploymentCommandsByDeploymentIdOperation
-                                .execute(sqlConnection,
-                                        shard.shard(),
-                                        deploymentId
-                                )))
+        return pgPool.withTransaction(
+                        sqlConnection -> selectActiveDeploymentCommandsByDeploymentIdOperation.execute(sqlConnection,
+                                shardModel.shard(),
+                                deploymentId
+                        ))
                 .map(ViewDeploymentCommandsResponse::new);
 
     }

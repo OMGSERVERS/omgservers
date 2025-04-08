@@ -50,7 +50,7 @@ class OpenMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler 
                             .getMatchmakerMatchResourcesToUpdateStatus()
                             .add(dtoToUpdateStatus);
 
-                    log.info("Match resource \"{}\" of matchmaker \"{}\" marked as created, matchId={}",
+                    log.info("Match resource \"{}\" from matchmaker \"{}\" marked as created, matchId={}",
                             matchmakerMatchResourceId,
                             matchmakerId,
                             matchId);

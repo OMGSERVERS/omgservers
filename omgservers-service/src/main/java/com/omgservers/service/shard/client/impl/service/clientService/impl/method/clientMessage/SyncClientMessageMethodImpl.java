@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientMessage;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.clientMessage.SyncClientMessageRequest;
 import com.omgservers.schema.module.client.clientMessage.SyncClientMessageResponse;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.client.impl.operation.clientMessage.UpsertClientMessageOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -20,26 +20,23 @@ class SyncClientMessageMethodImpl implements SyncClientMessageMethod {
 
     final UpsertClientMessageOperation upsertClientMessageOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     final LogModelFactory logModelFactory;
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncClientMessageResponse> execute(final SyncClientMessageRequest request) {
+    public Uni<SyncClientMessageResponse> execute(final ShardModel shardModel,
+                                                  final SyncClientMessageRequest request) {
         log.trace("{}", request);
 
         final var clientMessage = request.getClientMessage();
-        final var clientId = clientMessage.getClientId();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
-                                (changeContext, sqlConnection) -> upsertClientMessageOperation.upsertClientMessage(
-                                        changeContext,
-                                        sqlConnection,
-                                        shardModel.shard(),
-                                        clientMessage)
-                        )
-                        .map(ChangeContext::getResult))
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        upsertClientMessageOperation.upsertClientMessage(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                clientMessage))
+                .map(ChangeContext::getResult)
                 .map(SyncClientMessageResponse::new);
     }
 }

@@ -42,6 +42,6 @@ class SelectActiveTenantStagePermissionsByTenantStageIdOperationImpl
                         tenantStageId
                 ),
                 "Tenant stage permission",
-                tenantStagePermissionModelMapper::fromRow);
+                tenantStagePermissionModelMapper::execute);
     }
 }

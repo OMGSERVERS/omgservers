@@ -88,7 +88,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     Uni<PlayerModel> findPlayer(final Long userId, final Long tenantStageId) {
         final var request = new FindPlayerRequest(userId, tenantStageId);
-        return userShard.getService().findPlayer(request)
+        return userShard.getService().execute(request)
                 .map(FindPlayerResponse::getPlayer);
     }
 
@@ -97,7 +97,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                   final Long tenantStageId) {
         final var player = playerModelFactory.create(userId, tenantId, tenantStageId);
         final var syncPlayerRequest = new SyncPlayerRequest(player);
-        return userShard.getService().syncPlayer(syncPlayerRequest)
+        return userShard.getService().execute(syncPlayerRequest)
                 .replaceWith(player);
     }
 

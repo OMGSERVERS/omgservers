@@ -6,11 +6,11 @@ import com.omgservers.schema.model.deploymentLobbyAssignment.DeploymentLobbyAssi
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.deploymentMatchmakerAssignment.DeploymentMatchmakerAssignmentModel;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deploymentState.UpdateDeploymentStateRequest;
 import com.omgservers.schema.module.deployment.deploymentState.UpdateDeploymentStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentDeploymentCommand.DeleteDeploymentCommandOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyAssignment.DeleteDeploymentLobbyAssignmentOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyAssignment.UpsertDeploymentLobbyAssignmentOperation;
@@ -51,78 +51,73 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
     final DeleteDeploymentRequestOperation deleteDeploymentRequestOperation;
 
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<UpdateDeploymentStateResponse> execute(final UpdateDeploymentStateRequest request) {
+    public Uni<UpdateDeploymentStateResponse> execute(ShardModel shardModel,
+                                                      final UpdateDeploymentStateRequest request) {
         log.trace("{}", request);
 
+        final var shard = shardModel.shard();
+        final var deploymentId = request.getDeploymentId();
         final var deploymentChangeOfState = request.getDeploymentChangeOfState();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-
-                    final var deploymentId = request.getDeploymentId();
-
-                    return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
-                            deleteDeploymentCommands(changeContext,
-                                    sqlConnection,
-                                    shard,
-                                    deploymentId,
-                                    deploymentChangeOfState.getDeploymentCommandsToDelete())
-                                    .flatMap(voidItem -> deleteDeploymentRequests(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentId,
-                                            deploymentChangeOfState.getDeploymentRequestsToDelete()))
-                                    .flatMap(voidItem -> upsertDeploymentLobbyResources(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentChangeOfState.getDeploymentLobbyResourcesToSync()))
-                                    .flatMap(voidItem -> updateDeploymentLobbyResourcesStatus(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentId,
-                                            deploymentChangeOfState.getDeploymentLobbyResourcesToUpdateStatus()))
-                                    .flatMap(voidItem -> deleteDeploymentLobbyResources(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentId,
-                                            deploymentChangeOfState.getDeploymentLobbyResourcesToDelete()))
-                                    .flatMap(voidItem -> upsertDeploymentLobbyAssignment(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentChangeOfState.getDeploymentLobbyAssignmentToSync()))
-                                    .flatMap(voidItem -> deleteDeploymentLobbyAssignments(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentId,
-                                            deploymentChangeOfState.getDeploymentLobbyAssignmentToDelete()))
-                                    .flatMap(voidItem -> upsertDeploymentMatchmakerResources(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentChangeOfState.getDeploymentMatchmakerResourcesToSync()))
-                                    .flatMap(voidItem -> updateDeploymentMatchmakerResourcesStatus(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentId,
-                                            deploymentChangeOfState.getDeploymentMatchmakerResourcesToUpdateStatus()))
-                                    .flatMap(voidItem -> deleteDeploymentMatchmakerResources(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentId,
-                                            deploymentChangeOfState.getDeploymentMatchmakerResourcesToDelete()))
-                                    .flatMap(voidItem -> upsertDeploymentMatchmakerAssignment(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentChangeOfState.getDeploymentMatchmakerAssignmentToSync()))
-                                    .flatMap(voidItem -> deleteDeploymentMatchmakerAssignments(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            deploymentId,
-                                            deploymentChangeOfState.getDeploymentMatchmakerAssignmentToDelete()))
-                    );
-                })
+        return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
+                        deleteDeploymentCommands(changeContext,
+                                sqlConnection,
+                                shard,
+                                deploymentId,
+                                deploymentChangeOfState.getDeploymentCommandsToDelete())
+                                .flatMap(voidItem -> deleteDeploymentRequests(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentId,
+                                        deploymentChangeOfState.getDeploymentRequestsToDelete()))
+                                .flatMap(voidItem -> upsertDeploymentLobbyResources(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentChangeOfState.getDeploymentLobbyResourcesToSync()))
+                                .flatMap(voidItem -> updateDeploymentLobbyResourcesStatus(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentId,
+                                        deploymentChangeOfState.getDeploymentLobbyResourcesToUpdateStatus()))
+                                .flatMap(voidItem -> deleteDeploymentLobbyResources(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentId,
+                                        deploymentChangeOfState.getDeploymentLobbyResourcesToDelete()))
+                                .flatMap(voidItem -> upsertDeploymentLobbyAssignment(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentChangeOfState.getDeploymentLobbyAssignmentToSync()))
+                                .flatMap(voidItem -> deleteDeploymentLobbyAssignments(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentId,
+                                        deploymentChangeOfState.getDeploymentLobbyAssignmentToDelete()))
+                                .flatMap(voidItem -> upsertDeploymentMatchmakerResources(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentChangeOfState.getDeploymentMatchmakerResourcesToSync()))
+                                .flatMap(voidItem -> updateDeploymentMatchmakerResourcesStatus(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentId,
+                                        deploymentChangeOfState.getDeploymentMatchmakerResourcesToUpdateStatus()))
+                                .flatMap(voidItem -> deleteDeploymentMatchmakerResources(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentId,
+                                        deploymentChangeOfState.getDeploymentMatchmakerResourcesToDelete()))
+                                .flatMap(voidItem -> upsertDeploymentMatchmakerAssignment(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentChangeOfState.getDeploymentMatchmakerAssignmentToSync()))
+                                .flatMap(voidItem -> deleteDeploymentMatchmakerAssignments(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        deploymentId,
+                                        deploymentChangeOfState.getDeploymentMatchmakerAssignmentToDelete()))
+                )
                 .replaceWith(Boolean.TRUE)
                 .map(UpdateDeploymentStateResponse::new);
     }

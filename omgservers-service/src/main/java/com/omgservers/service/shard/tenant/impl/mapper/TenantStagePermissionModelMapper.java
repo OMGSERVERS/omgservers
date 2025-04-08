@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class TenantStagePermissionModelMapper {
 
-    public TenantStagePermissionModel fromRow(final Row row) {
+    public TenantStagePermissionModel execute(final Row row) {
         final var tenantStagePermission = new TenantStagePermissionModel();
         tenantStagePermission.setId(row.getLong("id"));
         tenantStagePermission.setIdempotencyKey(row.getString("idempotency_key"));

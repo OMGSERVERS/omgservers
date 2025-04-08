@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.user.operation.testInterface;
 
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.service.shard.user.impl.operation.user.validateCredentials.ValidateCredentialsOperation;
+import com.omgservers.service.shard.user.impl.operation.user.ValidateCredentialsOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class ValidateCredentialsOperationTestInterface {
 
     public UserModel validateCredentials(final UserModel user,
                                          final String password) {
-        return validateCredentialsOperation.validateCredentials(user, password)
+        return validateCredentialsOperation.execute(user, password)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

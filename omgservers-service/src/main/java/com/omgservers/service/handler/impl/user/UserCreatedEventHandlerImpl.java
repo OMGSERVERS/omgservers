@@ -77,7 +77,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
 
     Uni<UserModel> getUser(final Long id) {
         final var request = new GetUserRequest(id);
-        return userShard.getService().getUser(request)
+        return userShard.getService().execute(request)
                 .map(GetUserResponse::getUser);
     }
 
@@ -91,7 +91,7 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
                             refQualifier,
                             tenantId);
                     final var request = new SyncRootEntityRefRequest(rootEntityRef);
-                    return rootShard.getService().syncRootEntityRefWithIdempotency(request)
+                    return rootShard.getService().executeWithIdempotency(request)
                             .map(SyncRootEntityRefResponse::getCreated);
                 });
     }

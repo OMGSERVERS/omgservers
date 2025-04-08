@@ -2,29 +2,36 @@ package com.omgservers.service.service.task.impl.method.executeDeploymentTask.co
 
 import lombok.Getter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.TreeSet;
 
 abstract class DeploymentAssigner<T, A, R> {
 
-    final Map<Long, Resource> indexById;
+    final Map<Long, Resource> resourceById;
     final TreeSet<Resource> sortedSet;
     final int maxAssignments;
 
-    public DeploymentAssigner(int maxAssignments) {
+    public DeploymentAssigner(final int maxAssignments) {
         this.maxAssignments = maxAssignments;
         this.sortedSet = new TreeSet<>(Comparator.comparing(Resource::getSize)
                 .thenComparingLong(Resource::getId));
-        this.indexById = new HashMap<>();
+        this.resourceById = new HashMap<>();
     }
 
-    public void addResource(final Long resourceId, T resource) {
+    public void addResource(final Long resourceId, final T resource) {
         final var container = new Resource(resourceId, resource);
         sortedSet.add(container);
-        indexById.put(resourceId, container);
+        resourceById.put(resourceId, container);
     }
 
-    public void addAssignment(final Long resourceId, A assignment) {
-        final var resource = indexById.get(resourceId);
+    public void addAssignment(final Long resourceId, final A assignment) {
+        final var resource = resourceById.get(resourceId);
         if (Objects.nonNull(resource)) {
             resource.addAssignment(assignment);
         }
@@ -64,12 +71,12 @@ abstract class DeploymentAssigner<T, A, R> {
             size = 0;
         }
 
-        void addAssignment(A assignment) {
+        void addAssignment(final A assignment) {
             assignments.add(assignment);
             size += 1;
         }
 
-        boolean addRequest(R request) {
+        boolean addRequest(final R request) {
             if (size < maxAssignments) {
                 requests.add(request);
                 size += 1;

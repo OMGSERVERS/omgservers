@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentResource;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantDeploymentResource.FindTenantDeploymentResourceRequest;
 import com.omgservers.schema.module.tenant.tenantDeploymentResource.FindTenantDeploymentResourceResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantDeploymentResource.SelectTenantDeploymentResourceByDeploymentIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,23 +16,20 @@ import lombok.extern.slf4j.Slf4j;
 class FindTenantDeploymentResourceMethodImpl implements FindTenantDeploymentResourceMethod {
 
     final SelectTenantDeploymentResourceByDeploymentIdOperation selectTenantDeploymentResourceByDeploymentIdOperation;
-    final CheckShardOperation checkShardOperation;
     final PgPool pgPool;
 
     @Override
-    public Uni<FindTenantDeploymentResourceResponse> execute(final FindTenantDeploymentResourceRequest request) {
+    public Uni<FindTenantDeploymentResourceResponse> execute(final ShardModel shardModel,
+                                                             final FindTenantDeploymentResourceRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var tenantId = request.getTenantId();
-                    final var deploymentId = request.getDeploymentId();
-                    return pgPool.withTransaction(sqlConnection -> selectTenantDeploymentResourceByDeploymentIdOperation
-                            .execute(sqlConnection,
-                                    shardModel.shard(),
-                                    tenantId,
-                                    deploymentId));
-                })
+        final var tenantId = request.getTenantId();
+        final var deploymentId = request.getDeploymentId();
+        return pgPool.withTransaction(sqlConnection -> selectTenantDeploymentResourceByDeploymentIdOperation
+                        .execute(sqlConnection,
+                                shardModel.shard(),
+                                tenantId,
+                                deploymentId))
                 .map(FindTenantDeploymentResourceResponse::new);
     }
 }

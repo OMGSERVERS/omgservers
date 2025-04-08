@@ -1,12 +1,12 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenant;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.alias.ViewAliasesRequest;
 import com.omgservers.schema.module.alias.ViewAliasesResponse;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.module.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.module.tenant.tenant.dto.TenantDataDto;
 import com.omgservers.service.configuration.GlobalShardConfiguration;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.impl.operation.tenant.SelectTenantOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantPermission.SelectActiveTenantPermissionsByTenantIdOperation;
@@ -28,30 +28,27 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
     final SelectActiveTenantPermissionsByTenantIdOperation selectActiveTenantPermissionsByTenantIdOperation;
     final SelectActiveTenantProjectsByTenantIdOperation selectActiveTenantProjectsByTenantIdOperation;
     final SelectTenantOperation selectTenantOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetTenantDataResponse> getTenantData(final GetTenantDataRequest request) {
+    public Uni<GetTenantDataResponse> getTenantData(final ShardModel shardModel,
+                                                    final GetTenantDataRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final int shard = shardModel.shard();
-                    final var tenantId = request.getTenantId();
-                    final var tenantData = new TenantDataDto();
+        final int shard = shardModel.shard();
+        final var tenantId = request.getTenantId();
+        final var tenantData = new TenantDataDto();
 
-                    return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
-                                    shard,
-                                    tenantId,
-                                    tenantData))
-                            .flatMap(voidItem -> fillAliases(tenantId,
-                                    tenantData))
-                            .flatMap(voidItem -> fillTenantAliases(tenantId,
-                                    tenantData))
-                            .replaceWith(tenantData);
-                })
+        return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
+                        shard,
+                        tenantId,
+                        tenantData))
+                .flatMap(voidItem -> fillAliases(tenantId,
+                        tenantData))
+                .flatMap(voidItem -> fillTenantAliases(tenantId,
+                        tenantData))
+                .replaceWith(tenantData)
                 .map(GetTenantDataResponse::new);
     }
 

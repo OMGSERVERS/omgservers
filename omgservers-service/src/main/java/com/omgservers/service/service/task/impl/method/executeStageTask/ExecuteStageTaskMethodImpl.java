@@ -24,7 +24,8 @@ public class ExecuteStageTaskMethodImpl implements ExecuteStageTaskMethod {
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();
 
-        return executeTaskOperation.execute(stageTask.execute(tenantId, tenantStageId))
+        final var taskArguments = new StageTaskArguments(tenantId, tenantStageId);
+        return executeTaskOperation.executeFailSafe(stageTask, taskArguments)
                 .map(ExecuteStageTaskResponse::new);
     }
 }

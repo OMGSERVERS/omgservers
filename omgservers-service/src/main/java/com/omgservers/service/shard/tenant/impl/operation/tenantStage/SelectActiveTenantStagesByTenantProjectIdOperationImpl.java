@@ -37,6 +37,6 @@ class SelectActiveTenantStagesByTenantProjectIdOperationImpl
                         """,
                 List.of(tenantId, tenantProjectId),
                 "Stage",
-                tenantStageModelMapper::fromRow);
+                tenantStageModelMapper::execute);
     }
 }

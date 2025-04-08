@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerState;
 
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateRequest;
 import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.SelectMatchmakerOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerCommand.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment.SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation;
@@ -30,41 +30,37 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
             selectActiveMatchmakerRequestsByMatchmakerIdOperation;
 
     final SelectMatchmakerOperation selectMatchmakerOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetMatchmakerStateResponse> execute(final GetMatchmakerStateRequest request) {
+    public Uni<GetMatchmakerStateResponse> execute(final ShardModel shardModel,
+                                                   final GetMatchmakerStateRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var matchmakerId = request.getMatchmakerId();
-                    final var shard = shardModel.shard();
-                    return pgPool.withTransaction(sqlConnection -> {
-                                final var matchmakerState = new MatchmakerStateDto();
-                                return selectMatchmakerOperation.execute(sqlConnection, shard, matchmakerId)
-                                        .invoke(matchmakerState::setMatchmaker)
-                                        .flatMap(matchmaker ->
-                                                selectActiveMatchmakerCommandsByMatchmakerIdOperation
-                                                        .execute(sqlConnection, shard, matchmakerId))
-                                        .invoke(matchmakerState::setMatchmakerCommands)
-                                        .flatMap(matchmaker ->
-                                                selectActiveMatchmakerRequestsByMatchmakerIdOperation
-                                                        .execute(sqlConnection, shard, matchmakerId))
-                                        .invoke(matchmakerState::setMatchmakerRequests)
-                                        .flatMap(matchmaker ->
-                                                selectActiveMatchmakerMatchResourcesByMatchmakerIdOperation
-                                                        .execute(sqlConnection, shard, matchmakerId))
-                                        .invoke(matchmakerState::setMatchmakerMatchResources)
-                                        .flatMap(matchmakerMatches ->
-                                                selectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation
-                                                        .execute(sqlConnection, shard, matchmakerId))
-                                        .invoke(matchmakerState::setMatchmakerMatchAssignments)
-                                        .replaceWith(matchmakerState);
-                            }
-                    );
+        final var matchmakerId = request.getMatchmakerId();
+        final var shard = shardModel.shard();
+        return pgPool.withTransaction(sqlConnection -> {
+                    final var matchmakerState = new MatchmakerStateDto();
+                    return selectMatchmakerOperation.execute(sqlConnection, shard, matchmakerId)
+                            .invoke(matchmakerState::setMatchmaker)
+                            .flatMap(matchmaker ->
+                                    selectActiveMatchmakerCommandsByMatchmakerIdOperation
+                                            .execute(sqlConnection, shard, matchmakerId))
+                            .invoke(matchmakerState::setMatchmakerCommands)
+                            .flatMap(matchmaker ->
+                                    selectActiveMatchmakerRequestsByMatchmakerIdOperation
+                                            .execute(sqlConnection, shard, matchmakerId))
+                            .invoke(matchmakerState::setMatchmakerRequests)
+                            .flatMap(matchmaker ->
+                                    selectActiveMatchmakerMatchResourcesByMatchmakerIdOperation
+                                            .execute(sqlConnection, shard, matchmakerId))
+                            .invoke(matchmakerState::setMatchmakerMatchResources)
+                            .flatMap(matchmakerMatches ->
+                                    selectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation
+                                            .execute(sqlConnection, shard, matchmakerId))
+                            .invoke(matchmakerState::setMatchmakerMatchAssignments)
+                            .replaceWith(matchmakerState);
                 })
                 .map(GetMatchmakerStateResponse::new);
     }

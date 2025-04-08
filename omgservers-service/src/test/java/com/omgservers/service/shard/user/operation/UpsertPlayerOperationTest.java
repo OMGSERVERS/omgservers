@@ -34,7 +34,7 @@ class UpsertPlayerOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenPlayer_whenUpsertPlayer_thenInserted() {
+    void givenPlayer_whenExecute_thenInserted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user);
@@ -45,7 +45,7 @@ class UpsertPlayerOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenPlayer_whenUpsertPlayer_thenUpdated() {
+    void givenPlayer_whenExecute_thenUpdated() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user);
@@ -58,7 +58,7 @@ class UpsertPlayerOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenPlayer_whenUpsertPlayer_thenIdempotencyViolation() {
+    void givenPlayer_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user);

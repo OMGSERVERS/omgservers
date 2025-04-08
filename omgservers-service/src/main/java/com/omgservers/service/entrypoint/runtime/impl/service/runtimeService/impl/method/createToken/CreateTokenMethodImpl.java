@@ -53,7 +53,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     Uni<String> createUserToken(final Long userId, final String password) {
         final var createTokenRequest = new CreateTokenRequest(userId, password);
-        return userShard.getService().createToken(createTokenRequest)
+        return userShard.getService().execute(createTokenRequest)
                 .map(CreateTokenResponse::getRawToken);
     }
 

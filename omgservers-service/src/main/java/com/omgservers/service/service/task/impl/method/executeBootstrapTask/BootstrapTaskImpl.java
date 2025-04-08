@@ -8,6 +8,7 @@ import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.bootstrap.BootstrapService;
 import com.omgservers.service.service.bootstrap.dto.*;
+import com.omgservers.service.service.task.Task;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -16,14 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-public class BootstrapTaskImpl {
+public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
 
     final BootstrapService bootstrapService;
 
     final GetServiceConfigOperation getServiceConfigOperation;
     final CalculateShardOperation calculateShardOperation;
 
-    public Uni<Boolean> execute() {
+    public Uni<Boolean> execute(final BootstrapTaskArguments taskArguments) {
         return calculateShardOperation.calculateShard(String.valueOf(GlobalShardConfiguration.GLOBAL_SHARD_KEY))
                 .flatMap(shardModel -> {
                     if (shardModel.foreign()) {

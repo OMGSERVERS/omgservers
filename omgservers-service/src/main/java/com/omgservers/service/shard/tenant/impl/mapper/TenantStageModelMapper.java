@@ -14,7 +14,7 @@ public class TenantStageModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public TenantStageModel fromRow(final Row row) {
+    public TenantStageModel execute(final Row row) {
         final var tenantStage = new TenantStageModel();
         tenantStage.setId(row.getLong("id"));
         tenantStage.setTenantId(row.getLong("tenant_id"));

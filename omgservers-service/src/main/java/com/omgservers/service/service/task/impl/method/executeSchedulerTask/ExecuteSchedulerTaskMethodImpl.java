@@ -21,7 +21,8 @@ public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMetho
     public Uni<ExecuteSchedulerTaskResponse> execute(final ExecuteSchedulerTaskRequest request) {
         log.trace("{}", request);
 
-        return executeTaskOperation.execute(schedulerTask.execute())
+        final var taskArguments = new SchedulerTaskArguments();
+        return executeTaskOperation.executeFailSafe(schedulerTask, taskArguments)
                 .map(ExecuteSchedulerTaskResponse::new);
     }
 }

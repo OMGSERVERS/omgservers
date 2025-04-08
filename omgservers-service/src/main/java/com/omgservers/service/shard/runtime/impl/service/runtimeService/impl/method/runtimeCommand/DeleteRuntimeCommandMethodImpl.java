@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeCommand;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.runtime.runtimeCommand.DeleteRuntimeCommandRequest;
 import com.omgservers.schema.module.runtime.runtimeCommand.DeleteRuntimeCommandResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeCommand.DeleteRuntimeCommandOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,24 +18,22 @@ class DeleteRuntimeCommandMethodImpl implements DeleteRuntimeCommandMethod {
 
     final DeleteRuntimeCommandOperation deleteRuntimeCommandOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeleteRuntimeCommandResponse> execute(final DeleteRuntimeCommandRequest request) {
+    public Uni<DeleteRuntimeCommandResponse> execute(final ShardModel shardModel,
+                                                     final DeleteRuntimeCommandRequest request) {
         log.trace("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
-                                (changeContext, sqlConnection) ->
-                                        deleteRuntimeCommandOperation.execute(
-                                                changeContext,
-                                                sqlConnection,
-                                                shardModel.shard(),
-                                                runtimeId,
-                                                id))
-                        .map(ChangeContext::getResult))
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        deleteRuntimeCommandOperation.execute(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                runtimeId,
+                                id))
+                .map(ChangeContext::getResult)
                 .map(DeleteRuntimeCommandResponse::new);
     }
 }

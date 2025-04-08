@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deployment;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deployment.GetDeploymentDataRequest;
 import com.omgservers.schema.module.deployment.deployment.GetDeploymentDataResponse;
 import com.omgservers.schema.module.deployment.deployment.dto.DeploymentDataDto;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deployment.SelectDeploymentOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyResource.SelectActiveDeploymentLobbyResourcesByDeploymentIdOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerResource.SelectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation;
@@ -25,23 +25,22 @@ class GetDeploymentDataMethodImpl implements GetDeploymentDataMethod {
             selectActiveDeploymentLobbyResourcesByDeploymentIdOperation;
     final SelectDeploymentOperation
             selectDeploymentOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetDeploymentDataResponse> execute(final GetDeploymentDataRequest request) {
+    public Uni<GetDeploymentDataResponse> execute(final ShardModel shardModel,
+                                                  final GetDeploymentDataRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final int shard = shardModel.shard();
-                    final var deploymentId = request.getDeploymentId();
-                    final var deploymentData = new DeploymentDataDto();
+        final int shard = shardModel.shard();
+        final var deploymentId = request.getDeploymentId();
+        final var deploymentData = new DeploymentDataDto();
 
-                    return pgPool.withTransaction(sqlConnection ->
-                            fillData(sqlConnection, shard, deploymentId, deploymentData));
-                })
+        return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
+                        shard,
+                        deploymentId,
+                        deploymentData))
                 .map(GetDeploymentDataResponse::new);
     }
 

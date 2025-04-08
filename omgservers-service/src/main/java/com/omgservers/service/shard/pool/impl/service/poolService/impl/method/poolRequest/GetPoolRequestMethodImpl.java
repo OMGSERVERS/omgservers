@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolRequest;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.GetPoolRequestResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectPoolRequestOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,21 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 class GetPoolRequestMethodImpl implements GetPoolRequestMethod {
 
     final SelectPoolRequestOperation selectPoolRequestOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetPoolRequestResponse> execute(final GetPoolRequestRequest request) {
+    public Uni<GetPoolRequestResponse> execute(final ShardModel shardModel,
+                                               final GetPoolRequestRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var poolId = request.getPoolId();
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectPoolRequestOperation
-                            .execute(sqlConnection, shard.shard(), poolId, id));
-                })
+        final var poolId = request.getPoolId();
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectPoolRequestOperation
+                        .execute(sqlConnection, shardModel.shard(), poolId, id))
                 .map(GetPoolRequestResponse::new);
     }
 }

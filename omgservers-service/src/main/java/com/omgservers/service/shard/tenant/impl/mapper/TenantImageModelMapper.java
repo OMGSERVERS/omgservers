@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class TenantImageModelMapper {
 
-    public TenantImageModel fromRow(final Row row) {
+    public TenantImageModel execute(final Row row) {
         final var tenantImage = new TenantImageModel();
         tenantImage.setId(row.getLong("id"));
         tenantImage.setIdempotencyKey(row.getString("idempotency_key"));

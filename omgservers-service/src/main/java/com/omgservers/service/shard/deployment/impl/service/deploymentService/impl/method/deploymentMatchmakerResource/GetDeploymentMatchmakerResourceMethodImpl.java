@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentMatchmakerResource;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceRequest;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerResource.SelectDeploymentMatchmakerResourceOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,23 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 class GetDeploymentMatchmakerResourceMethodImpl implements GetDeploymentMatchmakerResourceMethod {
 
     final SelectDeploymentMatchmakerResourceOperation selectDeploymentMatchmakerResourceOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetDeploymentMatchmakerResourceResponse> execute(
-            final GetDeploymentMatchmakerResourceRequest request) {
+    public Uni<GetDeploymentMatchmakerResourceResponse> execute(final ShardModel shardModel,
+                                                                final GetDeploymentMatchmakerResourceRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var deploymentId = request.getDeploymentId();
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectDeploymentMatchmakerResourceOperation
-                            .execute(sqlConnection, shard, deploymentId, id));
-                })
+        final var deploymentId = request.getDeploymentId();
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectDeploymentMatchmakerResourceOperation
+                        .execute(sqlConnection, shardModel.shard(), deploymentId, id))
                 .map(GetDeploymentMatchmakerResourceResponse::new);
     }
 }

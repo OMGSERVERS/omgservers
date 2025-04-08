@@ -36,6 +36,6 @@ class SelectTenantVersionOperationImpl implements SelectTenantVersionOperation {
                         """,
                 List.of(tenantId, id),
                 "Tenant version",
-                tenantVersionModelMapper::fromRow);
+                tenantVersionModelMapper::execute);
     }
 }

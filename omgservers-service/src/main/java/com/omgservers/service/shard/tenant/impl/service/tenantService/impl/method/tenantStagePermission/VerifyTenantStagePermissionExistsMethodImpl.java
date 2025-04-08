@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantStagePermission.VerifyTenantStagePermissionExistsOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,23 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 class VerifyTenantStagePermissionExistsMethodImpl implements VerifyTenantStagePermissionExistsMethod {
 
     final VerifyTenantStagePermissionExistsOperation verifyTenantStagePermissionExistsOperation;
-    final CheckShardOperation checkShardOperation;
     final PgPool pgPool;
 
     @Override
-    public Uni<VerifyTenantStagePermissionExistsResponse> execute(VerifyTenantStagePermissionExistsRequest request) {
+    public Uni<VerifyTenantStagePermissionExistsResponse> execute(final ShardModel shardModel,
+                                                                  final VerifyTenantStagePermissionExistsRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var tenantId = request.getTenantId();
-                    final var tenantStageId = request.getTenantStageId();
-                    final var userId = request.getUserId();
-                    final var permission = request.getPermission();
-                    return pgPool.withTransaction(sqlConnection -> verifyTenantStagePermissionExistsOperation
-                            .execute(sqlConnection, shard, tenantId, tenantStageId, userId, permission));
-                })
+        final var tenantId = request.getTenantId();
+        final var tenantStageId = request.getTenantStageId();
+        final var userId = request.getUserId();
+        final var permission = request.getPermission();
+        return pgPool.withTransaction(sqlConnection -> verifyTenantStagePermissionExistsOperation
+                        .execute(sqlConnection, shardModel.shard(), tenantId, tenantStageId, userId, permission))
                 .map(VerifyTenantStagePermissionExistsResponse::new);
     }
 }

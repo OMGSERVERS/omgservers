@@ -2,6 +2,7 @@
 
 - Player creates Client using PlayerApi, it triggers CLIENT_CREATED
 - Handler of CLIENT_CREATED creates DeploymentRequest for DeploymentTask
+
 - Deployment task handles DeploymentRequest entities
     - It creates DeploymentLobbyResource, it triggers DEPLOYMENT_LOBBY_RESOURCE_CREATED
     - It creates DeploymentMatchmakerResource, it triggers DEPLOYMENT_MATCHMAKER_RESOURCE_CREATED
@@ -51,41 +52,59 @@
 - RuntimeTask detects inactive clients and delete all of them using ClientApi, it triggers CLIENT_DELETED
 
 - Handler of CLIENT_DELETED creates REMOVE_CLIENT command for DeploymentTask
+
 - DeploymentTask handles REMOVE_CLIENT command
-    - It removes all client requests, if any
-    - It removes all client lobby assignments, if any, it triggers DEPLOYMENT_LOBBY_ASSIGNMENT_DELETED
-    - It removes all client matchmaker assignments, if any, it triggers DEPLOYMENT_MATCHMAKER_ASSIGNMENT_DELETED
+    - It removes all client DeploymentRequest entities, if any
+    - It removes all client DeploymentLobbyAssignment entities, if any, it triggers DEPLOYMENT_LOBBY_ASSIGNMENT_DELETED
+    - It removes all client DeploymentMatchmakerAssignment entities, if any, it triggers
+      DEPLOYMENT_MATCHMAKER_ASSIGNMENT_DELETED
 
 - Handler of DEPLOYMENT_MATCHMAKER_ASSIGNMENT_DELETED creates REMOVE_CLIENT command for MatchmakerTask
 - MatchmakerTask handles REMOVE_CLIENT command
-    - It deletes all client MatchmakerRequests, if any
-    - It deletes all client MatchmakerMatchAssignments, if any, it triggers MATCHMAKER_MATCH_ASSIGNMENT_DELETED
-
-- Handler of DEPLOYMENT_LOBBY_ASSIGNMENT_DELETED creates REMOVE_CLIENT command for RuntimeTask
-- Handler of MATCHMAKER_MATCH_ASSIGNMENT_DELETED creates REMOVE_CLIENT command for RuntimeTask
-
-- RuntimeTask handles REMOVE_CLIENT command
-    - It removes client RuntimeAssignment entities, if any, it triggers RUNTIME_ASSIGNMENT_DELETED
-- Handler of RUNTIME_ASSIGNMENT_DELETED creates CLIENT_REMOVED message to Runtime
+    - It deletes all client MatchmakerRequest entities, if any
+    - It deletes all client MatchmakerMatchAssignment entities, if any, it triggers MATCHMAKER_MATCH_ASSIGNMENT_DELETED
 
 # Runtime became inactive
 
 - RuntimeTask detects that runtime became inactive
-    - If it is LOBBY runtime, it creates DELETE_LOBBY deployment command
-    - If it is MATCH runtime, it creates DELETE_MATCH matchmaker command
+    - If it is LOBBY runtime, it creates DELETE_LOBBY command for DeploymentTask
+    - If it is MATCH runtime, it creates DELETE_MATCH command for MatchmakerTask
 
 - DeploymentTask handles DELETE_LOBBY command
-    - It deletes DeploymentLobbyResource, it triggers DEPLOYMENT_LOBBY_RESOURCE_DELETED
-- Handler of DEPLOYMENT_LOBBY_RESOURCE_DELETED deletes Lobby, it triggers LOBBY_DELETED
-- Handler of LOBBY_DELETED deletes Runtime using RuntimeApi, it triggers RUNTIME_DELETED
+    - It changes DeploymentLobbyResource status from CREATED to CLOSED
+    - It deletes all lobby DeploymentLobbyAssignment entities, if any, it triggers DEPLOYMENT_LOBBY_ASSIGNMENT_DELETED
 
 - MatchmakerTask handles DELETE_MATCH command
-    - It deletes MatchmakerMatchResource, it triggers MATCHMAKER_MATCH_RESOURCE_DELETED
-- Handler of MATCHMAKER_MATCH_RESOURCE_DELETED deletes Match, it triggers MATCH_DELETED
+    - It changes MatchmakerMatchResource status from CREATED to CLOSED
+    - It deletes all match MatchmakerMatchAssignment entities, if any, it triggers MATCHMAKER_MATCH_ASSIGNMENT_DELETED
+
+# Runtime became CLOSED
+
+- DeploymentTask handles CLOSED DeploymentLobbyResource that have no DeploymentLobbyAssignment entities
+    - It deletes all of them, it triggers DEPLOYMENT_LOBBY_RESOURCE_DELETED
+
+- Handler of DEPLOYMENT_LOBBY_RESOURCE_DELETED deletes Lobby using LobbyApi, it triggers LOBBY_DELETED
+- Handler of LOBBY_DELETED deletes Runtime using RuntimeApi, it triggers RUNTIME_DELETED
+
+- MatchmakerTask handles CLOSED MatchmakerMatchResource that have no MatchmakerMatchAssignment entities
+    - It deletes all of them, it triggers MATCHMAKER_MATCH_RESOURCE_DELETED
+
+- Handler of MATCHMAKER_MATCH_RESOURCE_DELETED deletes Match using MatchApi, it triggers MATCH_DELETED
 - Handler of MATCH_DELETED deletes Runtime using RuntimeApi, it triggers RUNTIME_DELETED
 
 - Handler of RUNTIME_DELETED
-    - It deletes all RuntimeCommands, if any
-    - It deletes all RuntimeMessages, if any
-    - It creates DELETE_CONTAINER command for PoolTask
-    - It deletes Runtime job definition
+    - It deletes all RuntimeCommand entities, if any
+    - It deletes all RuntimeMessage entities, if any
+        - It creates DELETE_CONTAINER command for PoolTask
+        - It deletes Runtime job definition
+
+# Runtime assignment deleted
+
+- Handler of DEPLOYMENT_LOBBY_ASSIGNMENT_DELETED creates REMOVE_CLIENT command for RuntimeTask
+- Handler of MATCHMAKER_MATCH_ASSIGNMENT_DELETED
+    - It creates REMOVE_CLIENT command for RuntimeTask
+    - It creates DeploymentRequest for DeploymentTask
+
+- RuntimeTask handles REMOVE_CLIENT command
+    - It removes client RuntimeAssignment entities, if any, it triggers RUNTIME_ASSIGNMENT_DELETED
+- Handler of RUNTIME_ASSIGNMENT_DELETED creates CLIENT_REMOVED message to Runtime

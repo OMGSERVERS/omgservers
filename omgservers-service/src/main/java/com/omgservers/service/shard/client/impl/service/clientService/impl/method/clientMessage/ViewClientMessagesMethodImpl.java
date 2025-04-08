@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientMessage;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.clientMessage.ViewClientMessagesRequest;
 import com.omgservers.schema.module.client.clientMessage.ViewClientMessagesResponse;
 import com.omgservers.service.shard.client.impl.operation.clientMessage.SelectActiveClientMessagesByClientIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,23 +16,20 @@ import lombok.extern.slf4j.Slf4j;
 class ViewClientMessagesMethodImpl implements ViewClientMessagesMethod {
 
     final SelectActiveClientMessagesByClientIdOperation selectActiveClientMessagesByClientIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewClientMessagesResponse> execute(final ViewClientMessagesRequest request) {
+    public Uni<ViewClientMessagesResponse> execute(final ShardModel shardModel,
+                                                   final ViewClientMessagesRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var clientId = request.getClientId();
-                    return pgPool.withTransaction(sqlConnection -> selectActiveClientMessagesByClientIdOperation
-                            .selectActiveClientMessagesByClientId(sqlConnection,
-                                    shard.shard(),
-                                    clientId
-                            ));
-                })
+        final var clientId = request.getClientId();
+        return pgPool.withTransaction(sqlConnection -> selectActiveClientMessagesByClientIdOperation
+                        .selectActiveClientMessagesByClientId(sqlConnection,
+                                shardModel.shard(),
+                                clientId
+                        ))
                 .map(ViewClientMessagesResponse::new);
 
     }

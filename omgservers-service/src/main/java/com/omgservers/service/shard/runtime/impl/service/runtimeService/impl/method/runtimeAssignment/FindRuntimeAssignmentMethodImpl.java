@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeAssignment;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.runtime.runtimeAssignment.FindRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.runtimeAssignment.FindRuntimeAssignmentResponse;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment.SelectRuntimeAssignmentByRuntimeIdAndClientIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,24 +16,21 @@ import lombok.extern.slf4j.Slf4j;
 class FindRuntimeAssignmentMethodImpl implements FindRuntimeAssignmentMethod {
 
     final SelectRuntimeAssignmentByRuntimeIdAndClientIdOperation selectRuntimeAssignmentByRuntimeIdAndClientIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<FindRuntimeAssignmentResponse> execute(final FindRuntimeAssignmentRequest request) {
+    public Uni<FindRuntimeAssignmentResponse> execute(final ShardModel shardModel,
+                                                      final FindRuntimeAssignmentRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var runtimeId = request.getRuntimeId();
-                    final var entityId = request.getClientId();
-                    return pgPool.withTransaction(sqlConnection -> selectRuntimeAssignmentByRuntimeIdAndClientIdOperation
-                            .execute(sqlConnection,
-                                    shard.shard(),
-                                    runtimeId,
-                                    entityId));
-                })
+        final var runtimeId = request.getRuntimeId();
+        final var entityId = request.getClientId();
+        return pgPool.withTransaction(sqlConnection -> selectRuntimeAssignmentByRuntimeIdAndClientIdOperation
+                        .execute(sqlConnection,
+                                shardModel.shard(),
+                                runtimeId,
+                                entityId))
                 .map(FindRuntimeAssignmentResponse::new);
     }
 }

@@ -1,14 +1,14 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.shard.tenant.impl.operation.tenantStage.VerifyTenantStageExistsOperation;
-import com.omgservers.service.shard.tenant.impl.operation.tenantStagePermission.UpsertTenantStagePermissionOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenantStage.VerifyTenantStageExistsOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenantStagePermission.UpsertTenantStagePermissionOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,14 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMethod {
 
     final UpsertTenantStagePermissionOperation upsertTenantStagePermissionOperation;
-    final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
     final VerifyTenantStageExistsOperation verifyTenantStageExistsOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<SyncTenantStagePermissionResponse> execute(final SyncTenantStagePermissionRequest request) {
+    public Uni<SyncTenantStagePermissionResponse> execute(final ShardModel shardModel,
+                                                          final SyncTenantStagePermissionRequest request) {
         log.trace("{}", request);
 
         final var shardKey = request.getRequestShardKey();
@@ -36,28 +36,26 @@ class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMe
         final var tenantId = permission.getTenantId();
         final var tenantStageId = permission.getStageId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(shardKey))
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                                    verifyTenantStageExistsOperation.execute(sqlConnection, shard, tenantId, tenantStageId)
-                                            .flatMap(exists -> {
-                                                if (exists) {
-                                                    return upsertTenantStagePermissionOperation.execute(
-                                                            changeContext,
-                                                            sqlConnection,
-                                                            shardModel.shard(),
-                                                            permission);
-                                                } else {
-                                                    throw new ServerSideNotFoundException(
-                                                            ExceptionQualifierEnum.PARENT_NOT_FOUND,
-                                                            "stage does not exist or was deleted, id=" + tenantStageId);
-                                                }
-                                            })
-                            )
-                            .map(ChangeContext::getResult);
-                })
+        return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
+                        verifyTenantStageExistsOperation.execute(sqlConnection,
+                                        shardModel.shard(),
+                                        tenantId,
+                                        tenantStageId)
+                                .flatMap(exists -> {
+                                    if (exists) {
+                                        return upsertTenantStagePermissionOperation.execute(
+                                                changeContext,
+                                                sqlConnection,
+                                                shardModel.shard(),
+                                                permission);
+                                    } else {
+                                        throw new ServerSideNotFoundException(
+                                                ExceptionQualifierEnum.PARENT_NOT_FOUND,
+                                                "stage does not exist or was deleted, id=" + tenantStageId);
+                                    }
+                                })
+                )
+                .map(ChangeContext::getResult)
                 .map(SyncTenantStagePermissionResponse::new);
     }
 }

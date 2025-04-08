@@ -42,6 +42,6 @@ class SelectTenantImageByTenantVersionIdAndQualifierOperationImpl
                         """,
                 List.of(tenantId, tenantVersionId, qualifier),
                 "Tenant image",
-                tenantImageModelMapper::fromRow);
+                tenantImageModelMapper::execute);
     }
 }

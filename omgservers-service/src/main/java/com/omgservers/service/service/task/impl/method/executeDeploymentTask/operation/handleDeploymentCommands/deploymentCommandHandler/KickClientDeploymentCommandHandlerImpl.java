@@ -42,7 +42,7 @@ class KickClientDeploymentCommandHandlerImpl implements DeploymentCommandHandler
         handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToDelete()
                 .addAll(deploymentLobbyAssignmentsToDelete);
 
-        log.info("Client \"{}\" queued to be kicked \"{}\"",
+        log.info("Client \"{}\" must be kicked and assignments queued for deletion \"{}\"",
                 clientId,
                 deploymentId);
 

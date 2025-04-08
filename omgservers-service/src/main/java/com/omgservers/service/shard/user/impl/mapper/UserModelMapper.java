@@ -15,7 +15,7 @@ public class UserModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public UserModel fromRow(final Row row) {
+    public UserModel execute(final Row row) {
         final var user = new UserModel();
         user.setId(row.getLong("id"));
         user.setIdempotencyKey(row.getString("idempotency_key"));

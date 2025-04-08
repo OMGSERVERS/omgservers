@@ -39,52 +39,52 @@ class UserApiImpl implements UserApi {
     final WebService webService;
 
     @Override
-    public Uni<GetUserResponse> getUser(final GetUserRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getUser);
+    public Uni<GetUserResponse> execute(final GetUserRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncUserResponse> syncUser(final SyncUserRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncUser);
+    public Uni<SyncUserResponse> execute(final SyncUserRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteUserResponse> deleteUser(final DeleteUserRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteUser);
+    public Uni<DeleteUserResponse> execute(final DeleteUserRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<CreateTokenResponse> createToken(final CreateTokenRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::createToken);
+    public Uni<CreateTokenResponse> execute(final CreateTokenRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPlayer);
+    public Uni<GetPlayerResponse> execute(GetPlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findPlayer);
+    public Uni<FindPlayerResponse> execute(FindPlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncPlayer);
+    public Uni<SyncPlayerResponse> execute(SyncPlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(UpdatePlayerProfileRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::updatePlayerProfile);
+    public Uni<UpdatePlayerProfileResponse> execute(UpdatePlayerProfileRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deletePlayer);
+    public Uni<DeletePlayerResponse> execute(DeletePlayerRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetPlayerProfileResponse> getPlayerProfile(GetPlayerProfileRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getPlayerProfile);
+    public Uni<GetPlayerProfileResponse> execute(GetPlayerProfileRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

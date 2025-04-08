@@ -22,8 +22,8 @@ public class ExecuteMatchmakerTaskMethodImpl implements ExecuteMatchmakerTaskMet
         log.trace("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
-
-        return executeTaskOperation.execute(matchmakerTask.execute(matchmakerId))
+        final var taskArguments = new MatchmakerTaskArguments(matchmakerId);
+        return executeTaskOperation.executeFailSafe(matchmakerTask, taskArguments)
                 .map(ExecuteMatchmakerTaskResponse::new);
     }
 }

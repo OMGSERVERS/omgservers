@@ -21,7 +21,8 @@ class ExecuteBootstrapTaskMethodImpl implements ExecuteBootstrapTaskMethod {
     public Uni<ExecuteBootstrapTaskResponse> execute(final ExecuteBootstrapTaskRequest request) {
         log.trace("{}", request);
 
-        return executeTaskOperation.execute(bootstrapTask.execute())
+        final var taskArguments = new BootstrapTaskArguments();
+        return executeTaskOperation.executeFailSafe(bootstrapTask, taskArguments)
                 .map(ExecuteBootstrapTaskResponse::new);
     }
 }

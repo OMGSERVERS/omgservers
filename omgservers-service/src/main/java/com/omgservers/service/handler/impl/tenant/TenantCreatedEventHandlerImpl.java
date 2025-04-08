@@ -84,7 +84,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                             RootEntityRefQualifierEnum.TENANT,
                             tenantId);
                     final var request = new SyncRootEntityRefRequest(rootEntityRef);
-                    return rootShard.getService().syncRootEntityRefWithIdempotency(request)
+                    return rootShard.getService().executeWithIdempotency(request)
                             .map(SyncRootEntityRefResponse::getCreated);
                 });
     }

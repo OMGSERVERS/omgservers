@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeState;
 
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.runtime.runtimeState.UpdateRuntimeStateRequest;
 import com.omgservers.schema.module.runtime.runtimeState.UpdateRuntimeStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment.DeleteRuntimeAssignmentOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment.UpsertRuntimeAssignmentOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeCommand.DeleteRuntimeCommandOperation;
@@ -28,34 +28,30 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
     final DeleteRuntimeCommandOperation deleteRuntimeCommandOperation;
 
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<UpdateRuntimeStateResponse> execute(final UpdateRuntimeStateRequest request) {
+    public Uni<UpdateRuntimeStateResponse> execute(final ShardModel shardModel,
+                                                   final UpdateRuntimeStateRequest request) {
         log.trace("{}", request);
 
+        final var shard = shardModel.shard();
+        final var runtimeId = request.getRuntimeId();
         final var runtimeChangeOfState = request.getRuntimeChangeOfState();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var runtimeId = request.getRuntimeId();
-                    return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
-                            deleteRuntimeCommands(changeContext,
-                                    sqlConnection,
-                                    shard,
-                                    runtimeId,
-                                    runtimeChangeOfState.getRuntimeCommandsToDelete())
-                                    .flatMap(voidItem -> upsertRuntimeAssignment(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            runtimeChangeOfState.getRuntimeAssignmentToSync()))
-                                    .flatMap(voidItem -> deleteRuntimeAssignments(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            runtimeId,
-                                            runtimeChangeOfState.getRuntimeAssignmentToDelete()))
-                    );
-                })
+        return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
+                        deleteRuntimeCommands(changeContext,
+                                sqlConnection,
+                                shard,
+                                runtimeId,
+                                runtimeChangeOfState.getRuntimeCommandsToDelete())
+                                .flatMap(voidItem -> upsertRuntimeAssignment(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        runtimeChangeOfState.getRuntimeAssignmentToSync()))
+                                .flatMap(voidItem -> deleteRuntimeAssignments(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        runtimeId,
+                                        runtimeChangeOfState.getRuntimeAssignmentToDelete())))
                 .replaceWith(Boolean.TRUE)
                 .map(UpdateRuntimeStateResponse::new);
     }

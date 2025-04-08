@@ -36,42 +36,42 @@ public class RootApiImpl implements RootApi {
     final WebService webService;
 
     @Override
-    public Uni<GetRootResponse> getRoot(final GetRootRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRoot);
+    public Uni<GetRootResponse> execute(final GetRootRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncRootResponse> syncRoot(final SyncRootRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRoot);
+    public Uni<SyncRootResponse> execute(final SyncRootRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteRootResponse> deleteRoot(final DeleteRootRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRoot);
+    public Uni<DeleteRootResponse> execute(final DeleteRootRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<GetRootEntityRefResponse> getRootEntityRef(final GetRootEntityRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::getRootEntityRef);
+    public Uni<GetRootEntityRefResponse> execute(final GetRootEntityRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<FindRootEntityRefResponse> findRootEntityRef(final FindRootEntityRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::findRootEntityRef);
+    public Uni<FindRootEntityRefResponse> execute(final FindRootEntityRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(final ViewRootEntityRefsRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::viewRootEntityRefs);
+    public Uni<ViewRootEntityRefsResponse> execute(final ViewRootEntityRefsRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<SyncRootEntityRefResponse> syncRootEntityRef(final SyncRootEntityRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::syncRootEntityRef);
+    public Uni<SyncRootEntityRefResponse> execute(final SyncRootEntityRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 
     @Override
-    public Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(final DeleteRootEntityRefRequest request) {
-        return handleApiRequestOperation.handleApiRequest(log, request, webService::deleteRootEntityRef);
+    public Uni<DeleteRootEntityRefResponse> execute(final DeleteRootEntityRefRequest request) {
+        return handleApiRequestOperation.handleApiRequest(log, request, webService::execute);
     }
 }

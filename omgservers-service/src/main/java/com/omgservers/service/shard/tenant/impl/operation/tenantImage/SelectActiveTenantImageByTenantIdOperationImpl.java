@@ -36,6 +36,6 @@ class SelectActiveTenantImageByTenantIdOperationImpl implements SelectActiveTena
                         """,
                 List.of(tenantId),
                 "Tenant image",
-                tenantImageModelMapper::fromRow);
+                tenantImageModelMapper::execute);
     }
 }

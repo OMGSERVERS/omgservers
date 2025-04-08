@@ -20,23 +20,24 @@ import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface RootService {
-    Uni<GetRootResponse> getRoot(@Valid GetRootRequest request);
 
-    Uni<SyncRootResponse> syncRoot(@Valid SyncRootRequest request);
+    Uni<GetRootResponse> execute(@Valid GetRootRequest request);
 
-    Uni<SyncRootResponse> syncRootWithIdempotency(@Valid SyncRootRequest request);
+    Uni<SyncRootResponse> execute(@Valid SyncRootRequest request);
 
-    Uni<DeleteRootResponse> deleteRoot(@Valid DeleteRootRequest request);
+    Uni<SyncRootResponse> executeWithIdempotency(@Valid SyncRootRequest request);
 
-    Uni<GetRootEntityRefResponse> getRootEntityRef(@Valid GetRootEntityRefRequest request);
+    Uni<DeleteRootResponse> execute(@Valid DeleteRootRequest request);
 
-    Uni<FindRootEntityRefResponse> findRootEntityRef(@Valid FindRootEntityRefRequest request);
+    Uni<GetRootEntityRefResponse> execute(@Valid GetRootEntityRefRequest request);
 
-    Uni<ViewRootEntityRefsResponse> viewRootEntityRefs(@Valid ViewRootEntityRefsRequest request);
+    Uni<FindRootEntityRefResponse> execute(@Valid FindRootEntityRefRequest request);
 
-    Uni<SyncRootEntityRefResponse> syncRootEntityRef(@Valid SyncRootEntityRefRequest request);
+    Uni<ViewRootEntityRefsResponse> execute(@Valid ViewRootEntityRefsRequest request);
 
-    Uni<SyncRootEntityRefResponse> syncRootEntityRefWithIdempotency(@Valid SyncRootEntityRefRequest request);
+    Uni<SyncRootEntityRefResponse> execute(@Valid SyncRootEntityRefRequest request);
 
-    Uni<DeleteRootEntityRefResponse> deleteRootEntityRef(@Valid DeleteRootEntityRefRequest request);
+    Uni<SyncRootEntityRefResponse> executeWithIdempotency(@Valid SyncRootEntityRefRequest request);
+
+    Uni<DeleteRootEntityRefResponse> execute(@Valid DeleteRootEntityRefRequest request);
 }

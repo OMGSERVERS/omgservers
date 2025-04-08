@@ -1,9 +1,12 @@
 package com.omgservers.service.service.task.impl.method.executeDeploymentTask.operation.handleDeploymentCommands.deploymentCommandHandler;
 
+import com.omgservers.schema.model.deploymentChangeOfState.DeploymentLobbyResourceToUpdateStatusDto;
 import com.omgservers.schema.model.deploymentCommand.DeploymentCommandModel;
 import com.omgservers.schema.model.deploymentCommand.DeploymentCommandQualifierEnum;
 import com.omgservers.schema.model.deploymentCommand.body.DeleteLobbyDeploymentCommandBodyDto;
+import com.omgservers.schema.model.deploymentLobbyAssignment.DeploymentLobbyAssignmentModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
 import com.omgservers.service.service.task.impl.method.executeDeploymentTask.dto.FetchDeploymentResult;
 import com.omgservers.service.service.task.impl.method.executeDeploymentTask.dto.HandleDeploymentResult;
 import com.omgservers.service.service.task.impl.method.executeDeploymentTask.operation.handleDeploymentCommands.DeploymentCommandHandler;
@@ -36,18 +39,33 @@ class DeleteLobbyDeploymentCommandHandlerImpl implements DeploymentCommandHandle
 
         fetchDeploymentResult.deploymentState().getDeploymentLobbyResources().stream()
                 .filter(deploymentLobbyResource -> deploymentLobbyResource.getLobbyId().equals(lobbyId))
+                .filter(deploymentLobbyResource -> deploymentLobbyResource.getStatus()
+                        .equals(DeploymentLobbyResourceStatusEnum.CREATED))
                 .map(DeploymentLobbyResourceModel::getId)
                 .forEach(deploymentLobbyResourceId -> {
-                    handleDeploymentResult.deploymentChangeOfState()
-                            .getDeploymentLobbyResourcesToDelete()
-                            .add(deploymentLobbyResourceId);
+                    final var dtoToUpdateStatus = new DeploymentLobbyResourceToUpdateStatusDto(
+                            deploymentLobbyResourceId,
+                            DeploymentLobbyResourceStatusEnum.CLOSED);
 
-                    log.info("Lobby resource \"{}\" of deployment \"{}\" " +
-                                    "marked to be deleted with reason={}, lobbyId={}",
+                    handleDeploymentResult.deploymentChangeOfState()
+                            .getDeploymentLobbyResourcesToUpdateStatus()
+                            .add(dtoToUpdateStatus);
+
+                    log.info("Lobby resource \"{}\" from deployment \"{}\" " +
+                                    "must be deleted due to \"{}\" and marked as closed, lobbyId={}",
                             deploymentLobbyResourceId,
                             deploymentId,
                             reason,
                             lobbyId);
+
+                    final var deploymentLobbyAssignmentToDelete = fetchDeploymentResult
+                            .deploymentState().getDeploymentLobbyAssignments().stream()
+                            .filter(deploymentLobbyAssignment -> deploymentLobbyAssignment.getLobbyId().equals(lobbyId))
+                            .map(DeploymentLobbyAssignmentModel::getId)
+                            .toList();
+
+                    handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToDelete()
+                            .addAll(deploymentLobbyAssignmentToDelete);
                 });
 
         return true;

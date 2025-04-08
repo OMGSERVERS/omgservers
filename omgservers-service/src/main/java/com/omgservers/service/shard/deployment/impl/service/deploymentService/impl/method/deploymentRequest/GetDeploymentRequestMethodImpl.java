@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentRequest;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deploymentRequest.GetDeploymentRequestRequest;
 import com.omgservers.schema.module.deployment.deploymentRequest.GetDeploymentRequestResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentRequest.SelectDeploymentRequestOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,22 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 class GetDeploymentRequestMethodImpl implements GetDeploymentRequestMethod {
 
     final SelectDeploymentRequestOperation selectDeploymentRequestOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetDeploymentRequestResponse> execute(
-            final GetDeploymentRequestRequest request) {
+    public Uni<GetDeploymentRequestResponse> execute(final ShardModel shardModel,
+                                                     final GetDeploymentRequestRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var deploymentId = request.getDeploymentId();
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectDeploymentRequestOperation
-                            .execute(sqlConnection, shard.shard(), deploymentId, id));
-                })
+        final var deploymentId = request.getDeploymentId();
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectDeploymentRequestOperation
+                        .execute(sqlConnection, shardModel.shard(), deploymentId, id))
                 .map(GetDeploymentRequestResponse::new);
     }
 }

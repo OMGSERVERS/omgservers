@@ -5,6 +5,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
+import com.omgservers.schema.model.poolServer.PoolServerStatusEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
 import io.vertx.mutiny.sqlclient.Row;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,6 +29,7 @@ public class PoolServerModelMapper {
         poolServer.setCreated(row.getOffsetDateTime("created").toInstant());
         poolServer.setModified(row.getOffsetDateTime("modified").toInstant());
         poolServer.setQualifier(PoolServerQualifierEnum.valueOf(row.getString("qualifier")));
+        poolServer.setStatus(PoolServerStatusEnum.valueOf(row.getString("status")));
         poolServer.setDeleted(row.getBoolean("deleted"));
         try {
             poolServer.setConfig(objectMapper

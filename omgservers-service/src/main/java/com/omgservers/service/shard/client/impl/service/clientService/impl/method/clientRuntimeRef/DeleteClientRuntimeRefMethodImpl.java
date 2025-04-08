@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientRuntimeRef;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.clientRuntimeRef.DeleteClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.clientRuntimeRef.DeleteClientRuntimeRefResponse;
-import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.DeleteClientRuntimeRefOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.DeleteClientRuntimeRefOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,24 +18,22 @@ class DeleteClientRuntimeRefMethodImpl implements DeleteClientRuntimeRefMethod {
 
     final DeleteClientRuntimeRefOperation deleteClientRuntimeRefOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeleteClientRuntimeRefResponse> execute(DeleteClientRuntimeRefRequest request) {
+    public Uni<DeleteClientRuntimeRefResponse> execute(final ShardModel shardModel,
+                                                       final DeleteClientRuntimeRefRequest request) {
         log.trace("{}", request);
 
         final var clientId = request.getClientId();
         final var id = request.getId();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
-                                (changeContext, sqlConnection) -> deleteClientRuntimeRefOperation
-                                        .deleteClientRuntimeRef(changeContext,
-                                                sqlConnection,
-                                                shardModel.shard(),
-                                                clientId,
-                                                id))
-                        .map(ChangeContext::getResult))
+        return changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> deleteClientRuntimeRefOperation
+                                .deleteClientRuntimeRef(changeContext,
+                                        sqlConnection,
+                                        shardModel.shard(),
+                                        clientId,
+                                        id))
+                .map(ChangeContext::getResult)
                 .map(DeleteClientRuntimeRefResponse::new);
     }
 }

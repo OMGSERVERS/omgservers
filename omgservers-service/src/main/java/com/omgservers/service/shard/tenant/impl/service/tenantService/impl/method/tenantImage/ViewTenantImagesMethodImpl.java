@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
 import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantIdOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantVersionIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,33 +20,27 @@ class ViewTenantImagesMethodImpl implements ViewTenantImagesMethod {
 
     final SelectActiveTenantImageByTenantVersionIdOperation selectActiveTenantImageByTenantVersionIdOperation;
     final SelectActiveTenantImageByTenantIdOperation selectActiveTenantImageByTenantIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewTenantImagesResponse> execute(final ViewTenantImagesRequest request) {
+    public Uni<ViewTenantImagesResponse> execute(final ShardModel shardModel,
+                                                 final ViewTenantImagesRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var tenantId = request.getTenantId();
-                    return pgPool.withTransaction(sqlConnection -> {
-                                final var tenantVersionId = request.getTenantVersionId();
-                                if (Objects.nonNull(tenantVersionId)) {
-                                    return selectActiveTenantImageByTenantVersionIdOperation
-                                            .execute(sqlConnection,
-                                                    shard.shard(),
-                                                    tenantId,
-                                                    tenantVersionId);
-                                } else {
-                                    return selectActiveTenantImageByTenantIdOperation
-                                            .execute(sqlConnection,
-                                                    shard.shard(),
-                                                    tenantId);
-                                }
-                            }
-                    );
+        final var tenantId = request.getTenantId();
+        return pgPool.withTransaction(sqlConnection -> {
+                    final var tenantVersionId = request.getTenantVersionId();
+                    if (Objects.nonNull(tenantVersionId)) {
+                        return selectActiveTenantImageByTenantVersionIdOperation.execute(sqlConnection,
+                                shardModel.shard(),
+                                tenantId,
+                                tenantVersionId);
+                    } else {
+                        return selectActiveTenantImageByTenantIdOperation.execute(sqlConnection,
+                                shardModel.shard(),
+                                tenantId);
+                    }
                 })
                 .map(ViewTenantImagesResponse::new);
     }

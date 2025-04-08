@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
 import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantImage.SelectActiveTenantImageByTenantVersionIdOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantVersion.SelectTenantVersionOperation;
 import io.smallrye.mutiny.Uni;
@@ -21,24 +21,21 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
     final SelectTenantVersionOperation selectTenantVersionOperation;
     final SelectActiveTenantImageByTenantVersionIdOperation
             selectActiveTenantImageByTenantVersionIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetTenantVersionDataResponse> execute(final GetTenantVersionDataRequest request) {
+    public Uni<GetTenantVersionDataResponse> execute(final ShardModel shardModel,
+                                                     final GetTenantVersionDataRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final int shard = shardModel.shard();
-                    final var tenantId = request.getTenantId();
-                    final var tenantVersionId = request.getTenantVersionId();
-                    final var tenantVersionData = new TenantVersionDataDto();
+        final int shard = shardModel.shard();
+        final var tenantId = request.getTenantId();
+        final var tenantVersionId = request.getTenantVersionId();
+        final var tenantVersionData = new TenantVersionDataDto();
 
-                    return pgPool.withTransaction(sqlConnection ->
-                            fillData(sqlConnection, shard, tenantId, tenantVersionId, tenantVersionData));
-                })
+        return pgPool.withTransaction(sqlConnection ->
+                        fillData(sqlConnection, shard, tenantId, tenantVersionId, tenantVersionData))
                 .map(GetTenantVersionDataResponse::new);
     }
 

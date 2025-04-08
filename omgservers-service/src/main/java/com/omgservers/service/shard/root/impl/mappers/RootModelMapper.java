@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class RootModelMapper {
 
-    public RootModel fromRow(final Row row) {
+    public RootModel execute(final Row row) {
         final var root = new RootModel();
         root.setId(row.getLong("id"));
         root.setIdempotencyKey(row.getString("idempotency_key"));

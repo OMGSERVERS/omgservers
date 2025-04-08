@@ -2,11 +2,11 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolCommand.DeletePoolCommandOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolContainer.DeletePoolContainerOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolContainer.UpsertPoolContainerOperation;
@@ -35,48 +35,44 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
     final DeletePoolServerOperation deletePoolServerOperation;
 
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<UpdatePoolStateResponse> execute(final UpdatePoolStateRequest request) {
+    public Uni<UpdatePoolStateResponse> execute(final ShardModel shardModel,
+                                                final UpdatePoolStateRequest request) {
         log.trace("{}", request);
 
         final var poolChangeOfState = request.getPoolChangeOfState();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    final var poolId = request.getPoolId();
-                    return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
-                            deletePoolCommands(changeContext,
-                                    sqlConnection,
-                                    shard,
-                                    poolId,
-                                    poolChangeOfState.getPoolCommandsToDelete())
-                                    .flatMap(voidItem -> deletePoolRequest(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            poolId,
-                                            poolChangeOfState.getPoolRequestsToDelete()))
-                                    .flatMap(voidItem -> syncPoolServers(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            poolChangeOfState.getPoolServersToSync()))
-                                    .flatMap(voidItem -> deletePoolServers(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            poolId,
-                                            poolChangeOfState.getPoolServersToDelete()))
-                                    .flatMap(voidItem -> syncPoolContainers(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            poolChangeOfState.getPoolContainersToSync()))
-                                    .flatMap(voidItem -> deletePoolContainers(changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            poolId,
-                                            poolChangeOfState.getPoolContainersToDelete()))
-                    );
-                })
+        final var shard = shardModel.shard();
+        final var poolId = request.getPoolId();
+        return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
+                        deletePoolCommands(changeContext,
+                                sqlConnection,
+                                shard,
+                                poolId,
+                                poolChangeOfState.getPoolCommandsToDelete())
+                                .flatMap(voidItem -> deletePoolRequest(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        poolId,
+                                        poolChangeOfState.getPoolRequestsToDelete()))
+                                .flatMap(voidItem -> syncPoolServers(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        poolChangeOfState.getPoolServersToSync()))
+                                .flatMap(voidItem -> deletePoolServers(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        poolId,
+                                        poolChangeOfState.getPoolServersToDelete()))
+                                .flatMap(voidItem -> syncPoolContainers(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        poolChangeOfState.getPoolContainersToSync()))
+                                .flatMap(voidItem -> deletePoolContainers(changeContext,
+                                        sqlConnection,
+                                        shard,
+                                        poolId,
+                                        poolChangeOfState.getPoolContainersToDelete())))
                 .replaceWith(Boolean.TRUE)
                 .map(UpdatePoolStateResponse::new);
     }

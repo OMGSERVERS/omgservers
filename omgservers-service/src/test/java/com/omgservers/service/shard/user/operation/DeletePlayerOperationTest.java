@@ -37,7 +37,7 @@ class DeletePlayerOperationTest extends BaseTestClass {
     PlayerModelFactory playerModelFactory;
 
     @Test
-    void givenUserPlayer_whenDeletePlayer_thenDeleted() {
+    void givenUserPlayer_whenExecute_thenDeleted() {
         final var shard = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         upsertUserOperation.upsertUser(shard, user);
@@ -51,7 +51,7 @@ class DeletePlayerOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownIds_whenDeletePlayer_thenSkip() {
+    void givenUnknownIds_whenExecute_thenSkip() {
         final var shard = 0;
         final var userId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();

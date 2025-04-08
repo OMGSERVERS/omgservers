@@ -3,6 +3,7 @@ package com.omgservers.service.shard.docker.impl.service.dockerService.impl.meth
 import com.github.dockerjava.api.exception.DockerException;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.LogConfig;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.docker.StartDockerContainerRequest;
 import com.omgservers.schema.module.docker.StartDockerContainerResponse;
 import com.omgservers.service.operation.docker.GetDockerDaemonClientOperation;
@@ -26,7 +27,8 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
     final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
-    public Uni<StartDockerContainerResponse> execute(final StartDockerContainerRequest request) {
+    public Uni<StartDockerContainerResponse> execute(final ShardModel shardModel,
+                                                     final StartDockerContainerRequest request) {
         log.trace("{}", request);
 
         final var poolServer = request.getPoolServer();

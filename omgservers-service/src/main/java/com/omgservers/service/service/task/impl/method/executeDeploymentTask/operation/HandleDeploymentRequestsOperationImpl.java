@@ -17,7 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class HandleDeploymentRequestsOperationImpl implements HandleDeploymentRequestsOperation {
 
-    final ExecuteDeploymentAssignersOperation executeDeploymentAssignersOperation;
+    final CreateDeploymentMatchmakerAssignmentOperation createDeploymentMatchmakerAssignmentOperation;
+    final CreateDeploymentLobbyAssignmentOperation createDeploymentLobbyAssignmentOperation;
     final CreateMatchmakerAssignerOperation createMatchmakerAssignerOperation;
     final CreateLobbyAssignerOperation createLobbyAssignerOperation;
 
@@ -35,39 +36,90 @@ class HandleDeploymentRequestsOperationImpl implements HandleDeploymentRequestsO
         } else {
             final var lobbyAssigner = createLobbyAssignerOperation.execute(fetchDeploymentResult,
                     handleDeploymentResult);
+
             final var matchmakerAssigner = createMatchmakerAssignerOperation.execute(fetchDeploymentResult,
                     handleDeploymentResult);
 
-            final var executeDeploymentAssignersResult = executeDeploymentAssignersOperation.execute(deploymentRequests,
-                    lobbyAssigner,
-                    matchmakerAssigner,
-                    handleDeploymentResult);
+            for (final var deploymentRequest : deploymentRequests) {
+                final var clientId = deploymentRequest.getClientId();
 
-            // TODO: Introduce and check limits
+                final var lobbyNotAssigned = fetchDeploymentResult.deploymentState()
+                        .getDeploymentLobbyAssignments().stream()
+                        .noneMatch(deploymentLobbyAssignment ->
+                                deploymentLobbyAssignment.getClientId().equals(clientId));
 
-            if (executeDeploymentAssignersResult.lobbyNotAssigned()) {
-                final var noPendingLobbies = fetchDeploymentResult.deploymentState()
-                        .getDeploymentLobbyResources().stream()
-                        .map(DeploymentLobbyResourceModel::getStatus)
-                        .noneMatch(DeploymentLobbyResourceStatusEnum.PENDING::equals);
-                if (noPendingLobbies) {
-                    final var deploymentLobbyResource = deploymentLobbyResourceModelFactory.create(deploymentId);
-                    handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToSync()
-                            .add(deploymentLobbyResource);
+                if (lobbyNotAssigned) {
+                    final var assignedLobbyOptional = lobbyAssigner.assign(deploymentRequest);
+
+                    if (assignedLobbyOptional.isPresent()) {
+                        final var assignedLobby = assignedLobbyOptional.get();
+                        final var lobbyAssignment = createDeploymentLobbyAssignmentOperation.execute(assignedLobby,
+                                deploymentRequest);
+                        handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToSync()
+                                .add(lobbyAssignment);
+                    } else {
+                        createLobbyResource(fetchDeploymentResult, handleDeploymentResult);
+                    }
+                }
+
+                final var matchmakerNotAssigned = fetchDeploymentResult.deploymentState()
+                        .getDeploymentMatchmakerAssignments().stream()
+                        .noneMatch(deploymentMatchmakerAssignment ->
+                                deploymentMatchmakerAssignment.getClientId().equals(clientId));
+
+                if (matchmakerNotAssigned) {
+                    final var assignedMatchmakerOptional = matchmakerAssigner.assign(deploymentRequest);
+
+                    if (assignedMatchmakerOptional.isPresent()) {
+                        final var assignedMatchmaker = assignedMatchmakerOptional.get();
+                        final var matchmakerAssignment = createDeploymentMatchmakerAssignmentOperation
+                                .execute(assignedMatchmaker, deploymentRequest);
+                        handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerAssignmentToSync()
+                                .add(matchmakerAssignment);
+                    } else {
+                        createMatchmakerResource(fetchDeploymentResult, handleDeploymentResult);
+                    }
                 }
             }
+        }
+    }
 
-            if (executeDeploymentAssignersResult.matchmakerNotAssigned()) {
-                final var noPendingMatchmakers = fetchDeploymentResult.deploymentState()
-                        .getDeploymentMatchmakerResources().stream()
-                        .map(DeploymentMatchmakerResourceModel::getStatus)
-                        .noneMatch(DeploymentMatchmakerResourceStatusEnum.PENDING::equals);
+    // TODO: Check deployment limits
 
-                if (noPendingMatchmakers) {
-                    final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory.create(deploymentId);
-                    handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToSync()
-                            .add(deploymentMatchmakerResource);
-                }
+    void createLobbyResource(final FetchDeploymentResult fetchDeploymentResult,
+                             final HandleDeploymentResult handleDeploymentResult) {
+        if (handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToSync().isEmpty()) {
+
+            final var deploymentId = fetchDeploymentResult.deploymentId();
+
+            final var noPendingLobbies = fetchDeploymentResult.deploymentState()
+                    .getDeploymentLobbyResources().stream()
+                    .map(DeploymentLobbyResourceModel::getStatus)
+                    .noneMatch(DeploymentLobbyResourceStatusEnum.PENDING::equals);
+
+            if (noPendingLobbies) {
+                final var deploymentLobbyResource = deploymentLobbyResourceModelFactory.create(deploymentId);
+                handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToSync()
+                        .add(deploymentLobbyResource);
+            }
+        }
+    }
+
+    void createMatchmakerResource(final FetchDeploymentResult fetchDeploymentResult,
+                                  final HandleDeploymentResult handleDeploymentResult) {
+        if (handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToSync().isEmpty()) {
+
+            final var deploymentId = fetchDeploymentResult.deploymentId();
+
+            final var noPendingMatchmakers = fetchDeploymentResult.deploymentState()
+                    .getDeploymentMatchmakerResources().stream()
+                    .map(DeploymentMatchmakerResourceModel::getStatus)
+                    .noneMatch(DeploymentMatchmakerResourceStatusEnum.PENDING::equals);
+
+            if (noPendingMatchmakers) {
+                final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory.create(deploymentId);
+                handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToSync()
+                        .add(deploymentMatchmakerResource);
             }
         }
     }

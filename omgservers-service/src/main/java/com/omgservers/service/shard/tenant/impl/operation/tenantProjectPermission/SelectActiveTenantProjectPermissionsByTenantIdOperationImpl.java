@@ -37,6 +37,6 @@ class SelectActiveTenantProjectPermissionsByTenantIdOperationImpl
                         """,
                 List.of(tenantId),
                 "Project permission",
-                tenantProjectPermissionModelMapper::fromRow);
+                tenantProjectPermissionModelMapper::execute);
     }
 }

@@ -4,7 +4,7 @@ set -e
 # INTERNAL
 
 internal_help() {
-  echo "PROJECT ctl, v1.0.0"
+  echo "PROJECT ctl, v0.1.0"
   echo "Usage:"
   if [ -z "$1" -o "$1" = "help" ]; then
     echo " $0 help"

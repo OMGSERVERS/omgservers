@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerCommand;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmakerCommand.ViewMatchmakerCommandsRequest;
 import com.omgservers.schema.module.matchmaker.matchmakerCommand.ViewMatchmakerCommandsResponse;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerCommand.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,23 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 class ViewMatchmakerCommandsMethodImpl implements ViewMatchmakerCommandsMethod {
 
     final SelectActiveMatchmakerCommandsByMatchmakerIdOperation selectActiveMatchmakerCommandsByMatchmakerIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewMatchmakerCommandsResponse> execute(final ViewMatchmakerCommandsRequest request) {
+    public Uni<ViewMatchmakerCommandsResponse> execute(final ShardModel shardModel,
+                                                       final ViewMatchmakerCommandsRequest request) {
         log.trace("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> pgPool.withTransaction(
-                        sqlConnection -> selectActiveMatchmakerCommandsByMatchmakerIdOperation
-                                .execute(sqlConnection,
-                                        shard.shard(),
-                                        matchmakerId
-                                )))
+        return pgPool.withTransaction(sqlConnection -> selectActiveMatchmakerCommandsByMatchmakerIdOperation
+                        .execute(sqlConnection, shardModel.shard(), matchmakerId))
                 .map(ViewMatchmakerCommandsResponse::new);
 
     }

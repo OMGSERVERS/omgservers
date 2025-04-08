@@ -1,5 +1,6 @@
 package com.omgservers.service.service.task.impl.method.executeDeploymentTask.operation;
 
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.service.task.impl.method.executeDeploymentTask.dto.FetchDeploymentResult;
@@ -8,10 +9,15 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class DeleteClosedMatchmakersOperationImpl implements DeleteClosedMatchmakersOperation {
+
+    static private final long GRACEFUL_INTERVAL = 16;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -22,27 +28,31 @@ class DeleteClosedMatchmakersOperationImpl implements DeleteClosedMatchmakersOpe
 
         final var deploymentState = fetchDeploymentResult.deploymentState();
 
-        deploymentState.getDeploymentMatchmakerResources().stream()
+        final var deploymentMatchmakerResourcesToDelete = deploymentState.getDeploymentMatchmakerResources().stream()
                 .filter(deploymentMatchmakerResource -> deploymentMatchmakerResource.getStatus()
                         .equals(DeploymentMatchmakerResourceStatusEnum.CLOSED))
-                .forEach(deploymentMatchmakerResource -> {
-
+                .filter(deploymentMatchmakerResource -> {
                     final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
-                    final var noMatchmakerAssignments = deploymentState.getDeploymentMatchmakerAssignments().stream()
+                    return deploymentState.getDeploymentMatchmakerAssignments().stream()
                             .noneMatch(deploymentMatchmakerAssignment ->
                                     deploymentMatchmakerAssignment.getMatchmakerId().equals(matchmakerId));
+                })
+                .filter(deploymentMatchmakerResource -> {
+                    final var matchmakerResourceModified = deploymentMatchmakerResource.getModified();
+                    final var matchmakerCurrentInterval = Duration.between(matchmakerResourceModified, Instant.now());
+                    return matchmakerCurrentInterval.toSeconds() > GRACEFUL_INTERVAL;
+                })
+                .peek(deploymentMatchmakerResource -> {
+                    final var deploymentMatchmakerResourceId = deploymentMatchmakerResource.getId();
+                    final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
+                    log.info("Matchmaker resource \"{}\" of deployment \"{}\" " +
+                                    "is closed and queued for deletion, matchmakerId=\"{}\"",
+                            deploymentMatchmakerResourceId, deploymentId, matchmakerId);
+                })
+                .map(DeploymentMatchmakerResourceModel::getId)
+                .toList();
 
-                    if (noMatchmakerAssignments) {
-                        final var deploymentMatchmakerResourceId = deploymentMatchmakerResource.getId();
-
-                        handleDeploymentResult.deploymentChangeOfState()
-                                .getDeploymentMatchmakerResourcesToDelete()
-                                .add(deploymentMatchmakerResourceId);
-
-                        log.info("Matchmaker resource \"{}\" of deployment \"{}\" " +
-                                        "is closed and marked to be deleted, matchmakerId=\"{}\"",
-                                deploymentMatchmakerResourceId, deploymentId, matchmakerId);
-                    }
-                });
+        handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToDelete()
+                .addAll(deploymentMatchmakerResourcesToDelete);
     }
 }

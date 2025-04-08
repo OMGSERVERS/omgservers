@@ -5,6 +5,7 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.runtimeMessage.RuntimeMessageModel;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.runtime.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.runtime.runtimeAssignment.ViewRuntimeAssignmentsRequest;
@@ -14,7 +15,6 @@ import com.omgservers.schema.module.runtime.runtimeMessage.InterchangeMessagesRe
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.service.cache.CacheService;
 import com.omgservers.service.service.cache.dto.SetRuntimeLastActivityRequest;
 import com.omgservers.service.shard.runtime.RuntimeShard;
@@ -43,38 +43,36 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
     final DeleteRuntimeMessagesByIdsOperation deleteRuntimeMessagesByIdsOperation;
     final HandleOutgoingMessageOperation handleOutgoingMessageOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<InterchangeMessagesResponse> execute(final InterchangeMessagesRequest request) {
+    public Uni<InterchangeMessagesResponse> execute(final ShardModel shardModel,
+                                                    final InterchangeMessagesRequest request) {
         log.trace("{}", request);
 
         final var runtimeId = request.getRuntimeId();
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> getRuntime(runtimeId)
-                        .flatMap(runtime -> {
-                            if (runtime.getDeleted()) {
-                                throw new ServerSideNotFoundException(ExceptionQualifierEnum.RUNTIME_NOT_FOUND,
-                                        "runtime already deleted, runtimeId=" + runtimeId);
-                            }
+        return getRuntime(runtimeId)
+                .flatMap(runtime -> {
+                    if (runtime.getDeleted()) {
+                        throw new ServerSideNotFoundException(ExceptionQualifierEnum.RUNTIME_NOT_FOUND,
+                                "runtime already deleted, runtimeId=" + runtimeId);
+                    }
 
-                            return setRuntimeLastActivity(runtimeId)
-                                    .flatMap(voidItem -> viewRuntimeAssignments(runtimeId))
-                                    .flatMap(runtimeAssignments -> {
-                                        final int shard = shardModel.shard();
-                                        final var consumedMessages = request.getConsumedMessages();
-                                        return handleOutgoingMessages(runtime,
-                                                runtimeAssignments,
-                                                request.getOutgoingMessages())
-                                                .flatMap(voidItem -> receiveMessages(shard,
-                                                        runtimeId,
-                                                        consumedMessages));
-                                    });
-                        })
-                )
+                    return setRuntimeLastActivity(runtimeId)
+                            .flatMap(voidItem -> viewRuntimeAssignments(runtimeId))
+                            .flatMap(runtimeAssignments -> {
+                                final int shard = shardModel.shard();
+                                final var consumedMessages = request.getConsumedMessages();
+                                return handleOutgoingMessages(runtime,
+                                        runtimeAssignments,
+                                        request.getOutgoingMessages())
+                                        .flatMap(voidItem -> receiveMessages(shard,
+                                                runtimeId,
+                                                consumedMessages));
+                            });
+                })
                 .map(InterchangeMessagesResponse::new);
     }
 

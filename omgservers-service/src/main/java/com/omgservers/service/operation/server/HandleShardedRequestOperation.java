@@ -1,5 +1,6 @@
 package com.omgservers.service.operation.server;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.ShardedRequest;
 import io.smallrye.mutiny.Uni;
 import org.slf4j.Logger;
@@ -13,5 +14,5 @@ public interface HandleShardedRequestOperation {
                                                                  T request,
                                                                  Function<URI, C> api,
                                                                  BiFunction<C, T, Uni<? extends R>> route,
-                                                                 Function<T, Uni<? extends R>> handle);
+                                                                 BiFunction<ShardModel, T, Uni<? extends R>> handle);
 }

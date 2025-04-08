@@ -3,10 +3,9 @@ package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.meth
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.DeleteTenantStageResponse;
-import com.omgservers.service.shard.tenant.impl.operation.tenantStage.DeleteTenantStageOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.tenant.impl.operation.tenantStage.DeleteTenantStageOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,26 +19,20 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
     final DeleteTenantStageOperation deleteTenantStageOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<DeleteTenantStageResponse> execute(final DeleteTenantStageRequest request) {
+    public Uni<DeleteTenantStageResponse> execute(final ShardModel shardModel,
+                                                  final DeleteTenantStageRequest request) {
         log.trace("{}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();
 
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, tenantId, id))
-                .map(DeleteTenantStageResponse::new);
-    }
-
-    Uni<Boolean> changeFunction(ShardModel shardModel, Long tenantId, Long id) {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteTenantStageOperation.execute(changeContext, sqlConnection, shardModel.shard(), tenantId, id))
-                .map(ChangeContext::getResult);
+                .map(ChangeContext::getResult)
+                .map(DeleteTenantStageResponse::new);
     }
 }

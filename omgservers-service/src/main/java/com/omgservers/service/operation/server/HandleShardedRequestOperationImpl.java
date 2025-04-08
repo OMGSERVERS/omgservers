@@ -1,6 +1,7 @@
 package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.ShardedRequest;
 import com.omgservers.service.exception.ServerSideInternalException;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +25,7 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                                                                         final T request,
                                                                         final Function<URI, C> api,
                                                                         final BiFunction<C, T, Uni<? extends R>> route,
-                                                                        final Function<T, Uni<? extends R>> handle) {
+                                                                        final BiFunction<ShardModel, T, Uni<? extends R>> handle) {
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     MDC.put("shard", String.valueOf(shardModel.shard()));
@@ -41,7 +42,7 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                         return route.apply(client, request);
                     } else {
                         log.trace("Handle request, request={}", request);
-                        return handle.apply(request);
+                        return handle.apply(shardModel, request);
                     }
                 })
                 .onFailure()

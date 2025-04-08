@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.machmaker;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.module.matchmaker.matchmaker.GetMatchmakerResponse;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.SelectMatchmakerOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,20 +16,17 @@ import lombok.extern.slf4j.Slf4j;
 class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
 
     final SelectMatchmakerOperation selectMatchmakerOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetMatchmakerResponse> execute(final GetMatchmakerRequest request) {
+    public Uni<GetMatchmakerResponse> execute(final ShardModel shardModel,
+                                              final GetMatchmakerRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectMatchmakerOperation
-                            .execute(sqlConnection, shard.shard(), id));
-                })
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectMatchmakerOperation
+                        .execute(sqlConnection, shardModel.shard(), id))
                 .map(GetMatchmakerResponse::new);
     }
 }

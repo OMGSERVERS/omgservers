@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantProject.SelectTenantProjectOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,20 +17,17 @@ class
 GetTenantProjectMethodImpl implements GetTenantProjectMethod {
 
     final SelectTenantProjectOperation selectTenantProjectOperation;
-    final CheckShardOperation checkShardOperation;
     final PgPool pgPool;
 
     @Override
-    public Uni<GetTenantProjectResponse> execute(final GetTenantProjectRequest request) {
+    public Uni<GetTenantProjectResponse> execute(final ShardModel shardModel,
+                                                 final GetTenantProjectRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var tenantId = request.getTenantId();
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectTenantProjectOperation
-                            .execute(sqlConnection, shard.shard(), tenantId, id));
-                })
+        final var tenantId = request.getTenantId();
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectTenantProjectOperation
+                        .execute(sqlConnection, shardModel.shard(), tenantId, id))
                 .map(GetTenantProjectResponse::new);
     }
 }

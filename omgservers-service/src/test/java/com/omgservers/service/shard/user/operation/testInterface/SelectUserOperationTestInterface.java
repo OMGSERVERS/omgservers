@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.user.operation.testInterface;
 
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.service.shard.user.impl.operation.user.selectUser.SelectUserOperation;
+import com.omgservers.service.shard.user.impl.operation.user.SelectUserOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class SelectUserOperationTestInterface {
     public UserModel selectUser(final int shard,
                                 final Long id) {
         return pgPool.withTransaction(sqlConnection -> selectUserOperation
-                        .selectUser(sqlConnection, shard, id))
+                        .execute(sqlConnection, shard, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

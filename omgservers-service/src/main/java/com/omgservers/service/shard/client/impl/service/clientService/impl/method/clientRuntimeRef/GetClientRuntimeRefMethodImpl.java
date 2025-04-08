@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientRuntimeRef;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.client.clientRuntimeRef.GetClientRuntimeRefRequest;
 import com.omgservers.schema.module.client.clientRuntimeRef.GetClientRuntimeRefResponse;
 import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.SelectClientRuntimeRefOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,21 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 class GetClientRuntimeRefMethodImpl implements GetClientRuntimeRefMethod {
 
     final SelectClientRuntimeRefOperation selectClientRuntimeRefOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<GetClientRuntimeRefResponse> execute(final GetClientRuntimeRefRequest request) {
+    public Uni<GetClientRuntimeRefResponse> execute(final ShardModel shardModel,
+                                                    final GetClientRuntimeRefRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var clientId = request.getClientId();
-                    final var id = request.getId();
-                    return pgPool.withTransaction(sqlConnection -> selectClientRuntimeRefOperation
-                            .selectClientRuntimeRef(sqlConnection, shard.shard(), clientId, id));
-                })
+        final var clientId = request.getClientId();
+        final var id = request.getId();
+        return pgPool.withTransaction(sqlConnection -> selectClientRuntimeRefOperation
+                        .selectClientRuntimeRef(sqlConnection, shardModel.shard(), clientId, id))
                 .map(GetClientRuntimeRefResponse::new);
     }
 }

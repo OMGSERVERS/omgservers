@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentLobbyAsignment;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.deployment.deploymentLobbyAssignment.ViewDeploymentLobbyAssignmentsRequest;
 import com.omgservers.schema.module.deployment.deploymentLobbyAssignment.ViewDeploymentLobbyAssignmentsResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyAssignment.SelectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -17,24 +17,20 @@ class ViewDeploymentLobbyAssignmentMethodImpl implements ViewDeploymentLobbyAssi
 
     final SelectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation
             selectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewDeploymentLobbyAssignmentsResponse> execute(final ViewDeploymentLobbyAssignmentsRequest request) {
+    public Uni<ViewDeploymentLobbyAssignmentsResponse> execute(final ShardModel shardModel,
+                                                               final ViewDeploymentLobbyAssignmentsRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var deploymentId = request.getDeploymentId();
-                    return pgPool.withTransaction(
-                            sqlConnection -> selectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation
-                                    .execute(sqlConnection,
-                                            shard.shard(),
-                                            deploymentId)
-                    );
-                })
+        final var deploymentId = request.getDeploymentId();
+        return pgPool.withTransaction(
+                        sqlConnection -> selectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation
+                                .execute(sqlConnection,
+                                        shardModel.shard(),
+                                        deploymentId))
                 .map(ViewDeploymentLobbyAssignmentsResponse::new);
 
     }

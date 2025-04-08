@@ -26,36 +26,42 @@ class CloseDanglingLobbiesOperationImpl implements CloseDanglingLobbiesOperation
 
         final var deploymentState = fetchDeploymentResult.deploymentState();
 
-        deploymentState.getDeploymentLobbyResources().stream()
+        final var deploymentLobbyResourcesToUpdateStatus = deploymentState.getDeploymentLobbyResources().stream()
                 .filter(deploymentLobbyResource -> deploymentLobbyResource.getStatus()
                         .equals(DeploymentLobbyResourceStatusEnum.CREATED))
-                .forEach(deploymentLobbyResource -> {
-
+                .filter(deploymentLobbyResource -> {
                     final var lobbyId = deploymentLobbyResource.getLobbyId();
-                    final var noLobbyAssignments = deploymentState.getDeploymentLobbyAssignments().stream()
-                            .noneMatch(deploymentLobbyAssignment ->
-                                    deploymentLobbyAssignment.getLobbyId().equals(lobbyId));
+                    return deploymentState.getDeploymentLobbyAssignments().stream()
+                            .noneMatch(deploymentLobbyAssignment -> deploymentLobbyAssignment.getLobbyId()
+                                    .equals(lobbyId));
+                })
+                .filter(deploymentLobbyResource -> {
+                    final var lobbyResourceCreated = deploymentLobbyResource.getCreated();
+                    final var lobbyCurrentLifetime = Duration.between(lobbyResourceCreated, Instant.now());
+                    final var lobbyMinLifetime = getServiceConfigOperation.getServiceConfig().runtimes()
+                            .lobby().minLifetime();
+                    return lobbyCurrentLifetime.toSeconds() > lobbyMinLifetime;
+                })
+                .map(deploymentLobbyResource -> {
+                    final var lobbyId = deploymentLobbyResource.getLobbyId();
+                    final var deploymentLobbyResourceId = deploymentLobbyResource.getId();
 
-                    if (noLobbyAssignments) {
-                        final var lobbyResourceCreated = deploymentLobbyResource.getCreated();
-                        final var lobbyCurrentLifetime = Duration.between(lobbyResourceCreated, Instant.now());
-                        final var lobbyMinLifetime = getServiceConfigOperation.getServiceConfig().runtimes()
-                                .lobby().minLifetime();
-                        if (lobbyCurrentLifetime.toSeconds() > lobbyMinLifetime) {
-                            final var deploymentLobbyResourceId = deploymentLobbyResource.getId();
+                    log.info("Lobby resource \"{}\" from deployment \"{}\" is dangling " +
+                                    "and marked as closed, lobbyId=\"{}\"",
+                            deploymentLobbyResourceId,
+                            deploymentId,
+                            lobbyId);
 
-                            final var dtoToUpdateStatus = new DeploymentLobbyResourceToUpdateStatusDto(
-                                    deploymentLobbyResourceId,
-                                    DeploymentLobbyResourceStatusEnum.CLOSED);
+                    final var dtoToUpdateStatus = new DeploymentLobbyResourceToUpdateStatusDto(
+                            deploymentLobbyResourceId,
+                            DeploymentLobbyResourceStatusEnum.CLOSED);
 
-                            handleDeploymentResult.deploymentChangeOfState()
-                                    .getDeploymentLobbyResourcesToUpdateStatus()
-                                    .add(dtoToUpdateStatus);
+                    return dtoToUpdateStatus;
+                })
+                .toList();
 
-                            log.info("Lobby resource \"{}\" of deployment \"{}\" is dangling and marked as closed, " +
-                                    "lobbyId=\"{}\"", deploymentLobbyResourceId, deploymentId, lobbyId);
-                        }
-                    }
-                });
+
+        handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToUpdateStatus()
+                .addAll(deploymentLobbyResourcesToUpdateStatus);
     }
 }

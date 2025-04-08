@@ -24,23 +24,23 @@ import io.smallrye.mutiny.Uni;
 
 public interface WebService {
 
-    Uni<GetUserResponse> getUser(GetUserRequest request);
+    Uni<GetUserResponse> execute(GetUserRequest request);
 
-    Uni<SyncUserResponse> syncUser(SyncUserRequest request);
+    Uni<SyncUserResponse> execute(SyncUserRequest request);
 
-    Uni<DeleteUserResponse> deleteUser(DeleteUserRequest request);
+    Uni<DeleteUserResponse> execute(DeleteUserRequest request);
 
-    Uni<CreateTokenResponse> createToken(CreateTokenRequest request);
+    Uni<CreateTokenResponse> execute(CreateTokenRequest request);
 
-    Uni<GetPlayerResponse> getPlayer(GetPlayerRequest request);
+    Uni<GetPlayerResponse> execute(GetPlayerRequest request);
 
-    Uni<GetPlayerProfileResponse> getPlayerProfile(GetPlayerProfileRequest request);
+    Uni<GetPlayerProfileResponse> execute(GetPlayerProfileRequest request);
 
-    Uni<FindPlayerResponse> findPlayer(FindPlayerRequest request);
+    Uni<FindPlayerResponse> execute(FindPlayerRequest request);
 
-    Uni<SyncPlayerResponse> syncPlayer(SyncPlayerRequest request);
+    Uni<SyncPlayerResponse> execute(SyncPlayerRequest request);
 
-    Uni<UpdatePlayerProfileResponse> updatePlayerProfile(UpdatePlayerProfileRequest request);
+    Uni<UpdatePlayerProfileResponse> execute(UpdatePlayerProfileRequest request);
 
-    Uni<DeletePlayerResponse> deletePlayer(DeletePlayerRequest request);
+    Uni<DeletePlayerResponse> execute(DeletePlayerRequest request);
 }

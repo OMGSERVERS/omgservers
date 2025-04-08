@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolRequest;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.pool.poolRequest.ViewPoolRequestsRequest;
 import com.omgservers.schema.module.pool.poolRequest.ViewPoolRequestsResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolRequest.SelectActivePoolRequestsByPoolIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -16,24 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 class ViewPoolRequestsMethodImpl implements ViewPoolRequestsMethod {
 
     final SelectActivePoolRequestsByPoolIdOperation selectActivePoolRequestsByPoolIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewPoolRequestsResponse> execute(
-            final ViewPoolRequestsRequest request) {
+    public Uni<ViewPoolRequestsResponse> execute(final ShardModel shardModel,
+                                                 final ViewPoolRequestsRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var poolId = request.getPoolId();
-                    return pgPool.withTransaction(
-                            sqlConnection -> selectActivePoolRequestsByPoolIdOperation
-                                    .execute(sqlConnection,
-                                            shard.shard(),
-                                            poolId));
-                })
+        final var poolId = request.getPoolId();
+        return pgPool.withTransaction(sqlConnection -> selectActivePoolRequestsByPoolIdOperation
+                        .execute(sqlConnection,
+                                shardModel.shard(),
+                                poolId))
                 .map(ViewPoolRequestsResponse::new);
     }
 }

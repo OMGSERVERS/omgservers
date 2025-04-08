@@ -3,6 +3,7 @@ package com.omgservers.service.factory.pool;
 import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
+import com.omgservers.schema.model.poolServer.PoolServerStatusEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,7 @@ public class PoolServerModelFactory {
         poolServer.setModified(now);
         poolServer.setQualifier(qualifier);
         poolServer.setConfig(config);
+        poolServer.setStatus(PoolServerStatusEnum.CREATED);
         poolServer.setDeleted(Boolean.FALSE);
 
         return poolServer;

@@ -29,7 +29,7 @@ class SelectUserOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenUser_whenSelectUser_thenSelected() {
+    void givenUser_whenExecute_thenSelected() {
         final var shard = 0;
         final var user1 = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
         final var id = user1.getId();
@@ -40,7 +40,7 @@ class SelectUserOperationTest extends BaseTestClass {
     }
 
     @Test
-    void givenUnknownId_whenSelectUser_thenException() {
+    void givenUnknownId_whenExecute_thenException() {
         final var shard = 0;
         final var id = generateIdOperation.generateId();
 

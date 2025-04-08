@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.impl.method.matchmakerMatchResource;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.DeleteMatchmakerMatchResourceRequest;
 import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.DeleteMatchmakerMatchResourceResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource.DeleteMatchmakerMatchResourceOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,24 +18,22 @@ class DeleteMatchmakerMatchResourceMethodImpl implements DeleteMatchmakerMatchRe
 
     final DeleteMatchmakerMatchResourceOperation deleteMatchmakerMatchResourceOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<DeleteMatchmakerMatchResourceResponse> execute(final DeleteMatchmakerMatchResourceRequest request) {
+    public Uni<DeleteMatchmakerMatchResourceResponse> execute(final ShardModel shardModel,
+                                                              final DeleteMatchmakerMatchResourceRequest request) {
         log.trace("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> changeWithContextOperation.<Boolean>changeWithContext(
-                                (changeContext, sqlConnection) ->
-                                        deleteMatchmakerMatchResourceOperation.execute(changeContext,
-                                                sqlConnection,
-                                                shardModel.shard(),
-                                                matchmakerId,
-                                                id))
-                        .map(ChangeContext::getResult)
-                )
+        return changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) ->
+                                deleteMatchmakerMatchResourceOperation.execute(changeContext,
+                                        sqlConnection,
+                                        shardModel.shard(),
+                                        matchmakerId,
+                                        id))
+                .map(ChangeContext::getResult)
                 .map(DeleteMatchmakerMatchResourceResponse::new);
     }
 }

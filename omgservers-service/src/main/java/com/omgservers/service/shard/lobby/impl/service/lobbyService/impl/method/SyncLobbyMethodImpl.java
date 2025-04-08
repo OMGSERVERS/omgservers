@@ -1,10 +1,10 @@
 package com.omgservers.service.shard.lobby.impl.service.lobbyService.impl.method;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.lobby.SyncLobbyRequest;
 import com.omgservers.schema.module.lobby.SyncLobbyResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.lobby.impl.operation.lobby.UpsertLobbyOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,24 +18,20 @@ class SyncLobbyMethodImpl implements SyncLobbyMethod {
 
     final ChangeWithContextOperation changeWithContextOperation;
     final UpsertLobbyOperation upsertLobbyOperation;
-    final CheckShardOperation checkShardOperation;
 
     @Override
-    public Uni<SyncLobbyResponse> execute(final SyncLobbyRequest request) {
+    public Uni<SyncLobbyResponse> execute(final ShardModel shardModel,
+                                          final SyncLobbyRequest request) {
         log.trace("{}", request);
 
         final var lobby = request.getLobby();
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shardModel -> {
-                    final var shard = shardModel.shard();
-                    return changeWithContextOperation.<Boolean>changeWithContext(
-                                    (changeContext, sqlConnection) -> upsertLobbyOperation.execute(
-                                            changeContext,
-                                            sqlConnection,
-                                            shard,
-                                            lobby))
-                            .map(ChangeContext::getResult);
-                })
+        return changeWithContextOperation.<Boolean>changeWithContext(
+                        (changeContext, sqlConnection) -> upsertLobbyOperation.execute(
+                                changeContext,
+                                sqlConnection,
+                                shardModel.shard(),
+                                lobby))
+                .map(ChangeContext::getResult)
                 .map(SyncLobbyResponse::new);
     }
 }

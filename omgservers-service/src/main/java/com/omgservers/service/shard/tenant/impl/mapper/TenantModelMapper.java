@@ -14,7 +14,7 @@ public class TenantModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public TenantModel fromRow(final Row row) {
+    public TenantModel execute(final Row row) {
         final var tenant = new TenantModel();
         tenant.setId(row.getLong("id"));
         tenant.setCreated(row.getOffsetDateTime("created").toInstant());

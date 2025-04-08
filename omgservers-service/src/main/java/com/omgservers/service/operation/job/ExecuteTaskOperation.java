@@ -1,7 +1,8 @@
 package com.omgservers.service.operation.job;
 
+import com.omgservers.service.service.task.Task;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteTaskOperation {
-    Uni<Boolean> execute(Uni<Boolean> task);
+    <T> Uni<Boolean> executeFailSafe(Task<T> task, T arguments);
 }

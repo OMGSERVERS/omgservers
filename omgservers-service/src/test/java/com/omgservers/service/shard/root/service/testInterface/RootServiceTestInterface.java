@@ -22,17 +22,17 @@ public class RootServiceTestInterface {
     final RootService rootService;
 
     public GetRootResponse getRoot(final GetRootRequest request) {
-        return rootService.getRoot(request)
+        return rootService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public SyncRootResponse syncRoot(final SyncRootRequest request) {
-        return rootService.syncRoot(request)
+        return rootService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 
     public DeleteRootResponse deleteRoot(final DeleteRootRequest request) {
-        return rootService.deleteRoot(request)
+        return rootService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

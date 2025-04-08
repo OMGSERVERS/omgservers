@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
 import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantVersion.SelectActiveTenantVersionProjectionsByTenantProjectIdOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,26 +17,21 @@ class ViewTenantVersionsMethodImpl implements ViewTenantVersionsMethod {
 
     final SelectActiveTenantVersionProjectionsByTenantProjectIdOperation
             selectActiveTenantVersionProjectionsByTenantProjectIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
     @Override
-    public Uni<ViewTenantVersionsResponse> execute(final ViewTenantVersionsRequest request) {
+    public Uni<ViewTenantVersionsResponse> execute(final ShardModel shardModel,
+                                                   final ViewTenantVersionsRequest request) {
         log.trace("{}", request);
 
-        return checkShardOperation.checkShard(request.getRequestShardKey())
-                .flatMap(shard -> {
-                    final var tenantId = request.getTenantId();
-                    final var tenantProjectId = request.getTenantProjectId();
-                    return pgPool.withTransaction(sqlConnection -> selectActiveTenantVersionProjectionsByTenantProjectIdOperation
-                            .execute(sqlConnection,
-                                    shard.shard(),
-                                    tenantId,
-                                    tenantProjectId
-                            )
-                    );
-                })
+        final var tenantId = request.getTenantId();
+        final var tenantProjectId = request.getTenantProjectId();
+        return pgPool.withTransaction(sqlConnection ->
+                        selectActiveTenantVersionProjectionsByTenantProjectIdOperation.execute(sqlConnection,
+                                shardModel.shard(),
+                                tenantId,
+                                tenantProjectId))
                 .map(ViewTenantVersionsResponse::new);
     }
 }

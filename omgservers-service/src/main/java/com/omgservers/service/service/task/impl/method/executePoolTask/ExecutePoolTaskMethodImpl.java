@@ -22,8 +22,8 @@ public class ExecutePoolTaskMethodImpl implements ExecutePoolTaskMethod {
         log.trace("{}", request);
 
         final var poolId = request.getPoolId();
-
-        return executeTaskOperation.execute(poolTask.execute(poolId))
+        final var taskArguments = new PoolTaskArguments(poolId);
+        return executeTaskOperation.executeFailSafe(poolTask, taskArguments)
                 .map(ExecutePoolTaskResponse::new);
     }
 }

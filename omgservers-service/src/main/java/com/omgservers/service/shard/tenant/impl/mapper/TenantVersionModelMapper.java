@@ -19,7 +19,7 @@ public class TenantVersionModelMapper {
 
     final ObjectMapper objectMapper;
 
-    public TenantVersionModel fromRow(final Row row) {
+    public TenantVersionModel execute(final Row row) {
         final var version = new TenantVersionModel();
         version.setId(row.getLong("id"));
         version.setTenantId(row.getLong("tenant_id"));

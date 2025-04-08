@@ -3,10 +3,9 @@ package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.i
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.matchmaker.matchmakerRequest.DeleteMatchmakerRequestRequest;
 import com.omgservers.schema.module.matchmaker.matchmakerRequest.DeleteMatchmakerRequestResponse;
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerRequest.DeleteMatchmakerRequestOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.operation.server.CheckShardOperation;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerRequest.DeleteMatchmakerRequestOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -17,29 +16,21 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class DeleteMatchmakerRequestMethodImpl implements DeleteMatchmakerRequestMethod {
 
-    final ChangeWithContextOperation changeWithContextOperation;
     final DeleteMatchmakerRequestOperation deleteMatchmakerRequestOperation;
-    final CheckShardOperation checkShardOperation;
+    final ChangeWithContextOperation changeWithContextOperation;
 
     @Override
-    public Uni<DeleteMatchmakerRequestResponse> execute(final DeleteMatchmakerRequestRequest request) {
+    public Uni<DeleteMatchmakerRequestResponse> execute(final ShardModel shardModel,
+                                                        final DeleteMatchmakerRequestRequest request) {
         log.trace("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
-        return Uni.createFrom().voidItem()
-                .flatMap(voidItem -> checkShardOperation.checkShard(request.getRequestShardKey()))
-                .flatMap(shardModel -> changeFunction(shardModel, matchmakerId, id))
-                .map(DeleteMatchmakerRequestResponse::new);
-    }
-
-    Uni<Boolean> changeFunction(final ShardModel shardModel,
-                                final Long matchmakerId,
-                                final Long id) {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteMatchmakerRequestOperation.execute(changeContext, sqlConnection,
                                 shardModel.shard(), matchmakerId,
                                 id))
-                .map(ChangeContext::getResult);
+                .map(ChangeContext::getResult)
+                .map(DeleteMatchmakerRequestResponse::new);
     }
 }

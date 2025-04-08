@@ -38,6 +38,6 @@ class SelectActiveTenantVersionProjectionsByTenantIdOperationImpl
                         """,
                 Collections.singletonList(tenantId),
                 "Tenant version projection",
-                tenantVersionProjectionModelMapper::fromRow);
+                tenantVersionProjectionModelMapper::execute);
     }
 }

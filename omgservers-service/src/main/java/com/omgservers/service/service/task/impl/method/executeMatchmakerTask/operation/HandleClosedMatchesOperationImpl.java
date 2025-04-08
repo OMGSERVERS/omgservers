@@ -34,7 +34,8 @@ class HandleClosedMatchesOperationImpl implements HandleClosedMatchesOperation {
                     final var matchmakerId = matchmakerMatchResource.getMatchmakerId();
                     final var matchId = matchmakerMatchResource.getMatchId();
 
-                    log.info("Match resource \"{}\" of matchmaker \"{}\" queued for deletion, matchId=\"{}\"",
+                    log.info("Match resource \"{}\" from matchmaker \"{}\" " +
+                                    "is closed and queued for deletion, matchId=\"{}\"",
                             matchmakerMatchResourceId,
                             matchmakerId,
                             matchId);

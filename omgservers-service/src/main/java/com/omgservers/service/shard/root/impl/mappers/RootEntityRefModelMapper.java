@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class RootEntityRefModelMapper {
 
-    public RootEntityRefModel fromRow(final Row row) {
+    public RootEntityRefModel execute(final Row row) {
         final var rootEntityRef = new RootEntityRefModel();
         rootEntityRef.setId(row.getLong("id"));
         rootEntityRef.setIdempotencyKey(row.getString("idempotency_key"));

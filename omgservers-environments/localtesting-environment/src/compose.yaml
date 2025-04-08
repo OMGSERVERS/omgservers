@@ -52,23 +52,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command: "/etc/docker/registry/registry_config.yaml"
-  builder:
-    image: "omgservers/builder:${OMGSERVERS_VERSION}"
-    container_name: "builder"
-    restart: unless-stopped
-    ports:
-      - "7070:8080"
-    networks:
-      - omgservers
-    environment:
-      - JENKINS_URL=http://localhost:7070
-      - JENKINS_ADMIN_ID=omgservers
-      - JENKINS_ADMIN_PASSWORD=omgservers
-      - JENKINS_ADMIN_TOKEN=1167db115da39e5c7776c661e463fe7933
-      - OMGSERVERS_BUILDER_USERNAME=builder
-      - OMGSERVERS_BUILDER_USER_PASSWORD=builder
-      - DOCKER_HOST=tcp://docker:2375
-      - DOCKER_REGISTRY=localhost:5000
 networks:
   omgservers:
     name: omgservers

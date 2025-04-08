@@ -1,9 +1,10 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage;
 
+import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncTenantStageMethod {
-    Uni<SyncTenantStageResponse> execute(SyncTenantStageRequest request);
+    Uni<SyncTenantStageResponse> execute(ShardModel shardModel, SyncTenantStageRequest request);
 }

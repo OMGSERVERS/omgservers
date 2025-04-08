@@ -68,7 +68,7 @@ public class KickClientMessageHandler implements OutgoingMessageHandler {
                 final var matchmakerId = runtimeMatchConfig.getMatchmakerId();
                 final var matchId = runtimeMatchConfig.getMatchId();
 
-                yield createKickClientMatchmakerCommandOperation.execute(matchmakerId, matchId, clientId)
+                yield createKickClientMatchmakerCommandOperation.executeFailSafe(matchmakerId, matchId, clientId)
                         .replaceWithVoid();
             }
         };

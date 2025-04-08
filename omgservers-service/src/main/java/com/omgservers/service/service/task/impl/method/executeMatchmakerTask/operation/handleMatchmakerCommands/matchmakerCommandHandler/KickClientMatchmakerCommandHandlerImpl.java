@@ -44,7 +44,7 @@ class KickClientMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
         handleMatchmakerResult.matchmakerChangeOfState().getMatchmakerMatchAssignmentsToDelete()
                 .addAll(matchmakerMatchAssignmentsToDelete);
 
-        log.info("Client \"{}\" queued to be kicked, matchmakerId=\"{}\"",
+        log.info("Client \"{}\" must be kicked and assignments queued for deletion, matchmakerId=\"{}\"",
                 clientId,
                 matchmakerId);
 

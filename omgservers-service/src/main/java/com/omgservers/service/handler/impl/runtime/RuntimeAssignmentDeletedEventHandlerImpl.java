@@ -2,7 +2,6 @@ package com.omgservers.service.handler.impl.runtime;
 
 import com.omgservers.schema.message.body.ClientRemovedMessageBodyDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.runtimeMessage.RuntimeMessageModel;
 import com.omgservers.schema.module.runtime.runtimeAssignment.GetRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.runtimeAssignment.GetRuntimeAssignmentResponse;
 import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageRequest;
@@ -56,16 +55,9 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
                     final var clientId = runtimeAssignment.getClientId();
 
                     return findAndDeleteClientRuntimeRefOperation.execute(clientId, runtimeId)
-                            .flatMap(voidItem -> {
-                                final var messageBody = new ClientRemovedMessageBodyDto();
-                                messageBody.setClientId(clientId);
-
-                                final var runtimeMessage = runtimeMessageModelFactory.create(runtimeId,
-                                        messageBody,
-                                        idempotencyKey);
-
-                                return syncRuntimeMessage(runtimeMessage);
-                            });
+                            .flatMap(voidItem -> createClientRemovedRuntimeMessage(runtimeId,
+                                    clientId,
+                                    idempotencyKey));
                 })
                 .replaceWithVoid();
     }
@@ -76,7 +68,16 @@ public class RuntimeAssignmentDeletedEventHandlerImpl implements EventHandler {
                 .map(GetRuntimeAssignmentResponse::getRuntimeAssignment);
     }
 
-    Uni<Boolean> syncRuntimeMessage(final RuntimeMessageModel runtimeMessage) {
+    Uni<Boolean> createClientRemovedRuntimeMessage(final Long runtimeId,
+                                                   final Long clientId,
+                                                   final String idempotencyKey) {
+        final var messageBody = new ClientRemovedMessageBodyDto();
+        messageBody.setClientId(clientId);
+
+        final var runtimeMessage = runtimeMessageModelFactory.create(runtimeId,
+                messageBody,
+                idempotencyKey);
+
         final var request = new SyncRuntimeMessageRequest(runtimeMessage);
         return runtimeShard.getService().executeWithIdempotency(request)
                 .map(SyncRuntimeMessageResponse::getCreated)
