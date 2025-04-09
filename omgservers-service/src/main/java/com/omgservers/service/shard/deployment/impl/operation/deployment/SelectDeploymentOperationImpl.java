@@ -30,7 +30,7 @@ class SelectDeploymentOperationImpl implements SelectDeploymentOperation {
                 """
                         select
                             id, idempotency_key, created, modified, tenant_id, stage_id, version_id, deleted
-                        from $schema.tab_deployment
+                        from $shard.tab_deployment
                         where id = $1
                         limit 1
                         """,

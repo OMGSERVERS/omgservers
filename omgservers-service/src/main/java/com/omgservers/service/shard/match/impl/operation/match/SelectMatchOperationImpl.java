@@ -30,7 +30,7 @@ class SelectMatchOperationImpl implements SelectMatchOperation {
                 """
                         select
                             id, idempotency_key, created, modified, matchmaker_id, runtime_id, deleted
-                        from $schema.tab_match
+                        from $shard.tab_match
                         where id = $1
                         limit 1
                         """,

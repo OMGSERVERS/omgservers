@@ -26,7 +26,7 @@ class VerifyPoolServerExistsOperationImpl implements VerifyPoolServerExistsOpera
                 shard,
                 """
                         select id
-                        from $schema.tab_pool_server
+                        from $shard.tab_pool_server
                         where pool_id = $1 and id = $2 and deleted = false
                         limit 1
                         """,

@@ -33,10 +33,10 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final PlayerModel player) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user_player(
+                        insert into $shard.tab_user_player(
                             id, idempotency_key, user_id, created, modified, tenant_id, stage_id, profile, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

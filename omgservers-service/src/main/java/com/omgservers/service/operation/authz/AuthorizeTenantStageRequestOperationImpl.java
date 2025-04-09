@@ -27,10 +27,10 @@ class AuthorizeTenantStageRequestOperationImpl implements AuthorizeTenantStageRe
 
     @Override
     public Uni<TenantStageAuthorization> execute(final String tenant,
-                                                final String project,
-                                                final String stage,
-                                                final Long userId,
-                                                final TenantStagePermissionQualifierEnum permission) {
+                                                 final String project,
+                                                 final String stage,
+                                                 final Long userId,
+                                                 final TenantStagePermissionQualifierEnum permission) {
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> getIdByProjectOperation.execute(tenantId, project)
                         .flatMap(tenantProjectId -> getIdByStageOperation.execute(tenantId, tenantProjectId, stage)

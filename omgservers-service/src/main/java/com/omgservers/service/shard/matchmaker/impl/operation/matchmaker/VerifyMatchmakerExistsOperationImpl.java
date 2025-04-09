@@ -25,7 +25,7 @@ class VerifyMatchmakerExistsOperationImpl implements VerifyMatchmakerExistsOpera
                 shard,
                 """
                         select id
-                        from $schema.tab_matchmaker
+                        from $shard.tab_matchmaker
                         where id = $1 and deleted = false
                         limit 1
                         """,

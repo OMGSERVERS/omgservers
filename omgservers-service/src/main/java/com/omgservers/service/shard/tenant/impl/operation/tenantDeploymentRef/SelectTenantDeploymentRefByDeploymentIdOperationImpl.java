@@ -32,7 +32,7 @@ class SelectTenantDeploymentRefByDeploymentIdOperationImpl implements SelectTena
                         select
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id,
                             deleted
-                        from $schema.tab_tenant_deployment_ref
+                        from $shard.tab_tenant_deployment_ref
                         where tenant_id = $1 and deployment_id = $2
                         order by id desc
                         limit 1

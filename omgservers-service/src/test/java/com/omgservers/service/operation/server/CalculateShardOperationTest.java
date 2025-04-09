@@ -24,7 +24,7 @@ class CalculateShardOperationTest extends BaseTestClass {
     @Test
     void givenCompositeHashKey_whenCalculateShard() {
         final var indexShardCount = 32768;
-        final var shard = calculateShardOperation.calculateShard(indexShardCount, "db/system", "username");
+        final var shard = calculateShardOperation.calculateShard(indexShardCount, "db/server", "username");
         assertNotNull(shard);
         assertTrue(shard >= 0 && shard < indexShardCount);
     }

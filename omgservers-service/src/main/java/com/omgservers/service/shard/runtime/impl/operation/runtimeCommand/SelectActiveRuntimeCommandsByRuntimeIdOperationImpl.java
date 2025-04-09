@@ -31,7 +31,7 @@ class SelectActiveRuntimeCommandsByRuntimeIdOperationImpl
                 """
                         select
                             id, idempotency_key, runtime_id, created, modified, qualifier, body, deleted
-                        from $schema.tab_runtime_command
+                        from $shard.tab_runtime_command
                         where runtime_id = $1 and deleted = false
                         order by id asc
                         """,

@@ -31,7 +31,7 @@ class SelectRootEntityRefOperationImpl implements SelectRootEntityRefOperation {
                 shard,
                 """
                         select id, idempotency_key, root_id, created, modified, qualifier, entity_id, deleted
-                        from $schema.tab_root_entity_ref
+                        from $shard.tab_root_entity_ref
                         where root_id = $1 and id = $2
                         limit 1
                         """,

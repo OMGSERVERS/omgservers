@@ -30,6 +30,6 @@ public class IndexServerDto {
     URI uri;
 
     @NotNull
-    @Size(max = 32767)
+    @Size(max = 512)
     List<Integer> shards;
 }

@@ -30,7 +30,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
                 """
                         select
                             id, idempotency_key, created, modified, user_id, player_id, deployment_id, deleted
-                        from $schema.tab_client
+                        from $shard.tab_client
                         where id = $1
                         limit 1
                         """,

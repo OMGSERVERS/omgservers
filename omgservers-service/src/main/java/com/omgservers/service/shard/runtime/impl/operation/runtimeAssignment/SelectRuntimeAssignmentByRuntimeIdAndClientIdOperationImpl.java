@@ -32,7 +32,7 @@ class SelectRuntimeAssignmentByRuntimeIdAndClientIdOperationImpl implements
                 """
                         select
                             id, idempotency_key, runtime_id, created, modified, client_id, config, deleted
-                        from $schema.tab_runtime_assignment
+                        from $shard.tab_runtime_assignment
                         where runtime_id = $1 and client_id = $2
                         order by id desc
                         limit 1

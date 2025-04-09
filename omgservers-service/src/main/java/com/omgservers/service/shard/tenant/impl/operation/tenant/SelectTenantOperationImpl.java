@@ -29,7 +29,7 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
                 shard,
                 """
                         select id, idempotency_key, created, modified, deleted
-                        from $schema.tab_tenant
+                        from $shard.tab_tenant
                         where id = $1
                         limit 1
                         """,

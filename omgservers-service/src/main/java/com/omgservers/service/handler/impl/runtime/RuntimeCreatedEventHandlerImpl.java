@@ -13,9 +13,8 @@ import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyM
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.job.CreateJobOperation;
 import com.omgservers.service.operation.pool.CreatePoolRequestOperation;
-import com.omgservers.service.operation.runtime.CreateOpenRuntimeCommandOperation;
 import com.omgservers.service.operation.runtime.CreateRuntimeCreatedRuntimeMessageOperation;
-import com.omgservers.service.service.cache.CacheService;
+import com.omgservers.service.server.cache.CacheService;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;
@@ -35,7 +34,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
     final CacheService cacheService;
 
     final CreateRuntimeCreatedRuntimeMessageOperation createRuntimeCreatedRuntimeMessageOperation;
-    final CreateOpenRuntimeCommandOperation createOpenRuntimeCommandOperation;
     final CreatePoolRequestOperation createPoolRequestOperation;
     final CreateJobOperation createJobOperation;
 
@@ -61,8 +59,6 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                     return getDeployment(deploymentId)
                             .flatMap(deployment -> createRuntimeCreatedRuntimeMessageOperation
                                     .execute(runtime, idempotencyKey)
-                                    .flatMap(created -> createOpenRuntimeCommandOperation
-                                            .execute(runtime, idempotencyKey))
                                     .flatMap(created -> createPoolRequestOperation
                                             .execute(runtime, deployment, idempotencyKey))
                                     .flatMap(created -> createJobOperation

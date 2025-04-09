@@ -29,7 +29,7 @@ class SelectRootOperationImpl implements SelectRootOperation {
                 shard,
                 """
                         select id, idempotency_key, created, modified, deleted
-                        from $schema.tab_root
+                        from $shard.tab_root
                         where id = $1
                         limit 1
                         """,

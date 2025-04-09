@@ -26,10 +26,10 @@ class UpsertDeploymentRequestOperationImpl implements UpsertDeploymentRequestOpe
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final DeploymentRequestModel deploymentRequest) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_deployment_request(
+                        insert into $shard.tab_deployment_request(
                             id, idempotency_key, deployment_id, created, modified, client_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

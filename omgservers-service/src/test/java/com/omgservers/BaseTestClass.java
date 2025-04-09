@@ -1,7 +1,7 @@
 package com.omgservers;
 
-import com.omgservers.service.service.task.impl.method.executeBootstrapTask.BootstrapTaskArguments;
-import com.omgservers.service.service.task.impl.method.executeBootstrapTask.BootstrapTaskImpl;
+import com.omgservers.service.server.task.impl.method.executeBootstrapTask.BootstrapTaskArguments;
+import com.omgservers.service.server.task.impl.method.executeBootstrapTask.BootstrapTaskImpl;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;

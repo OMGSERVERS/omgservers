@@ -31,7 +31,7 @@ class SelectActiveDeploymentCommandsByDeploymentIdOperationImpl
                 """
                         select 
                             id, idempotency_key, deployment_id, created, modified, qualifier, body, deleted
-                        from $schema.tab_deployment_command
+                        from $shard.tab_deployment_command
                         where deployment_id = $1 and deleted = false
                         order by id asc
                         """,

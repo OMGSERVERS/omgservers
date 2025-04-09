@@ -33,10 +33,10 @@ class UpsertMatchmakerMatchAssignmentOperationImpl implements UpsertMatchmakerMa
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final MatchmakerMatchAssignmentModel matchmakerMatchAssignment) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_matchmaker_match_assignment(
+                        insert into $shard.tab_matchmaker_match_assignment(
                             id, idempotency_key, matchmaker_id, created, modified, match_id, client_id, group_name,
                             config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)

@@ -31,7 +31,7 @@ class SelectActiveRootEntityRefByRootIdOperationImpl
                 shard,
                 """
                         select id, idempotency_key, root_id, created, modified, qualifier, entity_id, deleted
-                        from $schema.tab_root_entity_ref
+                        from $shard.tab_root_entity_ref
                         where root_id = $1 and deleted = false
                         order by id asc
                         """,

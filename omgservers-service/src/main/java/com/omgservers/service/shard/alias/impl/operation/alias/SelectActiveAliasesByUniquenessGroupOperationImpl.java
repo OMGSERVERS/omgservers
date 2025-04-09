@@ -30,7 +30,7 @@ class SelectActiveAliasesByUniquenessGroupOperationImpl implements SelectActiveA
                 shard,
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
-                        from $schema.tab_alias
+                        from $shard.tab_alias
                         where shard_key = $1 and uniqueness_group = $2 and deleted = false
                         order by id asc
                         """,

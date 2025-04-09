@@ -25,7 +25,7 @@ class VerifyDeploymentExistsOperationImpl implements VerifyDeploymentExistsOpera
                 shard,
                 """
                         select id
-                        from $schema.tab_deployment
+                        from $shard.tab_deployment
                         where id = $1 and deleted = false
                         limit 1
                         """,

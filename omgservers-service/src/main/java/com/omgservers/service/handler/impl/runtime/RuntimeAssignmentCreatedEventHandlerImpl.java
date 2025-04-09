@@ -22,7 +22,7 @@ import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.client.ClientRuntimeRefModelFactory;
 import com.omgservers.service.factory.runtime.RuntimeMessageModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.service.cache.CacheService;
+import com.omgservers.service.server.cache.CacheService;
 import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.user.UserShard;

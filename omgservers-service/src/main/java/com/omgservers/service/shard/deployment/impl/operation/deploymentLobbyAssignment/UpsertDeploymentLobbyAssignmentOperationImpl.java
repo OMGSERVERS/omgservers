@@ -27,10 +27,10 @@ class UpsertDeploymentLobbyAssignmentOperationImpl implements UpsertDeploymentLo
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final DeploymentLobbyAssignmentModel deploymentLobbyAssignment) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_deployment_lobby_assignment(
+                        insert into $shard.tab_deployment_lobby_assignment(
                             id, idempotency_key, deployment_id, created, modified, client_id, lobby_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

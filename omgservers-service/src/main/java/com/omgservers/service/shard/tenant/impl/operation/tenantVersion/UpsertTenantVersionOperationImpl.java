@@ -33,10 +33,10 @@ class UpsertTenantVersionOperationImpl implements UpsertTenantVersionOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final TenantVersionModel tenantVersion) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_version(
+                        insert into $shard.tab_tenant_version(
                             id, idempotency_key, tenant_id, project_id, created, modified, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

@@ -32,7 +32,7 @@ class SelectTenantDeploymentResourceOperationImpl implements SelectTenantDeploym
                         select
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id,
                             status, deleted
-                        from $schema.tab_tenant_deployment_resource
+                        from $shard.tab_tenant_deployment_resource
                         where tenant_id = $1 and id = $2
                         limit 1
                         """,

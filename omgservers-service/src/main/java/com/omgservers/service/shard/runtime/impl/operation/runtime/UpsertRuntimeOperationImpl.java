@@ -33,10 +33,10 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final RuntimeModel runtime) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_runtime(
+                        insert into $shard.tab_runtime(
                             id, idempotency_key, created, modified, deployment_id, qualifier, user_id, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

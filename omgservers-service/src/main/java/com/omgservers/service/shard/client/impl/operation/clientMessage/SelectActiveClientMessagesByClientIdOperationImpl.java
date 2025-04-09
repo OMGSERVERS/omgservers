@@ -33,7 +33,7 @@ class SelectActiveClientMessagesByClientIdOperationImpl
                 """
                         select
                             id, idempotency_key, client_id, created, modified, qualifier, body, deleted
-                        from $schema.tab_client_message
+                        from $shard.tab_client_message
                         where client_id = $1 and deleted = false
                         order by id asc
                         """,

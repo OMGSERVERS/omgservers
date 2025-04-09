@@ -23,7 +23,7 @@ import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantPermissionsOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantProjectsOperation;
-import com.omgservers.service.service.job.JobService;
+import com.omgservers.service.server.job.JobService;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.root.RootShard;
 import com.omgservers.service.shard.tenant.TenantShard;

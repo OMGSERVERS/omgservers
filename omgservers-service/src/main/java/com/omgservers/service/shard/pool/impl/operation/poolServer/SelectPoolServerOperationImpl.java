@@ -31,7 +31,7 @@ class SelectPoolServerOperationImpl implements SelectPoolServerOperation {
                 """
                         select
                             id, idempotency_key, pool_id, created, modified, qualifier, config, status, deleted
-                        from $schema.tab_pool_server
+                        from $shard.tab_pool_server
                         where id = $1
                         limit 1
                         """,

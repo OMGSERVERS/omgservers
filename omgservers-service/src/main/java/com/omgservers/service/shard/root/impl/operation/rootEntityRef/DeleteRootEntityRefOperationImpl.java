@@ -25,10 +25,10 @@ class DeleteRootEntityRefOperationImpl implements DeleteRootEntityRefOperation {
                                 final int shard,
                                 final Long rootId,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_root_entity_ref
+                        update $shard.tab_root_entity_ref
                         set modified = $3, deleted = true
                         where root_id = $1 and id = $2 and deleted = false
                         """,

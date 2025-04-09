@@ -1,5 +1,6 @@
 package com.omgservers.service.operation.server;
 
+import com.omgservers.service.configuration.DatabaseSchemaConfiguration;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,10 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 class PrepareShardSqlOperationImpl implements PrepareShardSqlOperation {
 
     @Override
-    public String prepareShardSql(final String sql,
-                                  final int shard) {
-        final var schemaName = String.format("shard_%05d", shard);
-        final var preparedSql = sql.replaceAll("\\$schema", schemaName);
+    public String execute(final String sql,
+                          final int shard) {
+        final var shardSchema = String.format(DatabaseSchemaConfiguration.SHARD_SCHEMA_FORMAT, shard);
+        final var preparedSql = sql.replaceAll("\\$shard", shardSchema);
         return preparedSql;
     }
 }

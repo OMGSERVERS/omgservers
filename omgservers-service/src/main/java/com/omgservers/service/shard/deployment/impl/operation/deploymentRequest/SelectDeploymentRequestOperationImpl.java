@@ -31,7 +31,7 @@ class SelectDeploymentRequestOperationImpl implements SelectDeploymentRequestOpe
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, client_id, deleted
-                        from $schema.tab_deployment_request
+                        from $shard.tab_deployment_request
                         where deployment_id = $1 and id = $2
                         limit 1
                         """,

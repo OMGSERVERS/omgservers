@@ -28,7 +28,7 @@ class VerifyTenantPermissionExistsOperationImpl implements VerifyTenantPermissio
                 shard,
                 """
                         select id
-                        from $schema.tab_tenant_permission
+                        from $shard.tab_tenant_permission
                         where tenant_id = $1 and user_id = $2 and permission = $3 and deleted = false
                         limit 1
                         """,

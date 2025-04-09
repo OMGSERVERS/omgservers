@@ -29,7 +29,7 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
                 shard,
                 """
                         select id, idempotency_key, created, modified, deployment_id, deleted
-                        from $schema.tab_matchmaker
+                        from $shard.tab_matchmaker
                         where id = $1
                         limit 1
                         """,

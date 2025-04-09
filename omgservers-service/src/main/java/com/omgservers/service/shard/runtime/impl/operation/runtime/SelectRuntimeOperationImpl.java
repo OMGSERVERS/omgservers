@@ -31,7 +31,7 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
                         select
                             id, idempotency_key, created, modified, deployment_id, qualifier, user_id, 
                             config, deleted
-                        from $schema.tab_runtime
+                        from $shard.tab_runtime
                         where id = $1
                         limit 1
                         """,

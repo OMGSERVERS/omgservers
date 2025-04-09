@@ -27,9 +27,9 @@ class UpdateDeploymentLobbyResourceStatusOperationImpl implements UpdateDeployme
                                 final Long deploymentId,
                                 final Long id,
                                 final DeploymentLobbyResourceStatusEnum status) {
-        return changeObjectOperation.changeObject(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_deployment_lobby_resource
+                        update $shard.tab_deployment_lobby_resource
                         set modified = $3, status = $4
                         where deployment_id = $1 and id = $2
                         """,

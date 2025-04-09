@@ -31,7 +31,7 @@ class SelectMatchmakerMatchResourceOperationImpl implements SelectMatchmakerMatc
                 """
                         select
                             id, idempotency_key, matchmaker_id, created, modified, match_id, mode, status, deleted
-                        from $schema.tab_matchmaker_match_resource
+                        from $shard.tab_matchmaker_match_resource
                         where matchmaker_id = $1 and id = $2
                         limit 1
                         """,

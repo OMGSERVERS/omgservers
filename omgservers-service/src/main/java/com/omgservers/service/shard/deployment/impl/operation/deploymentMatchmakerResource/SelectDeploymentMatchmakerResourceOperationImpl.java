@@ -32,7 +32,7 @@ class SelectDeploymentMatchmakerResourceOperationImpl implements SelectDeploymen
                         select 
                             id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, 
                             deleted
-                        from $schema.tab_deployment_matchmaker_resource
+                        from $shard.tab_deployment_matchmaker_resource
                         where deployment_id = $1 and id = $2
                         limit 1
                         """,

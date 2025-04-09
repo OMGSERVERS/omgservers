@@ -26,10 +26,10 @@ class DeletePoolServerOperationImpl implements DeletePoolServerOperation {
                                 final int shard,
                                 final Long poolId,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_pool_server
+                        update $shard.tab_pool_server
                         set modified = $3, deleted = true
                         where pool_id = $1 and id = $2 and deleted = false
                         """,

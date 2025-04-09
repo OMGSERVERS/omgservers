@@ -29,10 +29,10 @@ class UpsertClientRuntimeRefOperationImpl implements UpsertClientRuntimeRefOpera
                                                final SqlConnection sqlConnection,
                                                final int shard,
                                                final ClientRuntimeRefModel clientRuntimeRef) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_client_runtime_ref(
+                        insert into $shard.tab_client_runtime_ref(
                             id, idempotency_key, client_id, created, modified, runtime_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

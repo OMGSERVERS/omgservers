@@ -28,10 +28,10 @@ class DeleteDeploymentLobbyAssignmentOperationImpl implements DeleteDeploymentLo
                                 final int shard,
                                 final Long deploymentId,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_deployment_lobby_assignment
+                        update $shard.tab_deployment_lobby_assignment
                         set modified = $3, deleted = true
                         where deployment_id = $1 and id = $2 and deleted = false
                         """,

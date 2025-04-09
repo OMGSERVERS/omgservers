@@ -29,10 +29,10 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
                                      final SqlConnection sqlConnection,
                                      final int shard,
                                      final ClientModel client) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_client(
+                        insert into $shard.tab_client(
                             id, idempotency_key, created, modified, user_id, player_id, deployment_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

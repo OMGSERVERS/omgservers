@@ -2,8 +2,9 @@ package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
+import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
@@ -23,6 +24,7 @@ import java.util.function.Function;
 class SelectObjectOperationImpl implements SelectObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
+    final PrepareServerSqlOperation prepareServerSqlOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
@@ -36,7 +38,25 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
                                    final List<?> parameters,
                                    final String objectName,
                                    final Function<Row, T> objectMapper) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        final var preparedSql = prepareShardSqlOperation.execute(sql, shard);
+        return executeQuery(sqlConnection, preparedSql, parameters, objectName, objectMapper);
+    }
+
+    @Override
+    public <T> Uni<T> selectObject(final SqlConnection sqlConnection,
+                                   final String sql,
+                                   final List<?> parameters,
+                                   final String objectName,
+                                   final Function<Row, T> objectMapper) {
+        final var preparedSql = prepareServerSqlOperation.execute(sql);
+        return executeQuery(sqlConnection, preparedSql, parameters, objectName, objectMapper);
+    }
+
+    <T> Uni<T> executeQuery(final SqlConnection sqlConnection,
+                            final String preparedSql,
+                            final List<?> parameters,
+                            final String objectName,
+                            final Function<Row, T> objectMapper) {
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(RowSet::iterator)

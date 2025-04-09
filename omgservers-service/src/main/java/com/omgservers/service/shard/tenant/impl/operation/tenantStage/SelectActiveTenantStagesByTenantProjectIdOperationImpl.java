@@ -31,7 +31,7 @@ class SelectActiveTenantStagesByTenantProjectIdOperationImpl
                 shard,
                 """
                         select id, idempotency_key, tenant_id, project_id, created, modified, deleted
-                        from $schema.tab_tenant_stage
+                        from $shard.tab_tenant_stage
                         where tenant_id = $1 and project_id = $2 and deleted = false
                         order by id asc
                         """,

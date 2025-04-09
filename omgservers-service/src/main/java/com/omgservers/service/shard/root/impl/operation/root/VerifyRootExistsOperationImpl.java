@@ -25,7 +25,7 @@ class VerifyRootExistsOperationImpl implements VerifyRootExistsOperation {
                 shard,
                 """
                         select id
-                        from $schema.tab_root
+                        from $shard.tab_root
                         where id = $1 and deleted = false
                         limit 1
                         """,

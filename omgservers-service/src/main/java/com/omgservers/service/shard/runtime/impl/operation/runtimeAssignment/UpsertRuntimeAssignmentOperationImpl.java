@@ -33,10 +33,10 @@ class UpsertRuntimeAssignmentOperationImpl implements UpsertRuntimeAssignmentOpe
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final RuntimeAssignmentModel runtimeAssignment) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_runtime_assignment(
+                        insert into $shard.tab_runtime_assignment(
                             id, idempotency_key, runtime_id, created, modified, client_id, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

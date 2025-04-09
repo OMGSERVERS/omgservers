@@ -30,6 +30,8 @@ public interface ServiceConfig {
     InitializationConfig initialization();
 
     interface ServerConfig {
+        long id();
+
         long instanceId();
 
         String jwtIssuer();

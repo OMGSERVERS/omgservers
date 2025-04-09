@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.deployment;
 
-import com.omgservers.schema.model.deployment.DeploymentModel;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentRequest;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentResponse;
+import com.omgservers.schema.model.deploymentState.DeploymentStateDto;
+import com.omgservers.schema.module.deployment.deploymentState.GetDeploymentStateRequest;
+import com.omgservers.schema.module.deployment.deploymentState.GetDeploymentStateResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentDeletedEventBodyModel;
@@ -46,26 +46,50 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
         final var body = (DeploymentDeletedEventBodyModel) event.getBody();
         final var deploymentId = body.getId();
 
-        return getDeployment(deploymentId)
-                .flatMap(deployment -> {
+        return getDeploymentState(deploymentId)
+                .flatMap(deploymentState -> {
+                    final var deployment = deploymentState.getDeployment();
                     log.debug("Deleted, {}", deployment);
 
-                    return deleteDeploymentCommandsOperation.execute(deploymentId)
-                            .flatMap(voidItem -> deleteDeploymentRequestsOperation.execute(deploymentId))
-                            .flatMap(voidItem -> deleteDeploymentLobbyResourcesOperation.execute(deploymentId))
-                            .flatMap(voidItem -> deleteDeploymentMatchmakerResourcesOperation.execute(deploymentId))
-                            .flatMap(voidItem -> {
-                                final var tenantId = deployment.getTenantId();
-                                return findAndDeleteTenantDeploymentRefOperation.execute(tenantId, deploymentId);
-                            })
+                    final var deploymentCommands = deploymentState.getDeploymentCommands();
+                    final var deploymentRequests = deploymentState.getDeploymentRequests();
+                    final var deploymentLobbyResources = deploymentState.getDeploymentLobbyResources();
+                    final var deploymentLobbyAssignments = deploymentState.getDeploymentLobbyAssignments();
+                    final var deploymentMatchmakerResources = deploymentState.getDeploymentMatchmakerResources();
+                    final var deploymentMatchmakerAssignments = deploymentState.getDeploymentMatchmakerAssignments();
+
+                    if (!deploymentCommands.isEmpty() ||
+                            !deploymentRequests.isEmpty() ||
+                            !deploymentLobbyResources.isEmpty() ||
+                            !deploymentLobbyAssignments.isEmpty() ||
+                            !deploymentMatchmakerResources.isEmpty() ||
+                            !deploymentMatchmakerAssignments.isEmpty()) {
+                        log.error("Deployment \"{}\" deleted, but some data remains, " +
+                                        "commands={}, " +
+                                        "requests={}, " +
+                                        "lobbyResources={}, " +
+                                        "lobbyAssignments={}, " +
+                                        "lobbyResources={}, " +
+                                        "lobbyAssignments={}",
+                                deploymentId,
+                                deploymentCommands.size(),
+                                deploymentRequests.size(),
+                                deploymentLobbyResources.size(),
+                                deploymentLobbyAssignments.size(),
+                                deploymentMatchmakerResources.size(),
+                                deploymentMatchmakerAssignments.size());
+                    }
+
+                    final var tenantId = deployment.getTenantId();
+                    return findAndDeleteTenantDeploymentRefOperation.execute(tenantId, deploymentId)
                             .flatMap(voidItem -> findAndDeleteJobOperation.execute(deploymentId, deploymentId));
                 })
                 .replaceWithVoid();
     }
 
-    Uni<DeploymentModel> getDeployment(final Long deploymentId) {
-        final var request = new GetDeploymentRequest(deploymentId);
+    Uni<DeploymentStateDto> getDeploymentState(final Long deploymentId) {
+        final var request = new GetDeploymentStateRequest(deploymentId);
         return deploymentShard.getService().execute(request)
-                .map(GetDeploymentResponse::getDeployment);
+                .map(GetDeploymentStateResponse::getDeploymentState);
     }
 }

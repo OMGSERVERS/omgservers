@@ -33,7 +33,7 @@ class SelectPoolContainerByPoolIdAndRuntimeIdOperationImpl
                         select
                             id, idempotency_key, pool_id, server_id, created, modified, runtime_id, runtime_qualifier, 
                             config, deleted
-                        from $schema.tab_pool_container
+                        from $shard.tab_pool_container
                         where pool_id = $1 and runtime_id = $2
                         order by id desc
                         limit 1

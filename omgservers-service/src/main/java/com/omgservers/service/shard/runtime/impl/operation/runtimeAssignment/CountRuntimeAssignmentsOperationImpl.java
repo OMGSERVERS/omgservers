@@ -29,7 +29,7 @@ class CountRuntimeAssignmentsOperationImpl implements
                 shard,
                 """
                         select id
-                        from $schema.tab_runtime_assignment
+                        from $shard.tab_runtime_assignment
                         where runtime_id = $1
                         """,
                 Collections.singletonList(runtimeId)

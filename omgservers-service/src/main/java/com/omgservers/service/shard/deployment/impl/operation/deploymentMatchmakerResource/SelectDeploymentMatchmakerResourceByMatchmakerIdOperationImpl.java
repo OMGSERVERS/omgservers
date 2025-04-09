@@ -33,7 +33,7 @@ class SelectDeploymentMatchmakerResourceByMatchmakerIdOperationImpl
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, deleted
-                        from $schema.tab_deployment_matchmaker_resource
+                        from $shard.tab_deployment_matchmaker_resource
                         where deployment_id = $1 and matchmaker_id = $2
                         order by id desc
                         limit 1

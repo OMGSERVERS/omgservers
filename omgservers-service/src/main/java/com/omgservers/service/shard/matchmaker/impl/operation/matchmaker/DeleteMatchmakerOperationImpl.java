@@ -28,10 +28,10 @@ class DeleteMatchmakerOperationImpl implements DeleteMatchmakerOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_matchmaker
+                        update $shard.tab_matchmaker
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,

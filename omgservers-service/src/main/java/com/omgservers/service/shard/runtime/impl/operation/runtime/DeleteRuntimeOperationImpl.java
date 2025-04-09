@@ -28,9 +28,9 @@ class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final Long id) {
-        return changeObjectOperation.changeObject(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_runtime
+                        update $shard.tab_runtime
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,

@@ -4,10 +4,8 @@ import io.smallrye.mutiny.Uni;
 
 public interface CreateOpenMatchMatchmakerCommandOperation {
     Uni<Boolean> execute(Long matchmakerId,
-                         Long matchId,
-                         String idempotencyKey);
+                         Long matchId);
 
     Uni<Boolean> executeFailSafe(Long matchmakerId,
-                                 Long matchId,
-                                 String idempotencyKey);
+                                 Long matchId);
 }

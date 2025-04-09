@@ -26,10 +26,10 @@ class DeleteTenantImageOperationImpl implements DeleteTenantImageOperation {
                                 final int shard,
                                 final Long tenantId,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_tenant_image
+                        update $shard.tab_tenant_image
                         set modified = $3, deleted = true
                         where tenant_id = $1 and id = $2 and deleted = false
                         """,

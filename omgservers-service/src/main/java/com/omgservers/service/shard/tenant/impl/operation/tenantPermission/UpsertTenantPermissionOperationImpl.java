@@ -26,10 +26,10 @@ class UpsertTenantPermissionOperationImpl implements UpsertTenantPermissionOpera
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final TenantPermissionModel tenantPermission) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_permission(
+                        insert into $shard.tab_tenant_permission(
                             id, idempotency_key, tenant_id, created, modified, user_id, permission, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

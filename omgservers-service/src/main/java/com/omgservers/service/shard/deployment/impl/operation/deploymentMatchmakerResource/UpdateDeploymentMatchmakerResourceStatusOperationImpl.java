@@ -27,9 +27,9 @@ class UpdateDeploymentMatchmakerResourceStatusOperationImpl implements UpdateDep
                                 final Long deploymentId,
                                 final Long id,
                                 final DeploymentMatchmakerResourceStatusEnum status) {
-        return changeObjectOperation.changeObject(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_deployment_matchmaker_resource
+                        update $shard.tab_deployment_matchmaker_resource
                         set modified = $3, status = $4
                         where deployment_id = $1 and id = $2
                         """,

@@ -27,9 +27,9 @@ class DeleteDeploymentCommandOperationImpl implements DeleteDeploymentCommandOpe
                                 final int shard,
                                 final Long deploymentId,
                                 final Long id) {
-        return changeObjectOperation.changeObject(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_deployment_command
+                        update $shard.tab_deployment_command
                         set modified = $3, deleted = true
                         where deployment_id = $1 and id = $2 and deleted = false
                         """,

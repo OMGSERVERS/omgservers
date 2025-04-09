@@ -31,7 +31,7 @@ class SelectDeploymentLobbyAssignmentByClientIdOperationImpl implements SelectDe
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, client_id, lobby_id, deleted
-                        from $schema.tab_deployment_lobby_assignment
+                        from $shard.tab_deployment_lobby_assignment
                         where deployment_id = $1 and client_id = $2
                         order by id desc
                         limit 1

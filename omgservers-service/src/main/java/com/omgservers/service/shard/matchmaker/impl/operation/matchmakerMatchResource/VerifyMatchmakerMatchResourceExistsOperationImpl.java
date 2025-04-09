@@ -26,7 +26,7 @@ class VerifyMatchmakerMatchResourceExistsOperationImpl implements VerifyMatchmak
                 shard,
                 """
                         select id
-                        from $schema.tab_matchmaker_match_resource
+                        from $shard.tab_matchmaker_match_resource
                         where matchmaker_id = $1 and match_id = $2 and deleted = false
                         limit 1
                         """,

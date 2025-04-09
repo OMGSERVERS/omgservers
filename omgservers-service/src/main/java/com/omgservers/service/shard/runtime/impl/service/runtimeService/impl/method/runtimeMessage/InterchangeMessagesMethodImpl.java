@@ -15,8 +15,8 @@ import com.omgservers.schema.module.runtime.runtimeMessage.InterchangeMessagesRe
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
-import com.omgservers.service.service.cache.CacheService;
-import com.omgservers.service.service.cache.dto.SetRuntimeLastActivityRequest;
+import com.omgservers.service.server.cache.CacheService;
+import com.omgservers.service.server.cache.dto.SetRuntimeLastActivityRequest;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.runtime.impl.operation.handleOutgoingMessages.HandleOutgoingMessageOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeMessage.DeleteRuntimeMessagesByIdsOperation;

@@ -7,7 +7,6 @@ import com.omgservers.service.exception.ServerSideInternalException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
-import org.jboss.logmanager.MDC;
 import org.slf4j.Logger;
 
 import java.net.URI;
@@ -19,6 +18,7 @@ import java.util.function.Function;
 class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation {
 
     final CalculateShardOperation calculateShardOperation;
+    final PutIntoMdcOperation putIntoMdcOperation;
 
     @Override
     public <T extends ShardedRequest, R, C> Uni<R> handleShardedRequest(final Logger log,
@@ -28,7 +28,7 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                                                                         final BiFunction<ShardModel, T, Uni<? extends R>> handle) {
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    MDC.put("shard", String.valueOf(shardModel.shard()));
+                    putIntoMdcOperation.putShard(shardModel.shard());
 
                     if (shardModel.locked()) {
                         throw new ServerSideInternalException(ExceptionQualifierEnum.SHARD_LOCKED,

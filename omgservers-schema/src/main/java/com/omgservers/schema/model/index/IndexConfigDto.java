@@ -59,16 +59,16 @@ public class IndexConfigDto {
 
     @NotNull
     @Min(1)
-    @Max(32767)
+    @Max(512)
     Integer totalShardCount;
 
     @NotNull
     @NotEmpty
-    @Size(max = 1024)
+    @Size(max = 64)
     List<IndexServerDto> servers;
 
     @NotNull
-    @Size(max = 32767)
+    @Size(max = 512)
     List<Integer> lockedShards;
 
     @JsonIgnore

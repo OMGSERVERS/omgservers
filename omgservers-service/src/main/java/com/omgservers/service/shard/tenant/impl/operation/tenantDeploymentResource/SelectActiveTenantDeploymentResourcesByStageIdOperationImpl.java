@@ -34,7 +34,7 @@ class SelectActiveTenantDeploymentResourcesByStageIdOperationImpl
                         select
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id, 
                             status, deleted
-                        from $schema.tab_tenant_deployment_resource
+                        from $shard.tab_tenant_deployment_resource
                         where deployment_id = $1 and stage_id = $2 and deleted = false
                         order by id asc
                         """,

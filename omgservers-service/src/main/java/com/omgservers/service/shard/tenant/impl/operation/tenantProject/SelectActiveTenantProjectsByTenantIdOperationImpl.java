@@ -30,7 +30,7 @@ class SelectActiveTenantProjectsByTenantIdOperationImpl implements SelectActiveT
                 shard,
                 """
                         select id, idempotency_key, tenant_id, created, modified, deleted
-                        from $schema.tab_tenant_project
+                        from $shard.tab_tenant_project
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,

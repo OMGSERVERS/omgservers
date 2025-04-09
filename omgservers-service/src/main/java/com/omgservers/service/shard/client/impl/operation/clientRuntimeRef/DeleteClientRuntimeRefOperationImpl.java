@@ -30,10 +30,10 @@ class DeleteClientRuntimeRefOperationImpl implements DeleteClientRuntimeRefOpera
                                                final int shard,
                                                final Long clientId,
                                                final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_client_runtime_ref
+                        update $shard.tab_client_runtime_ref
                         set modified = $3, deleted = true
                         where client_id = $1 and id = $2 and deleted = false
                         """,

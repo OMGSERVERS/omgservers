@@ -25,7 +25,7 @@ class VerifyRuntimeExistsOperationImpl implements VerifyRuntimeExistsOperation {
                 shard,
                 """
                         select id
-                        from $schema.tab_runtime
+                        from $shard.tab_runtime
                         where id = $1 and deleted = false
                         limit 1
                         """,

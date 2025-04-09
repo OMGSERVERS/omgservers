@@ -15,4 +15,10 @@ public interface SelectListOperation {
                                 List<?> parameters,
                                 String objectName,
                                 Function<Row, T> objectMapper);
+
+    <T> Uni<List<T>> selectList(SqlConnection sqlConnection,
+                                String sql,
+                                List<?> parameters,
+                                String objectName,
+                                Function<Row, T> objectMapper);
 }

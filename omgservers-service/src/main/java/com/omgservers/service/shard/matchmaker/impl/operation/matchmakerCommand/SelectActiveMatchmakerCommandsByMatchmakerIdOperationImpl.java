@@ -32,7 +32,7 @@ class SelectActiveMatchmakerCommandsByMatchmakerIdOperationImpl
                 shard,
                 """
                         select id, idempotency_key, matchmaker_id, created, modified, qualifier, body, deleted
-                        from $schema.tab_matchmaker_command
+                        from $shard.tab_matchmaker_command
                         where matchmaker_id = $1 and deleted = false
                         order by id asc
                         """,

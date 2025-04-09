@@ -31,7 +31,7 @@ class SelectDeploymentMatchmakerAssignmentOperationImpl implements SelectDeploym
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, client_id, matchmaker_id, deleted
-                        from $schema.tab_deployment_matchmaker_assignment
+                        from $shard.tab_deployment_matchmaker_assignment
                         where deployment_id = $1 and id = $2
                         limit 1
                         """,

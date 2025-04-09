@@ -30,10 +30,10 @@ class UpsertPoolContainerOperationImpl implements UpsertPoolContainerOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final PoolContainerModel poolContainer) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_pool_container(
+                        insert into $shard.tab_pool_container(
                             id, idempotency_key, pool_id, server_id, created, modified, runtime_id, runtime_qualifier, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do

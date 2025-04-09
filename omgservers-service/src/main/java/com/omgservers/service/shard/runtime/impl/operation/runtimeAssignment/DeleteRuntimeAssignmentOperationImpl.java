@@ -28,10 +28,10 @@ class DeleteRuntimeAssignmentOperationImpl implements DeleteRuntimeAssignmentOpe
                                 final int shard,
                                 final Long runtimeId,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_runtime_assignment
+                        update $shard.tab_runtime_assignment
                         set modified = $3, deleted = true
                         where runtime_id = $1 and id = $2 and deleted = false
                         """,

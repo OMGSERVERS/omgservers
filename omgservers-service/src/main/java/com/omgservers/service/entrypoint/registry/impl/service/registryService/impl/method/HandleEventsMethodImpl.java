@@ -2,7 +2,7 @@ package com.omgservers.service.entrypoint.registry.impl.service.registryService.
 
 import com.omgservers.schema.entrypoint.registry.HandleEventsRegistryRequest;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.service.event.EventService;
+import com.omgservers.service.server.event.EventService;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

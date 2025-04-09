@@ -32,7 +32,7 @@ class SelectMatchmakerMatchAssignmentOperationImpl implements SelectMatchmakerMa
                         select
                             id, idempotency_key, matchmaker_id, created, modified, match_id, client_id, group_name,
                             config, deleted
-                        from $schema.tab_matchmaker_match_assignment
+                        from $shard.tab_matchmaker_match_assignment
                         where matchmaker_id = $1 and id = $2
                         limit 1
                         """,

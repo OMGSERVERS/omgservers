@@ -31,7 +31,7 @@ class SelectTenantImageOperationImpl implements SelectTenantImageOperation {
                 """
                         select
                             id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, deleted
-                        from $schema.tab_tenant_image
+                        from $shard.tab_tenant_image
                         where tenant_id = $1 and id = $2
                         limit 1
                         """,

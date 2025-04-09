@@ -29,7 +29,7 @@ class VerifyTenantStagePermissionExistsOperationImpl implements VerifyTenantStag
                 shard,
                 """
                         select id
-                        from $schema.tab_tenant_stage_permission
+                        from $shard.tab_tenant_stage_permission
                         where tenant_id = $1 and stage_id = $2 and user_id = $3 and permission = $4 and deleted = false
                         limit 1
                         """,

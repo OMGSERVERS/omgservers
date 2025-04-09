@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.job;
 
-import com.omgservers.service.service.task.Task;
+import com.omgservers.service.server.task.Task;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -30,10 +30,10 @@ class UpsertMatchmakerMatchResourceOperationImpl implements UpsertMatchmakerMatc
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final MatchmakerMatchResourceModel matchmakerMatchResource) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_matchmaker_match_resource(
+                        insert into $shard.tab_matchmaker_match_resource(
                             id, idempotency_key, matchmaker_id, created, modified, match_id, mode, status, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

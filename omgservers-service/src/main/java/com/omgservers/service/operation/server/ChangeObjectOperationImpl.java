@@ -2,8 +2,9 @@ package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.log.LogModel;
 import com.omgservers.service.event.EventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
+import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
@@ -22,20 +23,41 @@ import java.util.function.Supplier;
 class ChangeObjectOperationImpl implements ChangeObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
+    final PrepareServerSqlOperation prepareServerSqlOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
 
-    public Uni<Boolean> changeObject(final ChangeContext<?> changeContext,
-                                     final SqlConnection sqlConnection,
-                                     final int shard,
-                                     final String sql,
-                                     final List<?> parameters,
-                                     final Supplier<EventBodyModel> eventBodySupplier,
-                                     final Supplier<LogModel> logSupplier) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+    public Uni<Boolean> execute(final ChangeContext<?> changeContext,
+                                final SqlConnection sqlConnection,
+                                final int shard,
+                                final String sql,
+                                final List<?> parameters,
+                                final Supplier<EventBodyModel> eventBodySupplier,
+                                final Supplier<LogModel> logSupplier) {
+        final var preparedSql = prepareShardSqlOperation.execute(sql, shard);
+        return executeQuery(changeContext, sqlConnection, preparedSql, parameters, eventBodySupplier, logSupplier);
+    }
+
+    @Override
+    public Uni<Boolean> execute(final ChangeContext<?> changeContext,
+                                final SqlConnection sqlConnection,
+                                final String sql,
+                                final List<?> parameters,
+                                final Supplier<EventBodyModel> eventBodySupplier,
+                                final Supplier<LogModel> logSupplier) {
+        final var preparedSql = prepareServerSqlOperation.execute(sql);
+        return executeQuery(changeContext, sqlConnection, preparedSql, parameters, eventBodySupplier, logSupplier);
+    }
+
+    Uni<Boolean> executeQuery(final ChangeContext<?> changeContext,
+                              final SqlConnection sqlConnection,
+                              final String preparedSql,
+                              final List<?> parameters,
+                              final Supplier<EventBodyModel> eventBodySupplier,
+                              final Supplier<LogModel> logSupplier) {
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(rowSet -> rowSet.rowCount() > 0)

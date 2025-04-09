@@ -25,7 +25,7 @@ class VerifyLobbyExistsOperationImpl implements VerifyLobbyExistsOperation {
                 shard,
                 """
                         select id
-                        from $schema.tab_lobby
+                        from $shard.tab_lobby
                         where id = $1 and deleted = false
                         limit 1
                         """,

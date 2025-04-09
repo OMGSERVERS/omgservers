@@ -33,7 +33,7 @@ class SelectTenantVersionConfigOperationImpl implements SelectTenantVersionConfi
                 shard,
                 """
                         select config
-                        from $schema.tab_tenant_version
+                        from $shard.tab_tenant_version
                         where tenant_id = $1 and id = $2
                         limit 1
                         """,

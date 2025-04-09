@@ -25,7 +25,7 @@ class VerifyMatchExistsOperationImpl implements VerifyMatchExistsOperation {
                 shard,
                 """
                         select id
-                        from $schema.tab_match
+                        from $shard.tab_match
                         where id = $1 and deleted = false
                         limit 1
                         """,

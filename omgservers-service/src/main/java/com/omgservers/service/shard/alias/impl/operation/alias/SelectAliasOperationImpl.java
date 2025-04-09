@@ -29,7 +29,7 @@ class SelectAliasOperationImpl implements SelectAliasOperation {
                 shard,
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
-                        from $schema.tab_alias
+                        from $shard.tab_alias
                         where id = $1
                         limit 1
                         """,

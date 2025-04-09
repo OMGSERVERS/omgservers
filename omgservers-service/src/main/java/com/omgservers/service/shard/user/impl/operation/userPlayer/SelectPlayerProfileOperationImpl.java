@@ -34,7 +34,7 @@ class SelectPlayerProfileOperationImpl implements SelectPlayerProfileOperation {
                 shard,
                 """
                         select profile
-                        from $schema.tab_user_player
+                        from $shard.tab_user_player
                         where user_id = $1 and id = $2
                         limit 1
                         """,

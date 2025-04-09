@@ -26,7 +26,7 @@ class VerifyTenantStageExistsOperationImpl implements VerifyTenantStageExistsOpe
                 shard,
                 """
                         select id
-                        from $schema.tab_tenant_stage
+                        from $shard.tab_tenant_stage
                         where tenant_id = $1 and id = $2 and deleted = false
                         limit 1
                         """,

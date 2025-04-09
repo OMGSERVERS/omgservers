@@ -29,7 +29,7 @@ class SelectUserOperationImpl implements SelectUserOperation {
                 shard,
                 """
                         select id, idempotency_key, created, modified, role, password_hash, deleted
-                        from $schema.tab_user
+                        from $shard.tab_user
                         where id = $1
                         limit 1
                         """,

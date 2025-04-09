@@ -15,4 +15,10 @@ public interface SelectObjectOperation {
                             List<?> parameters,
                             String objectName,
                             Function<Row, T> objectMapper);
+
+    <T> Uni<T> selectObject(SqlConnection sqlConnection,
+                            String sql,
+                            List<?> parameters,
+                            String objectName,
+                            Function<Row, T> objectMapper);
 }

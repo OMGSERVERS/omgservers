@@ -27,10 +27,10 @@ class UpsertDeploymentLobbyResourceOperationImpl implements UpsertDeploymentLobb
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final DeploymentLobbyResourceModel deploymentLobbyResource) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_deployment_lobby_resource(
+                        insert into $shard.tab_deployment_lobby_resource(
                             id, idempotency_key, deployment_id, created, modified, lobby_id, status,
                             deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)

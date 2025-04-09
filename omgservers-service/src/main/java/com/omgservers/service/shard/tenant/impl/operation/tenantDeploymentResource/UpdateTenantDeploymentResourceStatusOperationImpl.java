@@ -27,9 +27,9 @@ class UpdateTenantDeploymentResourceStatusOperationImpl implements UpdateTenantD
                                 final Long tenantId,
                                 final Long id,
                                 final TenantDeploymentResourceStatusEnum status) {
-        return changeObjectOperation.changeObject(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_tenant_deployment_resource
+                        update $shard.tab_tenant_deployment_resource
                         set modified = $3, status = $4
                         where tenant_id = $1 and id = $2
                         """,

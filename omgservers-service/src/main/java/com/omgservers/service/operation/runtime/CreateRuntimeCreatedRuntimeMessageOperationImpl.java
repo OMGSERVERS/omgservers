@@ -24,9 +24,7 @@ class CreateRuntimeCreatedRuntimeMessageOperationImpl implements CreateRuntimeCr
     @Override
     public Uni<Boolean> execute(final RuntimeModel runtime,
                                 final String idempotencyKey) {
-        final var commandBody = RuntimeCreatedMessageBodyDto.builder()
-                .runtimeConfig(runtime.getConfig())
-                .build();
+        final var commandBody = new RuntimeCreatedMessageBodyDto(runtime.getConfig());
         final var runtimeMessage = runtimeMessageModelFactory.create(runtime.getId(),
                 commandBody,
                 idempotencyKey);

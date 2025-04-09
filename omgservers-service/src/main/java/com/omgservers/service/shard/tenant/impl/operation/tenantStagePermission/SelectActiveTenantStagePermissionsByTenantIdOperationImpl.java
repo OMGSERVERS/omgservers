@@ -32,7 +32,7 @@ class SelectActiveTenantStagePermissionsByTenantIdOperationImpl
                 """
                         select 
                             id, idempotency_key, tenant_id, stage_id, created, modified, user_id, permission, deleted
-                        from $schema.tab_tenant_stage_permission
+                        from $shard.tab_tenant_stage_permission
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,

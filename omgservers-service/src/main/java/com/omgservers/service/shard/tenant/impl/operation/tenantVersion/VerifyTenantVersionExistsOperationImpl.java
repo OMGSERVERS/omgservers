@@ -26,7 +26,7 @@ class VerifyTenantVersionExistsOperationImpl implements VerifyTenantVersionExist
                 shard,
                 """
                         select id
-                        from $schema.tab_tenant_version
+                        from $shard.tab_tenant_version
                         where tenant_id = $1 and id = $2 and deleted = false
                         limit 1
                         """,

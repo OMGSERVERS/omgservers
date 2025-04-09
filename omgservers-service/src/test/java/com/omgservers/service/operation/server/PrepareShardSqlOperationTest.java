@@ -14,9 +14,9 @@ public class PrepareShardSqlOperationTest extends BaseTestClass {
     PrepareShardSqlOperation prepareShardSqlOperation;
 
     @Test
-    void givenSql_whenPrepareShardSql_thenPrepared() {
-        final var sql = "select id from $schema.tab_table";
-        final var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, 123);
-        assertEquals("select id from shard_00123.tab_table", preparedSql);
+    void givenSql_whenExecute_thenPrepared() {
+        final var sql = "select id from $shard.tab_table";
+        final var preparedSql = prepareShardSqlOperation.execute(sql, 123);
+        assertEquals("select id from shard_123.tab_table", preparedSql);
     }
 }

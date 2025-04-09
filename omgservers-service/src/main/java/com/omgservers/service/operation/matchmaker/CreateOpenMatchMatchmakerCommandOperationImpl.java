@@ -22,20 +22,20 @@ class CreateOpenMatchMatchmakerCommandOperationImpl implements CreateOpenMatchMa
 
     @Override
     public Uni<Boolean> execute(final Long matchmakerId,
-                                final Long matchId,
-                                final String idempotencyKey) {
+                                final Long matchId) {
         final var commandBody = new OpenMatchMatchmakerCommandBodyDto(matchId);
+
+        final var idempotencyKey = commandBody.getQualifier() + "/" + matchId;
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmakerId, commandBody, idempotencyKey);
         final var request = new SyncMatchmakerCommandRequest(matchmakerCommand);
-        return matchmakerShard.getService().execute(request)
+        return matchmakerShard.getService().executeWithIdempotency(request)
                 .map(SyncMatchmakerCommandResponse::getCreated);
     }
 
     @Override
     public Uni<Boolean> executeFailSafe(final Long matchmakerId,
-                                        final Long matchId,
-                                        final String idempotencyKey) {
-        return execute(matchmakerId, matchId, idempotencyKey)
+                                        final Long matchId) {
+        return execute(matchmakerId, matchId)
                 .onFailure()
                 .recoverWithItem(t -> {
                     log.warn("Failed, matchId={}, {}:{}",

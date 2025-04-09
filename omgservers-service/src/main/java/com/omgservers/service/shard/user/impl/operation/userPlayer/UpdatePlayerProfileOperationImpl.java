@@ -34,10 +34,10 @@ class UpdatePlayerProfileOperationImpl implements UpdatePlayerProfileOperation {
                                 final Long userId,
                                 final Long playerId,
                                 final Object profile) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_user_player
+                        update $shard.tab_user_player
                         set modified = $3, profile = $4
                         where user_id = $1 and id = $2
                         """,

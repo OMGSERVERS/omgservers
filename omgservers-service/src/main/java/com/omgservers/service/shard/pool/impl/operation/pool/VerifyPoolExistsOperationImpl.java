@@ -25,7 +25,7 @@ class VerifyPoolExistsOperationImpl implements VerifyPoolExistsOperation {
                 shard,
                 """
                         select id
-                        from $schema.tab_pool
+                        from $shard.tab_pool
                         where id = $1 and deleted = false
                         limit 1
                         """,

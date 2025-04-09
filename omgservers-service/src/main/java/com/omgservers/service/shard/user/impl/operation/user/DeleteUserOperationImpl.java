@@ -29,10 +29,10 @@ class DeleteUserOperationImpl implements DeleteUserOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_user
+                        update $shard.tab_user
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,

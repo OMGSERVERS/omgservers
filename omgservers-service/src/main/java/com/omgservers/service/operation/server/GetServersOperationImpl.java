@@ -2,9 +2,9 @@ package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.schema.model.index.IndexServerDto;
-import com.omgservers.service.service.index.IndexService;
-import com.omgservers.service.service.index.dto.GetIndexRequest;
-import com.omgservers.service.service.index.dto.GetIndexResponse;
+import com.omgservers.service.server.index.IndexService;
+import com.omgservers.service.server.index.dto.GetIndexRequest;
+import com.omgservers.service.server.index.dto.GetIndexResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

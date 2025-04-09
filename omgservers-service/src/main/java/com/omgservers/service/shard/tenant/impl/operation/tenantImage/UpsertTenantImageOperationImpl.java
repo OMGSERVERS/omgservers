@@ -27,10 +27,10 @@ class UpsertTenantImageOperationImpl implements UpsertTenantImageOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final TenantImageModel tenantImage) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_image(
+                        insert into $shard.tab_tenant_image(
                             id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

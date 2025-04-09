@@ -24,10 +24,10 @@ class UpsertAliasOperationImpl implements UpsertAliasOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final AliasModel alias) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_alias(id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted)
+                        insert into $shard.tab_alias(id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do
                         nothing

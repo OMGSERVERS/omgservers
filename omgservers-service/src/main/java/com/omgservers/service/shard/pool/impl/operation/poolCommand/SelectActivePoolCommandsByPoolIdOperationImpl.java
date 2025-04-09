@@ -31,7 +31,7 @@ class SelectActivePoolCommandsByPoolIdOperationImpl
                 """
                         select
                             id, idempotency_key, pool_id, created, modified, qualifier, body, deleted
-                        from $schema.tab_pool_command
+                        from $shard.tab_pool_command
                         where pool_id = $1 and deleted = false
                         order by id asc
                         """,

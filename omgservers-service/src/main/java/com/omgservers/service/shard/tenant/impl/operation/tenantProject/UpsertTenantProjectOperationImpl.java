@@ -29,10 +29,10 @@ class UpsertTenantProjectOperationImpl implements UpsertTenantProjectOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final TenantProjectModel tenantProject) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_project(
+                        insert into $shard.tab_tenant_project(
                             id, idempotency_key, tenant_id, created, modified, deleted)
                         values($1, $2, $3, $4, $5, $6)
                         on conflict (id) do

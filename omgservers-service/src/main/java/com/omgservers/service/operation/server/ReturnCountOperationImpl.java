@@ -2,6 +2,7 @@ package com.omgservers.service.operation.server;
 
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.SqlResult;
@@ -30,7 +31,7 @@ class ReturnCountOperationImpl implements ReturnCountOperation {
                                     final int shard,
                                     final String sql,
                                     final List<?> parameters) {
-        var preparedSql = prepareShardSqlOperation.prepareShardSql(sql, shard);
+        var preparedSql = prepareShardSqlOperation.execute(sql, shard);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(SqlResult::rowCount)

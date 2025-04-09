@@ -32,7 +32,7 @@ class SelectActiveRuntimeAssignmentsByRuntimeIdOperationImpl implements
                 shard,
                 """
                         select id, idempotency_key, runtime_id, created, modified, client_id, config, deleted
-                        from $schema.tab_runtime_assignment
+                        from $shard.tab_runtime_assignment
                         where runtime_id = $1 and deleted = false
                         order by id asc
                         """,

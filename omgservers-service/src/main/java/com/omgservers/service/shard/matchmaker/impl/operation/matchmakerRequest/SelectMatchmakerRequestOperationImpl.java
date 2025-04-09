@@ -31,7 +31,7 @@ class SelectMatchmakerRequestOperationImpl implements SelectMatchmakerRequestOpe
                 """
                         select
                             id, idempotency_key, matchmaker_id, created, modified, client_id, mode, config, deleted
-                        from $schema.tab_matchmaker_request
+                        from $shard.tab_matchmaker_request
                         where matchmaker_id = $1 and id = $2
                         limit 1
                         """,

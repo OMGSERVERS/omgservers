@@ -25,10 +25,10 @@ class UpsertRootOperationImpl implements UpsertRootOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final RootModel root) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_root(
+                        insert into $shard.tab_root(
                             id, idempotency_key, created, modified, deleted)
                         values($1, $2, $3, $4, $5)
                         on conflict (id) do

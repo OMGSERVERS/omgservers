@@ -29,10 +29,10 @@ class UpsertPoolRequestOperationImpl implements UpsertPoolRequestOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final PoolRequestModel poolRequest) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_pool_request(
+                        insert into $shard.tab_pool_request(
                             id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config,
                             deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)

@@ -27,10 +27,10 @@ class UpsertTenantDeploymentRefOperationImpl implements UpsertTenantDeploymentRe
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final TenantDeploymentRefModel tenantDeploymentRef) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_tenant_deployment_ref(
+                        insert into $shard.tab_tenant_deployment_ref(
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id,
                             deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)

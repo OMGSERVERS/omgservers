@@ -2,9 +2,9 @@ package com.omgservers.service.operation.job;
 
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.service.factory.system.JobModelFactory;
-import com.omgservers.service.service.job.JobService;
-import com.omgservers.service.service.job.dto.SyncJobRequest;
-import com.omgservers.service.service.job.dto.SyncJobResponse;
+import com.omgservers.service.server.job.JobService;
+import com.omgservers.service.server.job.dto.SyncJobRequest;
+import com.omgservers.service.server.job.dto.SyncJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

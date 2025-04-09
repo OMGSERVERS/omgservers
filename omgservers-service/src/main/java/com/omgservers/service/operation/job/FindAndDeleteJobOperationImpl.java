@@ -2,11 +2,11 @@ package com.omgservers.service.operation.job;
 
 import com.omgservers.schema.model.job.JobModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.service.job.JobService;
-import com.omgservers.service.service.job.dto.DeleteJobRequest;
-import com.omgservers.service.service.job.dto.DeleteJobResponse;
-import com.omgservers.service.service.job.dto.FindJobRequest;
-import com.omgservers.service.service.job.dto.FindJobResponse;
+import com.omgservers.service.server.job.JobService;
+import com.omgservers.service.server.job.dto.DeleteJobRequest;
+import com.omgservers.service.server.job.dto.DeleteJobResponse;
+import com.omgservers.service.server.job.dto.FindJobRequest;
+import com.omgservers.service.server.job.dto.FindJobResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

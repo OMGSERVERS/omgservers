@@ -32,7 +32,7 @@ class SelectPoolCommandOperationImpl implements SelectPoolCommandOperation {
                 """
                         select
                             id, idempotency_key, pool_id, created, modified, qualifier, body, deleted
-                        from $schema.tab_pool_command
+                        from $shard.tab_pool_command
                         where pool_id = $1 and id = $2
                         limit 1
                         """,

@@ -29,7 +29,7 @@ class SelectPoolOperationImpl implements SelectPoolOperation {
                 shard,
                 """
                         select id, idempotency_key, created, modified, deleted
-                        from $schema.tab_pool
+                        from $shard.tab_pool
                         where id = $1
                         limit 1
                         """,

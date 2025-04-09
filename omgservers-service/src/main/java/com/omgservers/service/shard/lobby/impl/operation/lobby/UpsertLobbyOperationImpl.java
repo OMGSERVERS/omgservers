@@ -25,10 +25,10 @@ class UpsertLobbyOperationImpl implements UpsertLobbyOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final LobbyModel lobby) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_lobby(
+                        insert into $shard.tab_lobby(
                             id, idempotency_key, created, modified, deployment_id, runtime_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

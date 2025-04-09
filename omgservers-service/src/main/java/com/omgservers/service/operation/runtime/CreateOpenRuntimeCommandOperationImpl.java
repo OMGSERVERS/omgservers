@@ -18,18 +18,17 @@ class CreateOpenRuntimeCommandOperationImpl implements CreateOpenRuntimeCommandO
     final CreateOpenMatchMatchmakerCommandOperation createOpenMatchMatchmakerCommandOperation;
 
     @Override
-    public Uni<Boolean> execute(final RuntimeModel runtime,
-                                final String idempotencyKey) {
+    public Uni<Boolean> execute(final RuntimeModel runtime) {
         return switch (runtime.getQualifier()) {
             case LOBBY -> {
                 final var deploymentId = runtime.getDeploymentId();
                 final var lobbyId = runtime.getConfig().getLobby().getLobbyId();
-                yield createOpenLobbyDeploymentCommandOperation.execute(deploymentId, lobbyId, idempotencyKey);
+                yield createOpenLobbyDeploymentCommandOperation.execute(deploymentId, lobbyId);
             }
             case MATCH -> {
                 final var matchmakerId = runtime.getConfig().getMatch().getMatchmakerId();
                 final var matchId = runtime.getConfig().getMatch().getMatchId();
-                yield createOpenMatchMatchmakerCommandOperation.execute(matchmakerId, matchId, idempotencyKey);
+                yield createOpenMatchMatchmakerCommandOperation.execute(matchmakerId, matchId);
             }
         };
     }

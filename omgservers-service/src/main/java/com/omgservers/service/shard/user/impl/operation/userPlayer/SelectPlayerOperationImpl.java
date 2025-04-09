@@ -33,7 +33,7 @@ class SelectPlayerOperationImpl implements SelectPlayerOperation {
                 """
                         select
                             id, idempotency_key, user_id, created, modified, tenant_id, stage_id, profile, deleted
-                        from $schema.tab_user_player
+                        from $shard.tab_user_player
                         where user_id = $1 and id = $2
                         limit 1
                         """,

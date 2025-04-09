@@ -31,7 +31,7 @@ class SelectActiveRuntimeMessagesByRuntimeIdOperationImpl
                 """
                         select
                             id, idempotency_key, runtime_id, created, modified, qualifier, body, deleted
-                        from $schema.tab_runtime_message
+                        from $shard.tab_runtime_message
                         where runtime_id = $1 and deleted = false
                         order by id asc
                         """,

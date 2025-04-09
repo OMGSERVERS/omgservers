@@ -23,28 +23,26 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MessageQualifierEnum {
-    CLIENT_GREETED(ClientGreetedMessageBodyDto.class, true, false),
-    RUNTIME_ASSIGNED(RuntimeAssignedMessageBodyDto.class, true, false),
-    CONNECTION_UPGRADED(ConnectionUpgradedMessageBodyDto.class, true, false),
-    CLIENT_DELETED(ClientDeletedMessageBodyDto.class, true, false),
-    MESSAGE_PRODUCED(MessageProducedMessageBodyDto.class, true, false),
-
-    RESPOND_CLIENT(RespondClientMessageBodyDto.class, false, true),
-    SET_PROFILE(SetProfileMessageBodyDto.class, false, true),
-    MULTICAST_MESSAGE(MulticastMessageBodyDto.class, false, true),
-    BROADCAST_MESSAGE(BroadcastMessageBodyDto.class, false, true),
-    REQUEST_MATCHMAKING(RequestMatchmakingMessageBodyDto.class, false, true),
-    KICK_CLIENT(KickClientMessageBodyDto.class, false, true),
-    STOP_MATCHMAKING(StopMatchmakingMessageBodyDto.class, false, true),
-    UPGRADE_CONNECTION(UpgradeConnectionMessageBodyDto.class, false, true),
-
-    RUNTIME_CREATED(RuntimeCreatedMessageBodyDto.class, false, true),
-    CLIENT_ASSIGNED(ClientAssignedMessageBodyDto.class, false, true),
-    CLIENT_REMOVED(ClientRemovedMessageBodyDto.class, false, true),
-    MESSAGE_RECEIVED(MessageReceivedMessageBodyDto.class, false, true);
+    // Service -> Client
+    CLIENT_GREETED(ClientGreetedMessageBodyDto.class),
+    RUNTIME_ASSIGNED(RuntimeAssignedMessageBodyDto.class),
+    CONNECTION_UPGRADED(ConnectionUpgradedMessageBodyDto.class),
+    CLIENT_DELETED(ClientDeletedMessageBodyDto.class),
+    MESSAGE_PRODUCED(MessageProducedMessageBodyDto.class),
+    // Runtime -> Service
+    RESPOND_CLIENT(RespondClientMessageBodyDto.class),
+    SET_PROFILE(SetProfileMessageBodyDto.class),
+    MULTICAST_MESSAGE(MulticastMessageBodyDto.class),
+    BROADCAST_MESSAGE(BroadcastMessageBodyDto.class),
+    REQUEST_MATCHMAKING(RequestMatchmakingMessageBodyDto.class),
+    KICK_CLIENT(KickClientMessageBodyDto.class),
+    STOP_MATCHMAKING(StopMatchmakingMessageBodyDto.class),
+    UPGRADE_CONNECTION(UpgradeConnectionMessageBodyDto.class),
+    // Service -> Runtime
+    RUNTIME_CREATED(RuntimeCreatedMessageBodyDto.class),
+    CLIENT_ASSIGNED(ClientAssignedMessageBodyDto.class),
+    CLIENT_REMOVED(ClientRemovedMessageBodyDto.class),
+    MESSAGE_RECEIVED(MessageReceivedMessageBodyDto.class);
 
     final Class<? extends MessageBodyDto> bodyClass;
-
-    final boolean client;
-    final boolean runtime;
 }

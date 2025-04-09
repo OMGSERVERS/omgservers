@@ -27,9 +27,9 @@ class DeleteRuntimeMessagesByIdsOperationImpl implements DeleteRuntimeMessagesBy
                                 final int shard,
                                 final Long runtimeId,
                                 final List<Long> ids) {
-        return changeObjectOperation.changeObject(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_runtime_message
+                        update $shard.tab_runtime_message
                         set modified = $3, deleted = true
                         where runtime_id = $1 and id = any($2) and deleted = false
                         """,

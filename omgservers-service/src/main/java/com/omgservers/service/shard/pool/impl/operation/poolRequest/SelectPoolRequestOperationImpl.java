@@ -33,7 +33,7 @@ class SelectPoolRequestOperationImpl implements SelectPoolRequestOperation {
                         select
                             id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config,
                             deleted
-                        from $schema.tab_pool_request
+                        from $shard.tab_pool_request
                         where pool_id = $1 and id = $2
                         limit 1
                         """,

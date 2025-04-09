@@ -25,10 +25,10 @@ class UpsertMatchOperationImpl implements UpsertMatchOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final MatchModel match) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_match(
+                        insert into $shard.tab_match(
                             id, idempotency_key, created, modified, matchmaker_id, runtime_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

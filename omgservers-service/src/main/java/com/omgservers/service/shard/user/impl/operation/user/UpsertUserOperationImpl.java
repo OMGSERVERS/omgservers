@@ -28,10 +28,10 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final UserModel user) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_user(
+                        insert into $shard.tab_user(
                             id, idempotency_key, created, modified, role, password_hash, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

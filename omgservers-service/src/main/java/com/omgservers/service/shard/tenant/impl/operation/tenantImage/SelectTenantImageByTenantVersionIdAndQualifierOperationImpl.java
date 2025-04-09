@@ -35,7 +35,7 @@ class SelectTenantImageByTenantVersionIdAndQualifierOperationImpl
                 """
                         select
                             id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, deleted
-                        from $schema.tab_tenant_image
+                        from $shard.tab_tenant_image
                         where tenant_id = $1 and version_id = $2 and qualifier = $3 and deleted = false
                         order by id desc
                         limit 1

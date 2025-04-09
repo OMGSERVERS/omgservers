@@ -29,10 +29,10 @@ class DeletePlayerOperationImpl implements DeletePlayerOperation {
                                 final int shard,
                                 final Long userId,
                                 final Long id) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        update $schema.tab_user_player
+                        update $shard.tab_user_player
                         set modified = $3, deleted = true
                         where user_id = $1 and id = $2 and deleted = false
                         """,

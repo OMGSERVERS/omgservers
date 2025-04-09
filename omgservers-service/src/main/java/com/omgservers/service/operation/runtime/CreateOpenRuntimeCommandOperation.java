@@ -4,6 +4,5 @@ import com.omgservers.schema.model.runtime.RuntimeModel;
 import io.smallrye.mutiny.Uni;
 
 public interface CreateOpenRuntimeCommandOperation {
-    Uni<Boolean> execute(RuntimeModel runtime,
-                         String idempotencyKey);
+    Uni<Boolean> execute(RuntimeModel runtime);
 }

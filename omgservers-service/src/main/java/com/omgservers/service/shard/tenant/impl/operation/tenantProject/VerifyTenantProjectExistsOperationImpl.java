@@ -26,7 +26,7 @@ class VerifyTenantProjectExistsOperationImpl implements VerifyTenantProjectExist
                 shard,
                 """
                         select id
-                        from $schema.tab_tenant_project
+                        from $shard.tab_tenant_project
                         where tenant_id = $1 and id = $2 and deleted = false
                         limit 1
                         """,

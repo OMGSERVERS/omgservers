@@ -25,7 +25,7 @@ class VerifyClientExistsOperationImpl implements VerifyClientExistsOperation {
                 shard,
                 """
                         select id
-                        from $schema.tab_client
+                        from $shard.tab_client
                         where id = $1 and deleted = false
                         limit 1
                         """,

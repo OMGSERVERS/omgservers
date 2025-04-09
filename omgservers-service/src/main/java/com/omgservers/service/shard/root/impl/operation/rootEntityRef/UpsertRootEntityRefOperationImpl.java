@@ -26,10 +26,10 @@ class UpsertRootEntityRefOperationImpl implements UpsertRootEntityRefOperation {
                                 final SqlConnection sqlConnection,
                                 final int shard,
                                 final RootEntityRefModel rootEntityRefModel) {
-        return changeObjectOperation.changeObject(
+        return changeObjectOperation.execute(
                 changeContext, sqlConnection, shard,
                 """
-                        insert into $schema.tab_root_entity_ref(
+                        insert into $shard.tab_root_entity_ref(
                             id, idempotency_key, root_id, created, modified, qualifier, entity_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
