@@ -15,8 +15,12 @@ public class PoolServerConfigDto {
 
     static public PoolServerConfigDto create() {
         final var poolServerConfig = new PoolServerConfigDto();
+        poolServerConfig.setVersion(PoolServerConfigVersionEnum.V1);
         return poolServerConfig;
     }
+
+    @NotNull
+    PoolServerConfigVersionEnum version;
 
     DockerHostConfig dockerHostConfig;
 

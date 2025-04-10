@@ -1,15 +1,16 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.message.body.RuntimeCreatedMessageBodyDto;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.lobby.LobbyModel;
 import com.omgservers.schema.model.match.MatchModel;
-import com.omgservers.schema.message.body.RuntimeCreatedMessageBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.runtimeMessage.RuntimeMessageModel;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.module.runtime.runtime.SyncRuntimeRequest;
 import com.omgservers.schema.module.runtime.runtimeAssignment.SyncRuntimeAssignmentRequest;
 import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageRequest;
@@ -38,7 +39,7 @@ public class RuntimeTestDataFactory {
         final var deploymentId = deployment.getId();
         final var runtimeId = lobby.getRuntimeId();
 
-        final var config = RuntimeConfigDto.create();
+        final var config = RuntimeConfigDto.create(TenantVersionConfigDto.create());
         config.setLobby(new RuntimeConfigDto.LobbyConfigDto(lobby.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 deploymentId,
@@ -55,7 +56,7 @@ public class RuntimeTestDataFactory {
 
         final var runtimeId = match.getRuntimeId();
 
-        final var config = RuntimeConfigDto.create();
+        final var config = RuntimeConfigDto.create(TenantVersionConfigDto.create());
         config.setMatch(new RuntimeConfigDto.MatchConfigDto(match.getMatchmakerId(), match.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 deploymentId,

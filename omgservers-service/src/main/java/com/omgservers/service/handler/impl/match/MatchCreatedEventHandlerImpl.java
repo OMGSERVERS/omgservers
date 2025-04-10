@@ -123,9 +123,8 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
         final var matchId = match.getId();
         final var runtimeId = match.getRuntimeId();
 
-        final var runtimeConfig = RuntimeConfigDto.create();
+        final var runtimeConfig = RuntimeConfigDto.create(tenantVersionConfig);
         runtimeConfig.setMatch(new RuntimeConfigDto.MatchConfigDto(matchmakerId, matchId));
-        runtimeConfig.setVersion(tenantVersionConfig);
 
         final var runtime = runtimeModelFactory.create(runtimeId,
                 deploymentId,

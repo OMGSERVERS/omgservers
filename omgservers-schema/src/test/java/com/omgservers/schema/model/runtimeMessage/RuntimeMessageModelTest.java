@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.message.MessageQualifierEnum;
 import com.omgservers.schema.message.body.RuntimeCreatedMessageBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeConfigDto;
+import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ class RuntimeMessageModelTest extends Assertions {
         final var created = Instant.now();
         final var modified = Instant.now();
         final var qualifier = MessageQualifierEnum.RUNTIME_CREATED;
-        final var body = new RuntimeCreatedMessageBodyDto(RuntimeConfigDto.create());
+        final var body = new RuntimeCreatedMessageBodyDto(RuntimeConfigDto.create(TenantVersionConfigDto.create()));
         final var deleted = false;
 
         final var runtimeCommandModel = new RuntimeMessageModel(id,

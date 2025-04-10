@@ -4,7 +4,7 @@ import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.model.poolCommand.PoolCommandModel;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -21,6 +21,7 @@ public class IndexConfigDto {
 
     static public IndexConfigDto create(final Integer totalShardCount) {
         final var indexConfig = new IndexConfigDto();
+        indexConfig.setVersion(IndexConfigVersionEnum.V1);
         indexConfig.setTotalShardCount(totalShardCount);
         indexConfig.setServers(new ArrayList<>());
         indexConfig.setLockedShards(new ArrayList<>());
@@ -34,6 +35,7 @@ public class IndexConfigDto {
 
     static public IndexConfigDto create(final List<URI> addresses, final int shardCount) {
         final var indexConfig = new IndexConfigDto();
+        indexConfig.setVersion(IndexConfigVersionEnum.V1);
         indexConfig.setTotalShardCount(shardCount);
 
         final var serverCount = addresses.size();
@@ -56,6 +58,9 @@ public class IndexConfigDto {
 
         return indexConfig;
     }
+
+    @NotNull
+    IndexConfigVersionEnum version;
 
     @NotNull
     @Min(1)

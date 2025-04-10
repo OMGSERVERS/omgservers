@@ -2,8 +2,8 @@ package com.omgservers.service.server.task.impl.method.executePoolTask.operation
 
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerConfigDto;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolContainer.PoolContainerConfigDto;
+import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import com.omgservers.service.factory.pool.PoolContainerModelFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

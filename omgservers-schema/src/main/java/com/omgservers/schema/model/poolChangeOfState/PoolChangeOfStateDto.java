@@ -2,7 +2,7 @@ package com.omgservers.schema.model.poolChangeOfState;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

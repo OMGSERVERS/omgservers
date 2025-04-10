@@ -1,7 +1,8 @@
-package com.omgservers.schema.model.poolSeverContainer;
+package com.omgservers.schema.model.poolContainer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -46,6 +47,7 @@ public class PoolContainerModel {
     @NotNull
     RuntimeQualifierEnum runtimeQualifier;
 
+    @Valid
     @NotNull
     @ToString.Exclude
     PoolContainerConfigDto config;

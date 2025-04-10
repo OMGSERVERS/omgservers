@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.pool;
 
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerEnvironment;
+import com.omgservers.schema.model.poolContainer.PoolContainerEnvironment;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import io.smallrye.mutiny.Uni;
 

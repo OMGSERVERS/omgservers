@@ -1,4 +1,4 @@
-package com.omgservers.schema.model.poolSeverContainer;
+package com.omgservers.schema.model.poolContainer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

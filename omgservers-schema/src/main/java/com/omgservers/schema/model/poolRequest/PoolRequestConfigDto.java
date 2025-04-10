@@ -1,7 +1,8 @@
 package com.omgservers.schema.model.poolRequest;
 
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerEnvironment;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerLabel;
+import com.omgservers.schema.model.poolContainer.PoolContainerEnvironment;
+import com.omgservers.schema.model.poolContainer.PoolContainerLabel;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +18,15 @@ public class PoolRequestConfigDto {
 
     static public PoolRequestConfigDto create() {
         final var config = new PoolRequestConfigDto();
+        config.setVersion(PoolRequestConfigVersionEnum.V1);
         return config;
     }
 
+    @NotNull
+    PoolRequestConfigVersionEnum version;
+
+    @Valid
+    @NotNull
     ContainerConfig containerConfig;
 
     @Data

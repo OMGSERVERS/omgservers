@@ -1,5 +1,6 @@
-package com.omgservers.schema.model.poolSeverContainer;
+package com.omgservers.schema.model.poolContainer;
 
+import com.omgservers.schema.model.poolRequest.PoolRequestConfigVersionEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,9 +14,13 @@ import java.util.Map;
 public class PoolContainerConfigDto {
 
     static public PoolContainerConfigDto create() {
-        final var poolContainerConfigDto = new PoolContainerConfigDto();
-        return poolContainerConfigDto;
+        final var poolContainerConfig = new PoolContainerConfigDto();
+        poolContainerConfig.setVersion(PoolRequestConfigVersionEnum.V1);
+        return poolContainerConfig;
     }
+
+    @NotNull
+    PoolRequestConfigVersionEnum version;
 
     @NotNull
     String imageId;

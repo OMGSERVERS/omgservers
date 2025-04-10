@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.matchmakerMatchAssignment;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class MatchmakerMatchAssignmentModel {
     @NotBlank
     String groupName;
 
+    @Valid
     @NotNull
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

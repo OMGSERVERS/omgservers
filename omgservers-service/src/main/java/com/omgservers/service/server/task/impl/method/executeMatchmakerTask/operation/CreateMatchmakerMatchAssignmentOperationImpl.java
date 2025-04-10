@@ -31,7 +31,7 @@ class CreateMatchmakerMatchAssignmentOperationImpl implements CreateMatchmakerMa
                         matchId,
                         clientId,
                         groupName,
-                        new MatchmakerMatchAssignmentConfigDto(matchmakerRequest));
+                        MatchmakerMatchAssignmentConfigDto.create(matchmakerRequest));
 
         return matchmakerMatchAssignment;
     }

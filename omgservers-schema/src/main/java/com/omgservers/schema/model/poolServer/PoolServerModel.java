@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.poolServer;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class PoolServerModel {
     @NotNull
     PoolServerQualifierEnum qualifier;
 
+    @Valid
     @NotNull
     @ToString.Exclude
     PoolServerConfigDto config;

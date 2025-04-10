@@ -2,7 +2,7 @@ package com.omgservers.service.operation.pool;
 
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.deployment.DeploymentModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerLabel;
+import com.omgservers.schema.model.poolContainer.PoolContainerLabel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;

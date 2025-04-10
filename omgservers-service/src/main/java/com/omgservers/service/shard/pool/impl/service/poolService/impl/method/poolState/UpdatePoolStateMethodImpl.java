@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolState;
 
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;

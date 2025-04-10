@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.pool;
 
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerConfigDto;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolContainer.PoolContainerConfigDto;
+import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;

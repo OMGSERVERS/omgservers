@@ -102,9 +102,8 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
         final var deploymentId = lobby.getDeploymentId();
         final var runtimeId = lobby.getRuntimeId();
 
-        final var runtimeConfig = RuntimeConfigDto.create();
+        final var runtimeConfig = RuntimeConfigDto.create(tenantVersionConfig);
         runtimeConfig.setLobby(new RuntimeConfigDto.LobbyConfigDto(lobbyId));
-        runtimeConfig.setVersion(tenantVersionConfig);
 
         final var runtime = runtimeModelFactory.create(runtimeId,
                 deploymentId,

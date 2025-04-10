@@ -2,7 +2,7 @@ package com.omgservers.service.server.task.impl.method.executePoolTask.component
 
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

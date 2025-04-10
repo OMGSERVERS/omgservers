@@ -80,7 +80,7 @@ public class MatchmakerTestDataFactory {
         final var matchId = matchmakerMatchResource.getMatchId();
         final var clientId = client.getId();
 
-        final var config = new MatchmakerMatchAssignmentConfigDto(matchmakerRequest);
+        final var config = MatchmakerMatchAssignmentConfigDto.create(matchmakerRequest);
         final var matchmakerMatchAssignment = matchmakerMatchAssignmentModelFactory.create(matchmakerId,
                 matchId,
                 clientId,

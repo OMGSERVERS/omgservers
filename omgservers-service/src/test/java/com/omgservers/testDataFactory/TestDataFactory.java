@@ -15,7 +15,7 @@ import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.schema.model.poolSeverContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
