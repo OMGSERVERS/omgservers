@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.pool;
 
-import com.omgservers.schema.model.poolContainer.PoolContainerEnvironment;
+import com.omgservers.schema.model.poolContainer.PoolContainerEnvironmentEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import io.smallrye.mutiny.Uni;
@@ -20,12 +20,12 @@ class CreatePoolContainerEnvironmentOperationImpl implements CreatePoolContainer
     final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
-    public Uni<HashMap<PoolContainerEnvironment, String>> execute(final RuntimeModel runtime,
-                                                                  final String password) {
-        final var environment = new HashMap<PoolContainerEnvironment, String>();
-        environment.put(PoolContainerEnvironment.RUNTIME_ID, runtime.getId().toString());
-        environment.put(PoolContainerEnvironment.PASSWORD, password);
-        environment.put(PoolContainerEnvironment.QUALIFIER, runtime.getQualifier().toString());
+    public Uni<HashMap<PoolContainerEnvironmentEnum, String>> execute(final RuntimeModel runtime,
+                                                                      final String password) {
+        final var environment = new HashMap<PoolContainerEnvironmentEnum, String>();
+        environment.put(PoolContainerEnvironmentEnum.RUNTIME_ID, runtime.getId().toString());
+        environment.put(PoolContainerEnvironmentEnum.PASSWORD, password);
+        environment.put(PoolContainerEnvironmentEnum.QUALIFIER, runtime.getQualifier().toString());
 
         final URI serviceUri;
         if (getServiceConfigOperation.getServiceConfig().runtimes().overriding().enabled()) {
@@ -33,7 +33,7 @@ class CreatePoolContainerEnvironmentOperationImpl implements CreatePoolContainer
         } else {
             serviceUri = getServiceConfigOperation.getServiceConfig().server().uri();
         }
-        environment.put(PoolContainerEnvironment.SERVICE_URL, serviceUri.toString());
+        environment.put(PoolContainerEnvironmentEnum.SERVICE_URL, serviceUri.toString());
 
         return Uni.createFrom().item(environment);
     }

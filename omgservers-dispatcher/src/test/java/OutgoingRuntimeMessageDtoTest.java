@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.dispatcher.service.room.dto.MessageEncodingEnum;
-import com.omgservers.dispatcher.service.room.dto.OutgoingRuntimeMessageDto;
+import com.omgservers.dispatcher.service.dispatcher.dto.MessageEncodingEnum;
+import com.omgservers.dispatcher.service.dispatcher.dto.OutgoingRuntimeMessageDto;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;
@@ -26,9 +26,9 @@ class OutgoingRuntimeMessageDtoTest extends Assertions {
                 "move_player", 123, 321);
         final var testMessageString = objectMapper.writeValueAsString(testMessageDto);
 
-        final var textMessageDto = new OutgoingRuntimeMessageDto(List.of(123456789L),
-                MessageEncodingEnum.TXT,
-                testMessageString);
+        final var textMessageDto = new OutgoingRuntimeMessageDto(MessageEncodingEnum.TXT,
+                testMessageString,
+                List.of(123456789L));
         final var textMessageString = objectMapper.writeValueAsString(textMessageDto);
         final var textMessageObject = objectMapper
                 .readValue(textMessageString, OutgoingRuntimeMessageDto.class);

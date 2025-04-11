@@ -4,12 +4,12 @@ import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.CreateTokenRuntimeResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.runtime.runtime.GetRuntimeRequest;
 import com.omgservers.schema.module.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.schema.module.user.CreateTokenRequest;
 import com.omgservers.schema.module.user.CreateTokenResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
+import com.omgservers.service.operation.runtime.CreateRuntimeDispatcherConnectionUrlOperation;
 import com.omgservers.service.operation.runtime.CreateOpenRuntimeCommandOperation;
 import com.omgservers.service.operation.security.IssueJwtTokenOperation;
 import com.omgservers.service.shard.runtime.RuntimeShard;
@@ -28,6 +28,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final RuntimeShard runtimeShard;
     final UserShard userShard;
 
+    final CreateRuntimeDispatcherConnectionUrlOperation createRuntimeDispatcherConnectionUrlOperation;
     final CreateOpenRuntimeCommandOperation createOpenRuntimeCommandOperation;
     final IssueJwtTokenOperation issueJwtTokenOperation;
 
@@ -50,12 +51,11 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                             .flatMap(userToken -> createOpenRuntimeCommandOperation.execute(runtime)
                                     .map(created -> {
                                         final var apiToken = issueJwtTokenOperation.issueRuntimeJwtToken(runtimeId);
-                                        final var wsToken = issueJwtTokenOperation.issueWsJwtToken(userId,
-                                                runtimeId,
-                                                UserRoleEnum.RUNTIME);
+                                        final var dispatcherUrl = createRuntimeDispatcherConnectionUrlOperation
+                                                .execute(userId, runtimeId);
 
-                                        log.info("Token issued to use by runtime \"{}\"", runtimeId);
-                                        return new CreateTokenRuntimeResponse(apiToken, wsToken);
+                                        log.info("Tokens issued to use by runtime \"{}\"", runtimeId);
+                                        return new CreateTokenRuntimeResponse(apiToken, dispatcherUrl);
                                     }));
                 });
     }

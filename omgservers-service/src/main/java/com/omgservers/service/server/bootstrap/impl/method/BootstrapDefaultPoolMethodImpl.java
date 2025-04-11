@@ -81,7 +81,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
 
     Uni<Void> createDefaultPoolServers(final Long defaultPoolId) {
         final var dockerHosts = getServiceConfigOperation.getServiceConfig()
-                .bootstrap().defaultPool().dockerHosts();
+                .bootstrap().defaultPool().servers();
 
         final var serverCounter = new AtomicInteger();
         return Multi.createFrom().iterable(dockerHosts)
@@ -106,7 +106,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
 
     Uni<Boolean> createPoolServer(final Long defaultPoolId,
                                   final int serverIndex,
-                                  final ServiceConfig.BootstrapDockerHostConfig dockerHostConfig) {
+                                  final ServiceConfig.BootstrapDefaultPoolServerConfig dockerHostConfig) {
         final var poolServerConfig = PoolServerConfigDto.create();
         poolServerConfig.setDockerHostConfig(new PoolServerConfigDto.DockerHostConfig(
                 dockerHostConfig.dockerDaemonUri(),

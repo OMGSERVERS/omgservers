@@ -19,6 +19,8 @@ public interface ServiceConfig {
 
     RuntimesConfig runtimes();
 
+    DispatcherConfig dispatcher();
+
     BuilderConfig builder();
 
     RegistryConfig registry();
@@ -108,6 +110,12 @@ public interface ServiceConfig {
         long defaultMemoryLimit();
     }
 
+    interface DispatcherConfig {
+        URI externalUri();
+
+        URI internalUri();
+    }
+
     interface RuntimesOverridingConfig {
         boolean enabled();
 
@@ -158,10 +166,12 @@ public interface ServiceConfig {
     interface BootstrapDefaultPoolConfig {
         boolean enabled();
 
-        List<BootstrapDockerHostConfig> dockerHosts();
+        List<BootstrapDefaultPoolServerConfig> servers();
     }
 
-    interface BootstrapDockerHostConfig {
+    interface BootstrapDefaultPoolServerConfig {
+
+        URI externalUri();
 
         URI dockerDaemonUri();
 

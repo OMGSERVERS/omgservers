@@ -76,8 +76,8 @@
 //                    ((ConnectionUpgradedMessageBodyDto) connectionUpgrade.getBody()).getClientId());
 //            assertEquals(ConnectionUpgradeQualifierEnum.DISPATCHER,
 //                    ((ConnectionUpgradedMessageBodyDto) connectionUpgrade.getBody()).getProtocol());
-//            assertNotNull(((ConnectionUpgradedMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig());
-//            assertNotNull(((ConnectionUpgradedMessageBodyDto) connectionUpgrade.getBody()).getWebSocketConfig()
+//            assertNotNull(((ConnectionUpgradedMessageBodyDto) connectionUpgrade.getBody()).getDispatcherConfig());
+//            assertNotNull(((ConnectionUpgradedMessageBodyDto) connectionUpgrade.getBody()).getDispatcherConfig()
 //                    .getWsToken());
 //        } finally {
 //            supportApiTester.deleteTenant(testVersion.getSupportToken(), testVersion.getTenantId());

@@ -1,18 +1,14 @@
 package com.omgservers.dispatcher.service.handler.impl.method;
 
+import com.omgservers.dispatcher.service.dispatcher.DispatcherService;
+import com.omgservers.dispatcher.service.dispatcher.dto.DeleteDispatcherRequest;
+import com.omgservers.dispatcher.service.dispatcher.dto.DeleteDispatcherResponse;
+import com.omgservers.dispatcher.service.dispatcher.dto.RemovePlayerConnectionRequest;
+import com.omgservers.dispatcher.service.dispatcher.dto.RemovePlayerConnectionResponse;
 import com.omgservers.dispatcher.service.handler.component.DispatcherConnection;
 import com.omgservers.dispatcher.service.handler.dto.HandleClosedConnectionRequest;
 import com.omgservers.dispatcher.service.handler.impl.components.DispatcherConnections;
-import com.omgservers.dispatcher.service.room.RoomService;
-import com.omgservers.dispatcher.service.room.dto.RemovePlayerConnectionRequest;
-import com.omgservers.dispatcher.service.room.dto.RemovePlayerConnectionResponse;
-import com.omgservers.dispatcher.service.room.dto.RemoveRoomRequest;
-import com.omgservers.dispatcher.service.room.dto.RemoveRoomResponse;
-import com.omgservers.dispatcher.service.router.RouterService;
-import com.omgservers.dispatcher.service.router.dto.CloseClientConnectionRequest;
-import com.omgservers.dispatcher.service.router.dto.CloseClientConnectionResponse;
 import com.omgservers.schema.model.user.UserRoleEnum;
-import io.quarkus.websockets.next.CloseReason;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -26,8 +22,7 @@ import java.util.Objects;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
 
-    final RouterService routerService;
-    final RoomService roomService;
+    final DispatcherService dispatcherService;
 
     final DispatcherConnections dispatcherConnections;
 
@@ -40,21 +35,12 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
 
         final var dispatcherConnection = dispatcherConnections.get(webSocketConnection);
         if (Objects.nonNull(dispatcherConnection)) {
-            return (switch (dispatcherConnection.getConnectionType()) {
-                case ROUTED -> closeRoutedConnection(dispatcherConnection, closeReason);
-                case SERVER -> handleDispatcherConnection(dispatcherConnection);
-            }).invoke(closed -> dispatcherConnections.remove(webSocketConnection)).replaceWithVoid();
+            return handleDispatcherConnection(dispatcherConnection)
+                    .replaceWithVoid();
         } else {
-            log.error("Dispatcher connection was not found, skipping operation for \"{}\"", webSocketConnection.id());
+            log.error("Dispatcher connection was not found, skip operation for \"{}\"", webSocketConnection.id());
             return Uni.createFrom().voidItem();
         }
-    }
-
-    Uni<Boolean> closeRoutedConnection(final DispatcherConnection serverConnection,
-                                       final CloseReason closeReason) {
-        final var request = new CloseClientConnectionRequest(serverConnection, closeReason);
-        return routerService.closeClientConnection(request)
-                .map(CloseClientConnectionResponse::getClosed);
     }
 
     Uni<Boolean> handleDispatcherConnection(final DispatcherConnection dispatcherConnection) {
@@ -63,12 +49,12 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
         if (userRole.equals(UserRoleEnum.RUNTIME)) {
             final var runtimeId = dispatcherConnection.getRuntimeId();
 
-            final var request = new RemoveRoomRequest(runtimeId);
-            return roomService.removeRoom(request)
-                    .map(RemoveRoomResponse::getRemoved);
+            final var request = new DeleteDispatcherRequest(runtimeId);
+            return dispatcherService.execute(request)
+                    .map(DeleteDispatcherResponse::getDeleted);
         } else {
             final var request = new RemovePlayerConnectionRequest(dispatcherConnection);
-            return roomService.removePlayerConnection(request)
+            return dispatcherService.execute(request)
                     .map(RemovePlayerConnectionResponse::getRemoved);
         }
     }

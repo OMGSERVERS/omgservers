@@ -1,6 +1,6 @@
 package com.omgservers.schema.model.poolRequest;
 
-import com.omgservers.schema.model.poolContainer.PoolContainerEnvironment;
+import com.omgservers.schema.model.poolContainer.PoolContainerEnvironmentEnum;
 import com.omgservers.schema.model.poolContainer.PoolContainerLabel;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -48,6 +48,6 @@ public class PoolRequestConfigDto {
         Long memoryLimitInMegabytes;
 
         @NotNull
-        Map<PoolContainerEnvironment, String> environment;
+        Map<PoolContainerEnvironmentEnum, String> environment;
     }
 }

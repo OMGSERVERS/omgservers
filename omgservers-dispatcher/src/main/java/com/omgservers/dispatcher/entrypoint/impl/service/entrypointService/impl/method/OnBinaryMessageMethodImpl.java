@@ -1,8 +1,8 @@
 package com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl.method;
 
 import com.omgservers.dispatcher.entrypoint.impl.dto.OnBinaryMessageEntrypointRequest;
-import com.omgservers.dispatcher.module.DispatcherModule;
-import com.omgservers.dispatcher.module.impl.dto.OnBinaryMessageRequest;
+import com.omgservers.dispatcher.service.handler.HandlerService;
+import com.omgservers.dispatcher.service.handler.dto.HandleBinaryMessageRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -14,14 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class OnBinaryMessageMethodImpl implements OnBinaryMessageMethod {
 
-    final DispatcherModule dispatcherModule;
+    final HandlerService handlerService;
 
     @Override
     public Uni<Void> execute(final OnBinaryMessageEntrypointRequest request) {
         final var webSocketConnection = request.getWebSocketConnection();
         final var buffer = request.getBuffer();
 
-        final var onBinaryMessageRequest = new OnBinaryMessageRequest(webSocketConnection, buffer);
-        return dispatcherModule.getDispatcherService().execute(onBinaryMessageRequest);
+        final var handleBinaryMessageRequest = new HandleBinaryMessageRequest(webSocketConnection, buffer);
+        return handlerService.execute(handleBinaryMessageRequest);
     }
 }

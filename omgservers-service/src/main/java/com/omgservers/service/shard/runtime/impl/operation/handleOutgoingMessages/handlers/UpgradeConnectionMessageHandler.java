@@ -6,9 +6,10 @@ import com.omgservers.schema.message.body.UpgradeConnectionMessageBodyDto;
 import com.omgservers.schema.message.body.UpgradeConnectionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.service.operation.client.CreateDispatcherUpgradeClientMessageOperation;
+import com.omgservers.service.operation.client.CreateDispatcherConnectionUpgradedClientMessageOperation;
+import com.omgservers.service.operation.runtime.CreateClientDispatcherConnectionUrlOperation;
 import com.omgservers.service.operation.security.IssueJwtTokenOperation;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.runtime.impl.operation.handleOutgoingMessages.OutgoingMessageHandler;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +24,10 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UpgradeConnectionMessageHandler implements OutgoingMessageHandler {
 
-    final CreateDispatcherUpgradeClientMessageOperation createDispatcherUpgradeClientMessageOperation;
+    final CreateClientDispatcherConnectionUrlOperation createClientDispatcherConnectionUrlOperation;
+    final CreateDispatcherConnectionUpgradedClientMessageOperation
+            createDispatcherConnectionUpgradedClientMessageOperation;
+    final GetServiceConfigOperation getServiceConfigOperation;
     final IssueJwtTokenOperation issueJwtTokenOperation;
 
     @Override
@@ -62,8 +66,10 @@ public class UpgradeConnectionMessageHandler implements OutgoingMessageHandler {
                                    final UpgradeConnectionQualifierEnum protocol) {
         return switch (protocol) {
             case DISPATCHER -> {
-                final var wsToken = issueJwtTokenOperation.issueWsJwtToken(clientId, runtimeId, UserRoleEnum.PLAYER);
-                yield createDispatcherUpgradeClientMessageOperation.execute(wsToken, clientId);
+                final var connectionUrl = createClientDispatcherConnectionUrlOperation
+                        .execute(clientId, runtimeId);
+                yield createDispatcherConnectionUpgradedClientMessageOperation
+                        .executeFailSafe(connectionUrl, clientId);
             }
         };
     }

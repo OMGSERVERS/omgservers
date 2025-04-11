@@ -3,13 +3,13 @@ package com.omgservers.dispatcher.service.handler.impl;
 import com.omgservers.dispatcher.service.handler.HandlerService;
 import com.omgservers.dispatcher.service.handler.dto.HandleBinaryMessageRequest;
 import com.omgservers.dispatcher.service.handler.dto.HandleClosedConnectionRequest;
-import com.omgservers.dispatcher.service.handler.dto.HandleExpiredConnectionsRequest;
+import com.omgservers.dispatcher.service.handler.dto.HandleIdleConnectionsRequest;
 import com.omgservers.dispatcher.service.handler.dto.HandleFailedConnectionRequest;
 import com.omgservers.dispatcher.service.handler.dto.HandleOpenedConnectionRequest;
 import com.omgservers.dispatcher.service.handler.dto.HandleTextMessageRequest;
 import com.omgservers.dispatcher.service.handler.impl.method.HandleBinaryMessageMethod;
 import com.omgservers.dispatcher.service.handler.impl.method.HandleClosedConnectionMethod;
-import com.omgservers.dispatcher.service.handler.impl.method.HandleExpiredConnectionsMethod;
+import com.omgservers.dispatcher.service.handler.impl.method.HandleIdleConnectionsMethod;
 import com.omgservers.dispatcher.service.handler.impl.method.HandleFailedConnectionMethod;
 import com.omgservers.dispatcher.service.handler.impl.method.HandleOpenedConnectionMethod;
 import com.omgservers.dispatcher.service.handler.impl.method.HandleTextMessageMethod;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class HandlerServiceImpl implements HandlerService {
 
-    final HandleExpiredConnectionsMethod handleExpiredConnectionsMethod;
+    final HandleIdleConnectionsMethod handleIdleConnectionsMethod;
     final HandleOpenedConnectionMethod handleOpenedConnectionMethod;
     final HandleClosedConnectionMethod handleClosedConnectionMethod;
     final HandleFailedConnectionMethod handleFailedConnectionMethod;
@@ -33,32 +33,32 @@ class HandlerServiceImpl implements HandlerService {
     final HandleTextMessageMethod handleTextMessageMethod;
 
     @Override
-    public Uni<Void> handleOpenedConnection(@Valid final HandleOpenedConnectionRequest request) {
+    public Uni<Void> execute(@Valid final HandleOpenedConnectionRequest request) {
         return handleOpenedConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleClosedConnection(@Valid final HandleClosedConnectionRequest request) {
+    public Uni<Void> execute(@Valid final HandleClosedConnectionRequest request) {
         return handleClosedConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleFailedConnection(@Valid final HandleFailedConnectionRequest request) {
+    public Uni<Void> execute(@Valid final HandleFailedConnectionRequest request) {
         return handleFailedConnectionMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleTextMessage(@Valid final HandleTextMessageRequest request) {
+    public Uni<Void> execute(@Valid final HandleTextMessageRequest request) {
         return handleTextMessageMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleBinaryMessage(@Valid final HandleBinaryMessageRequest request) {
+    public Uni<Void> execute(@Valid final HandleBinaryMessageRequest request) {
         return handleBinaryMessageMethod.execute(request);
     }
 
     @Override
-    public Uni<Void> handleExpiredConnections(@Valid final HandleExpiredConnectionsRequest request) {
-        return handleExpiredConnectionsMethod.execute(request);
+    public Uni<Void> execute(@Valid final HandleIdleConnectionsRequest request) {
+        return handleIdleConnectionsMethod.execute(request);
     }
 }

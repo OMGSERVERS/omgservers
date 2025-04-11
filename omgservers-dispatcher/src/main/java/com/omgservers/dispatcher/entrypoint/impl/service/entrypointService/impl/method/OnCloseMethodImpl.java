@@ -1,8 +1,8 @@
 package com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl.method;
 
 import com.omgservers.dispatcher.entrypoint.impl.dto.OnCloseEntrypointRequest;
-import com.omgservers.dispatcher.module.DispatcherModule;
-import com.omgservers.dispatcher.module.impl.dto.OnCloseRequest;
+import com.omgservers.dispatcher.service.handler.HandlerService;
+import com.omgservers.dispatcher.service.handler.dto.HandleClosedConnectionRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -14,15 +14,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class OnCloseMethodImpl implements OnCloseMethod {
 
-    final DispatcherModule dispatcherModule;
+    final HandlerService handlerService;
 
     @Override
     public Uni<Void> execute(final OnCloseEntrypointRequest request) {
         final var webSocketConnection = request.getWebSocketConnection();
         final var closeReason = request.getCloseReason();
 
-        final var onCloseRequest = new OnCloseRequest(webSocketConnection, closeReason);
-        return dispatcherModule.getDispatcherService().execute(onCloseRequest)
-                .replaceWithVoid();
+        final var handleClosedConnectionRequest = new HandleClosedConnectionRequest(webSocketConnection, closeReason);
+        return handlerService.execute(handleClosedConnectionRequest);
     }
 }

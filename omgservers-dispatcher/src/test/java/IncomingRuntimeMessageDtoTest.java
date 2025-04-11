@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.dispatcher.service.room.dto.IncomingRuntimeMessageDto;
-import com.omgservers.dispatcher.service.room.dto.MessageEncodingEnum;
+import com.omgservers.dispatcher.service.dispatcher.dto.IncomingRuntimeMessageDto;
+import com.omgservers.dispatcher.service.dispatcher.dto.MessageEncodingEnum;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.AllArgsConstructor;

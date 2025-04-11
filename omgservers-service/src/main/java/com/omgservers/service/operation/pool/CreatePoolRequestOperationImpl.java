@@ -3,7 +3,7 @@ package com.omgservers.service.operation.pool;
 import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
-import com.omgservers.schema.model.poolContainer.PoolContainerEnvironment;
+import com.omgservers.schema.model.poolContainer.PoolContainerEnvironmentEnum;
 import com.omgservers.schema.model.poolContainer.PoolContainerLabel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -89,7 +89,7 @@ class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
 
     public Uni<Boolean> createPoolRequest(final RuntimeModel runtime,
                                           final String image,
-                                          final HashMap<PoolContainerEnvironment, String> environment,
+                                          final HashMap<PoolContainerEnvironmentEnum, String> environment,
                                           final Map<PoolContainerLabel, String> labels,
                                           final String idempotencyKey) {
         return getDefaultPoolIdOperation.execute()

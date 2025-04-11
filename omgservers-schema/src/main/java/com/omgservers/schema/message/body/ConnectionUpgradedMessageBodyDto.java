@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.net.URI;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,17 +21,14 @@ public class ConnectionUpgradedMessageBodyDto extends MessageBodyDto {
     @NotNull
     ConnectionUpgradeQualifierEnum protocol;
 
-    /**
-     * Field has value if websocket upgrade takes place.
-     */
-    WebSocketConfig webSocketConfig;
+    DispatcherConfig dispatcherConfig;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class WebSocketConfig {
-        String wsToken;
+    public static class DispatcherConfig {
+        URI connectionUrl;
     }
 
     @Override

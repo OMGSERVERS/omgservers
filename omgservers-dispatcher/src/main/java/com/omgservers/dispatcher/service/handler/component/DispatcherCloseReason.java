@@ -4,19 +4,15 @@ import io.netty.handler.codec.http.websocketx.WebSocketCloseStatus;
 import io.quarkus.websockets.next.CloseReason;
 
 public class DispatcherCloseReason {
-    public static final CloseReason CONNECTING_FAILED =
+    public static final CloseReason FAILED_TO_OPEN =
             new CloseReason(WebSocketCloseStatus.PROTOCOL_ERROR.code(),
-                    "Failed to open the dispatcher connection");
+                    "Failed to open");
 
-    public static final CloseReason TRANSFER_FAILED =
+    public static final CloseReason INACTIVE_CONNECTION =
             new CloseReason(WebSocketCloseStatus.PROTOCOL_ERROR.code(),
-                    "Failed to transfer the message");
+                    "Inactive connection");
 
-    public static final CloseReason IDLE_TIMED_OUT =
-            new CloseReason(WebSocketCloseStatus.PROTOCOL_ERROR.code(),
-                    "Connection timed out due to inactivity.");
-
-    public static final CloseReason ROOM_REMOVED =
+    public static final CloseReason DISPATCHER_DELETED =
             new CloseReason(WebSocketCloseStatus.ENDPOINT_UNAVAILABLE.code(),
-                    "Room was removed");
+                    "Dispatcher deleted");
 }

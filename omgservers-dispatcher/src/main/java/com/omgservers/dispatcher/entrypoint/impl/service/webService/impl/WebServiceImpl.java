@@ -7,7 +7,6 @@ import com.omgservers.dispatcher.entrypoint.impl.dto.OnOpenEntrypointRequest;
 import com.omgservers.dispatcher.entrypoint.impl.dto.OnTextMessageEntrypointRequest;
 import com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.EntrypointService;
 import com.omgservers.dispatcher.entrypoint.impl.service.webService.WebService;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.websockets.next.CloseReason;
 import io.quarkus.websockets.next.WebSocketConnection;
 import io.smallrye.mutiny.Uni;
@@ -23,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 class WebServiceImpl implements WebService {
 
     final EntrypointService entrypointService;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<Void> onOpen(final WebSocketConnection webSocketConnection) {

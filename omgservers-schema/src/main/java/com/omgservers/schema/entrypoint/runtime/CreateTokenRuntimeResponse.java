@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.net.URI;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,5 +16,5 @@ public class CreateTokenRuntimeResponse {
     String apiToken;
 
     @ToString.Exclude
-    String wsToken;
+    URI dispatcherUrl;
 }

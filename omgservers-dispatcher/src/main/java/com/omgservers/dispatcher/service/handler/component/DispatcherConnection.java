@@ -20,9 +20,6 @@ public class DispatcherConnection {
     final WebSocketConnection webSocketConnection;
 
     @Getter
-    final ConnectionTypeEnum connectionType;
-
-    @Getter
     final Long runtimeId;
 
     @Getter
@@ -34,12 +31,10 @@ public class DispatcherConnection {
     final AtomicReference<Instant> lastUsage;
 
     public DispatcherConnection(final WebSocketConnection webSocketConnection,
-                                final ConnectionTypeEnum connectionType,
                                 final Long runtimeId,
                                 final UserRoleEnum userRole,
                                 final Long subject) {
         this.webSocketConnection = webSocketConnection;
-        this.connectionType = connectionType;
         this.runtimeId = runtimeId;
         this.userRole = userRole;
         this.subject = subject;
