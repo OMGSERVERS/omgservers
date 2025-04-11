@@ -43,6 +43,7 @@ create table if not exists tab_pool (
     idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -103,6 +104,7 @@ create table if not exists tab_user (
     modified timestamp with time zone not null,
     role text not null,
     password_hash text not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -128,6 +130,7 @@ create table if not exists tab_client (
     user_id bigint not null,
     player_id bigint not null,
     deployment_id bigint not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -159,6 +162,7 @@ create table if not exists tab_tenant (
     idempotency_key text not null unique,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -179,6 +183,7 @@ create table if not exists tab_tenant_project (
     tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -201,6 +206,7 @@ create table if not exists tab_tenant_stage (
     project_id bigint not null references tab_tenant_project(id) on delete restrict on update restrict,
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -261,6 +267,7 @@ create table if not exists tab_tenant_image (
     modified timestamp with time zone not null,
     qualifier text not null,
     image_id text not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -278,6 +285,7 @@ create table if not exists tab_deployment (
     tenant_id bigint not null,
     stage_id bigint not null,
     version_id bigint not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -355,6 +363,7 @@ create table if not exists tab_lobby (
     modified timestamp with time zone not null,
     deployment_id bigint not null,
     runtime_id bigint not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -366,6 +375,7 @@ create table if not exists tab_matchmaker (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     deployment_id bigint not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -426,6 +436,7 @@ create table if not exists tab_match (
     modified timestamp with time zone not null,
     matchmaker_id bigint not null,
     runtime_id bigint not null,
+    config jsonb not null,
     deleted boolean not null
 );
 

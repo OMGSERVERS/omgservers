@@ -29,7 +29,7 @@ class SelectMatchOperationImpl implements SelectMatchOperation {
                 shard,
                 """
                         select
-                            id, idempotency_key, created, modified, matchmaker_id, runtime_id, deleted
+                            id, idempotency_key, created, modified, matchmaker_id, runtime_id, config, deleted
                         from $shard.tab_match
                         where id = $1
                         limit 1

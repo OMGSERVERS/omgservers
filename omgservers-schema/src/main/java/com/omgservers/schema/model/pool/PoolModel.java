@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.pool;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,10 @@ public class PoolModel {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     Instant modified;
+
+    @Valid
+    @NotNull
+    PoolConfigDto config;
 
     @NotNull
     Boolean deleted;

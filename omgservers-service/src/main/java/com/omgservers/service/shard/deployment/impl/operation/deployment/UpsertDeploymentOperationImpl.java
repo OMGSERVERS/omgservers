@@ -2,7 +2,9 @@ package com.omgservers.service.shard.deployment.impl.operation.deployment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.deployment.DeploymentModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentCreatedEventBodyModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
@@ -13,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -34,8 +37,8 @@ class UpsertDeploymentOperationImpl implements UpsertDeploymentOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $shard.tab_deployment(
-                            id, idempotency_key, created, modified, tenant_id, stage_id, version_id, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, created, modified, tenant_id, stage_id, version_id, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -47,10 +50,19 @@ class UpsertDeploymentOperationImpl implements UpsertDeploymentOperation {
                         deployment.getTenantId(),
                         deployment.getStageId(),
                         deployment.getVersionId(),
+                        getConfigString(deployment),
                         deployment.getDeleted()
                 ),
                 () -> new DeploymentCreatedEventBodyModel(deployment.getId()),
                 () -> null
         );
+    }
+
+    String getConfigString(final DeploymentModel deployment) {
+        try {
+            return objectMapper.writeValueAsString(deployment.getConfig());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateClientPlayerResponse;
+import com.omgservers.schema.model.client.ClientConfigDto;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.player.PlayerModel;
@@ -110,7 +111,8 @@ class CreateClientMethodImpl implements CreateClientMethod {
                     final var deploymentId = tenantDeploymentResource.getDeploymentId();
                     final var client = clientModelFactory.create(userId,
                             playerId,
-                            deploymentId);
+                            deploymentId,
+                            ClientConfigDto.create());
 
                     final var request = new SyncClientRequest(client);
                     return clientShard.getService().execute(request)

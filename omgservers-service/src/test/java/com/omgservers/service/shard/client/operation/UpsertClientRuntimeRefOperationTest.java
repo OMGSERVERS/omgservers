@@ -1,6 +1,7 @@
 package com.omgservers.service.shard.client.operation;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.client.ClientConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
@@ -37,7 +38,7 @@ class UpsertClientRuntimeRefOperationTest extends BaseTestClass {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenInserted() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
@@ -49,7 +50,7 @@ class UpsertClientRuntimeRefOperationTest extends BaseTestClass {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenUpdated() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
@@ -71,7 +72,7 @@ class UpsertClientRuntimeRefOperationTest extends BaseTestClass {
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenIdempotencyViolation() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientRuntimeRef1 = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());

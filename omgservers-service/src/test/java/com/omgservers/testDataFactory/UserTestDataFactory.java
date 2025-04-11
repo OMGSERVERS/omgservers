@@ -3,6 +3,7 @@ package com.omgservers.testDataFactory;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.SyncPlayerRequest;
@@ -27,7 +28,7 @@ public class UserTestDataFactory {
 
     public UserModel createDeveloperUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash, UserConfigDto.create());
         final var syncUserRequest = new SyncUserRequest(user);
         userService.syncUser(syncUserRequest);
         return user;
@@ -35,7 +36,7 @@ public class UserTestDataFactory {
 
     public UserModel createPlayerUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash, UserConfigDto.create());
         final var syncUserRequest = new SyncUserRequest(user);
         userService.syncUser(syncUserRequest);
         return user;
@@ -43,7 +44,7 @@ public class UserTestDataFactory {
 
     public UserModel createRuntimeUser(String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.RUNTIME, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.RUNTIME, passwordHash, UserConfigDto.create());
         final var syncUserRequest = new SyncUserRequest(user);
         userService.syncUser(syncUserRequest);
         return user;

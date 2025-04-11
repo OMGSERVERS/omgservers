@@ -2,6 +2,7 @@ package com.omgservers.service.shard.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
 import com.omgservers.schema.model.matchmakerCommand.body.CloseMatchMatchmakerCommandBodyDto;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -37,7 +38,7 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
     @Test
     void givenMatchmakerCommand_whenExecute_thenInserted() {
         final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
@@ -51,7 +52,7 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
     @Test
     void givenMatchmakerCommand_whenExecuteAgain_thenUpdated() {
         final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
@@ -76,7 +77,7 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
     @Test
     void givenMatchmakerCommand_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var matchmakerCommandBody1 = new CloseMatchMatchmakerCommandBodyDto(matchId());

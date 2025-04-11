@@ -32,7 +32,8 @@ class SelectActiveTenantImageByTenantVersionIdOperationImpl
                 shard,
                 """
                         select
-                            id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, deleted
+                            id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, config,
+                            deleted
                         from $shard.tab_tenant_image
                         where tenant_id = $1 and version_id = $2 and deleted = false
                         order by id asc

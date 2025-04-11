@@ -1,5 +1,6 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.model.pool.PoolConfigDto;
 import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
 import com.omgservers.schema.model.poolRequest.PoolRequestModel;
@@ -53,7 +54,7 @@ public class PoolTestDataFactory {
             log.info("Default pool was already created, defaultPoolId={}", defaultPoolId);
             return poolService.execute(getPoolRequest).getPool();
         } catch (ServerSideNotFoundException e) {
-            final var pool = poolModelFactory.create(defaultPoolId);
+            final var pool = poolModelFactory.create(defaultPoolId, PoolConfigDto.create());
             final var syncPoolRequest = new SyncPoolRequest(pool);
             poolService.execute(syncPoolRequest);
             return pool;
@@ -61,7 +62,7 @@ public class PoolTestDataFactory {
     }
 
     public PoolModel createPool() {
-        final var pool = poolModelFactory.create();
+        final var pool = poolModelFactory.create(PoolConfigDto.create());
         final var syncPoolRequest = new SyncPoolRequest(pool);
         poolService.execute(syncPoolRequest);
         return pool;

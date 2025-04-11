@@ -1,8 +1,10 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenantStage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.service.event.body.module.tenant.TenantStageCreatedEventBodyModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
@@ -12,6 +14,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -33,8 +36,8 @@ class UpsertTenantStageOperationImpl implements UpsertTenantStageOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $shard.tab_tenant_stage(
-                            id, idempotency_key, tenant_id, project_id, created, modified, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, tenant_id, project_id, created, modified, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,10 +48,19 @@ class UpsertTenantStageOperationImpl implements UpsertTenantStageOperation {
                         tenantStage.getProjectId(),
                         tenantStage.getCreated().atOffset(ZoneOffset.UTC),
                         tenantStage.getModified().atOffset(ZoneOffset.UTC),
+                        getConfigString(tenantStage),
                         tenantStage.getDeleted()
                 ),
                 () -> new TenantStageCreatedEventBodyModel(tenantStage.getTenantId(), tenantStage.getId()),
                 () -> null
         );
+    }
+
+    String getConfigString(final TenantStageModel tenantStage) {
+        try {
+            return objectMapper.writeValueAsString(tenantStage.getConfig());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
+        }
     }
 }

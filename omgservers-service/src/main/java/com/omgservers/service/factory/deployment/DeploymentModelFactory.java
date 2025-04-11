@@ -1,5 +1,6 @@
 package com.omgservers.service.factory.deployment;
 
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,24 +19,27 @@ public class DeploymentModelFactory {
 
     public DeploymentModel create(final Long tenantId,
                                   final Long tenantStageId,
-                                  final Long tenantVersionId) {
+                                  final Long tenantVersionId,
+                                  final DeploymentConfigDto deploymentConfig) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, tenantStageId, tenantVersionId, idempotencyKey);
+        return create(id, tenantId, tenantStageId, tenantVersionId, deploymentConfig, idempotencyKey);
     }
 
     public DeploymentModel create(final Long tenantId,
                                   final Long tenantStageId,
                                   final Long tenantVersionId,
+                                  final DeploymentConfigDto deploymentConfig,
                                   final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, tenantStageId, tenantVersionId, idempotencyKey);
+        return create(id, tenantId, tenantStageId, tenantVersionId, deploymentConfig, idempotencyKey);
     }
 
     public DeploymentModel create(final Long id,
                                   final Long tenantId,
                                   final Long tenantStageId,
                                   final Long tenantVersionId,
+                                  final DeploymentConfigDto deploymentConfig,
                                   final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -47,6 +51,7 @@ public class DeploymentModelFactory {
         deployment.setTenantId(tenantId);
         deployment.setStageId(tenantStageId);
         deployment.setVersionId(tenantVersionId);
+        deployment.setConfig(deploymentConfig);
         deployment.setDeleted(false);
         return deployment;
     }

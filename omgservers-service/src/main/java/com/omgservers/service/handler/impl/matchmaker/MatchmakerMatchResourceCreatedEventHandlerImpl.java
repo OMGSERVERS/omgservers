@@ -1,5 +1,6 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
+import com.omgservers.schema.model.match.MatchConfigDto;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.module.match.SyncMatchRequest;
 import com.omgservers.schema.module.match.SyncMatchResponse;
@@ -63,6 +64,7 @@ public class MatchmakerMatchResourceCreatedEventHandlerImpl implements EventHand
         final var matchId = matchmakerMatchResource.getMatchId();
         final var match = matchModelFactory.create(matchId,
                 matchmakerId,
+                MatchConfigDto.create(),
                 idempotencyKey);
         final var request = new SyncMatchRequest(match);
         return matchShard.getService().executeWithIdempotency(request)

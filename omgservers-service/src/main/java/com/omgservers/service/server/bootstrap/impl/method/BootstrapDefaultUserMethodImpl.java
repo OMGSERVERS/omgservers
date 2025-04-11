@@ -2,6 +2,7 @@ package com.omgservers.service.server.bootstrap.impl.method;
 
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
+import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.alias.FindAliasRequest;
@@ -82,7 +83,7 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
     Uni<UserModel> createUser(final String password,
                               final UserRoleEnum role) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(role, passwordHash);
+        final var user = userModelFactory.create(role, passwordHash, UserConfigDto.create());
 
         final var request = new SyncUserRequest(user);
         return userShard.getService().execute(request)

@@ -1,7 +1,10 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmaker;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
@@ -11,6 +14,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -21,6 +25,7 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
 
     final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
+    final ObjectMapper objectMapper;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
@@ -31,8 +36,8 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $shard.tab_matchmaker(
-                            id, idempotency_key, created, modified, deployment_id, deleted)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, idempotency_key, created, modified, deployment_id, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -42,10 +47,19 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
                         matchmaker.getCreated().atOffset(ZoneOffset.UTC),
                         matchmaker.getModified().atOffset(ZoneOffset.UTC),
                         matchmaker.getDeploymentId(),
+                        getConfigString(matchmaker),
                         matchmaker.getDeleted()
                 ),
                 () -> new MatchmakerCreatedEventBodyModel(matchmaker.getId()),
                 () -> null
         );
+    }
+
+    String getConfigString(final MatchmakerModel matchmaker) {
+        try {
+            return objectMapper.writeValueAsString(matchmaker.getConfig());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
+        }
     }
 }

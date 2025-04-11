@@ -3,18 +3,19 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
+import com.omgservers.schema.model.tenantStage.TenantStageConfigDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CreateTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -75,7 +76,9 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
     Uni<TenantStageModel> createTenantStage(final Long tenantId,
                                             final Long tenantProjectId,
                                             final Long userId) {
-        final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
+        final var tenantStage = tenantStageModelFactory.create(tenantId,
+                tenantProjectId,
+                TenantStageConfigDto.create());
         final var tenantStageId = tenantStage.getId();
         final var request = new SyncTenantStageRequest(tenantStage);
         return tenantShard.getService().execute(request)

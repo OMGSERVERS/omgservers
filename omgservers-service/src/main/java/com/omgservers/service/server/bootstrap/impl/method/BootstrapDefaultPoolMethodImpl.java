@@ -2,6 +2,7 @@ package com.omgservers.service.server.bootstrap.impl.method;
 
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
+import com.omgservers.schema.model.pool.PoolConfigDto;
 import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.model.poolServer.PoolServerConfigDto;
 import com.omgservers.schema.model.poolServer.PoolServerQualifierEnum;
@@ -73,7 +74,7 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
     }
 
     Uni<PoolModel> createDefaultPool() {
-        final var defaultPool = poolModelFactory.create();
+        final var defaultPool = poolModelFactory.create(PoolConfigDto.create());
         final var request = new SyncPoolRequest(defaultPool);
         return poolShard.getService().execute(request)
                 .replaceWith(defaultPool);

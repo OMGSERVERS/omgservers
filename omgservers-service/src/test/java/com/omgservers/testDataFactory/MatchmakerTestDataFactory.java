@@ -2,6 +2,7 @@ package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
+import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentConfigDto;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
@@ -39,7 +40,7 @@ public class MatchmakerTestDataFactory {
         final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
         final var deploymentId = deploymentMatchmakerResource.getDeploymentId();
 
-        final var matchmaker = matchmakerModelFactory.create(matchmakerId, deploymentId);
+        final var matchmaker = matchmakerModelFactory.create(matchmakerId, deploymentId, MatchmakerConfigDto.create());
         final var syncMatchmakerRequest = new SyncMatchmakerRequest(matchmaker);
         matchmakerService.execute(syncMatchmakerRequest);
         return matchmaker;

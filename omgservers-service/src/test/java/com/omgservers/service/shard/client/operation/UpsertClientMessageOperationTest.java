@@ -2,6 +2,7 @@ package com.omgservers.service.shard.client.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.message.body.ClientGreetedMessageBodyDto;
+import com.omgservers.schema.model.client.ClientConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -39,7 +40,7 @@ class UpsertClientMessageOperationTest extends BaseTestClass {
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenInserted() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
@@ -51,7 +52,7 @@ class UpsertClientMessageOperationTest extends BaseTestClass {
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenUpdated() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
@@ -74,7 +75,7 @@ class UpsertClientMessageOperationTest extends BaseTestClass {
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenIdempotencyViolation() {
         final var shard = 0;
-        final var client = clientModelFactory.create(userId(), playerId(), versionId());
+        final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
         upsertClientOperation.upsertClient(shard, client);
 
         final var clientMessage1 = clientMessageModelFactory.create(client.getId(),

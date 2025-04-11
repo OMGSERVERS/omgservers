@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.tenantImage;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,10 @@ public class TenantImageModel {
 
     @NotNull
     String imageId;
+
+    @Valid
+    @NotNull
+    TenantImageConfigDto config;
 
     @NotNull
     Boolean deleted;

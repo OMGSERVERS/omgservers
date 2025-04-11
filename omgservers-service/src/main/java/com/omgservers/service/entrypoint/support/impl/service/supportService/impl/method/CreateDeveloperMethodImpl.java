@@ -2,16 +2,17 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
+import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
+import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -51,7 +52,7 @@ class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
 
     Uni<UserModel> createDeveloperUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.DEVELOPER, passwordHash, UserConfigDto.create());
         final var syncUserShardedRequest = new SyncUserRequest(user);
         return userShard.getService().execute(syncUserShardedRequest)
                 .replaceWith(user);

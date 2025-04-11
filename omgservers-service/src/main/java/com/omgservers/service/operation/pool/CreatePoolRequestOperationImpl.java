@@ -6,6 +6,7 @@ import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolContainer.PoolContainerEnvironmentEnum;
 import com.omgservers.schema.model.poolContainer.PoolContainerLabel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
+import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestRequest;
 import com.omgservers.schema.module.pool.poolRequest.SyncPoolRequestResponse;
@@ -81,7 +82,11 @@ class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
                             final String password,
                             final String idempotencyKey) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(id, UserRoleEnum.RUNTIME, passwordHash, idempotencyKey);
+        final var user = userModelFactory.create(id,
+                UserRoleEnum.RUNTIME,
+                passwordHash,
+                UserConfigDto.create(),
+                idempotencyKey);
         final var request = new SyncUserRequest(user);
         return userShard.getService().executeWithIdempotency(request)
                 .map(SyncUserResponse::getCreated);

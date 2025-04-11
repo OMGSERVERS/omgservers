@@ -2,15 +2,17 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportResponse;
+import com.omgservers.schema.model.project.TenantProjectConfigDto;
 import com.omgservers.schema.model.project.TenantProjectModel;
+import com.omgservers.schema.model.tenantStage.TenantStageConfigDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -56,7 +58,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     }
 
     Uni<TenantProjectModel> createTenantProject(final Long tenantId) {
-        final var tenantProject = tenantProjectModelFactory.create(tenantId);
+        final var tenantProject = tenantProjectModelFactory.create(tenantId, TenantProjectConfigDto.create());
         final var syncProjectInternalRequest = new SyncTenantProjectRequest(tenantProject);
         return tenantShard.getService().execute(syncProjectInternalRequest)
                 .replaceWith(tenantProject);
@@ -64,7 +66,9 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
     Uni<TenantStageModel> createTenantStage(final Long tenantId,
                                             final Long tenantProjectId) {
-        final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
+        final var tenantStage = tenantStageModelFactory.create(tenantId,
+                tenantProjectId,
+                TenantStageConfigDto.create());
         final var syncStageInternalRequest = new SyncTenantStageRequest(tenantStage);
         return tenantShard.getService().execute(syncStageInternalRequest)
                 .replaceWith(tenantStage);

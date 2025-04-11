@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.lobby;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,10 @@ public class LobbyModel {
 
     @NotNull
     Long runtimeId;
+
+    @Valid
+    @NotNull
+    LobbyConfigDto config;
 
     @NotNull
     Boolean deleted;

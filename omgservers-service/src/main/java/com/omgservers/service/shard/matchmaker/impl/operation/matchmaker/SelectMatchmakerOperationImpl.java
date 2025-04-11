@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmaker;
 
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +28,7 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, created, modified, deployment_id, deleted
+                        select id, idempotency_key, created, modified, deployment_id, config, deleted
                         from $shard.tab_matchmaker
                         where id = $1
                         limit 1

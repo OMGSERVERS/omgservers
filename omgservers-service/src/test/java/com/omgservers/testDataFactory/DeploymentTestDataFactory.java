@@ -1,5 +1,6 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
@@ -36,7 +37,8 @@ public class DeploymentTestDataFactory {
         final var tenantVersionId = tenantVersion.getId();
         final var tenantDeployment = deploymentModelFactory.create(tenantId,
                 tenantStageId,
-                tenantVersionId);
+                tenantVersionId,
+                DeploymentConfigDto.create());
         final var request = new SyncDeploymentRequest(tenantDeployment);
         deploymentService.execute(request);
         return tenantDeployment;

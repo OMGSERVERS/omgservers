@@ -2,6 +2,7 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
+import com.omgservers.schema.model.tenantStage.TenantStageConfigDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
@@ -55,7 +56,9 @@ class CreateTenantStageMethodImpl implements CreateTenantStageMethod {
 
     Uni<TenantStageModel> createTenantStage(final Long tenantId,
                                             final Long tenantProjectId) {
-        final var tenantStage = tenantStageModelFactory.create(tenantId, tenantProjectId);
+        final var tenantStage = tenantStageModelFactory.create(tenantId,
+                tenantProjectId,
+                TenantStageConfigDto.create());
         final var syncStageInternalRequest = new SyncTenantStageRequest(tenantStage);
         return tenantShard.getService().execute(syncStageInternalRequest)
                 .replaceWith(tenantStage);

@@ -1,5 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
+import com.omgservers.schema.model.tenantImage.TenantImageConfigDto;
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
@@ -20,19 +21,21 @@ public class TenantImageModelFactory {
     public TenantImageModel create(final Long tenantId,
                                    final Long tenantVersionId,
                                    final TenantImageQualifierEnum qualifier,
-                                   final String imageId) {
+                                   final String imageId,
+                                   final TenantImageConfigDto tenantImageConfig) {
         final var id = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, tenantVersionId, qualifier, imageId, idempotencyKey);
+        return create(id, tenantId, tenantVersionId, qualifier, imageId, tenantImageConfig, idempotencyKey);
     }
 
     public TenantImageModel create(final Long tenantId,
                                    final Long tenantVersionId,
                                    final TenantImageQualifierEnum qualifier,
                                    final String imageId,
+                                   final TenantImageConfigDto tenantImageConfig,
                                    final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
-        return create(id, tenantId, tenantVersionId, qualifier, imageId, idempotencyKey);
+        return create(id, tenantId, tenantVersionId, qualifier, imageId, tenantImageConfig, idempotencyKey);
     }
 
     public TenantImageModel create(final Long id,
@@ -40,6 +43,7 @@ public class TenantImageModelFactory {
                                    final Long tenantVersionId,
                                    final TenantImageQualifierEnum qualifier,
                                    final String imageId,
+                                   final TenantImageConfigDto tenantImageConfig,
                                    final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -52,6 +56,7 @@ public class TenantImageModelFactory {
         tenantImageModel.setModified(now);
         tenantImageModel.setQualifier(qualifier);
         tenantImageModel.setImageId(imageId);
+        tenantImageModel.setConfig(tenantImageConfig);
         tenantImageModel.setDeleted(false);
         return tenantImageModel;
     }

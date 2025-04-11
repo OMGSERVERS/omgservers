@@ -29,7 +29,7 @@ class SelectTenantProjectOperationImpl implements SelectTenantProjectOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, tenant_id, created, modified, deleted
+                        select id, idempotency_key, tenant_id, created, modified, config, deleted
                         from $shard.tab_tenant_project
                         where tenant_id = $1 and id = $2
                         limit 1

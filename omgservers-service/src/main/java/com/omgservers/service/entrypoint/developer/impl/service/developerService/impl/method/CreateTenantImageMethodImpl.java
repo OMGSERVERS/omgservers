@@ -2,6 +2,7 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperResponse;
+import com.omgservers.schema.model.tenantImage.TenantImageConfigDto;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
@@ -73,6 +74,7 @@ class CreateTenantImageMethodImpl implements CreateTenantImageMethod {
                 tenantVersionId,
                 qualifier,
                 image,
+                TenantImageConfigDto.create(),
                 idempotencyKey);
         final var request = new SyncTenantImageRequest(tenantImage);
         return tenantShard.getService().executeWithIdempotency(request)

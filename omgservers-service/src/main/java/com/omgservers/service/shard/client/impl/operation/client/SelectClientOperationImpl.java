@@ -29,7 +29,7 @@ class SelectClientOperationImpl implements SelectClientOperation {
                 shard,
                 """
                         select
-                            id, idempotency_key, created, modified, user_id, player_id, deployment_id, deleted
+                            id, idempotency_key, created, modified, user_id, player_id, deployment_id, config, deleted
                         from $shard.tab_client
                         where id = $1
                         limit 1

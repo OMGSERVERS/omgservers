@@ -1,7 +1,10 @@
 package com.omgservers.service.shard.user.impl.operation.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
@@ -12,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -22,6 +26,7 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
 
     final ChangeObjectOperation changeObjectOperation;
     final LogModelFactory logModelFactory;
+    final ObjectMapper objectMapper;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
@@ -32,8 +37,8 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $shard.tab_user(
-                            id, idempotency_key, created, modified, role, password_hash, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7)
+                            id, idempotency_key, created, modified, role, password_hash, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
                         nothing
                         """,
@@ -44,10 +49,19 @@ class UpsertUserOperationImpl implements UpsertUserOperation {
                         user.getModified().atOffset(ZoneOffset.UTC),
                         user.getRole(),
                         user.getPasswordHash(),
+                        getConfigString(user),
                         user.getDeleted()
                 ),
                 () -> new UserCreatedEventBodyModel(user.getId()),
                 () -> null
         );
+    }
+
+    String getConfigString(final UserModel user) {
+        try {
+            return objectMapper.writeValueAsString(user.getConfig());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
+        }
     }
 }

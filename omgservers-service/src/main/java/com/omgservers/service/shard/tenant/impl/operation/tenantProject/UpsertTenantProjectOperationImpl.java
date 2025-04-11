@@ -1,8 +1,10 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenantProject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.service.event.body.module.tenant.TenantProjectCreatedEventBodyModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
@@ -12,6 +14,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -33,8 +36,8 @@ class UpsertTenantProjectOperationImpl implements UpsertTenantProjectOperation {
                 changeContext, sqlConnection, shard,
                 """
                         insert into $shard.tab_tenant_project(
-                            id, idempotency_key, tenant_id, created, modified, deleted)
-                        values($1, $2, $3, $4, $5, $6)
+                            id, idempotency_key, tenant_id, created, modified, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do
                         nothing
                         """,
@@ -44,10 +47,19 @@ class UpsertTenantProjectOperationImpl implements UpsertTenantProjectOperation {
                         tenantProject.getTenantId(),
                         tenantProject.getCreated().atOffset(ZoneOffset.UTC),
                         tenantProject.getModified().atOffset(ZoneOffset.UTC),
+                        getConfigString(tenantProject),
                         tenantProject.getDeleted()
                 ),
                 () -> new TenantProjectCreatedEventBodyModel(tenantProject.getTenantId(), tenantProject.getId()),
                 () -> null
         );
+    }
+
+    String getConfigString(final TenantProjectModel tenantProject) {
+        try {
+            return objectMapper.writeValueAsString(tenantProject.getConfig());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
+        }
     }
 }

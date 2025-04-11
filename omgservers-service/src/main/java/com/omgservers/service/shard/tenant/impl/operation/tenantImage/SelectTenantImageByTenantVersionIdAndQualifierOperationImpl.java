@@ -2,8 +2,8 @@ package com.omgservers.service.shard.tenant.impl.operation.tenantImage;
 
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
-import com.omgservers.service.shard.tenant.impl.mapper.TenantImageModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.tenant.impl.mapper.TenantImageModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,7 +34,8 @@ class SelectTenantImageByTenantVersionIdAndQualifierOperationImpl
                 shard,
                 """
                         select
-                            id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, deleted
+                            id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, config, 
+                            deleted
                         from $shard.tab_tenant_image
                         where tenant_id = $1 and version_id = $2 and qualifier = $3 and deleted = false
                         order by id desc

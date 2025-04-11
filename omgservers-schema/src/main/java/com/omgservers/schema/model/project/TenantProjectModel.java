@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.project;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,10 @@ public class TenantProjectModel {
     @NotNull
     Long id;
 
+    @NotBlank
+    @ToString.Exclude
+    String idempotencyKey;
+
     @NotNull
     Long tenantId;
 
@@ -31,9 +36,9 @@ public class TenantProjectModel {
     @EqualsAndHashCode.Exclude
     Instant modified;
 
-    @NotBlank
-    @ToString.Exclude
-    String idempotencyKey;
+    @Valid
+    @NotNull
+    TenantProjectConfigDto config;
 
     @NotNull
     Boolean deleted;

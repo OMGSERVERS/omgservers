@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.user.impl.operation.user;
 
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.service.shard.user.impl.mapper.UserModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.user.impl.mapper.UserModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +28,7 @@ class SelectUserOperationImpl implements SelectUserOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, created, modified, role, password_hash, deleted
+                        select id, idempotency_key, created, modified, role, password_hash, config, deleted
                         from $shard.tab_user
                         where id = $1
                         limit 1

@@ -2,6 +2,7 @@ package com.omgservers.service.shard.user.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.exception.ServerSideConflictException;
@@ -25,7 +26,9 @@ class UpsertUserOperationTest extends BaseTestClass {
     @Test
     void givenUser_whenExecute_thenInserted() {
         final var shard = 0;
-        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER,
+                "passwordhash",
+                UserConfigDto.create());
 
         final var changeContext = upsertUserOperation.upsertUser(shard, user);
         assertTrue(changeContext.getResult());
@@ -35,7 +38,9 @@ class UpsertUserOperationTest extends BaseTestClass {
     @Test
     void givenUser_whenExecute_thenUpdated() {
         final var shard = 0;
-        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER,
+                "passwordhash",
+                UserConfigDto.create());
         upsertUserOperation.upsertUser(shard, user);
 
         final var changeContext = upsertUserOperation.upsertUser(shard, user);
@@ -46,11 +51,14 @@ class UpsertUserOperationTest extends BaseTestClass {
     @Test
     void givenUser_whenExecute_thenIdempotencyViolation() {
         final var shard = 0;
-        final var user1 = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user1 = userModelFactory.create(UserRoleEnum.PLAYER,
+                "passwordhash",
+                UserConfigDto.create());
         upsertUserOperation.upsertUser(shard, user1);
 
         final var user2 = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
+                UserConfigDto.create(),
                 user1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
                 upsertUserOperation.upsertUser(shard, user2));

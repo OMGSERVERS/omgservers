@@ -1,11 +1,11 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.model.client.ClientConfigDto;
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
 import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.player.PlayerModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.module.client.client.SyncClientRequest;
 import com.omgservers.schema.module.client.clientRuntimeRef.SyncClientRuntimeRefRequest;
 import com.omgservers.service.factory.client.ClientModelFactory;
@@ -31,7 +31,7 @@ public class ClientTestDataFactory {
         final var playerId = player.getId();
         final var deploymentId = deployment.getId();
 
-        final var client = clientModelFactory.create(userId, playerId, deploymentId);
+        final var client = clientModelFactory.create(userId, playerId, deploymentId, ClientConfigDto.create());
         final var syncClientRequest = new SyncClientRequest(client);
         clientService.syncClient(syncClientRequest);
         return client;

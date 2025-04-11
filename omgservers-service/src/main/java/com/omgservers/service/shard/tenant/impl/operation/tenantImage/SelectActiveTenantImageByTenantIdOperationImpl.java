@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenantImage;
 
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
-import com.omgservers.service.shard.tenant.impl.mapper.TenantImageModelMapper;
 import com.omgservers.service.operation.server.SelectListOperation;
+import com.omgservers.service.shard.tenant.impl.mapper.TenantImageModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +29,8 @@ class SelectActiveTenantImageByTenantIdOperationImpl implements SelectActiveTena
                 shard,
                 """
                         select
-                            id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, deleted
+                            id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, config,
+                            deleted
                         from $shard.tab_tenant_image
                         where tenant_id = $1 and deleted = false
                         order by id asc

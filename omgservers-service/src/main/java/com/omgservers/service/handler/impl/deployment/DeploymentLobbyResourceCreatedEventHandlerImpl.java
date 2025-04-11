@@ -1,6 +1,7 @@
 package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
+import com.omgservers.schema.model.lobby.LobbyConfigDto;
 import com.omgservers.schema.module.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceRequest;
 import com.omgservers.schema.module.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceResponse;
 import com.omgservers.schema.module.lobby.SyncLobbyRequest;
@@ -64,6 +65,7 @@ public class DeploymentLobbyResourceCreatedEventHandlerImpl implements EventHand
         final var lobbyId = tenantLobbyResource.getLobbyId();
         final var lobby = lobbyModelFactory.create(lobbyId,
                 deploymentId,
+                LobbyConfigDto.create(),
                 idempotencyKey);
         final var request = new SyncLobbyRequest(lobby);
         return lobbyShard.getService().executeWithIdempotency(request)

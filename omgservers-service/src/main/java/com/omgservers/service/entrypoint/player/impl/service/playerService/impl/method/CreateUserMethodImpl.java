@@ -2,12 +2,13 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateUserPlayerResponse;
+import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.module.user.SyncUserRequest;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
+import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -40,7 +41,7 @@ class CreateUserMethodImpl implements CreateUserMethod {
 
     Uni<UserModel> createUser(final String password) {
         final var passwordHash = BcryptUtil.bcryptHash(password);
-        final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash);
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, passwordHash, UserConfigDto.create());
         final var request = new SyncUserRequest(user);
         return userShard.getService().execute(request)
                 .replaceWith(user);

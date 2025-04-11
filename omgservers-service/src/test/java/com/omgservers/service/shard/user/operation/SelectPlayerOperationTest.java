@@ -1,14 +1,15 @@
 package com.omgservers.service.shard.user.operation;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.shard.user.operation.testInterface.SelectPlayerOperationTestInterface;
 import com.omgservers.service.shard.user.operation.testInterface.UpsertPlayerOperationTestInterface;
 import com.omgservers.service.shard.user.operation.testInterface.UpsertUserOperationTestInterface;
-import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ class SelectPlayerOperationTest extends BaseTestClass {
     @Test
     void givenPlayer_whenExecute_thenSelected() {
         final var shard = 0;
-        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash");
+        final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash", UserConfigDto.create());
         final var userId = user.getId();
         upsertUserOperation.upsertUser(shard, user);
         final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId());

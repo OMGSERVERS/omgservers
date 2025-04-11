@@ -1,7 +1,7 @@
 package com.omgservers.service.factory.lobby;
 
+import com.omgservers.schema.model.lobby.LobbyConfigDto;
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.model.match.MatchModel;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -17,26 +17,30 @@ public class LobbyModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public LobbyModel create(final Long deploymentId) {
-        final var id = generateIdOperation.generateId();
-        final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, deploymentId, idempotencyKey);
-    }
-
-    public LobbyModel create(final Long id,
-                             final Long deploymentId) {
-        final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, deploymentId, idempotencyKey);
-    }
-
     public LobbyModel create(final Long deploymentId,
-                             final String idempotencyKey) {
+                             final LobbyConfigDto lobbyConfig) {
         final var id = generateIdOperation.generateId();
-        return create(id, deploymentId, idempotencyKey);
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, deploymentId, lobbyConfig, idempotencyKey);
     }
 
     public LobbyModel create(final Long id,
                              final Long deploymentId,
+                             final LobbyConfigDto lobbyConfig) {
+        final var idempotencyKey = generateIdOperation.generateStringId();
+        return create(id, deploymentId, lobbyConfig, idempotencyKey);
+    }
+
+    public LobbyModel create(final Long deploymentId,
+                             final LobbyConfigDto lobbyConfig,
+                             final String idempotencyKey) {
+        final var id = generateIdOperation.generateId();
+        return create(id, deploymentId, lobbyConfig, idempotencyKey);
+    }
+
+    public LobbyModel create(final Long id,
+                             final Long deploymentId,
+                             final LobbyConfigDto lobbyConfig,
                              final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
         final var runtimeId = generateIdOperation.generateId();
@@ -48,6 +52,7 @@ public class LobbyModelFactory {
         lobby.setModified(now);
         lobby.setDeploymentId(deploymentId);
         lobby.setRuntimeId(runtimeId);
+        lobby.setConfig(lobbyConfig);
         lobby.setDeleted(Boolean.FALSE);
         return lobby;
     }

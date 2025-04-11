@@ -1,6 +1,7 @@
 package com.omgservers.service.shard.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
 import com.omgservers.service.shard.matchmaker.operation.testInterface.DeleteMatchmakerOperationTestInterface;
@@ -30,7 +31,7 @@ class DeleteMatchmakerOperationTest extends BaseTestClass {
     @Test
     void givenMatchmaker_whenExecute_thenDeleted() {
         final var shard = 0;
-        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId());
+        final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId(), MatchmakerConfigDto.create());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
 
         final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(shard, matchmaker.getId());

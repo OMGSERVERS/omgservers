@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.tenantStage;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,10 @@ public class TenantStageModel {
     @NotNull
     Long id;
 
+    @NotBlank
+    @ToString.Exclude
+    String idempotencyKey;
+
     @NotNull
     Long tenantId;
 
@@ -34,9 +39,9 @@ public class TenantStageModel {
     @EqualsAndHashCode.Exclude
     Instant modified;
 
-    @NotBlank
-    @ToString.Exclude
-    String idempotencyKey;
+    @Valid
+    @NotNull
+    TenantStageConfigDto config;
 
     @NotNull
     Boolean deleted;

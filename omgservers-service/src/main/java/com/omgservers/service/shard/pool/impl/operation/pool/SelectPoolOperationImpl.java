@@ -28,7 +28,7 @@ class SelectPoolOperationImpl implements SelectPoolOperation {
                 sqlConnection,
                 shard,
                 """
-                        select id, idempotency_key, created, modified, deleted
+                        select id, idempotency_key, created, modified, config, deleted
                         from $shard.tab_pool
                         where id = $1
                         limit 1

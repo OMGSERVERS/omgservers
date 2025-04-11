@@ -1,11 +1,12 @@
 package com.omgservers.service.shard.matchmaker.operation;
 
 import com.omgservers.BaseTestClass;
+import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.shard.matchmaker.operation.testInterface.SelectMatchmakerOperationTestInterface;
 import com.omgservers.service.shard.matchmaker.operation.testInterface.UpsertMatchmakerOperationTestInterface;
-import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ class SelectMatchmakerOperationTest extends BaseTestClass {
     @Test
     void givenMatchmaker_whenExecute_thenSelected() {
         final var shard = 0;
-        final var matchmaker1 = matchmakerModelFactory.create(tenantId(), versionId());
+        final var matchmaker1 = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
         upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker1);
 
         final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(shard, matchmaker1.getId());

@@ -29,13 +29,13 @@ class SelectDeploymentOperationImpl implements SelectDeploymentOperation {
                 shard,
                 """
                         select
-                            id, idempotency_key, created, modified, tenant_id, stage_id, version_id, deleted
+                            id, idempotency_key, created, modified, tenant_id, stage_id, version_id, config, deleted
                         from $shard.tab_deployment
                         where id = $1
                         limit 1
                         """,
                 List.of(id),
-                "FetchMatchmakerResult",
+                "Deployment",
                 deploymentModelMapper::execute);
     }
 }

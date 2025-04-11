@@ -30,6 +30,6 @@ class VerifyDeploymentExistsOperationImpl implements VerifyDeploymentExistsOpera
                         limit 1
                         """,
                 List.of(id),
-                "FetchMatchmakerResult");
+                "Deployment");
     }
 }

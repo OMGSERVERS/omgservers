@@ -1,6 +1,7 @@
 package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
+import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceRequest;
 import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceResponse;
 import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerRequest;
@@ -64,6 +65,7 @@ public class DeploymentMatchmakerResourceCreatedEventHandlerImpl implements Even
         final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
         final var matchmaker = matchmakerModelFactory.create(matchmakerId,
                 deploymentId,
+                MatchmakerConfigDto.create(),
                 idempotencyKey);
         final var request = new SyncMatchmakerRequest(matchmaker);
         return matchmakerShard.getService().executeWithIdempotency(request)
