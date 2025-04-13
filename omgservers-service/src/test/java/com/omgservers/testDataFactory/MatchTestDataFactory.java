@@ -22,8 +22,9 @@ public class MatchTestDataFactory {
     public MatchModel createMatch(final MatchmakerMatchResourceModel matchmakerMatchResource) {
         final var matchmakerId = matchmakerMatchResource.getMatchmakerId();
         final var matchId = matchmakerMatchResource.getMatchId();
+        final var mode = matchmakerMatchResource.getMode();
 
-        final var match = matchModelFactory.create(matchId, matchmakerId, MatchConfigDto.create());
+        final var match = matchModelFactory.create(matchId, matchmakerId, MatchConfigDto.create(mode));
         final var request = new SyncMatchRequest(match);
         matchService.execute(request);
         return match;

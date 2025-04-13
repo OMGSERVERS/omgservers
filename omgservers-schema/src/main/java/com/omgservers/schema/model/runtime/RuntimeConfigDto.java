@@ -23,18 +23,23 @@ public class RuntimeConfigDto {
     @NotNull
     RuntimeConfigVersionEnum version;
 
-    LobbyConfigDto lobby;
-    MatchConfigDto match;
-
     @Valid
     @NotNull
     TenantVersionConfigDto config;
+
+    @Valid
+    LobbyConfigDto lobby;
+
+    @Valid
+    MatchConfigDto match;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LobbyConfigDto {
+
+        @NotNull
         Long lobbyId;
     }
 
@@ -43,7 +48,14 @@ public class RuntimeConfigDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MatchConfigDto {
+
+        @NotNull
         Long matchmakerId;
+
+        @NotNull
         Long matchId;
+
+        @NotNull
+        String mode;
     }
 }

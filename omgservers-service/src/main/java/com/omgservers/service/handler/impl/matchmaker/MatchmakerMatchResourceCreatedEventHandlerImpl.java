@@ -62,9 +62,10 @@ public class MatchmakerMatchResourceCreatedEventHandlerImpl implements EventHand
                              final String idempotencyKey) {
         final var matchmakerId = matchmakerMatchResource.getMatchmakerId();
         final var matchId = matchmakerMatchResource.getMatchId();
+        final var mode = matchmakerMatchResource.getMode();
         final var match = matchModelFactory.create(matchId,
                 matchmakerId,
-                MatchConfigDto.create(),
+                MatchConfigDto.create(mode),
                 idempotencyKey);
         final var request = new SyncMatchRequest(match);
         return matchShard.getService().executeWithIdempotency(request)

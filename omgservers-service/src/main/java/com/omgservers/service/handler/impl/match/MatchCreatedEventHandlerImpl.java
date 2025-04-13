@@ -80,9 +80,11 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
                                             return getTenantVersion(tenantId, tenantVersionId)
                                                     .flatMap(tenantVersion -> {
                                                         final var tenantVersionConfig = tenantVersion.getConfig();
+                                                        final var mode = match.getConfig().getMode();
                                                         return createRuntime(deploymentId,
                                                                 match,
                                                                 tenantVersionConfig,
+                                                                mode,
                                                                 idempotencyKey);
                                                     });
                                         });
@@ -118,13 +120,14 @@ public class MatchCreatedEventHandlerImpl implements EventHandler {
     Uni<Boolean> createRuntime(final Long deploymentId,
                                final MatchModel match,
                                final TenantVersionConfigDto tenantVersionConfig,
+                               final String mode,
                                final String idempotencyKey) {
         final var matchmakerId = match.getMatchmakerId();
         final var matchId = match.getId();
         final var runtimeId = match.getRuntimeId();
 
         final var runtimeConfig = RuntimeConfigDto.create(tenantVersionConfig);
-        runtimeConfig.setMatch(new RuntimeConfigDto.MatchConfigDto(matchmakerId, matchId));
+        runtimeConfig.setMatch(new RuntimeConfigDto.MatchConfigDto(matchmakerId, matchId, mode));
 
         final var runtime = runtimeModelFactory.create(runtimeId,
                 deploymentId,
