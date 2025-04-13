@@ -3,7 +3,6 @@ set -e
 
 # Environment Variables:
 # OMG_FORMATTING is "true" by default
-# OMG_LOCALTESTING_CONTAINER is "omgservers" by default
 # OMG_CONTEXT_DIRECTORY is ".omgserversctl" by default
 # OMG_DOCKER_IMAGE is "omgservers/localtesting:latest" by default
 # OMG_LOCALTESTING_TENANT is "omgservers" by default
@@ -11,7 +10,6 @@ set -e
 # OMG_LOCALTESTING_STAGE is "default" by default
 
 OMG_FORMATTING=${OMG_FORMATTING:-"true"}
-OMG_LOCALTESTING_CONTAINER=${OMG_LOCALTESTING_CONTAINER:-"omgservers"}
 OMG_CONTEXT_DIRECTORY=${OMG_CONTEXT_DIRECTORY:-".omgserversctl"}
 OMG_DOCKER_IMAGE=${OMG_DOCKER_IMAGE:-"omgservers/localtesting:latest"}
 OMG_LOCALTESTING_TENANT=${OMG_LOCALTESTING_TENANT:-"omgservers"}
@@ -111,17 +109,8 @@ help() {
     internal_print_command " environment printVariable <variable>" "Print the value of a specific variable."
   fi
   # Localtesting
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting runServer" ]; then
-    internal_print_command " localtesting runServer" "Start the server in a Docker container."
-  fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting stopServer" ]; then
-    internal_print_command " localtesting stopServer" "Stop the running server container."
-  fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting resetServer" ]; then
-    internal_print_command " localtesting resetServer" "Reset the server in a Docker container."
-  fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting initProject" ]; then
-    internal_print_command " localtesting initProject" "Initialize a new server project and developer account."
+    internal_print_command " localtesting initProject" "Initialize a new project and developer account."
   fi
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting deployProject" ]; then
     internal_print_command " localtesting deployProject" "Deploy a new project version locally."
@@ -129,30 +118,10 @@ help() {
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting cleanupProject" ]; then
     internal_print_command " localtesting cleanupProject" "Remove the server project and related resources."
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewContainers" ]; then
-    internal_print_command " localtesting viewContainers" "List all active Docker containers."
-  fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewDockerStats" ]; then
-    internal_print_command " localtesting viewDockerStats" "Show real-time resource usage for Docker containers."
-  fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewDockerLogs" ]; then
-    internal_print_command " localtesting viewDockerLogs [options]" "Display logs from Docker containers."
-  fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting viewLatestLogs" ]; then
-    internal_print_command " localtesting viewLatestLogs [options]" "Display the latest container logs."
-  fi
   # Installation
   if [ -z "$1" -o "$1" = "installation" -o "$1" = "installation useCustomServer" ]; then
     internal_print_command " installation useCustomServer <name> <url>" "Set up an custom installation URL."
     if [ "$1" = "environment useEnvironment" ]; then
-      echo "   produces:"
-      echo "     - INSTALLATION_NAME"
-      echo "     - INSTALLATION_URL"
-    fi
-  fi
-  if [ -z "$1" -o "$1" = "installation" -o "$1" = "installation useDemoServer" ]; then
-    internal_print_command " installation useDemoServer" "Use the demo server installation."
-    if [ "$1" = "installation useDemoServer" ]; then
       echo "   produces:"
       echo "     - INSTALLATION_NAME"
       echo "     - INSTALLATION_URL"
@@ -536,25 +505,6 @@ handler_environment_printVariable() {
 
 # Localtesting
 
-handler_localtesting_runServer() {
-  internal_ensureEnvironment
-
-  docker run --privileged --rm --name "${OMG_LOCALTESTING_CONTAINER}" --tmpfs /tmp -p 8080:8080 -d "omgservers/dind:${OMGSERVERS_VERSION}"
-}
-
-handler_localtesting_stopServer() {
-  internal_ensureEnvironment
-
-  docker kill "${OMG_LOCALTESTING_CONTAINER}"
-}
-
-handler_localtesting_resetServer() {
-  internal_ensureEnvironment
-
-  handler_localtesting_stopServer || true
-  handler_localtesting_runServer
-}
-
 handler_localtesting_initProject() {
   internal_ensureEnvironment
 
@@ -623,34 +573,6 @@ handler_localtesting_cleanupProject() {
   echo "$(date) [CTL/localtestingCleanup] (${OMG_INSTALLATION_NAME:-unknown}) Localtesting project was deleted" >&2
 }
 
-handler_localtesting_viewContainers() {
-  internal_ensureEnvironment
-
-  docker exec "${OMG_LOCALTESTING_CONTAINER}" docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Command}}" $@
-}
-
-handler_localtesting_viewDockerStats() {
-  internal_ensureEnvironment
-
-  docker exec "${OMG_LOCALTESTING_CONTAINER}" docker stats
-}
-
-handler_localtesting_viewDockerLogs() {
-  internal_ensureEnvironment
-
-  if [ -z "$1" ] || [ "$1" = "-f" ]; then
-    docker logs "${OMG_LOCALTESTING_CONTAINER}" $@
-  else
-    docker exec "${OMG_LOCALTESTING_CONTAINER}" docker logs $@
-  fi
-}
-
-handler_localtesting_viewLatestLogs() {
-  internal_ensureEnvironment
-
-  docker exec "${OMG_LOCALTESTING_CONTAINER}" sh -c "docker logs \$(docker ps -q -l) $@"
-}
-
 # Installation
 
 handler_installation_useCustomServer() {
@@ -669,10 +591,6 @@ handler_installation_useCustomServer() {
 
   internal_ensureEnvironment
   echo "$(date) [CTL/installationUseCustomServer] (${OMG_INSTALLATION_NAME:-unknown}) Installation was set, INSTALLATION_URL=\"${INSTALLATION_URL}\"" >&2
-}
-
-handler_installation_useDemoServer() {
-  handler_installation_useCustomServer demoserver https://demoserver.omgservers.dev
 }
 
 handler_installation_useLocalServer() {
@@ -3171,26 +3089,12 @@ else
       exit 1
     else
       shift
-      if [ "${ARG}" = "runServer" ]; then
-        handler_localtesting_runServer $@
-      elif [ "${ARG}" = "stopServer" ]; then
-        handler_localtesting_stopServer $@
-      elif [ "${ARG}" = "resetServer" ]; then
-        handler_localtesting_resetServer $@
-      elif [ "${ARG}" = "initProject" ]; then
+      if [ "${ARG}" = "initProject" ]; then
         handler_localtesting_initProject $@
       elif [ "${ARG}" = "deployProject" ]; then
         handler_localtesting_deployProject $@
       elif [ "${ARG}" = "cleanupProject" ]; then
         handler_localtesting_cleanupProject $@
-      elif [ "${ARG}" = "viewContainers" ]; then
-        handler_localtesting_viewContainers $@
-      elif [ "${ARG}" = "viewDockerStats" ]; then
-        handler_localtesting_viewDockerStats $@
-      elif [ "${ARG}" = "viewDockerLogs" ]; then
-        handler_localtesting_viewDockerLogs $@
-      elif [ "${ARG}" = "viewLatestLogs" ]; then
-        handler_localtesting_viewLatestLogs $@
       else
         help "localtesting"
       fi
@@ -3204,8 +3108,6 @@ else
       shift
       if [ "${ARG}" = "useCustomServer" ]; then
         handler_installation_useCustomServer $@
-      elif [ "${ARG}" = "useDemoServer" ]; then
-        handler_installation_useDemoServer $@
       elif [ "${ARG}" = "useLocalServer" ]; then
         handler_installation_useLocalServer $@
       elif [ "${ARG}" = "createTenant" ]; then
