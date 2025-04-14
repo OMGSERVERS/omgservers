@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.pool.service.testInterface;
 
-import com.omgservers.schema.module.pool.pool.*;
-import com.omgservers.schema.module.pool.poolContainer.*;
-import com.omgservers.schema.module.pool.poolRequest.*;
-import com.omgservers.schema.module.pool.poolServer.*;
+import com.omgservers.schema.shard.pool.pool.*;
+import com.omgservers.schema.shard.pool.poolContainer.*;
+import com.omgservers.schema.shard.pool.poolRequest.*;
+import com.omgservers.schema.shard.pool.poolServer.*;
 import com.omgservers.service.shard.pool.impl.service.poolService.PoolService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

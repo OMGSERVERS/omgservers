@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.impl.service.webService.impl;
 
-import com.omgservers.schema.module.client.client.*;
-import com.omgservers.schema.module.client.clientMessage.*;
-import com.omgservers.schema.module.client.clientRuntimeRef.*;
+import com.omgservers.schema.shard.client.client.*;
+import com.omgservers.schema.shard.client.clientMessage.*;
+import com.omgservers.schema.shard.client.clientRuntimeRef.*;
 import com.omgservers.service.shard.client.impl.service.clientService.ClientService;
 import com.omgservers.service.shard.client.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;

@@ -2,8 +2,8 @@ package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantStageCreatedEventBodyModel;

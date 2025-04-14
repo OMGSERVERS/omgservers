@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.DeleteTenantImageResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantImage.DeleteTenantImageOperation;

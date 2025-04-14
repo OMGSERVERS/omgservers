@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantVersionCreatedEventBodyModel;

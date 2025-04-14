@@ -1,15 +1,15 @@
 package com.omgservers.service.shard.alias.impl.service.webService.impl;
 
-import com.omgservers.schema.module.alias.DeleteAliasRequest;
-import com.omgservers.schema.module.alias.DeleteAliasResponse;
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
-import com.omgservers.schema.module.alias.GetAliasRequest;
-import com.omgservers.schema.module.alias.GetAliasResponse;
-import com.omgservers.schema.module.alias.SyncAliasRequest;
-import com.omgservers.schema.module.alias.SyncAliasResponse;
-import com.omgservers.schema.module.alias.ViewAliasesRequest;
-import com.omgservers.schema.module.alias.ViewAliasesResponse;
+import com.omgservers.schema.shard.alias.DeleteAliasRequest;
+import com.omgservers.schema.shard.alias.DeleteAliasResponse;
+import com.omgservers.schema.shard.alias.FindAliasRequest;
+import com.omgservers.schema.shard.alias.FindAliasResponse;
+import com.omgservers.schema.shard.alias.GetAliasRequest;
+import com.omgservers.schema.shard.alias.GetAliasResponse;
+import com.omgservers.schema.shard.alias.SyncAliasRequest;
+import com.omgservers.schema.shard.alias.SyncAliasResponse;
+import com.omgservers.schema.shard.alias.ViewAliasesRequest;
+import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.service.shard.alias.impl.service.aliasService.AliasService;
 import com.omgservers.service.shard.alias.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;

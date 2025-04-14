@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.alias.impl.service.aliasService.impl.method;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.alias.GetAliasRequest;
-import com.omgservers.schema.module.alias.GetAliasResponse;
+import com.omgservers.schema.shard.alias.GetAliasRequest;
+import com.omgservers.schema.shard.alias.GetAliasResponse;
 import com.omgservers.service.shard.alias.impl.operation.alias.SelectAliasOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

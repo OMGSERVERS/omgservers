@@ -5,9 +5,9 @@ import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRes
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.module.alias.SyncAliasRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.shard.alias.SyncAliasRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;

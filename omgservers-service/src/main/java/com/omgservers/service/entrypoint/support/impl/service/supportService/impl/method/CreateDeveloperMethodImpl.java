@@ -5,7 +5,7 @@ import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
 import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.module.user.SyncUserRequest;
+import com.omgservers.schema.shard.user.SyncUserRequest;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.operation.server.GenerateIdOperation;

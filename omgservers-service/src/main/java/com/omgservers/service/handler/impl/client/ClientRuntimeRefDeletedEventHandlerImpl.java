@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.client;
 
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.schema.module.client.clientRuntimeRef.GetClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.clientRuntimeRef.GetClientRuntimeRefResponse;
+import com.omgservers.schema.shard.client.clientRuntimeRef.GetClientRuntimeRefRequest;
+import com.omgservers.schema.shard.client.clientRuntimeRef.GetClientRuntimeRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;

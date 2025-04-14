@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.runtime.impl.service.runtimeService.im
 
 import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeRequest;
 import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeResponse;
-import com.omgservers.schema.module.runtime.runtimeMessage.InterchangeMessagesRequest;
-import com.omgservers.schema.module.runtime.runtimeMessage.InterchangeMessagesResponse;
+import com.omgservers.schema.shard.runtime.runtimeMessage.InterchangeMessagesRequest;
+import com.omgservers.schema.shard.runtime.runtimeMessage.InterchangeMessagesResponse;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.user.UserShard;

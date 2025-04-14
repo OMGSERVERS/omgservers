@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentMatchmakerAssignment.DeploymentMatchmakerAssignmentModel;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerAssignment.GetDeploymentMatchmakerAssignmentRequest;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerAssignment.GetDeploymentMatchmakerAssignmentResponse;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerAssignment.GetDeploymentMatchmakerAssignmentRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerAssignment.GetDeploymentMatchmakerAssignmentResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentMatchmakerAssignmentCreatedEventBodyModel;

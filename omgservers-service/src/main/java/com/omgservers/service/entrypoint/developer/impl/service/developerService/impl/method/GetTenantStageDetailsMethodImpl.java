@@ -4,11 +4,11 @@ import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperReques
 import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageDataResponse;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.dto.TenantStageDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantStageMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.shard.tenant.TenantShard;

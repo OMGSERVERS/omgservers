@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.root.impl.service.rootService.impl.method.root;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.root.root.GetRootRequest;
-import com.omgservers.schema.module.root.root.GetRootResponse;
+import com.omgservers.schema.shard.root.root.GetRootRequest;
+import com.omgservers.schema.shard.root.root.GetRootResponse;
 import com.omgservers.service.shard.root.impl.operation.root.SelectRootOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

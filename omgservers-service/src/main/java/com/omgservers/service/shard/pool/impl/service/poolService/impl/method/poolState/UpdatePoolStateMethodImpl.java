@@ -3,8 +3,8 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolContainer.PoolContainerModel;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.pool.poolState.UpdatePoolStateRequest;
-import com.omgservers.schema.module.pool.poolState.UpdatePoolStateResponse;
+import com.omgservers.schema.shard.pool.poolState.UpdatePoolStateRequest;
+import com.omgservers.schema.shard.pool.poolState.UpdatePoolStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolCommand.DeletePoolCommandOperation;

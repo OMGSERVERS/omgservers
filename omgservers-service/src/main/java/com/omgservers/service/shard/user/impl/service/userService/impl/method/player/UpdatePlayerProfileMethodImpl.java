@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.user.impl.service.userService.impl.method.player;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.user.UpdatePlayerProfileRequest;
-import com.omgservers.schema.module.user.UpdatePlayerProfileResponse;
+import com.omgservers.schema.shard.user.UpdatePlayerProfileRequest;
+import com.omgservers.schema.shard.user.UpdatePlayerProfileResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.user.impl.operation.userPlayer.UpdatePlayerProfileOperation;

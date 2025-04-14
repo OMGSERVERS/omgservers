@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation;
 
 import com.omgservers.schema.model.runtimeChangeOfState.RuntimeChangeOfStateDto;
-import com.omgservers.schema.module.runtime.runtimeState.UpdateRuntimeStateRequest;
-import com.omgservers.schema.module.runtime.runtimeState.UpdateRuntimeStateResponse;
+import com.omgservers.schema.shard.runtime.runtimeState.UpdateRuntimeStateRequest;
+import com.omgservers.schema.shard.runtime.runtimeState.UpdateRuntimeStateResponse;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.dto.HandleRuntimeResult;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;

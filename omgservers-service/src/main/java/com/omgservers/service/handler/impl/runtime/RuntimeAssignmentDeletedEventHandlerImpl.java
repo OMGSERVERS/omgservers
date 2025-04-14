@@ -2,10 +2,10 @@ package com.omgservers.service.handler.impl.runtime;
 
 import com.omgservers.schema.message.body.ClientRemovedMessageBodyDto;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
-import com.omgservers.schema.module.runtime.runtimeAssignment.GetRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.runtimeAssignment.GetRuntimeAssignmentResponse;
-import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageRequest;
-import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageResponse;
+import com.omgservers.schema.shard.runtime.runtimeAssignment.GetRuntimeAssignmentRequest;
+import com.omgservers.schema.shard.runtime.runtimeAssignment.GetRuntimeAssignmentResponse;
+import com.omgservers.schema.shard.runtime.runtimeMessage.SyncRuntimeMessageRequest;
+import com.omgservers.schema.shard.runtime.runtimeMessage.SyncRuntimeMessageResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;

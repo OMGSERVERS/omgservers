@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientRuntimeRef;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.client.clientRuntimeRef.DeleteClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.clientRuntimeRef.DeleteClientRuntimeRefResponse;
+import com.omgservers.schema.shard.client.clientRuntimeRef.DeleteClientRuntimeRefRequest;
+import com.omgservers.schema.shard.client.clientRuntimeRef.DeleteClientRuntimeRefResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.DeleteClientRuntimeRefOperation;

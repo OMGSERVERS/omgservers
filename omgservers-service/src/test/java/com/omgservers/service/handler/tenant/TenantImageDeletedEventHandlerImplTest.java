@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.DeleteTenantImageRequest;
 import com.omgservers.service.event.body.module.tenant.TenantImageDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.TenantImageDeletedEventHandlerImplTestInterface;

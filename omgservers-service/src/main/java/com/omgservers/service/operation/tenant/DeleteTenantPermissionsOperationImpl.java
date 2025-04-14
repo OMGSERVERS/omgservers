@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.tenant;
 
 import com.omgservers.schema.model.tenantPermission.TenantPermissionModel;
-import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.DeleteTenantPermissionResponse;
-import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.ViewTenantPermissionsResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.DeleteTenantPermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.DeleteTenantPermissionResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.ViewTenantPermissionsRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.ViewTenantPermissionsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;

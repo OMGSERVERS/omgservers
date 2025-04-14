@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
-import com.omgservers.schema.module.user.CreateTokenRequest;
-import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.schema.shard.user.CreateTokenRequest;
+import com.omgservers.schema.shard.user.CreateTokenResponse;
 import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;

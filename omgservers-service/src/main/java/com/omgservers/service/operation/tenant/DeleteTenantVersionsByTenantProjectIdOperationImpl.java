@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.tenant;
 
 import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;

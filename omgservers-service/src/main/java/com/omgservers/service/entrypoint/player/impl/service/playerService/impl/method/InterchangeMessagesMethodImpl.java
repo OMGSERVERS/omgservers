@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 
 import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerResponse;
-import com.omgservers.schema.module.client.clientMessage.InterchangeMessagesRequest;
-import com.omgservers.schema.module.client.clientMessage.InterchangeMessagesResponse;
+import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesRequest;
+import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesResponse;
 import com.omgservers.service.operation.authz.AuthorizeClientRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.client.ClientShard;

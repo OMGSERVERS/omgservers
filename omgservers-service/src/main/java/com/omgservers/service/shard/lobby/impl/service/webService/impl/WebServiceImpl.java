@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.lobby.impl.service.webService.impl;
 
-import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
-import com.omgservers.schema.module.lobby.DeleteLobbyResponse;
-import com.omgservers.schema.module.lobby.GetLobbyRequest;
-import com.omgservers.schema.module.lobby.GetLobbyResponse;
-import com.omgservers.schema.module.lobby.SyncLobbyRequest;
-import com.omgservers.schema.module.lobby.SyncLobbyResponse;
+import com.omgservers.schema.shard.lobby.DeleteLobbyRequest;
+import com.omgservers.schema.shard.lobby.DeleteLobbyResponse;
+import com.omgservers.schema.shard.lobby.GetLobbyRequest;
+import com.omgservers.schema.shard.lobby.GetLobbyResponse;
+import com.omgservers.schema.shard.lobby.SyncLobbyRequest;
+import com.omgservers.schema.shard.lobby.SyncLobbyResponse;
 import com.omgservers.service.shard.lobby.impl.service.lobbyService.LobbyService;
 import com.omgservers.service.shard.lobby.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;

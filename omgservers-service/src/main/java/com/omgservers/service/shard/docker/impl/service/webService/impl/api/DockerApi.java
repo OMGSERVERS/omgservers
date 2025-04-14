@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.docker.impl.service.webService.impl.api;
 
-import com.omgservers.schema.module.docker.PingDockerHostRequest;
-import com.omgservers.schema.module.docker.PingDockerHostResponse;
-import com.omgservers.schema.module.docker.StartDockerContainerRequest;
-import com.omgservers.schema.module.docker.StartDockerContainerResponse;
-import com.omgservers.schema.module.docker.StopDockerContainerRequest;
-import com.omgservers.schema.module.docker.StopDockerContainerResponse;
+import com.omgservers.schema.shard.docker.PingDockerHostRequest;
+import com.omgservers.schema.shard.docker.PingDockerHostResponse;
+import com.omgservers.schema.shard.docker.StartDockerContainerRequest;
+import com.omgservers.schema.shard.docker.StartDockerContainerResponse;
+import com.omgservers.schema.shard.docker.StopDockerContainerRequest;
+import com.omgservers.schema.shard.docker.StopDockerContainerResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

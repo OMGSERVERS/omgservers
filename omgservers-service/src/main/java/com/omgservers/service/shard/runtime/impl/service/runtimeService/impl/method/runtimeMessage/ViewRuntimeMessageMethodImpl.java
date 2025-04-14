@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeMessage;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.runtime.runtimeMessage.ViewRuntimeMessagesRequest;
-import com.omgservers.schema.module.runtime.runtimeMessage.ViewRuntimeMessagesResponse;
+import com.omgservers.schema.shard.runtime.runtimeMessage.ViewRuntimeMessagesRequest;
+import com.omgservers.schema.shard.runtime.runtimeMessage.ViewRuntimeMessagesResponse;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeMessage.SelectActiveRuntimeMessagesByRuntimeIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

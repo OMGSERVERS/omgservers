@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.admin.impl.service.adminService.impl.m
 
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
-import com.omgservers.schema.module.user.CreateTokenRequest;
-import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.schema.shard.user.CreateTokenRequest;
+import com.omgservers.schema.shard.user.CreateTokenResponse;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByUserOperation;

@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.pool;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.pool.pool.GetPoolRequest;
-import com.omgservers.schema.module.pool.pool.GetPoolResponse;
+import com.omgservers.schema.shard.pool.pool.GetPoolRequest;
+import com.omgservers.schema.shard.pool.pool.GetPoolResponse;
 import com.omgservers.service.shard.pool.impl.operation.pool.SelectPoolOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

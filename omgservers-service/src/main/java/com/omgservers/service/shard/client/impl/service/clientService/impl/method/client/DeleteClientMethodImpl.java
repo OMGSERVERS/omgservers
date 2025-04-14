@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.client;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.client.client.DeleteClientRequest;
-import com.omgservers.schema.module.client.client.DeleteClientResponse;
+import com.omgservers.schema.shard.client.client.DeleteClientRequest;
+import com.omgservers.schema.shard.client.client.DeleteClientResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.client.impl.operation.client.DeleteClientOperation;

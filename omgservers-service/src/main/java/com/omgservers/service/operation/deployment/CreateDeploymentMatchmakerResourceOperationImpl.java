@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.deployment;
 
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceResponse;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceResponse;
 import com.omgservers.service.factory.deployment.DeploymentMatchmakerResourceModelFactory;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;

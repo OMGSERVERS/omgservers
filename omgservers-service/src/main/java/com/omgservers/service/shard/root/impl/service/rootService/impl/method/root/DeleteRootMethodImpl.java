@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.root.impl.service.rootService.impl.method.root;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.root.root.DeleteRootRequest;
-import com.omgservers.schema.module.root.root.DeleteRootResponse;
+import com.omgservers.schema.shard.root.root.DeleteRootRequest;
+import com.omgservers.schema.shard.root.root.DeleteRootResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.root.impl.operation.root.DeleteRootOperation;

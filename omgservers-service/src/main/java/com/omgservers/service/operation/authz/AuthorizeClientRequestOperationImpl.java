@@ -2,8 +2,8 @@ package com.omgservers.service.operation.authz;
 
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.client.client.GetClientRequest;
-import com.omgservers.schema.module.client.client.GetClientResponse;
+import com.omgservers.schema.shard.client.client.GetClientRequest;
+import com.omgservers.schema.shard.client.client.GetClientResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.shard.client.ClientShard;

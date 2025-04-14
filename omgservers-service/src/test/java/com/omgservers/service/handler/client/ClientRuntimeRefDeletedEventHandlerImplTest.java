@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.client;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.schema.module.client.clientRuntimeRef.DeleteClientRuntimeRefRequest;
+import com.omgservers.schema.shard.client.clientRuntimeRef.DeleteClientRuntimeRefRequest;
 import com.omgservers.service.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.client.testInterface.ClientRuntimeRefDeletedEventHandlerImplTestInterface;

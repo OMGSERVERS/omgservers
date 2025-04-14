@@ -7,8 +7,8 @@ import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResour
 import com.omgservers.schema.model.deploymentMatchmakerAssignment.DeploymentMatchmakerAssignmentModel;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentState.UpdateDeploymentStateRequest;
-import com.omgservers.schema.module.deployment.deploymentState.UpdateDeploymentStateResponse;
+import com.omgservers.schema.shard.deployment.deploymentState.UpdateDeploymentStateRequest;
+import com.omgservers.schema.shard.deployment.deploymentState.UpdateDeploymentStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentDeploymentCommand.DeleteDeploymentCommandOperation;

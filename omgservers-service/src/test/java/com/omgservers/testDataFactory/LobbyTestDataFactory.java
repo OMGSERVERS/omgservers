@@ -3,7 +3,7 @@ package com.omgservers.testDataFactory;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.lobby.LobbyConfigDto;
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.module.lobby.SyncLobbyRequest;
+import com.omgservers.schema.shard.lobby.SyncLobbyRequest;
 import com.omgservers.service.factory.lobby.LobbyModelFactory;
 import com.omgservers.service.shard.lobby.service.testInterface.LobbyServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.tenant;
 
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceResponse;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;

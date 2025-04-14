@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentRef;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantDeploymentRef.DeleteTenantDeploymentRefOperation;

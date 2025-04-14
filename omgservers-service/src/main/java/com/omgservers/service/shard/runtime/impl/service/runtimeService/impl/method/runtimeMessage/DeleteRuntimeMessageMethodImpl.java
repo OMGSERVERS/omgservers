@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtimeMessage;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.runtime.runtimeMessage.DeleteRuntimeMessageRequest;
-import com.omgservers.schema.module.runtime.runtimeMessage.DeleteRuntimeMessageResponse;
+import com.omgservers.schema.shard.runtime.runtimeMessage.DeleteRuntimeMessageRequest;
+import com.omgservers.schema.shard.runtime.runtimeMessage.DeleteRuntimeMessageResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeMessage.DeleteRuntimeMessageOperation;

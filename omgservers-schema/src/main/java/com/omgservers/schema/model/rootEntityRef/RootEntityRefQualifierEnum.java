@@ -17,16 +17,6 @@ public enum RootEntityRefQualifierEnum {
     SUPPORT_USER,
 
     /**
-     * Registry user.
-     */
-    REGISTRY_USER,
-
-    /**
-     * Builder user.
-     */
-    BUILDER_USER,
-
-    /**
      * Service user.
      */
     SERVICE_USER,

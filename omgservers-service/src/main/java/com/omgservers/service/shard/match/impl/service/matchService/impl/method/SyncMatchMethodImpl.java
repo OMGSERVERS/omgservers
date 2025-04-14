@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.match.impl.service.matchService.impl.method;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.match.SyncMatchRequest;
-import com.omgservers.schema.module.match.SyncMatchResponse;
+import com.omgservers.schema.shard.match.SyncMatchRequest;
+import com.omgservers.schema.shard.match.SyncMatchResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.match.impl.operation.match.UpsertMatchOperation;

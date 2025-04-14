@@ -2,8 +2,8 @@ package com.omgservers.service.shard.deployment.impl.service.deploymentService.i
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceResponse;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;

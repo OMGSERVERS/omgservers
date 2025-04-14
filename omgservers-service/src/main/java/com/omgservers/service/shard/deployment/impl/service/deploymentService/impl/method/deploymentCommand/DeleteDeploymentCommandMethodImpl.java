@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentCommand;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentCommand.DeleteDeploymentCommandRequest;
-import com.omgservers.schema.module.deployment.deploymentCommand.DeleteDeploymentCommandResponse;
+import com.omgservers.schema.shard.deployment.deploymentCommand.DeleteDeploymentCommandRequest;
+import com.omgservers.schema.shard.deployment.deploymentCommand.DeleteDeploymentCommandResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentDeploymentCommand.DeleteDeploymentCommandOperation;

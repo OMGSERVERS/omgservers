@@ -2,8 +2,8 @@ package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.me
 
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.runtime.runtimeState.UpdateRuntimeStateRequest;
-import com.omgservers.schema.module.runtime.runtimeState.UpdateRuntimeStateResponse;
+import com.omgservers.schema.shard.runtime.runtimeState.UpdateRuntimeStateRequest;
+import com.omgservers.schema.shard.runtime.runtimeState.UpdateRuntimeStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment.DeleteRuntimeAssignmentOperation;

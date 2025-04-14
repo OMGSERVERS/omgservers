@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 
 import com.omgservers.schema.entrypoint.player.CreateTokenPlayerRequest;
 import com.omgservers.schema.entrypoint.player.CreateTokenPlayerResponse;
-import com.omgservers.schema.module.user.CreateTokenRequest;
-import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.schema.shard.user.CreateTokenRequest;
+import com.omgservers.schema.shard.user.CreateTokenResponse;
 import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.shard.user.UserShard;

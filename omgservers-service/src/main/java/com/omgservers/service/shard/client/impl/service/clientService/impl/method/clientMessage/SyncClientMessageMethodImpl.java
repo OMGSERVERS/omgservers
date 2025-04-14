@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientMessage;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.client.clientMessage.SyncClientMessageRequest;
-import com.omgservers.schema.module.client.clientMessage.SyncClientMessageResponse;
+import com.omgservers.schema.shard.client.clientMessage.SyncClientMessageRequest;
+import com.omgservers.schema.shard.client.clientMessage.SyncClientMessageResponse;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;

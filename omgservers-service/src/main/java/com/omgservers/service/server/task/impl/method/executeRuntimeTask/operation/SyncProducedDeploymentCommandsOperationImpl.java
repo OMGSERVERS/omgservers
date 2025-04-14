@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation;
 
 import com.omgservers.schema.model.deploymentCommand.DeploymentCommandModel;
-import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandRequest;
-import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandResponse;
+import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandRequest;
+import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandResponse;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

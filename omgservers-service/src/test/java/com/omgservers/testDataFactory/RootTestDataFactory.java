@@ -1,8 +1,8 @@
 package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.root.RootModel;
-import com.omgservers.schema.module.root.root.GetRootRequest;
-import com.omgservers.schema.module.root.root.SyncRootRequest;
+import com.omgservers.schema.shard.root.root.GetRootRequest;
+import com.omgservers.schema.shard.root.root.SyncRootRequest;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.root.RootModelFactory;
 import com.omgservers.service.shard.root.service.testInterface.RootServiceTestInterface;

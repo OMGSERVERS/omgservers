@@ -5,9 +5,9 @@ import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportR
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.module.alias.SyncAliasRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.shard.alias.SyncAliasRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;

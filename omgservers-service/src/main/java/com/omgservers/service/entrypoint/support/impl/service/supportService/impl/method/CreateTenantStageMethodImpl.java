@@ -4,7 +4,7 @@ import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantStageSupportResponse;
 import com.omgservers.schema.model.tenantStage.TenantStageConfigDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;

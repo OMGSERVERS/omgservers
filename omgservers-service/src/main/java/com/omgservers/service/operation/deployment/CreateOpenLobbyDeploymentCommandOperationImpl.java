@@ -1,8 +1,8 @@
 package com.omgservers.service.operation.deployment;
 
 import com.omgservers.schema.model.deploymentCommand.body.OpenLobbyDeploymentCommandBodyDto;
-import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandRequest;
-import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandResponse;
+import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandRequest;
+import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandResponse;
 import com.omgservers.service.factory.deployment.DeploymentCommandModelFactory;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;

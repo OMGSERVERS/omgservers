@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.lobby;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
+import com.omgservers.schema.shard.lobby.DeleteLobbyRequest;
 import com.omgservers.service.event.body.module.lobby.LobbyDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.lobby.testInterface.LobbyDeletedEventHandlerImplTestInterface;

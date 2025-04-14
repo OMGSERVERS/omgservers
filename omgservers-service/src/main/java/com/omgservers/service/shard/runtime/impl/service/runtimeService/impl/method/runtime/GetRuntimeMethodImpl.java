@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtime;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.runtime.runtime.GetRuntimeRequest;
-import com.omgservers.schema.module.runtime.runtime.GetRuntimeResponse;
+import com.omgservers.schema.shard.runtime.runtime.GetRuntimeRequest;
+import com.omgservers.schema.shard.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.service.shard.runtime.impl.operation.runtime.SelectRuntimeOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

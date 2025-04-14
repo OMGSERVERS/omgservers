@@ -2,8 +2,8 @@ package com.omgservers.service.shard.user.impl.service.userService.impl.method.u
 
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.schema.module.user.CreateTokenRequest;
-import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.schema.shard.user.CreateTokenRequest;
+import com.omgservers.schema.shard.user.CreateTokenResponse;
 import com.omgservers.service.operation.security.IssueJwtTokenOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;

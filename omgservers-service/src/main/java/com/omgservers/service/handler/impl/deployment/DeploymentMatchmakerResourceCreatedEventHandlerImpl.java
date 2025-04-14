@@ -2,10 +2,10 @@ package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceResponse;
-import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerResponse;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceResponse;
+import com.omgservers.schema.shard.matchmaker.matchmaker.SyncMatchmakerRequest;
+import com.omgservers.schema.shard.matchmaker.matchmaker.SyncMatchmakerResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentMatchmakerResourceCreatedEventBodyModel;

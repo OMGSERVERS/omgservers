@@ -15,24 +15,9 @@ public enum UserRoleEnum {
     SUPPORT(Names.SUPPORT),
 
     /**
-     * Role which is used to interact with the service through Registry Api.
-     */
-    REGISTRY(Names.REGISTRY),
-
-    /**
-     * Role which is used by builder to get registry access.
-     */
-    BUILDER(Names.BUILDER),
-
-    /**
      * Role which is used to do inter server requests.
      */
     SERVICE(Names.SERVICE),
-
-    /**
-     * Role which is used to do inter dispatcher requests.
-     */
-    DISPATCHER(Names.DISPATCHER),
 
     /**
      * Role which is used to interact with the service through Developer Api.

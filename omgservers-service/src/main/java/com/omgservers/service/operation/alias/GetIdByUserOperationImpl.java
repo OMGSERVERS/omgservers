@@ -1,8 +1,8 @@
 package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
+import com.omgservers.schema.shard.alias.FindAliasRequest;
+import com.omgservers.schema.shard.alias.FindAliasResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.shard.alias.AliasShard;

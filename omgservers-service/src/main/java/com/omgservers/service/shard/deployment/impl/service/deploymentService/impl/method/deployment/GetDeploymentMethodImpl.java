@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deployment;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentRequest;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentResponse;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentRequest;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
 import com.omgservers.service.shard.deployment.impl.operation.deployment.SelectDeploymentOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

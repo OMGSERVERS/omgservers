@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.impl.service.webService.impl.api;
 
-import com.omgservers.schema.module.client.client.*;
-import com.omgservers.schema.module.client.clientMessage.*;
-import com.omgservers.schema.module.client.clientRuntimeRef.*;
+import com.omgservers.schema.shard.client.client.*;
+import com.omgservers.schema.shard.client.clientMessage.*;
+import com.omgservers.schema.shard.client.clientRuntimeRef.*;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

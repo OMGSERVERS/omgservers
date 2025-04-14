@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.deployment;
 
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceResponse;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.ViewDeploymentMatchmakerResourcesRequest;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.ViewDeploymentMatchmakerResourcesResponse;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceResponse;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.ViewDeploymentMatchmakerResourcesRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.ViewDeploymentMatchmakerResourcesResponse;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

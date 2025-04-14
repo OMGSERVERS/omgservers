@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.dispatcher.impl.service.dispatcherServ
 
 import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherRequest;
 import com.omgservers.schema.entrypoint.dispatcher.CreateTokenDispatcherResponse;
-import com.omgservers.schema.module.user.CreateTokenRequest;
-import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.schema.shard.user.CreateTokenRequest;
+import com.omgservers.schema.shard.user.CreateTokenResponse;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.operation.alias.GetIdByUserOperation;

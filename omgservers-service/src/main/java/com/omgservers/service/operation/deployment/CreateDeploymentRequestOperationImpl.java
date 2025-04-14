@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.deployment;
 
 import com.omgservers.schema.model.client.ClientModel;
-import com.omgservers.schema.module.client.client.GetClientRequest;
-import com.omgservers.schema.module.client.client.GetClientResponse;
-import com.omgservers.schema.module.deployment.deploymentRequest.SyncDeploymentRequestRequest;
-import com.omgservers.schema.module.deployment.deploymentRequest.SyncDeploymentRequestResponse;
+import com.omgservers.schema.shard.client.client.GetClientRequest;
+import com.omgservers.schema.shard.client.client.GetClientResponse;
+import com.omgservers.schema.shard.deployment.deploymentRequest.SyncDeploymentRequestRequest;
+import com.omgservers.schema.shard.deployment.deploymentRequest.SyncDeploymentRequestResponse;
 import com.omgservers.service.factory.deployment.DeploymentRequestModelFactory;
 import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.shard.deployment.DeploymentShard;

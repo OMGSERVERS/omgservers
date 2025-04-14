@@ -4,10 +4,10 @@ import com.omgservers.schema.entrypoint.developer.DeleteDeploymentDeveloperReque
 import com.omgservers.schema.entrypoint.developer.DeleteDeploymentDeveloperResponse;
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceResponse;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.FindTenantDeploymentResourceRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.FindTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.FindTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.FindTenantDeploymentResourceResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;

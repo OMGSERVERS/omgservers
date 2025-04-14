@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.module.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantStage.SelectTenantStageOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

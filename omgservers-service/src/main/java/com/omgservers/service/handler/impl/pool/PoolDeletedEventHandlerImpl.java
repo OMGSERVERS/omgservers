@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.pool;
 
 import com.omgservers.schema.model.poolState.PoolStateDto;
-import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
-import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.schema.shard.pool.poolState.GetPoolStateRequest;
+import com.omgservers.schema.shard.pool.poolState.GetPoolStateResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolDeletedEventBodyModel;

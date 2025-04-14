@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.method.runtime;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.runtime.runtime.SyncRuntimeRequest;
-import com.omgservers.schema.module.runtime.runtime.SyncRuntimeResponse;
+import com.omgservers.schema.shard.runtime.runtime.SyncRuntimeRequest;
+import com.omgservers.schema.shard.runtime.runtime.SyncRuntimeResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtime.UpsertRuntimeOperation;

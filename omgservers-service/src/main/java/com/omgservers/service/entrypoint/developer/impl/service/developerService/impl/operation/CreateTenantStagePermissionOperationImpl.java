@@ -2,7 +2,7 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
-import com.omgservers.schema.module.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;

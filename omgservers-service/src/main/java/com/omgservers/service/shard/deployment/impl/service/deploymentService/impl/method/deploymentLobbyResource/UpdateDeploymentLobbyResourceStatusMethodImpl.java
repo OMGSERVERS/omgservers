@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentLobbyResource;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.UpdateDeploymentLobbyResourceStatusRequest;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.UpdateDeploymentLobbyResourceStatusResponse;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.UpdateDeploymentLobbyResourceStatusRequest;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.UpdateDeploymentLobbyResourceStatusResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyResource.UpdateDeploymentLobbyResourceStatusOperation;

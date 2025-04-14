@@ -2,8 +2,8 @@ package com.omgservers.service.shard.runtime.impl.service.runtimeService.impl.me
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.runtime.runtimeAssignment.SyncRuntimeAssignmentRequest;
-import com.omgservers.schema.module.runtime.runtimeAssignment.SyncRuntimeAssignmentResponse;
+import com.omgservers.schema.shard.runtime.runtimeAssignment.SyncRuntimeAssignmentRequest;
+import com.omgservers.schema.shard.runtime.runtimeAssignment.SyncRuntimeAssignmentResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;

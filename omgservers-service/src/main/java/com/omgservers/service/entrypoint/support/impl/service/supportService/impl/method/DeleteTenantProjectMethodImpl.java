@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportResponse;
-import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectResponse;
 import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;

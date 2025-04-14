@@ -9,10 +9,10 @@ import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssi
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestConfigDto;
 import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
-import com.omgservers.schema.module.matchmaker.matchmaker.SyncMatchmakerRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerMatchAssignment.SyncMatchmakerMatchAssignmentRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.SyncMatchmakerMatchResourceRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerRequest.SyncMatchmakerRequestRequest;
+import com.omgservers.schema.shard.matchmaker.matchmaker.SyncMatchmakerRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerMatchAssignment.SyncMatchmakerMatchAssignmentRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerMatchResource.SyncMatchmakerMatchResourceRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerRequest.SyncMatchmakerRequestRequest;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchAssignmentModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchResourceModelFactory;
 import com.omgservers.service.factory.matchmaker.MatchmakerModelFactory;

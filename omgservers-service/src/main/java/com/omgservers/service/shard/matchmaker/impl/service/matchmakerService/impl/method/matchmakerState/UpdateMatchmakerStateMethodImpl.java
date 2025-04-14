@@ -4,8 +4,8 @@ import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerMatchResour
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateResponse;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.UpdateMatchmakerStateRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.UpdateMatchmakerStateResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerCommand.DeleteMatchmakerCommandOperation;

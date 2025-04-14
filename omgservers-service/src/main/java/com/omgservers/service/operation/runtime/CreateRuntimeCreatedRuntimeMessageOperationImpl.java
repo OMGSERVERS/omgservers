@@ -2,8 +2,8 @@ package com.omgservers.service.operation.runtime;
 
 import com.omgservers.schema.message.body.RuntimeCreatedMessageBodyDto;
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageRequest;
-import com.omgservers.schema.module.runtime.runtimeMessage.SyncRuntimeMessageResponse;
+import com.omgservers.schema.shard.runtime.runtimeMessage.SyncRuntimeMessageRequest;
+import com.omgservers.schema.shard.runtime.runtimeMessage.SyncRuntimeMessageResponse;
 import com.omgservers.service.factory.runtime.RuntimeMessageModelFactory;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;

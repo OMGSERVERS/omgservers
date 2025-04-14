@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.ShardedRequest;
+import com.omgservers.schema.shard.ShardedRequest;
 import io.smallrye.mutiny.Uni;
 import org.slf4j.Logger;
 

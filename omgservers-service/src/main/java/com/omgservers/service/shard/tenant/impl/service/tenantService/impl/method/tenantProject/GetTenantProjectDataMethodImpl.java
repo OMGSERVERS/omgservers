@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantProject;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.alias.ViewAliasesRequest;
-import com.omgservers.schema.module.alias.ViewAliasesResponse;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
-import com.omgservers.schema.module.tenant.tenantProject.dto.TenantProjectDataDto;
+import com.omgservers.schema.shard.alias.ViewAliasesRequest;
+import com.omgservers.schema.shard.alias.ViewAliasesResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.dto.TenantProjectDataDto;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.impl.operation.tenantProject.SelectTenantProjectOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantProjectPermission.SelectActiveTenantProjectPermissionsByTenantProjectIdOperation;

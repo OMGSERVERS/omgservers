@@ -3,10 +3,10 @@ package com.omgservers.service.server.task.impl.method.executeRuntimeTask.operat
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
 import com.omgservers.schema.model.runtimeState.RuntimeStateDto;
-import com.omgservers.schema.module.runtime.runtimeCommand.ViewRuntimeCommandsRequest;
-import com.omgservers.schema.module.runtime.runtimeCommand.ViewRuntimeCommandsResponse;
-import com.omgservers.schema.module.runtime.runtimeState.GetRuntimeStateRequest;
-import com.omgservers.schema.module.runtime.runtimeState.GetRuntimeStateResponse;
+import com.omgservers.schema.shard.runtime.runtimeCommand.ViewRuntimeCommandsRequest;
+import com.omgservers.schema.shard.runtime.runtimeCommand.ViewRuntimeCommandsResponse;
+import com.omgservers.schema.shard.runtime.runtimeState.GetRuntimeStateRequest;
+import com.omgservers.schema.shard.runtime.runtimeState.GetRuntimeStateResponse;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.dto.FetchRuntimeResult;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Uni;

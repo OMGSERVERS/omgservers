@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.tenant;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.schema.module.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionRequest;
 import com.omgservers.service.event.body.module.tenant.TenantVersionDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.tenant.testInterface.VersionDeletedEventHandlerImplTestInterface;

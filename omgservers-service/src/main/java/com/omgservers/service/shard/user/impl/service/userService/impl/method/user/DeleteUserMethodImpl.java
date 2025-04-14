@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.user.impl.service.userService.impl.method.user;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.user.DeleteUserRequest;
-import com.omgservers.schema.module.user.DeleteUserResponse;
+import com.omgservers.schema.shard.user.DeleteUserRequest;
+import com.omgservers.schema.shard.user.DeleteUserResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.user.impl.operation.user.DeleteUserOperation;

@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation;
 
 import com.omgservers.schema.model.matchmakerCommand.MatchmakerCommandModel;
-import com.omgservers.schema.module.matchmaker.matchmakerCommand.SyncMatchmakerCommandRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerCommand.SyncMatchmakerCommandResponse;
+import com.omgservers.schema.shard.matchmaker.matchmakerCommand.SyncMatchmakerCommandRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerCommand.SyncMatchmakerCommandResponse;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

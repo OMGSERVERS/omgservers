@@ -2,8 +2,8 @@ package com.omgservers.service.operation.client;
 
 import com.omgservers.schema.message.body.ConnectionUpgradeQualifierEnum;
 import com.omgservers.schema.message.body.ConnectionUpgradedMessageBodyDto;
-import com.omgservers.schema.module.client.clientMessage.SyncClientMessageRequest;
-import com.omgservers.schema.module.client.clientMessage.SyncClientMessageResponse;
+import com.omgservers.schema.shard.client.clientMessage.SyncClientMessageRequest;
+import com.omgservers.schema.shard.client.clientMessage.SyncClientMessageResponse;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
 import com.omgservers.service.shard.client.ClientShard;
 import io.smallrye.mutiny.Uni;

@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation;
 
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
-import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerState.UpdateMatchmakerStateResponse;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.UpdateMatchmakerStateRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.UpdateMatchmakerStateResponse;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.HandleMatchmakerResult;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import io.smallrye.mutiny.Uni;

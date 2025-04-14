@@ -29,13 +29,11 @@
     </properties>
 
     <modules>
+        <module>omgservers-ctl</module>
         <module>omgservers-dispatcher</module>
-        <module>omgservers-environments</module>
+        <module>omgservers-testing</module>
         <module>omgservers-schema</module>
-        <module>omgservers-sdk</module>
         <module>omgservers-service</module>
-        <module>omgservers-tests</module>
-        <module>omgservers-tools</module>
     </modules>
 
     <dependencies>

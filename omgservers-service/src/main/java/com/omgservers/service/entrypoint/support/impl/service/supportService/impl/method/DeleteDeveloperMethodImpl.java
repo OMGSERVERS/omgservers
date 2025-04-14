@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
-import com.omgservers.schema.module.user.DeleteUserRequest;
-import com.omgservers.schema.module.user.DeleteUserResponse;
+import com.omgservers.schema.shard.user.DeleteUserRequest;
+import com.omgservers.schema.shard.user.DeleteUserResponse;
 import com.omgservers.service.shard.user.UserShard;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;

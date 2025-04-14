@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentMatchmakerResource;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceResponse;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerResource.DeleteDeploymentMatchmakerResourceOperation;

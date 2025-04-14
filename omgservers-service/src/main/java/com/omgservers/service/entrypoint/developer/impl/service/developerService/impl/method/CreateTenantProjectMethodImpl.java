@@ -9,8 +9,8 @@ import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissi
 import com.omgservers.schema.model.tenantStage.TenantStageConfigDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
-import com.omgservers.schema.module.tenant.tenantProject.SyncTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CreateTenantProjectPermissionOperation;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CreateTenantStagePermissionOperation;

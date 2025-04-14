@@ -2,8 +2,8 @@ package com.omgservers.service.shard.root.impl.service.rootService.impl.method.r
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
-import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
+import com.omgservers.schema.shard.root.rootEntityRef.SyncRootEntityRefRequest;
+import com.omgservers.schema.shard.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;

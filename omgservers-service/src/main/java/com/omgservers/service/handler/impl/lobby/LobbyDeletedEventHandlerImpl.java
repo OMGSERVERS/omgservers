@@ -1,10 +1,10 @@
 package com.omgservers.service.handler.impl.lobby;
 
 import com.omgservers.schema.model.lobby.LobbyModel;
-import com.omgservers.schema.module.lobby.GetLobbyRequest;
-import com.omgservers.schema.module.lobby.GetLobbyResponse;
-import com.omgservers.schema.module.runtime.runtime.DeleteRuntimeRequest;
-import com.omgservers.schema.module.runtime.runtime.DeleteRuntimeResponse;
+import com.omgservers.schema.shard.lobby.GetLobbyRequest;
+import com.omgservers.schema.shard.lobby.GetLobbyResponse;
+import com.omgservers.schema.shard.runtime.runtime.DeleteRuntimeRequest;
+import com.omgservers.schema.shard.runtime.runtime.DeleteRuntimeResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.lobby.LobbyDeletedEventBodyModel;

@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.tenant;
 
 import com.omgservers.schema.model.tenantDeploymentRef.TenantDeploymentRefModel;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefResponse;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.FindTenantDeploymentRefRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.FindTenantDeploymentRefResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.FindTenantDeploymentRefRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.FindTenantDeploymentRefResponse;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;

@@ -6,7 +6,7 @@ import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.tenant.tenantVersion.SyncTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.shard.tenant.TenantShard;

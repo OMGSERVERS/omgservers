@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantImage;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.SyncTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.SyncTenantImageResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface SyncTenantImageMethod {

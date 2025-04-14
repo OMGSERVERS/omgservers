@@ -2,10 +2,10 @@ package com.omgservers.service.handler.impl.client;
 
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.deploymentCommand.body.RemoveClientDeploymentCommandBodyDto;
-import com.omgservers.schema.module.client.client.GetClientRequest;
-import com.omgservers.schema.module.client.client.GetClientResponse;
-import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandRequest;
-import com.omgservers.schema.module.deployment.deploymentCommand.SyncDeploymentCommandResponse;
+import com.omgservers.schema.shard.client.client.GetClientRequest;
+import com.omgservers.schema.shard.client.client.GetClientResponse;
+import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandRequest;
+import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.client.ClientDeletedEventBodyModel;

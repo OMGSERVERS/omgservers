@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executePoolTask.operation;
 
 import com.omgservers.schema.model.poolState.PoolStateDto;
-import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
-import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.schema.shard.pool.poolState.GetPoolStateRequest;
+import com.omgservers.schema.shard.pool.poolState.GetPoolStateResponse;
 import com.omgservers.service.server.task.impl.method.executePoolTask.dto.FetchPoolResult;
 import com.omgservers.service.shard.pool.PoolShard;
 import io.smallrye.mutiny.Uni;

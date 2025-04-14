@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
-import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.GetTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.GetTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.GetTenantImageResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantImageCreatedEventBodyModel;

@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.root.impl.service.rootService.impl.method.rootEntityRef;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefRequest;
-import com.omgservers.schema.module.root.rootEntityRef.DeleteRootEntityRefResponse;
+import com.omgservers.schema.shard.root.rootEntityRef.DeleteRootEntityRefRequest;
+import com.omgservers.schema.shard.root.rootEntityRef.DeleteRootEntityRefResponse;
 import io.smallrye.mutiny.Uni;
 
 public interface DeleteRootEntityRefMethod {

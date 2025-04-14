@@ -19,11 +19,11 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 public interface DockerApi {
 
     @GET
-    @Path("/create-token")
+    @Path("/token")
     Uni<BasicAuthDockerResponse> basicAuth(@NotNull @BeanParam BasicAuthDockerRequest request);
 
     @POST
-    @Path("/create-token")
+    @Path("/token")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     Uni<OAuth2DockerResponse> oAuth2(@NotNull @BeanParam OAuth2DockerRequest request);
 }

@@ -1,1 +1,0 @@
-# defold-test-runtime

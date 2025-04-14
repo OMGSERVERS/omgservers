@@ -1,16 +1,16 @@
 package com.omgservers.service.shard.tenant.impl.service.webService.impl.api;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.module.tenant.tenant.*;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.*;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.*;
-import com.omgservers.schema.module.tenant.tenantImage.*;
-import com.omgservers.schema.module.tenant.tenantPermission.*;
-import com.omgservers.schema.module.tenant.tenantProject.*;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
-import com.omgservers.schema.module.tenant.tenantStage.*;
-import com.omgservers.schema.module.tenant.tenantStagePermission.*;
-import com.omgservers.schema.module.tenant.tenantVersion.*;
+import com.omgservers.schema.shard.tenant.tenant.*;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.*;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.*;
+import com.omgservers.schema.shard.tenant.tenantImage.*;
+import com.omgservers.schema.shard.tenant.tenantPermission.*;
+import com.omgservers.schema.shard.tenant.tenantProject.*;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.*;
+import com.omgservers.schema.shard.tenant.tenantStage.*;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.*;
+import com.omgservers.schema.shard.tenant.tenantVersion.*;
 import com.omgservers.service.operation.server.HandleApiRequestOperation;
 import com.omgservers.service.shard.tenant.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;

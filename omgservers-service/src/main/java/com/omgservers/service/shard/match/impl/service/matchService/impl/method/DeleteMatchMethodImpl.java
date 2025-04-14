@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.match.impl.service.matchService.impl.method;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.match.DeleteMatchRequest;
-import com.omgservers.schema.module.match.DeleteMatchResponse;
+import com.omgservers.schema.shard.match.DeleteMatchRequest;
+import com.omgservers.schema.shard.match.DeleteMatchResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.match.impl.operation.match.DeleteMatchOperation;

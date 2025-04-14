@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.user.impl.service.userService.impl.method.user;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.user.SyncUserRequest;
-import com.omgservers.schema.module.user.SyncUserResponse;
+import com.omgservers.schema.shard.user.SyncUserRequest;
+import com.omgservers.schema.shard.user.SyncUserResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.user.impl.operation.user.UpsertUserOperation;

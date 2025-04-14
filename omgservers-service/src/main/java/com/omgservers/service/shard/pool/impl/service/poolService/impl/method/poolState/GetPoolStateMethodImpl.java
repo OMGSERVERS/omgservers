@@ -2,8 +2,8 @@ package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.p
 
 import com.omgservers.schema.model.poolState.PoolStateDto;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.pool.poolState.GetPoolStateRequest;
-import com.omgservers.schema.module.pool.poolState.GetPoolStateResponse;
+import com.omgservers.schema.shard.pool.poolState.GetPoolStateRequest;
+import com.omgservers.schema.shard.pool.poolState.GetPoolStateResponse;
 import com.omgservers.service.shard.pool.impl.operation.pool.SelectPoolOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolCommand.SelectActivePoolCommandsByPoolIdOperation;
 import com.omgservers.service.shard.pool.impl.operation.poolContainer.SelectActivePoolContainersByPoolIdOperation;

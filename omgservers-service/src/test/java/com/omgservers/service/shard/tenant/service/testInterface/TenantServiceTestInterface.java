@@ -1,13 +1,13 @@
 package com.omgservers.service.shard.tenant.service.testInterface;
 
-import com.omgservers.schema.module.tenant.tenant.*;
-import com.omgservers.schema.module.tenant.tenantImage.*;
-import com.omgservers.schema.module.tenant.tenantPermission.*;
-import com.omgservers.schema.module.tenant.tenantProject.*;
-import com.omgservers.schema.module.tenant.tenantProjectPermission.*;
-import com.omgservers.schema.module.tenant.tenantStage.*;
-import com.omgservers.schema.module.tenant.tenantStagePermission.*;
-import com.omgservers.schema.module.tenant.tenantVersion.*;
+import com.omgservers.schema.shard.tenant.tenant.*;
+import com.omgservers.schema.shard.tenant.tenantImage.*;
+import com.omgservers.schema.shard.tenant.tenantPermission.*;
+import com.omgservers.schema.shard.tenant.tenantProject.*;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.*;
+import com.omgservers.schema.shard.tenant.tenantStage.*;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.*;
+import com.omgservers.schema.shard.tenant.tenantVersion.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.TenantService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

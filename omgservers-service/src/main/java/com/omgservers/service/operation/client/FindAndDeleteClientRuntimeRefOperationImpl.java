@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.client;
 
 import com.omgservers.schema.model.clientRuntimeRef.ClientRuntimeRefModel;
-import com.omgservers.schema.module.client.clientRuntimeRef.DeleteClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.clientRuntimeRef.DeleteClientRuntimeRefResponse;
-import com.omgservers.schema.module.client.clientRuntimeRef.FindClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.clientRuntimeRef.FindClientRuntimeRefResponse;
+import com.omgservers.schema.shard.client.clientRuntimeRef.DeleteClientRuntimeRefRequest;
+import com.omgservers.schema.shard.client.clientRuntimeRef.DeleteClientRuntimeRefResponse;
+import com.omgservers.schema.shard.client.clientRuntimeRef.FindClientRuntimeRefRequest;
+import com.omgservers.schema.shard.client.clientRuntimeRef.FindClientRuntimeRefResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.shard.client.ClientShard;
 import io.smallrye.mutiny.Uni;

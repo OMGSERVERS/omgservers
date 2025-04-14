@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentState.DeploymentStateDto;
-import com.omgservers.schema.module.deployment.deploymentState.GetDeploymentStateRequest;
-import com.omgservers.schema.module.deployment.deploymentState.GetDeploymentStateResponse;
+import com.omgservers.schema.shard.deployment.deploymentState.GetDeploymentStateRequest;
+import com.omgservers.schema.shard.deployment.deploymentState.GetDeploymentStateResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentDeletedEventBodyModel;

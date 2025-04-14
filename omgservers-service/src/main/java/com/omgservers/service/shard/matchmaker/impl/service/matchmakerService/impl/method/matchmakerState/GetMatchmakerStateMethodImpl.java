@@ -2,8 +2,8 @@ package com.omgservers.service.shard.matchmaker.impl.service.matchmakerService.i
 
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateResponse;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.GetMatchmakerStateRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.GetMatchmakerStateResponse;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmaker.SelectMatchmakerOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerCommand.SelectActiveMatchmakerCommandsByMatchmakerIdOperation;
 import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchAssignment.SelectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation;

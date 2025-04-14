@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.runtime;
 
 import com.omgservers.schema.model.runtimeCommand.RuntimeCommandModel;
-import com.omgservers.schema.module.runtime.runtimeCommand.DeleteRuntimeCommandRequest;
-import com.omgservers.schema.module.runtime.runtimeCommand.DeleteRuntimeCommandResponse;
-import com.omgservers.schema.module.runtime.runtimeCommand.ViewRuntimeCommandsRequest;
-import com.omgservers.schema.module.runtime.runtimeCommand.ViewRuntimeCommandsResponse;
+import com.omgservers.schema.shard.runtime.runtimeCommand.DeleteRuntimeCommandRequest;
+import com.omgservers.schema.shard.runtime.runtimeCommand.DeleteRuntimeCommandResponse;
+import com.omgservers.schema.shard.runtime.runtimeCommand.ViewRuntimeCommandsRequest;
+import com.omgservers.schema.shard.runtime.runtimeCommand.ViewRuntimeCommandsResponse;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

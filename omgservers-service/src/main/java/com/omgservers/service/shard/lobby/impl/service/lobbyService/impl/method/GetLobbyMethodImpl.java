@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.lobby.impl.service.lobbyService.impl.method;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.lobby.GetLobbyRequest;
-import com.omgservers.schema.module.lobby.GetLobbyResponse;
+import com.omgservers.schema.shard.lobby.GetLobbyRequest;
+import com.omgservers.schema.shard.lobby.GetLobbyResponse;
 import com.omgservers.service.shard.lobby.impl.operation.lobby.SelectLobbyOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

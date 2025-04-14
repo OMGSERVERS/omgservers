@@ -5,7 +5,7 @@ import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperRes
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
-import com.omgservers.schema.module.alias.SyncAliasRequest;
+import com.omgservers.schema.shard.alias.SyncAliasRequest;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.shard.alias.AliasShard;

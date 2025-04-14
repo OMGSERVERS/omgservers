@@ -3,7 +3,7 @@ package com.omgservers.testDataFactory;
 import com.omgservers.schema.model.match.MatchConfigDto;
 import com.omgservers.schema.model.match.MatchModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
-import com.omgservers.schema.module.match.SyncMatchRequest;
+import com.omgservers.schema.shard.match.SyncMatchRequest;
 import com.omgservers.service.factory.match.MatchModelFactory;
 import com.omgservers.service.shard.match.service.testInterface.MatchServiceTestInterface;
 import jakarta.enterprise.context.ApplicationScoped;

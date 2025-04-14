@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectDeletedEventBodyModel;

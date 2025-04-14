@@ -3,8 +3,8 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.module.tenant.tenant.GetTenantRequest;
-import com.omgservers.schema.module.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;

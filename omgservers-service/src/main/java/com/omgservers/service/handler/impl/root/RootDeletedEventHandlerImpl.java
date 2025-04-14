@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.root;
 
 import com.omgservers.schema.model.root.RootModel;
-import com.omgservers.schema.module.root.root.GetRootRequest;
-import com.omgservers.schema.module.root.root.GetRootResponse;
+import com.omgservers.schema.shard.root.root.GetRootRequest;
+import com.omgservers.schema.shard.root.root.GetRootResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.root.RootDeletedEventBodyModel;

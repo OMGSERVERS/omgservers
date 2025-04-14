@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.user;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.schema.module.user.DeleteUserRequest;
+import com.omgservers.schema.shard.user.DeleteUserRequest;
 import com.omgservers.service.event.body.module.user.UserDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.user.testInterface.UserDeletedEventHandlerImplTestInterface;

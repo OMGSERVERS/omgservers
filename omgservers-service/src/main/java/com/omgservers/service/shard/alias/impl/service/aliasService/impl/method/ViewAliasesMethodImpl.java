@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.alias.impl.service.aliasService.impl.method;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.alias.ViewAliasesRequest;
-import com.omgservers.schema.module.alias.ViewAliasesResponse;
+import com.omgservers.schema.shard.alias.ViewAliasesRequest;
+import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByEntityIdOperation;
 import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByShardKeyOperation;

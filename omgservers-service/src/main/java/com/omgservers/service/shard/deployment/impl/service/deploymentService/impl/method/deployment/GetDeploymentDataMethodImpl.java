@@ -1,9 +1,9 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deployment;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentDataRequest;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentDataResponse;
-import com.omgservers.schema.module.deployment.deployment.dto.DeploymentDataDto;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentDataRequest;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentDataResponse;
+import com.omgservers.schema.shard.deployment.deployment.dto.DeploymentDataDto;
 import com.omgservers.service.shard.deployment.impl.operation.deployment.SelectDeploymentOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyResource.SelectActiveDeploymentLobbyResourcesByDeploymentIdOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentMatchmakerResource.SelectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation;

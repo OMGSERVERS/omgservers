@@ -2,8 +2,8 @@ package com.omgservers.service.shard.deployment.impl.service.deploymentService.i
 
 import com.omgservers.schema.model.deploymentState.DeploymentStateDto;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentState.GetDeploymentStateRequest;
-import com.omgservers.schema.module.deployment.deploymentState.GetDeploymentStateResponse;
+import com.omgservers.schema.shard.deployment.deploymentState.GetDeploymentStateRequest;
+import com.omgservers.schema.shard.deployment.deploymentState.GetDeploymentStateResponse;
 import com.omgservers.service.shard.deployment.impl.operation.deployment.SelectDeploymentOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentDeploymentCommand.SelectActiveDeploymentCommandsByDeploymentIdOperation;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyAssignment.SelectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation;

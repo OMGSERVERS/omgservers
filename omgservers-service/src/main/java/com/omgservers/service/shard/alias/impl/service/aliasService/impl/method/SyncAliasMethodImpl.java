@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.alias.impl.service.aliasService.impl.method;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.alias.SyncAliasRequest;
-import com.omgservers.schema.module.alias.SyncAliasResponse;
+import com.omgservers.schema.shard.alias.SyncAliasRequest;
+import com.omgservers.schema.shard.alias.SyncAliasResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.alias.impl.operation.alias.UpsertAliasOperation;

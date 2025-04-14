@@ -2,10 +2,10 @@ package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
-import com.omgservers.schema.module.deployment.deployment.SyncDeploymentRequest;
-import com.omgservers.schema.module.deployment.deployment.SyncDeploymentResponse;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.GetTenantDeploymentResourceRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentResource.GetTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.deployment.deployment.SyncDeploymentRequest;
+import com.omgservers.schema.shard.deployment.deployment.SyncDeploymentResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.GetTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.GetTenantDeploymentResourceResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentResourceCreatedEventBodyModel;

@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.internal;
 
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.schema.module.runtime.runtime.GetRuntimeRequest;
-import com.omgservers.schema.module.runtime.runtime.GetRuntimeResponse;
+import com.omgservers.schema.shard.runtime.runtime.GetRuntimeRequest;
+import com.omgservers.schema.shard.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;

@@ -1,11 +1,11 @@
 package com.omgservers.service.shard.match.impl.service.webService.impl.api;
 
-import com.omgservers.schema.module.match.DeleteMatchRequest;
-import com.omgservers.schema.module.match.DeleteMatchResponse;
-import com.omgservers.schema.module.match.GetMatchRequest;
-import com.omgservers.schema.module.match.GetMatchResponse;
-import com.omgservers.schema.module.match.SyncMatchRequest;
-import com.omgservers.schema.module.match.SyncMatchResponse;
+import com.omgservers.schema.shard.match.DeleteMatchRequest;
+import com.omgservers.schema.shard.match.DeleteMatchResponse;
+import com.omgservers.schema.shard.match.GetMatchRequest;
+import com.omgservers.schema.shard.match.GetMatchResponse;
+import com.omgservers.schema.shard.match.SyncMatchRequest;
+import com.omgservers.schema.shard.match.SyncMatchResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

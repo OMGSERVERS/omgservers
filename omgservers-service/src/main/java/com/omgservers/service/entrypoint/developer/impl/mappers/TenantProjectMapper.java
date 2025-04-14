@@ -7,7 +7,7 @@ import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDto
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.module.tenant.tenantProject.dto.TenantProjectDataDto;
+import com.omgservers.schema.shard.tenant.tenantProject.dto.TenantProjectDataDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

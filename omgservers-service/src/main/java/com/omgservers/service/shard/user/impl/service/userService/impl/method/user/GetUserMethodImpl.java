@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.user.impl.service.userService.impl.method.user;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.user.GetUserRequest;
-import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.schema.shard.user.GetUserRequest;
+import com.omgservers.schema.shard.user.GetUserResponse;
 import com.omgservers.service.shard.user.impl.operation.user.SelectUserOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

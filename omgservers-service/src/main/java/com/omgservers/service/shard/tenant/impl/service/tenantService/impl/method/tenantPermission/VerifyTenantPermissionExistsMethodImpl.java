@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantPermission;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantPermission.VerifyTenantPermissionExistsOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -4,11 +4,11 @@ import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperResp
 import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperRequest;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionDataResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.GetTenantVersionResponse;
-import com.omgservers.schema.module.tenant.tenantVersion.dto.TenantVersionDataDto;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionDataRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionDataResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.dto.TenantVersionDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantVersionMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.shard.tenant.TenantShard;

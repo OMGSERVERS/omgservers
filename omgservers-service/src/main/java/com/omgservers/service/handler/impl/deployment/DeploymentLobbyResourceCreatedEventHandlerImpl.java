@@ -2,10 +2,10 @@ package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.lobby.LobbyConfigDto;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceResponse;
-import com.omgservers.schema.module.lobby.SyncLobbyRequest;
-import com.omgservers.schema.module.lobby.SyncLobbyResponse;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceResponse;
+import com.omgservers.schema.shard.lobby.SyncLobbyRequest;
+import com.omgservers.schema.shard.lobby.SyncLobbyResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentLobbyResourceCreatedEventBodyModel;

@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.tenant;
 
 import com.omgservers.schema.model.tenantImage.TenantImageModel;
-import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageRequest;
-import com.omgservers.schema.module.tenant.tenantImage.DeleteTenantImageResponse;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesRequest;
-import com.omgservers.schema.module.tenant.tenantImage.ViewTenantImagesResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.DeleteTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.ViewTenantImagesRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.ViewTenantImagesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;

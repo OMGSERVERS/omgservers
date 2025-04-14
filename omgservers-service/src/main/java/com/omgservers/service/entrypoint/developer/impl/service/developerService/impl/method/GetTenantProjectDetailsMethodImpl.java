@@ -3,9 +3,9 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.GetProjectDetailsDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetProjectDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataRequest;
-import com.omgservers.schema.module.tenant.tenantProject.GetTenantProjectDataResponse;
-import com.omgservers.schema.module.tenant.tenantProject.dto.TenantProjectDataDto;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.dto.TenantProjectDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantProjectMapper;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.shard.tenant.TenantShard;

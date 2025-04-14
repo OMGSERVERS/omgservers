@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.tenantDeploymentRef.TenantDeploymentRefModel;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.GetTenantDeploymentRefRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.GetTenantDeploymentRefResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.GetTenantDeploymentRefRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.GetTenantDeploymentRefResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentRefDeletedEventBodyModel;

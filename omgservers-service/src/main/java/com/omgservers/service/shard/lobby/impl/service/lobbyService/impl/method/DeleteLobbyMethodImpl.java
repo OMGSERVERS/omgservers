@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.lobby.impl.service.lobbyService.impl.method;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.lobby.DeleteLobbyRequest;
-import com.omgservers.schema.module.lobby.DeleteLobbyResponse;
+import com.omgservers.schema.shard.lobby.DeleteLobbyRequest;
+import com.omgservers.schema.shard.lobby.DeleteLobbyResponse;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.lobby.impl.operation.lobby.DeleteLobbyOperation;

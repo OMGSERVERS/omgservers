@@ -1,10 +1,10 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
-import com.omgservers.schema.module.match.DeleteMatchRequest;
-import com.omgservers.schema.module.match.DeleteMatchResponse;
-import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.GetMatchmakerMatchResourceRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerMatchResource.GetMatchmakerMatchResourceResponse;
+import com.omgservers.schema.shard.match.DeleteMatchRequest;
+import com.omgservers.schema.shard.match.DeleteMatchResponse;
+import com.omgservers.schema.shard.matchmaker.matchmakerMatchResource.GetMatchmakerMatchResourceRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerMatchResource.GetMatchmakerMatchResourceResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerMatchResourceDeletedEventBodyModel;

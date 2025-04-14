@@ -2,8 +2,8 @@ package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.job.JobQualifierEnum;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentRequest;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentResponse;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentRequest;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentCreatedEventBodyModel;

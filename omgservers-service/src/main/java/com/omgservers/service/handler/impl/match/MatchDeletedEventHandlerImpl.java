@@ -1,10 +1,10 @@
 package com.omgservers.service.handler.impl.match;
 
 import com.omgservers.schema.model.match.MatchModel;
-import com.omgservers.schema.module.match.GetMatchRequest;
-import com.omgservers.schema.module.match.GetMatchResponse;
-import com.omgservers.schema.module.runtime.runtime.DeleteRuntimeRequest;
-import com.omgservers.schema.module.runtime.runtime.DeleteRuntimeResponse;
+import com.omgservers.schema.shard.match.GetMatchRequest;
+import com.omgservers.schema.shard.match.GetMatchResponse;
+import com.omgservers.schema.shard.runtime.runtime.DeleteRuntimeRequest;
+import com.omgservers.schema.shard.runtime.runtime.DeleteRuntimeResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.match.MatchDeletedEventBodyModel;

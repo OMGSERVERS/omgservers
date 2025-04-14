@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsRequest;
-import com.omgservers.schema.module.tenant.tenantVersion.ViewTenantVersionsResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.shard.tenant.impl.operation.tenantVersion.SelectActiveTenantVersionProjectionsByTenantProjectIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

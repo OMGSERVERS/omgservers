@@ -2,8 +2,8 @@ package com.omgservers.service.handler.impl.pool;
 
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.pool.PoolModel;
-import com.omgservers.schema.module.pool.pool.GetPoolRequest;
-import com.omgservers.schema.module.pool.pool.GetPoolResponse;
+import com.omgservers.schema.shard.pool.pool.GetPoolRequest;
+import com.omgservers.schema.shard.pool.pool.GetPoolResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;

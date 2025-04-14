@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation;
 
 import com.omgservers.schema.model.deploymentChangeOfState.DeploymentChangeOfStateDto;
-import com.omgservers.schema.module.deployment.deploymentState.UpdateDeploymentStateRequest;
-import com.omgservers.schema.module.deployment.deploymentState.UpdateDeploymentStateResponse;
+import com.omgservers.schema.shard.deployment.deploymentState.UpdateDeploymentStateRequest;
+import com.omgservers.schema.shard.deployment.deploymentState.UpdateDeploymentStateResponse;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.HandleDeploymentResult;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;

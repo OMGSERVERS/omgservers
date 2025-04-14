@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.alias.service.testInterface;
 
-import com.omgservers.schema.module.alias.*;
+import com.omgservers.schema.shard.alias.*;
 import com.omgservers.service.shard.alias.impl.service.aliasService.AliasService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

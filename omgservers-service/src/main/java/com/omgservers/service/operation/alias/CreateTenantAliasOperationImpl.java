@@ -2,7 +2,7 @@ package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
-import com.omgservers.schema.module.alias.SyncAliasRequest;
+import com.omgservers.schema.shard.alias.SyncAliasRequest;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.factory.alias.AliasModelFactory;

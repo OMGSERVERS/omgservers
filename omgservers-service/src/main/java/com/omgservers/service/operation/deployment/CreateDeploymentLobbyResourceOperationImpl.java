@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.deployment;
 
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceResponse;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceResponse;
 import com.omgservers.service.factory.deployment.DeploymentLobbyResourceModelFactory;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;

@@ -1,7 +1,7 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation;
 
-import com.omgservers.schema.module.client.client.DeleteClientRequest;
-import com.omgservers.schema.module.client.client.DeleteClientResponse;
+import com.omgservers.schema.shard.client.client.DeleteClientRequest;
+import com.omgservers.schema.shard.client.client.DeleteClientResponse;
 import com.omgservers.service.shard.client.ClientShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

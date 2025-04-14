@@ -3,8 +3,8 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperResponse;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
-import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectRequest;
-import com.omgservers.schema.module.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.shard.tenant.TenantShard;

@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.deployment;
 
 import com.omgservers.schema.model.deploymentCommand.DeploymentCommandModel;
-import com.omgservers.schema.module.deployment.deploymentCommand.DeleteDeploymentCommandRequest;
-import com.omgservers.schema.module.deployment.deploymentCommand.DeleteDeploymentCommandResponse;
-import com.omgservers.schema.module.deployment.deploymentCommand.ViewDeploymentCommandsRequest;
-import com.omgservers.schema.module.deployment.deploymentCommand.ViewDeploymentCommandsResponse;
+import com.omgservers.schema.shard.deployment.deploymentCommand.DeleteDeploymentCommandRequest;
+import com.omgservers.schema.shard.deployment.deploymentCommand.DeleteDeploymentCommandResponse;
+import com.omgservers.schema.shard.deployment.deploymentCommand.ViewDeploymentCommandsRequest;
+import com.omgservers.schema.shard.deployment.deploymentCommand.ViewDeploymentCommandsResponse;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;

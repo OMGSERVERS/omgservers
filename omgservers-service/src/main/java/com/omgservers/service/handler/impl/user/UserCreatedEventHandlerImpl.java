@@ -3,12 +3,12 @@ package com.omgservers.service.handler.impl.user;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.schema.model.user.UserModel;
-import com.omgservers.schema.module.alias.FindAliasRequest;
-import com.omgservers.schema.module.alias.FindAliasResponse;
-import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefRequest;
-import com.omgservers.schema.module.root.rootEntityRef.SyncRootEntityRefResponse;
-import com.omgservers.schema.module.user.GetUserRequest;
-import com.omgservers.schema.module.user.GetUserResponse;
+import com.omgservers.schema.shard.alias.FindAliasRequest;
+import com.omgservers.schema.shard.alias.FindAliasResponse;
+import com.omgservers.schema.shard.root.rootEntityRef.SyncRootEntityRefRequest;
+import com.omgservers.schema.shard.root.rootEntityRef.SyncRootEntityRefResponse;
+import com.omgservers.schema.shard.user.GetUserRequest;
+import com.omgservers.schema.shard.user.GetUserResponse;
 import com.omgservers.service.configuration.DefaultAliasConfiguration;
 import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.event.EventModel;
@@ -61,10 +61,6 @@ public class UserCreatedEventHandlerImpl implements EventHandler {
                                 RootEntityRefQualifierEnum.ADMIN_USER);
                         case SUPPORT -> syncRootUserRef(userId, idempotencyKey,
                                 RootEntityRefQualifierEnum.SUPPORT_USER);
-                        case REGISTRY -> syncRootUserRef(userId, idempotencyKey,
-                                RootEntityRefQualifierEnum.REGISTRY_USER);
-                        case BUILDER -> syncRootUserRef(userId, idempotencyKey,
-                                RootEntityRefQualifierEnum.BUILDER_USER);
                         case SERVICE -> syncRootUserRef(userId, idempotencyKey,
                                 RootEntityRefQualifierEnum.SERVICE_USER);
                         case DEVELOPER -> syncRootUserRef(userId, idempotencyKey,

@@ -7,7 +7,12 @@ import com.omgservers.service.exception.ServerSideInternalException;
 import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.bootstrap.BootstrapService;
-import com.omgservers.service.server.bootstrap.dto.*;
+import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolRequest;
+import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolResponse;
+import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserRequest;
+import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserResponse;
+import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityRequest;
+import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityResponse;
 import com.omgservers.service.server.task.Task;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,13 +47,10 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
     }
 
     Uni<Boolean> bootstrap() {
-        return bootstrapServiceRoot()
+        return bootstrapRootEntity()
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
-                .flatMap(voidItem -> bootstrapRegistryUser())
-                .flatMap(voidItem -> bootstrapBuilderUser())
                 .flatMap(voidItem -> bootstrapServiceUser())
-                .flatMap(voidItem -> bootstrapDispatcherUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .replaceWith(Boolean.TRUE)
                 .onFailure().transform(
@@ -57,7 +59,7 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                                 t));
     }
 
-    Uni<Boolean> bootstrapServiceRoot() {
+    Uni<Boolean> bootstrapRootEntity() {
         return bootstrapService.execute(new BootstrapRootEntityRequest())
                 .map(BootstrapRootEntityResponse::getCreated);
     }
@@ -86,47 +88,11 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
         }
     }
 
-    Uni<Boolean> bootstrapRegistryUser() {
-        final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().registryUser().alias();
-        final var password = getServiceConfigOperation.getServiceConfig().bootstrap().registryUser().password();
-        if (password.isPresent()) {
-            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.REGISTRY);
-            return bootstrapService.execute(request)
-                    .map(BootstrapDefaultUserResponse::getCreated);
-        } else {
-            return Uni.createFrom().item(Boolean.FALSE);
-        }
-    }
-
-    Uni<Boolean> bootstrapBuilderUser() {
-        final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().builderUser().alias();
-        final var password = getServiceConfigOperation.getServiceConfig().bootstrap().builderUser().password();
-        if (password.isPresent()) {
-            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.BUILDER);
-            return bootstrapService.execute(request)
-                    .map(BootstrapDefaultUserResponse::getCreated);
-        } else {
-            return Uni.createFrom().item(Boolean.FALSE);
-        }
-    }
-
     Uni<Boolean> bootstrapServiceUser() {
         final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().alias();
         final var password = getServiceConfigOperation.getServiceConfig().bootstrap().serviceUser().password();
         if (password.isPresent()) {
             final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.SERVICE);
-            return bootstrapService.execute(request)
-                    .map(BootstrapDefaultUserResponse::getCreated);
-        } else {
-            return Uni.createFrom().item(Boolean.FALSE);
-        }
-    }
-
-    Uni<Boolean> bootstrapDispatcherUser() {
-        final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().dispatcherUser().alias();
-        final var password = getServiceConfigOperation.getServiceConfig().bootstrap().dispatcherUser().password();
-        if (password.isPresent()) {
-            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.DISPATCHER);
             return bootstrapService.execute(request)
                     .map(BootstrapDefaultUserResponse::getCreated);
         } else {

@@ -2,8 +2,8 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
-import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
-import com.omgservers.schema.module.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
 import com.omgservers.service.exception.ServerSideForbiddenException;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;

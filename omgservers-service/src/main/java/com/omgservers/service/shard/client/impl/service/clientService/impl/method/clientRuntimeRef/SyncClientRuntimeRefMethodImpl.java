@@ -2,8 +2,8 @@ package com.omgservers.service.shard.client.impl.service.clientService.impl.meth
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.client.clientRuntimeRef.SyncClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.clientRuntimeRef.SyncClientRuntimeRefResponse;
+import com.omgservers.schema.shard.client.clientRuntimeRef.SyncClientRuntimeRefRequest;
+import com.omgservers.schema.shard.client.clientRuntimeRef.SyncClientRuntimeRefResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;

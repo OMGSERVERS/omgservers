@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentLobbyAsignment;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentLobbyAssignment.FindDeploymentLobbyAssignmentRequest;
-import com.omgservers.schema.module.deployment.deploymentLobbyAssignment.FindDeploymentLobbyAssignmentResponse;
+import com.omgservers.schema.shard.deployment.deploymentLobbyAssignment.FindDeploymentLobbyAssignmentRequest;
+import com.omgservers.schema.shard.deployment.deploymentLobbyAssignment.FindDeploymentLobbyAssignmentResponse;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyAssignment.SelectDeploymentLobbyAssignmentByClientIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

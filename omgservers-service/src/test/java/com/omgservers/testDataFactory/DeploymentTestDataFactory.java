@@ -8,9 +8,9 @@ import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchm
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
-import com.omgservers.schema.module.deployment.deployment.SyncDeploymentRequest;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceRequest;
+import com.omgservers.schema.shard.deployment.deployment.SyncDeploymentRequest;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceRequest;
 import com.omgservers.service.factory.deployment.DeploymentLobbyResourceModelFactory;
 import com.omgservers.service.factory.deployment.DeploymentMatchmakerResourceModelFactory;
 import com.omgservers.service.factory.deployment.DeploymentModelFactory;

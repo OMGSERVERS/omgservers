@@ -1,8 +1,8 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
-import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateRequest;
-import com.omgservers.schema.module.matchmaker.matchmakerState.GetMatchmakerStateResponse;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.GetMatchmakerStateRequest;
+import com.omgservers.schema.shard.matchmaker.matchmakerState.GetMatchmakerStateResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;

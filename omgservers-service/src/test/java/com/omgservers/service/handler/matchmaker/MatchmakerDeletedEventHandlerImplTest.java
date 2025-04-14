@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.matchmaker;
 
 import com.omgservers.BaseTestClass;
-import com.omgservers.schema.module.matchmaker.matchmaker.DeleteMatchmakerRequest;
+import com.omgservers.schema.shard.matchmaker.matchmaker.DeleteMatchmakerRequest;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.handler.matchmaker.testInterfaces.MatchmakerDeletedEventHandlerImplTestInterface;

@@ -21,8 +21,6 @@ public interface ServiceConfig {
 
     DispatcherConfig dispatcher();
 
-    BuilderConfig builder();
-
     RegistryConfig registry();
 
     FeatureFlagsConfig featureFlags();
@@ -146,13 +144,7 @@ public interface ServiceConfig {
 
         BootstrapUserPasswordConfig supportUser();
 
-        BootstrapUserPasswordConfig registryUser();
-
-        BootstrapUserPasswordConfig builderUser();
-
         BootstrapUserPasswordConfig serviceUser();
-
-        BootstrapUserPasswordConfig dispatcherUser();
 
         BootstrapDefaultPoolConfig defaultPool();
     }
@@ -182,20 +174,11 @@ public interface ServiceConfig {
         int maxContainers();
     }
 
-    interface BuilderConfig {
-        URI uri();
-
-        String username();
-
-        Optional<String> token();
-    }
-
     interface RegistryConfig {
         URI uri();
     }
 
     interface FeatureFlagsConfig {
-        boolean builderEnabled();
     }
 
     class UserHomeConverter implements Converter<String> {

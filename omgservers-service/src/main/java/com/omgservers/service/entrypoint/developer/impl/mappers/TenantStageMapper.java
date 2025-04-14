@@ -3,7 +3,7 @@ package com.omgservers.service.entrypoint.developer.impl.mappers;
 import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDetailsDto;
 import com.omgservers.schema.entrypoint.developer.dto.tenantStage.TenantStageDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.module.tenant.tenantStage.dto.TenantStageDataDto;
+import com.omgservers.schema.shard.tenant.tenantStage.dto.TenantStageDataDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

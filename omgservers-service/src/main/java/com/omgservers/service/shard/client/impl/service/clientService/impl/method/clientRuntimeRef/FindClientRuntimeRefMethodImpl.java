@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.impl.service.clientService.impl.method.clientRuntimeRef;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.client.clientRuntimeRef.FindClientRuntimeRefRequest;
-import com.omgservers.schema.module.client.clientRuntimeRef.FindClientRuntimeRefResponse;
+import com.omgservers.schema.shard.client.clientRuntimeRef.FindClientRuntimeRefRequest;
+import com.omgservers.schema.shard.client.clientRuntimeRef.FindClientRuntimeRefResponse;
 import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.SelectClientRuntimeRefByClientIdAndRuntimeIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

@@ -1,10 +1,10 @@
 package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.module.alias.DeleteAliasRequest;
-import com.omgservers.schema.module.alias.DeleteAliasResponse;
-import com.omgservers.schema.module.alias.ViewAliasesRequest;
-import com.omgservers.schema.module.alias.ViewAliasesResponse;
+import com.omgservers.schema.shard.alias.DeleteAliasRequest;
+import com.omgservers.schema.shard.alias.DeleteAliasResponse;
+import com.omgservers.schema.shard.alias.ViewAliasesRequest;
+import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Multi;

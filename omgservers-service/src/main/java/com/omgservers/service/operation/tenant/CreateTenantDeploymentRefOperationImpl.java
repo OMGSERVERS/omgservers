@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.tenant;
 
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.SyncTenantDeploymentRefRequest;
-import com.omgservers.schema.module.tenant.tenantDeploymentRef.SyncTenantDeploymentRefResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.SyncTenantDeploymentRefRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentRef.SyncTenantDeploymentRefResponse;
 import com.omgservers.service.factory.tenant.TenantDeploymentRefModelFactory;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;

@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.deployment.impl.service.deploymentService.impl.method.deploymentLobbyResource;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.FindDeploymentLobbyResourceRequest;
-import com.omgservers.schema.module.deployment.deploymentLobbyResource.FindDeploymentLobbyResourceResponse;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.FindDeploymentLobbyResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentLobbyResource.FindDeploymentLobbyResourceResponse;
 import com.omgservers.service.shard.deployment.impl.operation.deploymentLobbyResource.SelectDeploymentLobbyResourceByLobbyIdOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;

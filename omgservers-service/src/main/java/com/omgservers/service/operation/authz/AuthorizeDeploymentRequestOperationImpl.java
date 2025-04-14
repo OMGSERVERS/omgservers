@@ -2,8 +2,8 @@ package com.omgservers.service.operation.authz;
 
 import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentRequest;
-import com.omgservers.schema.module.deployment.deployment.GetDeploymentResponse;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentRequest;
+import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;

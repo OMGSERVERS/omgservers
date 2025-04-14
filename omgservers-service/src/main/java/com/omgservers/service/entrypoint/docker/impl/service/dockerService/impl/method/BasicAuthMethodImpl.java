@@ -3,8 +3,8 @@ package com.omgservers.service.entrypoint.docker.impl.service.dockerService.impl
 import com.omgservers.schema.entrypoint.docker.BasicAuthDockerRequest;
 import com.omgservers.schema.entrypoint.docker.BasicAuthDockerResponse;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
-import com.omgservers.schema.module.user.CreateTokenRequest;
-import com.omgservers.schema.module.user.CreateTokenResponse;
+import com.omgservers.schema.shard.user.CreateTokenRequest;
+import com.omgservers.schema.shard.user.CreateTokenResponse;
 import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.exception.ServerSideUnauthorizedException;
