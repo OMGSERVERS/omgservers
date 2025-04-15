@@ -70,6 +70,19 @@ internal_help() {
   if [ -z "$1" -o "$1" = "development" -o "$1" = "development test" ]; then
     echo " $0 development test"
   fi
+  # Multiinstance
+  if [ -z "$1" -o "$1" = "multiinstance" -o "$1" = "multiinstance up" ]; then
+    echo " $0 multiinstance up"
+  fi
+  if [ -z "$1" -o "$1" = "multiinstance" -o "$1" = "multiinstance ps" ]; then
+    echo " $0 multiinstance ps"
+  fi
+  if [ -z "$1" -o "$1" = "multiinstance" -o "$1" = "multiinstance reset" ]; then
+    echo " $0 multiinstance reset"
+  fi
+  if [ -z "$1" -o "$1" = "multiinstance" -o "$1" = "multiinstance test" ]; then
+    echo " $0 multiinstance test"
+  fi
   # Integration
   if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration up" ]; then
     echo " $0 integration up"
@@ -177,7 +190,7 @@ localtesting_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p localtesting -f omgservers-environments/localtesting-environment/src/compose.yaml up --remove-orphans -d
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p localtesting -f omgservers-testing/localtesting-environment/src/compose.yaml up --remove-orphans -d
   docker compose -p localtesting ps
 }
 
@@ -249,8 +262,43 @@ development_test() {
     ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
+multiinstance_up() {
+  internal_ask_down "localtesting|development|multiinstance|standalone"
+
+  OMGSERVERS_VERSION=$(build_printVersion)
+
+  if [ -z "${OMGSERVERS_VERSION}" ]; then
+    echo "$(date) ERROR: Current version was not detected, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+    exit 1
+  fi
+
+  echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
+
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p multiinstance -f omgservers-testing/multiinstance-environment/src/compose.yaml up --remove-orphans -d
+  docker compose -p multiinstance ps
+}
+
+multiinstance_ps() {
+  docker compose -p multiinstance ps
+}
+
+multiinstance_reset() {
+  read -p 'Continue (y/n)? : ' ANSWER
+  if [ "${ANSWER}" == "y" ]; then
+    docker compose -p multiinstance down -v
+    multiinstance_up
+  else
+    echo "Operation was cancelled"
+  fi
+}
+
+multiinstance_test() {
+  OMGSERVERS_TESTER_ENVIRONMENT=MULTIINSTANCE \
+    ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
+}
+
 integration_up() {
-  internal_ask_down "localtesting|development|standalone"
+  internal_ask_down "localtesting|development|multiinstance|standalone"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -386,6 +434,18 @@ elif [ "$1" = "development" ]; then
     development_test
   else
     internal_help "development"
+  fi
+elif [ "$1" = "multiinstance" ]; then
+  if [ "$2" = "up" ]; then
+    multiinstance_up
+  elif [ "$2" = "ps" ]; then
+    multiinstance_ps
+  elif [ "$2" = "reset" ]; then
+    multiinstance_reset
+  elif [ "$2" = "test" ]; then
+    multiinstance_test
+  else
+    internal_help "multiinstance"
   fi
 elif [ "$1" = "integration" ]; then
   if [ "$2" = "up" ]; then

@@ -34,7 +34,7 @@ public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
                 .flatMap(jobs -> Multi.createFrom().iterable(jobs)
                         .onItem().transformToUniAndMerge(this::executeJob)
                         .collect().asList())
-                .repeat().withDelay(Duration.ofSeconds(1)).indefinitely()
+                .repeat().withDelay(Duration.ofSeconds(1)).atMost(10)
                 .collect().last()
                 .replaceWith(Boolean.TRUE);
     }

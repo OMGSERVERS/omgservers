@@ -22,5 +22,6 @@
         <module>development-environment</module>
         <module>integration-environment</module>
         <module>localtesting-environment</module>
+        <module>multiinstance-environment</module>
     </modules>
 </project>
