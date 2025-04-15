@@ -1,7 +1,5 @@
 package com.omgservers.service.server.initializer.impl.method;
 
-import io.smallrye.mutiny.Uni;
-
 public interface InitializeBootstrapJobMethod {
-    Uni<Void> execute();
+    void execute();
 }

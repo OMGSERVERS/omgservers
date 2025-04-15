@@ -1,0 +1,5 @@
+- https://www.postgresql.org/docs/9.1/explicit-locking.html#ADVISORY-LOCKS
+- https://www.postgresql.org/docs/9.1/functions-admin.html#FUNCTIONS-ADVISORY-LOCKS
+- There is example in PostgreSQLAdvisoryLockTemplate from flyway-database-postgresql
+    - lockNum = LOCK_MAGIC_NUM + discriminator;
+    - tryLockTransactional, select pg_try_advisory_xact_lock(lockNum)

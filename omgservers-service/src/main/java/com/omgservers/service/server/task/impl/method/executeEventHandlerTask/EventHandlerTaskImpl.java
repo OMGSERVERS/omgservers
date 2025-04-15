@@ -28,7 +28,7 @@ public class EventHandlerTaskImpl implements Task<EventHandlerTaskArguments> {
                 .uni(this::handleEvents)
                 .whilst(Boolean.TRUE::equals)
                 .collect().last()
-                .repeat().withDelay(Duration.ofMillis(100)).indefinitely()
+                .repeat().withDelay(Duration.ofMillis(100)).atMost(100)
                 .collect().last()
                 .replaceWith(Boolean.TRUE);
     }

@@ -65,20 +65,14 @@ public interface ServiceConfig {
 
     interface InitializationEventHandlerJobConfig {
         boolean enabled();
-
-        String interval();
     }
 
     interface InitializationSchedulerJobConfig {
         boolean enabled();
-
-        String interval();
     }
 
     interface InitializationBootstrapJobConfig {
         boolean enabled();
-
-        String interval();
     }
 
     interface ClientsConfig {

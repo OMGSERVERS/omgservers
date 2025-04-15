@@ -48,9 +48,9 @@ public class InitializerServiceImpl implements InitializerService {
                 .flatMap(voidItem -> initializeServerSchema())
                 .flatMap(voidItem -> initializeServerIndex())
                 .flatMap(voidItem -> initializeShardsSchemas())
-                .flatMap(voidItem -> initializeEventHandlerJob())
-                .flatMap(voidItem -> initializeSchedulerJob())
-                .flatMap(voidItem -> initializeBootstrapJob());
+                .invoke(voidItem -> initializeEventHandlerJob())
+                .invoke(voidItem -> initializeSchedulerJob())
+                .invoke(voidItem -> initializeBootstrapJob());
     }
 
     Uni<Void> initializeServerSchema() {
@@ -82,33 +82,27 @@ public class InitializerServiceImpl implements InitializerService {
         }
     }
 
-    Uni<Void> initializeEventHandlerJob() {
+    void initializeEventHandlerJob() {
         if (getServiceConfigOperation.getServiceConfig().initialization().eventHandlerJob().enabled()) {
-            return initializeEventHandlerJobMethod.execute()
-                    .invoke(voidItem -> log.info("Event handler job initialized"));
+            initializeEventHandlerJobMethod.execute();
         } else {
-            log.info("Event handler job initialization disabled");
-            return Uni.createFrom().voidItem();
+            log.info("Event handler job disabled");
         }
     }
 
-    Uni<Void> initializeSchedulerJob() {
+    void initializeSchedulerJob() {
         if (getServiceConfigOperation.getServiceConfig().initialization().schedulerJob().enabled()) {
-            return initializeSchedulerJobMethod.execute()
-                    .invoke(voidItem -> log.info("Scheduler job initialized"));
+            initializeSchedulerJobMethod.execute();
         } else {
-            log.info("Scheduler job initialization disabled");
-            return Uni.createFrom().voidItem();
+            log.info("Scheduler job disabled");
         }
     }
 
-    Uni<Void> initializeBootstrapJob() {
+    void initializeBootstrapJob() {
         if (getServiceConfigOperation.getServiceConfig().initialization().bootstrapJob().enabled()) {
-            return initializeBootstrapJobMethod.execute()
-                    .invoke(voidItem -> log.info("Bootstrap job initialized"));
+            initializeBootstrapJobMethod.execute();
         } else {
-            log.info("Bootstrap job initialization disabled");
-            return Uni.createFrom().voidItem();
+            log.info("Bootstrap job disabled");
         }
     }
 }
