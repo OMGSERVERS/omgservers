@@ -10,6 +10,7 @@ import com.omgservers.service.server.initializer.impl.method.InitializeNodeIdMet
 import com.omgservers.service.server.initializer.impl.method.InitializeSchedulerJobMethod;
 import com.omgservers.service.server.initializer.impl.method.InitializeServerIndexMethod;
 import com.omgservers.service.server.initializer.impl.method.InitializeServerSchemaMethod;
+import com.omgservers.service.server.initializer.impl.method.InitializeServiceTokenMethod;
 import com.omgservers.service.server.initializer.impl.method.InitializeShardsSchemasMethod;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
@@ -32,6 +33,7 @@ public class InitializerServiceImpl implements InitializerService {
     final InitializeMasterSchemaMethod initializeMasterSchemaMethod;
     final InitializeSchedulerJobMethod initializeSchedulerJobMethod;
     final InitializeBootstrapJobMethod initializeBootstrapJobMethod;
+    final InitializeServiceTokenMethod initializeServiceTokenMethod;
     final InitializeServerIndexMethod initializeServerIndexMethod;
     final InitializeNodeIdMethod initializeNodeIdMethod;
 
@@ -46,6 +48,7 @@ public class InitializerServiceImpl implements InitializerService {
     @Override
     public Uni<Void> initialize() {
         return Uni.createFrom().voidItem()
+                .invoke(voidItem -> initializeServiceToken())
                 .flatMap(voidItem -> initializeMasterSchema())
                 .flatMap(voidItem -> initializeNodeId())
                 .flatMap(voidItem -> initializeServerSchema())
@@ -54,6 +57,10 @@ public class InitializerServiceImpl implements InitializerService {
                 .invoke(voidItem -> initializeEventHandlerJob())
                 .invoke(voidItem -> initializeSchedulerJob())
                 .invoke(voidItem -> initializeBootstrapJob());
+    }
+
+    void initializeServiceToken() {
+        initializeServiceTokenMethod.execute();
     }
 
     Uni<Void> initializeMasterSchema() {

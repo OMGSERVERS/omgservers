@@ -2,7 +2,7 @@ package com.omgservers.service.server.state.impl.method;
 
 import com.omgservers.service.server.state.dto.SetNodeIdRequest;
 import com.omgservers.service.server.state.dto.SetNodeIdResponse;
-import com.omgservers.service.server.state.impl.operation.ChangeStateOperation;
+import com.omgservers.service.server.state.impl.operation.ExecuteStateOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SetNodeIdMethodImpl implements SetNodeIdMethod {
 
-    final ChangeStateOperation changeStateOperation;
+    final ExecuteStateOperation executeStateOperation;
 
     @Override
     public SetNodeIdResponse execute(final SetNodeIdRequest request) {
         final var nodeId = request.getNodeId();
-        changeStateOperation.setNodeId(nodeId);
+        executeStateOperation.setNodeId(nodeId);
 
         log.info("Node \"{}\" is set", nodeId);
 

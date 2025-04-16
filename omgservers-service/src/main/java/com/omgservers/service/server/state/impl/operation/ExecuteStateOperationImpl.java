@@ -7,12 +7,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @ApplicationScoped
-class ChangeStateOperationImpl implements ChangeStateOperation {
+class ExecuteStateOperationImpl implements ExecuteStateOperation {
 
     final AtomicReference<String> serviceToken;
     final AtomicReference<Long> nodeId;
 
-    ChangeStateOperationImpl() {
+    ExecuteStateOperationImpl() {
         serviceToken = new AtomicReference<>();
         nodeId = new AtomicReference<>();
     }

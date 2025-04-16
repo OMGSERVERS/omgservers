@@ -13,7 +13,7 @@ import java.time.Instant;
 
 @Slf4j
 @QuarkusTest
-class RuntimeCommandModelTest extends Assertions {
+class DeploymentCommandModelTest extends Assertions {
 
     @Inject
     ObjectMapper objectMapper;
