@@ -1,4 +1,4 @@
-package com.omgservers.service.server.cache.impl.service.inmemory.method;
+package com.omgservers.service.server.cache.impl.method;
 
 import com.omgservers.service.server.cache.dto.SetRuntimeLastActivityRequest;
 import com.omgservers.service.server.cache.dto.SetRuntimeLastActivityResponse;
