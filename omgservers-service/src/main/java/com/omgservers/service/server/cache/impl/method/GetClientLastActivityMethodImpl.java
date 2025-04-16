@@ -1,9 +1,9 @@
-package com.omgservers.service.server.cache.impl.service.inmemory.method;
+package com.omgservers.service.server.cache.impl.method;
 
-import com.omgservers.service.server.cache.dto.GetClientLastActivityResponse;
 import com.omgservers.service.server.cache.dto.GetClientLastActivityRequest;
+import com.omgservers.service.server.cache.dto.GetClientLastActivityResponse;
+import com.omgservers.service.server.cache.impl.operation.ExecuteCacheCommandOperation;
 import com.omgservers.service.server.cache.impl.operation.GetClientLastActivityCacheKeyOperation;
-import com.omgservers.service.server.cache.impl.service.inmemory.component.InMemoryCache;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,13 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 class GetClientLastActivityMethodImpl implements GetClientLastActivityMethod {
 
     final GetClientLastActivityCacheKeyOperation getClientLastActivityCacheKeyOperation;
-    final InMemoryCache inMemoryCache;
+    final ExecuteCacheCommandOperation executeCacheCommandOperation;
 
     @Override
     public Uni<GetClientLastActivityResponse> execute(final GetClientLastActivityRequest request) {
         final var clientId = request.getClientId();
         final var cacheKey = getClientLastActivityCacheKeyOperation.execute(clientId);
-        return Uni.createFrom().item(inMemoryCache.getInstant(cacheKey))
+        return executeCacheCommandOperation.getInstant(cacheKey)
                 .map(GetClientLastActivityResponse::new);
     }
 }

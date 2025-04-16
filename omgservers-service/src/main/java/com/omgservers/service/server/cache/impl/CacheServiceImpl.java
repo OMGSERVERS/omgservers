@@ -1,12 +1,12 @@
-package com.omgservers.service.server.cache.impl.service.inmemory;
+package com.omgservers.service.server.cache.impl;
 
 import com.omgservers.service.server.cache.CacheService;
 import com.omgservers.service.server.cache.dto.*;
-import com.omgservers.service.server.cache.impl.service.inmemory.method.GetClientLastActivityMethod;
-import com.omgservers.service.server.cache.impl.service.inmemory.method.GetRuntimeLastActivityMethod;
-import com.omgservers.service.server.cache.impl.service.inmemory.method.SetClientLastActivityMethod;
-import com.omgservers.service.server.cache.impl.service.inmemory.method.SetRuntimeLastActivityMethod;
-import com.omgservers.service.server.cache.impl.service.inmemory.method.GetClientsLastActivitiesMethod;
+import com.omgservers.service.server.cache.impl.method.GetClientLastActivityMethod;
+import com.omgservers.service.server.cache.impl.method.GetRuntimeLastActivityMethod;
+import com.omgservers.service.server.cache.impl.method.SetClientLastActivityMethod;
+import com.omgservers.service.server.cache.impl.method.SetRuntimeLastActivityMethod;
+import com.omgservers.service.server.cache.impl.method.GetClientsLastActivitiesMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class CacheServiceInMemoryImpl implements CacheService {
+public class CacheServiceImpl implements CacheService {
 
     final GetClientsLastActivitiesMethod getClientsLastActivitiesMethod;
     final GetRuntimeLastActivityMethod getRuntimeLastActivityMethod;

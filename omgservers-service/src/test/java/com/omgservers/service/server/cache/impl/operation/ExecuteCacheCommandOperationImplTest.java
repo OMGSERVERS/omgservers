@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class GetClientLastActivityCacheKeyOperationImplTest extends BaseTestClass {
+class ExecuteCacheCommandOperationImplTest extends BaseTestClass {
 
     @Inject
     GetClientLastActivityCacheKeyOperation getClientLastActivityCacheKeyOperation;
