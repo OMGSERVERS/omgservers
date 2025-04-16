@@ -46,8 +46,7 @@ class ExecuteCacheCommandOperationImpl implements ExecuteCacheCommandOperation {
                         final var parsedValue = objectMapper.readValue(value, clazz);
                         return parsedValue;
                     } catch (IOException e) {
-                        reactiveKeyCommands.del(key);
-                        log.error("Invalid cache key \"{}\" removed", key);
+                        log.error("Invalid cache key \"{}\" found", key);
                         return null;
                     }
                 });
@@ -68,8 +67,7 @@ class ExecuteCacheCommandOperationImpl implements ExecuteCacheCommandOperation {
                                 final var parsedValue = objectMapper.readValue(value, clazz);
                                 result.put(key, parsedValue);
                             } catch (IOException e) {
-                                reactiveKeyCommands.del(key);
-                                log.error("Invalid cache key \"{}\" removed", key);
+                                log.error("Invalid cache key \"{}\" found", key);
                             }
                         }
 
