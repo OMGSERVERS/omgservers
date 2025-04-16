@@ -13,6 +13,6 @@ public interface HandleShardedRequestOperation {
     <T extends ShardedRequest, R, C> Uni<R> handleShardedRequest(Logger log,
                                                                  T request,
                                                                  Function<URI, C> api,
-                                                                 BiFunction<C, T, Uni<? extends R>> route,
-                                                                 BiFunction<ShardModel, T, Uni<? extends R>> handle);
+                                                                 BiFunction<C, T, Uni<R>> route,
+                                                                 BiFunction<ShardModel, T, Uni<R>> handle);
 }

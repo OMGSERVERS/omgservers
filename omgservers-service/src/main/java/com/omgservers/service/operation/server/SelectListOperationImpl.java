@@ -23,7 +23,7 @@ import java.util.function.Function;
 class SelectListOperationImpl implements SelectListOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareServerSqlOperation prepareServerSqlOperation;
+    final PrepareSqlOperation prepareSqlOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
@@ -47,7 +47,7 @@ class SelectListOperationImpl implements SelectListOperation {
                                        final List<?> parameters,
                                        final String objectName,
                                        final Function<Row, T> objectMapper) {
-        final var preparedSql = prepareServerSqlOperation.execute(sql);
+        final var preparedSql = prepareSqlOperation.execute(sql);
         return executeQuery(sqlConnection, preparedSql, parameters, objectName, objectMapper);
     }
 

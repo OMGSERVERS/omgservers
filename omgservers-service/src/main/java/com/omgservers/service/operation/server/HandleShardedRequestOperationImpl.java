@@ -24,8 +24,8 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
     public <T extends ShardedRequest, R, C> Uni<R> handleShardedRequest(final Logger log,
                                                                         final T request,
                                                                         final Function<URI, C> api,
-                                                                        final BiFunction<C, T, Uni<? extends R>> route,
-                                                                        final BiFunction<ShardModel, T, Uni<? extends R>> handle) {
+                                                                        final BiFunction<C, T, Uni<R>> route,
+                                                                        final BiFunction<ShardModel, T, Uni<R>> handle) {
         return calculateShardOperation.calculateShard(request.getRequestShardKey())
                 .flatMap(shardModel -> {
                     putIntoMdcOperation.putShard(shardModel.shard());

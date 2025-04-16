@@ -1,5 +1,5 @@
 package com.omgservers.service.operation.server;
 
-public interface PrepareServerSqlOperation {
+public interface PrepareSqlOperation {
     String execute(String sql);
 }

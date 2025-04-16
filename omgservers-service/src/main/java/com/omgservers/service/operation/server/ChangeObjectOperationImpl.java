@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 class ChangeObjectOperationImpl implements ChangeObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareServerSqlOperation prepareServerSqlOperation;
+    final PrepareSqlOperation prepareSqlOperation;
     final PrepareShardSqlOperation prepareShardSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
@@ -48,7 +48,7 @@ class ChangeObjectOperationImpl implements ChangeObjectOperation {
                                 final List<?> parameters,
                                 final Supplier<EventBodyModel> eventBodySupplier,
                                 final Supplier<LogModel> logSupplier) {
-        final var preparedSql = prepareServerSqlOperation.execute(sql);
+        final var preparedSql = prepareSqlOperation.execute(sql);
         return executeQuery(changeContext, sqlConnection, preparedSql, parameters, eventBodySupplier, logSupplier);
     }
 

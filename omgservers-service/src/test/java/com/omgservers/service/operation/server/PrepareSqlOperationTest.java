@@ -8,13 +8,20 @@ import org.junit.jupiter.api.Test;
 
 @Slf4j
 @QuarkusTest
-class PrepareServerSqlOperationTest extends BaseTestClass {
+class PrepareSqlOperationTest extends BaseTestClass {
 
     @Inject
-    PrepareServerSqlOperationImpl prepareServerSqlOperation;
+    PrepareSqlOperationImpl prepareServerSqlOperation;
 
     @Test
-    void givenSql_whenExecute_thenPrepared() {
+    void givenMasterSql_whenExecute_thenPrepared() {
+        final var sql = "select id from $master.tab_table";
+        final var preparedSql = prepareServerSqlOperation.execute(sql);
+        assertEquals("select id from master_15.tab_table", preparedSql);
+    }
+
+    @Test
+    void givenServerSql_whenExecute_thenPrepared() {
         final var sql = "select id from $server.tab_table";
         final var preparedSql = prepareServerSqlOperation.execute(sql);
         assertEquals("select id from server_15.tab_table", preparedSql);
