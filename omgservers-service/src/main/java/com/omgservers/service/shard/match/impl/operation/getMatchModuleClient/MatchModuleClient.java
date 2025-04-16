@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.match.impl.operation.getMatchModuleClient;
 
-import com.omgservers.service.component.ServiceHeadersFactory;
+import com.omgservers.service.security.ServiceHeadersFactory;
 import com.omgservers.service.exception.ClientSideExceptionMapper;
 import com.omgservers.service.shard.match.impl.service.webService.impl.api.MatchApi;
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;

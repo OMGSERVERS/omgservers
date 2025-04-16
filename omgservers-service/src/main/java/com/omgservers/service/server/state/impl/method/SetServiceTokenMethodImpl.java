@@ -2,7 +2,7 @@ package com.omgservers.service.server.state.impl.method;
 
 import com.omgservers.service.server.state.dto.SetServiceTokenRequest;
 import com.omgservers.service.server.state.dto.SetServiceTokenResponse;
-import com.omgservers.service.server.state.impl.operation.ChangeStateOperation;
+import com.omgservers.service.server.state.impl.operation.ExecuteStateOperation;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class SetServiceTokenMethodImpl implements SetServiceTokenMethod {
 
-    final ChangeStateOperation changeStateOperation;
+    final ExecuteStateOperation executeStateOperation;
 
     @Override
     public SetServiceTokenResponse execute(final SetServiceTokenRequest request) {
         final var serviceToken = request.getServiceToken();
-        changeStateOperation.setServiceToken(serviceToken);
+        executeStateOperation.setServiceToken(serviceToken);
 
         log.info("Service token is set");
 

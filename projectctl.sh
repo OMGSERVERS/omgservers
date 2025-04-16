@@ -99,22 +99,6 @@ internal_help() {
   if [ -z "$1" -o "$1" = "integration" -o "$1" = "integration test" ]; then
     echo " $0 integration test"
   fi
-  # Standalone
-  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone up" ]; then
-    echo " $0 standalone up"
-  fi
-  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone ps" ]; then
-    echo " $0 standalone ps"
-  fi
-  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone reset" ]; then
-    echo " $0 standalone reset"
-  fi
-  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone logs" ]; then
-    echo " $0 standalone logs"
-  fi
-  if [ -z "$1" -o "$1" = "standalone" -o "$1" = "standalone test" ]; then
-    echo " $0 standalone test"
-  fi
 }
 
 internal_ask_down() {
@@ -172,14 +156,14 @@ environment_down() {
     docker compose -p localtesting down -v
     docker compose -p development down -v
     docker compose -p integration down -v
-    docker compose -p standalone down -v
+    docker compose -p multiinstance down -v
   else
     echo "Operation was cancelled"
   fi
 }
 
 localtesting_up() {
-  internal_ask_down "integration|development|standalone"
+  internal_ask_down "development|integration|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -214,7 +198,7 @@ localtesting_test() {
 }
 
 development_up() {
-  internal_ask_down "localtesting|integration|standalone"
+  internal_ask_down "localtesting|integration|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -225,7 +209,7 @@ development_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p development -f omgservers-environments/development-environment/src/compose.yaml up --remove-orphans -d
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p development -f omgservers-testing/development-environment/src/compose.yaml up --remove-orphans -d
   docker compose -p development ps
 }
 
@@ -263,7 +247,7 @@ development_test() {
 }
 
 multiinstance_up() {
-  internal_ask_down "localtesting|development|multiinstance|standalone"
+  internal_ask_down "localtesting|development|integration"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -298,7 +282,7 @@ multiinstance_test() {
 }
 
 integration_up() {
-  internal_ask_down "localtesting|development|multiinstance|standalone"
+  internal_ask_down "localtesting|development|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -309,7 +293,7 @@ integration_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p integration -f omgservers-environments/integration-environment/src/compose.yaml up --remove-orphans -d
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p integration -f omgservers-testing/integration-environment/src/compose.yaml up --remove-orphans -d
   docker compose -p integration ps
 }
 
@@ -336,47 +320,6 @@ integration_test() {
 
   OMGSERVERS_TESTER_ENVIRONMENT=INTEGRATION \
       ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
-}
-
-standalone_up() {
-  internal_ask_down "localtesting|development|integration"
-
-  OMGSERVERS_VERSION=$(build_printVersion)
-
-  if [ -z "${OMGSERVERS_VERSION}" ]; then
-    echo "$(date) ERROR: Current version was not detected, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
-    exit 1
-  fi
-
-  echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
-
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p standalone -f omgservers-environments/standalone-environment/src/compose.yaml up --remove-orphans -d
-  docker compose -p standalone ps
-}
-
-standalone_ps() {
-  docker compose -p standalone ps
-}
-
-standalone_reset() {
-  read -p 'Continue (y/n)? : ' ANSWER
-  if [ "${ANSWER}" == "y" ]; then
-    docker compose -p standalone down -v
-    standalone_up
-  else
-    echo "Operation was cancelled"
-  fi
-}
-
-standalone_logs() {
-  docker compose -p standalone logs $@
-}
-
-standalone_test() {
-  standalone_up
-
-  OMGSERVERS_TESTER_ENVIRONMENT=STANDALONE \
-        ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
 # Build
@@ -460,20 +403,6 @@ elif [ "$1" = "integration" ]; then
     integration_test
   else
     internal_help "integration"
-  fi
-elif [ "$1" = "standalone" ]; then
-  if [ "$2" = "up" ]; then
-    standalone_up
-  elif [ "$2" = "ps" ]; then
-    standalone_ps
-  elif [ "$2" = "reset" ]; then
-    standalone_reset
-  elif [ "$2" = "logs" ]; then
-    standalone_logs "${@:3}"
-  elif [ "$2" = "test" ]; then
-    standalone_test
-  else
-    internal_help "standalone"
   fi
 else
   internal_help

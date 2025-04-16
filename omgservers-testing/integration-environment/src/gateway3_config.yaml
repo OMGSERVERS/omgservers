@@ -34,14 +34,6 @@ static_resources:
                             prefix: "/service"
                           route:
                             cluster: service
-                        - match:
-                            prefix: "/dispatcher"
-                          route:
-                            cluster: dispatcher
-                        - match:
-                            prefix: "/v2"
-                          route:
-                            cluster: registry
                 http_filters:
                   - name: envoy.filters.http.router
                     typed_config:
@@ -59,27 +51,3 @@ static_resources:
                     socket_address:
                       address: service3
                       port_value: 8080
-    - name: dispatcher
-      type: STRICT_DNS
-      lb_policy: ROUND_ROBIN
-      load_assignment:
-        cluster_name: dispatcher
-        endpoints:
-          - lb_endpoints:
-              - endpoint:
-                  address:
-                    socket_address:
-                      address: dispatcher3
-                      port_value: 8080
-    - name: registry
-      type: STRICT_DNS
-      lb_policy: ROUND_ROBIN
-      load_assignment:
-        cluster_name: registry
-        endpoints:
-          - lb_endpoints:
-              - endpoint:
-                  address:
-                    socket_address:
-                      address: registry
-                      port_value: 5000

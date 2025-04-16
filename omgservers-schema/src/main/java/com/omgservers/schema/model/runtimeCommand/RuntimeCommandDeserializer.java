@@ -46,7 +46,7 @@ public class RuntimeCommandDeserializer extends StdDeserializer<RuntimeCommandMo
             runtimeCommandModel.setIdempotencyKey(idempotencyKeyNode.asText());
         }
 
-        final var runtimeIdNode = root.get("runtimeId");
+        final var runtimeIdNode = root.get("runtime_id");
         if (runtimeIdNode != null) {
             runtimeCommandModel.setRuntimeId(Long.valueOf(runtimeIdNode.asText()));
         }

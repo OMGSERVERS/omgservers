@@ -1,6 +1,6 @@
 package com.omgservers.service.server.state.impl.operation;
 
-public interface ChangeStateOperation {
+public interface ExecuteStateOperation {
 
     void setServiceToken(String serviceToken);
 
