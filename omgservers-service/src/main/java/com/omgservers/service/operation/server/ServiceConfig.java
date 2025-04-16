@@ -32,8 +32,6 @@ public interface ServiceConfig {
     interface ServerConfig {
         long id();
 
-        long instanceId();
-
         String jwtIssuer();
 
         String x5c();
@@ -41,6 +39,8 @@ public interface ServiceConfig {
         ServiceUserConfig serviceUser();
 
         URI uri();
+
+        URI masterUri();
 
         int shardCount();
     }
