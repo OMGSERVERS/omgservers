@@ -1,9 +1,9 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation;
 
 import com.omgservers.service.server.cache.CacheService;
-import com.omgservers.service.server.cache.dto.GetRuntimeLastActivityRequest;
-import com.omgservers.service.server.cache.dto.GetRuntimeLastActivityResponse;
-import com.omgservers.service.server.cache.dto.SetRuntimeLastActivityRequest;
+import com.omgservers.service.server.cache.dto.CacheRuntimeLastActivityRequest;
+import com.omgservers.service.server.cache.dto.GetCachedRuntimeLastActivityRequest;
+import com.omgservers.service.server.cache.dto.GetCachedRuntimeLastActivityResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -26,18 +26,18 @@ class GetRuntimeLastActivityOperationImpl implements GetRuntimeLastActivityOpera
                     log.info("No last activity for runtime \"{}\", set current timestamp", runtimeId);
 
                     final var lastActivity = Instant.now();
-                    return setRuntimeLastActivity(runtimeId, lastActivity);
+                    return cacheRuntimeLastActivity(runtimeId, lastActivity);
                 });
     }
 
     Uni<Instant> getRuntimeLastActivity(final Long runtimeId) {
-        final var request = new GetRuntimeLastActivityRequest(runtimeId);
+        final var request = new GetCachedRuntimeLastActivityRequest(runtimeId);
         return cacheService.execute(request)
-                .map(GetRuntimeLastActivityResponse::getLastActivity);
+                .map(GetCachedRuntimeLastActivityResponse::getLastActivity);
     }
 
-    Uni<Instant> setRuntimeLastActivity(final Long runtimeId, final Instant lastActivity) {
-        final var request = new SetRuntimeLastActivityRequest(runtimeId, lastActivity);
+    Uni<Instant> cacheRuntimeLastActivity(final Long runtimeId, final Instant lastActivity) {
+        final var request = new CacheRuntimeLastActivityRequest(runtimeId, lastActivity);
         return cacheService.execute(request)
                 .replaceWith(lastActivity);
     }

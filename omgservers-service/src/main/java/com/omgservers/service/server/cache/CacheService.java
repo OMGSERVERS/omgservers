@@ -1,27 +1,35 @@
 package com.omgservers.service.server.cache;
 
-import com.omgservers.service.server.cache.dto.GetClientLastActivityRequest;
-import com.omgservers.service.server.cache.dto.GetClientLastActivityResponse;
-import com.omgservers.service.server.cache.dto.GetClientsLastActivitiesRequest;
-import com.omgservers.service.server.cache.dto.GetClientsLastActivitiesResponse;
-import com.omgservers.service.server.cache.dto.GetRuntimeLastActivityRequest;
-import com.omgservers.service.server.cache.dto.GetRuntimeLastActivityResponse;
-import com.omgservers.service.server.cache.dto.SetClientLastActivityRequest;
-import com.omgservers.service.server.cache.dto.SetClientLastActivityResponse;
-import com.omgservers.service.server.cache.dto.SetRuntimeLastActivityRequest;
-import com.omgservers.service.server.cache.dto.SetRuntimeLastActivityResponse;
+import com.omgservers.service.server.cache.dto.GetCachedClientLastActivityRequest;
+import com.omgservers.service.server.cache.dto.GetCachedClientLastActivityResponse;
+import com.omgservers.service.server.cache.dto.GetCachedClientsLastActivitiesRequest;
+import com.omgservers.service.server.cache.dto.GetCachedClientsLastActivitiesResponse;
+import com.omgservers.service.server.cache.dto.GetCachedIndexConfigRequest;
+import com.omgservers.service.server.cache.dto.GetCachedIndexConfigResponse;
+import com.omgservers.service.server.cache.dto.GetCachedRuntimeLastActivityRequest;
+import com.omgservers.service.server.cache.dto.GetCachedRuntimeLastActivityResponse;
+import com.omgservers.service.server.cache.dto.CacheClientLastActivityRequest;
+import com.omgservers.service.server.cache.dto.CacheClientLastActivityResponse;
+import com.omgservers.service.server.cache.dto.CacheIndexConfigRequest;
+import com.omgservers.service.server.cache.dto.CacheIndexConfigResponse;
+import com.omgservers.service.server.cache.dto.CacheRuntimeLastActivityRequest;
+import com.omgservers.service.server.cache.dto.CacheRuntimeLastActivityResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
 public interface CacheService {
 
-    Uni<GetRuntimeLastActivityResponse> execute(@Valid GetRuntimeLastActivityRequest request);
+    Uni<GetCachedRuntimeLastActivityResponse> execute(@Valid GetCachedRuntimeLastActivityRequest request);
 
-    Uni<SetRuntimeLastActivityResponse> execute(@Valid SetRuntimeLastActivityRequest request);
+    Uni<CacheRuntimeLastActivityResponse> execute(@Valid CacheRuntimeLastActivityRequest request);
 
-    Uni<GetClientLastActivityResponse> execute(@Valid GetClientLastActivityRequest request);
+    Uni<GetCachedClientLastActivityResponse> execute(@Valid GetCachedClientLastActivityRequest request);
 
-    Uni<GetClientsLastActivitiesResponse> execute(@Valid GetClientsLastActivitiesRequest request);
+    Uni<GetCachedClientsLastActivitiesResponse> execute(@Valid GetCachedClientsLastActivitiesRequest request);
 
-    Uni<SetClientLastActivityResponse> execute(@Valid SetClientLastActivityRequest request);
+    Uni<CacheClientLastActivityResponse> execute(@Valid CacheClientLastActivityRequest request);
+
+    Uni<GetCachedIndexConfigResponse> execute(@Valid GetCachedIndexConfigRequest request);
+
+    Uni<CacheIndexConfigResponse> execute(@Valid CacheIndexConfigRequest request);
 }

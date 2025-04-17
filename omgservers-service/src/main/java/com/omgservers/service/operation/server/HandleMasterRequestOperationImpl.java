@@ -1,7 +1,6 @@
 package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.master.MasterRequest;
-import com.omgservers.service.exception.ServerSideInternalException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -39,14 +38,7 @@ class HandleMasterRequestOperationImpl implements HandleMasterRequestOperation {
 
         return operation
                 .onFailure()
-                .invoke(t -> {
-                    if (t instanceof ServerSideInternalException) {
-                        log.warn("Internal request failed, request={}, {}:{}",
-                                request, t.getClass().getSimpleName(), t.getMessage());
-                    } else {
-                        log.trace("Internal request failed, request={}, {}:{}",
-                                request, t.getClass().getSimpleName(), t.getMessage());
-                    }
-                });
+                .invoke(t -> log.error("Master request failed, uri={}, request={}, {}:{}",
+                        masterUri, request, t.getClass().getSimpleName(), t.getMessage()));
     }
 }

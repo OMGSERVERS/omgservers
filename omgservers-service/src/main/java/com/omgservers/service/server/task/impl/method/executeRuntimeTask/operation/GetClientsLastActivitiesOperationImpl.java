@@ -1,9 +1,9 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation;
 
 import com.omgservers.service.server.cache.CacheService;
-import com.omgservers.service.server.cache.dto.GetClientsLastActivitiesRequest;
-import com.omgservers.service.server.cache.dto.GetClientsLastActivitiesResponse;
-import com.omgservers.service.server.cache.dto.SetClientLastActivityRequest;
+import com.omgservers.service.server.cache.dto.GetCachedClientsLastActivitiesRequest;
+import com.omgservers.service.server.cache.dto.GetCachedClientsLastActivitiesResponse;
+import com.omgservers.service.server.cache.dto.CacheClientLastActivityRequest;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,7 +37,7 @@ class GetClientsLastActivitiesOperationImpl implements GetClientsLastActivitiesO
                                 } else {
                                     log.info("No last activity for client \"{}\", set current timestamp", clientId);
 
-                                    return setClientLastActivity(clientId, now)
+                                    return cacheClientLastActivity(clientId, now)
                                             .invoke(voidItem -> lastActivities.put(clientId, now));
                                 }
                             })
@@ -47,13 +47,13 @@ class GetClientsLastActivitiesOperationImpl implements GetClientsLastActivitiesO
     }
 
     Uni<Map<Long, Instant>> getClientsLastActivities(final List<Long> clientIds) {
-        final var request = new GetClientsLastActivitiesRequest(clientIds);
+        final var request = new GetCachedClientsLastActivitiesRequest(clientIds);
         return cacheService.execute(request)
-                .map(GetClientsLastActivitiesResponse::getLastActivities);
+                .map(GetCachedClientsLastActivitiesResponse::getLastActivities);
     }
 
-    Uni<Void> setClientLastActivity(final Long clientId, final Instant lastActivity) {
-        final var request = new SetClientLastActivityRequest(clientId, lastActivity);
+    Uni<Void> cacheClientLastActivity(final Long clientId, final Instant lastActivity) {
+        final var request = new CacheClientLastActivityRequest(clientId, lastActivity);
         return cacheService.execute(request)
                 .replaceWithVoid();
     }

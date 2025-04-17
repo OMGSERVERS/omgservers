@@ -16,7 +16,6 @@ import com.omgservers.service.factory.pool.PoolCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.alias.GetDefaultPoolIdOperation;
 import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
-import com.omgservers.service.operation.server.GetServersOperation;
 import com.omgservers.service.server.job.JobService;
 import com.omgservers.service.shard.lobby.LobbyShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
@@ -43,8 +42,6 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
     final PoolShard poolShard;
 
     final JobService jobService;
-
-    final GetServersOperation getServersOperation;
 
     final FindAndDeleteJobOperation findAndDeleteJobOperation;
     final GetDefaultPoolIdOperation getDefaultPoolIdOperation;

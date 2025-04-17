@@ -20,7 +20,7 @@ import com.omgservers.service.operation.client.SelectClientRuntimeOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.server.cache.CacheService;
-import com.omgservers.service.server.cache.dto.SetClientLastActivityRequest;
+import com.omgservers.service.server.cache.dto.CacheClientLastActivityRequest;
 import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.shard.client.impl.operation.clientMessage.DeleteClientMessagesByIdsOperation;
 import com.omgservers.service.shard.client.impl.operation.clientMessage.SelectActiveClientMessagesByClientIdOperation;
@@ -67,7 +67,7 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                         // If client was deleted then only receiving is available
                         return receiveMessages(shard, clientId, consumedMessages);
                     } else {
-                        return setClientLastActivity(clientId)
+                        return cacheClientLastActivity(clientId)
                                 .flatMap(voidItem -> {
                                     final var outgoingMessages = request.getOutgoingMessages();
                                     return deliverMessages(clientId, outgoingMessages);
@@ -84,9 +84,9 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                 .map(GetClientResponse::getClient);
     }
 
-    Uni<Void> setClientLastActivity(final Long clientId) {
+    Uni<Void> cacheClientLastActivity(final Long clientId) {
         final var lastActivity = Instant.now();
-        final var request = new SetClientLastActivityRequest(clientId, lastActivity);
+        final var request = new CacheClientLastActivityRequest(clientId, lastActivity);
         return cacheService.execute(request)
                 .replaceWithVoid();
     }

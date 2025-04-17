@@ -2,9 +2,7 @@ package com.omgservers.service.server.task.impl.method.executeBootstrapTask;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.exception.ServerSideInternalException;
-import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.bootstrap.BootstrapService;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolRequest;
@@ -27,26 +25,8 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
     final BootstrapService bootstrapService;
 
     final GetServiceConfigOperation getServiceConfigOperation;
-    final CalculateShardOperation calculateShardOperation;
 
     public Uni<Boolean> execute(final BootstrapTaskArguments taskArguments) {
-        return calculateShardOperation.calculateShard(String.valueOf(GlobalShardConfiguration.GLOBAL_SHARD_KEY))
-                .flatMap(shardModel -> {
-                    if (shardModel.foreign()) {
-                        log.info("Bootstrap is skipped; it is the responsibility of {}", shardModel.serverUri());
-                        return Uni.createFrom().item(Boolean.TRUE);
-                    } else {
-                        if (!getServiceConfigOperation.getServiceConfig().bootstrap().enabled()) {
-                            log.debug("Bootstrap is not enabled, skip operation");
-                            return Uni.createFrom().item(Boolean.TRUE);
-                        }
-
-                        return bootstrap();
-                    }
-                });
-    }
-
-    Uni<Boolean> bootstrap() {
         return bootstrapRootEntity()
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
@@ -61,7 +41,12 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
 
     Uni<Boolean> bootstrapRootEntity() {
         return bootstrapService.execute(new BootstrapRootEntityRequest())
-                .map(BootstrapRootEntityResponse::getCreated);
+                .map(BootstrapRootEntityResponse::getCreated)
+                .invoke(created -> {
+                    if (created) {
+                        log.info("Root created");
+                    }
+                });
     }
 
     Uni<Boolean> bootstrapAdminUser() {
@@ -70,7 +55,12 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
         if (password.isPresent()) {
             final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.ADMIN);
             return bootstrapService.execute(request)
-                    .map(BootstrapDefaultUserResponse::getCreated);
+                    .map(BootstrapDefaultUserResponse::getCreated)
+                    .invoke(created -> {
+                        if (created) {
+                            log.info("Admin user \"{}\" created", alias);
+                        }
+                    });
         } else {
             return Uni.createFrom().item(Boolean.FALSE);
         }
@@ -82,7 +72,12 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
         if (password.isPresent()) {
             final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.SUPPORT);
             return bootstrapService.execute(request)
-                    .map(BootstrapDefaultUserResponse::getCreated);
+                    .map(BootstrapDefaultUserResponse::getCreated)
+                    .invoke(created -> {
+                        if (created) {
+                            log.info("Support user \"{}\" created", alias);
+                        }
+                    });
         } else {
             return Uni.createFrom().item(Boolean.FALSE);
         }
@@ -94,7 +89,12 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
         if (password.isPresent()) {
             final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.SERVICE);
             return bootstrapService.execute(request)
-                    .map(BootstrapDefaultUserResponse::getCreated);
+                    .map(BootstrapDefaultUserResponse::getCreated)
+                    .invoke(created -> {
+                        if (created) {
+                            log.info("Service user \"{}\" created", alias);
+                        }
+                    });
         } else {
             return Uni.createFrom().item(Boolean.FALSE);
         }
@@ -102,6 +102,11 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
 
     Uni<Boolean> bootstrapDefaultPool() {
         return bootstrapService.execute(new BootstrapDefaultPoolRequest())
-                .map(BootstrapDefaultPoolResponse::getCreated);
+                .map(BootstrapDefaultPoolResponse::getCreated)
+                .invoke(created -> {
+                    if (created) {
+                        log.info("Default pool created");
+                    }
+                });
     }
 }

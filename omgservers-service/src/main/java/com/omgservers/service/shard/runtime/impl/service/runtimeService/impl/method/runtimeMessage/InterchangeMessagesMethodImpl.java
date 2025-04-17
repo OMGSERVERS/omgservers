@@ -16,7 +16,7 @@ import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.server.cache.CacheService;
-import com.omgservers.service.server.cache.dto.SetRuntimeLastActivityRequest;
+import com.omgservers.service.server.cache.dto.CacheRuntimeLastActivityRequest;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.runtime.impl.operation.handleOutgoingMessages.HandleOutgoingMessageOperation;
 import com.omgservers.service.shard.runtime.impl.operation.runtimeMessage.DeleteRuntimeMessagesByIdsOperation;
@@ -60,7 +60,7 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                                 "runtime already deleted, runtimeId=" + runtimeId);
                     }
 
-                    return setRuntimeLastActivity(runtimeId)
+                    return cacheRuntimeLastActivity(runtimeId)
                             .flatMap(voidItem -> viewRuntimeAssignments(runtimeId))
                             .flatMap(runtimeAssignments -> {
                                 final int shard = shardModel.shard();
@@ -82,9 +82,9 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                 .map(GetRuntimeResponse::getRuntime);
     }
 
-    Uni<Void> setRuntimeLastActivity(final Long runtimeId) {
+    Uni<Void> cacheRuntimeLastActivity(final Long runtimeId) {
         final var lastActivity = Instant.now();
-        final var request = new SetRuntimeLastActivityRequest(runtimeId, lastActivity);
+        final var request = new CacheRuntimeLastActivityRequest(runtimeId, lastActivity);
         return cacheService.execute(request)
                 .replaceWithVoid();
     }

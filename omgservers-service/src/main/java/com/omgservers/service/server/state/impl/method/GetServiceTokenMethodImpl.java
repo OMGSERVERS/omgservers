@@ -16,7 +16,7 @@ class GetServiceTokenMethodImpl implements GetServiceTokenMethod {
 
     @Override
     public GetServiceTokenResponse execute(final GetServiceTokenRequest request) {
-        final var serviceToken = executeStateOperation.getServiceToken();
+        final var serviceToken = executeStateOperation.getServerToken();
         return new GetServiceTokenResponse(serviceToken);
     }
 }

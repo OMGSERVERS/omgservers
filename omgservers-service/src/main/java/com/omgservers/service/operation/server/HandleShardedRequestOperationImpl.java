@@ -35,25 +35,28 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                                 "shardModel is locked, shardModel=" + shardModel.shard());
                     }
 
+                    final Uni<R> operation;
+                    final var serverUri = shardModel.serverUri();
                     if (shardModel.foreign()) {
-                        var serverUri = shardModel.serverUri();
                         final var client = api.apply(serverUri);
                         log.trace("Route request, targetServer={}, request={}", serverUri, request);
-                        return route.apply(client, request);
+                        operation = route.apply(client, request);
                     } else {
                         log.trace("Handle request, request={}", request);
-                        return handle.apply(shardModel, request);
+                        operation = handle.apply(shardModel, request);
                     }
-                })
-                .onFailure()
-                .invoke(t -> {
-                    if (t instanceof ServerSideInternalException) {
-                        log.warn("Internal request failed, request={}, {}:{}",
-                                request, t.getClass().getSimpleName(), t.getMessage());
-                    } else {
-                        log.trace("Internal request failed, request={}, {}:{}",
-                                request, t.getClass().getSimpleName(), t.getMessage());
-                    }
+
+                    return operation
+                            .onFailure()
+                            .invoke(t -> {
+                                if (t instanceof ServerSideInternalException) {
+                                    log.warn("Sharded request failed, uri={}, request={}, {}:{}",
+                                            serverUri, request, t.getClass().getSimpleName(), t.getMessage());
+                                } else {
+                                    log.debug("Sharded request failed, uri={}, request={}, {}:{}",
+                                            serverUri, request, t.getClass().getSimpleName(), t.getMessage());
+                                }
+                            });
                 });
     }
 }

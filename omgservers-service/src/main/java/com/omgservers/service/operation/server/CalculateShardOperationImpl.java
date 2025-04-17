@@ -1,10 +1,6 @@
 package com.omgservers.service.operation.server;
 
-import com.omgservers.schema.model.index.IndexModel;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.service.server.index.IndexService;
-import com.omgservers.service.server.index.dto.GetIndexRequest;
-import com.omgservers.service.server.index.dto.GetIndexResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -19,10 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 class CalculateShardOperationImpl implements CalculateShardOperation {
 
-    final IndexService indexService;
-
-    final CalculateCrc16Operation calculateCrc16Operation;
     final GetServiceConfigOperation getServiceConfigOperation;
+    final CalculateCrc16Operation calculateCrc16Operation;
+    final GetIndexConfigOperation getIndexConfigOperation;
 
     @Override
     public Uni<ShardModel> calculateShard(String... keys) {
@@ -31,23 +26,17 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
 
     @Override
     public Uni<ShardModel> calculateShard(List<String> keys) {
-        return getIndex()
-                .map(index -> {
-                    final var shardIndex = calculateShard(index.getConfig().getTotalShardCount(), keys);
-                    final var shardServerUri = index.getConfig().getServerUri(shardIndex);
+        return getIndexConfigOperation.execute()
+                .map(indexConfig -> {
+                    final var shardIndex = calculateShard(indexConfig.getTotalShardCount(), keys);
+                    final var shardServerUri = indexConfig.getServerUri(shardIndex);
                     final var thisServerUri = getServiceConfigOperation.getServiceConfig().server().uri();
                     final var foreign = !shardServerUri.equals(thisServerUri);
-                    final var locked = index.getConfig().getLockedShards().contains(shardIndex);
+                    final var locked = indexConfig.getLockedShards().contains(shardIndex);
 
                     final var shardModel = new ShardModel(shardIndex, shardServerUri, foreign, locked);
                     return shardModel;
                 });
-    }
-
-    Uni<IndexModel> getIndex() {
-        final var request = new GetIndexRequest();
-        return indexService.getIndex(request)
-                .map(GetIndexResponse::getIndex);
     }
 
     @Override

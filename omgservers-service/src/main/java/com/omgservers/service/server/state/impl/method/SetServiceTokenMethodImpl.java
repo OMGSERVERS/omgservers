@@ -17,9 +17,9 @@ class SetServiceTokenMethodImpl implements SetServiceTokenMethod {
     @Override
     public SetServiceTokenResponse execute(final SetServiceTokenRequest request) {
         final var serviceToken = request.getServiceToken();
-        executeStateOperation.setServiceToken(serviceToken);
+        executeStateOperation.setServerToken(serviceToken);
 
-        log.info("Service token is set");
+        log.info("Service token set");
 
         return new SetServiceTokenResponse();
     }
