@@ -63,6 +63,11 @@ class ExecuteCacheCommandOperationImpl implements ExecuteCacheCommandOperation {
 
                         for (final String key : values.keySet()) {
                             final var value = values.get(key);
+
+                            if (Objects.isNull(value)) {
+                                continue;
+                            }
+
                             try {
                                 final var parsedValue = objectMapper.readValue(value, clazz);
                                 result.put(key, parsedValue);
@@ -92,8 +97,12 @@ class ExecuteCacheCommandOperationImpl implements ExecuteCacheCommandOperation {
                          final long timeout) {
         try {
             final var stringValue = objectMapper.writeValueAsString(value);
-            final var setArgs = new SetArgs().ex(timeout);
-            return reactiveValueCommands.set(key, stringValue, setArgs);
+            if (timeout > 0) {
+                final var setArgs = new SetArgs().ex(timeout);
+                return reactiveValueCommands.set(key, stringValue, setArgs);
+            } else {
+                return reactiveValueCommands.set(key, stringValue);
+            }
         } catch (IOException e) {
             throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
         }

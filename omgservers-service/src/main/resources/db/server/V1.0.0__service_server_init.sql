@@ -1,12 +1,3 @@
-create table if not exists tab_index (
-    id bigint primary key,
-    idempotency_key text not null unique,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    config jsonb not null,
-    deleted boolean not null
-);
-
 create table if not exists tab_job (
     id bigint primary key,
     idempotency_key text not null unique,

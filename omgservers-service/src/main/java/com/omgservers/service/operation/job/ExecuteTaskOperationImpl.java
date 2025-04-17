@@ -17,9 +17,9 @@ class ExecuteTaskOperationImpl implements ExecuteTaskOperation {
         return task.execute(arguments)
                 .onFailure()
                 .recoverWithUni(t -> {
-                    log.error("Failed to execute, task=\"{}\", {}:{}",
+                    log.error("Failed to execute task=\"{}\", {}:{}",
                             task.getClass().getSimpleName(),
-                            t.getClass().getSimpleName(), t.getMessage(), t);
+                            t.getClass().getSimpleName(), t.getMessage());
                     return Uni.createFrom().item(Boolean.FALSE);
                 })
                 .invoke(result -> log.trace("Task finished, result={}", result));

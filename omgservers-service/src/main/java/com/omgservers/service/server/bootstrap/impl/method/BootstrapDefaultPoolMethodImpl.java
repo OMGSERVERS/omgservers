@@ -18,7 +18,6 @@ import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.pool.PoolModelFactory;
 import com.omgservers.service.factory.pool.PoolServerModelFactory;
-import com.omgservers.service.operation.server.GetServersOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.server.ServiceConfig;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolRequest;
@@ -42,7 +41,6 @@ class BootstrapDefaultPoolMethodImpl implements BootstrapDefaultPoolMethod {
 
     final PoolShard poolShard;
 
-    final GetServersOperation getServersOperation;
     final GetServiceConfigOperation getServiceConfigOperation;
 
     final PoolServerModelFactory poolServerModelFactory;

@@ -19,7 +19,7 @@ class SetNodeIdMethodImpl implements SetNodeIdMethod {
         final var nodeId = request.getNodeId();
         executeStateOperation.setNodeId(nodeId);
 
-        log.info("Node \"{}\" is set", nodeId);
+        log.info("Node \"{}\" set", nodeId);
 
         return new SetNodeIdResponse();
     }

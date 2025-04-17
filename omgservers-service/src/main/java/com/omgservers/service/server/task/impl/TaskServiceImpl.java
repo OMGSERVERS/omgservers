@@ -35,6 +35,11 @@ class TaskServiceImpl implements TaskService {
     final ExecutePoolTaskMethod executePoolTaskMethod;
 
     @Override
+    public Uni<ExecuteBootstrapTaskResponse> execute(@Valid final ExecuteBootstrapTaskRequest request) {
+        return executeBootstrapTaskMethod.execute(request);
+    }
+
+    @Override
     public Uni<ExecuteSchedulerTaskResponse> execute(@Valid final ExecuteSchedulerTaskRequest request) {
         return executeSchedulerTaskMethod.execute(request);
     }
@@ -72,10 +77,5 @@ class TaskServiceImpl implements TaskService {
     @Override
     public Uni<ExecuteEventHandlerTaskResponse> execute(@Valid final ExecuteEventHandlerTaskRequest request) {
         return executeEventHandlerTaskMethod.execute(request);
-    }
-
-    @Override
-    public Uni<ExecuteBootstrapTaskResponse> execute(@Valid final ExecuteBootstrapTaskRequest request) {
-        return executeBootstrapTaskMethod.execute(request);
     }
 }

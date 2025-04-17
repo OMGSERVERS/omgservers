@@ -3,15 +3,16 @@ package com.omgservers.service.server.initializer.impl;
 import com.omgservers.service.configuration.ServicePriorityConfiguration;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.initializer.InitializerService;
-import com.omgservers.service.server.initializer.impl.method.InitializeBootstrapJobMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeEventHandlerJobMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeMasterSchemaMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeNodeIdMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeSchedulerJobMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeServerIndexMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeServerSchemaMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeServiceTokenMethod;
-import com.omgservers.service.server.initializer.impl.method.InitializeShardsSchemasMethod;
+import com.omgservers.service.server.initializer.impl.method.AcquireNodeIdMethod;
+import com.omgservers.service.server.initializer.impl.method.CreateIndexMethod;
+import com.omgservers.service.server.initializer.impl.method.IssueServiceTokenMethod;
+import com.omgservers.service.server.initializer.impl.method.MigrateMasterSchemaMethod;
+import com.omgservers.service.server.initializer.impl.method.MigrateServerSchemaMethod;
+import com.omgservers.service.server.initializer.impl.method.MigrateShardsSchemasMethod;
+import com.omgservers.service.server.initializer.impl.method.ScheduleBootstrapJobMethod;
+import com.omgservers.service.server.initializer.impl.method.ScheduleEventHandlerJobMethod;
+import com.omgservers.service.server.initializer.impl.method.ScheduleSchedulerJobMethod;
+import com.omgservers.service.server.initializer.impl.method.SetIndexConfigMethod;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.Uni;
@@ -27,15 +28,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class InitializerServiceImpl implements InitializerService {
 
-    final InitializeEventHandlerJobMethod initializeEventHandlerJobMethod;
-    final InitializeShardsSchemasMethod initializeShardsSchemasMethod;
-    final InitializeServerSchemaMethod initializeServerSchemaMethod;
-    final InitializeMasterSchemaMethod initializeMasterSchemaMethod;
-    final InitializeSchedulerJobMethod initializeSchedulerJobMethod;
-    final InitializeBootstrapJobMethod initializeBootstrapJobMethod;
-    final InitializeServiceTokenMethod initializeServiceTokenMethod;
-    final InitializeServerIndexMethod initializeServerIndexMethod;
-    final InitializeNodeIdMethod initializeNodeIdMethod;
+    final ScheduleEventHandlerJobMethod scheduleEventHandlerJobMethod;
+    final MigrateShardsSchemasMethod migrateShardsSchemasMethod;
+    final ScheduleSchedulerJobMethod scheduleSchedulerJobMethod;
+    final ScheduleBootstrapJobMethod scheduleBootstrapJobMethod;
+    final MigrateServerSchemaMethod migrateServerSchemaMethod;
+    final MigrateMasterSchemaMethod migrateMasterSchemaMethod;
+    final IssueServiceTokenMethod issueServiceTokenMethod;
+    final AcquireNodeIdMethod acquireNodeIdMethod;
+    final CreateIndexMethod createIndexMethod;
+    final SetIndexConfigMethod setIndexConfigMethod;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -47,86 +49,71 @@ public class InitializerServiceImpl implements InitializerService {
 
     @Override
     public Uni<Void> initialize() {
+        return migrateMasterSchema()
+                .flatMap(voidItem -> issueServiceToken())
+                .flatMap(voidItem -> acquireNodeId())
+                .flatMap(voidItem -> migrateServerSchema())
+                .flatMap(voidItem -> createIndex())
+                .flatMap(voidItem -> setIndexConfig())
+                .flatMap(voidItem -> migrateShardsSchemas())
+                .flatMap(voidItem -> scheduleEventHandlerJob())
+                .flatMap(voidItem -> scheduleSchedulerJob())
+                .flatMap(voidItem -> scheduleBootstrapJob());
+    }
+
+    Uni<Void> migrateMasterSchema() {
+        return migrateMasterSchemaMethod.execute();
+    }
+
+    Uni<Void> acquireNodeId() {
+        return acquireNodeIdMethod.execute();
+    }
+
+    Uni<Void> migrateServerSchema() {
+        return migrateServerSchemaMethod.execute();
+    }
+
+    Uni<Void> createIndex() {
+        return createIndexMethod.execute();
+    }
+
+    Uni<Void> issueServiceToken() {
         return Uni.createFrom().voidItem()
-                .invoke(voidItem -> initializeServiceToken())
-                .flatMap(voidItem -> initializeMasterSchema())
-                .flatMap(voidItem -> initializeNodeId())
-                .flatMap(voidItem -> initializeServerSchema())
-                .flatMap(voidItem -> initializeServerIndex())
-                .flatMap(voidItem -> initializeShardsSchemas())
-                .invoke(voidItem -> initializeEventHandlerJob())
-                .invoke(voidItem -> initializeSchedulerJob())
-                .invoke(voidItem -> initializeBootstrapJob());
+                .invoke(voidItem -> issueServiceTokenMethod.execute());
     }
 
-    void initializeServiceToken() {
-        initializeServiceTokenMethod.execute();
+    Uni<Void> setIndexConfig() {
+        return setIndexConfigMethod.execute();
     }
 
-    Uni<Void> initializeMasterSchema() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().databaseSchema().enabled()) {
-            return initializeMasterSchemaMethod.execute()
-                    .invoke(voidItem -> log.info("Master schema initialized"));
-        } else {
+    Uni<Void> migrateShardsSchemas() {
+        return migrateShardsSchemasMethod.execute();
+    }
+
+    Uni<Void> scheduleEventHandlerJob() {
+        if (!getServiceConfigOperation.getServiceConfig().initialization().eventHandlerJob().enabled()) {
             return Uni.createFrom().voidItem();
         }
+
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> scheduleEventHandlerJobMethod.execute());
     }
 
-    Uni<Void> initializeNodeId() {
-        return initializeNodeIdMethod.execute()
-                .invoke(voidItem -> log.info("NodeId initialized"));
-    }
-
-    Uni<Void> initializeServerSchema() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().databaseSchema().enabled()) {
-            return initializeServerSchemaMethod.execute()
-                    .invoke(voidItem -> log.info("Server schema initialized"));
-        } else {
+    Uni<Void> scheduleSchedulerJob() {
+        if (!getServiceConfigOperation.getServiceConfig().initialization().schedulerJob().enabled()) {
             return Uni.createFrom().voidItem();
         }
+
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> scheduleSchedulerJobMethod.execute());
     }
 
-    Uni<Void> initializeServerIndex() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().serverIndex().enabled()) {
-            return initializeServerIndexMethod.execute()
-                    .invoke(voidItem -> log.info("Server index initialized"));
-        } else {
-            log.info("Server index initialization disabled");
+    Uni<Void> scheduleBootstrapJob() {
+        if (!getServiceConfigOperation.getServiceConfig().initialization().bootstrapJob().enabled()) {
             return Uni.createFrom().voidItem();
         }
-    }
 
-    Uni<Void> initializeShardsSchemas() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().databaseSchema().enabled()) {
-            return initializeShardsSchemasMethod.execute()
-                    .invoke(voidItem -> log.info("Shards schemas initialized"));
-        } else {
-            log.info("Database schema initialization disabled");
-            return Uni.createFrom().voidItem();
-        }
-    }
-
-    void initializeEventHandlerJob() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().eventHandlerJob().enabled()) {
-            initializeEventHandlerJobMethod.execute();
-        } else {
-            log.info("Event handler job disabled");
-        }
-    }
-
-    void initializeSchedulerJob() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().schedulerJob().enabled()) {
-            initializeSchedulerJobMethod.execute();
-        } else {
-            log.info("Scheduler job disabled");
-        }
-    }
-
-    void initializeBootstrapJob() {
-        if (getServiceConfigOperation.getServiceConfig().initialization().bootstrapJob().enabled()) {
-            initializeBootstrapJobMethod.execute();
-        } else {
-            log.info("Bootstrap job disabled");
-        }
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> scheduleBootstrapJobMethod.execute());
     }
 }

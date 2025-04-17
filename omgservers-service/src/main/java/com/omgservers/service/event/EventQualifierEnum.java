@@ -58,7 +58,6 @@ import com.omgservers.service.event.body.module.user.PlayerDeletedEventBodyModel
 import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.user.UserDeletedEventBodyModel;
 import com.omgservers.service.event.body.system.IndexCreatedEventBodyModel;
-import com.omgservers.service.event.body.system.IndexDeletedEventBodyModel;
 import com.omgservers.service.event.body.system.JobCreatedEventBodyModel;
 import com.omgservers.service.event.body.system.JobDeletedEventBodyModel;
 import lombok.AllArgsConstructor;
@@ -69,7 +68,6 @@ import lombok.Getter;
 public enum EventQualifierEnum {
     // System
     INDEX_CREATED(IndexCreatedEventBodyModel.class),
-    INDEX_DELETED(IndexDeletedEventBodyModel.class),
     JOB_CREATED(JobCreatedEventBodyModel.class),
     JOB_DELETED(JobDeletedEventBodyModel.class),
     // Shards
