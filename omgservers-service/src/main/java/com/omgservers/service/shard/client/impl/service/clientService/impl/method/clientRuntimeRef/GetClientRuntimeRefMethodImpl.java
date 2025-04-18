@@ -27,7 +27,7 @@ class GetClientRuntimeRefMethodImpl implements GetClientRuntimeRefMethod {
         final var clientId = request.getClientId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectClientRuntimeRefOperation
-                        .selectClientRuntimeRef(sqlConnection, shardModel.shard(), clientId, id))
+                        .selectClientRuntimeRef(sqlConnection, shardModel.slot(), clientId, id))
                 .map(GetClientRuntimeRefResponse::new);
     }
 }

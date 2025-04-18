@@ -37,13 +37,13 @@ class SyncClientRuntimeRefMethodImpl implements SyncClientRuntimeRefMethod {
         final var clientId = clientRuntimeRef.getClientId();
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> verifyClientExistsOperation
-                                .hasClient(sqlConnection, shardModel.shard(), clientId)
+                                .hasClient(sqlConnection, shardModel.slot(), clientId)
                                 .flatMap(has -> {
                                     if (has) {
                                         return upsertClientRuntimeRefOperation.upsertClientRuntimeRef(
                                                 changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 clientRuntimeRef);
                                     } else {
                                         throw new ServerSideNotFoundException(

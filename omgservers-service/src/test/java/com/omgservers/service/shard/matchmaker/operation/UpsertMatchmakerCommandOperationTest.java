@@ -37,60 +37,60 @@ class UpsertMatchmakerCommandOperationTest extends BaseTestClass {
 
     @Test
     void givenMatchmakerCommand_whenExecute_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker);
 
         final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody);
 
-        final var changeContext = upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand);
+        final var changeContext = upsertMatchmakerCommandOperation.upsertMatchmakerCommand(slot, matchmakerCommand);
         assertTrue(changeContext.getResult());
     }
 
     @Test
     void givenMatchmakerCommand_whenExecuteAgain_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker);
 
         final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody);
-        upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand);
+        upsertMatchmakerCommandOperation.upsertMatchmakerCommand(slot, matchmakerCommand);
 
-        final var changeContext = upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand);
+        final var changeContext = upsertMatchmakerCommandOperation.upsertMatchmakerCommand(slot, matchmakerCommand);
         assertFalse(changeContext.getResult());
     }
 
     @Test
     void givenUnknownIds_whenExecute_thenException() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmakerCommandBody = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand = matchmakerCommandModelFactory.create(matchmakerId(),
                 matchmakerCommandBody);
         assertThrows(ServerSideBadRequestException.class, () ->
-                upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand));
+                upsertMatchmakerCommandOperation.upsertMatchmakerCommand(slot, matchmakerCommand));
     }
 
     @Test
     void givenMatchmakerCommand_whenExecute_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker);
 
         final var matchmakerCommandBody1 = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand1 = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody1);
-        upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand1);
+        upsertMatchmakerCommandOperation.upsertMatchmakerCommand(slot, matchmakerCommand1);
 
         final var matchmakerCommandBody2 = new CloseMatchMatchmakerCommandBodyDto(matchId());
         final var matchmakerCommand2 = matchmakerCommandModelFactory.create(matchmaker.getId(),
                 matchmakerCommandBody2,
                 matchmakerCommand1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertMatchmakerCommandOperation.upsertMatchmakerCommand(shard, matchmakerCommand2));
+                upsertMatchmakerCommandOperation.upsertMatchmakerCommand(slot, matchmakerCommand2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

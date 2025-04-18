@@ -8,7 +8,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface UpdateMatchmakerMatchResourceStatusOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long matchmakerId,
                          Long matchId,
                          MatchmakerMatchResourceStatusEnum status);

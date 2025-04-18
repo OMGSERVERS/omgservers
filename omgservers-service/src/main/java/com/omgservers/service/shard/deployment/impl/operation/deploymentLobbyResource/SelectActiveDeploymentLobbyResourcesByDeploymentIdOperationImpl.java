@@ -22,17 +22,16 @@ class SelectActiveDeploymentLobbyResourcesByDeploymentIdOperationImpl
     final DeploymentLobbyResourceModelMapper deploymentLobbyResourceModelMapper;
 
     @Override
-    public Uni<List<DeploymentLobbyResourceModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long deploymentId) {
+    public Uni<List<DeploymentLobbyResourceModel>> execute(final SqlConnection sqlConnection,
+                                                           final int slot,
+                                                           final Long deploymentId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, lobby_id, status, deleted
-                        from $shard.tab_deployment_lobby_resource
+                        from $slot.tab_deployment_lobby_resource
                         where deployment_id = $1 and deleted = false
                         order by id asc
                         """,

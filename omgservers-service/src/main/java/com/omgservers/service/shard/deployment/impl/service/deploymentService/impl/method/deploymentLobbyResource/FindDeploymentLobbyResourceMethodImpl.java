@@ -27,7 +27,7 @@ class FindDeploymentLobbyResourceMethodImpl implements FindDeploymentLobbyResour
         final var lobbyId = request.getLobbyId();
         return pgPool.withTransaction(sqlConnection -> selectDeploymentLobbyResourceByLobbyIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 deploymentId,
                                 lobbyId))
                 .map(FindDeploymentLobbyResourceResponse::new);

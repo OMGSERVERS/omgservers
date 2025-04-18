@@ -30,7 +30,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteTenantProjectOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 id))
                 .map(ChangeContext::getResult)

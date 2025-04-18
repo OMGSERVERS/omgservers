@@ -26,7 +26,7 @@ class GetAliasMethodImpl implements GetAliasMethod {
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectAliasOperation
-                        .execute(sqlConnection, shardModel.shard(), id))
+                        .execute(sqlConnection, shardModel.slot(), id))
                 .map(GetAliasResponse::new);
     }
 }

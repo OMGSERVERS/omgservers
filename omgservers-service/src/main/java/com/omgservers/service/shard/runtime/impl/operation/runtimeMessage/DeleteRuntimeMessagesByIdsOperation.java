@@ -9,7 +9,7 @@ import java.util.List;
 public interface DeleteRuntimeMessagesByIdsOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long runtimeId,
                          List<Long> ids);
 }

@@ -9,6 +9,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface UpsertRuntimeCommandOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          RuntimeCommandModel runtimeCommand);
 }

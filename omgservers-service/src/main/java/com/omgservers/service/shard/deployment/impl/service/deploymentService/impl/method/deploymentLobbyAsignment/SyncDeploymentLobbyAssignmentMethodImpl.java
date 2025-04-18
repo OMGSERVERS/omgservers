@@ -36,13 +36,13 @@ class SyncDeploymentLobbyAssignmentMethodImpl implements SyncDeploymentLobbyAssi
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> verifyDeploymentExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), deploymentId)
+                                .execute(sqlConnection, shardModel.slot(), deploymentId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertDeploymentLobbyAssignmentOperation
                                                 .execute(changeContext,
                                                         sqlConnection,
-                                                        shardModel.shard(),
+                                                        shardModel.slot(),
                                                         deploymentLobbyAssignment);
                                     } else {
                                         throw new ServerSideNotFoundException(

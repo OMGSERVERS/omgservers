@@ -30,7 +30,7 @@ class FindPoolContainerMethodImpl implements FindPoolContainerMethod {
         return pgPool.withTransaction(sqlConnection ->
                         selectPoolContainerByPoolIdAndRuntimeIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         poolId,
                                         runtimeId))
                 .map(FindPoolContainerResponse::new);

@@ -33,13 +33,13 @@ class SyncMatchmakerCommandMethodImpl implements SyncMatchmakerCommandMethod {
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> verifyMatchmakerExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), matchmakerId)
+                                .execute(sqlConnection, shardModel.slot(), matchmakerId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertMatchmakerCommandOperation
                                                 .execute(changeContext,
                                                         sqlConnection,
-                                                        shardModel.shard(),
+                                                        shardModel.slot(),
                                                         matchmakerCommand);
                                     } else {
                                         throw new ServerSideNotFoundException(

@@ -22,14 +22,14 @@ class SelectRootOperationImpl implements SelectRootOperation {
 
     @Override
     public Uni<RootModel> execute(final SqlConnection sqlConnection,
-                                  final int shard,
+                                  final int slot,
                                   final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, deleted
-                        from $shard.tab_root
+                        from $slot.tab_root
                         where id = $1
                         limit 1
                         """,

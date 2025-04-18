@@ -28,14 +28,14 @@ class UpdateMatchmakerMatchResourceStatusOperationImpl implements UpdateMatchmak
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long matchmakerId,
                                 final Long matchId,
                                 final MatchmakerMatchResourceStatusEnum status) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_matchmaker_match_resource
+                        update $slot.tab_matchmaker_match_resource
                         set modified = $3, status = $4
                         where matchmaker_id = $1 and id = $2
                         """,

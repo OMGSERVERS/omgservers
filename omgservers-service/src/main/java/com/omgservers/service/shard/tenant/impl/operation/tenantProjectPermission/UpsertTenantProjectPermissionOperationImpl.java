@@ -24,12 +24,12 @@ class UpsertTenantProjectPermissionOperationImpl implements UpsertTenantProjectP
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final TenantProjectPermissionModel tenantProjectPermission) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_tenant_project_permission(
+                        insert into $slot.tab_tenant_project_permission(
                             id, idempotency_key, tenant_id, project_id, created, modified, user_id, permission, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

@@ -27,7 +27,7 @@ class GetRootEntityRefMethodImpl implements GetRootEntityRefMethod {
         final var rootId = request.getRootId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectRootEntityRefOperation
-                        .execute(sqlConnection, shardModel.shard(), rootId, id))
+                        .execute(sqlConnection, shardModel.slot(), rootId, id))
                 .map(GetRootEntityRefResponse::new);
     }
 }

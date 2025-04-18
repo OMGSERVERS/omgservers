@@ -23,15 +23,15 @@ class SelectActiveRuntimeMessagesByRuntimeIdOperationImpl
 
     @Override
     public Uni<List<RuntimeMessageModel>> execute(final SqlConnection sqlConnection,
-                                                  final int shard,
+                                                  final int slot,
                                                   final Long runtimeId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, runtime_id, created, modified, qualifier, body, deleted
-                        from $shard.tab_runtime_message
+                        from $slot.tab_runtime_message
                         where runtime_id = $1 and deleted = false
                         order by id asc
                         """,

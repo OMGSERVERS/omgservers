@@ -29,7 +29,7 @@ class ViewMatchmakerMatchAssignmentsMethodImpl implements ViewMatchmakerMatchAss
         final var matchId = request.getMatchId();
         return pgPool.withTransaction(sqlConnection -> selectActiveMatchmakerMatchAssignmentsByMatchIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 matchmakerId,
                                 matchId))
                 .map(ViewMatchmakerMatchAssignmentsResponse::new);

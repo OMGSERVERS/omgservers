@@ -27,7 +27,7 @@ class ViewClientMessagesMethodImpl implements ViewClientMessagesMethod {
         final var clientId = request.getClientId();
         return pgPool.withTransaction(sqlConnection -> selectActiveClientMessagesByClientIdOperation
                         .selectActiveClientMessagesByClientId(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 clientId
                         ))
                 .map(ViewClientMessagesResponse::new);

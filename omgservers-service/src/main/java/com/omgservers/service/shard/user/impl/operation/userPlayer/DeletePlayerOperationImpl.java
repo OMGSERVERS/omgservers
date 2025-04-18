@@ -26,13 +26,13 @@ class DeletePlayerOperationImpl implements DeletePlayerOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long userId,
                                 final Long id) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_user_player
+                        update $slot.tab_user_player
                         set modified = $3, deleted = true
                         where user_id = $1 and id = $2 and deleted = false
                         """,

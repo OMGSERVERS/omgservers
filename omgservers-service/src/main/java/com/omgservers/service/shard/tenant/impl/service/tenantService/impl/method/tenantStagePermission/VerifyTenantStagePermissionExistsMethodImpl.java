@@ -28,7 +28,7 @@ class VerifyTenantStagePermissionExistsMethodImpl implements VerifyTenantStagePe
         final var userId = request.getUserId();
         final var permission = request.getPermission();
         return pgPool.withTransaction(sqlConnection -> verifyTenantStagePermissionExistsOperation
-                        .execute(sqlConnection, shardModel.shard(), tenantId, tenantStageId, userId, permission))
+                        .execute(sqlConnection, shardModel.slot(), tenantId, tenantStageId, userId, permission))
                 .map(VerifyTenantStagePermissionExistsResponse::new);
     }
 }

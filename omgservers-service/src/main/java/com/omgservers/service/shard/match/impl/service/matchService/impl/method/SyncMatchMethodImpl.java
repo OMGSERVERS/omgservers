@@ -29,7 +29,7 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
                         (changeContext, sqlConnection) -> matchOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 match))
                 .map(ChangeContext::getResult)
                 .map(SyncMatchResponse::new);

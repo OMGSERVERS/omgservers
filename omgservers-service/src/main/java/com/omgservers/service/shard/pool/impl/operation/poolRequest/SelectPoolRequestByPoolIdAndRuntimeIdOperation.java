@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectPoolRequestByPoolIdAndRuntimeIdOperation {
     Uni<PoolRequestModel> execute(SqlConnection sqlConnection,
-                                  int shard,
+                                  int slot,
                                   Long poolId,
                                   Long runtimeId);
 }

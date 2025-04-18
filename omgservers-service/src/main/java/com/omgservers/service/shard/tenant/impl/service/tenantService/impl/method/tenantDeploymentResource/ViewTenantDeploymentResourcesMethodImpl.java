@@ -37,14 +37,14 @@ class ViewTenantDeploymentResourcesMethodImpl implements ViewTenantDeploymentRes
                     if (Objects.nonNull(status)) {
                         return selectActiveTenantDeploymentResourcesByStageIdAndStatusOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         tenantStageId,
                                         status);
                     } else {
                         return selectActiveTenantDeploymentResourcesByStageIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         tenantStageId
                                 );

@@ -6,10 +6,9 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectTenantImageByTenantVersionIdAndQualifierOperation {
-    Uni<TenantImageModel> execute(
-            SqlConnection sqlConnection,
-            int shard,
-            Long tenantId,
-            Long tenantVersionId,
-            TenantImageQualifierEnum qualifier);
+    Uni<TenantImageModel> execute(SqlConnection sqlConnection,
+                                  int slot,
+                                  Long tenantId,
+                                  Long tenantVersionId,
+                                  TenantImageQualifierEnum qualifier);
 }

@@ -21,12 +21,12 @@ public class UpsertRuntimeAssignmentOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> upsertRuntimeAssignment(final int shard,
+    public ChangeContext<Boolean> upsertRuntimeAssignment(final int slot,
                                                           final RuntimeAssignmentModel runtimeAssignment) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertRuntimeAssignmentOperation
-                                    .execute(changeContext, sqlConnection, shard, runtimeAssignment))
+                                    .execute(changeContext, sqlConnection, slot, runtimeAssignment))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

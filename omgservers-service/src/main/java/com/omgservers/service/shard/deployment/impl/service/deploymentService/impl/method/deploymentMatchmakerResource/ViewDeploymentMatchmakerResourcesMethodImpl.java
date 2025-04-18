@@ -37,13 +37,13 @@ class ViewDeploymentMatchmakerResourcesMethodImpl implements ViewDeploymentMatch
                             if (Objects.nonNull(status)) {
                                 return selectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperation
                                         .execute(sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 deploymentId,
                                                 status);
                             } else {
                                 return selectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation
                                         .execute(sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 deploymentId);
                             }
                 })

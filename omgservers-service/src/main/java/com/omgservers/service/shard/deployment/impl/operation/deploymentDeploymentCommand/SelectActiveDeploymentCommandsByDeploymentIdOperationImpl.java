@@ -23,15 +23,15 @@ class SelectActiveDeploymentCommandsByDeploymentIdOperationImpl
 
     @Override
     public Uni<List<DeploymentCommandModel>> execute(final SqlConnection sqlConnection,
-                                                     final int shard,
+                                                     final int slot,
                                                      final Long deploymentId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select 
                             id, idempotency_key, deployment_id, created, modified, qualifier, body, deleted
-                        from $shard.tab_deployment_command
+                        from $slot.tab_deployment_command
                         where deployment_id = $1 and deleted = false
                         order by id asc
                         """,

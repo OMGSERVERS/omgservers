@@ -1,6 +1,7 @@
 package com.omgservers.schema.model.index;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.omgservers.schema.configuration.ValidationConfiguration;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,48 +14,36 @@ import lombok.NoArgsConstructor;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class IndexConfigDto {
 
-    static public IndexConfigDto create(final Integer totalShardCount) {
+    static public IndexConfigDto create(final List<URI> uris, final int slotsCount) {
         final var indexConfig = new IndexConfigDto();
         indexConfig.setVersion(IndexConfigVersionEnum.V1);
-        indexConfig.setTotalShardCount(totalShardCount);
-        indexConfig.setServers(new ArrayList<>());
-        indexConfig.setLockedShards(new ArrayList<>());
+        indexConfig.setTotalSlotsCount(slotsCount);
 
-        return indexConfig;
-    }
+        final var shardsCount = uris.size();
+        final var shards = new ArrayList<IndexShardDto>();
+        for (int shardIndex = 0; shardIndex < shardsCount; shardIndex++) {
+            final var shardUri = uris.get(shardIndex);
+            final var shardSlots = new ArrayList<Integer>();
 
-    static public IndexConfigDto create(final List<URI> addresses) {
-        return create(addresses, addresses.size());
-    }
-
-    static public IndexConfigDto create(final List<URI> addresses, final int shardCount) {
-        final var indexConfig = new IndexConfigDto();
-        indexConfig.setVersion(IndexConfigVersionEnum.V1);
-        indexConfig.setTotalShardCount(shardCount);
-
-        final var serverCount = addresses.size();
-        final var servers = new ArrayList<IndexServerDto>();
-        for (int serverIndex = 0; serverIndex < serverCount; serverIndex++) {
-            final var serverUri = addresses.get(serverIndex);
-            final var serverShards = new ArrayList<Integer>();
-
-            int shard = serverIndex;
-            while (shard < shardCount) {
-                serverShards.add(shard);
-                shard += serverCount;
+            int slot = shardIndex;
+            while (slot < slotsCount) {
+                shardSlots.add(slot);
+                slot += shardsCount;
             }
 
-            servers.add(IndexServerDto.create(serverUri, serverShards));
+            final var indexShard = IndexShardDto.create(shardUri, shardSlots);
+            shards.add(indexShard);
         }
 
-        indexConfig.setServers(servers);
-        indexConfig.setLockedShards(new ArrayList<>());
+        indexConfig.setShards(shards);
+        indexConfig.setLockedSlots(List.of());
 
         return indexConfig;
     }
@@ -64,24 +53,23 @@ public class IndexConfigDto {
 
     @NotNull
     @Min(1)
-    @Max(512)
-    Integer totalShardCount;
+    @Max(ValidationConfiguration.MAX_SLOTS)
+    Integer totalSlotsCount;
 
     @NotNull
     @NotEmpty
-    @Size(max = 64)
-    List<IndexServerDto> servers;
+    @Size(max = ValidationConfiguration.MAX_SHARDS)
+    List<IndexShardDto> shards;
 
     @NotNull
-    @Size(max = 512)
-    List<Integer> lockedShards;
+    @Size(max = ValidationConfiguration.MAX_SLOTS)
+    List<Integer> lockedSlots;
 
     @JsonIgnore
-    public URI getServerUri(final Integer shard) {
-        return servers.stream()
-                .filter(server -> server.getShards().contains(shard))
-                .map(IndexServerDto::getUri)
-                .findFirst()
-                .get();
+    public Optional<URI> getShardUri(final Integer slot) {
+        return shards.stream()
+                .filter(shard -> shard.getSlots().contains(slot))
+                .map(IndexShardDto::getUri)
+                .findFirst();
     }
 }

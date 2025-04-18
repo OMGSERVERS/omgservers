@@ -5,5 +5,7 @@ import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectRuntimeOperation {
-    Uni<RuntimeModel> execute(SqlConnection sqlConnection, int shard, Long id);
+    Uni<RuntimeModel> execute(SqlConnection sqlConnection,
+                              int slot,
+                              Long id);
 }

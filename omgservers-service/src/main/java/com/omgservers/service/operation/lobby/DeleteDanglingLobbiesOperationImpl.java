@@ -12,9 +12,9 @@
 //import com.omgservers.schema.module.deployment.deploymentLobbyRef.ViewDeploymentLobbyRefsRequest;
 //import com.omgservers.schema.module.deployment.deploymentLobbyRef.ViewDeploymentLobbyRefsResponse;
 //import com.omgservers.service.operation.server.GetServiceConfigOperation;
-//import com.omgservers.service.shard.lobby.LobbyShard;
-//import com.omgservers.service.shard.runtime.RuntimeShard;
-//import com.omgservers.service.shard.tenant.TenantShard;
+//import com.omgservers.service.slot.lobby.LobbyShard;
+//import com.omgservers.service.slot.runtime.RuntimeShard;
+//import com.omgservers.service.slot.tenant.TenantShard;
 //import io.smallrye.mutiny.Multi;
 //import io.smallrye.mutiny.Uni;
 //import jakarta.enterprise.context.ApplicationScoped;

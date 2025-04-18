@@ -2,7 +2,7 @@ package com.omgservers.schema.shard;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public interface ShardedRequest {
+public interface ShardRequest {
 
     @JsonIgnore
     String getRequestShardKey();

@@ -35,14 +35,14 @@ class SyncTenantStageMethodImpl implements SyncTenantStageMethod {
         final var tenantId = tenantStage.getTenantId();
         final var tenantProjectId = tenantStage.getProjectId();
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        verifyTenantProjectExistsOperation.execute(sqlConnection, shard, tenantId, tenantProjectId)
+                        verifyTenantProjectExistsOperation.execute(sqlConnection, slot, tenantId, tenantProjectId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertTenantStageOperation.execute(changeContext,
                                                 sqlConnection,
-                                                shard,
+                                                slot,
                                                 tenantStage);
                                     } else {
                                         throw new ServerSideNotFoundException(

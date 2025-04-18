@@ -30,7 +30,7 @@ class UpdateTenantDeploymentResourceStatusMethodImpl implements UpdateTenantDepl
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         updateTenantDeploymentResourceStatusOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 id,
                                 status

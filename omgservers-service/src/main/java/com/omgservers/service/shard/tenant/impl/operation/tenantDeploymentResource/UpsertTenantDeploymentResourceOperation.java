@@ -8,6 +8,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface UpsertTenantDeploymentResourceOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          TenantDeploymentResourceModel tenantDeploymentResource);
 }

@@ -27,7 +27,7 @@ class FindTenantDeploymentResourceMethodImpl implements FindTenantDeploymentReso
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(sqlConnection -> selectTenantDeploymentResourceByDeploymentIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 deploymentId))
                 .map(FindTenantDeploymentResourceResponse::new);

@@ -21,12 +21,12 @@ public class UpsertPlayerOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> upsertPlayer(final int shard,
+    public ChangeContext<Boolean> upsertPlayer(final int slot,
                                                final PlayerModel player) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertPlayerOperation
-                                    .execute(changeContext, sqlConnection, shard, player))
+                                    .execute(changeContext, sqlConnection, slot, player))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

@@ -7,11 +7,7 @@ import java.util.List;
 
 public interface CalculateShardOperation {
 
-    Uni<ShardModel> calculateShard(String... keys);
+    Uni<ShardModel> execute(String... keys);
 
-    Uni<ShardModel> calculateShard(List<String> keys);
-
-    Integer calculateShard(Integer indexShardCount, String... keys);
-
-    Integer calculateShard(Integer indexShardCount, List<String> keys);
+    Uni<ShardModel> execute(List<String> keys);
 }

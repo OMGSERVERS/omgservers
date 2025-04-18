@@ -7,7 +7,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface DeletePlayerOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          final Long userId,
                          Long id);
 }

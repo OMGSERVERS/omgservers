@@ -28,7 +28,7 @@ class DeleteRootMethodImpl implements DeleteRootMethod {
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> deleteRootOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeleteRootResponse::new);

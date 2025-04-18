@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SelectActiveTenantDeploymentRefsByStageIdOperation {
     Uni<List<TenantDeploymentRefModel>> execute(SqlConnection sqlConnection,
-                                                int shard,
+                                                int slot,
                                                 Long tenantId,
                                                 Long stageId);
 }

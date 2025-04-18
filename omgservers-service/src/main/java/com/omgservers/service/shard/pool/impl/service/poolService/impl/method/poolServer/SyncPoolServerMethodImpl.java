@@ -33,12 +33,12 @@ class SyncPoolServerMethodImpl implements SyncPoolServerMethod {
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (context, sqlConnection) -> verifyPoolExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), poolId)
+                                .execute(sqlConnection, shardModel.slot(), poolId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertPoolServerOperation.execute(context,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 poolServer);
                                     } else {
                                         throw new ServerSideNotFoundException(

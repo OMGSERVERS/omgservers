@@ -25,7 +25,7 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
         log.trace("{}", request);
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectRuntimeOperation
-                        .execute(sqlConnection, shardModel.shard(), id))
+                        .execute(sqlConnection, shardModel.slot(), id))
                 .map(GetRuntimeResponse::new);
     }
 }

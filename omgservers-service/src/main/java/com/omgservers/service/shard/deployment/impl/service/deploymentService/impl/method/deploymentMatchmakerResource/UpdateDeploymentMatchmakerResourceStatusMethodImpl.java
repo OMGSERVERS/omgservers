@@ -31,7 +31,7 @@ class UpdateDeploymentMatchmakerResourceStatusMethodImpl implements UpdateDeploy
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         updateDeploymentMatchmakerResourceStatusOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 deploymentId,
                                 id,
                                 status

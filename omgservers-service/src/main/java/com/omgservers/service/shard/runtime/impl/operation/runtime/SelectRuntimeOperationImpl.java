@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.runtime.impl.operation.runtime;
 
 import com.omgservers.schema.model.runtime.RuntimeModel;
-import com.omgservers.service.shard.runtime.impl.mapper.RuntimeModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.runtime.impl.mapper.RuntimeModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,16 +22,16 @@ class SelectRuntimeOperationImpl implements SelectRuntimeOperation {
 
     @Override
     public Uni<RuntimeModel> execute(final SqlConnection sqlConnection,
-                                     final int shard,
+                                     final int slot,
                                      final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, created, modified, deployment_id, qualifier, user_id, 
                             config, deleted
-                        from $shard.tab_runtime
+                        from $slot.tab_runtime
                         where id = $1
                         limit 1
                         """,

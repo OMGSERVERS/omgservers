@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveTenantStagePermissionsByTenantIdOperation {
     Uni<List<TenantStagePermissionModel>> execute(SqlConnection sqlConnection,
-                                                  int shard,
+                                                  int slot,
                                                   Long tenantId);
 }

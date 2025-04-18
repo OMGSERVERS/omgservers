@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface VerifyTenantStagePermissionExistsOperation {
     Uni<Boolean> execute(SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long tenantId,
                          Long tenantStageId,
                          Long userId,

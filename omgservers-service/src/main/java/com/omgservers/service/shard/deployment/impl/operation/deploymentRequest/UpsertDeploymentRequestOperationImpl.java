@@ -24,12 +24,12 @@ class UpsertDeploymentRequestOperationImpl implements UpsertDeploymentRequestOpe
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final DeploymentRequestModel deploymentRequest) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_deployment_request(
+                        insert into $slot.tab_deployment_request(
                             id, idempotency_key, deployment_id, created, modified, client_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

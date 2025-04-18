@@ -36,13 +36,13 @@ class ViewPoolContainersMethodImpl implements ViewPoolContainersMethod {
                     if (Objects.nonNull(serverId)) {
                         return selectActivePoolContainersByPoolIdAndServerIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         poolId,
                                         serverId);
                     } else {
                         return selectActivePoolContainersByPoolIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         poolId);
                     }
                 })

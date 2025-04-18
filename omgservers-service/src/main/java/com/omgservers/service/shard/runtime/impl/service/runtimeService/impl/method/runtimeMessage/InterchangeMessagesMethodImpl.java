@@ -63,12 +63,12 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                     return cacheRuntimeLastActivity(runtimeId)
                             .flatMap(voidItem -> viewRuntimeAssignments(runtimeId))
                             .flatMap(runtimeAssignments -> {
-                                final int shard = shardModel.shard();
+                                final int slot = shardModel.slot();
                                 final var consumedMessages = request.getConsumedMessages();
                                 return handleOutgoingMessages(runtime,
                                         runtimeAssignments,
                                         request.getOutgoingMessages())
-                                        .flatMap(voidItem -> receiveMessages(shard,
+                                        .flatMap(voidItem -> receiveMessages(slot,
                                                 runtimeId,
                                                 consumedMessages));
                             });
@@ -114,18 +114,18 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                 .replaceWithVoid();
     }
 
-    Uni<List<RuntimeMessageModel>> receiveMessages(final int shard,
+    Uni<List<RuntimeMessageModel>> receiveMessages(final int slot,
                                                    final Long runtimeId,
                                                    final List<Long> consumedCommands) {
         return changeWithContextOperation.<List<RuntimeMessageModel>>changeWithContext((changeContext, sqlConnection) ->
                         deleteRuntimeMessagesByIdsOperation.execute(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         runtimeId,
                                         consumedCommands)
                                 .flatMap(deleted -> selectActiveRuntimeMessagesByRuntimeIdOperation
                                         .execute(sqlConnection,
-                                                shard,
+                                                slot,
                                                 runtimeId))
                 )
                 .map(ChangeContext::getResult);

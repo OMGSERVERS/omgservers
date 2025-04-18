@@ -30,21 +30,21 @@ class SelectMatchmakerOperationTest extends BaseTestClass {
 
     @Test
     void givenMatchmaker_whenExecute_thenSelected() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker1 = matchmakerModelFactory.create(tenantId(), versionId(), MatchmakerConfigDto.create());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker1);
+        upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker1);
 
-        final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(shard, matchmaker1.getId());
+        final var matchmaker2 = selectMatchmakerOperation.selectMatchmaker(slot, matchmaker1.getId());
         assertEquals(matchmaker1, matchmaker2);
     }
 
     @Test
     void givenUnknownId_whenExecute_thenException() {
-        final var shard = 0;
+        final var slot = 0;
         final var id = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectMatchmakerOperation
-                .selectMatchmaker(shard, id));
+                .selectMatchmaker(slot, id));
     }
 
     Long tenantId() {

@@ -27,7 +27,7 @@ class ViewTenantProjectsMethodImpl implements ViewTenantProjectsMethod {
         final var tenantId = request.getTenantId();
         return pgPool.withTransaction(sqlConnection -> selectActiveTenantProjectsByTenantIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId
                         ))
                 .map(ViewTenantProjectsResponse::new);

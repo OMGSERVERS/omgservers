@@ -30,12 +30,12 @@ class UpsertTenantImageOperationImpl implements UpsertTenantImageOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final TenantImageModel tenantImage) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_tenant_image(
+                        insert into $slot.tab_tenant_image(
                             id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, config,
                             deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)

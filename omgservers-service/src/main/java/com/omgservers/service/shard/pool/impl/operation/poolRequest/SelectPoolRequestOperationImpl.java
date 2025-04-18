@@ -21,19 +21,18 @@ class SelectPoolRequestOperationImpl implements SelectPoolRequestOperation {
     final PoolRequestModelMapper poolRequestModelMapper;
 
     @Override
-    public Uni<PoolRequestModel> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long poolId,
-            final Long id) {
+    public Uni<PoolRequestModel> execute(final SqlConnection sqlConnection,
+                                         final int slot,
+                                         final Long poolId,
+                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, pool_id, created, modified, runtime_id, runtime_qualifier, config,
                             deleted
-                        from $shard.tab_pool_request
+                        from $slot.tab_pool_request
                         where pool_id = $1 and id = $2
                         limit 1
                         """,

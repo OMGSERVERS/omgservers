@@ -6,6 +6,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectUserOperation {
     Uni<UserModel> execute(SqlConnection sqlConnection,
-                           int shard,
+                           int slot,
                            Long id);
 }

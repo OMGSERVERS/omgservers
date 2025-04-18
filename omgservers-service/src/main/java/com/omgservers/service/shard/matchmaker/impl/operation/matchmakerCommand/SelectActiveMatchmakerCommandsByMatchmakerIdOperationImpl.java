@@ -25,14 +25,14 @@ class SelectActiveMatchmakerCommandsByMatchmakerIdOperationImpl
     @Override
     public Uni<List<MatchmakerCommandModel>> execute(
             final SqlConnection sqlConnection,
-            final int shard,
+            final int slot,
             final Long matchmakerId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, matchmaker_id, created, modified, qualifier, body, deleted
-                        from $shard.tab_matchmaker_command
+                        from $slot.tab_matchmaker_command
                         where matchmaker_id = $1 and deleted = false
                         order by id asc
                         """,

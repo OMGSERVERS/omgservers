@@ -29,7 +29,7 @@ class ViewTenantDeploymentRefsMethodImpl implements ViewTenantDeploymentRefsMeth
         return pgPool.withTransaction(
                         sqlConnection -> selectActiveTenantDeploymentRefsByStageIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         tenantStageId)
                 )

@@ -31,7 +31,7 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
         final var id = request.getId();
 
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        deleteTenantStageOperation.execute(changeContext, sqlConnection, shardModel.shard(), tenantId, id))
+                        deleteTenantStageOperation.execute(changeContext, sqlConnection, shardModel.slot(), tenantId, id))
                 .map(ChangeContext::getResult)
                 .map(DeleteTenantStageResponse::new);
     }

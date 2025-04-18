@@ -22,17 +22,16 @@ class SelectActiveTenantStagePermissionsByTenantIdOperationImpl
     final TenantStagePermissionModelMapper tenantStagePermissionModelMapper;
 
     @Override
-    public Uni<List<TenantStagePermissionModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long tenantId) {
+    public Uni<List<TenantStagePermissionModel>> execute(final SqlConnection sqlConnection,
+                                                         final int slot,
+                                                         final Long tenantId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select 
                             id, idempotency_key, tenant_id, stage_id, created, modified, user_id, permission, deleted
-                        from $shard.tab_tenant_stage_permission
+                        from $slot.tab_tenant_stage_permission
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,

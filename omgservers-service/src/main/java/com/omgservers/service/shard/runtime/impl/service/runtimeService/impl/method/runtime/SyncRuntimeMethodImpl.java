@@ -26,7 +26,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
 
         final var runtime = request.getRuntime();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertRuntimeOperation.execute(changeContext, sqlConnection, shardModel.shard(), runtime))
+                        upsertRuntimeOperation.execute(changeContext, sqlConnection, shardModel.slot(), runtime))
                 .map(ChangeContext::getResult)
                 .map(SyncRuntimeResponse::new);
     }

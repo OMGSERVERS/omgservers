@@ -25,12 +25,12 @@ class UpsertDeploymentLobbyResourceOperationImpl implements UpsertDeploymentLobb
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final DeploymentLobbyResourceModel deploymentLobbyResource) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_deployment_lobby_resource(
+                        insert into $slot.tab_deployment_lobby_resource(
                             id, idempotency_key, deployment_id, created, modified, lobby_id, status,
                             deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)

@@ -27,7 +27,7 @@ class GetMatchmakerMatchAssignmentMethodImpl implements GetMatchmakerMatchAssign
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectMatchmakerMatchAssignmentOperation
-                        .execute(sqlConnection, shardModel.shard(), matchmakerId, id))
+                        .execute(sqlConnection, shardModel.slot(), matchmakerId, id))
                 .map(GetMatchmakerMatchAssignmentResponse::new);
     }
 }

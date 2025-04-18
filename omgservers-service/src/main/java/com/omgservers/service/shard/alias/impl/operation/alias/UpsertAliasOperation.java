@@ -8,6 +8,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface UpsertAliasOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          AliasModel alias);
 }

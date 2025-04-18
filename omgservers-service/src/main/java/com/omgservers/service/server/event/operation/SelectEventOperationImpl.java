@@ -27,7 +27,7 @@ class SelectEventOperationImpl implements SelectEventOperation {
                 sqlConnection,
                 """
                         select id, idempotency_key, created, modified, qualifier, body, status, deleted
-                        from $server.tab_event
+                        from $shard.tab_event
                         where id = $1
                         limit 1
                         """,

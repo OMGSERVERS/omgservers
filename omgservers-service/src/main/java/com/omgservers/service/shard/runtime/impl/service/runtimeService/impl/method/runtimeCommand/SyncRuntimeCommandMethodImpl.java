@@ -35,13 +35,13 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
         final var runtimeId = runtimeCommand.getRuntimeId();
 
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        verifyRuntimeExistsOperation.execute(sqlConnection, shardModel.shard(), runtimeId)
+                        verifyRuntimeExistsOperation.execute(sqlConnection, shardModel.slot(), runtimeId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertRuntimeCommandOperation.execute(
                                                 changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 runtimeCommand);
                                     } else {
                                         throw new ServerSideNotFoundException(

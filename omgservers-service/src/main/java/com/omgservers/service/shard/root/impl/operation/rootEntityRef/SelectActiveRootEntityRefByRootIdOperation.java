@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveRootEntityRefByRootIdOperation {
     Uni<List<RootEntityRefModel>> execute(SqlConnection sqlConnection,
-                                          int shard,
+                                          int slot,
                                           Long rootId);
 }

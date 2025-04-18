@@ -23,17 +23,17 @@ class SelectActiveMatchmakerMatchAssignmentsByMatchIdOperationImpl
 
     @Override
     public Uni<List<MatchmakerMatchAssignmentModel>> execute(final SqlConnection sqlConnection,
-                                                             final int shard,
+                                                             final int slot,
                                                              final Long matchmakerId,
                                                              final Long matchId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, matchmaker_id, created, modified, match_id, client_id,
                             group_name, config, deleted
-                        from $shard.tab_matchmaker_match_assignment
+                        from $slot.tab_matchmaker_match_assignment
                         where matchmaker_id = $1 and match_id = $2 and deleted = false
                         order by id asc
                         """,

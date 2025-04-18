@@ -42,7 +42,7 @@ public interface ServiceConfig {
 
         URI masterUri();
 
-        int shardCount();
+        int slotsCount();
     }
 
     interface ServiceUserConfig {

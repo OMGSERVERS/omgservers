@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectClientRuntimeRefOperation {
     Uni<ClientRuntimeRefModel> selectClientRuntimeRef(SqlConnection sqlConnection,
-                                                      int shard,
+                                                      int slot,
                                                       Long clientId,
                                                       Long id);
 }

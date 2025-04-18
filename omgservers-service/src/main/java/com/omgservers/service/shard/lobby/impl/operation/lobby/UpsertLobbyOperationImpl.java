@@ -28,12 +28,12 @@ class UpsertLobbyOperationImpl implements UpsertLobbyOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final LobbyModel lobby) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_lobby(
+                        insert into $slot.tab_lobby(
                             id, idempotency_key, created, modified, deployment_id, runtime_id, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

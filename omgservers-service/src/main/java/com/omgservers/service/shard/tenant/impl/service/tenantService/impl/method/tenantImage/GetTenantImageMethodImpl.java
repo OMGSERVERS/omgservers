@@ -24,11 +24,11 @@ class GetTenantImageMethodImpl implements GetTenantImageMethod {
                                                final GetTenantImageRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var tenantId = request.getTenantId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectTenantImageOperation
-                        .execute(sqlConnection, shard, tenantId, id))
+                        .execute(sqlConnection, slot, tenantId, id))
                 .map(GetTenantImageResponse::new);
     }
 }

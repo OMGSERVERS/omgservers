@@ -29,7 +29,7 @@ class SyncRootMethodImpl implements SyncRootMethod {
                         (changeContext, sqlConnection) -> upsertRootOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 root))
                 .map(ChangeContext::getResult)
                 .map(SyncRootResponse::new);

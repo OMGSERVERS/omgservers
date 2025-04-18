@@ -31,16 +31,16 @@ class SyncPoolRequestMethodImpl implements SyncPoolRequestMethod {
         final var poolRequest = request.getPoolRequest();
         final var poolId = poolRequest.getPoolId();
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
-                        verifyPoolExistsOperation.execute(sqlConnection, shard, poolId)
+                        verifyPoolExistsOperation.execute(sqlConnection, slot, poolId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertPoolRequestOperation
                                                 .execute(
                                                         context,
                                                         sqlConnection,
-                                                        shard,
+                                                        slot,
                                                         poolRequest);
                                     } else {
                                         throw new ServerSideNotFoundException(

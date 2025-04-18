@@ -29,7 +29,7 @@ class SyncClientMethodImpl implements SyncClientMethod {
 
         final var client = request.getClient();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertClientOperation.upsertClient(changeContext, sqlConnection, shardModel.shard(), client))
+                        upsertClientOperation.upsertClient(changeContext, sqlConnection, shardModel.slot(), client))
                 .map(ChangeContext::getResult)
                 .map(SyncClientResponse::new);
     }

@@ -33,24 +33,24 @@ class GetPoolStateMethodImpl implements GetPoolStateMethod {
                                              final GetPoolStateRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var poolId = request.getPoolId();
         final var poolState = new PoolStateDto();
 
         return pgPool.withTransaction(sqlConnection -> selectPoolOperation
-                        .execute(sqlConnection, shard, poolId)
+                        .execute(sqlConnection, slot, poolId)
                         .invoke(poolState::setPool)
                         .flatMap(pool -> selectActivePoolCommandsByPoolIdOperation
-                                .execute(sqlConnection, shard, poolId)
+                                .execute(sqlConnection, slot, poolId)
                                 .invoke(poolState::setPoolCommands))
                         .flatMap(pool -> selectActivePoolRequestsByPoolIdOperation
-                                .execute(sqlConnection, shard, poolId)
+                                .execute(sqlConnection, slot, poolId)
                                 .invoke(poolState::setPoolRequests))
                         .flatMap(pool -> selectActivePoolServersByPoolIdOperation
-                                .execute(sqlConnection, shard, poolId)
+                                .execute(sqlConnection, slot, poolId)
                                 .invoke(poolState::setPoolServers))
                         .flatMap(poolServers -> selectActivePoolContainersByPoolIdOperation
-                                .execute(sqlConnection, shard, poolId)
+                                .execute(sqlConnection, slot, poolId)
                                 .invoke(poolState::setPoolContainers))
                 )
                 .replaceWith(poolState)

@@ -24,15 +24,15 @@ class SelectActiveDeploymentLobbyAssignmentsByDeploymentIdOperationImpl
     @Override
     public Uni<List<DeploymentLobbyAssignmentModel>> execute(
             final SqlConnection sqlConnection,
-            final int shard,
+            final int slot,
             final Long deploymentId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, client_id, lobby_id, deleted
-                        from $shard.tab_deployment_lobby_assignment
+                        from $slot.tab_deployment_lobby_assignment
                         where deployment_id = $1 and deleted = false
                         order by id asc
                         """,

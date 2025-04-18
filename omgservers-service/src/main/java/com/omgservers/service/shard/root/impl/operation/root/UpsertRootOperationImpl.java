@@ -23,12 +23,12 @@ class UpsertRootOperationImpl implements UpsertRootOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final RootModel root) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_root(
+                        insert into $slot.tab_root(
                             id, idempotency_key, created, modified, deleted)
                         values($1, $2, $3, $4, $5)
                         on conflict (id) do

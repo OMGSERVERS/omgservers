@@ -1,6 +1,6 @@
 package com.omgservers.schema.shard.matchmaker.matchmakerMatchAssignment;
 
-import com.omgservers.schema.shard.ShardedRequest;
+import com.omgservers.schema.shard.ShardRequest;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SyncMatchmakerMatchAssignmentRequest implements ShardedRequest {
+public class SyncMatchmakerMatchAssignmentRequest implements ShardRequest {
 
     @NotNull
     MatchmakerMatchAssignmentModel matchmakerMatchAssignment;

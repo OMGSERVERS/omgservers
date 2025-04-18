@@ -29,12 +29,12 @@ class UpsertClientMessageOperationImpl implements UpsertClientMessageOperation {
     @Override
     public Uni<Boolean> upsertClientMessage(final ChangeContext<?> changeContext,
                                             final SqlConnection sqlConnection,
-                                            final int shard,
+                                            final int slot,
                                             final ClientMessageModel clientMessage) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_client_message(
+                        insert into $slot.tab_client_message(
                             id, idempotency_key, client_id, created, modified, qualifier, body, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

@@ -22,17 +22,17 @@ class SelectMatchmakerMatchAssignmentOperationImpl implements SelectMatchmakerMa
 
     @Override
     public Uni<MatchmakerMatchAssignmentModel> execute(final SqlConnection sqlConnection,
-                                                       final int shard,
+                                                       final int slot,
                                                        final Long matchmakerId,
                                                        final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, matchmaker_id, created, modified, match_id, client_id, group_name,
                             config, deleted
-                        from $shard.tab_matchmaker_match_assignment
+                        from $slot.tab_matchmaker_match_assignment
                         where matchmaker_id = $1 and id = $2
                         limit 1
                         """,

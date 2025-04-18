@@ -38,27 +38,27 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
                                                    final GetMatchmakerStateRequest request) {
         log.trace("{}", request);
 
+        final var slot = shardModel.slot();
         final var matchmakerId = request.getMatchmakerId();
-        final var shard = shardModel.shard();
         return pgPool.withTransaction(sqlConnection -> {
                     final var matchmakerState = new MatchmakerStateDto();
-                    return selectMatchmakerOperation.execute(sqlConnection, shard, matchmakerId)
+                    return selectMatchmakerOperation.execute(sqlConnection, slot, matchmakerId)
                             .invoke(matchmakerState::setMatchmaker)
                             .flatMap(matchmaker ->
                                     selectActiveMatchmakerCommandsByMatchmakerIdOperation
-                                            .execute(sqlConnection, shard, matchmakerId))
+                                            .execute(sqlConnection, slot, matchmakerId))
                             .invoke(matchmakerState::setMatchmakerCommands)
                             .flatMap(matchmaker ->
                                     selectActiveMatchmakerRequestsByMatchmakerIdOperation
-                                            .execute(sqlConnection, shard, matchmakerId))
+                                            .execute(sqlConnection, slot, matchmakerId))
                             .invoke(matchmakerState::setMatchmakerRequests)
                             .flatMap(matchmaker ->
                                     selectActiveMatchmakerMatchResourcesByMatchmakerIdOperation
-                                            .execute(sqlConnection, shard, matchmakerId))
+                                            .execute(sqlConnection, slot, matchmakerId))
                             .invoke(matchmakerState::setMatchmakerMatchResources)
                             .flatMap(matchmakerMatches ->
                                     selectActiveMatchmakerMatchAssignmentsByMatchmakerIdOperation
-                                            .execute(sqlConnection, shard, matchmakerId))
+                                            .execute(sqlConnection, slot, matchmakerId))
                             .invoke(matchmakerState::setMatchmakerMatchAssignments)
                             .replaceWith(matchmakerState);
                 })

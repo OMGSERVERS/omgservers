@@ -23,14 +23,14 @@ class SelectActiveTenantProjectsByTenantIdOperationImpl implements SelectActiveT
 
     @Override
     public Uni<List<TenantProjectModel>> execute(final SqlConnection sqlConnection,
-                                                 final int shard,
+                                                 final int slot,
                                                  final Long tenantId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, tenant_id, created, modified, config, deleted
-                        from $shard.tab_tenant_project
+                        from $slot.tab_tenant_project
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,

@@ -22,8 +22,8 @@ class CalculateShardMethodImpl implements CalculateShardMethod {
 
         final var shardKey = request.getShardKey();
 
-        return calculateShardOperation.calculateShard(shardKey)
-                .map(shardModel -> new CalculateShardAdminResponse(shardModel.shard(),
-                        shardModel.serverUri()));
+        return calculateShardOperation.execute(shardKey)
+                .map(shardModel -> new CalculateShardAdminResponse(shardModel.slot(),
+                        shardModel.uri()));
     }
 }

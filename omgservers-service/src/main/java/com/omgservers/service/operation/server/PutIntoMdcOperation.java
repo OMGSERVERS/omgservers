@@ -9,5 +9,5 @@ public interface PutIntoMdcOperation {
 
     void putUnknownSubject();
 
-    void putShard(int shard);
+    void putSlot(int slot);
 }

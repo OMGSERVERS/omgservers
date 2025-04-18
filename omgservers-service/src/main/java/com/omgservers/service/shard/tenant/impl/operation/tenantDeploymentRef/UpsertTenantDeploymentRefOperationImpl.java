@@ -25,12 +25,12 @@ class UpsertTenantDeploymentRefOperationImpl implements UpsertTenantDeploymentRe
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final TenantDeploymentRefModel tenantDeploymentRef) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_tenant_deployment_ref(
+                        insert into $slot.tab_tenant_deployment_ref(
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id,
                             deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)

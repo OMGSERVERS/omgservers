@@ -30,7 +30,7 @@ class DeleteRootEntityRefMethodImpl implements DeleteRootEntityRefMethod {
                         (changeContext, sqlConnection) -> deleteRootEntityRefOperation
                                 .execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         rootId,
                                         id))
                 .map(ChangeContext::getResult)

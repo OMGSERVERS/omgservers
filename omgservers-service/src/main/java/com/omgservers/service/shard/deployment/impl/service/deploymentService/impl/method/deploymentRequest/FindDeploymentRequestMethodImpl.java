@@ -30,7 +30,7 @@ class FindDeploymentRequestMethodImpl implements FindDeploymentRequestMethod {
         return pgPool.withTransaction(sqlConnection ->
                         selectDeploymentRequestByClientIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId,
                                         clientId))
                 .map(FindDeploymentRequestResponse::new);

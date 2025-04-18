@@ -9,7 +9,7 @@ import java.util.List;
 public interface DeleteClientMessagesByIdsOperation {
     Uni<Boolean> deleteClientMessagesByIds(ChangeContext<?> changeContext,
                                            SqlConnection sqlConnection,
-                                           int shard,
+                                           int slot,
                                            Long clientId,
                                            List<Long> ids);
 }

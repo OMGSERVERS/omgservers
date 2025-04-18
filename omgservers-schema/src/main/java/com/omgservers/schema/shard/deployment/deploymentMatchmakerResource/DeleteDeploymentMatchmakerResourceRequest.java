@@ -1,6 +1,6 @@
 package com.omgservers.schema.shard.deployment.deploymentMatchmakerResource;
 
-import com.omgservers.schema.shard.ShardedRequest;
+import com.omgservers.schema.shard.ShardRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeleteDeploymentMatchmakerResourceRequest implements ShardedRequest {
+public class DeleteDeploymentMatchmakerResourceRequest implements ShardRequest {
 
     @Valid
     Long deploymentId;

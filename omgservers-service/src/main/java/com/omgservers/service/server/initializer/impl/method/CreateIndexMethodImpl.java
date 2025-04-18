@@ -46,11 +46,11 @@ class CreateIndexMethodImpl implements CreateIndexMethod {
     Uni<Void> createIndex() {
         final var servers = getServiceConfigOperation.getServiceConfig().initialization()
                 .serverIndex().servers();
-        final var shardCount = getServiceConfigOperation.getServiceConfig().server().shardCount();
-        log.info("Index not found, create a new one for {} server/s, shardCount={}",
-                servers.size(), shardCount);
+        final var slotsCount = getServiceConfigOperation.getServiceConfig().server().slotsCount();
+        log.info("Index not found, create a new one for {} server/s, slotsCount={}",
+                servers.size(), slotsCount);
 
-        final var indexConfig = IndexConfigDto.create(servers, shardCount);
+        final var indexConfig = IndexConfigDto.create(servers, slotsCount);
         final var index = indexModelFactory.create(indexConfig, "initialization");
 
         final var request = new SyncIndexRequest(index);

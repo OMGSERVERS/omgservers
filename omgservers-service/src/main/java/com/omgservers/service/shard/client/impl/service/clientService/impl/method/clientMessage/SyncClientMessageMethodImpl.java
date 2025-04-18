@@ -34,7 +34,7 @@ class SyncClientMessageMethodImpl implements SyncClientMessageMethod {
                         upsertClientMessageOperation.upsertClientMessage(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 clientMessage))
                 .map(ChangeContext::getResult)
                 .map(SyncClientMessageResponse::new);

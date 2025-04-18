@@ -22,17 +22,16 @@ class SelectRootEntityRefByRootIdAndEntityIdOperationImpl
     final RootEntityRefModelMapper rootEntityRefModelMapper;
 
     @Override
-    public Uni<RootEntityRefModel> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long rootId,
-            final Long entityId) {
+    public Uni<RootEntityRefModel> execute(final SqlConnection sqlConnection,
+                                           final int slot,
+                                           final Long rootId,
+                                           final Long entityId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, root_id, created, modified, qualifier, entity_id, deleted
-                        from $shard.tab_root_entity_ref
+                        from $slot.tab_root_entity_ref
                         where root_id = $1 and entity_id = $2
                         order by id desc
                         limit 1

@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveDeploymentMatchmakerAssignmentsByDeploymentIdOperation {
     Uni<List<DeploymentMatchmakerAssignmentModel>> execute(SqlConnection sqlConnection,
-                                                           int shard,
+                                                           int slot,
                                                            Long deploymentId);
 }

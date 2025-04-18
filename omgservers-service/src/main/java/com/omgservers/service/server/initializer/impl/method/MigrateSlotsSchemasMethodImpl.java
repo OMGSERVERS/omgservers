@@ -1,6 +1,6 @@
 package com.omgservers.service.server.initializer.impl.method;
 
-import com.omgservers.schema.model.index.IndexServerDto;
+import com.omgservers.schema.model.index.IndexShardDto;
 import com.omgservers.service.configuration.DatabaseSchemaConfiguration;
 import com.omgservers.service.operation.server.GetIndexConfigOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
@@ -16,9 +16,9 @@ import javax.sql.DataSource;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class MigrateShardsSchemasMethodImpl implements MigrateShardsSchemasMethod {
+class MigrateSlotsSchemasMethodImpl implements MigrateSlotsSchemasMethod {
 
-    private static final String SHARDS_SCHEMA_LOCATION = "db/shards";
+    private static final String SCRIPTS_LOCATION = "db/slot";
 
     final GetServiceConfigOperation getServiceConfigOperation;
     final GetIndexConfigOperation getIndexConfigOperation;
@@ -27,27 +27,27 @@ class MigrateShardsSchemasMethodImpl implements MigrateShardsSchemasMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Migrate {} schema", SHARDS_SCHEMA_LOCATION);
+        log.debug("Migrate \"{}\"", SCRIPTS_LOCATION);
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
-                .flatMap(voidItem -> migrateShardsSchema())
-                .invoke(voidItem -> log.info("Shards schemas migrated"));
+                .flatMap(voidItem -> migrateSchemas())
+                .invoke(voidItem -> log.info("Slots schemas migrated"));
     }
 
-    public Uni<Void> migrateShardsSchema() {
+    public Uni<Void> migrateSchemas() {
         return getIndexConfigOperation.execute()
                 .flatMap(indexConfig -> {
                     final var serverUri = getServiceConfigOperation.getServiceConfig().server().uri();
-                    return indexConfig.getServers().stream()
+                    return indexConfig.getShards().stream()
                             .filter(s -> s.getUri().equals(serverUri))
-                            .map(IndexServerDto::getShards)
+                            .map(IndexShardDto::getSlots)
                             .findFirst()
-                            .map(serverShards -> {
+                            .map(slots -> {
                                 final var migrationConcurrency = getServiceConfigOperation.getServiceConfig()
                                         .initialization().databaseSchema().concurrency();
-                                final var migrationTasks = serverShards.stream()
-                                        .map(this::migrateShard)
+                                final var migrationTasks = slots.stream()
+                                        .map(this::migrateSlotSchema)
                                         .toList();
                                 return Uni.join().all(migrationTasks)
                                         .usingConcurrencyOf(migrationConcurrency)
@@ -57,14 +57,14 @@ class MigrateShardsSchemasMethodImpl implements MigrateShardsSchemasMethod {
                 });
     }
 
-    Uni<Void> migrateShard(final int shard) {
+    Uni<Void> migrateSlotSchema(final int slot) {
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> {
                     final var flyway = Flyway.configure()
                             .dataSource(dataSource)
-                            .locations(SHARDS_SCHEMA_LOCATION)
+                            .locations(SCRIPTS_LOCATION)
                             .createSchemas(true)
-                            .defaultSchema(String.format(DatabaseSchemaConfiguration.SHARD_SCHEMA_FORMAT, shard))
+                            .defaultSchema(String.format(DatabaseSchemaConfiguration.SLOT_SCHEMA_FORMAT, slot))
                             .load();
                     flyway.migrate();
                 });

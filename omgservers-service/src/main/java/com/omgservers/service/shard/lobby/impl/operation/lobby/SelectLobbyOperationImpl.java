@@ -22,14 +22,14 @@ class SelectLobbyOperationImpl implements SelectLobbyOperation {
 
     @Override
     public Uni<LobbyModel> execute(final SqlConnection sqlConnection,
-                                   final int shard,
+                                   final int slot,
                                    final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, deployment_id, runtime_id, config, deleted
-                        from $shard.tab_lobby
+                        from $slot.tab_lobby
                         where id = $1
                         limit 1
                         """,

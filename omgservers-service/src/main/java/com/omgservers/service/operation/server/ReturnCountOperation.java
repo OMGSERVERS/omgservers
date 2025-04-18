@@ -8,7 +8,7 @@ import java.util.List;
 public interface ReturnCountOperation {
 
     Uni<Integer> returnCount(SqlConnection sqlConnection,
-                             int shard,
+                             int slot,
                              String sql,
                              List<?> parameters);
 }

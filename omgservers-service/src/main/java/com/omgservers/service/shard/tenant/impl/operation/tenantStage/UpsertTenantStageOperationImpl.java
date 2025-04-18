@@ -30,12 +30,12 @@ class UpsertTenantStageOperationImpl implements UpsertTenantStageOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final TenantStageModel tenantStage) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_tenant_stage(
+                        insert into $slot.tab_tenant_stage(
                             id, idempotency_key, tenant_id, project_id, created, modified, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

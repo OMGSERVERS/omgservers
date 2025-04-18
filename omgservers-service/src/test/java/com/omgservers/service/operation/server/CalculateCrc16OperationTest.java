@@ -90,7 +90,7 @@ public class CalculateCrc16OperationTest extends BaseTestClass {
         }
 
         void put(byte[] bytes) {
-            Integer crc16 = calculateCrc16Operation.calculateCrc16(bytes);
+            Integer crc16 = calculateCrc16Operation.execute(bytes);
             Integer index = crc16 % buckets;
             distribution.get(index).incrementAndGet();
         }

@@ -28,7 +28,7 @@ class VerifyTenantProjectPermissionExistsMethodImpl implements VerifyTenantProje
         final var userId = request.getUserId();
         final var permission = request.getTenantProjectPermissionQualifier();
         return pgPool.withTransaction(sqlConnection -> verifyTenantProjectPermissionExistsOperation
-                        .execute(sqlConnection, shardModel.shard(), tenantId, tenantProjectId, userId, permission))
+                        .execute(sqlConnection, shardModel.slot(), tenantId, tenantProjectId, userId, permission))
                 .map(VerifyTenantProjectPermissionExistsResponse::new);
     }
 }

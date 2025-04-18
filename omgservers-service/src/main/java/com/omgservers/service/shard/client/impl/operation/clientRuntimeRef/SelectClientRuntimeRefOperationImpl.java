@@ -22,14 +22,14 @@ class SelectClientRuntimeRefOperationImpl implements SelectClientRuntimeRefOpera
 
     @Override
     public Uni<ClientRuntimeRefModel> selectClientRuntimeRef(final SqlConnection sqlConnection,
-                                                             final int shard,
+                                                             final int slot,
                                                              Long clientId, final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, client_id, created, modified, runtime_id, deleted
-                        from $shard.tab_client_runtime_ref
+                        from $slot.tab_client_runtime_ref
                         where client_id = $1 and id = $2
                         limit 1
                         """,

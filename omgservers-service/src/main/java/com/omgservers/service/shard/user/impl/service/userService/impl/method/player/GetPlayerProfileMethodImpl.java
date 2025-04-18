@@ -26,7 +26,7 @@ class GetPlayerProfileMethodImpl implements GetPlayerProfileMethod {
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();
         return pgPool.withTransaction(sqlConnection -> selectPlayerProfileOperation
-                        .execute(sqlConnection, shardModel.shard(), userId, playerId))
+                        .execute(sqlConnection, shardModel.slot(), userId, playerId))
                 .map(GetPlayerProfileResponse::new);
     }
 }

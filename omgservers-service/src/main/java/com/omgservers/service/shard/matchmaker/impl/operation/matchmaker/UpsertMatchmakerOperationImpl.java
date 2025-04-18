@@ -30,12 +30,12 @@ class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final MatchmakerModel matchmaker) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_matchmaker(
+                        insert into $slot.tab_matchmaker(
                             id, idempotency_key, created, modified, deployment_id, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

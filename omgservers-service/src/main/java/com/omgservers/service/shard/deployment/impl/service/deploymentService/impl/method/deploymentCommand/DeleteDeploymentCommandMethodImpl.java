@@ -31,7 +31,7 @@ class DeleteDeploymentCommandMethodImpl implements DeleteDeploymentCommandMethod
                         (changeContext, sqlConnection) -> deleteDeploymentCommandOperation
                                 .execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId,
                                         id))
                 .map(ChangeContext::getResult)

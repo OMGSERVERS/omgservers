@@ -34,12 +34,12 @@ class SyncTenantProjectMethodImpl implements SyncTenantProjectMethod {
         final var project = request.getTenantProject();
         final var tenantId = project.getTenantId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        verifyTenantExistsOperation.execute(sqlConnection, shardModel.shard(), tenantId)
+                        verifyTenantExistsOperation.execute(sqlConnection, shardModel.slot(), tenantId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertTenantProjectOperation.execute(changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 project);
                                     } else {
                                         throw new ServerSideNotFoundException(

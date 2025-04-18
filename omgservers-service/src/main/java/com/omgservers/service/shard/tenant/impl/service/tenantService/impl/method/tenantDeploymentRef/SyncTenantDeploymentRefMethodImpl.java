@@ -41,19 +41,19 @@ class SyncTenantDeploymentRefMethodImpl implements SyncTenantDeploymentRefMethod
 
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         verifyTenantStageExistsOperation.execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         tenantStageId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return verifyTenantVersionExistsOperation
-                                                .execute(sqlConnection, shardModel.shard(), tenantId, tenantVersionId)
+                                                .execute(sqlConnection, shardModel.slot(), tenantId, tenantVersionId)
                                                 .flatMap(versionExists -> {
                                                     if (versionExists) {
                                                         return upsertTenantDeploymentRefOperation
                                                                 .execute(changeContext,
                                                                         sqlConnection,
-                                                                        shardModel.shard(),
+                                                                        shardModel.slot(),
                                                                         tenantDeploymentRef);
                                                     } else {
                                                         throw new ServerSideNotFoundException(

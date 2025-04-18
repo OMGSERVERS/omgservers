@@ -20,13 +20,13 @@ public class DeletePlayerOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> deletePlayer(final int shard,
+    public ChangeContext<Boolean> deletePlayer(final int slot,
                                                final Long userId,
                                                final Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deletePlayerOperation
-                                    .execute(changeContext, sqlConnection, shard, userId, id))
+                                    .execute(changeContext, sqlConnection, slot, userId, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

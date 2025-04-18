@@ -5,6 +5,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface VerifyClientExistsOperation {
     Uni<Boolean> hasClient(SqlConnection sqlConnection,
-                           int shard,
+                           int slot,
                            Long id);
 }

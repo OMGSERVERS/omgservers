@@ -30,7 +30,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> deleteClientOperation
-                                .deleteClient(changeContext, sqlConnection, shardModel.shard(), id))
+                                .deleteClient(changeContext, sqlConnection, shardModel.slot(), id))
                 .map(ChangeContext::getResult)
                 .map(DeleteClientResponse::new);
     }

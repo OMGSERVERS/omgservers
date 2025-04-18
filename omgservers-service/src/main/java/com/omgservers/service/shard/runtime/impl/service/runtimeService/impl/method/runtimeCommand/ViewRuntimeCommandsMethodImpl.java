@@ -27,7 +27,7 @@ class ViewRuntimeCommandsMethodImpl implements ViewRuntimeCommandsMethod {
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeCommandsByRuntimeIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId))
                 .map(ViewRuntimeCommandsResponse::new);
 

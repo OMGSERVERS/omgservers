@@ -22,13 +22,13 @@ class DeleteRootEntityRefOperationImpl implements DeleteRootEntityRefOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long rootId,
                                 final Long id) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_root_entity_ref
+                        update $slot.tab_root_entity_ref
                         set modified = $3, deleted = true
                         where root_id = $1 and id = $2 and deleted = false
                         """,

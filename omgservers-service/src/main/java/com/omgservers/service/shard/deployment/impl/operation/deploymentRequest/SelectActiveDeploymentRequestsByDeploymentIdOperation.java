@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveDeploymentRequestsByDeploymentIdOperation {
     Uni<List<DeploymentRequestModel>> execute(SqlConnection sqlConnection,
-                                              int shard,
+                                              int slot,
                                               Long deploymentId);
 }

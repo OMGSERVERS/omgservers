@@ -37,13 +37,13 @@ class ViewDeploymentLobbyResourcesMethodImpl implements ViewDeploymentLobbyResou
                             if (Objects.nonNull(status)) {
                                 return selectActiveDeploymentLobbyResourcesByDeploymentIdAndStatusOperation
                                         .execute(sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 deploymentId,
                                                 status);
                             } else {
                                 return selectActiveDeploymentLobbyResourcesByDeploymentIdOperation
                                         .execute(sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 deploymentId
                                         );
                             }

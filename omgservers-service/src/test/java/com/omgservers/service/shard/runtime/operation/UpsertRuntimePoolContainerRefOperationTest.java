@@ -38,67 +38,67 @@ class UpsertRuntimePoolContainerRefOperationTest extends BaseTestClass {
 
     @Test
     void givenRuntimeAssignment_whenUpsertRuntimeAssignment_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(slot, runtime);
 
         final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtime.getId(), clientId());
 
-        final var changeContext = upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(shard, runtimeAssignment);
+        final var changeContext = upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(slot, runtimeAssignment);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_ASSIGNMENT_CREATED));
     }
 
     @Test
     void givenRuntimeAssignment_whenUpsertRuntimeAssignment_thenSkip() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(slot, runtime);
 
         final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtime.getId(),
                 clientId());
-        upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(shard, runtimeAssignment);
+        upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(slot, runtimeAssignment);
 
-        final var changeContext = upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(shard, runtimeAssignment);
+        final var changeContext = upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(slot, runtimeAssignment);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_ASSIGNMENT_CREATED));
     }
 
     @Test
     void givenUnknownIds_whenUpsertRuntimeAssignment_thenException() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtimeAssignment = runtimeAssignmentModelFactory.create(runtimeId(),
                 clientId());
         final var exception = assertThrows(ServerSideBadRequestException.class, () -> upsertRuntimeAssignmentOperation
-                .upsertRuntimeAssignment(shard, runtimeAssignment));
+                .upsertRuntimeAssignment(slot, runtimeAssignment));
         assertEquals(ExceptionQualifierEnum.DB_CONSTRAINT_VIOLATED, exception.getQualifier());
     }
 
     @Test
     void givenRuntimeAssignment_whenUpsertRuntimeAssignment_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(slot, runtime);
 
         final var runtimeAssignment1 = runtimeAssignmentModelFactory.create(runtime.getId(),
                 clientId());
-        upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(shard, runtimeAssignment1);
+        upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(slot, runtimeAssignment1);
 
         final var runtimeAssignment2 = runtimeAssignmentModelFactory.create(runtime.getId(),
                 clientId(),
                 runtimeAssignment1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(shard, runtimeAssignment2));
+                upsertRuntimeAssignmentOperation.upsertRuntimeAssignment(slot, runtimeAssignment2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

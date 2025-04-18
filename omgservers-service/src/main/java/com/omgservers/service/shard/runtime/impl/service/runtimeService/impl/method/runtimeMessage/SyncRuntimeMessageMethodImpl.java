@@ -36,13 +36,13 @@ class SyncRuntimeMessageMethodImpl implements SyncRuntimeMessageMethod {
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> verifyRuntimeExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), runtimeId)
+                                .execute(sqlConnection, shardModel.slot(), runtimeId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertRuntimeMessageOperation.execute(
                                                 changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 runtimeMessage);
                                     } else {
                                         throw new ServerSideNotFoundException(

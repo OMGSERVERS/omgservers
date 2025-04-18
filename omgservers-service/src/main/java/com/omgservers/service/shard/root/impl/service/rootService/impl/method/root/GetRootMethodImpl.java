@@ -26,7 +26,7 @@ class GetRootMethodImpl implements GetRootMethod {
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectRootOperation
-                        .execute(sqlConnection, shardModel.shard(), id))
+                        .execute(sqlConnection, shardModel.slot(), id))
                 .map(GetRootResponse::new);
     }
 }

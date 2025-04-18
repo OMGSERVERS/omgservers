@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SelectActiveDeploymentLobbyResourcesByDeploymentIdAndStatusOperation {
     Uni<List<DeploymentLobbyResourceModel>> execute(SqlConnection sqlConnection,
-                                                    int shard,
+                                                    int slot,
                                                     Long deploymentId,
                                                     DeploymentLobbyResourceStatusEnum status);
 }

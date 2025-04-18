@@ -30,7 +30,7 @@ class DeleteClientMessagesMethodImpl implements DeleteClientMessagesMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteClientMessagesByIdsOperation.deleteClientMessagesByIds(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 clientId,
                                 ids))
                 .map(ChangeContext::getResult)

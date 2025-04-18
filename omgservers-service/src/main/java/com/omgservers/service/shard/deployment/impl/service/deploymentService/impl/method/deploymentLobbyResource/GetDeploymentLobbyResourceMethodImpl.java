@@ -24,11 +24,11 @@ class GetDeploymentLobbyResourceMethodImpl implements GetDeploymentLobbyResource
                                                            final GetDeploymentLobbyResourceRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectDeploymentLobbyResourceOperation
-                        .execute(sqlConnection, shard, deploymentId, id))
+                        .execute(sqlConnection, slot, deploymentId, id))
                 .map(GetDeploymentLobbyResourceResponse::new);
     }
 }

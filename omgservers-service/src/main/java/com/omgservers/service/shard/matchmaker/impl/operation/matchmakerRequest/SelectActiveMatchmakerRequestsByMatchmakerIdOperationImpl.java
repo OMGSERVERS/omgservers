@@ -22,17 +22,16 @@ class SelectActiveMatchmakerRequestsByMatchmakerIdOperationImpl
     final MatchmakerRequestModelMapper matchmakerRequestModelMapper;
 
     @Override
-    public Uni<List<MatchmakerRequestModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long matchmakerId) {
+    public Uni<List<MatchmakerRequestModel>> execute(final SqlConnection sqlConnection,
+                                                     final int slot,
+                                                     final Long matchmakerId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, matchmaker_id, created, modified, client_id, mode, config, deleted
-                        from $shard.tab_matchmaker_request
+                        from $slot.tab_matchmaker_request
                         where matchmaker_id = $1 and deleted = false
                         order by id asc
                         """,

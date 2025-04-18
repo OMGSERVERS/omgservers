@@ -37,7 +37,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
         final var userId = request.getUserId();
         final var password = request.getPassword();
         return changeWithContextOperation.<String>changeWithContext((changeContext, sqlConnection) ->
-                        selectUserOperation.execute(sqlConnection, shardModel.shard(), userId)
+                        selectUserOperation.execute(sqlConnection, shardModel.slot(), userId)
                                 .flatMap(user -> validateCredentialsOperation
                                         .execute(user, password))
                                 .map(this::issueJwtToken))

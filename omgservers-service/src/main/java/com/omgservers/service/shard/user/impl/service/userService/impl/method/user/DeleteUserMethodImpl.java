@@ -29,7 +29,7 @@ class DeleteUserMethodImpl implements DeleteUserMethod {
                         deleteUserOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeleteUserResponse::new);

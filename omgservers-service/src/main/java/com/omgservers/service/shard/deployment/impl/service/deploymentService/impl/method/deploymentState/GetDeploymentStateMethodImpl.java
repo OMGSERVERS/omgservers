@@ -44,39 +44,39 @@ class GetDeploymentStateMethodImpl implements GetDeploymentStateMethod {
                                                    final GetDeploymentStateRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();
         final var deploymentState = new DeploymentStateDto();
         return pgPool.withTransaction(sqlConnection ->
-                        selectDeploymentOperation.execute(sqlConnection, shard, deploymentId)
+                        selectDeploymentOperation.execute(sqlConnection, slot, deploymentId)
                                 .invoke(deploymentState::setDeployment)
                                 .flatMap(deployment ->
                                         selectActiveDeploymentCommandsByDeploymentIdOperation
-                                                .execute(sqlConnection, shard, deploymentId)
+                                                .execute(sqlConnection, slot, deploymentId)
                                                 .invoke(deploymentState::setDeploymentCommands))
                                 .flatMap(deployment ->
                                         selectActiveDeploymentRequestsByDeploymentIdOperation
-                                                .execute(sqlConnection, shard, deploymentId)
+                                                .execute(sqlConnection, slot, deploymentId)
                                                 .invoke(deploymentState::setDeploymentRequests))
                                 .flatMap(deployment ->
                                         selectActiveDeploymentLobbyResourcesByDeploymentIdOperation
-                                                .execute(sqlConnection, shard, deploymentId)
+                                                .execute(sqlConnection, slot, deploymentId)
                                                 .invoke(deploymentState::setDeploymentLobbyResources))
                                 .flatMap(deployment ->
                                         selectActiveDeploymentLobbyResourcesByDeploymentIdOperation
-                                                .execute(sqlConnection, shard, deploymentId)
+                                                .execute(sqlConnection, slot, deploymentId)
                                                 .invoke(deploymentState::setDeploymentLobbyResources))
                                 .flatMap(deployment ->
                                         selectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation
-                                                .execute(sqlConnection, shard, deploymentId)
+                                                .execute(sqlConnection, slot, deploymentId)
                                                 .invoke(deploymentState::setDeploymentLobbyAssignments))
                                 .flatMap(deployment ->
                                         selectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation
-                                                .execute(sqlConnection, shard, deploymentId)
+                                                .execute(sqlConnection, slot, deploymentId)
                                                 .invoke(deploymentState::setDeploymentMatchmakerResources))
                                 .flatMap(deployment ->
                                         selectActiveDeploymentMatchmakerAssignmentsByDeploymentIdOperation
-                                                .execute(sqlConnection, shard, deploymentId)
+                                                .execute(sqlConnection, slot, deploymentId)
                                                 .invoke(deploymentState::setDeploymentMatchmakerAssignments))
                 )
                 .replaceWith(deploymentState)

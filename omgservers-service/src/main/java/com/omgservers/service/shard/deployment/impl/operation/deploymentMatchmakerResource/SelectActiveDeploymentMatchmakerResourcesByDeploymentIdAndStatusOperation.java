@@ -10,7 +10,7 @@ import java.util.List;
 public interface SelectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperation {
     Uni<List<DeploymentMatchmakerResourceModel>> execute(
             SqlConnection sqlConnection,
-            int shard,
+            int slot,
             Long deploymentId,
             DeploymentMatchmakerResourceStatusEnum status);
 }

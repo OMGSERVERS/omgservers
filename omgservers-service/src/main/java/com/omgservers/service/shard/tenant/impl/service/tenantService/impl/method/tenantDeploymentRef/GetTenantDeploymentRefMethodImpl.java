@@ -24,11 +24,11 @@ class GetTenantDeploymentRefMethodImpl implements GetTenantDeploymentRefMethod {
                                                        final GetTenantDeploymentRefRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var tenantId = request.getTenantId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectTenantDeploymentRefOperation
-                        .execute(sqlConnection, shard, tenantId, id))
+                        .execute(sqlConnection, slot, tenantId, id))
                 .map(GetTenantDeploymentRefResponse::new);
     }
 }

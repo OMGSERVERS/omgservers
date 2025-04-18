@@ -5,6 +5,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface VerifyRootExistsOperation {
     Uni<Boolean> execute(SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long id);
 }

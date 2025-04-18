@@ -2,7 +2,7 @@ package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.shard.ShardedRequest;
+import com.omgservers.schema.shard.ShardRequest;
 import com.omgservers.service.exception.ServerSideInternalException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,22 +21,22 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
     final PutIntoMdcOperation putIntoMdcOperation;
 
     @Override
-    public <T extends ShardedRequest, R, C> Uni<R> handleShardedRequest(final Logger log,
-                                                                        final T request,
-                                                                        final Function<URI, C> api,
-                                                                        final BiFunction<C, T, Uni<R>> route,
-                                                                        final BiFunction<ShardModel, T, Uni<R>> handle) {
-        return calculateShardOperation.calculateShard(request.getRequestShardKey())
+    public <T extends ShardRequest, R, C> Uni<R> execute(final Logger log,
+                                                         final T request,
+                                                         final Function<URI, C> api,
+                                                         final BiFunction<C, T, Uni<R>> route,
+                                                         final BiFunction<ShardModel, T, Uni<R>> handle) {
+        return calculateShardOperation.execute(request.getRequestShardKey())
                 .flatMap(shardModel -> {
-                    putIntoMdcOperation.putShard(shardModel.shard());
+                    putIntoMdcOperation.putSlot(shardModel.slot());
 
                     if (shardModel.locked()) {
                         throw new ServerSideInternalException(ExceptionQualifierEnum.SHARD_LOCKED,
-                                "shardModel is locked, shardModel=" + shardModel.shard());
+                                "shardModel is locked, shardModel=" + shardModel.slot());
                     }
 
                     final Uni<R> operation;
-                    final var serverUri = shardModel.serverUri();
+                    final var serverUri = shardModel.uri();
                     if (shardModel.foreign()) {
                         final var client = api.apply(serverUri);
                         log.trace("Route request, targetServer={}, request={}", serverUri, request);
@@ -50,10 +50,10 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                             .onFailure()
                             .invoke(t -> {
                                 if (t instanceof ServerSideInternalException) {
-                                    log.warn("Sharded request failed, uri={}, request={}, {}:{}",
+                                    log.warn("Shard request failed, uri={}, request={}, {}:{}",
                                             serverUri, request, t.getClass().getSimpleName(), t.getMessage());
                                 } else {
-                                    log.debug("Sharded request failed, uri={}, request={}, {}:{}",
+                                    log.debug("Shard request failed, uri={}, request={}, {}:{}",
                                             serverUri, request, t.getClass().getSimpleName(), t.getMessage());
                                 }
                             });

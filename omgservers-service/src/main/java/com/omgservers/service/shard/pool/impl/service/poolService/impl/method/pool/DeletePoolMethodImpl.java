@@ -28,7 +28,7 @@ class DeletePoolMethodImpl implements DeletePoolMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deletePoolOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeletePoolResponse::new);

@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.pool.impl.operation.poolServer;
 
 import com.omgservers.schema.model.poolServer.PoolServerModel;
-import com.omgservers.service.shard.pool.impl.mappers.PoolServerModelMapper;
 import com.omgservers.service.operation.server.SelectListOperation;
+import com.omgservers.service.shard.pool.impl.mappers.PoolServerModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,17 +22,16 @@ class SelectActivePoolServersByPoolIdOperationImpl
     final PoolServerModelMapper poolServerModelMapper;
 
     @Override
-    public Uni<List<PoolServerModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long poolId) {
+    public Uni<List<PoolServerModel>> execute(final SqlConnection sqlConnection,
+                                              final int slot,
+                                              final Long poolId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, pool_id, created, modified, qualifier, config, status, deleted
-                        from $shard.tab_pool_server
+                        from $slot.tab_pool_server
                         where pool_id = $1 and deleted = false
                         order by id asc
                         """,

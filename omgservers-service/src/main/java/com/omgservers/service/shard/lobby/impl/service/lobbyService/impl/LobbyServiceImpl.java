@@ -37,7 +37,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<GetLobbyResponse> execute(@Valid final GetLobbyRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::execute,
                 getLobbyMethod::execute);
@@ -45,7 +45,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<SyncLobbyResponse> execute(@Valid final SyncLobbyRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::execute,
                 syncLobbyMethod::execute);
@@ -69,7 +69,7 @@ class LobbyServiceImpl implements LobbyService {
 
     @Override
     public Uni<DeleteLobbyResponse> execute(@Valid final DeleteLobbyRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getMatchServiceApiClientOperation::getClient,
                 LobbyApi::execute,
                 deleteLobbyMethod::execute);

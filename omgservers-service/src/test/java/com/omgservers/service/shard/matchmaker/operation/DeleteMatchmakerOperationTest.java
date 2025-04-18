@@ -30,21 +30,21 @@ class DeleteMatchmakerOperationTest extends BaseTestClass {
 
     @Test
     void givenMatchmaker_whenExecute_thenDeleted() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId(), MatchmakerConfigDto.create());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker);
 
-        final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(shard, matchmaker.getId());
+        final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(slot, matchmaker.getId());
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.MATCHMAKER_DELETED));
     }
 
     @Test
     void givenUnknownUuid_whenExecute_thenSkip() {
-        final var shard = 0;
+        final var slot = 0;
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(shard, id);
+        final var changeContext = deleteMatchmakerOperation.deleteMatchmaker(slot, id);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.MATCHMAKER_DELETED));
     }

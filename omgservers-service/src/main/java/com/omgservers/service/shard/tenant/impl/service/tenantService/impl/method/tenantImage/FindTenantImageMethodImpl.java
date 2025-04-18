@@ -29,7 +29,7 @@ class FindTenantImageMethodImpl implements FindTenantImageMethod {
         final var qualifier = request.getQualifier();
         return pgPool.withTransaction(sqlConnection ->
                         selectTenantImageByTenantVersionIdAndQualifierOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 tenantVersionId,
                                 qualifier))

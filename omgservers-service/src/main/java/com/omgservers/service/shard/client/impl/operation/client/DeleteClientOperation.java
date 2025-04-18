@@ -7,6 +7,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface DeleteClientOperation {
     Uni<Boolean> deleteClient(ChangeContext<?> changeContext,
                               SqlConnection sqlConnection,
-                              int shard,
+                              int slot,
                               Long id);
 }

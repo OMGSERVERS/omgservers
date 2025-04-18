@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.server;
 
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
+import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -20,7 +20,7 @@ import java.util.List;
 class ReturnCountOperationImpl implements ReturnCountOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
+    final PrepareSlotSqlOperation prepareSlotSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
@@ -28,10 +28,10 @@ class ReturnCountOperationImpl implements ReturnCountOperation {
 
     @Override
     public Uni<Integer> returnCount(final SqlConnection sqlConnection,
-                                    final int shard,
+                                    final int slot,
                                     final String sql,
                                     final List<?> parameters) {
-        var preparedSql = prepareShardSqlOperation.execute(sql, shard);
+        var preparedSql = prepareSlotSqlOperation.execute(sql, slot);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(SqlResult::rowCount)

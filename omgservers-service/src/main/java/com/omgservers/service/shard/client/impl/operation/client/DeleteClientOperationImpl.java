@@ -26,12 +26,12 @@ class DeleteClientOperationImpl implements DeleteClientOperation {
     @Override
     public Uni<Boolean> deleteClient(final ChangeContext<?> changeContext,
                                      final SqlConnection sqlConnection,
-                                     final int shard,
+                                     final int slot,
                                      final Long id) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_client
+                        update $slot.tab_client
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,

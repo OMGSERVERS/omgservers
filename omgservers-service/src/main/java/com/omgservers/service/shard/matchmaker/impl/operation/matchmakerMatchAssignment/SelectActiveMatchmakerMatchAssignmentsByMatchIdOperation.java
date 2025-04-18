@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SelectActiveMatchmakerMatchAssignmentsByMatchIdOperation {
     Uni<List<MatchmakerMatchAssignmentModel>> execute(SqlConnection sqlConnection,
-                                                      int shard,
+                                                      int slot,
                                                       Long matchmakerId,
                                                       Long matchId);
 }

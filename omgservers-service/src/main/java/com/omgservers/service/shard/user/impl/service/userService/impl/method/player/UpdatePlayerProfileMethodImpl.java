@@ -30,7 +30,7 @@ class UpdatePlayerProfileMethodImpl implements UpdatePlayerProfileMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         updatePlayerProfileOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 userId,
                                 playerId,
                                 profile))

@@ -22,14 +22,14 @@ class SelectMatchmakerOperationImpl implements SelectMatchmakerOperation {
 
     @Override
     public Uni<MatchmakerModel> execute(final SqlConnection sqlConnection,
-                                        final int shard,
+                                        final int slot,
                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, deployment_id, config, deleted
-                        from $shard.tab_matchmaker
+                        from $slot.tab_matchmaker
                         where id = $1
                         limit 1
                         """,

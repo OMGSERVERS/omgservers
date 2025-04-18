@@ -31,7 +31,7 @@ class DeleteTenantProjectPermissionMethodImpl implements DeleteTenantProjectPerm
                         (changeContext, sqlConnection) -> deleteTenantProjectPermissionOperation
                                 .execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         id))
                 .map(ChangeContext::getResult)

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SelectActiveTenantImageByTenantVersionIdOperation {
     Uni<List<TenantImageModel>> execute(SqlConnection sqlConnection,
-                                        int shard,
+                                        int slot,
                                         Long tenantId,
                                         Long tenantVersionId);
 }

@@ -33,13 +33,13 @@ class SyncDeploymentRequestMethodImpl implements SyncDeploymentRequestMethod {
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (context, sqlConnection) -> verifyDeploymentExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), deploymentId)
+                                .execute(sqlConnection, shardModel.slot(), deploymentId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertDeploymentRequestOperation.execute(
                                                 context,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 deploymentRequest);
                                     } else {
                                         throw new ServerSideNotFoundException(

@@ -10,7 +10,7 @@ import org.jboss.logmanager.MDC;
 class PutIntoMdcOperationImpl implements PutIntoMdcOperation {
 
     static private final String SUBJECT = "subject";
-    static private final String SHARD = "shard";
+    static private final String SLOT = "slot";
 
     @Override
     public void putArbitrarySubject(final String subject) {
@@ -33,7 +33,7 @@ class PutIntoMdcOperationImpl implements PutIntoMdcOperation {
     }
 
     @Override
-    public void putShard(final int shard) {
-        MDC.put(SHARD, String.valueOf(shard));
+    public void putSlot(final int slot) {
+        MDC.put(SLOT, String.valueOf(slot));
     }
 }

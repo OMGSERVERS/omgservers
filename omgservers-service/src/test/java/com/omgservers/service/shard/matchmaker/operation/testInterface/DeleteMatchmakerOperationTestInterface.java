@@ -20,12 +20,12 @@ public class DeleteMatchmakerOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> deleteMatchmaker(final int shard,
+    public ChangeContext<Boolean> deleteMatchmaker(final int slot,
                                                    final Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deleteMatchmakerOperation
-                                    .execute(changeContext, sqlConnection, shard, id))
+                                    .execute(changeContext, sqlConnection, slot, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

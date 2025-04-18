@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SelectActivePoolContainersByPoolIdAndServerIdOperation {
     Uni<List<PoolContainerModel>> execute(SqlConnection sqlConnection,
-                                          int shard,
+                                          int slot,
                                           Long poolId,
                                           Long serverId);
 }

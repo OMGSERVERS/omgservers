@@ -27,26 +27,26 @@ class HandleRuntimeCommandByIdsOperationTest extends BaseTestClass {
 
     @Test
     void givenRuntime_whenUpsertRuntime_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        final var changeContext = upsertRuntimeOperation.upsertRuntime(slot, runtime);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_CREATED));
     }
 
     @Test
     void givenRuntime_whenUpsertRuntime_thenSkip() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime = runtimeModelFactory.create(tenantId(),
                 versionId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(slot, runtime);
 
-        final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        final var changeContext = upsertRuntimeOperation.upsertRuntime(slot, runtime);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_CREATED));
     }

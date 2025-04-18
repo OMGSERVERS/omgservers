@@ -24,10 +24,10 @@ class GetDeploymentMethodImpl implements GetDeploymentMethod {
                                               final GetDeploymentRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectDeploymentOperation
-                        .execute(sqlConnection, shard, id))
+                        .execute(sqlConnection, slot, id))
                 .map(GetDeploymentResponse::new);
     }
 }

@@ -29,23 +29,23 @@ class DeleteAliasOperationTest extends BaseTestClass {
 
     @Test
     void givenAlias_whenDeleteAlias_thenDeleted() {
-        final var shard = 0;
+        final var slot = 0;
         final var alias = aliasModelFactory.create(AliasQualifierEnum.TENANT,
                 generateIdOperation.generateId(),
                 generateIdOperation.generateId(),
                 generateIdOperation.generateId(),
                 "alias");
-        upsertAliasOperation.execute(shard, alias);
+        upsertAliasOperation.execute(slot, alias);
 
-        final var changeContext = deleteAliasOperation.execute(shard, alias.getId());
+        final var changeContext = deleteAliasOperation.execute(slot, alias.getId());
         assertTrue(changeContext.getResult());
     }
 
     @Test
     void givenUnknownIds_whenDeleteAlias_thenSkip() {
-        final var shard = 0;
+        final var slot = 0;
 
-        final var changeContext = deleteAliasOperation.execute(shard,
+        final var changeContext = deleteAliasOperation.execute(slot,
                 generateIdOperation.generateId());
         assertFalse(changeContext.getResult());
     }

@@ -22,16 +22,16 @@ class SelectPoolServerOperationImpl implements SelectPoolServerOperation {
 
     @Override
     public Uni<PoolServerModel> execute(final SqlConnection sqlConnection,
-                                        final int shard,
+                                        final int slot,
                                         final Long poolId,
                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, pool_id, created, modified, qualifier, config, status, deleted
-                        from $shard.tab_pool_server
+                        from $slot.tab_pool_server
                         where id = $1
                         limit 1
                         """,

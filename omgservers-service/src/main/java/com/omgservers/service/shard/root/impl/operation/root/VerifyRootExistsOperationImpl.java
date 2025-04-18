@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.root.impl.operation.root;
 
-import com.omgservers.service.operation.server.HasObjectOperation;
+import com.omgservers.service.operation.server.VerifyObjectExistsOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,18 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 class VerifyRootExistsOperationImpl implements VerifyRootExistsOperation {
 
-    final HasObjectOperation hasObjectOperation;
+    final VerifyObjectExistsOperation verifyObjectExistsOperation;
 
     @Override
     public Uni<Boolean> execute(final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long id) {
-        return hasObjectOperation.hasObject(
+        return verifyObjectExistsOperation.execute(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id
-                        from $shard.tab_root
+                        from $slot.tab_root
                         where id = $1 and deleted = false
                         limit 1
                         """,

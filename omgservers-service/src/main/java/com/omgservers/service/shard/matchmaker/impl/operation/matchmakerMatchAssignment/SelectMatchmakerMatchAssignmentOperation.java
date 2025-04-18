@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectMatchmakerMatchAssignmentOperation {
     Uni<MatchmakerMatchAssignmentModel> execute(SqlConnection sqlConnection,
-                                                int shard,
+                                                int slot,
                                                 Long matchmakerId,
                                                 Long id);
 }

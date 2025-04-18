@@ -27,7 +27,7 @@ class ViewRuntimeMessageMethodImpl implements ViewRuntimeMessageMethod {
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeMessagesByRuntimeIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId))
                 .map(ViewRuntimeMessagesResponse::new);
 

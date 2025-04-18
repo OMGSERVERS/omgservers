@@ -22,14 +22,14 @@ class CountRuntimeAssignmentsOperationImpl implements
 
     @Override
     public Uni<Integer> execute(final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long runtimeId) {
         return returnCountOperation.returnCount(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id
-                        from $shard.tab_runtime_assignment
+                        from $slot.tab_runtime_assignment
                         where runtime_id = $1
                         """,
                 Collections.singletonList(runtimeId)

@@ -37,13 +37,13 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
                                                    final GetTenantStageDataRequest request) {
         log.trace("{}", request);
 
-        final int shard = shardModel.shard();
+        final int slot = shardModel.slot();
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();
         final var tenantStageData = new TenantStageDataDto();
 
         return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantStageId,
                         tenantStageData))
@@ -55,18 +55,18 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
     }
 
     Uni<TenantStageDataDto> fillData(final SqlConnection sqlConnection,
-                                     final int shard,
+                                     final int slot,
                                      final Long tenantId,
                                      final Long tenantStageId,
                                      final TenantStageDataDto tenantStageData) {
-        return fillStage(sqlConnection, shard, tenantId, tenantStageId, tenantStageData)
+        return fillStage(sqlConnection, slot, tenantId, tenantStageId, tenantStageData)
                 .flatMap(voidItem -> fillPermissions(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantStageId,
                         tenantStageData))
                 .flatMap(voidItem -> fillDeployments(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantStageId,
                         tenantStageData))
@@ -74,12 +74,12 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
     }
 
     Uni<Void> fillStage(final SqlConnection sqlConnection,
-                        final int shard,
+                        final int slot,
                         final Long tenantId,
                         final Long tenantStageId,
                         final TenantStageDataDto tenantStageData) {
         return selectTenantStageOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantStageId)
                 .invoke(tenantStageData::setStage)
@@ -87,12 +87,12 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
     }
 
     Uni<Void> fillPermissions(final SqlConnection sqlConnection,
-                              final int shard,
+                              final int slot,
                               final Long tenantId,
                               final Long tenantStageId,
                               final TenantStageDataDto stageData) {
         return selectActiveTenantStagePermissionsByTenantStageIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantStageId)
                 .invoke(stageData::setPermissions)
@@ -100,12 +100,12 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
     }
 
     Uni<Void> fillDeployments(final SqlConnection sqlConnection,
-                              final int shard,
+                              final int slot,
                               final Long tenantId,
                               final Long tenantStageId,
                               final TenantStageDataDto stageData) {
         return selectActiveTenantDeploymentResourcesByStageIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantStageId)
                 .invoke(stageData::setDeployments)

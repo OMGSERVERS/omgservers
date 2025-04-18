@@ -12,7 +12,7 @@ public interface ChangeObjectOperation {
 
     Uni<Boolean> execute(final ChangeContext<?> changeContext,
                          final SqlConnection sqlConnection,
-                         final int shard,
+                         final int slot,
                          String sql,
                          List<?> parameters,
                          Supplier<EventBodyModel> eventBodySupplier,

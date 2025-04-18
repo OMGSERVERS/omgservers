@@ -10,7 +10,7 @@ import java.util.function.Function;
 public interface SelectListOperation {
 
     <T> Uni<List<T>> selectList(SqlConnection sqlConnection,
-                                int shard,
+                                int slot,
                                 String sql,
                                 List<?> parameters,
                                 String objectName,

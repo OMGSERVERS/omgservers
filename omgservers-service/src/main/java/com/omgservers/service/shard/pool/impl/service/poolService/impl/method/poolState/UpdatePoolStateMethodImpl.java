@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.pool.impl.service.poolService.impl.method.poolState;
 
-import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.poolContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolServer.PoolServerModel;
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.shard.pool.poolState.UpdatePoolStateRequest;
 import com.omgservers.schema.shard.pool.poolState.UpdatePoolStateResponse;
@@ -42,35 +42,35 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
         log.trace("{}", request);
 
         final var poolChangeOfState = request.getPoolChangeOfState();
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var poolId = request.getPoolId();
         return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
                         deletePoolCommands(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 poolId,
                                 poolChangeOfState.getPoolCommandsToDelete())
                                 .flatMap(voidItem -> deletePoolRequest(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         poolId,
                                         poolChangeOfState.getPoolRequestsToDelete()))
                                 .flatMap(voidItem -> syncPoolServers(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         poolChangeOfState.getPoolServersToSync()))
                                 .flatMap(voidItem -> deletePoolServers(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         poolId,
                                         poolChangeOfState.getPoolServersToDelete()))
                                 .flatMap(voidItem -> syncPoolContainers(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         poolChangeOfState.getPoolContainersToSync()))
                                 .flatMap(voidItem -> deletePoolContainers(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         poolId,
                                         poolChangeOfState.getPoolContainersToDelete())))
                 .replaceWith(Boolean.TRUE)
@@ -79,14 +79,14 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
 
     Uni<Void> deletePoolCommands(final ChangeContext<?> changeContext,
                                  final SqlConnection sqlConnection,
-                                 final int shard,
+                                 final int slot,
                                  final Long poolId,
                                  final List<Long> poolCommands) {
         return Multi.createFrom().iterable(poolCommands)
                 .onItem().transformToUniAndConcatenate(poolCommandId ->
                         deletePoolCommandOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 poolId,
                                 poolCommandId))
                 .collect().asList()
@@ -95,14 +95,14 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
 
     Uni<Void> deletePoolRequest(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long poolId,
                                 final List<Long> poolRequests) {
         return Multi.createFrom().iterable(poolRequests)
                 .onItem().transformToUniAndConcatenate(poolRequestId ->
                         deletePoolRequestOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 poolId,
                                 poolRequestId))
                 .collect().asList()
@@ -111,13 +111,13 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
 
     Uni<Void> syncPoolServers(final ChangeContext<?> changeContext,
                               final SqlConnection sqlConnection,
-                              final int shard,
+                              final int slot,
                               final List<PoolServerModel> poolServers) {
         return Multi.createFrom().iterable(poolServers)
                 .onItem().transformToUniAndConcatenate(poolServer ->
                         upsertPoolServerOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 poolServer))
                 .collect().asList()
                 .replaceWithVoid();
@@ -125,14 +125,14 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
 
     Uni<Void> deletePoolServers(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long poolId,
                                 final List<Long> poolServers) {
         return Multi.createFrom().iterable(poolServers)
                 .onItem().transformToUniAndConcatenate(poolServerId ->
                         deletePoolServerOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 poolId,
                                 poolServerId))
                 .collect().asList()
@@ -141,13 +141,13 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
 
     Uni<Void> syncPoolContainers(final ChangeContext<?> changeContext,
                                  final SqlConnection sqlConnection,
-                                 final int shard,
+                                 final int slot,
                                  final List<PoolContainerModel> poolContainers) {
         return Multi.createFrom().iterable(poolContainers)
                 .onItem().transformToUniAndConcatenate(poolContainer ->
                         upsertPoolContainerOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 poolContainer))
                 .collect().asList()
                 .replaceWithVoid();
@@ -155,14 +155,14 @@ class UpdatePoolStateMethodImpl implements UpdatePoolStateMethod {
 
     Uni<Void> deletePoolContainers(final ChangeContext<?> changeContext,
                                    final SqlConnection sqlConnection,
-                                   final int shard,
+                                   final int slot,
                                    final Long poolId,
                                    final List<Long> poolContainers) {
         return Multi.createFrom().iterable(poolContainers)
                 .onItem().transformToUniAndConcatenate(poolContainerId ->
                         deletePoolContainerOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 poolId,
                                 poolContainerId))
                 .collect().asList()

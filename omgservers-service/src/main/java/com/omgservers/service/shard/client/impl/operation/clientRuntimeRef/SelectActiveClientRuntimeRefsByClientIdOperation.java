@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveClientRuntimeRefsByClientIdOperation {
     Uni<List<ClientRuntimeRefModel>> selectActiveClientRuntimeRefsByClientId(SqlConnection sqlConnection,
-                                                                             int shard,
+                                                                             int slot,
                                                                              Long clientId);
 }

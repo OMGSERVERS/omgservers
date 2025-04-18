@@ -31,7 +31,7 @@ class DeleteMatchmakerCommandMethodImpl implements DeleteMatchmakerCommandMethod
                         (changeContext, sqlConnection) -> deleteMatchmakerCommandOperation
                                 .execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         matchmakerId,
                                         id))
                 .map(ChangeContext::getResult)

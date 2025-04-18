@@ -36,12 +36,12 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
                                                     final GetTenantDataRequest request) {
         log.trace("{}", request);
 
-        final int shard = shardModel.shard();
+        final int slot = shardModel.slot();
         final var tenantId = request.getTenantId();
         final var tenantData = new TenantDataDto();
 
         return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantData))
                 .flatMap(voidItem -> fillAliases(tenantId,
@@ -53,43 +53,43 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
     }
 
     Uni<Void> fillData(final SqlConnection sqlConnection,
-                       final int shard,
+                       final int slot,
                        final Long tenantId,
                        final TenantDataDto tenantData) {
-        return fillTenant(sqlConnection, shard, tenantId, tenantData)
-                .flatMap(voidItem -> fillTenantPermissions(sqlConnection, shard, tenantId, tenantData))
-                .flatMap(voidItem -> fillProjects(sqlConnection, shard, tenantId, tenantData))
+        return fillTenant(sqlConnection, slot, tenantId, tenantData)
+                .flatMap(voidItem -> fillTenantPermissions(sqlConnection, slot, tenantId, tenantData))
+                .flatMap(voidItem -> fillProjects(sqlConnection, slot, tenantId, tenantData))
                 .replaceWithVoid();
     }
 
     Uni<Void> fillTenant(final SqlConnection sqlConnection,
-                         final int shard,
+                         final int slot,
                          final Long tenantId,
                          final TenantDataDto tenantDetails) {
         return selectTenantOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId)
                 .invoke(tenantDetails::setTenant)
                 .replaceWithVoid();
     }
 
     Uni<Void> fillTenantPermissions(final SqlConnection sqlConnection,
-                                    final int shard,
+                                    final int slot,
                                     final Long tenantId,
                                     final TenantDataDto tenantData) {
         return selectActiveTenantPermissionsByTenantIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId)
                 .invoke(tenantData::setTenantPermissions)
                 .replaceWithVoid();
     }
 
     Uni<Void> fillProjects(final SqlConnection sqlConnection,
-                           final int shard,
+                           final int slot,
                            final Long tenantId,
                            final TenantDataDto tenantData) {
         return selectActiveTenantProjectsByTenantIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId)
                 .invoke(tenantData::setTenantProjects)
                 .replaceWithVoid();

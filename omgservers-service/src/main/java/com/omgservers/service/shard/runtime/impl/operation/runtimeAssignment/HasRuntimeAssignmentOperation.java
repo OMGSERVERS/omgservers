@@ -5,7 +5,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface HasRuntimeAssignmentOperation {
     Uni<Boolean> execute(SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long runtimeId,
                          Long clientId);
 }

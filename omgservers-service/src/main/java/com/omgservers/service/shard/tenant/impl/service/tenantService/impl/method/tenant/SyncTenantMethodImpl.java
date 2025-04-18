@@ -29,7 +29,7 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
 
         final var tenant = request.getTenant();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        upsertTenantOperation.execute(changeContext, sqlConnection, shardModel.shard(), tenant))
+                        upsertTenantOperation.execute(changeContext, sqlConnection, shardModel.slot(), tenant))
                 .map(ChangeContext::getResult)
                 .map(SyncTenantResponse::new);
     }

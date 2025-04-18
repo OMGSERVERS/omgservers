@@ -22,14 +22,14 @@ class SelectActiveAliasesByShardKeyOperationImpl implements SelectActiveAliasesB
 
     @Override
     public Uni<List<AliasModel>> execute(final SqlConnection sqlConnection,
-                                         final int shard,
+                                         final int slot,
                                          final Long shardKey) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
-                        from $shard.tab_alias
+                        from $slot.tab_alias
                         where shard_key = $1 and deleted = false
                         order by id asc
                         """,

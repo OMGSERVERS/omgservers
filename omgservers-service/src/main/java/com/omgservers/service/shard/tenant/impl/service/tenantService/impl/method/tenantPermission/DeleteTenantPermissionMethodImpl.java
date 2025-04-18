@@ -30,7 +30,7 @@ class DeleteTenantPermissionMethodImpl implements DeleteTenantPermissionMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteTenantPermissionOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 id))
                 .map(ChangeContext::getResult)

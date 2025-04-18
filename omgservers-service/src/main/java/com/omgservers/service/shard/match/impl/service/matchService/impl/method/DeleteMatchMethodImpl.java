@@ -28,7 +28,7 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> deleteMatchOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeleteMatchResponse::new);

@@ -25,15 +25,15 @@ class SelectTenantVersionConfigOperationImpl implements SelectTenantVersionConfi
 
     @Override
     public Uni<TenantVersionConfigDto> execute(final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Long tenantId,
                                                final Long tenantVersionId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select config
-                        from $shard.tab_tenant_version
+                        from $slot.tab_tenant_version
                         where tenant_id = $1 and id = $2
                         limit 1
                         """,

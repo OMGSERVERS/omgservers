@@ -22,17 +22,17 @@ class SelectTenantImageOperationImpl implements SelectTenantImageOperation {
 
     @Override
     public Uni<TenantImageModel> execute(final SqlConnection sqlConnection,
-                                         final int shard,
+                                         final int slot,
                                          final Long tenantId,
                                          final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, config,
                             deleted
-                        from $shard.tab_tenant_image
+                        from $slot.tab_tenant_image
                         where tenant_id = $1 and id = $2
                         limit 1
                         """,

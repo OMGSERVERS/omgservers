@@ -6,6 +6,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectMatchOperation {
     Uni<MatchModel> execute(SqlConnection sqlConnection,
-                            int shard,
+                            int slot,
                             Long id);
 }

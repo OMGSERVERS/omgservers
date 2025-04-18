@@ -30,7 +30,7 @@ class FindMatchmakerMatchAssignmentMethodImpl implements FindMatchmakerMatchAssi
         return pgPool.withTransaction(
                         sqlConnection -> selectMatchmakerMatchAssignmentByMatchmakerIdAndClientIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         matchmakerId,
                                         clientId))
                 .map(FindMatchmakerMatchAssignmentResponse::new);

@@ -24,7 +24,7 @@ class ChangeObjectOperationImpl implements ChangeObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareSqlOperation prepareSqlOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
+    final PrepareSlotSqlOperation prepareSlotSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
@@ -32,12 +32,12 @@ class ChangeObjectOperationImpl implements ChangeObjectOperation {
 
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final String sql,
                                 final List<?> parameters,
                                 final Supplier<EventBodyModel> eventBodySupplier,
                                 final Supplier<LogModel> logSupplier) {
-        final var preparedSql = prepareShardSqlOperation.execute(sql, shard);
+        final var preparedSql = prepareSlotSqlOperation.execute(sql, slot);
         return executeQuery(changeContext, sqlConnection, preparedSql, parameters, eventBodySupplier, logSupplier);
     }
 

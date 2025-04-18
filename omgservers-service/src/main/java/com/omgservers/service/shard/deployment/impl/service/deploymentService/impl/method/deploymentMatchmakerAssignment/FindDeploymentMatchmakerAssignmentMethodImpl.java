@@ -29,7 +29,7 @@ class FindDeploymentMatchmakerAssignmentMethodImpl implements FindDeploymentMatc
                     final var clientId = request.getClientId();
                     return selectDeploymentMatchmakerAssignmentByClientIdOperation
                             .execute(sqlConnection,
-                                    shardModel.shard(),
+                                    shardModel.slot(),
                                     deploymentId,
                                     clientId);
                 })

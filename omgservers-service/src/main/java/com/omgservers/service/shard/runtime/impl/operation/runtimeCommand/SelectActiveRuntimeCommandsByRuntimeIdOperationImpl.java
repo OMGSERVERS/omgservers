@@ -23,15 +23,15 @@ class SelectActiveRuntimeCommandsByRuntimeIdOperationImpl
 
     @Override
     public Uni<List<RuntimeCommandModel>> execute(final SqlConnection sqlConnection,
-                                                  final int shard,
+                                                  final int slot,
                                                   final Long runtimeId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, runtime_id, created, modified, qualifier, body, deleted
-                        from $shard.tab_runtime_command
+                        from $slot.tab_runtime_command
                         where runtime_id = $1 and deleted = false
                         order by id asc
                         """,

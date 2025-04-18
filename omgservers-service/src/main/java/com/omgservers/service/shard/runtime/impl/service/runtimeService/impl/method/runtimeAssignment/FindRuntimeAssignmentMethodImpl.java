@@ -28,7 +28,7 @@ class FindRuntimeAssignmentMethodImpl implements FindRuntimeAssignmentMethod {
         final var entityId = request.getClientId();
         return pgPool.withTransaction(sqlConnection -> selectRuntimeAssignmentByRuntimeIdAndClientIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId,
                                 entityId))
                 .map(FindRuntimeAssignmentResponse::new);

@@ -29,42 +29,42 @@ class UpsertRuntimeOperationTest extends BaseTestClass {
 
     @Test
     void givenRuntime_whenExecute_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        final var changeContext = upsertRuntimeOperation.upsertRuntime(slot, runtime);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_CREATED));
     }
 
     @Test
     void givenRuntime_whenExecute_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        upsertRuntimeOperation.upsertRuntime(slot, runtime);
 
-        final var changeContext = upsertRuntimeOperation.upsertRuntime(shard, runtime);
+        final var changeContext = upsertRuntimeOperation.upsertRuntime(slot, runtime);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_CREATED));
     }
 
     @Test
     void givenRuntime_whenExecute_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime1 = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        upsertRuntimeOperation.upsertRuntime(shard, runtime1);
+        upsertRuntimeOperation.upsertRuntime(slot, runtime1);
 
         final var runtime2 = runtimeModelFactory.create(deploymentId(),
                 RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto(),
                 runtime1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertRuntimeOperation.upsertRuntime(shard, runtime2));
+                upsertRuntimeOperation.upsertRuntime(slot, runtime2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

@@ -31,7 +31,7 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteTenantVersionOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 id))
                 .map(ChangeContext::getResult)

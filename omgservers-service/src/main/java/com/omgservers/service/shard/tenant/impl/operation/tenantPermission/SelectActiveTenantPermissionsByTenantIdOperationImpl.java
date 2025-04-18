@@ -23,14 +23,14 @@ class SelectActiveTenantPermissionsByTenantIdOperationImpl implements SelectActi
 
     @Override
     public Uni<List<TenantPermissionModel>> execute(final SqlConnection sqlConnection,
-                                                    final int shard,
+                                                    final int slot,
                                                     final Long tenantId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key,tenant_id, created, modified, user_id, permission, deleted
-                        from $shard.tab_tenant_permission
+                        from $slot.tab_tenant_permission
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,
