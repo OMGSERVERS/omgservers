@@ -27,7 +27,7 @@ class FindDeploymentMatchmakerResourceMethodImpl implements FindDeploymentMatchm
         final var matchmakerId = request.getMatchmakerId();
         return pgPool.withTransaction(sqlConnection -> selectDeploymentMatchmakerResourceByMatchmakerIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 deploymentId,
                                 matchmakerId))
                 .map(FindDeploymentMatchmakerResourceResponse::new);

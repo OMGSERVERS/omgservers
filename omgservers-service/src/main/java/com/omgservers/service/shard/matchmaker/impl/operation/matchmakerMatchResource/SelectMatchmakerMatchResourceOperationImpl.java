@@ -22,16 +22,16 @@ class SelectMatchmakerMatchResourceOperationImpl implements SelectMatchmakerMatc
 
     @Override
     public Uni<MatchmakerMatchResourceModel> execute(final SqlConnection sqlConnection,
-                                                     final int shard,
+                                                     final int slot,
                                                      final Long matchmakerId,
                                                      final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, matchmaker_id, created, modified, match_id, mode, status, deleted
-                        from $shard.tab_matchmaker_match_resource
+                        from $slot.tab_matchmaker_match_resource
                         where matchmaker_id = $1 and id = $2
                         limit 1
                         """,

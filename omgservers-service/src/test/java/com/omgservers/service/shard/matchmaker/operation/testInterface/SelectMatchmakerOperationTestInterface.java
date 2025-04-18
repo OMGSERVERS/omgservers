@@ -19,10 +19,10 @@ public class SelectMatchmakerOperationTestInterface {
 
     final PgPool pgPool;
 
-    public MatchmakerModel selectMatchmaker(final int shard,
+    public MatchmakerModel selectMatchmaker(final int slot,
                                             final Long id) {
         return pgPool.withTransaction(sqlConnection -> selectMatchmakerOperation
-                        .execute(sqlConnection, shard, id))
+                        .execute(sqlConnection, slot, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

@@ -29,7 +29,7 @@ class ViewTenantStagePermissionsMethodImpl implements ViewTenantStagePermissions
         final var tenantStageId = request.getTenantStageId();
         return pgPool.withTransaction(sqlConnection ->
                         selectActiveTenantStagePermissionsByTenantStageIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 tenantStageId))
                 .map(ViewTenantStagePermissionsResponse::new);

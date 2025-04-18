@@ -22,14 +22,14 @@ class SelectUserOperationImpl implements SelectUserOperation {
 
     @Override
     public Uni<UserModel> execute(final SqlConnection sqlConnection,
-                                  final int shard,
+                                  final int slot,
                                   final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, role, password_hash, config, deleted
-                        from $shard.tab_user
+                        from $slot.tab_user
                         where id = $1
                         limit 1
                         """,

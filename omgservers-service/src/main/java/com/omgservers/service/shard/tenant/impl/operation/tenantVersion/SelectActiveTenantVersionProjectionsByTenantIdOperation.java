@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveTenantVersionProjectionsByTenantIdOperation {
     Uni<List<TenantVersionProjectionModel>> execute(SqlConnection sqlConnection,
-                                                    int shard,
+                                                    int slot,
                                                     Long tenantId);
 }

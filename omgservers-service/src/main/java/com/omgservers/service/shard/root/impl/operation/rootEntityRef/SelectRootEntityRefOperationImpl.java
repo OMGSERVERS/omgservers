@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.root.impl.operation.rootEntityRef;
 
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
-import com.omgservers.service.shard.root.impl.mappers.RootEntityRefModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.root.impl.mappers.RootEntityRefModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,17 +21,16 @@ class SelectRootEntityRefOperationImpl implements SelectRootEntityRefOperation {
     final RootEntityRefModelMapper rootEntityRefModelMapper;
 
     @Override
-    public Uni<RootEntityRefModel> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long rootId,
-            final Long id) {
+    public Uni<RootEntityRefModel> execute(final SqlConnection sqlConnection,
+                                           final int slot,
+                                           final Long rootId,
+                                           final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, root_id, created, modified, qualifier, entity_id, deleted
-                        from $shard.tab_root_entity_ref
+                        from $slot.tab_root_entity_ref
                         where root_id = $1 and id = $2
                         limit 1
                         """,

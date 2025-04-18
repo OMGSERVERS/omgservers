@@ -33,13 +33,13 @@ class SelectAliasByValueOperationTest extends BaseTestClass {
 
     @Test
     void givenAlias_whenExecute_thenSelected() {
-        final var shard = 0;
+        final var slot = 0;
         final var alias1 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
                 generateIdOperation.generateId(),
                 generateIdOperation.generateId(),
                 generateIdOperation.generateId(),
                 "alias");
-        upsertAliasOperation.execute(shard, alias1);
+        upsertAliasOperation.execute(slot, alias1);
 
         final var alias2 = selectAliasByValueOperation
                 .execute(alias1.getShardKey(), alias1.getUniquenessGroup(), alias1.getValue());

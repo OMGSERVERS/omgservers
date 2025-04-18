@@ -37,53 +37,53 @@ class UpsertClientRuntimeRefOperationTest extends BaseTestClass {
 
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client);
+        upsertClientOperation.upsertClient(slot, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
-        final var changeContext = upsertClientRuntimeRefOperation.upsertClientRuntimeRef(shard, clientRuntimeRef);
+        final var changeContext = upsertClientRuntimeRefOperation.upsertClientRuntimeRef(slot, clientRuntimeRef);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.CLIENT_RUNTIME_REF_CREATED));
     }
 
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client);
+        upsertClientOperation.upsertClient(slot, client);
 
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
-        upsertClientRuntimeRefOperation.upsertClientRuntimeRef(shard, clientRuntimeRef);
+        upsertClientRuntimeRefOperation.upsertClientRuntimeRef(slot, clientRuntimeRef);
 
-        final var changeContext = upsertClientRuntimeRefOperation.upsertClientRuntimeRef(shard, clientRuntimeRef);
+        final var changeContext = upsertClientRuntimeRefOperation.upsertClientRuntimeRef(slot, clientRuntimeRef);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.CLIENT_RUNTIME_REF_CREATED));
     }
 
     @Test
     void givenUnknownId_whenUpsertClientRuntimeRef_thenException() {
-        final var shard = 0;
+        final var slot = 0;
         final var clientRuntimeRef = clientRuntimeRefModelFactory.create(clientId(), runtimeId());
         assertThrows(ServerSideBadRequestException.class, () ->
-                upsertClientRuntimeRefOperation.upsertClientRuntimeRef(shard, clientRuntimeRef));
+                upsertClientRuntimeRefOperation.upsertClientRuntimeRef(slot, clientRuntimeRef));
     }
 
     @Test
     void givenClientRuntimeRef_whenUpsertClientRuntimeRef_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client);
+        upsertClientOperation.upsertClient(slot, client);
 
         final var clientRuntimeRef1 = clientRuntimeRefModelFactory.create(client.getId(), runtimeId());
-        upsertClientRuntimeRefOperation.upsertClientRuntimeRef(shard, clientRuntimeRef1);
+        upsertClientRuntimeRefOperation.upsertClientRuntimeRef(slot, clientRuntimeRef1);
 
         final var clientRuntimeRef2 = clientRuntimeRefModelFactory.create(client.getId(),
                 runtimeId(),
                 clientRuntimeRef1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertClientRuntimeRefOperation.upsertClientRuntimeRef(shard, clientRuntimeRef2));
+                upsertClientRuntimeRefOperation.upsertClientRuntimeRef(slot, clientRuntimeRef2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

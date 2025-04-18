@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectDeploymentMatchmakerResourceByMatchmakerIdOperation {
     Uni<DeploymentMatchmakerResourceModel> execute(SqlConnection sqlConnection,
-                                                   int shard,
+                                                   int slot,
                                                    Long deploymentId,
                                                    Long matchmakerId);
 }

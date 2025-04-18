@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface SelectActiveRuntimeCommandsByRuntimeIdOperation {
     Uni<List<RuntimeCommandModel>> execute(SqlConnection sqlConnection,
-                                           int shard,
+                                           int slot,
                                            Long runtimeId);
 }

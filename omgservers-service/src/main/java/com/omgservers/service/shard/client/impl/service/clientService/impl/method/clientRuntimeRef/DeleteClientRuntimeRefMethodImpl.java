@@ -30,7 +30,7 @@ class DeleteClientRuntimeRefMethodImpl implements DeleteClientRuntimeRefMethod {
                         (changeContext, sqlConnection) -> deleteClientRuntimeRefOperation
                                 .deleteClientRuntimeRef(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         clientId,
                                         id))
                 .map(ChangeContext::getResult)

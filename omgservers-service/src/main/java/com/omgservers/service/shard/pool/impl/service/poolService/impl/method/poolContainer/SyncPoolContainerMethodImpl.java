@@ -34,13 +34,13 @@ class SyncPoolContainerMethodImpl implements SyncPoolContainerMethod {
         final var serverId = poolContainer.getServerId();
 
         return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
-                        verifyPoolServerExistsOperation.execute(sqlConnection, shardModel.shard(), poolId, serverId)
+                        verifyPoolServerExistsOperation.execute(sqlConnection, shardModel.slot(), poolId, serverId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertPoolContainerOperation.execute(
                                                 context,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 poolContainer);
                                     } else {
                                         throw new ServerSideNotFoundException(

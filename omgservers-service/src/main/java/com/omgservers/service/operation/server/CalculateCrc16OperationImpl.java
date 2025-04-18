@@ -47,7 +47,7 @@ class CalculateCrc16OperationImpl implements CalculateCrc16Operation {
     }
 
     @Override
-    public Integer calculateCrc16(byte[] bytes) {
+    public Integer execute(byte[] bytes) {
         int crc = 0x0000;
         for (byte b : bytes) {
             crc = (crc >>> 8) ^ table[(crc ^ b) & 0xff];

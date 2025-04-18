@@ -23,16 +23,16 @@ class SelectDeploymentMatchmakerAssignmentByClientIdOperationImpl
 
     @Override
     public Uni<DeploymentMatchmakerAssignmentModel> execute(final SqlConnection sqlConnection,
-                                                            final int shard,
+                                                            final int slot,
                                                             final Long deploymentId,
                                                             final Long clientId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, client_id, matchmaker_id, deleted
-                        from $shard.tab_deployment_matchmaker_assignment
+                        from $slot.tab_deployment_matchmaker_assignment
                         where deployment_id = $1 and client_id = $2
                         order by id desc
                         limit 1

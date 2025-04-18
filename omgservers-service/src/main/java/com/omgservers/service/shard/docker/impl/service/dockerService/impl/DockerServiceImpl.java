@@ -34,7 +34,7 @@ public class DockerServiceImpl implements DockerService {
 
     @Override
     public Uni<PingDockerHostResponse> execute(@Valid final PingDockerHostRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDockerModuleClientOperation::getClient,
                 DockerApi::execute,
                 pingDockerHostMethod::execute);
@@ -42,7 +42,7 @@ public class DockerServiceImpl implements DockerService {
 
     @Override
     public Uni<StartDockerContainerResponse> execute(@Valid final StartDockerContainerRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDockerModuleClientOperation::getClient,
                 DockerApi::execute,
                 startDockerContainerMethod::execute);
@@ -50,7 +50,7 @@ public class DockerServiceImpl implements DockerService {
 
     @Override
     public Uni<StopDockerContainerResponse> execute(@Valid final StopDockerContainerRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDockerModuleClientOperation::getClient,
                 DockerApi::execute,
                 stopDockerContainerMethod::execute);

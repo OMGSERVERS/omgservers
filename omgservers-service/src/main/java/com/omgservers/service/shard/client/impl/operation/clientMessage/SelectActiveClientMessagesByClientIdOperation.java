@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveClientMessagesByClientIdOperation {
     Uni<List<ClientMessageModel>> selectActiveClientMessagesByClientId(SqlConnection sqlConnection,
-                                                                       int shard,
+                                                                       int slot,
                                                                        Long clientId);
 }

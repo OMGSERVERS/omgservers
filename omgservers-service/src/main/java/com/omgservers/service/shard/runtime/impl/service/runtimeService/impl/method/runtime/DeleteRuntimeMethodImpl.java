@@ -29,7 +29,7 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
                         deleteRuntimeOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeleteRuntimeResponse::new);

@@ -29,7 +29,7 @@ class SyncUserMethodImpl implements SyncUserMethod {
                         (changeContext, sqlConnection) -> upsertUserOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 user))
                 .map(ChangeContext::getResult)
                 .map(SyncUserResponse::new);

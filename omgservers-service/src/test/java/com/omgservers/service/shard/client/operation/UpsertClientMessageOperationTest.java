@@ -39,55 +39,55 @@ class UpsertClientMessageOperationTest extends BaseTestClass {
 
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client);
+        upsertClientOperation.upsertClient(slot, client);
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
                 new ClientGreetedMessageBodyDto(tenantId(), versionId(), Instant.now()));
-        final var changeContext = upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
+        final var changeContext = upsertClientMessageOperation.upsertClientMessage(slot, clientMessage);
         assertTrue(changeContext.getResult());
     }
 
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client);
+        upsertClientOperation.upsertClient(slot, client);
 
         final var clientMessage = clientMessageModelFactory.create(client.getId(),
                 new ClientGreetedMessageBodyDto(tenantId(), versionId(), Instant.now()));
-        upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
+        upsertClientMessageOperation.upsertClientMessage(slot, clientMessage);
 
-        final var changeContext = upsertClientMessageOperation.upsertClientMessage(shard, clientMessage);
+        final var changeContext = upsertClientMessageOperation.upsertClientMessage(slot, clientMessage);
         assertFalse(changeContext.getResult());
     }
 
     @Test
     void givenUnknownId_whenUpsertClientMessage_thenException() {
-        final var shard = 0;
+        final var slot = 0;
         final var clientMessage = clientMessageModelFactory.create(clientId(),
                 new ClientGreetedMessageBodyDto(tenantId(), versionId(), Instant.now()));
         assertThrows(ServerSideBadRequestException.class, () ->
-                upsertClientMessageOperation.upsertClientMessage(shard, clientMessage));
+                upsertClientMessageOperation.upsertClientMessage(slot, clientMessage));
     }
 
     @Test
     void givenClientMessage_whenUpsertClientMessage_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client);
+        upsertClientOperation.upsertClient(slot, client);
 
         final var clientMessage1 = clientMessageModelFactory.create(client.getId(),
                 new ClientGreetedMessageBodyDto(tenantId(), versionId(), Instant.now()));
-        upsertClientMessageOperation.upsertClientMessage(shard, clientMessage1);
+        upsertClientMessageOperation.upsertClientMessage(slot, clientMessage1);
 
         final var clientMessage2 = clientMessageModelFactory.create(client.getId(),
                 new ClientGreetedMessageBodyDto(tenantId(), versionId(), Instant.now()),
                 clientMessage1.getIdempotencyKey());
 
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertClientMessageOperation.upsertClientMessage(shard, clientMessage2));
+                upsertClientMessageOperation.upsertClientMessage(slot, clientMessage2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

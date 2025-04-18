@@ -33,14 +33,14 @@ class SyncDeploymentCommandMethodImpl implements SyncDeploymentCommandMethod {
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> verifyDeploymentExistsOperation.execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertDeploymentCommandOperation
                                                 .execute(changeContext,
                                                         sqlConnection,
-                                                        shardModel.shard(),
+                                                        shardModel.slot(),
                                                         deploymentCommand);
                                     } else {
                                         throw new ServerSideNotFoundException(

@@ -27,7 +27,7 @@ class GetPoolContainerMethodImpl implements GetPoolContainerMethod {
         final var poolId = request.getPoolId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectPoolContainerOperation
-                        .execute(sqlConnection, shardModel.shard(), poolId, id))
+                        .execute(sqlConnection, shardModel.slot(), poolId, id))
                 .map(GetPoolContainerResponse::new);
     }
 }

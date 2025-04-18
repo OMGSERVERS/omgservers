@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectDeploymentLobbyAssignmentByClientIdOperation {
     Uni<DeploymentLobbyAssignmentModel> execute(SqlConnection sqlConnection,
-                                                int shard,
+                                                int slot,
                                                 Long deploymentId,
                                                 Long clientId);
 }

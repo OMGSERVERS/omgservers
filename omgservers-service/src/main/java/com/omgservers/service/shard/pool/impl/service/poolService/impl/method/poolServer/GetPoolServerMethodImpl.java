@@ -27,7 +27,7 @@ class GetPoolServerMethodImpl implements GetPoolServerMethod {
         final var poolId = request.getPoolId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectPoolServerOperation
-                        .execute(sqlConnection, shardModel.shard(), poolId, id))
+                        .execute(sqlConnection, shardModel.slot(), poolId, id))
                 .map(GetPoolServerResponse::new);
     }
 }

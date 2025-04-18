@@ -22,17 +22,17 @@ class SelectTenantDeploymentRefByDeploymentIdOperationImpl implements SelectTena
 
     @Override
     public Uni<TenantDeploymentRefModel> execute(final SqlConnection sqlConnection,
-                                                 final int shard,
+                                                 final int slot,
                                                  final Long tenantId,
                                                  final Long deploymentId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id,
                             deleted
-                        from $shard.tab_tenant_deployment_ref
+                        from $slot.tab_tenant_deployment_ref
                         where tenant_id = $1 and deployment_id = $2
                         order by id desc
                         limit 1

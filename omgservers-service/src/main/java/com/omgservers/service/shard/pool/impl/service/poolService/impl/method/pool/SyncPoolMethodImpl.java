@@ -29,7 +29,7 @@ class SyncPoolMethodImpl implements SyncPoolMethod {
                         (changeContext, sqlConnection) -> upsertPoolOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 pool))
                 .map(ChangeContext::getResult)
                 .map(SyncPoolResponse::new);

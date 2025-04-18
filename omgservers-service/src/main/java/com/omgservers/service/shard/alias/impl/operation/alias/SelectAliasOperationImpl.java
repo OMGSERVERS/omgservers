@@ -22,14 +22,14 @@ class SelectAliasOperationImpl implements SelectAliasOperation {
 
     @Override
     public Uni<AliasModel> execute(final SqlConnection sqlConnection,
-                                   final int shard,
+                                   final int slot,
                                    final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
-                        from $shard.tab_alias
+                        from $slot.tab_alias
                         where id = $1
                         limit 1
                         """,

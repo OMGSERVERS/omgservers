@@ -40,12 +40,12 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
                                                      final GetTenantProjectDataRequest request) {
         log.trace("{}", request);
 
-        final int shard = shardModel.shard();
+        final int slot = shardModel.slot();
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getTenantProjectId();
         final var tenantProjectData = new TenantProjectDataDto();
         return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId,
                         tenantProjectData))
@@ -60,26 +60,26 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
     }
 
     Uni<Void> fillData(final SqlConnection sqlConnection,
-                       final int shard,
+                       final int slot,
                        final Long tenantId,
                        final Long tenantProjectId,
                        final TenantProjectDataDto tenantProjectData) {
-        return fillProject(sqlConnection, shard, tenantId, tenantProjectId, tenantProjectData)
+        return fillProject(sqlConnection, slot, tenantId, tenantProjectId, tenantProjectData)
                 .flatMap(voidItem -> fillAliases(tenantId,
                         tenantProjectId,
                         tenantProjectData))
                 .flatMap(voidItem -> fillProjectPermissions(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId,
                         tenantProjectData))
                 .flatMap(voidItem -> fillProjectStages(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId,
                         tenantProjectData))
                 .flatMap(voidItem -> fillProjectVersions(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId,
                         tenantProjectData))
@@ -90,12 +90,12 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
     }
 
     Uni<Void> fillProject(final SqlConnection sqlConnection,
-                          final int shard,
+                          final int slot,
                           final Long tenantId,
                           final Long tenantProjectId,
                           final TenantProjectDataDto tenantProjectData) {
         return selectTenantProjectOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId)
                 .invoke(tenantProjectData::setProject)
@@ -103,12 +103,12 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
     }
 
     Uni<Void> fillProjectPermissions(final SqlConnection sqlConnection,
-                                     final int shard,
+                                     final int slot,
                                      final Long tenantId,
                                      final Long tenantProjectId,
                                      final TenantProjectDataDto tenantProjectData) {
         return selectActiveTenantProjectPermissionsByTenantProjectIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId)
                 .invoke(tenantProjectData::setProjectPermissions)
@@ -116,12 +116,12 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
     }
 
     Uni<Void> fillProjectStages(final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long tenantId,
                                 final Long tenantProjectId,
                                 final TenantProjectDataDto tenantProjectData) {
         return selectActiveTenantStagesByTenantProjectIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId)
                 .invoke(tenantProjectData::setProjectStages)
@@ -129,12 +129,12 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
     }
 
     Uni<Void> fillProjectVersions(final SqlConnection sqlConnection,
-                                  final int shard,
+                                  final int slot,
                                   final Long tenantId,
                                   final Long tenantProjectId,
                                   final TenantProjectDataDto tenantProjectData) {
         return selectActiveTenantVersionProjectionsByTenantProjectIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantProjectId)
                 .invoke(tenantProjectData::setProjectVersions)

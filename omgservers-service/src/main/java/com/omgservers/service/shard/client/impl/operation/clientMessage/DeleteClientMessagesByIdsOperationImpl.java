@@ -24,12 +24,12 @@ class DeleteClientMessagesByIdsOperationImpl implements DeleteClientMessagesById
     @Override
     public Uni<Boolean> deleteClientMessagesByIds(final ChangeContext<?> changeContext,
                                                   final SqlConnection sqlConnection,
-                                                  final int shard,
+                                                  final int slot,
                                                   final Long clientId,
                                                   final List<Long> ids) {
-        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_client_message
+                        update $slot.tab_client_message
                         set modified = $3, deleted = true
                         where client_id = $1 and id = any($2) and deleted = false
                         """,

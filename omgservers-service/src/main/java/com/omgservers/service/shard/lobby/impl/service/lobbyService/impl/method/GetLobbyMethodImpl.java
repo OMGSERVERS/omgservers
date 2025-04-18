@@ -26,7 +26,7 @@ class GetLobbyMethodImpl implements GetLobbyMethod {
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectLobbyOperation
-                        .execute(sqlConnection, shardModel.shard(), id))
+                        .execute(sqlConnection, shardModel.slot(), id))
                 .map(GetLobbyResponse::new);
     }
 }

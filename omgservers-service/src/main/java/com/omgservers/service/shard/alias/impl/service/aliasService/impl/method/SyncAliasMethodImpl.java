@@ -29,7 +29,7 @@ class SyncAliasMethodImpl implements SyncAliasMethod {
                         (changeContext, sqlConnection) -> upsertAliasOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 alias))
                 .map(ChangeContext::getResult)
                 .map(SyncAliasResponse::new);

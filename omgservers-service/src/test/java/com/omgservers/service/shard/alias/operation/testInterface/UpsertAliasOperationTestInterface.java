@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.alias.operation.testInterface;
 
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.service.shard.alias.impl.operation.alias.UpsertAliasOperation;
 import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.shard.alias.impl.operation.alias.UpsertAliasOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +21,12 @@ public class UpsertAliasOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> execute(final int shard,
+    public ChangeContext<Boolean> execute(final int slot,
                                           final AliasModel alias) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertAliasOperation
-                                    .execute(changeContext, sqlConnection, shard, alias))
+                                    .execute(changeContext, sqlConnection, slot, alias))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

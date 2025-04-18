@@ -24,12 +24,12 @@ class DeleteRuntimeMessagesByIdsOperationImpl implements DeleteRuntimeMessagesBy
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long runtimeId,
                                 final List<Long> ids) {
-        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_runtime_message
+                        update $slot.tab_runtime_message
                         set modified = $3, deleted = true
                         where runtime_id = $1 and id = any($2) and deleted = false
                         """,

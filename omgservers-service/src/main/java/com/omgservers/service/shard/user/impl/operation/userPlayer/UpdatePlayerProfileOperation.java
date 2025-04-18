@@ -7,7 +7,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface UpdatePlayerProfileOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long userId,
                          Long playerId,
                          Object profile);

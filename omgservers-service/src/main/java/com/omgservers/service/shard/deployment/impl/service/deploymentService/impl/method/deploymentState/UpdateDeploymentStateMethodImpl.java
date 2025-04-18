@@ -57,64 +57,64 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
                                                       final UpdateDeploymentStateRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();
         final var deploymentChangeOfState = request.getDeploymentChangeOfState();
         return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
                         deleteDeploymentCommands(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentChangeOfState.getDeploymentCommandsToDelete())
                                 .flatMap(voidItem -> deleteDeploymentRequests(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentId,
                                         deploymentChangeOfState.getDeploymentRequestsToDelete()))
                                 .flatMap(voidItem -> upsertDeploymentLobbyResources(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentChangeOfState.getDeploymentLobbyResourcesToSync()))
                                 .flatMap(voidItem -> updateDeploymentLobbyResourcesStatus(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentId,
                                         deploymentChangeOfState.getDeploymentLobbyResourcesToUpdateStatus()))
                                 .flatMap(voidItem -> deleteDeploymentLobbyResources(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentId,
                                         deploymentChangeOfState.getDeploymentLobbyResourcesToDelete()))
                                 .flatMap(voidItem -> upsertDeploymentLobbyAssignment(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentChangeOfState.getDeploymentLobbyAssignmentToSync()))
                                 .flatMap(voidItem -> deleteDeploymentLobbyAssignments(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentId,
                                         deploymentChangeOfState.getDeploymentLobbyAssignmentToDelete()))
                                 .flatMap(voidItem -> upsertDeploymentMatchmakerResources(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentChangeOfState.getDeploymentMatchmakerResourcesToSync()))
                                 .flatMap(voidItem -> updateDeploymentMatchmakerResourcesStatus(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentId,
                                         deploymentChangeOfState.getDeploymentMatchmakerResourcesToUpdateStatus()))
                                 .flatMap(voidItem -> deleteDeploymentMatchmakerResources(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentId,
                                         deploymentChangeOfState.getDeploymentMatchmakerResourcesToDelete()))
                                 .flatMap(voidItem -> upsertDeploymentMatchmakerAssignment(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentChangeOfState.getDeploymentMatchmakerAssignmentToSync()))
                                 .flatMap(voidItem -> deleteDeploymentMatchmakerAssignments(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         deploymentId,
                                         deploymentChangeOfState.getDeploymentMatchmakerAssignmentToDelete()))
                 )
@@ -124,7 +124,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> deleteDeploymentCommands(final ChangeContext<?> changeContext,
                                        final SqlConnection sqlConnection,
-                                       final int shard,
+                                       final int slot,
                                        final Long deploymentId,
                                        final List<Long> deploymentCommands) {
         return Multi.createFrom().iterable(deploymentCommands)
@@ -132,7 +132,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
                         deleteDeploymentCommandOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentCommandId))
                 .collect().asList()
@@ -141,7 +141,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> deleteDeploymentRequests(final ChangeContext<?> changeContext,
                                        final SqlConnection sqlConnection,
-                                       final int shard,
+                                       final int slot,
                                        final Long deploymentId,
                                        final List<Long> deploymentRequests) {
         return Multi.createFrom().iterable(deploymentRequests)
@@ -149,7 +149,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
                         deleteDeploymentRequestOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentRequestId))
                 .collect().asList()
@@ -158,13 +158,13 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> upsertDeploymentLobbyResources(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
-                                             final int shard,
+                                             final int slot,
                                              final List<DeploymentLobbyResourceModel> deploymentLobbyResources) {
         return Multi.createFrom().iterable(deploymentLobbyResources)
                 .onItem().transformToUniAndConcatenate(deploymentLobbyResource ->
                         upsertDeploymentLobbyResourceOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentLobbyResource))
                 .collect().asList()
                 .replaceWithVoid();
@@ -172,14 +172,14 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> updateDeploymentLobbyResourcesStatus(final ChangeContext<?> changeContext,
                                                    final SqlConnection sqlConnection,
-                                                   final int shard,
+                                                   final int slot,
                                                    final Long deploymentId,
                                                    final List<DeploymentLobbyResourceToUpdateStatusDto> deploymentLobbyResources) {
         return Multi.createFrom().iterable(deploymentLobbyResources)
                 .onItem().transformToUniAndConcatenate(deploymentLobbyResource ->
                         updateDeploymentLobbyResourceStatusOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentLobbyResource.id(),
                                 deploymentLobbyResource.status())
@@ -190,7 +190,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> deleteDeploymentLobbyResources(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
-                                             final int shard,
+                                             final int slot,
                                              final Long deploymentId,
                                              final List<Long> deploymentLobbyResources) {
         return Multi.createFrom().iterable(deploymentLobbyResources)
@@ -198,7 +198,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
                         deleteDeploymentLobbyResourceOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentLobbyResourceId))
                 .collect().asList()
@@ -207,13 +207,13 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> upsertDeploymentLobbyAssignment(final ChangeContext<?> changeContext,
                                               final SqlConnection sqlConnection,
-                                              final int shard,
+                                              final int slot,
                                               final List<DeploymentLobbyAssignmentModel> deploymentLobbyAssignments) {
         return Multi.createFrom().iterable(deploymentLobbyAssignments)
                 .onItem().transformToUniAndConcatenate(deploymentLobbyAssignment ->
                         upsertDeploymentLobbyAssignmentOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentLobbyAssignment))
                 .collect().asList()
                 .replaceWithVoid();
@@ -221,7 +221,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> deleteDeploymentLobbyAssignments(final ChangeContext<?> changeContext,
                                                final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Long deploymentId,
                                                final List<Long> deploymentLobbyAssignments) {
         return Multi.createFrom().iterable(deploymentLobbyAssignments)
@@ -229,7 +229,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
                         deleteDeploymentLobbyAssignmentOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentLobbyAssignmentId))
                 .collect().asList()
@@ -238,13 +238,13 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> upsertDeploymentMatchmakerResources(final ChangeContext<?> changeContext,
                                                   final SqlConnection sqlConnection,
-                                                  final int shard,
+                                                  final int slot,
                                                   final List<DeploymentMatchmakerResourceModel> deploymentMatchmakerResources) {
         return Multi.createFrom().iterable(deploymentMatchmakerResources)
                 .onItem().transformToUniAndConcatenate(deploymentMatchmakerResource ->
                         upsertDeploymentMatchmakerResourceOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentMatchmakerResource))
                 .collect().asList()
                 .replaceWithVoid();
@@ -252,14 +252,14 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> updateDeploymentMatchmakerResourcesStatus(final ChangeContext<?> changeContext,
                                                         final SqlConnection sqlConnection,
-                                                        final int shard,
+                                                        final int slot,
                                                         final Long deploymentId,
                                                         final List<DeploymentMatchmakerResourceToUpdateStatusDto> deploymentMatchmakerResources) {
         return Multi.createFrom().iterable(deploymentMatchmakerResources)
                 .onItem().transformToUniAndConcatenate(deploymentMatchmakerResource ->
                         updateDeploymentMatchmakerResourceStatusOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentMatchmakerResource.id(),
                                 deploymentMatchmakerResource.status())
@@ -270,7 +270,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> deleteDeploymentMatchmakerResources(final ChangeContext<?> changeContext,
                                                   final SqlConnection sqlConnection,
-                                                  final int shard,
+                                                  final int slot,
                                                   final Long deploymentId,
                                                   final List<Long> deploymentMatchmakerResources) {
         return Multi.createFrom().iterable(deploymentMatchmakerResources)
@@ -278,7 +278,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
                         deleteDeploymentMatchmakerResourceOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentMatchmakerResourceId))
                 .collect().asList()
@@ -287,13 +287,13 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> upsertDeploymentMatchmakerAssignment(final ChangeContext<?> changeContext,
                                                    final SqlConnection sqlConnection,
-                                                   final int shard,
+                                                   final int slot,
                                                    final List<DeploymentMatchmakerAssignmentModel> deploymentMatchmakerAssignments) {
         return Multi.createFrom().iterable(deploymentMatchmakerAssignments)
                 .onItem().transformToUniAndConcatenate(deploymentMatchmakerAssignment ->
                         upsertDeploymentMatchmakerAssignmentOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentMatchmakerAssignment))
                 .collect().asList()
                 .replaceWithVoid();
@@ -301,7 +301,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
 
     Uni<Void> deleteDeploymentMatchmakerAssignments(final ChangeContext<?> changeContext,
                                                     final SqlConnection sqlConnection,
-                                                    final int shard,
+                                                    final int slot,
                                                     final Long deploymentId,
                                                     final List<Long> deploymentMatchmakerAssignments) {
         return Multi.createFrom().iterable(deploymentMatchmakerAssignments)
@@ -309,7 +309,7 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
                         deleteDeploymentMatchmakerAssignmentOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 deploymentId,
                                 deploymentMatchmakerAssignmentId))
                 .collect().asList()

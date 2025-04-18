@@ -24,11 +24,11 @@ class GetDeploymentLobbyAssignmentMethodImpl implements GetDeploymentLobbyAssign
                                                              final GetDeploymentLobbyAssignmentRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectDeploymentLobbyAssignmentOperation
-                        .execute(sqlConnection, shard, deploymentId, id))
+                        .execute(sqlConnection, slot, deploymentId, id))
                 .map(GetDeploymentLobbyAssignmentResponse::new);
     }
 }

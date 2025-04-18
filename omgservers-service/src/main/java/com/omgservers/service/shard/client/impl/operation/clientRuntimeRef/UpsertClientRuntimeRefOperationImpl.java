@@ -27,12 +27,12 @@ class UpsertClientRuntimeRefOperationImpl implements UpsertClientRuntimeRefOpera
     @Override
     public Uni<Boolean> upsertClientRuntimeRef(final ChangeContext<?> changeContext,
                                                final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final ClientRuntimeRefModel clientRuntimeRef) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_client_runtime_ref(
+                        insert into $slot.tab_client_runtime_ref(
                             id, idempotency_key, client_id, created, modified, runtime_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7)
                         on conflict (id) do

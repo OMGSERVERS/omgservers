@@ -28,7 +28,7 @@ class SelectActiveEventsOperationImpl implements SelectActiveEventsOperation {
                 sqlConnection,
                 """
                         select id, idempotency_key, created, modified, qualifier, body, status, deleted
-                        from $server.tab_event
+                        from $shard.tab_event
                         where deleted = false and status = $2
                         order by id asc
                         limit $1

@@ -27,7 +27,7 @@ class ViewRootEntityRefsMethodImpl implements ViewRootEntityRefsMethod {
         final var poolId = request.getRootId();
         return pgPool.withTransaction(sqlConnection -> selectActiveRootEntityRefByRootIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 poolId))
                 .map(ViewRootEntityRefsResponse::new);
     }

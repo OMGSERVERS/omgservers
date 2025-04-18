@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectTenantVersionConfigOperation {
     Uni<TenantVersionConfigDto> execute(SqlConnection sqlConnection,
-                                        int shard,
+                                        int slot,
                                         Long tenantId,
                                         Long tenantVersionId);
 }

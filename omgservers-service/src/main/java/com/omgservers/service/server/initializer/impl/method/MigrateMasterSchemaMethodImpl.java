@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @AllArgsConstructor
 class MigrateMasterSchemaMethodImpl implements MigrateMasterSchemaMethod {
 
-    private static final String MASTER_SCHEMA_LOCATION = "db/master";
+    private static final String SCRIPTS_LOCATION = "db/master";
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -24,7 +24,7 @@ class MigrateMasterSchemaMethodImpl implements MigrateMasterSchemaMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Migrate {} schema", MASTER_SCHEMA_LOCATION);
+        log.debug("Migrate \"{}\"", SCRIPTS_LOCATION);
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())
@@ -36,7 +36,7 @@ class MigrateMasterSchemaMethodImpl implements MigrateMasterSchemaMethod {
         final var serverId = getServiceConfigOperation.getServiceConfig().server().id();
         final var flyway = Flyway.configure()
                 .dataSource(dataSource)
-                .locations(MASTER_SCHEMA_LOCATION)
+                .locations(SCRIPTS_LOCATION)
                 .createSchemas(true)
                 .defaultSchema(String.format(DatabaseSchemaConfiguration.MASTER_SCHEMA_FORMAT, serverId))
                 .load();

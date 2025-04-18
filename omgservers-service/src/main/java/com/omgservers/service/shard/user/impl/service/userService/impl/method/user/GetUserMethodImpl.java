@@ -26,7 +26,7 @@ class GetUserMethodImpl implements GetUserMethod {
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectUserOperation
-                        .execute(sqlConnection, shardModel.shard(), id))
+                        .execute(sqlConnection, shardModel.slot(), id))
                 .map(GetUserResponse::new);
     }
 }

@@ -31,7 +31,7 @@ class DeleteTenantDeploymentRefMethodImpl implements DeleteTenantDeploymentRefMe
                         (changeContext, sqlConnection) ->
                                 deleteTenantDeploymentRefOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         id))
                 .map(ChangeContext::getResult)

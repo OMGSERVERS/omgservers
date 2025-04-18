@@ -25,43 +25,43 @@ class UpsertUserOperationTest extends BaseTestClass {
 
     @Test
     void givenUser_whenExecute_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create());
 
-        final var changeContext = upsertUserOperation.upsertUser(shard, user);
+        final var changeContext = upsertUserOperation.upsertUser(slot, user);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.USER_CREATED));
     }
 
     @Test
     void givenUser_whenExecute_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create());
-        upsertUserOperation.upsertUser(shard, user);
+        upsertUserOperation.upsertUser(slot, user);
 
-        final var changeContext = upsertUserOperation.upsertUser(shard, user);
+        final var changeContext = upsertUserOperation.upsertUser(slot, user);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.USER_CREATED));
     }
 
     @Test
     void givenUser_whenExecute_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var user1 = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create());
-        upsertUserOperation.upsertUser(shard, user1);
+        upsertUserOperation.upsertUser(slot, user1);
 
         final var user2 = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create(),
                 user1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertUserOperation.upsertUser(shard, user2));
+                upsertUserOperation.upsertUser(slot, user2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 }

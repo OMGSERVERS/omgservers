@@ -23,16 +23,16 @@ class SelectRuntimeAssignmentByRuntimeIdAndClientIdOperationImpl implements
 
     @Override
     public Uni<RuntimeAssignmentModel> execute(final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Long runtimeId,
                                                final Long clientId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, runtime_id, created, modified, client_id, config, deleted
-                        from $shard.tab_runtime_assignment
+                        from $slot.tab_runtime_assignment
                         where runtime_id = $1 and client_id = $2
                         order by id desc
                         limit 1

@@ -23,17 +23,17 @@ class SelectActivePoolContainersByPoolIdAndServerIdOperationImpl
 
     @Override
     public Uni<List<PoolContainerModel>> execute(final SqlConnection sqlConnection,
-                                                 final int shard,
+                                                 final int slot,
                                                  final Long poolId,
                                                  final Long serverId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, pool_id, server_id, created, modified, runtime_id, runtime_qualifier,
                             config, deleted
-                        from $shard.tab_pool_container
+                        from $slot.tab_pool_container
                         where pool_id = $1 and server_id = $2 and deleted = false
                         order by id asc
                         """,

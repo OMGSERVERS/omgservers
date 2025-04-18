@@ -31,12 +31,12 @@ class UpsertRuntimeOperationImpl implements UpsertRuntimeOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final RuntimeModel runtime) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_runtime(
+                        insert into $slot.tab_runtime(
                             id, idempotency_key, created, modified, deployment_id, qualifier, user_id, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

@@ -27,7 +27,7 @@ GetTenantProjectMethodImpl implements GetTenantProjectMethod {
         final var tenantId = request.getTenantId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectTenantProjectOperation
-                        .execute(sqlConnection, shardModel.shard(), tenantId, id))
+                        .execute(sqlConnection, shardModel.slot(), tenantId, id))
                 .map(GetTenantProjectResponse::new);
     }
 }

@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource;
 
-import com.omgservers.service.operation.server.HasObjectOperation;
+import com.omgservers.service.operation.server.VerifyObjectExistsOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,19 +14,19 @@ import java.util.List;
 @AllArgsConstructor
 class VerifyMatchmakerMatchResourceExistsOperationImpl implements VerifyMatchmakerMatchResourceExistsOperation {
 
-    final HasObjectOperation hasObjectOperation;
+    final VerifyObjectExistsOperation verifyObjectExistsOperation;
 
     @Override
     public Uni<Boolean> execute(final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long matchmakerId,
                                 final Long matchId) {
-        return hasObjectOperation.hasObject(
+        return verifyObjectExistsOperation.execute(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id
-                        from $shard.tab_matchmaker_match_resource
+                        from $slot.tab_matchmaker_match_resource
                         where matchmaker_id = $1 and match_id = $2 and deleted = false
                         limit 1
                         """,

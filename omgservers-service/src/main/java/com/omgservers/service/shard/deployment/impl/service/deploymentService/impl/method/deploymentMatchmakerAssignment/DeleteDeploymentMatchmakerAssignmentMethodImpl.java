@@ -31,7 +31,7 @@ class DeleteDeploymentMatchmakerAssignmentMethodImpl implements DeleteDeployment
                         (changeContext, sqlConnection) ->
                                 deleteDeploymentMatchmakerAssignmentOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId,
                                         id))
                 .map(ChangeContext::getResult)

@@ -28,29 +28,29 @@ class UpsertClientOperationTest extends BaseTestClass {
 
     @Test
     void givenClient_whenUpsertClient_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        final var changeContext = upsertClientOperation.upsertClient(shard, client);
+        final var changeContext = upsertClientOperation.upsertClient(slot, client);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.CLIENT_CREATED));
     }
 
     @Test
     void givenClient_whenUpsertClient_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var client = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client);
+        upsertClientOperation.upsertClient(slot, client);
 
-        final var changeContext = upsertClientOperation.upsertClient(shard, client);
+        final var changeContext = upsertClientOperation.upsertClient(slot, client);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.CLIENT_CREATED));
     }
 
     @Test
     void givenClient_whenUpsertClient_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var client1 = clientModelFactory.create(userId(), playerId(), versionId(), ClientConfigDto.create());
-        upsertClientOperation.upsertClient(shard, client1);
+        upsertClientOperation.upsertClient(slot, client1);
 
         final var client2 = clientModelFactory.create(userId(),
                 playerId(),
@@ -59,7 +59,7 @@ class UpsertClientOperationTest extends BaseTestClass {
                 ClientConfigDto.create(),
                 client1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertClientOperation.upsertClient(shard, client2));
+                upsertClientOperation.upsertClient(slot, client2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

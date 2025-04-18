@@ -28,7 +28,7 @@ class GetRuntimeAssignmentMethodImpl implements GetRuntimeAssignmentMethod {
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectRuntimeAssignmentOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId,
                                 id))
                 .map(GetRuntimeAssignmentResponse::new);

@@ -39,26 +39,26 @@ class SelectPlayerOperationTest extends BaseTestClass {
 
     @Test
     void givenPlayer_whenExecute_thenSelected() {
-        final var shard = 0;
+        final var slot = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER, "passwordhash", UserConfigDto.create());
         final var userId = user.getId();
-        upsertUserOperation.upsertUser(shard, user);
+        upsertUserOperation.upsertUser(slot, user);
         final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId());
         final var playerId = player1.getId();
-        upsertPlayerOperation.upsertPlayer(shard, player1);
+        upsertPlayerOperation.upsertPlayer(slot, player1);
 
-        final var player2 = selectPlayerOperation.selectPlayer(shard, userId, playerId, false);
+        final var player2 = selectPlayerOperation.selectPlayer(slot, userId, playerId, false);
         assertEquals(player1, player2);
     }
 
     @Test
     void givenUnknownIds_whenExecute_thenException() {
-        final var shard = 0;
+        final var slot = 0;
         final var userId = generateIdOperation.generateId();
         final var playerId = generateIdOperation.generateId();
 
         assertThrows(ServerSideNotFoundException.class, () -> selectPlayerOperation
-                .selectPlayer(shard, userId, playerId, false));
+                .selectPlayer(slot, userId, playerId, false));
     }
 
     Long tenantId() {

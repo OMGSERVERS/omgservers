@@ -22,14 +22,14 @@ class SelectTenantOperationImpl implements SelectTenantOperation {
 
     @Override
     public Uni<TenantModel> execute(final SqlConnection sqlConnection,
-                                    final int shard,
+                                    final int slot,
                                     final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, config, deleted
-                        from $shard.tab_tenant
+                        from $slot.tab_tenant
                         where id = $1
                         limit 1
                         """,

@@ -29,7 +29,7 @@ class SyncLobbyMethodImpl implements SyncLobbyMethod {
                         (changeContext, sqlConnection) -> upsertLobbyOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 lobby))
                 .map(ChangeContext::getResult)
                 .map(SyncLobbyResponse::new);

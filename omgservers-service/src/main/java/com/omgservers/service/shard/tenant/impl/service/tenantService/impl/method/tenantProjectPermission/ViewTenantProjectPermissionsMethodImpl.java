@@ -29,7 +29,7 @@ class ViewTenantProjectPermissionsMethodImpl implements ViewTenantProjectPermiss
         final var tenantProjectId = request.getTenantProjectId();
         return pgPool.withTransaction(sqlConnection ->
                         selectActiveTenantProjectPermissionsByTenantProjectIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 tenantProjectId
                         ))

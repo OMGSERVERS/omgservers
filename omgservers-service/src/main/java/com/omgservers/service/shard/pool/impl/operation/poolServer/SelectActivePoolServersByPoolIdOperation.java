@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActivePoolServersByPoolIdOperation {
     Uni<List<PoolServerModel>> execute(SqlConnection sqlConnection,
-                                       int shard,
+                                       int slot,
                                        Long poolId);
 }

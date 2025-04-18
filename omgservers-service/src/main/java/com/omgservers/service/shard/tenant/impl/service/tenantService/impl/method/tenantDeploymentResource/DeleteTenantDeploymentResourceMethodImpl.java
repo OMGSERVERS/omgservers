@@ -31,7 +31,7 @@ class DeleteTenantDeploymentResourceMethodImpl implements DeleteTenantDeployment
                         (changeContext, sqlConnection) ->
                                 deleteTenantDeploymentResourceOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         id))
                 .map(ChangeContext::getResult)

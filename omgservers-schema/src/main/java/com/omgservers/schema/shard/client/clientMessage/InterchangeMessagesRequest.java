@@ -1,7 +1,7 @@
 package com.omgservers.schema.shard.client.clientMessage;
 
 import com.omgservers.schema.message.MessageModel;
-import com.omgservers.schema.shard.ShardedRequest;
+import com.omgservers.schema.shard.ShardRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InterchangeMessagesRequest implements ShardedRequest {
+public class InterchangeMessagesRequest implements ShardRequest {
 
     @NotNull
     Long clientId;

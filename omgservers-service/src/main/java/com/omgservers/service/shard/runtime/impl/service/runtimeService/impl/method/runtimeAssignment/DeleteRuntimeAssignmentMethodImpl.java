@@ -30,7 +30,7 @@ class DeleteRuntimeAssignmentMethodImpl implements DeleteRuntimeAssignmentMethod
                         deleteRuntimeAssignmentOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId,
                                 id))
                 .map(ChangeContext::getResult)

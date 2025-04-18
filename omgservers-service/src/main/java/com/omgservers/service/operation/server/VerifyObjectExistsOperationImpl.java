@@ -16,22 +16,22 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class HasObjectOperationImpl implements HasObjectOperation {
+class VerifyObjectExistsOperationImpl implements VerifyObjectExistsOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
+    final PrepareSlotSqlOperation prepareSlotSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
     final LogModelFactory logModelFactory;
 
     @Override
-    public Uni<Boolean> hasObject(final SqlConnection sqlConnection,
-                                  final int shard,
-                                  final String sql,
-                                  final List<?> parameters,
-                                  final String objectName) {
-        var preparedSql = prepareShardSqlOperation.execute(sql, shard);
+    public Uni<Boolean> execute(final SqlConnection sqlConnection,
+                                final int slot,
+                                final String sql,
+                                final List<?> parameters,
+                                final String objectName) {
+        var preparedSql = prepareSlotSqlOperation.execute(sql, slot);
         return sqlConnection.preparedQuery(preparedSql)
                 .execute(Tuple.from(parameters))
                 .map(rowSet -> rowSet.rowCount() > 0)

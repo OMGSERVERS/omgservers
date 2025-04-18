@@ -3,7 +3,6 @@ package com.omgservers.service.shard.alias.impl.service.aliasService.impl.method
 import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.shard.alias.ViewAliasesRequest;
 import com.omgservers.schema.shard.alias.ViewAliasesResponse;
-import com.omgservers.service.operation.server.CheckShardOperation;
 import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByEntityIdOperation;
 import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByShardKeyOperation;
 import com.omgservers.service.shard.alias.impl.operation.alias.SelectActiveAliasesByUniquenessGroupOperation;
@@ -23,7 +22,6 @@ class ViewAliasesMethodImpl implements ViewAliasesMethod {
     final SelectActiveAliasesByUniquenessGroupOperation selectActiveAliasesByUniquenessGroupOperation;
     final SelectActiveAliasesByShardKeyOperation selectActiveAliasesByShardKeyOperation;
     final SelectActiveAliasesByEntityIdOperation selectActiveAliasesByEntityIdOperation;
-    final CheckShardOperation checkShardOperation;
 
     final PgPool pgPool;
 
@@ -39,17 +37,17 @@ class ViewAliasesMethodImpl implements ViewAliasesMethod {
                             final var entityId = request.getEntityId();
                             if (Objects.nonNull(entityId)) {
                                 return selectActiveAliasesByEntityIdOperation.execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         shardKey,
                                         entityId);
                             } else if (Objects.nonNull(uniquenessGroup)) {
                                 return selectActiveAliasesByUniquenessGroupOperation.execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         shardKey,
                                         uniquenessGroup);
                             } else {
                                 return selectActiveAliasesByShardKeyOperation.execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         shardKey);
                             }
                         })

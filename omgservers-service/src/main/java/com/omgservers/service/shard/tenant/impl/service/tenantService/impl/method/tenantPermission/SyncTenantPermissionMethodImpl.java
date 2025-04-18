@@ -36,13 +36,13 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
         final var permission = request.getTenantPermission();
         final var tenantId = permission.getTenantId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        verifyTenantExistsOperation.execute(sqlConnection, shardModel.shard(), tenantId)
+                        verifyTenantExistsOperation.execute(sqlConnection, shardModel.slot(), tenantId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertTenantPermissionOperation.execute(
                                                 changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 permission);
                                     } else {
                                         throw new ServerSideNotFoundException(

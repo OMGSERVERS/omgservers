@@ -27,7 +27,7 @@ class ViewTenantPermissionsMethodImpl implements ViewTenantPermissionsMethod {
         final var tenantId = request.getTenantId();
         return pgPool.withTransaction(sqlConnection ->
                         selectActiveTenantPermissionsByTenantIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId))
                 .map(ViewTenantPermissionsResponse::new);
 

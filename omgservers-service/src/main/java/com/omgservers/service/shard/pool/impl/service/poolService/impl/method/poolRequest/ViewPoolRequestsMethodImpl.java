@@ -27,7 +27,7 @@ class ViewPoolRequestsMethodImpl implements ViewPoolRequestsMethod {
         final var poolId = request.getPoolId();
         return pgPool.withTransaction(sqlConnection -> selectActivePoolRequestsByPoolIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 poolId))
                 .map(ViewPoolRequestsResponse::new);
     }

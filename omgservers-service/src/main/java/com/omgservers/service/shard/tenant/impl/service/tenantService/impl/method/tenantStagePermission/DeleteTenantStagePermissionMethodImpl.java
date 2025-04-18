@@ -30,7 +30,7 @@ class DeleteTenantStagePermissionMethodImpl implements DeleteTenantStagePermissi
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteTenantStagePermissionOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 id))
                 .map(ChangeContext::getResult)

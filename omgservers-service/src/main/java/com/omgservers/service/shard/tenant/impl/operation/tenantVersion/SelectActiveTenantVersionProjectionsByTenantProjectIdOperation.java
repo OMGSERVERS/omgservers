@@ -7,9 +7,8 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.util.List;
 
 public interface SelectActiveTenantVersionProjectionsByTenantProjectIdOperation {
-    Uni<List<TenantVersionProjectionModel>> execute(
-            SqlConnection sqlConnection,
-            int shard,
-            Long tenantId,
-            Long tenantProjectId);
+    Uni<List<TenantVersionProjectionModel>> execute(SqlConnection sqlConnection,
+                                                    int slot,
+                                                    Long tenantId,
+                                                    Long tenantProjectId);
 }

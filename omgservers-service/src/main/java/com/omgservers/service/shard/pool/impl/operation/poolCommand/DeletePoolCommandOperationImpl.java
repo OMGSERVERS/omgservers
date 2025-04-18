@@ -22,13 +22,13 @@ class DeletePoolCommandOperationImpl implements DeletePoolCommandOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long poolId,
                                 final Long id) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_pool_command
+                        update $slot.tab_pool_command
                         set modified = $3, deleted = true
                         where pool_id = $1 and id = $2 and deleted = false
                         """,

@@ -23,13 +23,13 @@ class UpdateDeploymentMatchmakerResourceStatusOperationImpl implements UpdateDep
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long deploymentId,
                                 final Long id,
                                 final DeploymentMatchmakerResourceStatusEnum status) {
-        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_deployment_matchmaker_resource
+                        update $slot.tab_deployment_matchmaker_resource
                         set modified = $3, status = $4
                         where deployment_id = $1 and id = $2
                         """,

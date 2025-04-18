@@ -33,14 +33,14 @@ class SyncRootEntityRefMethodImpl implements SyncRootEntityRefMethod {
         final var rootId = rootEntityRef.getRootId();
 
         return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
-                        verifyRootExistsOperation.execute(sqlConnection, shardModel.shard(), rootId)
+                        verifyRootExistsOperation.execute(sqlConnection, shardModel.slot(), rootId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertRootEntityRefOperation
                                                 .execute(
                                                         context,
                                                         sqlConnection,
-                                                        shardModel.shard(),
+                                                        shardModel.slot(),
                                                         rootEntityRef);
                                     } else {
                                         throw new ServerSideNotFoundException(

@@ -23,15 +23,15 @@ class SelectClientRuntimeRefByClientIdAndRuntimeIdOperationImpl
 
     @Override
     public Uni<ClientRuntimeRefModel> selectClientRuntimeRefByClientIdAndRuntimeId(final SqlConnection sqlConnection,
-                                                                                   final int shard,
+                                                                                   final int slot,
                                                                                    final Long clientId,
                                                                                    final Long runtimeId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, client_id, created, modified, runtime_id, deleted
-                        from $shard.tab_client_runtime_ref
+                        from $slot.tab_client_runtime_ref
                         where client_id = $1 and runtime_id = $2
                         order by id desc
                         limit 1

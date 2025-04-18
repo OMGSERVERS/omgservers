@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface VerifyTenantPermissionExistsOperation {
     Uni<Boolean> execute(SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long tenantId,
                          Long userId,
                          TenantPermissionQualifierEnum tenantPermissionQualifier);

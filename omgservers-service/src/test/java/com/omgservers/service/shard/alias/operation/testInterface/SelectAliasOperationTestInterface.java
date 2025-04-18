@@ -19,10 +19,10 @@ public class SelectAliasOperationTestInterface {
 
     final PgPool pgPool;
 
-    public AliasModel execute(final int shard,
+    public AliasModel execute(final int slot,
                               final Long id) {
         return pgPool.withTransaction(sqlConnection -> selectAliasOperation
-                        .execute(sqlConnection, shard, id))
+                        .execute(sqlConnection, slot, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

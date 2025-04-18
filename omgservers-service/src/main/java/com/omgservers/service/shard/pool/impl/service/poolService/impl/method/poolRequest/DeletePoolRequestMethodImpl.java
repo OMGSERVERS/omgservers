@@ -30,7 +30,7 @@ class DeletePoolRequestMethodImpl implements DeletePoolRequestMethod {
                         (changeContext, sqlConnection) -> deletePoolRequestOperation
                                 .execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         poolId,
                                         id))
                 .map(ChangeContext::getResult)

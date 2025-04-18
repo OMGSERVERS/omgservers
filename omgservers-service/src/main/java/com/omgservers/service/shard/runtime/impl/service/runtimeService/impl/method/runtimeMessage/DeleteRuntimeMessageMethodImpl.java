@@ -30,7 +30,7 @@ class DeleteRuntimeMessageMethodImpl implements DeleteRuntimeMessageMethod {
                         deleteRuntimeMessageOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId,
                                 id))
                 .map(ChangeContext::getResult)

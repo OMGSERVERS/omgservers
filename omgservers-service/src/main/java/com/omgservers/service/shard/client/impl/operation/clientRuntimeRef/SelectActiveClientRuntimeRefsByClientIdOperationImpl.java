@@ -22,14 +22,14 @@ class SelectActiveClientRuntimeRefsByClientIdOperationImpl implements SelectActi
 
     @Override
     public Uni<List<ClientRuntimeRefModel>> selectActiveClientRuntimeRefsByClientId(final SqlConnection sqlConnection,
-                                                                                    final int shard,
+                                                                                    final int slot,
                                                                                     final Long clientId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, client_id, created, modified, runtime_id, deleted
-                        from $shard.tab_client_runtime_ref
+                        from $slot.tab_client_runtime_ref
                         where client_id = $1 and deleted = false
                         order by id asc
                         """,

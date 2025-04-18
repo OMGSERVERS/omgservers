@@ -26,7 +26,7 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
         final var userId = request.getUserId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectPlayerOperation
-                        .execute(sqlConnection, shardModel.shard(), userId, id))
+                        .execute(sqlConnection, shardModel.slot(), userId, id))
                 .map(GetPlayerResponse::new);
     }
 }

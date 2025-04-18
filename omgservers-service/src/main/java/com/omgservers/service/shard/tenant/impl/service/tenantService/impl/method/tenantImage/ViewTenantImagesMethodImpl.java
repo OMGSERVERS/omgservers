@@ -33,12 +33,12 @@ class ViewTenantImagesMethodImpl implements ViewTenantImagesMethod {
                     final var tenantVersionId = request.getTenantVersionId();
                     if (Objects.nonNull(tenantVersionId)) {
                         return selectActiveTenantImageByTenantVersionIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 tenantVersionId);
                     } else {
                         return selectActiveTenantImageByTenantIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId);
                     }
                 })

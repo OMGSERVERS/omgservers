@@ -31,12 +31,12 @@ class UpsertTenantVersionOperationImpl implements UpsertTenantVersionOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final TenantVersionModel tenantVersion) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_tenant_version(
+                        insert into $slot.tab_tenant_version(
                             id, idempotency_key, tenant_id, project_id, created, modified, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

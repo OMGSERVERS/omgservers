@@ -19,10 +19,10 @@ public class SelectUserOperationTestInterface {
 
     final PgPool pgPool;
 
-    public UserModel selectUser(final int shard,
+    public UserModel selectUser(final int slot,
                                 final Long id) {
         return pgPool.withTransaction(sqlConnection -> selectUserOperation
-                        .execute(sqlConnection, shard, id))
+                        .execute(sqlConnection, slot, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

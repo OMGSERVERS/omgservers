@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectRootEntityRefOperation {
     Uni<RootEntityRefModel> execute(SqlConnection sqlConnection,
-                                    int shard,
+                                    int slot,
                                     Long rootId,
                                     Long id);
 }

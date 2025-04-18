@@ -7,7 +7,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface DeleteClientRuntimeRefOperation {
     Uni<Boolean> deleteClientRuntimeRef(ChangeContext<?> changeContext,
                                         SqlConnection sqlConnection,
-                                        int shard,
+                                        int slot,
                                         Long clientId,
                                         Long id);
 }

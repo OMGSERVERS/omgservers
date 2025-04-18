@@ -27,12 +27,12 @@ class UpsertDeploymentMatchmakerResourceOperationImpl implements UpsertDeploymen
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final DeploymentMatchmakerResourceModel deploymentMatchmakerResource) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_deployment_matchmaker_resource(
+                        insert into $slot.tab_deployment_matchmaker_resource(
                             id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

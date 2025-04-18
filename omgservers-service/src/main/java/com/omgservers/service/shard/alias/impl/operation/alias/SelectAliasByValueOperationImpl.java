@@ -23,16 +23,16 @@ class SelectAliasByValueOperationImpl
 
     @Override
     public Uni<AliasModel> execute(final SqlConnection sqlConnection,
-                                   final int shard,
+                                   final int slot,
                                    final Long shardKey,
                                    final Long uniquenessGroup,
                                    final String value) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, uniqueness_group, entity_id, alias_value, deleted
-                        from $shard.tab_alias
+                        from $slot.tab_alias
                         where shard_key = $1 and uniqueness_group = $2 and alias_value = $3
                         order by id desc
                         limit 1

@@ -34,12 +34,12 @@ class SyncMatchmakerMatchResourceMethodImpl implements SyncMatchmakerMatchResour
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (context, sqlConnection) -> verifyMatchmakerExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), matchmakerId)
+                                .execute(sqlConnection, shardModel.slot(), matchmakerId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertMatchmakerMatchResourceOperation.execute(context,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 matchmakerMatchResource);
                                     } else {
                                         throw new ServerSideNotFoundException(

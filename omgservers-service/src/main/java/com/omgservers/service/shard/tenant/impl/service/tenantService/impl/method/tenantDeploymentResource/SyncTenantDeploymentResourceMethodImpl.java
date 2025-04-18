@@ -40,17 +40,17 @@ class SyncTenantDeploymentResourceMethodImpl implements SyncTenantDeploymentReso
 
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         verifyTenantStageExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), tenantId, tenantStageId)
+                                .execute(sqlConnection, shardModel.slot(), tenantId, tenantStageId)
                                 .flatMap(stageExists -> {
                                     if (stageExists) {
                                         return verifyTenantVersionExistsOperation
-                                                .execute(sqlConnection, shardModel.shard(), tenantId, tenantVersionId)
+                                                .execute(sqlConnection, shardModel.slot(), tenantId, tenantVersionId)
                                                 .flatMap(versionExists -> {
                                                     if (versionExists) {
                                                         return upsertTenantDeploymentResourceOperation
                                                                 .execute(changeContext,
                                                                         sqlConnection,
-                                                                        shardModel.shard(),
+                                                                        shardModel.slot(),
                                                                         tenantDeploymentResource);
                                                     } else {
                                                         throw new ServerSideNotFoundException(

@@ -23,18 +23,17 @@ class SelectActiveDeploymentMatchmakerResourcesByDeploymentIdAndStatusOperationI
     final DeploymentMatchmakerResourceModelMapper deploymentMatchmakerResourceModelMapper;
 
     @Override
-    public Uni<List<DeploymentMatchmakerResourceModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long deploymentId,
-            final DeploymentMatchmakerResourceStatusEnum status) {
+    public Uni<List<DeploymentMatchmakerResourceModel>> execute(final SqlConnection sqlConnection,
+                                                                final int slot,
+                                                                final Long deploymentId,
+                                                                final DeploymentMatchmakerResourceStatusEnum status) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, deleted
-                        from $shard.tab_deployment_matchmaker_resource
+                        from $slot.tab_deployment_matchmaker_resource
                         where deployment_id = $1 and status = $2 and deleted = false
                         order by id asc
                         """,

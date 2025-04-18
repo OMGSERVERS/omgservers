@@ -44,48 +44,48 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                                                       final UpdateMatchmakerStateRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var matchmakerChangeOfState = request.getMatchmakerChangeOfState();
         final var matchmakerId = request.getMatchmakerId();
         return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
                         deleteMatchmakerCommands(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 matchmakerId,
                                 matchmakerChangeOfState.getMatchmakerCommandsToDelete())
                                 .flatMap(voidItem -> deleteMatchmakerRequests(
                                         changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         matchmakerId,
                                         matchmakerChangeOfState.getMatchmakerRequestsToDelete()))
                                 .flatMap(voiItem -> upsertMatchmakerMatches(
                                         changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         matchmakerChangeOfState.getMatchmakerMatchResourcesToSync()))
                                 .flatMap(voidItem -> updateMatchmakerMatchResourcesStatus(
                                         changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         matchmakerId,
                                         matchmakerChangeOfState.getMatchmakerMatchResourcesToUpdateStatus()))
                                 .flatMap(voidItem -> deleteMatchmakerMatchResources(
                                         changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         matchmakerId,
                                         matchmakerChangeOfState.getMatchmakerMatchResourcesToDelete()))
                                 .flatMap(voidItem -> upsertMatchmakerMatchAssignments(
                                         changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         matchmakerChangeOfState.getMatchmakerMatchAssignmentsToSync()))
                                 .flatMap(voidItem -> deleteMatchmakerMatchAssignments(
                                         changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         matchmakerId,
                                         matchmakerChangeOfState.getMatchmakerMatchAssignmentsToDelete()))
                 )
@@ -95,7 +95,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     Uni<Void> deleteMatchmakerCommands(final ChangeContext<?> changeContext,
                                        final SqlConnection sqlConnection,
-                                       final int shard,
+                                       final int slot,
                                        final Long matchmakerId,
                                        final List<Long> matchmakerCommands) {
         return Multi.createFrom().iterable(matchmakerCommands)
@@ -103,7 +103,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                         deleteMatchmakerCommandOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 matchmakerId,
                                 matchmakerCommandId))
                 .collect().asList()
@@ -112,7 +112,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     Uni<Void> deleteMatchmakerRequests(final ChangeContext<?> changeContext,
                                        final SqlConnection sqlConnection,
-                                       final int shard,
+                                       final int slot,
                                        final Long matchmakerId,
                                        final List<Long> matchmakerRequests) {
         return Multi.createFrom().iterable(matchmakerRequests)
@@ -120,7 +120,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                         deleteMatchmakerRequestOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 matchmakerId,
                                 matchmakerRequestId))
                 .collect().asList()
@@ -129,25 +129,25 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     Uni<Void> upsertMatchmakerMatches(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
-                                      final int shard,
+                                      final int slot,
                                       final Collection<MatchmakerMatchResourceModel> matches) {
         return Multi.createFrom().iterable(matches)
                 .onItem().transformToUniAndConcatenate(match -> upsertMatchmakerMatchResourceOperation
-                        .execute(changeContext, sqlConnection, shard, match))
+                        .execute(changeContext, sqlConnection, slot, match))
                 .collect().asList()
                 .replaceWithVoid();
     }
 
     Uni<Void> updateMatchmakerMatchResourcesStatus(final ChangeContext<?> changeContext,
                                                    final SqlConnection sqlConnection,
-                                                   final int shard,
+                                                   final int slot,
                                                    final Long matchmakerId,
                                                    final List<MatchmakerMatchResourceToUpdateStatusDto> matchmakerMatchResources) {
         return Multi.createFrom().iterable(matchmakerMatchResources)
                 .onItem().transformToUniAndConcatenate(matchmakerMatchResource ->
                         updateMatchmakerMatchResourceStatusOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 matchmakerId,
                                 matchmakerMatchResource.id(),
                                 matchmakerMatchResource.status())
@@ -158,7 +158,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     Uni<Void> deleteMatchmakerMatchResources(final ChangeContext<?> changeContext,
                                              final SqlConnection sqlConnection,
-                                             final int shard,
+                                             final int slot,
                                              final Long matchmakerId,
                                              final List<Long> matchmakerMatchResources) {
         return Multi.createFrom().iterable(matchmakerMatchResources)
@@ -166,7 +166,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                         deleteMatchmakerMatchResourceOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 matchmakerId,
                                 matchmakerMatchResourceId))
                 .collect().asList()
@@ -175,13 +175,13 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     Uni<Void> upsertMatchmakerMatchAssignments(final ChangeContext<?> changeContext,
                                                final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Collection<MatchmakerMatchAssignmentModel> matchmakerMatchAssignments) {
         return Multi.createFrom().iterable(matchmakerMatchAssignments)
                 .onItem().transformToUniAndConcatenate(matchmakerMatchAssignment ->
                         upsertMatchmakerMatchAssignmentOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 matchmakerMatchAssignment))
                 .collect().asList()
                 .replaceWithVoid();
@@ -189,7 +189,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
 
     Uni<Void> deleteMatchmakerMatchAssignments(final ChangeContext<?> changeContext,
                                                final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Long matchmakerId,
                                                final List<Long> matchmakerMatchAssignments) {
         return Multi.createFrom().iterable(matchmakerMatchAssignments)
@@ -197,7 +197,7 @@ class UpdateMatchmakerStateMethodImpl implements UpdateMatchmakerStateMethod {
                         deleteMatchmakerMatchAssignmentOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 matchmakerId,
                                 matchmakerMatchAssignmentId))
                 .collect().asList()

@@ -26,15 +26,15 @@ class SelectPlayerProfileOperationImpl implements SelectPlayerProfileOperation {
 
     @Override
     public Uni<Object> execute(final SqlConnection sqlConnection,
-                               final int shard,
+                               final int slot,
                                final Long userId,
                                final Long playerId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select profile
-                        from $shard.tab_user_player
+                        from $slot.tab_user_player
                         where user_id = $1 and id = $2
                         limit 1
                         """,

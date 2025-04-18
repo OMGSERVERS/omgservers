@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SelectActiveTenantDeploymentResourcesByStageIdAndStatusOperation {
     Uni<List<TenantDeploymentResourceModel>> execute(SqlConnection sqlConnection,
-                                                     int shard,
+                                                     int slot,
                                                      Long tenantId,
                                                      Long stageId,
                                                      TenantDeploymentResourceStatusEnum status);

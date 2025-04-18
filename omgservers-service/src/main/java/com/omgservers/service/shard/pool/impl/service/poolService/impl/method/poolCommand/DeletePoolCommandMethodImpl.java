@@ -30,7 +30,7 @@ class DeletePoolCommandMethodImpl implements DeletePoolCommandMethod {
                         (changeContext, sqlConnection) -> deletePoolCommandOperation
                                 .execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         poolId,
                                         id))
                 .map(ChangeContext::getResult)

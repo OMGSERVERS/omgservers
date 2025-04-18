@@ -29,7 +29,7 @@ class FindAliasMethodImpl implements FindAliasMethod {
                     final var uniquenessGroup = request.getUniquenessGroup();
                     final var value = request.getValue();
                     return selectAliasByValueOperation.execute(sqlConnection,
-                            shardModel.shard(),
+                            shardModel.slot(),
                             shardKey,
                             uniquenessGroup,
                             value);

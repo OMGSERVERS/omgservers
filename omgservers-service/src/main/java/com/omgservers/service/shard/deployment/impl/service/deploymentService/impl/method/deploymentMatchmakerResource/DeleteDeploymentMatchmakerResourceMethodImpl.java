@@ -31,7 +31,7 @@ class DeleteDeploymentMatchmakerResourceMethodImpl implements DeleteDeploymentMa
                         (changeContext, sqlConnection) ->
                                 deleteDeploymentMatchmakerResourceOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId,
                                         id))
                 .map(ChangeContext::getResult)

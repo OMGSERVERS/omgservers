@@ -22,16 +22,16 @@ class SelectActiveTenantImageByTenantIdOperationImpl implements SelectActiveTena
 
     @Override
     public Uni<List<TenantImageModel>> execute(final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Long tenantId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, tenant_id, version_id, created, modified, qualifier, image_id, config,
                             deleted
-                        from $shard.tab_tenant_image
+                        from $slot.tab_tenant_image
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,

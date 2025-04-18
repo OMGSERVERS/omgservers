@@ -28,7 +28,7 @@ class FindClientRuntimeRefMethodImpl implements FindClientRuntimeRefMethod {
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectClientRuntimeRefByClientIdAndRuntimeIdOperation
                         .selectClientRuntimeRefByClientIdAndRuntimeId(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 clientId,
                                 runtimeId))
                 .map(FindClientRuntimeRefResponse::new);

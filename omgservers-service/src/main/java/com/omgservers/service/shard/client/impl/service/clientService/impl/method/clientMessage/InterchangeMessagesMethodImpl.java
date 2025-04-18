@@ -62,17 +62,17 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
 
         return getClient(clientId)
                 .flatMap(client -> {
-                    final var shard = shardModel.shard();
+                    final var slot = shardModel.slot();
                     if (client.getDeleted()) {
                         // If client was deleted then only receiving is available
-                        return receiveMessages(shard, clientId, consumedMessages);
+                        return receiveMessages(slot, clientId, consumedMessages);
                     } else {
                         return cacheClientLastActivity(clientId)
                                 .flatMap(voidItem -> {
                                     final var outgoingMessages = request.getOutgoingMessages();
                                     return deliverMessages(clientId, outgoingMessages);
                                 })
-                                .flatMap(voidItem2 -> receiveMessages(shard, clientId, consumedMessages));
+                                .flatMap(voidItem2 -> receiveMessages(slot, clientId, consumedMessages));
                     }
                 })
                 .map(InterchangeMessagesResponse::new);
@@ -123,20 +123,20 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                 .map(SyncRuntimeMessageResponse::getCreated);
     }
 
-    Uni<List<ClientMessageModel>> receiveMessages(final int shard,
+    Uni<List<ClientMessageModel>> receiveMessages(final int slot,
                                                   final Long clientId,
                                                   final List<Long> consumedMessages) {
         return changeWithContextOperation.<List<ClientMessageModel>>changeWithContext((changeContext, sqlConnection) ->
                         deleteClientMessagesByIdsOperation.deleteClientMessagesByIds(
                                         changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         clientId,
                                         consumedMessages)
                                 .flatMap(deleted -> selectActiveClientMessagesByClientIdOperation
                                         .selectActiveClientMessagesByClientId(
                                                 sqlConnection,
-                                                shard,
+                                                slot,
                                                 clientId))
                 )
                 .map(ChangeContext::getResult);

@@ -30,12 +30,12 @@ class UpsertRuntimeMessageOperationImpl implements UpsertRuntimeMessageOperation
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final RuntimeMessageModel runtimeMessage) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_runtime_message(
+                        insert into $slot.tab_runtime_message(
                             id, idempotency_key, runtime_id, created, modified, qualifier, body, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do

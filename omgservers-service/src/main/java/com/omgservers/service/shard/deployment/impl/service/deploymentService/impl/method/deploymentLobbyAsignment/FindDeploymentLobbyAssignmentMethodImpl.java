@@ -28,7 +28,7 @@ class FindDeploymentLobbyAssignmentMethodImpl implements FindDeploymentLobbyAssi
                     final var clientId = request.getClientId();
                     return selectDeploymentLobbyAssignmentByClientIdOperation
                             .execute(sqlConnection,
-                                    shardModel.shard(),
+                                    shardModel.slot(),
                                     deploymentId,
                                     clientId);
                 })

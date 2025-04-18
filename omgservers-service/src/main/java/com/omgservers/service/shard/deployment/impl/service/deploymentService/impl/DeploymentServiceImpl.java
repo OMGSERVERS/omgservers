@@ -92,7 +92,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<GetDeploymentResponse> execute(@Valid final GetDeploymentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentMethod::execute);
@@ -100,7 +100,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<GetDeploymentDataResponse> execute(GetDeploymentDataRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentDataMethod::execute);
@@ -108,7 +108,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<SyncDeploymentResponse> execute(@Valid final SyncDeploymentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 syncDeploymentMethod::execute);
@@ -134,7 +134,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<DeleteDeploymentResponse> execute(
             @Valid final DeleteDeploymentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 deleteDeploymentMethod::execute);
@@ -146,7 +146,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<ViewDeploymentCommandsResponse> execute(@Valid final ViewDeploymentCommandsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 viewDeploymentCommandsMethod::execute);
@@ -154,7 +154,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<SyncDeploymentCommandResponse> execute(@Valid final SyncDeploymentCommandRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 syncDeploymentCommandMethod::execute);
@@ -180,7 +180,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<DeleteDeploymentCommandResponse> execute(
             @Valid final DeleteDeploymentCommandRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 deleteDeploymentCommandMethod::execute);
@@ -192,7 +192,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<GetDeploymentRequestResponse> execute(@Valid final GetDeploymentRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentRequestMethod::execute);
@@ -200,7 +200,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<FindDeploymentRequestResponse> execute(@Valid final FindDeploymentRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 findDeploymentRequestMethod::execute);
@@ -208,7 +208,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<ViewDeploymentRequestsResponse> execute(@Valid final ViewDeploymentRequestsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 viewDeploymentRequestsMethod::execute);
@@ -216,7 +216,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<SyncDeploymentRequestResponse> execute(@Valid final SyncDeploymentRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 syncDeploymentRequestMethod::execute);
@@ -241,7 +241,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<DeleteDeploymentRequestResponse> execute(@Valid final DeleteDeploymentRequestRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 deleteDeploymentRequestMethod::execute);
@@ -254,7 +254,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<GetDeploymentLobbyResourceResponse> execute(
             @Valid final GetDeploymentLobbyResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentLobbyResourceMethod::execute);
@@ -263,7 +263,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<FindDeploymentLobbyResourceResponse> execute(
             @Valid final FindDeploymentLobbyResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 findDeploymentLobbyResourceMethod::execute);
@@ -272,7 +272,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<ViewDeploymentLobbyResourcesResponse> execute(
             @Valid final ViewDeploymentLobbyResourcesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 viewDeploymentLobbyResourcesMethod::execute);
@@ -281,7 +281,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<SyncDeploymentLobbyResourceResponse> execute(
             @Valid final SyncDeploymentLobbyResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 syncDeploymentLobbyResourceMethod::execute);
@@ -290,7 +290,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<UpdateDeploymentLobbyResourceStatusResponse> execute(
             @Valid final UpdateDeploymentLobbyResourceStatusRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 updateDeploymentLobbyResourceStatusMethod::execute);
@@ -317,7 +317,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<DeleteDeploymentLobbyResourceResponse> execute(
             @Valid final DeleteDeploymentLobbyResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 deleteDeploymentLobbyResourceMethod::execute);
@@ -329,7 +329,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<GetDeploymentLobbyAssignmentResponse> execute(@Valid final GetDeploymentLobbyAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentLobbyAssignmentMethod::execute);
@@ -337,7 +337,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<FindDeploymentLobbyAssignmentResponse> execute(@Valid final FindDeploymentLobbyAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 findDeploymentLobbyAssignmentMethod::execute);
@@ -345,7 +345,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<ViewDeploymentLobbyAssignmentsResponse> execute(@Valid final ViewDeploymentLobbyAssignmentsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 viewDeploymentLobbyAssignmentMethod::execute);
@@ -353,7 +353,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<SyncDeploymentLobbyAssignmentResponse> execute(@Valid final SyncDeploymentLobbyAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 syncDeploymentLobbyAssignmentMethod::execute);
@@ -361,7 +361,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<DeleteDeploymentLobbyAssignmentResponse> execute(@Valid final DeleteDeploymentLobbyAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 deleteDeploymentLobbyAssignmentMethod::execute);
@@ -373,7 +373,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<GetDeploymentMatchmakerResourceResponse> execute(@Valid final GetDeploymentMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentMatchmakerResourceMethod::execute);
@@ -381,7 +381,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<FindDeploymentMatchmakerResourceResponse> execute(@Valid final FindDeploymentMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 findDeploymentMatchmakerResourceMethod::execute);
@@ -389,7 +389,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<ViewDeploymentMatchmakerResourcesResponse> execute(@Valid final ViewDeploymentMatchmakerResourcesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 viewDeploymentMatchmakerResourcesMethod::execute);
@@ -397,7 +397,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<SyncDeploymentMatchmakerResourceResponse> execute(@Valid final SyncDeploymentMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 syncDeploymentMatchmakerResourceMethod::execute);
@@ -423,7 +423,7 @@ public class DeploymentServiceImpl implements DeploymentService {
     @Override
     public Uni<UpdateDeploymentMatchmakerResourceStatusResponse> execute(
             @Valid final UpdateDeploymentMatchmakerResourceStatusRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 updateDeploymentMatchmakerResourceStatusMethod::execute);
@@ -431,7 +431,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<DeleteDeploymentMatchmakerResourceResponse> execute(@Valid final DeleteDeploymentMatchmakerResourceRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 deleteDeploymentMatchmakerResourceMethod::execute);
@@ -443,7 +443,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<DeleteDeploymentMatchmakerAssignmentResponse> execute(@Valid final DeleteDeploymentMatchmakerAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 deleteDeploymentMatchmakerAssignmentMethod::execute);
@@ -451,7 +451,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<SyncDeploymentMatchmakerAssignmentResponse> execute(@Valid final SyncDeploymentMatchmakerAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 syncDeploymentMatchmakerAssignmentMethod::execute);
@@ -459,7 +459,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<ViewDeploymentMatchmakerAssignmentsResponse> execute(@Valid final ViewDeploymentMatchmakerAssignmentsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 viewDeploymentMatchmakerAssignmentMethod::execute);
@@ -467,7 +467,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<FindDeploymentMatchmakerAssignmentResponse> execute(@Valid final FindDeploymentMatchmakerAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 findDeploymentMatchmakerAssignmentMethod::execute);
@@ -475,7 +475,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<GetDeploymentMatchmakerAssignmentResponse> execute(@Valid final GetDeploymentMatchmakerAssignmentRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentMatchmakerAssignmentMethod::execute);
@@ -487,7 +487,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<GetDeploymentStateResponse> execute(@Valid final GetDeploymentStateRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 getDeploymentStateMethod::execute);
@@ -495,7 +495,7 @@ public class DeploymentServiceImpl implements DeploymentService {
 
     @Override
     public Uni<UpdateDeploymentStateResponse> execute(@Valid final UpdateDeploymentStateRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getDeploymentModuleClientOperation::getClient,
                 DeploymentModuleClient::execute,
                 updateDeploymentStateMethod::execute);

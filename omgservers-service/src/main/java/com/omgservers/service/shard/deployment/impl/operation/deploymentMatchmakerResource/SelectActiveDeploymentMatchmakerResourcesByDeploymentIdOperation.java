@@ -7,8 +7,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 import java.util.List;
 
 public interface SelectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation {
-    Uni<List<DeploymentMatchmakerResourceModel>> execute(
-            SqlConnection sqlConnection,
-            int shard,
-            Long deploymentId);
+    Uni<List<DeploymentMatchmakerResourceModel>> execute(SqlConnection sqlConnection,
+                                                         int slot,
+                                                         Long deploymentId);
 }

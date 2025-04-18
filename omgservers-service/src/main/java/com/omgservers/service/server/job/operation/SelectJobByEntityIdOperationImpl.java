@@ -28,7 +28,7 @@ class SelectJobByEntityIdOperationImpl implements SelectJobByEntityIdOperation {
                 sqlConnection,
                 """
                         select id, idempotency_key, created, modified, qualifier, shard_key, entity_id, deleted
-                        from $server.tab_job
+                        from $shard.tab_job
                         where shard_key = $1 and entity_id = $2
                         limit 1
                         """,

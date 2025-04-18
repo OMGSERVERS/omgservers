@@ -29,7 +29,7 @@ class ViewDeploymentMatchmakerAssignmentMethodImpl implements ViewDeploymentMatc
         return pgPool.withTransaction(
                         sqlConnection -> selectActiveDeploymentMatchmakerAssignmentsByDeploymentIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId)
                 )
                 .map(ViewDeploymentMatchmakerAssignmentsResponse::new);

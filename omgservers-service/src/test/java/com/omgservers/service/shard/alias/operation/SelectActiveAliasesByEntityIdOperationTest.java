@@ -32,7 +32,7 @@ class SelectActiveAliasesByEntityIdOperationTest extends BaseTestClass {
 
     @Test
     void givenAliases_whenExecute_thenSelected() {
-        final var shard = 0;
+        final var slot = 0;
         final var shardKey = generateIdOperation.generateId();
         final var uniquenessGroup = generateIdOperation.generateId();
         final var entityId = generateIdOperation.generateId();
@@ -42,14 +42,14 @@ class SelectActiveAliasesByEntityIdOperationTest extends BaseTestClass {
                 uniquenessGroup,
                 entityId,
                 "tenant-" + UUID.randomUUID());
-        upsertAliasOperation.execute(shard, alias1);
+        upsertAliasOperation.execute(slot, alias1);
 
         final var alias2 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
                 shardKey,
                 uniquenessGroup,
                 entityId,
                 "tenant-" + UUID.randomUUID());
-        upsertAliasOperation.execute(shard, alias2);
+        upsertAliasOperation.execute(slot, alias2);
 
         final var aliases = selectActiveAliasesByEntityIdOperation
                 .execute(shardKey, entityId).stream()

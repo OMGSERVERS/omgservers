@@ -22,17 +22,16 @@ class SelectActiveTenantProjectPermissionsByTenantProjectIdOperationImpl
     final TenantProjectPermissionModelMapper tenantProjectPermissionModelMapper;
 
     @Override
-    public Uni<List<TenantProjectPermissionModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long tenantId,
-            final Long tenantProjectId) {
+    public Uni<List<TenantProjectPermissionModel>> execute(final SqlConnection sqlConnection,
+                                                           final int slot,
+                                                           final Long tenantId,
+                                                           final Long tenantProjectId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, tenant_id, project_id, created, modified, user_id, permission, deleted
-                        from $shard.tab_tenant_project_permission
+                        from $slot.tab_tenant_project_permission
                         where tenant_id = $1 and project_id = $2 and deleted = false
                         order by id asc
                         """,

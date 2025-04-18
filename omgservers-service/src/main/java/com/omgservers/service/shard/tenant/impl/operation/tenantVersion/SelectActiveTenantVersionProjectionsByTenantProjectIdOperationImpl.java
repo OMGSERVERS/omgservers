@@ -22,17 +22,16 @@ class SelectActiveTenantVersionProjectionsByTenantProjectIdOperationImpl
     final TenantVersionProjectionModelMapper tenantVersionProjectionModelMapper;
 
     @Override
-    public Uni<List<TenantVersionProjectionModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long tenantId,
-            final Long tenantProjectId) {
+    public Uni<List<TenantVersionProjectionModel>> execute(final SqlConnection sqlConnection,
+                                                           final int slot,
+                                                           final Long tenantId,
+                                                           final Long tenantProjectId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, tenant_id, project_id, created, modified, deleted
-                        from $shard.tab_tenant_version
+                        from $slot.tab_tenant_version
                         where tenant_id = $1 and project_id = $2 and deleted = false
                         order by id asc
                         """,

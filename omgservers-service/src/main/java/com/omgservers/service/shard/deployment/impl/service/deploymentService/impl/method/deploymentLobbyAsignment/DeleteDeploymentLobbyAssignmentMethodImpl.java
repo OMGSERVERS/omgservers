@@ -31,7 +31,7 @@ class DeleteDeploymentLobbyAssignmentMethodImpl implements DeleteDeploymentLobby
                         (changeContext, sqlConnection) ->
                                 deleteDeploymentLobbyAssignmentOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId,
                                         id))
                 .map(ChangeContext::getResult)

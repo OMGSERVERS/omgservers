@@ -26,7 +26,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        deleteMatchmakerOperation.execute(changeContext, sqlConnection, shardModel.shard(), id))
+                        deleteMatchmakerOperation.execute(changeContext, sqlConnection, shardModel.slot(), id))
                 .map(ChangeContext::getResult)
                 .map(DeleteMatchmakerResponse::new);
     }

@@ -27,7 +27,7 @@ class ViewRuntimeAssignmentsMethodImpl implements ViewRuntimeAssignmentsMethod {
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeAssignmentsByRuntimeIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId))
                 .map(ViewRuntimeAssignmentsResponse::new);
     }

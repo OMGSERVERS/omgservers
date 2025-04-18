@@ -29,7 +29,7 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deletePlayerOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 userId,
                                 id))
                 .map(ChangeContext::getResult)

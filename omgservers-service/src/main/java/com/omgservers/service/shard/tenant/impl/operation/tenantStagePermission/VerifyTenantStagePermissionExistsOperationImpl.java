@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenantStagePermission;
 
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
-import com.omgservers.service.operation.server.HasObjectOperation;
+import com.omgservers.service.operation.server.VerifyObjectExistsOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,21 +15,21 @@ import java.util.List;
 @AllArgsConstructor
 class VerifyTenantStagePermissionExistsOperationImpl implements VerifyTenantStagePermissionExistsOperation {
 
-    final HasObjectOperation hasObjectOperation;
+    final VerifyObjectExistsOperation verifyObjectExistsOperation;
 
     @Override
     public Uni<Boolean> execute(final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long tenantId,
                                 final Long tenantStageId,
                                 final Long userId,
                                 final TenantStagePermissionQualifierEnum tenantStagePermissionQualifier) {
-        return hasObjectOperation.hasObject(
+        return verifyObjectExistsOperation.execute(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id
-                        from $shard.tab_tenant_stage_permission
+                        from $slot.tab_tenant_stage_permission
                         where tenant_id = $1 and stage_id = $2 and user_id = $3 and permission = $4 and deleted = false
                         limit 1
                         """,

@@ -26,7 +26,7 @@ class GetClientMethodImpl implements GetClientMethod {
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectClientOperation
-                        .selectClient(sqlConnection, shardModel.shard(), id))
+                        .selectClient(sqlConnection, shardModel.slot(), id))
                 .map(GetClientResponse::new);
     }
 }

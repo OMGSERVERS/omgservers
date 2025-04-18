@@ -35,15 +35,15 @@ class SyncTenantImageMethodImpl implements SyncTenantImageMethod {
         final var tenantId = tenantImage.getTenantId();
         final var tenantVersionId = tenantImage.getVersionId();
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
-                        verifyTenantVersionExistsOperation.execute(sqlConnection, shard, tenantId, tenantVersionId)
+                        verifyTenantVersionExistsOperation.execute(sqlConnection, slot, tenantId, tenantVersionId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertTenantImageOperation
                                                 .execute(changeContext,
                                                         sqlConnection,
-                                                        shardModel.shard(),
+                                                        shardModel.slot(),
                                                         tenantImage);
                                     } else {
                                         throw new ServerSideNotFoundException(

@@ -1,7 +1,7 @@
 package com.omgservers.service.shard.alias.operation.testInterface;
 
-import com.omgservers.service.shard.alias.impl.operation.alias.DeleteAliasOperation;
 import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.shard.alias.impl.operation.alias.DeleteAliasOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,12 +20,12 @@ public class DeleteAliasOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> execute(final int shard,
+    public ChangeContext<Boolean> execute(final int slot,
                                           final Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deleteAliasOperation
-                                    .execute(changeContext, sqlConnection, shard, id))
+                                    .execute(changeContext, sqlConnection, slot, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

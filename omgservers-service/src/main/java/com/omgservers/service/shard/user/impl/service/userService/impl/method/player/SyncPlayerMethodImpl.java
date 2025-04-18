@@ -29,7 +29,7 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
                         (changeContext, sqlConnection) -> upsertPlayerOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 player))
                 .map(ChangeContext::getResult)
                 .map(SyncPlayerResponse::new);

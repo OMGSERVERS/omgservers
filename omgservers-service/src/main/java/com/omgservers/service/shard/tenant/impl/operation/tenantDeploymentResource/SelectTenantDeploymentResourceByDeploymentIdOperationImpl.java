@@ -22,17 +22,17 @@ class SelectTenantDeploymentResourceByDeploymentIdOperationImpl implements Selec
 
     @Override
     public Uni<TenantDeploymentResourceModel> execute(final SqlConnection sqlConnection,
-                                                      final int shard,
+                                                      final int slot,
                                                       final Long tenantId,
                                                       final Long deploymentId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id,
                             status, deleted
-                        from $shard.tab_tenant_deployment_resource
+                        from $slot.tab_tenant_deployment_resource
                         where tenant_id = $1 and deployment_id = $2
                         order by id desc
                         limit 1

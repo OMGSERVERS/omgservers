@@ -40,22 +40,22 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends BaseTestCla
 
 //    @Test
 //    void givenRuntimeCommands_whenSelectNewRuntimeCommands_thenSelected() {
-//        final var shard = 0;
+//        final var slot = 0;
 //
 //        final var runtime1 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeQualifierEnum.SCRIPT, RuntimeAssignmentConfigDto.create());
-//        upsertRuntimeOperation.upsertRuntime(shard, runtime1);
+//        upsertRuntimeOperation.upsertRuntime(slot, runtime1);
 //        final var runtimeCommand11 = runtimeMessageModelFactory.create(runtime1.getId(), new InitMatchCommandBodyModel());
-//        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand11);
+//        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, slot, runtimeCommand11);
 //        final var runtimeCommand12 = runtimeMessageModelFactory.create(runtime1.getId(), new StopMatchmakingCommandBodyModel());
-//        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand12);
+//        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, slot, runtimeCommand12);
 //
 //        final var runtime21 = runtimeModelFactory.create(tenantId(), stageId(), versionId(), matchmakerId(), matchId(), RuntimeQualifierEnum.SCRIPT, RuntimeAssignmentConfigDto.create());
-//        upsertRuntimeOperation.upsertRuntime(shard, runtime21);
+//        upsertRuntimeOperation.upsertRuntime(slot, runtime21);
 //
 //        final var runtimeCommand21 = runtimeMessageModelFactory.create(runtime21.getId(), new InitMatchCommandBodyModel());
-//        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, shard, runtimeCommand21);
+//        upsertRuntimeCommandOperation.upsertRuntimeCommand(TIMEOUT, pgPool, slot, runtimeCommand21);
 //
-//        final var newRuntimeCommands = selectActiveRuntimeCommandsByRuntimeIdOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, shard, runtime1.getId());
+//        final var newRuntimeCommands = selectActiveRuntimeCommandsByRuntimeIdOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, slot, runtime1.getId());
 //        assertEquals(2, newRuntimeCommands.size());
 //        assertEquals(runtimeCommand11, newRuntimeCommands.get(0));
 //        assertEquals(runtimeCommand12, newRuntimeCommands.get(1));
@@ -63,10 +63,10 @@ class SelectRuntimeCommandsByRuntimeIdAndStatusOperationTest extends BaseTestCla
 //
 //    @Test
 //    void givenUnknownRuntimeId_whenSelectNewRuntimeCommands_thenEmpty() {
-//        final var shard = 0;
+//        final var slot = 0;
 //        final var id = generateIdOperation.generateId();
 //
-//        final var newRuntimeCommands = selectActiveRuntimeCommandsByRuntimeIdOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, shard, id);
+//        final var newRuntimeCommands = selectActiveRuntimeCommandsByRuntimeIdOperation.selectRuntimeCommandsByRuntimeIdAndStatus(TIMEOUT, pgPool, slot, id);
 //        assertTrue(newRuntimeCommands.isEmpty());
 //    }
 

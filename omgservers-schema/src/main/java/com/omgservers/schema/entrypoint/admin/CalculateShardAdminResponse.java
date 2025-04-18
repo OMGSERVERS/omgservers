@@ -11,6 +11,6 @@ import java.net.URI;
 @AllArgsConstructor
 public class CalculateShardAdminResponse {
 
-    int shardIndex;
-    URI serverUri;
+    int slot;
+    URI uri;
 }

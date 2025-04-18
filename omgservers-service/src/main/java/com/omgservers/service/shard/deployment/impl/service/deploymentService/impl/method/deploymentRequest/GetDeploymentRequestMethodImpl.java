@@ -27,7 +27,7 @@ class GetDeploymentRequestMethodImpl implements GetDeploymentRequestMethod {
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectDeploymentRequestOperation
-                        .execute(sqlConnection, shardModel.shard(), deploymentId, id))
+                        .execute(sqlConnection, shardModel.slot(), deploymentId, id))
                 .map(GetDeploymentRequestResponse::new);
     }
 }

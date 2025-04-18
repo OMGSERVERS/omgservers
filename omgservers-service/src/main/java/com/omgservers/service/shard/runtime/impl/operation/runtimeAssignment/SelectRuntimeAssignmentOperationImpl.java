@@ -22,15 +22,15 @@ class SelectRuntimeAssignmentOperationImpl implements SelectRuntimeAssignmentOpe
 
     @Override
     public Uni<RuntimeAssignmentModel> execute(final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Long runtimeId,
                                                final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, runtime_id, created, modified, client_id, config, deleted
-                        from $shard.tab_runtime_assignment
+                        from $slot.tab_runtime_assignment
                         where runtime_id = $1 and id = $2
                         limit 1
                         """,

@@ -24,15 +24,15 @@ class SelectPlayerByUserIdAndStageIdOperationImpl implements SelectPlayerByUserI
 
     @Override
     public Uni<PlayerModel> execute(final SqlConnection sqlConnection,
-                                    final int shard,
+                                    final int slot,
                                     final Long userId,
                                     final Long tenantStageId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, user_id, created, modified, tenant_id, stage_id, profile, deleted
-                        from $shard.tab_user_player
+                        from $slot.tab_user_player
                         where user_id = $1 and stage_id = $2
                         order by id desc
                         limit 1

@@ -36,13 +36,13 @@ class SyncDeploymentMatchmakerAssignmentMethodImpl implements SyncDeploymentMatc
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> verifyDeploymentExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), deploymentId)
+                                .execute(sqlConnection, shardModel.slot(), deploymentId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertDeploymentMatchmakerAssignmentOperation
                                                 .execute(changeContext,
                                                         sqlConnection,
-                                                        shardModel.shard(),
+                                                        shardModel.slot(),
                                                         deploymentMatchmakerAssignment);
                                     } else {
                                         throw new ServerSideNotFoundException(

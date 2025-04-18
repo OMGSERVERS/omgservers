@@ -30,7 +30,7 @@ class DeleteMatchmakerMatchResourceMethodImpl implements DeleteMatchmakerMatchRe
                         (changeContext, sqlConnection) ->
                                 deleteMatchmakerMatchResourceOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         matchmakerId,
                                         id))
                 .map(ChangeContext::getResult)

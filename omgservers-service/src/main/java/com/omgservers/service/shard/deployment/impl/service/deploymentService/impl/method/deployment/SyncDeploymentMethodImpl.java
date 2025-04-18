@@ -32,7 +32,7 @@ class SyncDeploymentMethodImpl implements SyncDeploymentMethod {
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> upsertDeploymentOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 deployment))
                 .map(ChangeContext::getResult)
                 .map(SyncDeploymentResponse::new);

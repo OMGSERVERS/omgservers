@@ -38,13 +38,13 @@ class SyncTenantProjectPermissionMethodImpl implements SyncTenantProjectPermissi
 
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> verifyTenantProjectExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), tenantId, tenantProjectId)
+                                .execute(sqlConnection, shardModel.slot(), tenantId, tenantProjectId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertTenantProjectPermissionOperation.execute(
                                                 changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 permission);
                                     } else {
                                         throw new ServerSideNotFoundException(

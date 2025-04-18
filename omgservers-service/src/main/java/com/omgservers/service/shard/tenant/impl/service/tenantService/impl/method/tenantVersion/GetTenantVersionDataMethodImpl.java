@@ -29,24 +29,24 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
                                                      final GetTenantVersionDataRequest request) {
         log.trace("{}", request);
 
-        final int shard = shardModel.shard();
+        final int slot = shardModel.slot();
         final var tenantId = request.getTenantId();
         final var tenantVersionId = request.getTenantVersionId();
         final var tenantVersionData = new TenantVersionDataDto();
 
         return pgPool.withTransaction(sqlConnection ->
-                        fillData(sqlConnection, shard, tenantId, tenantVersionId, tenantVersionData))
+                        fillData(sqlConnection, slot, tenantId, tenantVersionId, tenantVersionData))
                 .map(GetTenantVersionDataResponse::new);
     }
 
     Uni<TenantVersionDataDto> fillData(final SqlConnection sqlConnection,
-                                       final int shard,
+                                       final int slot,
                                        final Long tenantId,
                                        final Long tenantVersionId,
                                        final TenantVersionDataDto tenantVersionData) {
-        return fillTenantVersion(sqlConnection, shard, tenantId, tenantVersionId, tenantVersionData)
+        return fillTenantVersion(sqlConnection, slot, tenantId, tenantVersionId, tenantVersionData)
                 .flatMap(voidItem -> fillTenantImage(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantVersionId,
                         tenantVersionData))
@@ -54,12 +54,12 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
     }
 
     Uni<Void> fillTenantVersion(final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long tenantId,
                                 final Long tenantVersionId,
                                 final TenantVersionDataDto tenantVersionData) {
         return selectTenantVersionOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantVersionId)
                 .invoke(tenantVersionData::setTenantVersion)
@@ -67,12 +67,12 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
     }
 
     Uni<Void> fillTenantImage(final SqlConnection sqlConnection,
-                              final int shard,
+                              final int slot,
                               final Long tenantId,
                               final Long tenantVersionId,
                               final TenantVersionDataDto tenantVersionData) {
         return selectActiveTenantImageByTenantVersionIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         tenantId,
                         tenantVersionId)
                 .invoke(tenantVersionData::setTenantImages)

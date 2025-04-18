@@ -22,16 +22,16 @@ class SelectDeploymentLobbyResourceByLobbyIdOperationImpl implements SelectDeplo
 
     @Override
     public Uni<DeploymentLobbyResourceModel> execute(final SqlConnection sqlConnection,
-                                                     final int shard,
+                                                     final int slot,
                                                      final Long deploymentId,
                                                      final Long lobbyId) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, deployment_id, created, modified, lobby_id, status, deleted
-                        from $shard.tab_deployment_lobby_resource
+                        from $slot.tab_deployment_lobby_resource
                         where deployment_id = $1 and lobby_id = $2
                         order by id desc
                         limit 1

@@ -32,12 +32,12 @@ class SyncMatchmakerRequestMethodImpl implements SyncMatchmakerRequestMethod {
         final var matchmakerId = requestModel.getMatchmakerId();
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (context, sqlConnection) -> verifyMatchmakerExistsOperation
-                                .execute(sqlConnection, shardModel.shard(), matchmakerId)
+                                .execute(sqlConnection, shardModel.slot(), matchmakerId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertRequestOperation.execute(context,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 requestModel);
                                     } else {
                                         throw new ServerSideNotFoundException(

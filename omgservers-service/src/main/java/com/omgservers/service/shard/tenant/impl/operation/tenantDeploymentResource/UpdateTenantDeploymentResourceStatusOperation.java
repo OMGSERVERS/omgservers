@@ -8,7 +8,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface UpdateTenantDeploymentResourceStatusOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long tenantId,
                          Long id,
                          TenantDeploymentResourceStatusEnum status);

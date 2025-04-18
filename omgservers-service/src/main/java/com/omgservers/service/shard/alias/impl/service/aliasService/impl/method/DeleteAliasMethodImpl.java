@@ -28,7 +28,7 @@ class DeleteAliasMethodImpl implements DeleteAliasMethod {
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> deleteAliasOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeleteAliasResponse::new);

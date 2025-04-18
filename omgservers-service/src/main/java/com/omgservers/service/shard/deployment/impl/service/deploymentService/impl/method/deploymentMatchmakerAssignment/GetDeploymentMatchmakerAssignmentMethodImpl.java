@@ -24,11 +24,11 @@ class GetDeploymentMatchmakerAssignmentMethodImpl implements GetDeploymentMatchm
                                                                   final GetDeploymentMatchmakerAssignmentRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectDeploymentMatchmakerAssignmentOperation
-                        .execute(sqlConnection, shard, deploymentId, id))
+                        .execute(sqlConnection, slot, deploymentId, id))
                 .map(GetDeploymentMatchmakerAssignmentResponse::new);
     }
 }

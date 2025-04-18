@@ -29,7 +29,7 @@ class DeleteMatchmakerMatchAssignmentMethodImpl implements DeleteMatchmakerMatch
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteMatchmakerMatchAssignmentOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 matchmakerId, id))
                 .map(ChangeContext::getResult)
                 .map(DeleteMatchmakerMatchAssignmentResponse::new);

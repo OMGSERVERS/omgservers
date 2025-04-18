@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveTenantProjectsByTenantIdOperation {
     Uni<List<TenantProjectModel>> execute(SqlConnection sqlConnection,
-                                          int shard,
+                                          int slot,
                                           Long tenantId);
 }

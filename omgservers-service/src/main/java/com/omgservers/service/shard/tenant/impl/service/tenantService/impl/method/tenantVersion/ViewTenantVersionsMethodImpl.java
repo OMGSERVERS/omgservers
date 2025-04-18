@@ -29,7 +29,7 @@ class ViewTenantVersionsMethodImpl implements ViewTenantVersionsMethod {
         final var tenantProjectId = request.getTenantProjectId();
         return pgPool.withTransaction(sqlConnection ->
                         selectActiveTenantVersionProjectionsByTenantProjectIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 tenantId,
                                 tenantProjectId))
                 .map(ViewTenantVersionsResponse::new);

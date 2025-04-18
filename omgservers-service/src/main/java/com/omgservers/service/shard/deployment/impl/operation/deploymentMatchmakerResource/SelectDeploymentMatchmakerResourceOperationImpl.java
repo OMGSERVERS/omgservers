@@ -22,17 +22,17 @@ class SelectDeploymentMatchmakerResourceOperationImpl implements SelectDeploymen
 
     @Override
     public Uni<DeploymentMatchmakerResourceModel> execute(final SqlConnection sqlConnection,
-                                                          final int shard,
+                                                          final int slot,
                                                           final Long deploymentId,
                                                           final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select 
                             id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, 
                             deleted
-                        from $shard.tab_deployment_matchmaker_resource
+                        from $slot.tab_deployment_matchmaker_resource
                         where deployment_id = $1 and id = $2
                         limit 1
                         """,

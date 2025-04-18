@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveRuntimeMessagesByRuntimeIdOperation {
     Uni<List<RuntimeMessageModel>> execute(SqlConnection sqlConnection,
-                                           int shard,
+                                           int slot,
                                            Long runtimeId);
 }

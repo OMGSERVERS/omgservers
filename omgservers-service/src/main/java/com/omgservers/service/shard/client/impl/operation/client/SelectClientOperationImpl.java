@@ -22,15 +22,15 @@ class SelectClientOperationImpl implements SelectClientOperation {
 
     @Override
     public Uni<ClientModel> selectClient(final SqlConnection sqlConnection,
-                                         final int shard,
+                                         final int slot,
                                          final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, created, modified, user_id, player_id, deployment_id, config, deleted
-                        from $shard.tab_client
+                        from $slot.tab_client
                         where id = $1
                         limit 1
                         """,

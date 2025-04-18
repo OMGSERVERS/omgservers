@@ -7,7 +7,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface DeleteMatchmakerCommandOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
-                         int shard,
+                         int slot,
                          Long matchmakerId,
                          Long id);
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface SelectActiveTenantProjectPermissionsByTenantProjectIdOperation {
     Uni<List<TenantProjectPermissionModel>> execute(
             SqlConnection sqlConnection,
-            int shard,
+            int slot,
             Long tenantId,
             Long tenantProjectId);
 }

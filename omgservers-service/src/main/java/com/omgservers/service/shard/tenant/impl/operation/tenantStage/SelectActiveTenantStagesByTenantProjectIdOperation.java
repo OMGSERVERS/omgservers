@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SelectActiveTenantStagesByTenantProjectIdOperation {
     Uni<List<TenantStageModel>> execute(SqlConnection sqlConnection,
-                                        int shard,
+                                        int slot,
                                         Long tenantId,
                                         Long tenantProjectId);
 }

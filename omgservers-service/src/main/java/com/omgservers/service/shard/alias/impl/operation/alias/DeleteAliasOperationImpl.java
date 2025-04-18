@@ -22,12 +22,12 @@ class DeleteAliasOperationImpl implements DeleteAliasOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long id) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_alias
+                        update $slot.tab_alias
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,

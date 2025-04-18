@@ -29,7 +29,7 @@ class ViewDeploymentLobbyAssignmentMethodImpl implements ViewDeploymentLobbyAssi
         return pgPool.withTransaction(
                         sqlConnection -> selectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation
                                 .execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId))
                 .map(ViewDeploymentLobbyAssignmentsResponse::new);
 

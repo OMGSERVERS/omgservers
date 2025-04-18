@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.operation.testInterface;
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
-import com.omgservers.service.shard.client.impl.operation.clientMessage.UpsertClientMessageOperation;
 import com.omgservers.service.operation.server.ChangeContext;
+import com.omgservers.service.shard.client.impl.operation.clientMessage.UpsertClientMessageOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,12 +21,12 @@ public class UpsertClientMessageOperationTestInterface {
 
     final PgPool pgPool;
 
-    public ChangeContext<Boolean> upsertClientMessage(final int shard,
+    public ChangeContext<Boolean> upsertClientMessage(final int slot,
                                                       final ClientMessageModel clientMessage) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> upsertClientMessageOperation
-                                    .upsertClientMessage(changeContext, sqlConnection, shard, clientMessage))
+                                    .upsertClientMessage(changeContext, sqlConnection, slot, clientMessage))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

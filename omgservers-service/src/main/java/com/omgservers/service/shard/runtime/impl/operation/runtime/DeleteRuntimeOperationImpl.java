@@ -26,11 +26,11 @@ class DeleteRuntimeOperationImpl implements DeleteRuntimeOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long id) {
-        return changeObjectOperation.execute(changeContext, sqlConnection, shard,
+        return changeObjectOperation.execute(changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_runtime
+                        update $slot.tab_runtime
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,

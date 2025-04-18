@@ -27,32 +27,32 @@ class UpsertMatchmakerOperationTest extends BaseTestClass {
 
     @Test
     void givenMatchmaker_whenExecute_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId(), MatchmakerConfigDto.create());
-        final var changeContext = upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        final var changeContext = upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker);
         assertTrue(changeContext.getResult());
     }
 
     @Test
     void givenMatchmaker_whenExecute_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker = matchmakerModelFactory.create(tenantId(), stageId(), MatchmakerConfigDto.create());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker);
 
-        final var changeContext = upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker);
+        final var changeContext = upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker);
         assertFalse(changeContext.getResult());
     }
 
     @Test
     void givenMatchmaker_whenExecute_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var matchmaker1 = matchmakerModelFactory.create(tenantId(), stageId(), MatchmakerConfigDto.create());
-        upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker1);
+        upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker1);
 
         final var matchmaker2 = matchmakerModelFactory.create(tenantId(), stageId(), MatchmakerConfigDto.create(),
                 matchmaker1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertMatchmakerOperation.upsertMatchmaker(shard, matchmaker2));
+                upsertMatchmakerOperation.upsertMatchmaker(slot, matchmaker2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

@@ -30,12 +30,12 @@ class UpsertClientOperationImpl implements UpsertClientOperation {
     @Override
     public Uni<Boolean> upsertClient(final ChangeContext<?> changeContext,
                                      final SqlConnection sqlConnection,
-                                     final int shard,
+                                     final int slot,
                                      final ClientModel client) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_client(
+                        insert into $slot.tab_client(
                             id, idempotency_key, created, modified, user_id, player_id, deployment_id, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

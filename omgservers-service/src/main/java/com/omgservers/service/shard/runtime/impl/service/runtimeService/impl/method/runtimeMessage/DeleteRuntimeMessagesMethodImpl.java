@@ -29,7 +29,7 @@ class DeleteRuntimeMessagesMethodImpl implements DeleteRuntimeMessagesMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteRuntimeMessagesByIdsOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId,
                                 ids
                         ))

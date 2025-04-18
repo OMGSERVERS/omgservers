@@ -21,18 +21,17 @@ class SelectPoolCommandOperationImpl implements SelectPoolCommandOperation {
     final PoolCommandModelMapper poolCommandModelMapper;
 
     @Override
-    public Uni<PoolCommandModel> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long poolId,
-            final Long id) {
+    public Uni<PoolCommandModel> execute(final SqlConnection sqlConnection,
+                                         final int slot,
+                                         final Long poolId,
+                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, pool_id, created, modified, qualifier, body, deleted
-                        from $shard.tab_pool_command
+                        from $slot.tab_pool_command
                         where pool_id = $1 and id = $2
                         limit 1
                         """,

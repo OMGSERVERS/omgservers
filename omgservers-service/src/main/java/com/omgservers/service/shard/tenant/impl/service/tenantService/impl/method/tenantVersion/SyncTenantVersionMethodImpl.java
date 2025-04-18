@@ -38,14 +38,14 @@ class SyncTenantVersionMethodImpl implements SyncTenantVersionMethod {
 
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         verifyTenantProjectExistsOperation.execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         tenantProjectId)
                                 .flatMap(exists -> {
                                     if (exists) {
                                         return upsertTenantVersionOperation.execute(changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 tenantVersion);
                                     } else {
                                         throw new ServerSideNotFoundException(

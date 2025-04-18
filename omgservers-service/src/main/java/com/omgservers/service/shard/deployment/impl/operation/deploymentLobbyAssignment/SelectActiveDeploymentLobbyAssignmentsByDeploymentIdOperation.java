@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface SelectActiveDeploymentLobbyAssignmentsByDeploymentIdOperation {
     Uni<List<DeploymentLobbyAssignmentModel>> execute(SqlConnection sqlConnection,
-                                                      int shard,
+                                                      int slot,
                                                       Long deploymentId);
 }

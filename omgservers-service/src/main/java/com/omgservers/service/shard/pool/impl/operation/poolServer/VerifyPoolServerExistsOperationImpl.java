@@ -1,6 +1,6 @@
 package com.omgservers.service.shard.pool.impl.operation.poolServer;
 
-import com.omgservers.service.operation.server.HasObjectOperation;
+import com.omgservers.service.operation.server.VerifyObjectExistsOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,19 +14,19 @@ import java.util.List;
 @AllArgsConstructor
 class VerifyPoolServerExistsOperationImpl implements VerifyPoolServerExistsOperation {
 
-    final HasObjectOperation hasObjectOperation;
+    final VerifyObjectExistsOperation verifyObjectExistsOperation;
 
     @Override
     public Uni<Boolean> execute(final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final Long poolId,
                                 final Long id) {
-        return hasObjectOperation.hasObject(
+        return verifyObjectExistsOperation.execute(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id
-                        from $shard.tab_pool_server
+                        from $slot.tab_pool_server
                         where pool_id = $1 and id = $2 and deleted = false
                         limit 1
                         """,

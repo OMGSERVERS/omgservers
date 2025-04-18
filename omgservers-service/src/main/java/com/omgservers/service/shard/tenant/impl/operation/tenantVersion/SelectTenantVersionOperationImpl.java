@@ -22,15 +22,15 @@ class SelectTenantVersionOperationImpl implements SelectTenantVersionOperation {
 
     @Override
     public Uni<TenantVersionModel> execute(final SqlConnection sqlConnection,
-                                           final int shard,
+                                           final int slot,
                                            final Long tenantId,
                                            final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, tenant_id, project_id, created, modified, config, deleted
-                        from $shard.tab_tenant_version
+                        from $slot.tab_tenant_version
                         where tenant_id = $1 and id = $2
                         limit 1
                         """,

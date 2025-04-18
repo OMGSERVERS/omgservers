@@ -22,8 +22,8 @@ class PrepareSqlOperationTest extends BaseTestClass {
 
     @Test
     void givenServerSql_whenExecute_thenPrepared() {
-        final var sql = "select id from $server.tab_table";
+        final var sql = "select id from $shard.tab_table";
         final var preparedSql = prepareServerSqlOperation.execute(sql);
-        assertEquals("select id from server_15.tab_table", preparedSql);
+        assertEquals("select id from shard_15.tab_table", preparedSql);
     }
 }

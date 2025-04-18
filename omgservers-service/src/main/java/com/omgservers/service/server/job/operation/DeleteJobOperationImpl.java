@@ -30,7 +30,7 @@ class DeleteJobOperationImpl implements DeleteJobOperation {
                 changeContext,
                 sqlConnection,
                 """
-                        update $server.tab_job
+                        update $shard.tab_job
                         set modified = $2, deleted = true
                         where id = $1 and deleted = false
                         """,

@@ -6,7 +6,7 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 
 public interface SelectPlayerByUserIdAndStageIdOperation {
     Uni<PlayerModel> execute(SqlConnection sqlConnection,
-                             int shard,
+                             int slot,
                              Long userId,
                              Long tenantStageId);
 }

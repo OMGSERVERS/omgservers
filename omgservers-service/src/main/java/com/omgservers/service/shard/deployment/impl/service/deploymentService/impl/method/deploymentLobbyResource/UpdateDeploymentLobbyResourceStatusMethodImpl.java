@@ -30,7 +30,7 @@ class UpdateDeploymentLobbyResourceStatusMethodImpl implements UpdateDeploymentL
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         updateDeploymentLobbyResourceStatusOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 deploymentId,
                                 id,
                                 status

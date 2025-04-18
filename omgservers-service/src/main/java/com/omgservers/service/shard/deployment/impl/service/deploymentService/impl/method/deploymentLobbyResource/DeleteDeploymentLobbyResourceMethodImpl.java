@@ -31,7 +31,7 @@ class DeleteDeploymentLobbyResourceMethodImpl implements DeleteDeploymentLobbyRe
                         (changeContext, sqlConnection) ->
                                 deleteDeploymentLobbyResourceOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         deploymentId,
                                         id))
                 .map(ChangeContext::getResult)

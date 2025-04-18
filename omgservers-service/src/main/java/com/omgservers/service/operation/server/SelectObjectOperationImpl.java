@@ -25,7 +25,7 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
 
     final TransformPgExceptionOperation transformPgExceptionOperation;
     final PrepareSqlOperation prepareSqlOperation;
-    final PrepareShardSqlOperation prepareShardSqlOperation;
+    final PrepareSlotSqlOperation prepareSlotSqlOperation;
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
@@ -33,12 +33,12 @@ class SelectObjectOperationImpl implements SelectObjectOperation {
 
     @Override
     public <T> Uni<T> selectObject(final SqlConnection sqlConnection,
-                                   final int shard,
+                                   final int slot,
                                    final String sql,
                                    final List<?> parameters,
                                    final String objectName,
                                    final Function<Row, T> objectMapper) {
-        final var preparedSql = prepareShardSqlOperation.execute(sql, shard);
+        final var preparedSql = prepareSlotSqlOperation.execute(sql, slot);
         return executeQuery(sqlConnection, preparedSql, parameters, objectName, objectMapper);
     }
 

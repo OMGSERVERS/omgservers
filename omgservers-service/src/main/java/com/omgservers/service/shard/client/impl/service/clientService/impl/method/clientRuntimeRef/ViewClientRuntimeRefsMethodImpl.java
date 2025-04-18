@@ -27,7 +27,7 @@ class ViewClientRuntimeRefsMethodImpl implements ViewClientRuntimeRefsMethod {
         final var clientId = request.getClientId();
         return pgPool.withTransaction(sqlConnection -> selectActiveClientRuntimeRefsByClientIdOperation
                         .selectActiveClientRuntimeRefsByClientId(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 clientId
                         ))
                 .map(ViewClientRuntimeRefsResponse::new);

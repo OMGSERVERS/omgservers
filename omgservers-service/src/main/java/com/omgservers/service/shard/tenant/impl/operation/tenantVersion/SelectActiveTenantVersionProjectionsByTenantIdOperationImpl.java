@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenantVersion;
 
 import com.omgservers.schema.model.tenantVersion.TenantVersionProjectionModel;
-import com.omgservers.service.shard.tenant.impl.mapper.TenantVersionProjectionModelMapper;
 import com.omgservers.service.operation.server.SelectListOperation;
+import com.omgservers.service.shard.tenant.impl.mapper.TenantVersionProjectionModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,16 +23,15 @@ class SelectActiveTenantVersionProjectionsByTenantIdOperationImpl
     final TenantVersionProjectionModelMapper tenantVersionProjectionModelMapper;
 
     @Override
-    public Uni<List<TenantVersionProjectionModel>> execute(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long tenantId) {
+    public Uni<List<TenantVersionProjectionModel>> execute(final SqlConnection sqlConnection,
+                                                           final int slot,
+                                                           final Long tenantId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select id, idempotency_key, tenant_id, project_id, created, modified, deleted
-                        from $shard.tab_tenant_version
+                        from $slot.tab_tenant_version
                         where tenant_id = $1 and deleted = false
                         order by id asc
                         """,

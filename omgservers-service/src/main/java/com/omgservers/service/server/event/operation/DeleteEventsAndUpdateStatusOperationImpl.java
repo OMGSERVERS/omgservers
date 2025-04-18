@@ -29,7 +29,7 @@ class DeleteEventsAndUpdateStatusOperationImpl implements DeleteEventsAndUpdateS
                 changeContext,
                 sqlConnection,
                 """
-                        update $server.tab_event
+                        update $shard.tab_event
                         set modified = $2, deleted = true, status = $3
                         where id = any($1) and deleted = false
                         """,

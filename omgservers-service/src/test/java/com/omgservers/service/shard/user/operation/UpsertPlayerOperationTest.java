@@ -36,46 +36,46 @@ class UpsertPlayerOperationTest extends BaseTestClass {
 
     @Test
     void givenPlayer_whenExecute_thenInserted() {
-        final var shard = 0;
+        final var slot = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create());
-        upsertUserOperation.upsertUser(shard, user);
+        upsertUserOperation.upsertUser(slot, user);
 
         final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
-        final var changeContext = upsertPlayerOperation.upsertPlayer(shard, player);
+        final var changeContext = upsertPlayerOperation.upsertPlayer(slot, player);
         assertTrue(changeContext.getResult());
     }
 
     @Test
     void givenPlayer_whenExecute_thenUpdated() {
-        final var shard = 0;
+        final var slot = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create());
-        upsertUserOperation.upsertUser(shard, user);
+        upsertUserOperation.upsertUser(slot, user);
 
         final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
-        upsertPlayerOperation.upsertPlayer(shard, player);
+        upsertPlayerOperation.upsertPlayer(slot, player);
 
-        final var changeContext = upsertPlayerOperation.upsertPlayer(shard, player);
+        final var changeContext = upsertPlayerOperation.upsertPlayer(slot, player);
         assertFalse(changeContext.getResult());
     }
 
     @Test
     void givenPlayer_whenExecute_thenIdempotencyViolation() {
-        final var shard = 0;
+        final var slot = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create());
-        upsertUserOperation.upsertUser(shard, user);
+        upsertUserOperation.upsertUser(slot, user);
 
         final var player1 = playerModelFactory.create(user.getId(), tenantId(), stageId());
-        upsertPlayerOperation.upsertPlayer(shard, player1);
+        upsertPlayerOperation.upsertPlayer(slot, player1);
 
         final var player2 = playerModelFactory.create(user.getId(), tenantId(), stageId(), player1.getIdempotencyKey());
         final var exception = assertThrows(ServerSideConflictException.class, () ->
-                upsertPlayerOperation.upsertPlayer(shard, player2));
+                upsertPlayerOperation.upsertPlayer(slot, player2));
         assertEquals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED, exception.getQualifier());
     }
 

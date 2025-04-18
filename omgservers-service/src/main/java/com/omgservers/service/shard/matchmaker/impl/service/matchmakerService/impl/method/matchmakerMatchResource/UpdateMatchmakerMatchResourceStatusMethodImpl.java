@@ -30,7 +30,7 @@ class UpdateMatchmakerMatchResourceStatusMethodImpl implements UpdateMatchmakerM
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         updateMatchmakerMatchResourceStatusOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 matchmakerId,
                                 matchId,
                                 status

@@ -31,12 +31,12 @@ class UpsertPlayerOperationImpl implements UpsertPlayerOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final PlayerModel player) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_user_player(
+                        insert into $slot.tab_user_player(
                             id, idempotency_key, user_id, created, modified, tenant_id, stage_id, profile, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do

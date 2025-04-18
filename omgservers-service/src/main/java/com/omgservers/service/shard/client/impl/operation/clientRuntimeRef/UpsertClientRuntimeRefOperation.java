@@ -8,6 +8,6 @@ import io.vertx.mutiny.sqlclient.SqlConnection;
 public interface UpsertClientRuntimeRefOperation {
     Uni<Boolean> upsertClientRuntimeRef(ChangeContext<?> changeContext,
                                         SqlConnection sqlConnection,
-                                        int shard,
+                                        int slot,
                                         ClientRuntimeRefModel clientRuntimeRef);
 }

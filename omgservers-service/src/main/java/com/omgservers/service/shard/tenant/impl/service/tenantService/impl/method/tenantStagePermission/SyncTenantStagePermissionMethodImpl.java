@@ -38,7 +38,7 @@ class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMe
 
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         verifyTenantStageExistsOperation.execute(sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         tenantStageId)
                                 .flatMap(exists -> {
@@ -46,7 +46,7 @@ class SyncTenantStagePermissionMethodImpl implements SyncTenantStagePermissionMe
                                         return upsertTenantStagePermissionOperation.execute(
                                                 changeContext,
                                                 sqlConnection,
-                                                shardModel.shard(),
+                                                shardModel.slot(),
                                                 permission);
                                     } else {
                                         throw new ServerSideNotFoundException(

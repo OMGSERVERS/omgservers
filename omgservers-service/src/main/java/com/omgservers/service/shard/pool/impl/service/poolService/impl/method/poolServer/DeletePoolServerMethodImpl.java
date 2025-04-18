@@ -29,7 +29,7 @@ class DeletePoolServerMethodImpl implements DeletePoolServerMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deletePoolServerOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 poolId,
                                 id))
                 .map(ChangeContext::getResult)

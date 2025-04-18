@@ -33,55 +33,56 @@ class GetDeploymentDataMethodImpl implements GetDeploymentDataMethod {
                                                   final GetDeploymentDataRequest request) {
         log.trace("{}", request);
 
-        final int shard = shardModel.shard();
+        final int slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();
         final var deploymentData = new DeploymentDataDto();
 
         return pgPool.withTransaction(sqlConnection -> fillData(sqlConnection,
-                        shard,
+                        slot,
                         deploymentId,
                         deploymentData))
                 .map(GetDeploymentDataResponse::new);
     }
 
     Uni<DeploymentDataDto> fillData(final SqlConnection sqlConnection,
-                                    final int shard,
+                                    final int slot,
                                     final Long deploymentId,
                                     final DeploymentDataDto deploymentData) {
-        return fillDeployment(sqlConnection, shard, deploymentId, deploymentData)
-                .flatMap(voidItem -> fillDeploymentLobbyResources(sqlConnection, shard, deploymentId, deploymentData))
-                .flatMap(voidItem -> fillDeploymentMatchmakerResources(sqlConnection, shard, deploymentId, deploymentData))
+        return fillDeployment(sqlConnection, slot, deploymentId, deploymentData)
+                .flatMap(voidItem -> fillDeploymentLobbyResources(sqlConnection, slot, deploymentId, deploymentData))
+                .flatMap(voidItem -> fillDeploymentMatchmakerResources(sqlConnection, slot, deploymentId,
+                        deploymentData))
                 .replaceWith(deploymentData);
     }
 
     Uni<Void> fillDeployment(final SqlConnection sqlConnection,
-                             final int shard,
+                             final int slot,
                              final Long deploymentId,
                              final DeploymentDataDto deploymentData) {
         return selectDeploymentOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         deploymentId)
                 .invoke(deploymentData::setDeployment)
                 .replaceWithVoid();
     }
 
     Uni<Void> fillDeploymentLobbyResources(final SqlConnection sqlConnection,
-                                           final int shard,
+                                           final int slot,
                                            final Long deploymentId,
                                            final DeploymentDataDto deploymentData) {
         return selectActiveDeploymentLobbyResourcesByDeploymentIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         deploymentId)
                 .invoke(deploymentData::setLobbyResources)
                 .replaceWithVoid();
     }
 
     Uni<Void> fillDeploymentMatchmakerResources(final SqlConnection sqlConnection,
-                                                final int shard,
+                                                final int slot,
                                                 final Long deploymentId,
                                                 final DeploymentDataDto deploymentData) {
         return selectActiveDeploymentMatchmakerResourcesByDeploymentIdOperation.execute(sqlConnection,
-                        shard,
+                        slot,
                         deploymentId)
                 .invoke(deploymentData::setMatchmakerResources)
                 .replaceWithVoid();

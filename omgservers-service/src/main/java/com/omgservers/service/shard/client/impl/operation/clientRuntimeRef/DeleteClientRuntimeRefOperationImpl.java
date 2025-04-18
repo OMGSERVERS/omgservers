@@ -27,13 +27,13 @@ class DeleteClientRuntimeRefOperationImpl implements DeleteClientRuntimeRefOpera
     @Override
     public Uni<Boolean> deleteClientRuntimeRef(final ChangeContext<?> changeContext,
                                                final SqlConnection sqlConnection,
-                                               final int shard,
+                                               final int slot,
                                                final Long clientId,
                                                final Long id) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        update $shard.tab_client_runtime_ref
+                        update $slot.tab_client_runtime_ref
                         set modified = $3, deleted = true
                         where client_id = $1 and id = $2 and deleted = false
                         """,

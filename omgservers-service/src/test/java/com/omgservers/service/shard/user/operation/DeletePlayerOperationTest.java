@@ -39,27 +39,27 @@ class DeletePlayerOperationTest extends BaseTestClass {
 
     @Test
     void givenUserPlayer_whenExecute_thenDeleted() {
-        final var shard = 0;
+        final var slot = 0;
         final var user = userModelFactory.create(UserRoleEnum.PLAYER,
                 "passwordhash",
                 UserConfigDto.create());
-        upsertUserOperation.upsertUser(shard, user);
+        upsertUserOperation.upsertUser(slot, user);
         final var player = playerModelFactory.create(user.getId(), tenantId(), stageId());
         final var id = player.getId();
-        upsertPlayerOperation.upsertPlayer(shard, player);
+        upsertPlayerOperation.upsertPlayer(slot, player);
 
-        final var changeContext = deletePlayerOperation.deletePlayer(shard, user.getId(), id);
+        final var changeContext = deletePlayerOperation.deletePlayer(slot, user.getId(), id);
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.PLAYER_DELETED));
     }
 
     @Test
     void givenUnknownIds_whenExecute_thenSkip() {
-        final var shard = 0;
+        final var slot = 0;
         final var userId = generateIdOperation.generateId();
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deletePlayerOperation.deletePlayer(shard, userId, id);
+        final var changeContext = deletePlayerOperation.deletePlayer(slot, userId, id);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.PLAYER_DELETED));
     }

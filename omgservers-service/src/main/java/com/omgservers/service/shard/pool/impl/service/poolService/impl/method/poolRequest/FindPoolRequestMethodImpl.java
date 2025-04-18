@@ -29,7 +29,7 @@ class FindPoolRequestMethodImpl implements FindPoolRequestMethod {
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectPoolRequestByPoolIdAndRuntimeIdOperation
                         .execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 lobbyId,
                                 runtimeId))
                 .map(FindPoolRequestResponse::new);

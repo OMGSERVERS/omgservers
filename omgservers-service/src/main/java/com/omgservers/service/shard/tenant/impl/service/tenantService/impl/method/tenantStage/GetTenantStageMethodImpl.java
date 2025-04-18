@@ -26,7 +26,7 @@ class GetTenantStageMethodImpl implements GetTenantStageMethod {
         final var tenantId = request.getTenantId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectTenantStageOperation
-                        .execute(sqlConnection, shardModel.shard(), tenantId, id))
+                        .execute(sqlConnection, shardModel.slot(), tenantId, id))
                 .map(GetTenantStageResponse::new);
     }
 }

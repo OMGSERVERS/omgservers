@@ -10,7 +10,7 @@ import java.util.function.Function;
 public interface SelectObjectOperation {
 
     <T> Uni<T> selectObject(SqlConnection sqlConnection,
-                            int shard,
+                            int slot,
                             String sql,
                             List<?> parameters,
                             String objectName,

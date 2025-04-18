@@ -34,22 +34,22 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
                                                    final UpdateRuntimeStateRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var runtimeId = request.getRuntimeId();
         final var runtimeChangeOfState = request.getRuntimeChangeOfState();
         return changeWithContextOperation.<Void>changeWithContext((changeContext, sqlConnection) ->
                         deleteRuntimeCommands(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 runtimeId,
                                 runtimeChangeOfState.getRuntimeCommandsToDelete())
                                 .flatMap(voidItem -> upsertRuntimeAssignment(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         runtimeChangeOfState.getRuntimeAssignmentToSync()))
                                 .flatMap(voidItem -> deleteRuntimeAssignments(changeContext,
                                         sqlConnection,
-                                        shard,
+                                        slot,
                                         runtimeId,
                                         runtimeChangeOfState.getRuntimeAssignmentToDelete())))
                 .replaceWith(Boolean.TRUE)
@@ -58,7 +58,7 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
 
     Uni<Void> deleteRuntimeCommands(final ChangeContext<?> changeContext,
                                     final SqlConnection sqlConnection,
-                                    final int shard,
+                                    final int slot,
                                     final Long runtimeId,
                                     final List<Long> runtimeCommands) {
         return Multi.createFrom().iterable(runtimeCommands)
@@ -66,7 +66,7 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
                         deleteRuntimeCommandOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 runtimeId,
                                 runtimeCommandId))
                 .collect().asList()
@@ -75,13 +75,13 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
 
     Uni<Void> upsertRuntimeAssignment(final ChangeContext<?> changeContext,
                                       final SqlConnection sqlConnection,
-                                      final int shard,
+                                      final int slot,
                                       final List<RuntimeAssignmentModel> runtimeAssignments) {
         return Multi.createFrom().iterable(runtimeAssignments)
                 .onItem().transformToUniAndConcatenate(runtimeAssignment ->
                         upsertRuntimeAssignmentOperation.execute(changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 runtimeAssignment))
                 .collect().asList()
                 .replaceWithVoid();
@@ -89,7 +89,7 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
 
     Uni<Void> deleteRuntimeAssignments(final ChangeContext<?> changeContext,
                                        final SqlConnection sqlConnection,
-                                       final int shard,
+                                       final int slot,
                                        final Long runtimeId,
                                        final List<Long> runtimeAssignments) {
         return Multi.createFrom().iterable(runtimeAssignments)
@@ -97,7 +97,7 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
                         deleteRuntimeAssignmentOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shard,
+                                slot,
                                 runtimeId,
                                 runtimeAssignmentId))
                 .collect().asList()

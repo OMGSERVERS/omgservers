@@ -28,7 +28,7 @@ class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->
                         deleteLobbyOperation.execute(changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeleteLobbyResponse::new);

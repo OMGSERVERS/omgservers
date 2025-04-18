@@ -31,22 +31,22 @@ class DeleteRuntimeOperationTest extends BaseTestClass {
 
     @Test
     void givenRuntime_whenRuntimeTenant_thenDeleted() {
-        final var shard = 0;
+        final var slot = 0;
         final var runtime1 = runtimeModelFactory.create(tenantId(), versionId(), RuntimeQualifierEnum.MATCH,
                 new RuntimeConfigDto());
-        upsertRuntimeOperation.upsertRuntime(shard, runtime1);
+        upsertRuntimeOperation.upsertRuntime(slot, runtime1);
 
-        final var changeContext = deleteRuntimeOperation.deleteRuntime(shard, runtime1.getId());
+        final var changeContext = deleteRuntimeOperation.deleteRuntime(slot, runtime1.getId());
         assertTrue(changeContext.getResult());
         assertTrue(changeContext.contains(EventQualifierEnum.RUNTIME_DELETED));
     }
 
     @Test
     void givenUnknownUuid_whenDeleteTenant_thenSkip() {
-        final var shard = 0;
+        final var slot = 0;
         final var id = generateIdOperation.generateId();
 
-        final var changeContext = deleteRuntimeOperation.deleteRuntime(shard, id);
+        final var changeContext = deleteRuntimeOperation.deleteRuntime(slot, id);
         assertFalse(changeContext.getResult());
         assertFalse(changeContext.contains(EventQualifierEnum.RUNTIME_DELETED));
     }

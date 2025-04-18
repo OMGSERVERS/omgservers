@@ -28,7 +28,7 @@ class SyncMatchmakerMethodImpl implements SyncMatchmakerMethod {
         return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->
                         upsertMatchmakerOperation.execute(context,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 matchmaker))
                 .map(ChangeContext::getResult)
                 .map(SyncMatchmakerResponse::new);

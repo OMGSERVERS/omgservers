@@ -28,12 +28,12 @@ class UpsertPoolContainerOperationImpl implements UpsertPoolContainerOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final PoolContainerModel poolContainer) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_pool_container(
+                        insert into $slot.tab_pool_container(
                             id, idempotency_key, pool_id, server_id, created, modified, runtime_id, runtime_qualifier, config, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                         on conflict (id) do

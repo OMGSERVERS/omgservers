@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.client.impl.operation.clientMessage;
 
 import com.omgservers.schema.model.clientMessage.ClientMessageModel;
-import com.omgservers.service.shard.client.impl.mapper.ClientMessageModelMapper;
 import com.omgservers.service.operation.server.SelectListOperation;
+import com.omgservers.service.shard.client.impl.mapper.ClientMessageModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,17 +23,16 @@ class SelectActiveClientMessagesByClientIdOperationImpl
     final ClientMessageModelMapper clientMessageModelMapper;
 
     @Override
-    public Uni<List<ClientMessageModel>> selectActiveClientMessagesByClientId(
-            final SqlConnection sqlConnection,
-            final int shard,
-            final Long clientId) {
+    public Uni<List<ClientMessageModel>> selectActiveClientMessagesByClientId(final SqlConnection sqlConnection,
+                                                                              final int slot,
+                                                                              final Long clientId) {
         return selectListOperation.selectList(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, client_id, created, modified, qualifier, body, deleted
-                        from $shard.tab_client_message
+                        from $slot.tab_client_message
                         where client_id = $1 and deleted = false
                         order by id asc
                         """,

@@ -30,7 +30,7 @@ class DeleteRuntimeCommandMethodImpl implements DeleteRuntimeCommandMethod {
                         deleteRuntimeCommandOperation.execute(
                                 changeContext,
                                 sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 runtimeId,
                                 id))
                 .map(ChangeContext::getResult)

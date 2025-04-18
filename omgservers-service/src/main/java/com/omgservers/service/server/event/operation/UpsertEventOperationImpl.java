@@ -35,7 +35,7 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
                         changeContext,
                         sqlConnection,
                         """
-                                insert into $server.tab_event(
+                                insert into $shard.tab_event(
                                     id, idempotency_key, created, modified, qualifier, body, status, deleted)
                                 values($1, $2, $3, $4, $5, $6, $7, $8)
                                 on conflict (id) do

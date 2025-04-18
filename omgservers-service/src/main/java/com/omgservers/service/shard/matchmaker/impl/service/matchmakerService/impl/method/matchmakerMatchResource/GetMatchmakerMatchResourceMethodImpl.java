@@ -27,7 +27,7 @@ class GetMatchmakerMatchResourceMethodImpl implements GetMatchmakerMatchResource
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectMatchmakerMatchResourceOperation
-                        .execute(sqlConnection, shardModel.shard(), matchmakerId, id))
+                        .execute(sqlConnection, shardModel.slot(), matchmakerId, id))
                 .map(GetMatchmakerMatchResourceResponse::new);
     }
 }

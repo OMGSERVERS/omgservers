@@ -31,7 +31,7 @@ class DeleteTenantImageMethodImpl implements DeleteTenantImageMethod {
                         (changeContext, sqlConnection) ->
                                 deleteTenantImageOperation.execute(changeContext,
                                         sqlConnection,
-                                        shardModel.shard(),
+                                        shardModel.slot(),
                                         tenantId,
                                         id))
                 .map(ChangeContext::getResult)

@@ -29,19 +29,19 @@ class GetRuntimeStateMethodImpl implements GetRuntimeStateMethod {
                                                 final GetRuntimeStateRequest request) {
         log.trace("{}", request);
 
-        final var shard = shardModel.shard();
+        final var slot = shardModel.slot();
         final var runtimeId = request.getId();
         final var runtimeState = new RuntimeStateDto();
         return pgPool.withTransaction(sqlConnection ->
-                        selectRuntimeOperation.execute(sqlConnection, shard, runtimeId)
+                        selectRuntimeOperation.execute(sqlConnection, slot, runtimeId)
                                 .invoke(runtimeState::setRuntime)
                                 .flatMap(deployment ->
                                         selectActiveRuntimeCommandsByRuntimeIdOperation
-                                                .execute(sqlConnection, shard, runtimeId)
+                                                .execute(sqlConnection, slot, runtimeId)
                                                 .invoke(runtimeState::setRuntimeCommands))
                                 .flatMap(runtimeCommands ->
                                         selectActiveRuntimeAssignmentsByRuntimeIdOperation
-                                                .execute(sqlConnection, shard, runtimeId)
+                                                .execute(sqlConnection, slot, runtimeId)
                                                 .invoke(runtimeState::setRuntimeAssignments)))
                 .replaceWith(runtimeState)
                 .map(GetRuntimeStateResponse::new);

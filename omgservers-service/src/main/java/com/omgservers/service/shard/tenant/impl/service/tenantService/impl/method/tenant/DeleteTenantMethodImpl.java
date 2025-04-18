@@ -30,7 +30,7 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> deleteTenantOperation
-                                .execute(changeContext, sqlConnection, shardModel.shard(), id))
+                                .execute(changeContext, sqlConnection, shardModel.slot(), id))
                 .map(ChangeContext::getResult)
                 .map(DeleteTenantResponse::new);
     }

@@ -29,7 +29,7 @@ class ViewDeploymentCommandsMethodImpl implements ViewDeploymentCommandsMethod {
 
         return pgPool.withTransaction(
                         sqlConnection -> selectActiveDeploymentCommandsByDeploymentIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 deploymentId
                         ))
                 .map(ViewDeploymentCommandsResponse::new);

@@ -22,15 +22,15 @@ class SelectDeploymentOperationImpl implements SelectDeploymentOperation {
 
     @Override
     public Uni<DeploymentModel> execute(final SqlConnection sqlConnection,
-                                        final int shard,
+                                        final int slot,
                                         final Long id) {
         return selectObjectOperation.selectObject(
                 sqlConnection,
-                shard,
+                slot,
                 """
                         select
                             id, idempotency_key, created, modified, tenant_id, stage_id, version_id, config, deleted
-                        from $shard.tab_deployment
+                        from $slot.tab_deployment
                         where id = $1
                         limit 1
                         """,

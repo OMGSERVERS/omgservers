@@ -54,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<GetClientResponse> execute(@Valid final GetClientRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 getClientMethod::execute);
@@ -62,7 +62,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<SyncClientResponse> execute(@Valid final SyncClientRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 syncClientMethod::execute);
@@ -70,7 +70,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<DeleteClientResponse> execute(@Valid final DeleteClientRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 deleteClientMethod::execute);
@@ -83,7 +83,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<ViewClientMessagesResponse> execute(
             @Valid final ViewClientMessagesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 viewClientMessagesMethod::execute);
@@ -91,7 +91,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<SyncClientMessageResponse> execute(@Valid final SyncClientMessageRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 syncClientMessageMethod::execute);
@@ -118,7 +118,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<DeleteClientMessagesResponse> execute(
             @Valid final DeleteClientMessagesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 deleteClientMessagesMethod::execute);
@@ -126,7 +126,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<InterchangeMessagesResponse> execute(@Valid final InterchangeMessagesRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 interchangeMessagesMethod::execute);
@@ -138,7 +138,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<GetClientRuntimeRefResponse> execute(@Valid final GetClientRuntimeRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 getClientRuntimeRefMethod::execute);
@@ -146,7 +146,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<FindClientRuntimeRefResponse> execute(@Valid final FindClientRuntimeRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 findClientRuntimeRefMethod::execute);
@@ -154,7 +154,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<ViewClientRuntimeRefsResponse> execute(@Valid final ViewClientRuntimeRefsRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 viewClientRuntimeRefsMethod::execute);
@@ -162,7 +162,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Uni<SyncClientRuntimeRefResponse> execute(@Valid final SyncClientRuntimeRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 syncClientRuntimeRefMethod::execute);
@@ -188,7 +188,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Uni<DeleteClientRuntimeRefResponse> execute(
             @Valid final DeleteClientRuntimeRefRequest request) {
-        return handleShardedRequestOperation.handleShardedRequest(log, request,
+        return handleShardedRequestOperation.execute(log, request,
                 getClientModuleClientOperation::getClient,
                 ClientModuleClient::execute,
                 deleteClientRuntimeRefMethod::execute);

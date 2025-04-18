@@ -1,13 +1,14 @@
 package com.omgservers.service.operation.server;
 
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.shard.ShardModel;
+import com.omgservers.service.exception.ServerSideInternalException;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -20,42 +21,39 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
     final GetIndexConfigOperation getIndexConfigOperation;
 
     @Override
-    public Uni<ShardModel> calculateShard(String... keys) {
-        return calculateShard(List.of(keys));
+    public Uni<ShardModel> execute(String... keys) {
+        return execute(List.of(keys));
     }
 
     @Override
-    public Uni<ShardModel> calculateShard(List<String> keys) {
+    public Uni<ShardModel> execute(List<String> keys) {
         return getIndexConfigOperation.execute()
                 .map(indexConfig -> {
-                    final var shardIndex = calculateShard(indexConfig.getTotalShardCount(), keys);
-                    final var shardServerUri = indexConfig.getServerUri(shardIndex);
-                    final var thisServerUri = getServiceConfigOperation.getServiceConfig().server().uri();
-                    final var foreign = !shardServerUri.equals(thisServerUri);
-                    final var locked = indexConfig.getLockedShards().contains(shardIndex);
+                    final var slot = execute(indexConfig.getTotalSlotsCount(), keys);
+                    final var shardUriOptional = indexConfig.getShardUri(slot);
+                    if (shardUriOptional.isEmpty()) {
+                        throw new ServerSideInternalException(ExceptionQualifierEnum.INTERNAL_EXCEPTION_OCCURRED,
+                                "failed to get shard uri");
+                    }
+                    final var shardUri = shardUriOptional.get();
 
-                    final var shardModel = new ShardModel(shardIndex, shardServerUri, foreign, locked);
+                    final var thisUri = getServiceConfigOperation.getServiceConfig().server().uri();
+                    final var foreign = !shardUri.equals(thisUri);
+                    final var locked = indexConfig.getLockedSlots().contains(slot);
+
+                    final var shardModel = new ShardModel(slot, shardUri, foreign, locked);
                     return shardModel;
                 });
     }
 
-    @Override
-    public Integer calculateShard(Integer indexShardCount, String... keys) {
-        return calculateShard(indexShardCount, Arrays.asList(keys));
+    Integer execute(final Integer indexShardCount, final String... keys) {
+        return execute(indexShardCount, List.of(keys));
     }
 
-    @Override
-    public Integer calculateShard(Integer indexShardCount, List<String> keys) {
-        if (indexShardCount == null) {
-            throw new IllegalArgumentException("indexShardCount is null");
-        }
-        if (keys.isEmpty()) {
-            throw new IllegalArgumentException("keys is empty");
-        }
-
+    Integer execute(final Integer indexShardCount, final List<String> keys) {
         final var hashKey = String.join("/", keys);
         final var keyBytes = hashKey.getBytes(StandardCharsets.UTF_8);
-        final var crc16 = calculateCrc16Operation.calculateCrc16(keyBytes);
+        final var crc16 = calculateCrc16Operation.execute(keyBytes);
         final var shard = crc16 % indexShardCount;
         return shard;
     }

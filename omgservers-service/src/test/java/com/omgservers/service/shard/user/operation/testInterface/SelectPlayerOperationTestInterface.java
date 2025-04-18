@@ -19,12 +19,12 @@ public class SelectPlayerOperationTestInterface {
 
     final PgPool pgPool;
 
-    public PlayerModel selectPlayer(final int shard,
+    public PlayerModel selectPlayer(final int slot,
                                     final Long userId,
                                     final Long id,
                                     final Boolean deleted) {
         return pgPool.withTransaction(sqlConnection -> selectPlayerOperation
-                        .execute(sqlConnection, shard, userId, id))
+                        .execute(sqlConnection, slot, userId, id))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

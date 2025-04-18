@@ -27,7 +27,7 @@ class ViewDeploymentRequestsMethodImpl implements ViewDeploymentRequestsMethod {
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(sqlConnection ->
                         selectActiveDeploymentRequestsByDeploymentIdOperation.execute(sqlConnection,
-                                shardModel.shard(),
+                                shardModel.slot(),
                                 deploymentId))
                 .map(ViewDeploymentRequestsResponse::new);
     }

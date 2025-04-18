@@ -24,12 +24,12 @@ class UpsertRootEntityRefOperationImpl implements UpsertRootEntityRefOperation {
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
-                                final int shard,
+                                final int slot,
                                 final RootEntityRefModel rootEntityRefModel) {
         return changeObjectOperation.execute(
-                changeContext, sqlConnection, shard,
+                changeContext, sqlConnection, slot,
                 """
-                        insert into $shard.tab_root_entity_ref(
+                        insert into $slot.tab_root_entity_ref(
                             id, idempotency_key, root_id, created, modified, qualifier, entity_id, deleted)
                         values($1, $2, $3, $4, $5, $6, $7, $8)
                         on conflict (id) do
