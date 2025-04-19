@@ -12,6 +12,4 @@ import java.net.URI;
 public class PingDockerHostAdminResponse {
 
     Boolean successful;
-
-    URI fromServer;
 }

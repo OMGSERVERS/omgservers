@@ -37,7 +37,7 @@ class CalculateShardOperationImpl implements CalculateShardOperation {
                     }
                     final var shardUri = shardUriOptional.get();
 
-                    final var thisUri = getServiceConfigOperation.getServiceConfig().server().uri();
+                    final var thisUri = getServiceConfigOperation.getServiceConfig().shard().uri();
                     final var foreign = !shardUri.equals(thisUri);
                     final var locked = indexConfig.getLockedSlots().contains(slot);
 

@@ -29,19 +29,16 @@ class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperati
     @Override
     public synchronized DockerClient getClient(final URI uri) {
         if (!cache.containsKey(uri)) {
-            final var tlsVerify = getServiceConfigOperation.getServiceConfig().dockerClient().tlsVerify();
-            final var certPath = getServiceConfigOperation.getServiceConfig().dockerClient().certPath();
+            final var tlsVerify = getServiceConfigOperation.getServiceConfig().docker().tlsVerify();
+            final var certPath = getServiceConfigOperation.getServiceConfig().docker().certPath();
 
             final var config = DefaultDockerClientConfig.createDefaultConfigBuilder()
                     .withDockerHost(uri.toString())
                     .withDockerTlsVerify(tlsVerify)
                     .withDockerCertPath(certPath)
-                    .withRegistryUrl(getServiceConfigOperation
-                            .getServiceConfig().registry().uri().toString())
-                    .withRegistryUsername(getServiceConfigOperation
-                            .getServiceConfig().server().serviceUser().alias())
-                    .withRegistryPassword(getServiceConfigOperation
-                            .getServiceConfig().server().serviceUser().password())
+                    .withRegistryUrl(getServiceConfigOperation.getServiceConfig().registry().uri().toString())
+                    .withRegistryUsername(getServiceConfigOperation.getServiceConfig().user().alias())
+                    .withRegistryPassword(getServiceConfigOperation.getServiceConfig().user().password())
                     .build();
 
             final var httpClient = new ZerodepDockerHttpClient.Builder()

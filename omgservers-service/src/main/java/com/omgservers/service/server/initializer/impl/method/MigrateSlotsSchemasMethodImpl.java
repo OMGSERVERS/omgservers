@@ -38,19 +38,19 @@ class MigrateSlotsSchemasMethodImpl implements MigrateSlotsSchemasMethod {
     public Uni<Void> migrateSchemas() {
         return getIndexConfigOperation.execute()
                 .flatMap(indexConfig -> {
-                    final var serverUri = getServiceConfigOperation.getServiceConfig().server().uri();
+                    final var shardUri = getServiceConfigOperation.getServiceConfig().shard().uri();
                     return indexConfig.getShards().stream()
-                            .filter(s -> s.getUri().equals(serverUri))
+                            .filter(s -> s.getUri().equals(shardUri))
                             .map(IndexShardDto::getSlots)
                             .findFirst()
                             .map(slots -> {
-                                final var migrationConcurrency = getServiceConfigOperation.getServiceConfig()
-                                        .initialization().databaseSchema().concurrency();
+                                final var concurrency = getServiceConfigOperation.getServiceConfig()
+                                        .migration().concurrency();
                                 final var migrationTasks = slots.stream()
                                         .map(this::migrateSlotSchema)
                                         .toList();
                                 return Uni.join().all(migrationTasks)
-                                        .usingConcurrencyOf(migrationConcurrency)
+                                        .usingConcurrencyOf(concurrency)
                                         .andFailFast().replaceWithVoid();
                             })
                             .orElse(Uni.createFrom().voidItem());

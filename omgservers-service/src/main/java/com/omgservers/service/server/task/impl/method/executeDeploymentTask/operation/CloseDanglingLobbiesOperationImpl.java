@@ -38,8 +38,8 @@ class CloseDanglingLobbiesOperationImpl implements CloseDanglingLobbiesOperation
                 .filter(deploymentLobbyResource -> {
                     final var lobbyResourceCreated = deploymentLobbyResource.getCreated();
                     final var lobbyCurrentLifetime = Duration.between(lobbyResourceCreated, Instant.now());
-                    final var lobbyMinLifetime = getServiceConfigOperation.getServiceConfig().runtimes()
-                            .lobby().minLifetime();
+                    final var lobbyMinLifetime = getServiceConfigOperation.getServiceConfig().runtime()
+                            .minLifetime();
                     return lobbyCurrentLifetime.toSeconds() > lobbyMinLifetime;
                 })
                 .map(deploymentLobbyResource -> {

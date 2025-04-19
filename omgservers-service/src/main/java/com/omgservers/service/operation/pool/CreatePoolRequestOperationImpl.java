@@ -105,10 +105,10 @@ class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
 
                     // TODO: get limits from version config
                     final var defaultCpuLimit = getServiceConfigOperation.getServiceConfig()
-                            .runtimes().defaultCpuLimit();
+                            .runtime().defaultCpuLimit();
                     containerConfig.setCpuLimitInMilliseconds(defaultCpuLimit);
                     final var defaultMemoryLimit = getServiceConfigOperation.getServiceConfig()
-                            .runtimes().defaultMemoryLimit();
+                            .runtime().defaultMemoryLimit();
                     containerConfig.setMemoryLimitInMegabytes(defaultMemoryLimit);
 
                     containerConfig.setEnvironment(environment);

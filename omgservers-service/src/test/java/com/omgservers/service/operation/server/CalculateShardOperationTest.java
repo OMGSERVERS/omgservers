@@ -19,7 +19,7 @@ class CalculateShardOperationTest extends BaseTestClass {
     @Test
     void givenSingleHashKey_whenCalculateShard() {
         final var shardModel = calculateShardOperation.execute("key").await().indefinitely();
-        final var slotsCount = getServiceConfigOperation.getServiceConfig().server().slotsCount();
+        final var slotsCount = getServiceConfigOperation.getServiceConfig().index().slotsCount();
         final var slot = shardModel.slot();
         assertNotNull(shardModel);
         assertTrue(slot >= 0 && slot < slotsCount);

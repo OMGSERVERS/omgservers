@@ -24,7 +24,7 @@ class CreateClientDispatcherConnectionUrlOperationImpl implements CreateClientDi
 
     @Override
     public URI execute(final Long clientId, final Long runtimeId) {
-        final var dispatcherUri = getServiceConfigOperation.getServiceConfig().dispatcher().externalUri();
+        final var dispatcherUri = getServiceConfigOperation.getServiceConfig().client().dispatcherUri();
         final var wsToken = issueJwtTokenOperation.issueWsJwtToken(clientId, runtimeId, UserRoleEnum.PLAYER);
 
         final var connectionUrl = UriBuilder.fromUri(dispatcherUri)
