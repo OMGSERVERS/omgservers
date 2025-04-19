@@ -12,9 +12,9 @@ class PrepareSqlOperationImpl implements PrepareSqlOperation {
     final String shardSchema;
 
     public PrepareSqlOperationImpl(final GetServiceConfigOperation getServiceConfigOperation) {
-        final var serverId = getServiceConfigOperation.getServiceConfig().server().id();
-        masterSchema = String.format(DatabaseSchemaConfiguration.MASTER_SCHEMA_FORMAT, serverId);
-        shardSchema = String.format(DatabaseSchemaConfiguration.SHARD_SCHEMA_FORMAT, serverId);
+        final var shardId = getServiceConfigOperation.getServiceConfig().shard().id();
+        masterSchema = String.format(DatabaseSchemaConfiguration.MASTER_SCHEMA_FORMAT, shardId);
+        shardSchema = String.format(DatabaseSchemaConfiguration.SHARD_SCHEMA_FORMAT, shardId);
     }
 
     @Override

@@ -33,12 +33,12 @@ class MigrateShardSchemaMethodImpl implements MigrateShardSchemaMethod {
     }
 
     void migrateServerSchema() {
-        final var serverId = getServiceConfigOperation.getServiceConfig().server().id();
+        final var shardId = getServiceConfigOperation.getServiceConfig().shard().id();
         final var flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .locations(SCRIPTS_LOCATION)
                 .createSchemas(true)
-                .defaultSchema(String.format(DatabaseSchemaConfiguration.SHARD_SCHEMA_FORMAT, serverId))
+                .defaultSchema(String.format(DatabaseSchemaConfiguration.SHARD_SCHEMA_FORMAT, shardId))
                 .load();
         flyway.migrate();
     }

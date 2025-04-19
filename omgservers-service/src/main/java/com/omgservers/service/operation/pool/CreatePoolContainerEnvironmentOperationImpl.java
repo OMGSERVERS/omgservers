@@ -27,12 +27,7 @@ class CreatePoolContainerEnvironmentOperationImpl implements CreatePoolContainer
         environment.put(PoolContainerEnvironmentEnum.PASSWORD, password);
         environment.put(PoolContainerEnvironmentEnum.QUALIFIER, runtime.getQualifier().toString());
 
-        final URI serviceUri;
-        if (getServiceConfigOperation.getServiceConfig().runtimes().overriding().enabled()) {
-            serviceUri = getServiceConfigOperation.getServiceConfig().runtimes().overriding().uri();
-        } else {
-            serviceUri = getServiceConfigOperation.getServiceConfig().server().uri();
-        }
+        final var serviceUri = getServiceConfigOperation.getServiceConfig().runtime().serviceUri();
         environment.put(PoolContainerEnvironmentEnum.SERVICE_URL, serviceUri.toString());
 
         return Uni.createFrom().item(environment);

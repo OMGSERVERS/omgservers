@@ -24,7 +24,7 @@ class CreateRuntimeDispatcherConnectionUrlOperationImpl implements CreateRuntime
 
     @Override
     public URI execute(final Long userId, final Long runtimeId) {
-        final var dispatcherUri = getServiceConfigOperation.getServiceConfig().dispatcher().internalUri();
+        final var dispatcherUri = getServiceConfigOperation.getServiceConfig().runtime().dispatcherUri();
         final var wsToken = issueJwtTokenOperation.issueWsJwtToken(userId, runtimeId, UserRoleEnum.RUNTIME);
 
         final var connectionUrl = UriBuilder.fromUri(dispatcherUri)

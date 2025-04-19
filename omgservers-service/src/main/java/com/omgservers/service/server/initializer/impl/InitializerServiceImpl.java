@@ -80,7 +80,7 @@ class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> scheduleEventHandlerJob() {
-        if (!getServiceConfigOperation.getServiceConfig().initialization().eventHandlerJob().enabled()) {
+        if (!getServiceConfigOperation.getServiceConfig().jobs().eventHandler().enabled()) {
             return Uni.createFrom().voidItem();
         }
 
@@ -89,7 +89,7 @@ class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> scheduleSchedulerJob() {
-        if (!getServiceConfigOperation.getServiceConfig().initialization().schedulerJob().enabled()) {
+        if (!getServiceConfigOperation.getServiceConfig().jobs().scheduler().enabled()) {
             return Uni.createFrom().voidItem();
         }
 
@@ -98,7 +98,7 @@ class InitializerServiceImpl implements InitializerService {
     }
 
     Uni<Void> scheduleBootstrapJob() {
-        if (!getServiceConfigOperation.getServiceConfig().initialization().bootstrapJob().enabled()) {
+        if (!getServiceConfigOperation.getServiceConfig().jobs().bootstrap().enabled()) {
             return Uni.createFrom().voidItem();
         }
 

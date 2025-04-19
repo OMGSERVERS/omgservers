@@ -34,7 +34,7 @@ class HandleRuntimeLastActivityOperationImpl implements HandleRuntimeLastActivit
                         final HandleRuntimeResult handleRuntimeResult) {
 
         final var runtimeLastActivity = fetchRuntimeResult.lastActivity();
-        final var maxInactiveInterval = getServiceConfigOperation.getServiceConfig().runtimes()
+        final var maxInactiveInterval = getServiceConfigOperation.getServiceConfig().runtime()
                 .inactiveInterval();
         final var currentInactiveInterval = Duration.between(runtimeLastActivity, Instant.now());
 

@@ -23,9 +23,9 @@ class ScheduleBootstrapJobMethodImpl implements ScheduleBootstrapJobMethod {
     public void execute() {
         log.debug("Schedule bootstrap job");
 
-        final var masterUri = getServiceConfigOperation.getServiceConfig().server().masterUri();
-        final var serverUri = getServiceConfigOperation.getServiceConfig().server().uri();
-        if (masterUri.equals(serverUri)) {
+        final var masterUri = getServiceConfigOperation.getServiceConfig().master().uri();
+        final var thisUri = getServiceConfigOperation.getServiceConfig().shard().uri();
+        if (masterUri.equals(thisUri)) {
             scheduleJobExecutionOperation.execute(JobQualifierEnum.BOOTSTRAP,
                     scheduledExecution -> {
                         final var request = new ExecuteBootstrapTaskRequest();

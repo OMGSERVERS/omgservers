@@ -23,11 +23,11 @@ class HandleMasterRequestOperationImpl implements HandleMasterRequestOperation {
                                                           final Function<URI, C> api,
                                                           final BiFunction<C, T, Uni<R>> route,
                                                           final Function<T, Uni<R>> handle) {
-        final var masterUri = getServiceConfigOperation.getServiceConfig().server().masterUri();
-        final var serverUri = getServiceConfigOperation.getServiceConfig().server().uri();
+        final var masterUri = getServiceConfigOperation.getServiceConfig().master().uri();
+        final var thisUri = getServiceConfigOperation.getServiceConfig().shard().uri();
 
         final Uni<R> operation;
-        if (masterUri.equals(serverUri)) {
+        if (masterUri.equals(thisUri)) {
             log.trace("Handle request, request={}", request);
             operation = handle.apply(request);
         } else {

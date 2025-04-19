@@ -44,7 +44,7 @@ public class ServiceHeadersFactory extends ReactiveClientHeadersFactory {
     }
 
     HeadersProvider createHeadersProvider() {
-        final var userAgent = getServiceConfigOperation.getServiceConfig().server().uri().getHost();
+        final var userAgent = getServiceConfigOperation.getServiceConfig().shard().uri().getHost();
         final var serviceToken = stateService.execute(new GetServiceTokenRequest()).getServiceToken();
 
         if (Objects.nonNull(serviceToken)) {

@@ -23,7 +23,7 @@ class HandleClientsLastActivitiesOperationImpl implements HandleClientsLastActiv
                         final HandleRuntimeResult handleRuntimeResult) {
 
         final var lastActivityByClientId = fetchRuntimeResult.lastActivityByClientId();
-        final var maxInactiveInterval = getServiceConfigOperation.getServiceConfig().clients()
+        final var maxInactiveInterval = getServiceConfigOperation.getServiceConfig().client()
                 .inactiveInterval();
 
         fetchRuntimeResult.runtimeState().getRuntimeAssignments()

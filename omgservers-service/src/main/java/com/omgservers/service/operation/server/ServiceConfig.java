@@ -11,139 +11,131 @@ import java.util.Optional;
 @ConfigMapping(prefix = "omgservers")
 public interface ServiceConfig {
 
-    ServerConfig server();
+    UserConfig user();
 
-    ClientsConfig clients();
+    JwtConfig jwt();
 
-    DockerClientConfig dockerClient();
+    MigrationConfig migration();
 
-    RuntimesConfig runtimes();
+    IndexConfig index();
 
-    DispatcherConfig dispatcher();
+    MasterConfig master();
+
+    ShardConfig shard();
+
+    ClientConfig client();
+
+    DockerConfig docker();
+
+    RuntimeConfig runtime();
 
     RegistryConfig registry();
 
-    FeatureFlagsConfig featureFlags();
+    FeaturesConfig features();
+
+    JobsConfig jobs();
 
     BootstrapConfig bootstrap();
 
-    InitializationConfig initialization();
-
-    interface ServerConfig {
-        long id();
-
-        String jwtIssuer();
-
-        String x5c();
-
-        ServiceUserConfig serviceUser();
-
-        URI uri();
-
-        URI masterUri();
-
-        int slotsCount();
-    }
-
-    interface ServiceUserConfig {
+    interface UserConfig {
         String alias();
 
         String password();
     }
 
-    interface InitializationDatabaseSchemaConfig {
+    interface JwtConfig {
+        String issuer();
+
+        String x5c();
+    }
+
+    interface MigrationConfig {
         boolean enabled();
 
         int concurrency();
     }
 
-    interface InitializationServerIndexConfig {
+    interface IndexConfig {
+
         boolean enabled();
 
-        List<URI> servers();
+        List<URI> shards();
+
+        int slotsCount();
     }
 
-    interface InitializationEventHandlerJobConfig {
-        boolean enabled();
+    interface MasterConfig {
+        URI uri();
     }
 
-    interface InitializationSchedulerJobConfig {
-        boolean enabled();
+    interface ShardConfig {
+        long id();
+
+        URI uri();
     }
 
-    interface InitializationBootstrapJobConfig {
-        boolean enabled();
-    }
-
-    interface ClientsConfig {
-        long tokenLifetime();
-
+    interface ClientConfig {
         long inactiveInterval();
+
+        URI dispatcherUri();
     }
 
-    interface DockerClientConfig {
+    interface DockerConfig {
         boolean tlsVerify();
 
         @WithConverter(UserHomeConverter.class)
         String certPath();
     }
 
-    interface RuntimesConfig {
+    interface RuntimeConfig {
         long inactiveInterval();
 
-        RuntimesLobbyConfig lobby();
+        long minLifetime();
 
         String dockerNetwork();
 
-        RuntimesOverridingConfig overriding();
+        URI serviceUri();
+
+        URI dispatcherUri();
 
         long defaultCpuLimit();
 
         long defaultMemoryLimit();
     }
 
-    interface DispatcherConfig {
-        URI externalUri();
-
-        URI internalUri();
-    }
-
-    interface RuntimesOverridingConfig {
-        boolean enabled();
-
+    interface RegistryConfig {
         URI uri();
     }
 
-    interface RuntimesLobbyConfig {
-        long minLifetime();
+    interface FeaturesConfig {
     }
 
-    interface InitializationConfig {
-        InitializationDatabaseSchemaConfig databaseSchema();
+    interface JobsConfig {
+        JobsJobConfig eventHandler();
 
-        InitializationServerIndexConfig serverIndex();
+        JobsJobConfig scheduler();
 
-        InitializationEventHandlerJobConfig eventHandlerJob();
+        JobsJobConfig bootstrap();
+    }
 
-        InitializationSchedulerJobConfig schedulerJob();
-
-        InitializationBootstrapJobConfig bootstrapJob();
+    interface JobsJobConfig {
+        boolean enabled();
     }
 
     interface BootstrapConfig {
 
         boolean enabled();
 
-        BootstrapUserPasswordConfig adminUser();
+        BootstrapDefaultUserConfig adminUser();
 
-        BootstrapUserPasswordConfig supportUser();
+        BootstrapDefaultUserConfig supportUser();
 
-        BootstrapUserPasswordConfig serviceUser();
+        BootstrapDefaultUserConfig serviceUser();
 
         BootstrapDefaultPoolConfig defaultPool();
     }
 
-    interface BootstrapUserPasswordConfig {
+    interface BootstrapDefaultUserConfig {
         String alias();
 
         Optional<String> password();
@@ -157,7 +149,7 @@ public interface ServiceConfig {
 
     interface BootstrapDefaultPoolServerConfig {
 
-        URI externalUri();
+        URI serverUri();
 
         URI dockerDaemonUri();
 
@@ -166,13 +158,6 @@ public interface ServiceConfig {
         int memorySize();
 
         int maxContainers();
-    }
-
-    interface RegistryConfig {
-        URI uri();
-    }
-
-    interface FeatureFlagsConfig {
     }
 
     class UserHomeConverter implements Converter<String> {

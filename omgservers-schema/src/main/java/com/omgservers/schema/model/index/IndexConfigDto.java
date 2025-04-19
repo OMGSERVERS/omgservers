@@ -21,15 +21,15 @@ import java.util.Optional;
 @AllArgsConstructor
 public class IndexConfigDto {
 
-    static public IndexConfigDto create(final List<URI> uris, final int slotsCount) {
+    static public IndexConfigDto create(final List<URI> shards, final int slotsCount) {
         final var indexConfig = new IndexConfigDto();
         indexConfig.setVersion(IndexConfigVersionEnum.V1);
         indexConfig.setTotalSlotsCount(slotsCount);
 
-        final var shardsCount = uris.size();
-        final var shards = new ArrayList<IndexShardDto>();
+        final var shardsCount = shards.size();
+        final var indexShards = new ArrayList<IndexShardDto>();
         for (int shardIndex = 0; shardIndex < shardsCount; shardIndex++) {
-            final var shardUri = uris.get(shardIndex);
+            final var shardUri = shards.get(shardIndex);
             final var shardSlots = new ArrayList<Integer>();
 
             int slot = shardIndex;
@@ -39,10 +39,10 @@ public class IndexConfigDto {
             }
 
             final var indexShard = IndexShardDto.create(shardUri, shardSlots);
-            shards.add(indexShard);
+            indexShards.add(indexShard);
         }
 
-        indexConfig.setShards(shards);
+        indexConfig.setShards(indexShards);
         indexConfig.setLockedSlots(List.of());
 
         return indexConfig;
