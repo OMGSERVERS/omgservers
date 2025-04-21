@@ -19,7 +19,7 @@
     </properties>
 
     <modules>
-        <module>development-environment</module>
+        <module>singleinstance-environment</module>
         <module>integration-environment</module>
         <module>localtesting-environment</module>
         <module>multiinstance-environment</module>

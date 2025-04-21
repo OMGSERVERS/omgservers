@@ -5,7 +5,5 @@ import io.smallrye.config.ConfigMapping;
 @ConfigMapping(prefix = "omgservers")
 public interface DispatcherConfig {
 
-    String idleConnectionsHandlerJobInterval();
-
-    long idleConnectionsTimeout();
+    long idleConnectionTimeout();
 }

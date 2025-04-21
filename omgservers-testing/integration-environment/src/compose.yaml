@@ -4,6 +4,7 @@ services:
   ingress:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "ingress"
+    command: "-c /etc/envoy/ingress_config.yaml"
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -11,16 +12,27 @@ services:
       - omgservers
     volumes:
       - ./ingress_config.yaml:/etc/envoy/ingress_config.yaml:ro
-    command: "-c /etc/envoy/ingress_config.yaml"
   docker:
     image: "alpine/socat"
     container_name: "docker"
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
     restart: unless-stopped
     networks:
       - omgservers
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
+  registry:
+    image: "registry:2.8.3"
+    container_name: "registry"
+    command: "/etc/docker/registry/registry_config.yaml"
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      - omgservers
+    volumes:
+      - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
+      - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
   cache:
     image: redis:7
     container_name: "cache"
@@ -29,28 +41,16 @@ services:
       - "6379:6379"
     networks:
       - omgservers
-  registry:
-    image: "registry:2.8.3"
-    container_name: "registry"
-    restart: unless-stopped
-    volumes:
-      - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
-      - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
-    ports:
-      - "5000:5000"
-    networks:
-      - omgservers
-    command: "/etc/docker/registry/registry_config.yaml"
-  # service1
+  # shard1
   gateway1:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "gateway1"
+    command: "-c /etc/envoy/gateway_config.yaml"
     restart: unless-stopped
     networks:
       - omgservers
     volumes:
       - ./gateway1_config.yaml:/etc/envoy/gateway_config.yaml:ro
-    command: "-c /etc/envoy/gateway_config.yaml"
   database1:
     image: "postgres:16.1"
     container_name: "database1"
@@ -65,48 +65,49 @@ services:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service1"
     restart: unless-stopped
-    networks:
-      - omgservers
     depends_on:
       - database1
-    volumes:
-      - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
-      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
+    networks:
+      - omgservers
     environment:
-      - OMGSERVERS_SHARD_URI=http://gateway1:8080
-      - OMGSERVERS_MASTER_URI=http://gateway1:8080
-      - OMGSERVERS_SHARD_ID=1
-      - OMGSERVERS_INDEX_SLOTS_COUNT=3
-      - OMGSERVERS_JWT_X5C=MIIFGDCCAwCgAwIBAgIUMFIuRDQIpaoal+4IpE4qLAaWCJAwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UEAwwRY2Eub21nc2VydmVycy5jb20wHhcNMjQwNzI2MjAyNzM2WhcNMjcwNzI2MjAyNzM2WjAVMRMwEQYDVQQDDApvbWdzZXJ2ZXJzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsu6S++nQyen62g5+Q8bEr5ZYm/Cy2lgd8VqPoPrzQNrPBIPZPPEzMSlpFWF4CDbKHcsqpSvyYL/idzDYt/gbpI+CTK7uXNk9irgrnKII3K6fNTlfzj/10vWR1CIgpEW3uyHoQCsj1XQ7YTwIc9v+NzYe+F6tcHnUqFBiz/2g3eQvvMLwIJXbIVk2399bPgkR4X1KCBcTYosB9AG2IzopqyJKeueYbCIF9eMJEBgsRqYK0vWDahVMNC7U96ZgENVIf2VEEtTAYDDbr4o6Iw2B9vByoArgJsmegH4TptuW3RI8y0srsAWQOwZ9/doEPaXYHirs+UR9Qy6urg6ReLVr5FddfYBymIb4W3GtiVjKqtc+v5tXa89FjpG+osnYkRUT2EmLaQc0osnoCrrudiokwAOzN84QWB9RVp20nbfcPrr4ITUlMQFpRZadaPSpFd4iF3PeB21IpKqBiupaGHne0twNfjTiIobTB6oTM0LZqTpYHyl3HQ03mPM5jTcQqPAZgLqLga7feYjOz5GoBazeazzAN4OqSj5/o3ShIK0aN5YvL/7jDnqfnKCCXnuKjRblomzCt34kTeGbjqJ/NB9YvW03egPhPoUQ6BGi8FcmNbSo8f+j2f2lN9uK5z+OO6Ky0CtB+26z6DOhAk6zm0rkYji2/gfS5ftIY8zDIZ3XKJMCAwEAAaNZMFcwFQYDVR0RBA4wDIIKb21nc2VydmVyczAdBgNVHQ4EFgQUxAacQCyFYdsLI+6OW4E23BvT6hIwHwYDVR0jBBgwFoAUlm8JZMuyJ+wuvzE1yXsSbYxPDmQwDQYJKoZIhvcNAQELBQADggIBAJ0O/aTm8N6vaQoerUCtswv2uHObA4fy3rC/e/TEpbeA/utUnYX+uCmjqBjplIHPoB95njMJDbtCbkPv1Y1+vxvoVTn38Ty/S12PnoX2eow/PCQnscixzB9jwbw/fO/UzujFOfc0aKbTlbqQCYXZG466MpBS/Edh0FQtZXxYowKZ7uQg9o675vMXg8tMmODt0IxaUf33bvoN41G+n0/3078RLnLNAyvPoGMdW2FZscjn+3oIZEx78dB+Kmp9JTDcLmxoduJvxduytg7zgcR6pz06th3WYgpBla1Tmreqmz4m4/Gm9W05vl1bwiF/YfackbQ/1jOD9CoKkOMhF1A+q2Rg3ypEDGbjsQJJv6SDfbaIdPXZECl3VR1Pt6oQzskMuKj/1vtqNbRanJdznUq0dZ3KYkuCtRl292Da05SuTIDA36Vmum7WS0uoBcug9TGw3BYQcBdWw09IOkDPOILvFafpxfgnMYNnUOL19EaQDhi/dY4BWInlB27zSrCH5DqVvm+xs2GxIu+QNKjTdtDH+hpUJuY/tJSFs43uWHHnu4YzfslWoBbDt8pn/NILrU5JGuTkZ/RF5Ww8EZf/01DPO6SiZlwvmGYVST+PBpfunufCWheiRW76oJsarVi3BQijVqOTobpkvXqyjFKRoX1TNH2pYuTmg6IsGDdCFpDBmeag
-      - OMGSERVERS_USER_PASSWORD=service
+      - OMGSERVERS_APP_LOG_LEVEL=${SERVICE_LOG_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database1:5432/omgservers
       - OMGSERVERS_DATABASE_PASSWORD=omgservers
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
+      - OMGSERVERS_CACHE_HOSTS=redis://cache:6379
+      - OMGSERVERS_USER_PASSWORD=service
+      - OMGSERVERS_JWT_X5C=MIIFGDCCAwCgAwIBAgIUMFIuRDQIpaoal+4IpE4qLAaWCJAwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UEAwwRY2Eub21nc2VydmVycy5jb20wHhcNMjQwNzI2MjAyNzM2WhcNMjcwNzI2MjAyNzM2WjAVMRMwEQYDVQQDDApvbWdzZXJ2ZXJzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsu6S++nQyen62g5+Q8bEr5ZYm/Cy2lgd8VqPoPrzQNrPBIPZPPEzMSlpFWF4CDbKHcsqpSvyYL/idzDYt/gbpI+CTK7uXNk9irgrnKII3K6fNTlfzj/10vWR1CIgpEW3uyHoQCsj1XQ7YTwIc9v+NzYe+F6tcHnUqFBiz/2g3eQvvMLwIJXbIVk2399bPgkR4X1KCBcTYosB9AG2IzopqyJKeueYbCIF9eMJEBgsRqYK0vWDahVMNC7U96ZgENVIf2VEEtTAYDDbr4o6Iw2B9vByoArgJsmegH4TptuW3RI8y0srsAWQOwZ9/doEPaXYHirs+UR9Qy6urg6ReLVr5FddfYBymIb4W3GtiVjKqtc+v5tXa89FjpG+osnYkRUT2EmLaQc0osnoCrrudiokwAOzN84QWB9RVp20nbfcPrr4ITUlMQFpRZadaPSpFd4iF3PeB21IpKqBiupaGHne0twNfjTiIobTB6oTM0LZqTpYHyl3HQ03mPM5jTcQqPAZgLqLga7feYjOz5GoBazeazzAN4OqSj5/o3ShIK0aN5YvL/7jDnqfnKCCXnuKjRblomzCt34kTeGbjqJ/NB9YvW03egPhPoUQ6BGi8FcmNbSo8f+j2f2lN9uK5z+OO6Ky0CtB+26z6DOhAk6zm0rkYji2/gfS5ftIY8zDIZ3XKJMCAwEAAaNZMFcwFQYDVR0RBA4wDIIKb21nc2VydmVyczAdBgNVHQ4EFgQUxAacQCyFYdsLI+6OW4E23BvT6hIwHwYDVR0jBBgwFoAUlm8JZMuyJ+wuvzE1yXsSbYxPDmQwDQYJKoZIhvcNAQELBQADggIBAJ0O/aTm8N6vaQoerUCtswv2uHObA4fy3rC/e/TEpbeA/utUnYX+uCmjqBjplIHPoB95njMJDbtCbkPv1Y1+vxvoVTn38Ty/S12PnoX2eow/PCQnscixzB9jwbw/fO/UzujFOfc0aKbTlbqQCYXZG466MpBS/Edh0FQtZXxYowKZ7uQg9o675vMXg8tMmODt0IxaUf33bvoN41G+n0/3078RLnLNAyvPoGMdW2FZscjn+3oIZEx78dB+Kmp9JTDcLmxoduJvxduytg7zgcR6pz06th3WYgpBla1Tmreqmz4m4/Gm9W05vl1bwiF/YfackbQ/1jOD9CoKkOMhF1A+q2Rg3ypEDGbjsQJJv6SDfbaIdPXZECl3VR1Pt6oQzskMuKj/1vtqNbRanJdznUq0dZ3KYkuCtRl292Da05SuTIDA36Vmum7WS0uoBcug9TGw3BYQcBdWw09IOkDPOILvFafpxfgnMYNnUOL19EaQDhi/dY4BWInlB27zSrCH5DqVvm+xs2GxIu+QNKjTdtDH+hpUJuY/tJSFs43uWHHnu4YzfslWoBbDt8pn/NILrU5JGuTkZ/RF5Ww8EZf/01DPO6SiZlwvmGYVST+PBpfunufCWheiRW76oJsarVi3BQijVqOTobpkvXqyjFKRoX1TNH2pYuTmg6IsGDdCFpDBmeag
       - OMGSERVERS_INDEX_SHARDS_0_=http://gateway1:8080
       - OMGSERVERS_INDEX_SHARDS_1_=http://gateway2:8080
       - OMGSERVERS_INDEX_SHARDS_2_=http://gateway3:8080
+      - OMGSERVERS_SLOTS_COUNT=3
+      - OMGSERVERS_MASTER_URI=http://gateway1:8080
+      - OMGSERVERS_SHARD_ID=0
+      - OMGSERVERS_SHARD_URI=http://gateway1:8080
       - OMGSERVERS_CLIENT_DISPATCHER_URI=ws://localhost:8080
-      - OMGSERVERS_RUNTIME_SERVICE_URI=ws://ingress:8080
+      - OMGSERVERS_RUNTIME_SERVICE_URI=http://ingress:8080
       - OMGSERVERS_RUNTIME_DISPATCHER_URI=ws://dispatcher:8080
-      - OMGSERVERS_BOOTSTRAP_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_ADMIN_USER_PASSWORD=admin
-      - OMGSERVERS_BOOTSTRAP_SUPPORT_USER_PASSWORD=support
-      - OMGSERVERS_BOOTSTRAP_SERVICE_USER_PASSWORD=service
+      - OMGSERVERS_REGISTRY_URI=registry:5000
+      - OMGSERVERS_ADMIN_USER_PASSWORD=admin
+      - OMGSERVERS_SUPPORT_USER_PASSWORD=support
+      - OMGSERVERS_SERVICE_USER_PASSWORD=service
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__SERVER_URI=localhost
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__DOCKER_DAEMON_URI=tcp://docker:2375
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__CPU_COUNT=800
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__MEMORY_SIZE=8192
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__MAX_CONTAINERS=16
+    volumes:
+      - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
+      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
   # service2
   gateway2:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "gateway2"
+    command: "-c /etc/envoy/gateway_config.yaml"
     restart: unless-stopped
     networks:
       - omgservers
     volumes:
       - ./gateway2_config.yaml:/etc/envoy/gateway_config.yaml:ro
-    command: "-c /etc/envoy/gateway_config.yaml"
   database2:
     image: "postgres:16.1"
     container_name: "database2"
@@ -121,48 +122,49 @@ services:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service2"
     restart: unless-stopped
-    networks:
-      - omgservers
     depends_on:
       - database2
-    volumes:
-      - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
-      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
     environment:
-      - OMGSERVERS_SHARD_URI=http://gateway2:8080
-      - OMGSERVERS_MASTER_URI=http://gateway1:8080
-      - OMGSERVERS_SHARD_ID=2
-      - OMGSERVERS_INDEX_SLOTS_COUNT=3
-      - OMGSERVERS_JWT_X5C=MIIFGDCCAwCgAwIBAgIUMFIuRDQIpaoal+4IpE4qLAaWCJAwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UEAwwRY2Eub21nc2VydmVycy5jb20wHhcNMjQwNzI2MjAyNzM2WhcNMjcwNzI2MjAyNzM2WjAVMRMwEQYDVQQDDApvbWdzZXJ2ZXJzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsu6S++nQyen62g5+Q8bEr5ZYm/Cy2lgd8VqPoPrzQNrPBIPZPPEzMSlpFWF4CDbKHcsqpSvyYL/idzDYt/gbpI+CTK7uXNk9irgrnKII3K6fNTlfzj/10vWR1CIgpEW3uyHoQCsj1XQ7YTwIc9v+NzYe+F6tcHnUqFBiz/2g3eQvvMLwIJXbIVk2399bPgkR4X1KCBcTYosB9AG2IzopqyJKeueYbCIF9eMJEBgsRqYK0vWDahVMNC7U96ZgENVIf2VEEtTAYDDbr4o6Iw2B9vByoArgJsmegH4TptuW3RI8y0srsAWQOwZ9/doEPaXYHirs+UR9Qy6urg6ReLVr5FddfYBymIb4W3GtiVjKqtc+v5tXa89FjpG+osnYkRUT2EmLaQc0osnoCrrudiokwAOzN84QWB9RVp20nbfcPrr4ITUlMQFpRZadaPSpFd4iF3PeB21IpKqBiupaGHne0twNfjTiIobTB6oTM0LZqTpYHyl3HQ03mPM5jTcQqPAZgLqLga7feYjOz5GoBazeazzAN4OqSj5/o3ShIK0aN5YvL/7jDnqfnKCCXnuKjRblomzCt34kTeGbjqJ/NB9YvW03egPhPoUQ6BGi8FcmNbSo8f+j2f2lN9uK5z+OO6Ky0CtB+26z6DOhAk6zm0rkYji2/gfS5ftIY8zDIZ3XKJMCAwEAAaNZMFcwFQYDVR0RBA4wDIIKb21nc2VydmVyczAdBgNVHQ4EFgQUxAacQCyFYdsLI+6OW4E23BvT6hIwHwYDVR0jBBgwFoAUlm8JZMuyJ+wuvzE1yXsSbYxPDmQwDQYJKoZIhvcNAQELBQADggIBAJ0O/aTm8N6vaQoerUCtswv2uHObA4fy3rC/e/TEpbeA/utUnYX+uCmjqBjplIHPoB95njMJDbtCbkPv1Y1+vxvoVTn38Ty/S12PnoX2eow/PCQnscixzB9jwbw/fO/UzujFOfc0aKbTlbqQCYXZG466MpBS/Edh0FQtZXxYowKZ7uQg9o675vMXg8tMmODt0IxaUf33bvoN41G+n0/3078RLnLNAyvPoGMdW2FZscjn+3oIZEx78dB+Kmp9JTDcLmxoduJvxduytg7zgcR6pz06th3WYgpBla1Tmreqmz4m4/Gm9W05vl1bwiF/YfackbQ/1jOD9CoKkOMhF1A+q2Rg3ypEDGbjsQJJv6SDfbaIdPXZECl3VR1Pt6oQzskMuKj/1vtqNbRanJdznUq0dZ3KYkuCtRl292Da05SuTIDA36Vmum7WS0uoBcug9TGw3BYQcBdWw09IOkDPOILvFafpxfgnMYNnUOL19EaQDhi/dY4BWInlB27zSrCH5DqVvm+xs2GxIu+QNKjTdtDH+hpUJuY/tJSFs43uWHHnu4YzfslWoBbDt8pn/NILrU5JGuTkZ/RF5Ww8EZf/01DPO6SiZlwvmGYVST+PBpfunufCWheiRW76oJsarVi3BQijVqOTobpkvXqyjFKRoX1TNH2pYuTmg6IsGDdCFpDBmeag
-      - OMGSERVERS_USER_PASSWORD=service
+      - OMGSERVERS_APP_LOG_LEVEL=${SERVICE_LOG_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database2:5432/omgservers
       - OMGSERVERS_DATABASE_PASSWORD=omgservers
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
+      - OMGSERVERS_CACHE_HOSTS=redis://cache:6379
+      - OMGSERVERS_USER_PASSWORD=service
+      - OMGSERVERS_JWT_X5C=MIIFGDCCAwCgAwIBAgIUMFIuRDQIpaoal+4IpE4qLAaWCJAwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UEAwwRY2Eub21nc2VydmVycy5jb20wHhcNMjQwNzI2MjAyNzM2WhcNMjcwNzI2MjAyNzM2WjAVMRMwEQYDVQQDDApvbWdzZXJ2ZXJzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsu6S++nQyen62g5+Q8bEr5ZYm/Cy2lgd8VqPoPrzQNrPBIPZPPEzMSlpFWF4CDbKHcsqpSvyYL/idzDYt/gbpI+CTK7uXNk9irgrnKII3K6fNTlfzj/10vWR1CIgpEW3uyHoQCsj1XQ7YTwIc9v+NzYe+F6tcHnUqFBiz/2g3eQvvMLwIJXbIVk2399bPgkR4X1KCBcTYosB9AG2IzopqyJKeueYbCIF9eMJEBgsRqYK0vWDahVMNC7U96ZgENVIf2VEEtTAYDDbr4o6Iw2B9vByoArgJsmegH4TptuW3RI8y0srsAWQOwZ9/doEPaXYHirs+UR9Qy6urg6ReLVr5FddfYBymIb4W3GtiVjKqtc+v5tXa89FjpG+osnYkRUT2EmLaQc0osnoCrrudiokwAOzN84QWB9RVp20nbfcPrr4ITUlMQFpRZadaPSpFd4iF3PeB21IpKqBiupaGHne0twNfjTiIobTB6oTM0LZqTpYHyl3HQ03mPM5jTcQqPAZgLqLga7feYjOz5GoBazeazzAN4OqSj5/o3ShIK0aN5YvL/7jDnqfnKCCXnuKjRblomzCt34kTeGbjqJ/NB9YvW03egPhPoUQ6BGi8FcmNbSo8f+j2f2lN9uK5z+OO6Ky0CtB+26z6DOhAk6zm0rkYji2/gfS5ftIY8zDIZ3XKJMCAwEAAaNZMFcwFQYDVR0RBA4wDIIKb21nc2VydmVyczAdBgNVHQ4EFgQUxAacQCyFYdsLI+6OW4E23BvT6hIwHwYDVR0jBBgwFoAUlm8JZMuyJ+wuvzE1yXsSbYxPDmQwDQYJKoZIhvcNAQELBQADggIBAJ0O/aTm8N6vaQoerUCtswv2uHObA4fy3rC/e/TEpbeA/utUnYX+uCmjqBjplIHPoB95njMJDbtCbkPv1Y1+vxvoVTn38Ty/S12PnoX2eow/PCQnscixzB9jwbw/fO/UzujFOfc0aKbTlbqQCYXZG466MpBS/Edh0FQtZXxYowKZ7uQg9o675vMXg8tMmODt0IxaUf33bvoN41G+n0/3078RLnLNAyvPoGMdW2FZscjn+3oIZEx78dB+Kmp9JTDcLmxoduJvxduytg7zgcR6pz06th3WYgpBla1Tmreqmz4m4/Gm9W05vl1bwiF/YfackbQ/1jOD9CoKkOMhF1A+q2Rg3ypEDGbjsQJJv6SDfbaIdPXZECl3VR1Pt6oQzskMuKj/1vtqNbRanJdznUq0dZ3KYkuCtRl292Da05SuTIDA36Vmum7WS0uoBcug9TGw3BYQcBdWw09IOkDPOILvFafpxfgnMYNnUOL19EaQDhi/dY4BWInlB27zSrCH5DqVvm+xs2GxIu+QNKjTdtDH+hpUJuY/tJSFs43uWHHnu4YzfslWoBbDt8pn/NILrU5JGuTkZ/RF5Ww8EZf/01DPO6SiZlwvmGYVST+PBpfunufCWheiRW76oJsarVi3BQijVqOTobpkvXqyjFKRoX1TNH2pYuTmg6IsGDdCFpDBmeag
       - OMGSERVERS_INDEX_SHARDS_0_=http://gateway1:8080
       - OMGSERVERS_INDEX_SHARDS_1_=http://gateway2:8080
       - OMGSERVERS_INDEX_SHARDS_2_=http://gateway3:8080
+      - OMGSERVERS_SLOTS_COUNT=3
+      - OMGSERVERS_MASTER_URI=http://gateway1:8080
+      - OMGSERVERS_SHARD_ID=0
+      - OMGSERVERS_SHARD_URI=http://gateway2:8080
       - OMGSERVERS_CLIENT_DISPATCHER_URI=ws://localhost:8080
-      - OMGSERVERS_RUNTIME_SERVICE_URI=ws://ingress:8080
+      - OMGSERVERS_RUNTIME_SERVICE_URI=http://ingress:8080
       - OMGSERVERS_RUNTIME_DISPATCHER_URI=ws://dispatcher:8080
-      - OMGSERVERS_BOOTSTRAP_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_ADMIN_USER_PASSWORD=admin
-      - OMGSERVERS_BOOTSTRAP_SUPPORT_USER_PASSWORD=support
-      - OMGSERVERS_BOOTSTRAP_SERVICE_USER_PASSWORD=service
+      - OMGSERVERS_REGISTRY_URI=registry:5000
+      - OMGSERVERS_ADMIN_USER_PASSWORD=admin
+      - OMGSERVERS_SUPPORT_USER_PASSWORD=support
+      - OMGSERVERS_SERVICE_USER_PASSWORD=service
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__SERVER_URI=localhost
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__DOCKER_DAEMON_URI=tcp://docker:2375
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__CPU_COUNT=800
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__MEMORY_SIZE=8192
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__MAX_CONTAINERS=16
-  # service3
+    networks:
+      - omgservers
+    volumes:
+      - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
+      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
+  # shard3
   gateway3:
     image: "envoyproxy/envoy:v1.28-latest"
     container_name: "gateway3"
+    command: "-c /etc/envoy/gateway_config.yaml"
     restart: unless-stopped
     networks:
       - omgservers
     volumes:
       - ./gateway3_config.yaml:/etc/envoy/gateway_config.yaml:ro
-    command: "-c /etc/envoy/gateway_config.yaml"
   database3:
     image: "postgres:16.1"
     container_name: "database3"
@@ -177,38 +179,40 @@ services:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service3"
     restart: unless-stopped
-    networks:
-      - omgservers
     depends_on:
       - database3
-    volumes:
-      - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
-      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
     environment:
-      - OMGSERVERS_SHARD_URI=http://gateway3:8080
-      - OMGSERVERS_MASTER_URI=http://gateway1:8080
-      - OMGSERVERS_SHARD_ID=3
-      - OMGSERVERS_INDEX_SLOTS_COUNT=3
-      - OMGSERVERS_JWT_X5C=MIIFGDCCAwCgAwIBAgIUMFIuRDQIpaoal+4IpE4qLAaWCJAwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UEAwwRY2Eub21nc2VydmVycy5jb20wHhcNMjQwNzI2MjAyNzM2WhcNMjcwNzI2MjAyNzM2WjAVMRMwEQYDVQQDDApvbWdzZXJ2ZXJzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsu6S++nQyen62g5+Q8bEr5ZYm/Cy2lgd8VqPoPrzQNrPBIPZPPEzMSlpFWF4CDbKHcsqpSvyYL/idzDYt/gbpI+CTK7uXNk9irgrnKII3K6fNTlfzj/10vWR1CIgpEW3uyHoQCsj1XQ7YTwIc9v+NzYe+F6tcHnUqFBiz/2g3eQvvMLwIJXbIVk2399bPgkR4X1KCBcTYosB9AG2IzopqyJKeueYbCIF9eMJEBgsRqYK0vWDahVMNC7U96ZgENVIf2VEEtTAYDDbr4o6Iw2B9vByoArgJsmegH4TptuW3RI8y0srsAWQOwZ9/doEPaXYHirs+UR9Qy6urg6ReLVr5FddfYBymIb4W3GtiVjKqtc+v5tXa89FjpG+osnYkRUT2EmLaQc0osnoCrrudiokwAOzN84QWB9RVp20nbfcPrr4ITUlMQFpRZadaPSpFd4iF3PeB21IpKqBiupaGHne0twNfjTiIobTB6oTM0LZqTpYHyl3HQ03mPM5jTcQqPAZgLqLga7feYjOz5GoBazeazzAN4OqSj5/o3ShIK0aN5YvL/7jDnqfnKCCXnuKjRblomzCt34kTeGbjqJ/NB9YvW03egPhPoUQ6BGi8FcmNbSo8f+j2f2lN9uK5z+OO6Ky0CtB+26z6DOhAk6zm0rkYji2/gfS5ftIY8zDIZ3XKJMCAwEAAaNZMFcwFQYDVR0RBA4wDIIKb21nc2VydmVyczAdBgNVHQ4EFgQUxAacQCyFYdsLI+6OW4E23BvT6hIwHwYDVR0jBBgwFoAUlm8JZMuyJ+wuvzE1yXsSbYxPDmQwDQYJKoZIhvcNAQELBQADggIBAJ0O/aTm8N6vaQoerUCtswv2uHObA4fy3rC/e/TEpbeA/utUnYX+uCmjqBjplIHPoB95njMJDbtCbkPv1Y1+vxvoVTn38Ty/S12PnoX2eow/PCQnscixzB9jwbw/fO/UzujFOfc0aKbTlbqQCYXZG466MpBS/Edh0FQtZXxYowKZ7uQg9o675vMXg8tMmODt0IxaUf33bvoN41G+n0/3078RLnLNAyvPoGMdW2FZscjn+3oIZEx78dB+Kmp9JTDcLmxoduJvxduytg7zgcR6pz06th3WYgpBla1Tmreqmz4m4/Gm9W05vl1bwiF/YfackbQ/1jOD9CoKkOMhF1A+q2Rg3ypEDGbjsQJJv6SDfbaIdPXZECl3VR1Pt6oQzskMuKj/1vtqNbRanJdznUq0dZ3KYkuCtRl292Da05SuTIDA36Vmum7WS0uoBcug9TGw3BYQcBdWw09IOkDPOILvFafpxfgnMYNnUOL19EaQDhi/dY4BWInlB27zSrCH5DqVvm+xs2GxIu+QNKjTdtDH+hpUJuY/tJSFs43uWHHnu4YzfslWoBbDt8pn/NILrU5JGuTkZ/RF5Ww8EZf/01DPO6SiZlwvmGYVST+PBpfunufCWheiRW76oJsarVi3BQijVqOTobpkvXqyjFKRoX1TNH2pYuTmg6IsGDdCFpDBmeag
-      - OMGSERVERS_USER_PASSWORD=service
+      - OMGSERVERS_APP_LOG_LEVEL=${SERVICE_LOG_LEVEL}
       - OMGSERVERS_DATABASE_URL=postgresql://database3:5432/omgservers
       - OMGSERVERS_DATABASE_PASSWORD=omgservers
-      - OMGSERVERS_LOGGING_APP_LOGS_LEVEL=${SERVICE_LOGGING_LEVEL}
+      - OMGSERVERS_CACHE_HOSTS=redis://cache:6379
+      - OMGSERVERS_USER_PASSWORD=service
+      - OMGSERVERS_JWT_X5C=MIIFGDCCAwCgAwIBAgIUMFIuRDQIpaoal+4IpE4qLAaWCJAwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UEAwwRY2Eub21nc2VydmVycy5jb20wHhcNMjQwNzI2MjAyNzM2WhcNMjcwNzI2MjAyNzM2WjAVMRMwEQYDVQQDDApvbWdzZXJ2ZXJzMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsu6S++nQyen62g5+Q8bEr5ZYm/Cy2lgd8VqPoPrzQNrPBIPZPPEzMSlpFWF4CDbKHcsqpSvyYL/idzDYt/gbpI+CTK7uXNk9irgrnKII3K6fNTlfzj/10vWR1CIgpEW3uyHoQCsj1XQ7YTwIc9v+NzYe+F6tcHnUqFBiz/2g3eQvvMLwIJXbIVk2399bPgkR4X1KCBcTYosB9AG2IzopqyJKeueYbCIF9eMJEBgsRqYK0vWDahVMNC7U96ZgENVIf2VEEtTAYDDbr4o6Iw2B9vByoArgJsmegH4TptuW3RI8y0srsAWQOwZ9/doEPaXYHirs+UR9Qy6urg6ReLVr5FddfYBymIb4W3GtiVjKqtc+v5tXa89FjpG+osnYkRUT2EmLaQc0osnoCrrudiokwAOzN84QWB9RVp20nbfcPrr4ITUlMQFpRZadaPSpFd4iF3PeB21IpKqBiupaGHne0twNfjTiIobTB6oTM0LZqTpYHyl3HQ03mPM5jTcQqPAZgLqLga7feYjOz5GoBazeazzAN4OqSj5/o3ShIK0aN5YvL/7jDnqfnKCCXnuKjRblomzCt34kTeGbjqJ/NB9YvW03egPhPoUQ6BGi8FcmNbSo8f+j2f2lN9uK5z+OO6Ky0CtB+26z6DOhAk6zm0rkYji2/gfS5ftIY8zDIZ3XKJMCAwEAAaNZMFcwFQYDVR0RBA4wDIIKb21nc2VydmVyczAdBgNVHQ4EFgQUxAacQCyFYdsLI+6OW4E23BvT6hIwHwYDVR0jBBgwFoAUlm8JZMuyJ+wuvzE1yXsSbYxPDmQwDQYJKoZIhvcNAQELBQADggIBAJ0O/aTm8N6vaQoerUCtswv2uHObA4fy3rC/e/TEpbeA/utUnYX+uCmjqBjplIHPoB95njMJDbtCbkPv1Y1+vxvoVTn38Ty/S12PnoX2eow/PCQnscixzB9jwbw/fO/UzujFOfc0aKbTlbqQCYXZG466MpBS/Edh0FQtZXxYowKZ7uQg9o675vMXg8tMmODt0IxaUf33bvoN41G+n0/3078RLnLNAyvPoGMdW2FZscjn+3oIZEx78dB+Kmp9JTDcLmxoduJvxduytg7zgcR6pz06th3WYgpBla1Tmreqmz4m4/Gm9W05vl1bwiF/YfackbQ/1jOD9CoKkOMhF1A+q2Rg3ypEDGbjsQJJv6SDfbaIdPXZECl3VR1Pt6oQzskMuKj/1vtqNbRanJdznUq0dZ3KYkuCtRl292Da05SuTIDA36Vmum7WS0uoBcug9TGw3BYQcBdWw09IOkDPOILvFafpxfgnMYNnUOL19EaQDhi/dY4BWInlB27zSrCH5DqVvm+xs2GxIu+QNKjTdtDH+hpUJuY/tJSFs43uWHHnu4YzfslWoBbDt8pn/NILrU5JGuTkZ/RF5Ww8EZf/01DPO6SiZlwvmGYVST+PBpfunufCWheiRW76oJsarVi3BQijVqOTobpkvXqyjFKRoX1TNH2pYuTmg6IsGDdCFpDBmeag
       - OMGSERVERS_INDEX_SHARDS_0_=http://gateway1:8080
       - OMGSERVERS_INDEX_SHARDS_1_=http://gateway2:8080
       - OMGSERVERS_INDEX_SHARDS_2_=http://gateway3:8080
+      - OMGSERVERS_SLOTS_COUNT=3
+      - OMGSERVERS_MASTER_URI=http://gateway1:8080
+      - OMGSERVERS_SHARD_ID=0
+      - OMGSERVERS_SHARD_URI=http://gateway3:8080
       - OMGSERVERS_CLIENT_DISPATCHER_URI=ws://localhost:8080
-      - OMGSERVERS_RUNTIME_SERVICE_URI=ws://ingress:8080
+      - OMGSERVERS_RUNTIME_SERVICE_URI=http://ingress:8080
       - OMGSERVERS_RUNTIME_DISPATCHER_URI=ws://dispatcher:8080
-      - OMGSERVERS_BOOTSTRAP_ENABLED=true
-      - OMGSERVERS_BOOTSTRAP_ADMIN_USER_PASSWORD=admin
-      - OMGSERVERS_BOOTSTRAP_SUPPORT_USER_PASSWORD=support
-      - OMGSERVERS_BOOTSTRAP_SERVICE_USER_PASSWORD=service
+      - OMGSERVERS_REGISTRY_URI=registry:5000
+      - OMGSERVERS_ADMIN_USER_PASSWORD=admin
+      - OMGSERVERS_SUPPORT_USER_PASSWORD=support
+      - OMGSERVERS_SERVICE_USER_PASSWORD=service
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__SERVER_URI=localhost
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__DOCKER_DAEMON_URI=tcp://docker:2375
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__CPU_COUNT=800
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__MEMORY_SIZE=8192
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__MAX_CONTAINERS=16
+    networks:
+      - omgservers
+    volumes:
+      - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
+      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
+  # Dispatcher
   dispatcher:
     image: "omgservers/dispatcher:${OMGSERVERS_VERSION}"
     container_name: "dispatcher"

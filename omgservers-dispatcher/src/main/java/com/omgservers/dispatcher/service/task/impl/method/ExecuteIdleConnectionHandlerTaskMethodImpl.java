@@ -1,5 +1,6 @@
 package com.omgservers.dispatcher.service.task.impl.method;
 
+import com.omgservers.dispatcher.operation.ExecuteTaskOperation;
 import com.omgservers.dispatcher.service.task.dto.ExecuteIdleConnectionsHandlerTaskRequest;
 import com.omgservers.dispatcher.service.task.dto.ExecuteIdleConnectionsHandlerTaskResponse;
 import io.smallrye.mutiny.Uni;
@@ -12,19 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class ExecuteIdleConnectionHandlerTaskMethodImpl implements ExecuteIdleConnectionHandlerTaskMethod {
 
+    final ExecuteTaskOperation executeTaskOperation;
+
     final IdleConnectionsHandlerTaskImpl idleConnectionsHandlerTask;
 
     @Override
-    public Uni<ExecuteIdleConnectionsHandlerTaskResponse> execute(
-            final ExecuteIdleConnectionsHandlerTaskRequest request) {
+    public Uni<ExecuteIdleConnectionsHandlerTaskResponse> execute(final ExecuteIdleConnectionsHandlerTaskRequest request) {
         log.trace("{}", request);
 
-        return idleConnectionsHandlerTask.execute()
-                .onFailure()
-                .recoverWithUni(t -> {
-                    log.warn("Job task failed, {}:{}", t.getClass().getSimpleName(), t.getMessage(), t);
-                    return Uni.createFrom().item(Boolean.FALSE);
-                })
+        final var taskArguments = new IdleConnectionsHandlerTaskArguments();
+        return executeTaskOperation.executeFailSafe(idleConnectionsHandlerTask, taskArguments)
                 .map(ExecuteIdleConnectionsHandlerTaskResponse::new);
     }
 }

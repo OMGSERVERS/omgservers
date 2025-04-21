@@ -28,7 +28,7 @@ class HandleIdleConnectionsMethodImpl implements HandleIdleConnectionsMethod {
         log.trace("{}", request);
 
         final var now = Instant.now();
-        final var idleTimeout = getDispatcherConfigOperation.getDispatcherConfig().idleConnectionsTimeout();
+        final var idleTimeout = getDispatcherConfigOperation.getDispatcherConfig().idleConnectionTimeout();
 
         return Multi.createFrom().iterable(dispatcherConnections.getAll())
                 .onItem().transformToUniAndConcatenate(dispatcherConnection -> {
