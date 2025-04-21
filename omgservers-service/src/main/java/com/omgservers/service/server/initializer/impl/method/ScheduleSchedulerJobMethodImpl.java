@@ -1,7 +1,6 @@
 package com.omgservers.service.server.initializer.impl.method;
 
 import com.omgservers.service.configuration.JobQualifierEnum;
-import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.server.ScheduleJobExecutionOperation;
 import com.omgservers.service.server.task.TaskService;
 import com.omgservers.service.server.task.dto.ExecuteSchedulerTaskRequest;
@@ -17,7 +16,6 @@ class ScheduleSchedulerJobMethodImpl implements ScheduleSchedulerJobMethod {
     final TaskService taskService;
 
     final ScheduleJobExecutionOperation scheduleJobExecutionOperation;
-    final GetServiceConfigOperation getServiceConfigOperation;
 
     @Override
     public void execute() {

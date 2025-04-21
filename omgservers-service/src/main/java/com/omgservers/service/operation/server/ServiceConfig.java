@@ -124,8 +124,6 @@ public interface ServiceConfig {
 
     interface BootstrapConfig {
 
-        boolean enabled();
-
         BootstrapDefaultUserConfig adminUser();
 
         BootstrapDefaultUserConfig supportUser();
@@ -142,8 +140,6 @@ public interface ServiceConfig {
     }
 
     interface BootstrapDefaultPoolConfig {
-        boolean enabled();
-
         List<BootstrapDefaultPoolServerConfig> servers();
     }
 

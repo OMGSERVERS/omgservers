@@ -48,27 +48,27 @@ internal_help() {
   if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting test" ]; then
     echo " $0 localtesting test"
   fi
-  # Development
-  if [ -z "$1" -o "$1" = "development" -o "$1" = "development up" ]; then
-    echo " $0 development up"
+  # Singleinstance
+  if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance up" ]; then
+    echo " $0 singleinstance up"
   fi
-  if [ -z "$1" -o "$1" = "development" -o "$1" = "development ps" ]; then
-    echo " $0 development ps"
+  if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance ps" ]; then
+    echo " $0 singleinstance ps"
   fi
-  if [ -z "$1" -o "$1" = "development" -o "$1" = "development reset" ]; then
-    echo " $0 development reset"
+  if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance reset" ]; then
+    echo " $0 singleinstance reset"
   fi
-  if [ -z "$1" -o "$1" = "development" -o "$1" = "development logs" ]; then
-    echo " $0 development logs"
+  if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance logs" ]; then
+    echo " $0 singleinstance logs"
   fi
-  if [ -z "$1" -o "$1" = "development" -o "$1" = "development database" ]; then
-    echo " $0 development database"
+  if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance database" ]; then
+    echo " $0 singleinstance database"
   fi
-  if [ -z "$1" -o "$1" = "development" -o "$1" = "development ctl" ]; then
-    echo " $0 development ctl"
+  if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance ctl" ]; then
+    echo " $0 singleinstance ctl"
   fi
-  if [ -z "$1" -o "$1" = "development" -o "$1" = "development test" ]; then
-    echo " $0 development test"
+  if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance test" ]; then
+    echo " $0 singleinstance test"
   fi
   # Multiinstance
   if [ -z "$1" -o "$1" = "multiinstance" -o "$1" = "multiinstance up" ]; then
@@ -154,7 +154,7 @@ environment_down() {
   read -p 'Continue (y/n)? : ' ANSWER
   if [ "${ANSWER}" == "y" ]; then
     docker compose -p localtesting down -v
-    docker compose -p development down -v
+    docker compose -p singleinstance down -v
     docker compose -p integration down -v
     docker compose -p multiinstance down -v
   else
@@ -163,7 +163,7 @@ environment_down() {
 }
 
 localtesting_up() {
-  internal_ask_down "development|integration|multiinstance"
+  internal_ask_down "singleinstance|integration|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -197,7 +197,7 @@ localtesting_test() {
     ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
-development_up() {
+singleinstance_up() {
   internal_ask_down "localtesting|integration|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
@@ -209,45 +209,45 @@ development_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p development -f omgservers-testing/development-environment/src/compose.yaml up --remove-orphans -d
-  docker compose -p development ps
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p singleinstance -f omgservers-testing/singleinstance-environment/src/compose.yaml up --remove-orphans -d
+  docker compose -p singleinstance ps
 }
 
-development_ps() {
-  docker compose -p development ps
+singleinstance_ps() {
+  docker compose -p singleinstance ps
 }
 
-development_reset() {
+singleinstance_reset() {
   read -p 'Continue (y/n)? : ' ANSWER
   if [ "${ANSWER}" == "y" ]; then
-    docker compose -p development down -v
-    development_up
+    docker compose -p singleinstance down -v
+    singleinstance_up
   else
     echo "Operation was cancelled"
   fi
 }
 
-development_logs() {
-  docker compose -p development logs $@
+singleinstance_logs() {
+  docker compose -p singleinstance logs $@
 }
 
-development_database() {
-  docker compose -p development exec database psql
+singleinstance_database() {
+  docker compose -p singleinstance exec database psql
 }
 
-development_ctl() {
-  docker compose -p development exec ctl /bin/bash
+singleinstance_ctl() {
+  docker compose -p singleinstance exec ctl /bin/bash
 }
 
-development_test() {
-  development_up
+singleinstance_test() {
+  singleinstance_up
 
-  OMGSERVERS_TESTER_ENVIRONMENT=DEVELOPMENT \
+  OMGSERVERS_TESTER_ENVIRONMENT=SINGLEINSTANCE \
     ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
 multiinstance_up() {
-  internal_ask_down "localtesting|development|integration"
+  internal_ask_down "localtesting|singleinstance|integration"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -282,7 +282,7 @@ multiinstance_test() {
 }
 
 integration_up() {
-  internal_ask_down "localtesting|development|multiinstance"
+  internal_ask_down "localtesting|singleinstance|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -360,23 +360,23 @@ elif [ "$1" = "localtesting" ]; then
   else
     internal_help "localtesting"
   fi
-elif [ "$1" = "development" ]; then
+elif [ "$1" = "singleinstance" ]; then
   if [ "$2" = "up" ]; then
-    development_up
+    singleinstance_up
   elif [ "$2" = "ps" ]; then
-    development_ps
+    singleinstance_ps
   elif [ "$2" = "reset" ]; then
-    development_reset
+    singleinstance_reset
   elif [ "$2" = "logs" ]; then
-    development_logs "${@:3}"
+    singleinstance_logs "${@:3}"
   elif [ "$2" = "database" ]; then
-    development_database
+    singleinstance_database
   elif [ "$2" = "ctl" ]; then
-    development_ctl
+    singleinstance_ctl
   elif [ "$2" = "test" ]; then
-    development_test
+    singleinstance_test
   else
-    internal_help "development"
+    internal_help "singleinstance"
   fi
 elif [ "$1" = "multiinstance" ]; then
   if [ "$2" = "up" ]; then
