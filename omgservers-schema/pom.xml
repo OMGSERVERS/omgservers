@@ -9,9 +9,6 @@
     </parent>
 
     <artifactId>omgservers-schema</artifactId>
-    <description>Set of model, request/response and dto classes to share it between different modules or to interact
-        with service externally.
-    </description>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

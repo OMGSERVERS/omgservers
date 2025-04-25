@@ -1,0 +1,4 @@
+- https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners
+- Example: https://github.com/coronalabs/corona/blob/master/.github/workflows/build.yml
+- GraalVM action https://github.com/graalvm/setup-graalvm
+- GraalVM releases: https://github.com/graalvm/graalvm-ce-builds/releases

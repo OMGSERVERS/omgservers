@@ -1,7 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method;
 
-import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
@@ -45,8 +45,8 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<DeleteProjectPermissionsSupportResponse> execute(
-            final DeleteProjectPermissionsSupportRequest request) {
+    public Uni<DeleteTenantProjectPermissionsSupportResponse> execute(
+            final DeleteTenantProjectPermissionsSupportRequest request) {
         log.info("Requested, {}", request);
 
         final var userId = securityIdentity
@@ -90,7 +90,7 @@ class DeleteProjectPermissionsMethodImpl implements DeleteProjectPermissionsMeth
                                         }
                                     });
                         }))
-                .map(DeleteProjectPermissionsSupportResponse::new);
+                .map(DeleteTenantProjectPermissionsSupportResponse::new);
     }
 
     Uni<UserModel> getUser(final Long id) {

@@ -20,8 +20,8 @@ import com.omgservers.schema.entrypoint.support.CreateTokenSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTokenSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
-import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRequest;
@@ -149,8 +149,8 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<DeleteProjectPermissionsSupportResponse> execute(
-            DeleteProjectPermissionsSupportRequest request) {
+    public Uni<DeleteTenantProjectPermissionsSupportResponse> execute(
+            DeleteTenantProjectPermissionsSupportRequest request) {
         return supportService.execute(request);
     }
 

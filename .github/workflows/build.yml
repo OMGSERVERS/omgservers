@@ -1,12 +1,16 @@
 name: Build
+
 on:
   push:
+    tags:
+      - "*"
     branches:
-      - main
+      - "*"
   workflow_dispatch:
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  maven-install:
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -15,7 +19,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 21
-          distribution: 'temurin'
+          distribution: "temurin"
       - name: Cache SonarCloud packages
         uses: actions/cache@v4
         with:
@@ -31,24 +35,88 @@ jobs:
       - name: Build project
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./projectctl.sh build testWithSonar
-#      - name: Start containers
-#        run: ./projectctl.sh integration up && sleep 60
-#      - name: Run tests
-#        run: ./projectctl.sh integration test
-#      - name: Log builder job
-#        if: always()
-#        run: curl -v -u builder:1167db115da39e5c7776c661e463fe7933 http://localhost:7070/job/luajit-runtime-builder-v1/1/consoleText
-#      - name: Log containers
-#        if: always()
-#        run: ./projectctl.sh integration logs
-#      - name: Stop containers
-#        if: always()
-#        run: yes | ./projectctl.sh environment down
+        run: ./mvnw -B install org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=OMGSERVERS_omgservers
+      - name: Upload artifact (omgserversctl-java-jar)
+        uses: actions/upload-artifact@v4
+        with:
+          name: omgserversctl-java-jar
+          path: omgservers-ctl/target/*-runner.jar
+      - name: Upload artifact (openapi-yaml)
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-yaml
+          path: omgservers-service/target/openapi/openapi.yaml
+
+  build-ctl:
+    runs-on: "${{ matrix.runner }}"
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            arch: x86_64
+            os: linux
+            executable: "*-runner"
+          - runner: windows-2025
+            arch: x86_64
+            os: windows
+            executable: "*-runner.exe"
+          - runner: macos-13
+            arch: intel
+            os: macos
+            executable: "*-runner"
+          - runner: macos-15
+            arch: arm64
+            os: macos
+            executable: "*-runner"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: "temurin"
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: 21
+          distribution: "graalvm-community"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Build Native Image
+        run: ./mvnw clean install -DskipTests -Dnative -pl omgservers-ctl -am
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: omgserversctl-${{ matrix.arch }}-${{ matrix.os }}
+          path: omgservers-ctl/target/${{ matrix.executable }}
+
+  push-images:
+    runs-on: ubuntu-24.04
+    needs: maven-install
+    if: |
+      startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: "temurin"
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
       - name: Log into Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Push images
-        run: ./projectctl.sh build pushImages
+      - name: Push image for omgservers-service
+        run: ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true -pl omgservers-service -am
+      - name: Push image for omgservers-dispatcher
+        run: ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true -pl omgservers-dispatcher -am
