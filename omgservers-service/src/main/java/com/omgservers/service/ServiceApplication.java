@@ -1,6 +1,6 @@
 package com.omgservers.service;
 
-import com.omgservers.service.configuration.ServiceOpenApiConfiguration;
+import com.omgservers.api.configuration.OpenApiConfiguration;
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.annotations.QuarkusMain;
@@ -16,11 +16,13 @@ import org.eclipse.microprofile.openapi.annotations.security.SecuritySchemes;
 @QuarkusMain
 @AllArgsConstructor
 @SecuritySchemes({
-        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.DEVELOPER_SECURITY_SCHEMA,
+        @SecurityScheme(securitySchemeName = OpenApiConfiguration.SUPPORT_SECURITY_SCHEMA,
                 type = SecuritySchemeType.HTTP, scheme = "Bearer"),
-        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.PLAYER_SECURITY_SCHEMA,
+        @SecurityScheme(securitySchemeName = OpenApiConfiguration.DEVELOPER_SECURITY_SCHEMA,
                 type = SecuritySchemeType.HTTP, scheme = "Bearer"),
-        @SecurityScheme(securitySchemeName = ServiceOpenApiConfiguration.RUNTIME_SECURITY_SCHEMA,
+        @SecurityScheme(securitySchemeName = OpenApiConfiguration.PLAYER_SECURITY_SCHEMA,
+                type = SecuritySchemeType.HTTP, scheme = "Bearer"),
+        @SecurityScheme(securitySchemeName = OpenApiConfiguration.RUNTIME_SECURITY_SCHEMA,
                 type = SecuritySchemeType.HTTP, scheme = "Bearer")
 })
 public class ServiceApplication extends Application {

@@ -20,8 +20,8 @@ import com.omgservers.schema.entrypoint.support.CreateTokenSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTokenSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
-import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.DeleteProjectPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRequest;
@@ -86,7 +86,7 @@ public interface WebService {
 
     Uni<CreateTenantProjectPermissionsSupportResponse> execute(CreateTenantProjectPermissionsSupportRequest request);
 
-    Uni<DeleteProjectPermissionsSupportResponse> execute(DeleteProjectPermissionsSupportRequest request);
+    Uni<DeleteTenantProjectPermissionsSupportResponse> execute(DeleteTenantProjectPermissionsSupportRequest request);
 
     Uni<CreateTenantStagePermissionsSupportResponse> execute(CreateTenantStagePermissionsSupportRequest request);
 

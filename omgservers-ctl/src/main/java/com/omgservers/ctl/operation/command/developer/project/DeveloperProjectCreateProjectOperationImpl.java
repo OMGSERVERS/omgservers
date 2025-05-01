@@ -1,0 +1,54 @@
+package com.omgservers.ctl.operation.command.developer.project;
+
+import com.omgservers.ctl.dto.key.KeyEnum;
+import com.omgservers.ctl.operation.client.CreateDeveloperClientOperation;
+import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
+import com.omgservers.ctl.operation.wal.GetWalOperation;
+import com.omgservers.ctl.operation.wal.developer.FindDeveloperTokenOperation;
+import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
+
+@Slf4j
+@ApplicationScoped
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+class DeveloperProjectCreateProjectOperationImpl implements DeveloperProjectCreateProjectOperation {
+
+    final CreateDeveloperClientOperation createDeveloperClientOperation;
+    final FindDeveloperTokenOperation findDeveloperTokenOperation;
+    final AppendResultMapOperation appendResultMapOperation;
+    final FindServiceUrlOperation findServiceUrlOperation;
+    final GetWalOperation getWalOperation;
+
+    @Override
+    public void execute(final String tenant,
+                        final String service,
+                        final String user) {
+        final var wal = getWalOperation.execute();
+        final var path = wal.getPath();
+
+        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceName = serviceUrl.getName();
+        final var serviceUri = serviceUrl.getUri();
+
+        final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName, user);
+        final var developerToken = developerTokenLog.getToken();
+        final var developerClient = createDeveloperClientOperation.execute(serviceUri, developerToken);
+
+        final var request = new CreateProjectDeveloperRequest(tenant);
+        final var createProjectDeveloperResponse = developerClient.execute(request)
+                .await().indefinitely();
+
+        final var projectId = createProjectDeveloperResponse.getProjectId();
+        final var stageId = createProjectDeveloperResponse.getStageId();
+
+        appendResultMapOperation.execute(path, Map.of(
+                KeyEnum.PROJECT_ID, projectId.toString(),
+                KeyEnum.STAGE_ID, stageId.toString()));
+    }
+}

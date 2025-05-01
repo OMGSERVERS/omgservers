@@ -28,7 +28,7 @@ class ParseDockerImageOperationImpl implements ParseDockerImageOperation {
 
         final var nameTagParts = nameTag.split(":");
         if (nameTagParts.length != 2) {
-            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_ARGUMENT, "incorrect docker image");
+            throwError();
         }
 
         final var name = nameTagParts[0];

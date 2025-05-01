@@ -21,6 +21,7 @@ public class TenantVersionConfigDto {
         return config;
     }
 
+    @Valid
     @NotNull
     TenantVersionConfigVersionEnum version;
 
