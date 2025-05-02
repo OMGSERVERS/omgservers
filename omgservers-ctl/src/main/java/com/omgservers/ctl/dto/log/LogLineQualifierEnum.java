@@ -5,6 +5,7 @@ import com.omgservers.ctl.dto.log.body.DeveloperTokenLogLineBodyDto;
 import com.omgservers.ctl.dto.log.body.ResultMapLogLineBodyDto;
 import com.omgservers.ctl.dto.log.body.ServiceUrlLogLineBodyDto;
 import com.omgservers.ctl.dto.log.body.SupportTokenLogLineBodyDto;
+import com.omgservers.ctl.dto.log.body.TestTenantLogLineBodyDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,7 +16,8 @@ public enum LogLineQualifierEnum {
     SERVICE_URL(ServiceUrlLogLineBodyDto.class),
     ADMIN_TOKEN(AdminTokenLogLineBodyDto.class),
     SUPPORT_TOKEN(SupportTokenLogLineBodyDto.class),
-    DEVELOPER_TOKEN(DeveloperTokenLogLineBodyDto.class);
+    DEVELOPER_TOKEN(DeveloperTokenLogLineBodyDto.class),
+    TEST_TENANT(TestTenantLogLineBodyDto.class);
 
     final Class<? extends LogLineBodyDto> bodyClass;
 }
