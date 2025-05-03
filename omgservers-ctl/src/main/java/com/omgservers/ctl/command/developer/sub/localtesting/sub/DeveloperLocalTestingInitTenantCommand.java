@@ -1,15 +1,15 @@
-package com.omgservers.ctl.command.localtesting.sub;
+package com.omgservers.ctl.command.developer.sub.localtesting.sub;
 
-import com.omgservers.ctl.operation.command.localtesting.LocalTestingDeleteTenantOperation;
+import com.omgservers.ctl.operation.command.localtesting.DeveloperLocalTestingInitTenantOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
 @Slf4j
 @CommandLine.Command(
-        name = "delete-tenant",
-        description = "Delete a tenant created for local testing.")
-public class LocalTestingDeleteTenantCommand implements Runnable {
+        name = "init-tenant",
+        description = "Initialize a new tenant for local testing.")
+public class DeveloperLocalTestingInitTenantCommand implements Runnable {
 
     @CommandLine.Parameters(description = "Alias of the tenant to be created for local testing. Default is \"${DEFAULT-VALUE}\"",
             defaultValue = "omgservers")
@@ -24,10 +24,10 @@ public class LocalTestingDeleteTenantCommand implements Runnable {
     String stage;
 
     @Inject
-    LocalTestingDeleteTenantOperation localTestingDeleteTenantOperation;
+    DeveloperLocalTestingInitTenantOperation developerLocalTestingInitTenantOperation;
 
     @Override
     public void run() {
-        localTestingDeleteTenantOperation.execute(tenant, project, stage);
+        developerLocalTestingInitTenantOperation.execute(tenant, project, stage);
     }
 }

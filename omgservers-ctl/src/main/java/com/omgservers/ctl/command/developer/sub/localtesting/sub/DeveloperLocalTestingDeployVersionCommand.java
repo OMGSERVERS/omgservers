@@ -1,7 +1,7 @@
-package com.omgservers.ctl.command.localtesting.sub;
+package com.omgservers.ctl.command.developer.sub.localtesting.sub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.ctl.operation.command.localtesting.test.LocalTestingDeployVersionOperation;
+import com.omgservers.ctl.operation.command.localtesting.test.DeveloperLocalTestingDeployVersionOperation;
 import com.omgservers.ctl.operation.ctl.HandleFileOptionOperation;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import jakarta.inject.Inject;
@@ -13,7 +13,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "deploy-version",
         description = "Deploy a new version for local testing.")
-public class LocalTestingDeployVersionCommand implements Runnable {
+public class DeveloperLocalTestingDeployVersionCommand implements Runnable {
 
     @CommandLine.Option(names = {"-c", "--config"},
             description = "Path to a file to read config from. Use '-' to read from stdin.",
@@ -41,7 +41,7 @@ public class LocalTestingDeployVersionCommand implements Runnable {
     HandleFileOptionOperation handleFileOptionOperation;
 
     @Inject
-    LocalTestingDeployVersionOperation localTestingDeployVersionOperation;
+    DeveloperLocalTestingDeployVersionOperation developerLocalTestingDeployVersionOperation;
 
     @Inject
     ObjectMapper objectMapper;
@@ -52,6 +52,6 @@ public class LocalTestingDeployVersionCommand implements Runnable {
         final var configString = handleFileOptionOperation.execute(config);
         final var config = objectMapper.readValue(configString, TenantVersionConfigDto.class);
 
-        localTestingDeployVersionOperation.execute(tenant, project, stage, config, image);
+        developerLocalTestingDeployVersionOperation.execute(tenant, project, stage, config, image);
     }
 }
