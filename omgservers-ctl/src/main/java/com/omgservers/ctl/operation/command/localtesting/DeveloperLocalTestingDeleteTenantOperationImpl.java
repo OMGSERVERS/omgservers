@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class LocalTestingDeleteTenantOperationImpl implements LocalTestingDeleteTenantOperation {
+class DeveloperLocalTestingDeleteTenantOperationImpl implements DeveloperLocalTestingDeleteTenantOperation {
 
     final CreateLocalTestingSupportClientOperation createLocalTestingSupportClientOperation;
     final FindTestTenantOperation findTestTenantOperation;

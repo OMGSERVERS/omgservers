@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class LocalTestingDeployVersionOperationImpl implements LocalTestingDeployVersionOperation {
+class DeveloperLocalTestingDeployVersionOperationImpl implements DeveloperLocalTestingDeployVersionOperation {
 
     final CreateLocalTestingDeveloperClientOperation createLocalTestingDeveloperClientOperation;
     final CreateDockerDaemonClientOperation createDockerDaemonClientOperation;

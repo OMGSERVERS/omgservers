@@ -29,7 +29,7 @@ import java.util.Set;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class LocalTestingInitTenantOperationImpl implements LocalTestingInitTenantOperation {
+class DeveloperLocalTestingInitTenantOperationImpl implements DeveloperLocalTestingInitTenantOperation {
 
     final CreateLocalTestingDeveloperClientOperation createLocalTestingDeveloperClientOperation;
     final CreateLocalTestingSupportClientOperation createLocalTestingSupportClientOperation;
