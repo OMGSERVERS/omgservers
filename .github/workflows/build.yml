@@ -130,3 +130,67 @@ jobs:
         run: ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true -pl omgservers-service -am
       - name: Push image for omgservers-dispatcher
         run: ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true -pl omgservers-dispatcher -am
+
+  release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    needs:
+      - maven-install
+      - push-images
+      - build-ctl
+    if: |
+      startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: omgserversctl-java-jar
+          path: omgserversctl-java-jar
+      - uses: actions/download-artifact@v4
+        with:
+          name: openapi-yaml
+          path: openapi-yaml
+      - uses: actions/download-artifact@v4
+        with:
+          name: localtesting-environment
+          path: localtesting-environment
+      - uses: actions/download-artifact@v4
+        with:
+          name: install-sh
+          path: install-sh
+      - uses: actions/download-artifact@v4
+        with:
+          name: omgserversctl-x86_64-linux
+          path: omgserversctl-x86_64-linux
+      - uses: actions/download-artifact@v4
+        with:
+          name: omgserversctl-x86_64-windows
+          path: omgserversctl-x86_64-windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: omgserversctl-intel-macos
+          path: omgserversctl-intel-macos
+      - uses: actions/download-artifact@v4
+        with:
+          name: omgserversctl-arm64-macos
+          path: omgserversctl-arm64-macos
+      - name: Rename Artifacts
+        run: |
+          set -x
+          mkdir artifacts
+          mv omgserversctl-java-jar/*-runner.jar artifacts/omgserversctl.jar
+          mv omgserversctl-x86_64-linux/*-runner omgserversctl-x86_64-linux/omgserversctl && zip artifacts/omgserversctl-x86_64-linux.zip omgserversctl-x86_64-linux/omgserversctl
+          mv omgserversctl-x86_64-windows/*-runner.exe omgserversctl-x86_64-windows/omgserversctl.exe && zip artifacts/omgserversctl-x86_64-windows.zip omgserversctl-x86_64-windows/omgserversctl.exe
+          mv omgserversctl-intel-macos/*-runner omgserversctl-intel-macos/omgserversctl && zip artifacts/omgserversctl-intel-macos.zip omgserversctl-intel-macos/omgserversctl
+          mv omgserversctl-arm64-macos/*-runner omgserversctl-arm64-macos/omgserversctl && zip artifacts/omgserversctl-arm64-macos.zip omgserversctl-arm64-macos/omgserversctl
+          zip -r artifacts/localtesting-environment.zip localtesting-environment
+          mv install-sh/install.sh artifacts/install.sh
+          mv openapi-yaml/openapi.yaml artifacts/openapi.yaml
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: artifacts/*
+          preserve_order: true
+          draft: true
