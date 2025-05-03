@@ -46,6 +46,16 @@ jobs:
         with:
           name: openapi-yaml
           path: omgservers-service/target/openapi/openapi.yaml
+      - name: Upload artifact (localtesting-environment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: localtesting-environment
+          path: omgservers-testing/localtesting-environment/src/**
+      - name: Upload artifact (install-sh)
+        uses: actions/upload-artifact@v4
+        with:
+          name: install-sh
+          path: install.sh
 
   build-ctl:
     runs-on: "${{ matrix.runner }}"

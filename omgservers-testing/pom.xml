@@ -20,8 +20,9 @@
 
     <modules>
         <module>singleinstance-environment</module>
-        <module>integration-environment</module>
         <module>localtesting-environment</module>
+        <module>integration-environment</module>
+        <module>orphan-environment</module>
         <module>multiinstance-environment</module>
     </modules>
 </project>
