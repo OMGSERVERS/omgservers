@@ -9,35 +9,19 @@
 
 OMGSERVERS is a backend for authoritative game servers.
 
+## How to try it
+
+```bash
+curl -L https://github.com/OMGSERVERS/omgservers/releases/download/0.2.0/install.sh | bash
+```
+
 # Features
 
-- Developer account and permission management.
-- Organization of tenants, projects, stages, versions, and deployments.
-- Two types of game runtimes: lobbies and matches.
-- Game runtimes execution in Docker containers.
-- Players assignment across lobbies and matches.
-- Players data storage and management.
-- [Defold SDK](https://github.com/OMGSERVERS/omgdefold) support for both clients and servers.
-- A command-line tool for administrative tasks.
-
-# User Roles
-
-- Admin – Manages backend installation.
-- Support – Creates tenants for developers.
-- Developer – Push game runtime docker images.
-- Player – Plays games developed by developers.
-- Runtime – Interacts with the backend and handles gameplay.
-
-# How it Works
-
-- A support user creates a new tenant for the developer to use.
-- The developer creates and sets up a new project within the tenant.
-- The developer creates a new version of the project.
-- The developer pushes game runtime Docker images to the registry under the created version.
-- The developer initiates the fetchDeploymentResult of the new version.
-- When the first players connect, the backend starts and assigns lobbies to them within the fetchDeploymentResult.
-- To enable multiplayer gameplay, the backend runs matches.
-- Lobbies and matches use the OMGSERVER SDK to execute backend-specific commands.
-- Players use the OMGPLAYER SDK to interact with the backend.
-- All incoming player messages are routed to their assigned runtimes.
-- To implement real-time gameplay, matches require players to connect directly.
+- Developer account and permission management
+- Structured organization of tenants, projects, stages, versions, and deployments
+- Support for two game runtime types: lobbies and matches
+- Runtime execution in Docker containers
+- Player assignment and distribution across lobbies and matches
+- Player data storage and lifecycle management
+- [Defold SDK](https://github.com/OMGSERVERS/omgdefold) support for both clients and servers
+- Command-line tool for administrative and development tasks

@@ -1,0 +1,65 @@
+name: localtesting
+
+services:
+  gateway:
+    image: "envoyproxy/envoy:v1.28-latest"
+    container_name: "gateway"
+    command: "-c /etc/envoy/gateway_config.yaml"
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "10000:10000"
+    networks:
+      - omgservers
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./gateway_config.yaml:/etc/envoy/gateway_config.yaml:ro
+  docker:
+    image: "alpine/socat"
+    container_name: "docker"
+    command: "tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock"
+    restart: unless-stopped
+    ports:
+      - "2375:2375"
+    networks:
+      - omgservers
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  database:
+    image: "postgres:16.1"
+    container_name: "database"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=omgservers
+      - POSTGRES_PASSWORD=omgservers
+      - POSTGRES_DB=omgservers
+    ports:
+      - "5432:5432"
+    networks:
+      - omgservers
+  cache:
+    image: redis:7
+    container_name: "cache"
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - omgservers
+  registry:
+    image: "registry:2.8.3"
+    container_name: "registry"
+    command: "/etc/docker/registry/registry_config.yaml"
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    networks:
+      - omgservers
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
+      - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
+networks:
+  omgservers:
+    name: omgservers

@@ -35,18 +35,18 @@ internal_help() {
   if [ -z "$1" -o "$1" = "environment" -o "$1" = "environment down" ]; then
     echo " $0 environment down"
   fi
-  # Localtesting
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting up" ]; then
-    echo " $0 localtesting up"
+  # Orphan
+  if [ -z "$1" -o "$1" = "orphan" -o "$1" = "orphan up" ]; then
+    echo " $0 orphan up"
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting ps" ]; then
-    echo " $0 localtesting ps"
+  if [ -z "$1" -o "$1" = "orphan" -o "$1" = "orphan ps" ]; then
+    echo " $0 orphan ps"
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting reset" ]; then
-    echo " $0 localtesting reset"
+  if [ -z "$1" -o "$1" = "orphan" -o "$1" = "orphan reset" ]; then
+    echo " $0 orphan reset"
   fi
-  if [ -z "$1" -o "$1" = "localtesting" -o "$1" = "localtesting test" ]; then
-    echo " $0 localtesting test"
+  if [ -z "$1" -o "$1" = "orphan" -o "$1" = "orphan test" ]; then
+    echo " $0 orphan test"
   fi
   # Singleinstance
   if [ -z "$1" -o "$1" = "singleinstance" -o "$1" = "singleinstance up" ]; then
@@ -153,7 +153,7 @@ environment_printCurrent() {
 environment_down() {
   read -p 'Continue (y/n)? : ' ANSWER
   if [ "${ANSWER}" == "y" ]; then
-    docker compose -p localtesting down -v
+    docker compose -p orphan down -v
     docker compose -p singleinstance down -v
     docker compose -p integration down -v
     docker compose -p multiinstance down -v
@@ -162,7 +162,7 @@ environment_down() {
   fi
 }
 
-localtesting_up() {
+orphan_up() {
   internal_ask_down "singleinstance|integration|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
@@ -174,31 +174,31 @@ localtesting_up() {
 
   echo "$(date) Using version, OMGSERVERS_VERSION=${OMGSERVERS_VERSION}"
 
-  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p localtesting -f omgservers-testing/localtesting-environment/src/compose.yaml up --remove-orphans -d
-  docker compose -p localtesting ps
+  OMGSERVERS_VERSION=${OMGSERVERS_VERSION} docker compose -p orphan -f omgservers-testing/orphan-environment/src/compose.yaml up --remove-orphans -d
+  docker compose -p orphan ps
 }
 
-localtesting_ps() {
-  docker compose -p localtesting ps
+orphan_ps() {
+  docker compose -p orphan ps
 }
 
-localtesting_reset() {
+orphan_reset() {
   read -p 'Continue (y/n)? : ' ANSWER
   if [ "${ANSWER}" == "y" ]; then
-    docker compose -p localtesting down -v
-    localtesting_up
+    docker compose -p orphan down -v
+    orphan_up
   else
     echo "Operation was cancelled"
   fi
 }
 
-localtesting_test() {
-  OMGSERVERS_TESTER_ENVIRONMENT=LOCALTESTING \
+orphan_test() {
+  OMGSERVERS_TESTER_ENVIRONMENT=orphan \
     ./mvnw -B -Dquarkus.test.profile=test -DskipITs=false -f pom.xml verify
 }
 
 singleinstance_up() {
-  internal_ask_down "localtesting|integration|multiinstance"
+  internal_ask_down "orphan|integration|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -247,7 +247,7 @@ singleinstance_test() {
 }
 
 multiinstance_up() {
-  internal_ask_down "localtesting|singleinstance|integration"
+  internal_ask_down "orphan|singleinstance|integration"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -282,7 +282,7 @@ multiinstance_test() {
 }
 
 integration_up() {
-  internal_ask_down "localtesting|singleinstance|multiinstance"
+  internal_ask_down "orphan|singleinstance|multiinstance"
 
   OMGSERVERS_VERSION=$(build_printVersion)
 
@@ -348,17 +348,17 @@ elif [ "$1" = "environment" ]; then
   else
     internal_help "environment"
   fi
-elif [ "$1" = "localtesting" ]; then
+elif [ "$1" = "orphan" ]; then
   if [ "$2" = "up" ]; then
-    localtesting_up
+    orphan_up
   elif [ "$2" = "ps" ]; then
-    localtesting_ps
+    orphan_ps
   elif [ "$2" = "reset" ]; then
-    localtesting_reset
+    orphan_reset
   elif [ "$2" = "test" ]; then
-    localtesting_test
+    orphan_test
   else
-    internal_help "localtesting"
+    internal_help "orphan"
   fi
 elif [ "$1" = "singleinstance" ]; then
   if [ "$2" = "up" ]; then
