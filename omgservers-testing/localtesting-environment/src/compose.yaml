@@ -40,8 +40,8 @@ services:
     networks:
       - omgservers
     volumes:
-      - ./configs/registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
-      - ./certs/jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
+      - ./registry_config.yaml:/etc/docker/registry/registry_config.yaml:ro
+      - ./jwt_issuer_cert.pem:/root/certs/bundle/jwt_issuer_cert.pem
   service:
     image: "omgservers/service:${OMGSERVERS_VERSION}"
     container_name: "service"
@@ -65,7 +65,7 @@ services:
       - OMGSERVERS_CLIENT_DISPATCHER_URI=ws://localhost:8081
       - OMGSERVERS_RUNTIME_SERVICE_URI=http://service:8080
       - OMGSERVERS_RUNTIME_DISPATCHER_URI=ws://dispatcher:8080
-      - OMGSERVERS_REGISTRY_URI=registry:5000
+      - OMGSERVERS_REGISTRY_URI=http://localhost:5000
       - OMGSERVERS_ADMIN_USER_PASSWORD=admin
       - OMGSERVERS_SUPPORT_USER_PASSWORD=support
       - OMGSERVERS_SERVICE_USER_PASSWORD=service
@@ -79,8 +79,8 @@ services:
     networks:
       - omgservers
     volumes:
-      - ./certs/jwt_issuer_private_key.pem:/jwt_issuer/private_key.pem:ro
-      - ./certs/jwt_issuer_public_key.pem:/jwt_issuer/public_key.pem:ro
+      - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
+      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
   dispatcher:
     image: "omgservers/dispatcher:${OMGSERVERS_VERSION}"
     container_name: "dispatcher"
@@ -92,7 +92,7 @@ services:
     networks:
       - omgservers
     volumes:
-      - ./certs/jwt_issuer_public_key.pem:/jwt_issuer/public_key.pem:ro
+      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
 networks:
   omgservers:
     name: omgservers
