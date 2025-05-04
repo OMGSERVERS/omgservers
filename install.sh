@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-VERSION="0.2.0"
+VERSION="0.3.0"
 
 DOWNLOAD_URL="https://github.com/OMGSERVERS/omgservers/releases/download/${VERSION}/localtesting-environment.zip"
 ARCHIVE_NAME=$(basename ${DOWNLOAD_URL})
