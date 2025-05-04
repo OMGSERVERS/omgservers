@@ -27,7 +27,7 @@ class FindDeveloperTokenOperationImpl implements FindDeveloperTokenOperation {
                 .filter(log -> log.getQualifier().equals(LogLineQualifierEnum.DEVELOPER_TOKEN))
                 .map(LogLineDto::getBody)
                 .map(DeveloperTokenLogLineBodyDto.class::cast)
-                .filter(logLine -> logLine.getService().equals(service))
+                .filter(logLine -> logLine.getInstallation().equals(service))
                 .filter(logLine -> {
                     if (user == null) {
                         return true;

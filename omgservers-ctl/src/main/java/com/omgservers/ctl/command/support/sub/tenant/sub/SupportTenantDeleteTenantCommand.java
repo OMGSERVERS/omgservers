@@ -20,6 +20,6 @@ public class SupportTenantDeleteTenantCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantDeleteTenantOperation.execute(tenant, service, user);
+        supportTenantDeleteTenantOperation.execute(tenant, installation, user);
     }
 }

@@ -17,6 +17,6 @@ public class AdminGenerateIdCommand extends UserCommand {
 
     @Override
     public void run() {
-        adminGenerateIdOperation.execute(service, user);
+        adminGenerateIdOperation.execute(installation, user);
     }
 }

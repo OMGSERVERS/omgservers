@@ -23,6 +23,6 @@ public class SupportTenantCreateAliasCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantCreateAliasOperation.execute(tenantId, alias, service, user);
+        supportTenantCreateAliasOperation.execute(tenantId, alias, installation, user);
     }
 }

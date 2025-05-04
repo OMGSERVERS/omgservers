@@ -42,7 +42,7 @@ public class SupportStageDeletePermissionCommand extends UserCommand {
                 stage,
                 userId,
                 permission,
-                service,
+                installation,
                 user);
     }
 }

@@ -5,7 +5,7 @@ import com.omgservers.ctl.operation.client.CreateDeveloperClientOperation;
 import com.omgservers.ctl.operation.ctl.OutputObjectOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.developer.FindDeveloperTokenOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ class DeveloperVersionGetDetailsOperationImpl implements DeveloperVersionGetDeta
 
     final CreateDeveloperClientOperation createDeveloperClientOperation;
     final FindDeveloperTokenOperation findDeveloperTokenOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final OutputObjectOperation outputObjectOperation;
     final GetWalOperation getWalOperation;
 
@@ -37,9 +37,9 @@ class DeveloperVersionGetDetailsOperationImpl implements DeveloperVersionGetDeta
                         final boolean prettyPrint) {
         final var wal = getWalOperation.execute();
 
-        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getUri();
+        final var serviceUri = serviceUrl.getApi();
 
         final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName, user);
         final var developerToken = developerTokenLog.getToken();

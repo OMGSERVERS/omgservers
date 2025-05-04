@@ -21,7 +21,7 @@ public class DeveloperDeploymentGetDetailsCommand extends UserCommand {
     @Override
     public void run() {
         developerDeploymentGetDetailsOperation.execute(deploymentId,
-                service,
+                installation,
                 user,
                 prettyPrint);
     }

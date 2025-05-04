@@ -10,7 +10,7 @@ import picocli.CommandLine;
 
 @CommandLine.Command(
         name = "admin",
-        description = "Manage service installation and configuration.",
+        description = "Administer the service installation.",
         subcommands = {
                 AdminCreateTokenCommand.class,
                 AdminGenerateIdCommand.class,

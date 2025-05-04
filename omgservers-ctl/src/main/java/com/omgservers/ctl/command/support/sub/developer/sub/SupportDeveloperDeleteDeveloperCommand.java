@@ -20,6 +20,6 @@ public class SupportDeveloperDeleteDeveloperCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportDeveloperDeleteDeveloperOperation.execute(userId, service, user);
+        supportDeveloperDeleteDeveloperOperation.execute(userId, installation, user);
     }
 }

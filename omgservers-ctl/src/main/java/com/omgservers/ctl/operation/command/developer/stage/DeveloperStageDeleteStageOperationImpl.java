@@ -5,7 +5,7 @@ import com.omgservers.ctl.operation.client.CreateDeveloperClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.developer.FindDeveloperTokenOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.DeleteStageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteStageDeveloperResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ class DeveloperStageDeleteStageOperationImpl implements DeveloperStageDeleteStag
     final CreateDeveloperClientOperation createDeveloperClientOperation;
     final FindDeveloperTokenOperation findDeveloperTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
@@ -33,9 +33,9 @@ class DeveloperStageDeleteStageOperationImpl implements DeveloperStageDeleteStag
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getUri();
+        final var serviceUri = serviceUrl.getApi();
 
         final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName, user);
         final var developerToken = developerTokenLog.getToken();

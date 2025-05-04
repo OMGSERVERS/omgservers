@@ -12,7 +12,9 @@ import java.util.Arrays;
 public enum KeyEnum {
     ID("id"),
     MAP("map"),
-    SERVICE("service"),
+    INSTALLATION("installation"),
+    API("api"),
+    REGISTRY("registry"),
     USER("user"),
     USER_ID("user_id"),
     DEVELOPER("developer"),

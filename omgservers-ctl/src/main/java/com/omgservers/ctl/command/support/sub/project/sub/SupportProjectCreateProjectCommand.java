@@ -20,6 +20,6 @@ public class SupportProjectCreateProjectCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportProjectCreateProjectOperation.execute(tenant, service, user);
+        supportProjectCreateProjectOperation.execute(tenant, installation, user);
     }
 }

@@ -31,6 +31,6 @@ public class SupportTenantCreatePermissionCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantCreatePermissionOperation.execute(tenant, userId, permission, service, user);
+        supportTenantCreatePermissionOperation.execute(tenant, userId, permission, installation, user);
     }
 }

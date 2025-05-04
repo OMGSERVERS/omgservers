@@ -27,7 +27,7 @@ class FindAdminTokenOperationImpl implements FindAdminTokenOperation {
                 .filter(log -> log.getQualifier().equals(LogLineQualifierEnum.ADMIN_TOKEN))
                 .map(LogLineDto::getBody)
                 .map(AdminTokenLogLineBodyDto.class::cast)
-                .filter(logLine -> logLine.getService().equals(service))
+                .filter(logLine -> logLine.getInstallation().equals(service))
                 .filter(logLine -> {
                     if (user == null) {
                         return true;

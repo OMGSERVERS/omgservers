@@ -29,7 +29,7 @@ public class SupportStageCreateAliasCommand extends UserCommand {
         supportStageCreateAliasOperation.execute(tenant,
                 stageId,
                 alias,
-                service,
+                installation,
                 user);
     }
 }

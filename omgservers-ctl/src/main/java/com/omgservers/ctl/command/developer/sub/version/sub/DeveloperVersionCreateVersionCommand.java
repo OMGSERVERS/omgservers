@@ -45,7 +45,7 @@ public class DeveloperVersionCreateVersionCommand extends UserCommand {
         developerVersionCreateVersionOperation.execute(tenant,
                 project,
                 config,
-                service,
+                installation,
                 user);
     }
 }

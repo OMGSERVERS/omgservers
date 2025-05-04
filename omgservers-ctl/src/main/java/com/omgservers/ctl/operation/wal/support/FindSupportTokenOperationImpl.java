@@ -27,7 +27,7 @@ class FindSupportTokenOperationImpl implements FindSupportTokenOperation {
                 .filter(log -> log.getQualifier().equals(LogLineQualifierEnum.SUPPORT_TOKEN))
                 .map(LogLineDto::getBody)
                 .map(SupportTokenLogLineBodyDto.class::cast)
-                .filter(logLine -> logLine.getService().equals(service))
+                .filter(logLine -> logLine.getInstallation().equals(service))
                 .filter(logLine -> {
                     if (user == null) {
                         return true;

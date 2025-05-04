@@ -17,6 +17,6 @@ public class SupportDeveloperCreateDeveloperCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportDeveloperCreateDeveloperOperation.execute(service, user);
+        supportDeveloperCreateDeveloperOperation.execute(installation, user);
     }
 }

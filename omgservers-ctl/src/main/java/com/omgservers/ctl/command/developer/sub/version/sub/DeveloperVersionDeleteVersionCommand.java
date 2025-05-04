@@ -29,7 +29,7 @@ public class DeveloperVersionDeleteVersionCommand extends UserCommand {
         developerVersionDeleteVersionOperation.execute(tenant,
                 project,
                 version,
-                service,
+                installation,
                 user);
     }
 }

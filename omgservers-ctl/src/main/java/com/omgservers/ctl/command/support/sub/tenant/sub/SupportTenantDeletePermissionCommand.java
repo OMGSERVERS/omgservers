@@ -31,6 +31,6 @@ public class SupportTenantDeletePermissionCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantDeletePermissionOperation.execute(tenant, userId, permission, service, user);
+        supportTenantDeletePermissionOperation.execute(tenant, userId, permission, installation, user);
     }
 }

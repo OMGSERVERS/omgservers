@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "get",
-        description = "Retrieve the latest command result by key.")
+        description = "Get the latest result field by key.")
 public class GetCommand implements Runnable {
 
     @CommandLine.Parameters(description = "Key of value.",

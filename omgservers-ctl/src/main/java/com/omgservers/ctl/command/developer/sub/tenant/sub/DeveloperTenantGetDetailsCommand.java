@@ -20,6 +20,6 @@ public class DeveloperTenantGetDetailsCommand extends UserCommand {
 
     @Override
     public void run() {
-        developerTenantGetDetailsOperation.execute(tenant, service, user, prettyPrint);
+        developerTenantGetDetailsOperation.execute(tenant, installation, user, prettyPrint);
     }
 }

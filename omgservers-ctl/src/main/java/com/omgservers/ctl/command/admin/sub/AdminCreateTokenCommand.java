@@ -23,6 +23,6 @@ public class AdminCreateTokenCommand extends ServiceCommand {
 
     @Override
     public void run() {
-        adminCreateTokenOperation.execute(user, password, service);
+        adminCreateTokenOperation.execute(user, password, installation);
     }
 }

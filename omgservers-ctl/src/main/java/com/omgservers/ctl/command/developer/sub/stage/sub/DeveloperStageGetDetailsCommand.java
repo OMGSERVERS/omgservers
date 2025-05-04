@@ -26,6 +26,6 @@ public class DeveloperStageGetDetailsCommand extends UserCommand {
 
     @Override
     public void run() {
-        developerStageGetDetailsOperation.execute(tenant, project, stage, service, user, prettyPrint);
+        developerStageGetDetailsOperation.execute(tenant, project, stage, installation, user, prettyPrint);
     }
 }

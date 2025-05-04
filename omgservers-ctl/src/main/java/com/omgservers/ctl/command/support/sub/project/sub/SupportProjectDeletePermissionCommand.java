@@ -38,7 +38,7 @@ public class SupportProjectDeletePermissionCommand extends UserCommand {
                 project,
                 userId,
                 permission,
-                service,
+                installation,
                 user);
     }
 }

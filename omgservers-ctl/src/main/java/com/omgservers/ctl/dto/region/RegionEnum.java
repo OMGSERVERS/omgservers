@@ -11,10 +11,13 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum RegionEnum {
-    FRA1("fra1", URI.create("https://api.fra1.omgservers.com"));
+    FRA1("fra1",
+            URI.create("https://api.fra1.omgservers.com"),
+            URI.create("https://registry.fra1.omgservers.com"));
 
     final String region;
-    final URI uri;
+    final URI api;
+    final URI registry;
 
     @JsonValue
     public String toJson() {

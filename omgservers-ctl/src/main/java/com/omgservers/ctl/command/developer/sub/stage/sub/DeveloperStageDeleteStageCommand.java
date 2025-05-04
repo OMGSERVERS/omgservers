@@ -29,7 +29,7 @@ public class DeveloperStageDeleteStageCommand extends UserCommand {
         developerStageDeleteStageOperation.execute(tenant,
                 project,
                 stage,
-                service,
+                installation,
                 user);
     }
 }
