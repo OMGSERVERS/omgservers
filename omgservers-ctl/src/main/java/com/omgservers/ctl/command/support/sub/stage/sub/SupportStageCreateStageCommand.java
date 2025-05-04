@@ -23,6 +23,6 @@ public class SupportStageCreateStageCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportStageCreateStageOperation.execute(tenant, project, service, user);
+        supportStageCreateStageOperation.execute(tenant, project, installation, user);
     }
 }

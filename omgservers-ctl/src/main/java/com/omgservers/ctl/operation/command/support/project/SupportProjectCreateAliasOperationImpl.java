@@ -4,7 +4,7 @@ import com.omgservers.ctl.dto.key.KeyEnum;
 import com.omgservers.ctl.operation.client.CreateSupportClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.ctl.operation.wal.support.FindSupportTokenOperation;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ class SupportProjectCreateAliasOperationImpl implements SupportProjectCreateAlia
     final CreateSupportClientOperation createSupportClientOperation;
     final FindSupportTokenOperation findSupportTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
@@ -32,13 +32,13 @@ class SupportProjectCreateAliasOperationImpl implements SupportProjectCreateAlia
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrlLog = findServiceUrlOperation.execute(wal, service);
-        final var serviceName = serviceUrlLog.getName();
-        final var serviceUri = serviceUrlLog.getUri();
+        final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, service);
+        final var installationName = installationDetailsLog.getName();
+        final var installationApi = installationDetailsLog.getApi();
 
-        final var supportTokenLog = findSupportTokenOperation.execute(wal, serviceName, user);
+        final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName, user);
         final var supportToken = supportTokenLog.getToken();
-        final var supportClient = createSupportClientOperation.execute(serviceUri, supportToken);
+        final var supportClient = createSupportClientOperation.execute(installationApi, supportToken);
 
         final var request = new CreateTenantProjectAliasSupportRequest(tenant, projectId, alias);
         supportClient.execute(request)

@@ -4,7 +4,7 @@ import com.omgservers.ctl.operation.client.CreateDeveloperAnonymousClientOperati
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.developer.AppendDeveloperTokenOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ class DeveloperCreateTokenOperationImpl implements DeveloperCreateTokenOperation
     final CreateDeveloperAnonymousClientOperation createDeveloperAnonymousClientOperation;
     final AppendDeveloperTokenOperation appendDeveloperTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
@@ -30,9 +30,9 @@ class DeveloperCreateTokenOperationImpl implements DeveloperCreateTokenOperation
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getUri();
+        final var serviceUri = serviceUrl.getApi();
 
         final var developerAnonymousClient = createDeveloperAnonymousClientOperation.execute(serviceUri);
 

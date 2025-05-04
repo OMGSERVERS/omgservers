@@ -4,7 +4,7 @@ import com.omgservers.ctl.dto.key.KeyEnum;
 import com.omgservers.ctl.operation.client.CreateSupportClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.ctl.operation.wal.support.FindSupportTokenOperation;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
@@ -21,7 +21,7 @@ class SupportTenantCreateTenantOperationImpl implements SupportTenantCreateTenan
     final CreateSupportClientOperation createSupportClientOperation;
     final FindSupportTokenOperation findSupportTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
@@ -29,9 +29,9 @@ class SupportTenantCreateTenantOperationImpl implements SupportTenantCreateTenan
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getUri();
+        final var serviceUri = serviceUrl.getApi();
 
         final var supportTokenLog = findSupportTokenOperation.execute(wal, serviceName, user);
         final var supportToken = supportTokenLog.getToken();

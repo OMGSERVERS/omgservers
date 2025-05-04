@@ -26,6 +26,6 @@ public class SupportStageDeleteStageCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportStageDeleteStageOperation.execute(tenant, project, stage, service, user);
+        supportStageDeleteStageOperation.execute(tenant, project, stage, installation, user);
     }
 }

@@ -4,7 +4,7 @@ import com.omgservers.ctl.operation.client.CreateAdminAnonymousClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.admin.AppendAdminTokenOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminRequest;
 import com.omgservers.schema.entrypoint.admin.CreateTokenAdminResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ class AdminCreateTokenOperationImpl implements AdminCreateTokenOperation {
     final CreateAdminAnonymousClientOperation createAdminAnonymousClientOperation;
     final AppendAdminTokenOperation appendAdminTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
@@ -30,9 +30,9 @@ class AdminCreateTokenOperationImpl implements AdminCreateTokenOperation {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getUri();
+        final var serviceUri = serviceUrl.getApi();
 
         final var adminAnonymousClient = createAdminAnonymousClientOperation.execute(serviceUri);
 

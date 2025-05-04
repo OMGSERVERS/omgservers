@@ -23,6 +23,10 @@ public class DeveloperProjectGetDetailsCommand extends UserCommand {
 
     @Override
     public void run() {
-        developerProjectGetDetailsOperation.execute(tenant, project, service, user, prettyPrint);
+        developerProjectGetDetailsOperation.execute(tenant,
+                project,
+                installation,
+                user,
+                prettyPrint);
     }
 }

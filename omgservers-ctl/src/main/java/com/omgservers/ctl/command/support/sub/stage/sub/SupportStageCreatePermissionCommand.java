@@ -42,7 +42,7 @@ public class SupportStageCreatePermissionCommand extends UserCommand {
                 stage,
                 userId,
                 permission,
-                service,
+                installation,
                 user);
     }
 }

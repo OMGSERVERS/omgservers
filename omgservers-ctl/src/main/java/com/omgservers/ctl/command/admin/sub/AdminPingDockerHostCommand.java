@@ -22,6 +22,6 @@ public class AdminPingDockerHostCommand extends UserCommand {
 
     @Override
     public void run() {
-        pingDockerHostOperation.execute(dockerDaemonUri, service, user);
+        pingDockerHostOperation.execute(dockerDaemonUri, installation, user);
     }
 }

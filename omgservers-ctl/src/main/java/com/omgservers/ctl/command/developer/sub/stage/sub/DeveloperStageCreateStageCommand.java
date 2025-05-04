@@ -23,6 +23,9 @@ public class DeveloperStageCreateStageCommand extends UserCommand {
 
     @Override
     public void run() {
-        developerStageCreateStageOperation.execute(tenant, project, service, user);
+        developerStageCreateStageOperation.execute(tenant,
+                project,
+                installation,
+                user);
     }
 }

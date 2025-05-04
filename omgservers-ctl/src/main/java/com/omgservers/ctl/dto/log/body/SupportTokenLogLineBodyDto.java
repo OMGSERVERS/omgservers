@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 public class SupportTokenLogLineBodyDto extends LogLineBodyDto {
 
-    String service;
+    String installation;
     String user;
     String token;
 

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +13,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 public class AdminTokenLogLineBodyDto extends LogLineBodyDto {
 
-    String service;
+    String installation;
     String user;
     String token;
 

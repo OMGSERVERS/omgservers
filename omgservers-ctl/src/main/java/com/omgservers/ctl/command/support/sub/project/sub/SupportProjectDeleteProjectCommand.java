@@ -23,6 +23,6 @@ public class SupportProjectDeleteProjectCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportProjectDeleteProjectOperation.execute(tenant, project, service, user);
+        supportProjectDeleteProjectOperation.execute(tenant, project, installation, user);
     }
 }

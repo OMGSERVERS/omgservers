@@ -38,7 +38,7 @@ public class SupportProjectCreatePermissionCommand extends UserCommand {
                 project,
                 userId,
                 permission,
-                service,
+                installation,
                 user);
     }
 }

@@ -5,7 +5,7 @@ import com.omgservers.ctl.operation.client.CreateAdminClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.admin.FindAdminTokenOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.admin.GenerateIdAdminRequest;
 import com.omgservers.schema.entrypoint.admin.GenerateIdAdminResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -20,7 +20,7 @@ class AdminGenerateIdOperationImpl implements AdminGenerateIdOperation {
 
     final CreateAdminClientOperation createAdminClientOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final FindAdminTokenOperation findAdminTokenOperation;
     final GetWalOperation getWalOperation;
 
@@ -29,13 +29,13 @@ class AdminGenerateIdOperationImpl implements AdminGenerateIdOperation {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrlLog = findServiceUrlOperation.execute(wal, service);
-        final var serviceName = serviceUrlLog.getName();
-        final var serviceUri = serviceUrlLog.getUri();
+        final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, service);
+        final var installationName = installationDetailsLog.getName();
+        final var installationApi = installationDetailsLog.getApi();
 
-        final var adminTokenLog = findAdminTokenOperation.execute(wal, serviceName, user);
+        final var adminTokenLog = findAdminTokenOperation.execute(wal, installationName, user);
         final var adminToken = adminTokenLog.getToken();
-        final var adminClient = createAdminClientOperation.execute(serviceUri, adminToken);
+        final var adminClient = createAdminClientOperation.execute(installationApi, adminToken);
 
         final var request = new GenerateIdAdminRequest();
         final var generatedId = adminClient.execute(request)

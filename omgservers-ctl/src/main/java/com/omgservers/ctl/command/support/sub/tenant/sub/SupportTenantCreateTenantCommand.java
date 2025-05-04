@@ -17,6 +17,6 @@ public class SupportTenantCreateTenantCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantCreateTenantOperation.execute(service, user);
+        supportTenantCreateTenantOperation.execute(installation, user);
     }
 }

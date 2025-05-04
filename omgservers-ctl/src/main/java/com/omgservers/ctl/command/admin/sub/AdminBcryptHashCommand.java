@@ -20,6 +20,6 @@ public class AdminBcryptHashCommand extends UserCommand {
 
     @Override
     public void run() {
-        adminBcryptHashOperation.execute(value, service, user);
+        adminBcryptHashOperation.execute(value, installation, user);
     }
 }

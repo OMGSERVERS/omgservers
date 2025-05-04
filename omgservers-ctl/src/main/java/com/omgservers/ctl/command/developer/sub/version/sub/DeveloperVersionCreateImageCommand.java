@@ -51,7 +51,7 @@ public class DeveloperVersionCreateImageCommand extends UserCommand {
                 version,
                 type,
                 url,
-                service,
+                installation,
                 user);
     }
 }

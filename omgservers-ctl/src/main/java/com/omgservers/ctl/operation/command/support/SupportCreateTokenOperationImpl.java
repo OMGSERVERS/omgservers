@@ -3,7 +3,7 @@ package com.omgservers.ctl.operation.command.support;
 import com.omgservers.ctl.operation.client.CreateSupportAnonymousClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.ctl.operation.wal.support.AppendSupportTokenOperation;
 import com.omgservers.schema.entrypoint.support.CreateTokenSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTokenSupportResponse;
@@ -20,7 +20,7 @@ class SupportCreateTokenOperationImpl implements SupportCreateTokenOperation {
     final CreateSupportAnonymousClientOperation createSupportAnonymousClientOperation;
     final AppendSupportTokenOperation appendSupportTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
@@ -30,9 +30,9 @@ class SupportCreateTokenOperationImpl implements SupportCreateTokenOperation {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getUri();
+        final var serviceUri = serviceUrl.getApi();
 
         final var supportAnonymousClient = createSupportAnonymousClientOperation.execute(serviceUri);
 

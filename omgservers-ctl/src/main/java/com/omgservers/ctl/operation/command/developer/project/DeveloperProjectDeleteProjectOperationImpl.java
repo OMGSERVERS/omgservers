@@ -2,17 +2,12 @@ package com.omgservers.ctl.operation.command.developer.project;
 
 import com.omgservers.ctl.dto.key.KeyEnum;
 import com.omgservers.ctl.operation.client.CreateDeveloperClientOperation;
-import com.omgservers.ctl.operation.client.CreateSupportClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.developer.FindDeveloperTokenOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
-import com.omgservers.ctl.operation.wal.support.FindSupportTokenOperation;
-import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperResponse;
-import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRequest;
-import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,7 +21,7 @@ class DeveloperProjectDeleteProjectOperationImpl implements DeveloperProjectDele
     final CreateDeveloperClientOperation createDeveloperClientOperation;
     final FindDeveloperTokenOperation findDeveloperTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
@@ -37,9 +32,9 @@ class DeveloperProjectDeleteProjectOperationImpl implements DeveloperProjectDele
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findServiceUrlOperation.execute(wal, service);
+        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getUri();
+        final var serviceUri = serviceUrl.getApi();
 
         final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName, user);
         final var developerToken = developerTokenLog.getToken();

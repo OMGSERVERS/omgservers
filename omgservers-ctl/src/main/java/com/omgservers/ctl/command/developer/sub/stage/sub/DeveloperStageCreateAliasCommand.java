@@ -29,7 +29,7 @@ public class DeveloperStageCreateAliasCommand extends UserCommand {
         developerStageCreateAliasOperation.execute(tenant,
                 stageId,
                 alias,
-                service,
+                installation,
                 user);
     }
 }

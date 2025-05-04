@@ -4,9 +4,9 @@ import picocli.CommandLine;
 
 public abstract class UserCommand implements Runnable {
 
-    @CommandLine.Option(names = {"-s", "--service"},
-            description = "Name of the service to send commands to.")
-    protected String service;
+    @CommandLine.Option(names = {"-i", "--installation"},
+            description = "Name of the installation to send commands to.")
+    protected String installation;
 
     @CommandLine.Option(names = {"-u", "--user"},
             description = "Id or alias of the user on whose behalf the commands are sent.")

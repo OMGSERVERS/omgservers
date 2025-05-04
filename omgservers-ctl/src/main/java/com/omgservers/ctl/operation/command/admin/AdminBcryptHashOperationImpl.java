@@ -6,7 +6,7 @@ import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.admin.AppendAdminTokenOperation;
 import com.omgservers.ctl.operation.wal.admin.FindAdminTokenOperation;
-import com.omgservers.ctl.operation.wal.service.FindServiceUrlOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.admin.BcryptHashAdminRequest;
 import com.omgservers.schema.entrypoint.admin.BcryptHashAdminResponse;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,24 +22,24 @@ class AdminBcryptHashOperationImpl implements AdminBcryptHashOperation {
     final CreateAdminClientOperation createAdminClientOperation;
     final AppendAdminTokenOperation appendAdminTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindServiceUrlOperation findServiceUrlOperation;
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final FindAdminTokenOperation findAdminTokenOperation;
     final GetWalOperation getWalOperation;
 
     @Override
     public void execute(final String value,
-                        final String service,
+                        final String installation,
                         final String user) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrlLog = findServiceUrlOperation.execute(wal, service);
-        final var serviceName = serviceUrlLog.getName();
-        final var serviceUri = serviceUrlLog.getUri();
+        final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, installation);
+        final var installationName = installationDetailsLog.getName();
+        final var installationApi = installationDetailsLog.getApi();
 
-        final var adminTokenLog = findAdminTokenOperation.execute(wal, serviceName, user);
+        final var adminTokenLog = findAdminTokenOperation.execute(wal, installationName, user);
         final var adminToken = adminTokenLog.getToken();
-        final var adminClient = createAdminClientOperation.execute(serviceUri, adminToken);
+        final var adminClient = createAdminClientOperation.execute(installationApi, adminToken);
 
         final var request = new BcryptHashAdminRequest(value);
         final var hash = adminClient.execute(request)

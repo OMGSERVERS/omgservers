@@ -29,7 +29,7 @@ public class DeveloperVersionGetDetailsCommand extends UserCommand {
         developerVersionGetDetailsOperation.execute(tenant,
                 project,
                 version,
-                service,
+                installation,
                 user,
                 prettyPrint);
     }

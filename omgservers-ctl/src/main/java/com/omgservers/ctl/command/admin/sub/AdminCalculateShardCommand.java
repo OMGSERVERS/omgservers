@@ -20,6 +20,6 @@ public class AdminCalculateShardCommand extends UserCommand {
 
     @Override
     public void run() {
-        adminCalculateShardOperation.execute(key, service, user);
+        adminCalculateShardOperation.execute(key, installation, user);
     }
 }

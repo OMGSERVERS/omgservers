@@ -29,7 +29,7 @@ public class SupportProjectCreateAliasCommand extends UserCommand {
         supportProjectCreateAliasOperation.execute(tenant,
                 projectId,
                 alias,
-                service,
+                installation,
                 user);
     }
 }

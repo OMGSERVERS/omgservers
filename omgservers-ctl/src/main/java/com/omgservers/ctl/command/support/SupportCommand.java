@@ -10,7 +10,7 @@ import picocli.CommandLine;
 
 @CommandLine.Command(
         name = "support",
-        description = "Provide service support commands.",
+        description = "Service support commands.",
         subcommands = {
                 SupportCreateTokenCommand.class,
                 SupportDeveloperCommand.class,

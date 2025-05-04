@@ -35,7 +35,7 @@ public class DeveloperDeploymentCreateDeploymentCommand extends UserCommand {
                 project,
                 stage,
                 version,
-                service,
+                installation,
                 user);
     }
 }

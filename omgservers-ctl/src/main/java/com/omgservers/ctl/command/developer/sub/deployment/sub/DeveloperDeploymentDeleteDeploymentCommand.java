@@ -21,7 +21,7 @@ public class DeveloperDeploymentDeleteDeploymentCommand extends UserCommand {
     @Override
     public void run() {
         developerDeploymentDeleteDeploymentOperation.execute(deploymentId,
-                service,
+                installation,
                 user);
     }
 }
