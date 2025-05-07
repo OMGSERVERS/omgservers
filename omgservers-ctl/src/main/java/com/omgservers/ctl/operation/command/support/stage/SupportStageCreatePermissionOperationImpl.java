@@ -32,7 +32,7 @@ class SupportStageCreatePermissionOperationImpl implements SupportStageCreatePer
     public void execute(final String tenant,
                         final String project,
                         final String stage,
-                        final Long userId,
+                        final String developer,
                         final StagePermissionEnum permission,
                         final String service,
                         final String user) {
@@ -51,7 +51,7 @@ class SupportStageCreatePermissionOperationImpl implements SupportStageCreatePer
         final var request = new CreateTenantStagePermissionsSupportRequest(tenant,
                 project,
                 stage,
-                userId,
+                developer,
                 Collections.singleton(qualifier));
         final var result = supportClient.execute(request)
                 .map(CreateTenantStagePermissionsSupportResponse::getCreatedPermissions)

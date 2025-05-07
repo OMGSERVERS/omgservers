@@ -1,7 +1,6 @@
 package com.omgservers.schema.entrypoint.developer;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +12,9 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CreateTokenDeveloperRequest {
 
-    @NotNull
-    Long userId;
+    @NotBlank
+    @Size(max = 64)
+    String user;
 
     @NotBlank
     @Size(max = 64)

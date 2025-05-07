@@ -4,6 +4,7 @@ import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
 import com.omgservers.schema.shard.user.CreateTokenRequest;
 import com.omgservers.schema.shard.user.CreateTokenResponse;
+import com.omgservers.service.operation.alias.GetIdByUserOperation;
 import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -19,17 +20,20 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     final UserShard userShard;
 
+    final GetIdByUserOperation getIdByUserOperation;
+
     final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateTokenDeveloperResponse> execute(final CreateTokenDeveloperRequest request) {
         log.trace("{}", request);
 
-        final var userId = request.getUserId();
-        final var password = request.getPassword();
-
-        return createToken(userId, password)
-                .invoke(token -> log.info("Token issued for developer user \"{}\"", userId))
+        return getIdByUserOperation.execute(request.getUser())
+                .flatMap(userId -> {
+                    final var password = request.getPassword();
+                    return createToken(userId, password)
+                            .invoke(token -> log.info("Token issued for developer user \"{}\"", userId));
+                })
                 .map(CreateTokenDeveloperResponse::new);
     }
 

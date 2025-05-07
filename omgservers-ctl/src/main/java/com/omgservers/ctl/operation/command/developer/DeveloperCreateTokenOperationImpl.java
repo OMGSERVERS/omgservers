@@ -36,7 +36,7 @@ class DeveloperCreateTokenOperationImpl implements DeveloperCreateTokenOperation
 
         final var developerAnonymousClient = createDeveloperAnonymousClientOperation.execute(serviceUri);
 
-        final var request = new CreateTokenDeveloperRequest(Long.valueOf(user), password);
+        final var request = new CreateTokenDeveloperRequest(user, password);
         final var adminToken = developerAnonymousClient.execute(request)
                 .map(CreateTokenDeveloperResponse::getRawToken)
                 .await().indefinitely();

@@ -12,7 +12,7 @@ import picocli.CommandLine;
         description = "Create developer token using credentials.")
 public class DeveloperCreateTokenCommand extends ServiceCommand {
 
-    @CommandLine.Parameters(description = "Developer user alias or id.")
+    @CommandLine.Parameters(description = "Id or alias of the developer user.")
     String user;
 
     @CommandLine.Parameters(description = "Developer user password.")

@@ -20,8 +20,9 @@ public class DeleteTenantPermissionsSupportRequest {
     @Size(max = 64)
     String tenant;
 
-    @NotNull
-    Long userId;
+    @NotBlank
+    @Size(max = 64)
+    String user;
 
     @NotEmpty
     Set<TenantPermissionQualifierEnum> permissionsToDelete;

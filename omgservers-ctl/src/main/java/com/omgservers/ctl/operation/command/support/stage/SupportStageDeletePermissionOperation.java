@@ -7,7 +7,7 @@ public interface SupportStageDeletePermissionOperation {
     void execute(String tenant,
                  String project,
                  String stage,
-                 Long userId,
+                 String developer,
                  StagePermissionEnum permission,
                  String service,
                  String user);

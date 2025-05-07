@@ -25,7 +25,7 @@ class SupportDeveloperDeleteDeveloperOperationImpl implements SupportDeveloperDe
     final GetWalOperation getWalOperation;
 
     @Override
-    public void execute(final Long developerUserId,
+    public void execute(final String developer,
                         final String service,
                         final String user) {
         final var wal = getWalOperation.execute();
@@ -39,7 +39,7 @@ class SupportDeveloperDeleteDeveloperOperationImpl implements SupportDeveloperDe
         final var supportToken = supportTokenLog.getToken();
         final var supportClient = createSupportClientOperation.execute(installationApi, supportToken);
 
-        final var request = new DeleteDeveloperSupportRequest(developerUserId);
+        final var request = new DeleteDeveloperSupportRequest(developer);
         final var deleted = supportClient.execute(request)
                 .map(DeleteDeveloperSupportResponse::getDeleted)
                 .await().indefinitely();

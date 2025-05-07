@@ -21,8 +21,8 @@ public class SupportProjectDeletePermissionCommand extends UserCommand {
     @CommandLine.Parameters(description = "Id or alias of the project from which the permission will be revoked.")
     String project;
 
-    @CommandLine.Parameters(description = "Developer user id.")
-    Long userId;
+    @CommandLine.Parameters(description = "Id or alias of the developer user.")
+    String developer;
 
     @CommandLine.Parameters(description = "Project permission to revoke. Possible values: ${COMPLETION-CANDIDATES}.",
             converter = ProjectPermissionConverter.class,
@@ -36,7 +36,7 @@ public class SupportProjectDeletePermissionCommand extends UserCommand {
     public void run() {
         supportProjectDeletePermissionOperation.execute(tenant,
                 project,
-                userId,
+                developer,
                 permission,
                 installation,
                 user);

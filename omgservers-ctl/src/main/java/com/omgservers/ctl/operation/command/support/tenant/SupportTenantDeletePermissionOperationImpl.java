@@ -30,7 +30,7 @@ class SupportTenantDeletePermissionOperationImpl implements SupportTenantDeleteP
 
     @Override
     public void execute(final String tenant,
-                        final Long userId,
+                        final String developer,
                         final TenantPermissionEnum permission,
                         final String service,
                         final String user) {
@@ -47,7 +47,7 @@ class SupportTenantDeletePermissionOperationImpl implements SupportTenantDeleteP
 
         final var qualifier = permission.toQualifier();
         final var request = new DeleteTenantPermissionsSupportRequest(tenant,
-                userId,
+                developer,
                 Collections.singleton(qualifier));
         final var result = supportClient.execute(request)
                 .map(DeleteTenantPermissionsSupportResponse::getDeletedPermissions)
