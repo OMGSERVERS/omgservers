@@ -4,8 +4,8 @@ import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
 import com.omgservers.schema.shard.user.DeleteUserRequest;
 import com.omgservers.schema.shard.user.DeleteUserResponse;
+import com.omgservers.service.operation.alias.GetIdByUserOperation;
 import com.omgservers.service.shard.user.UserShard;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,24 +19,25 @@ class DeleteDeveloperMethodImpl implements DeleteDeveloperMethod {
 
     final UserShard userShard;
 
+    final GetIdByUserOperation getIdByUserOperation;
+
     final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<DeleteDeveloperSupportResponse> execute(final DeleteDeveloperSupportRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
-
-        final var developerUserId = request.getUserId();
-        final var deleteUserRequest = new DeleteUserRequest(developerUserId);
-        return userShard.getService().execute(deleteUserRequest)
-                .map(DeleteUserResponse::getDeleted)
-                .invoke(deleted -> {
-                    if (deleted) {
-                        log.info("The developer user \"{}\" was deleted", developerUserId);
-                    }
-                })
-                .map(DeleteDeveloperSupportResponse::new);
+        return getIdByUserOperation.execute(request.getUser())
+                .flatMap(userId -> {
+                    final var deleteUserRequest = new DeleteUserRequest(userId);
+                    return userShard.getService().execute(deleteUserRequest)
+                            .map(DeleteUserResponse::getDeleted)
+                            .invoke(deleted -> {
+                                if (deleted) {
+                                    log.info("The developer user \"{}\" was deleted", userId);
+                                }
+                            })
+                            .map(DeleteDeveloperSupportResponse::new);
+                });
     }
 }

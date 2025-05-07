@@ -1,5 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.webService;
 
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
@@ -78,7 +80,13 @@ public interface WebService {
 
     Uni<CreateDeveloperSupportResponse> execute(CreateDeveloperSupportRequest request);
 
+    Uni<CreateDeveloperAliasSupportResponse> execute(CreateDeveloperAliasSupportRequest request);
+
     Uni<DeleteDeveloperSupportResponse> execute(DeleteDeveloperSupportRequest request);
+
+    /*
+    Permissions
+     */
 
     Uni<CreateTenantPermissionsSupportResponse> execute(CreateTenantPermissionsSupportRequest request);
 

@@ -111,7 +111,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
             final var permissions = Set.of(TenantPermissionQualifierEnum.PROJECT_MANAGER,
                     TenantPermissionQualifierEnum.TENANT_VIEWER);
             final var request = new CreateTenantPermissionsSupportRequest(tenantAlias,
-                    Long.valueOf(developerUser),
+                    developerUser,
                     permissions);
             final var response = supportClient.execute(request)
                     .await().indefinitely();
@@ -142,7 +142,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
                     TenantProjectPermissionQualifierEnum.PROJECT_VIEWER);
             final var request = new CreateTenantProjectPermissionsSupportRequest(tenantAlias,
                     projectAlias,
-                    Long.valueOf(developerUser),
+                    developerUser,
                     permissions);
             final var response = supportClient.execute(request)
                     .await().indefinitely();
@@ -163,7 +163,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
             final var request = new CreateTenantStagePermissionsSupportRequest(tenantAlias,
                     projectAlias,
                     stageAlias,
-                    Long.valueOf(developerUser),
+                    developerUser,
                     permissions);
             final var response = supportClient.execute(request)
                     .await().indefinitely();

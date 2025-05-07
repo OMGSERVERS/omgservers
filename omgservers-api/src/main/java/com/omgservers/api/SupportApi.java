@@ -1,6 +1,8 @@
 package com.omgservers.api;
 
 import com.omgservers.api.configuration.OpenApiConfiguration;
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
@@ -108,6 +110,10 @@ public interface SupportApi {
     @POST
     @Path("/create-developer")
     Uni<CreateDeveloperSupportResponse> execute(@NotNull CreateDeveloperSupportRequest request);
+
+    @POST
+    @Path("/create-developer-alias")
+    Uni<CreateDeveloperAliasSupportResponse> execute(@NotNull CreateDeveloperAliasSupportRequest request);
 
     @POST
     @Path("/delete-developer")

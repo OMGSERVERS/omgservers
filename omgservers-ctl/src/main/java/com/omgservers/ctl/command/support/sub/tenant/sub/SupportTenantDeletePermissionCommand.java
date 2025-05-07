@@ -18,8 +18,8 @@ public class SupportTenantDeletePermissionCommand extends UserCommand {
     @CommandLine.Parameters(description = "Id or alias of the tenant from which the permission will be revoked.")
     String tenant;
 
-    @CommandLine.Parameters(description = "Developer user id.")
-    Long userId;
+    @CommandLine.Parameters(description = "Id or alias of the developer user.")
+    String developer;
 
     @CommandLine.Parameters(description = "Tenant permission to revoke. Possible values: ${COMPLETION-CANDIDATES}.",
             converter = TenantPermissionConverter.class,
@@ -31,6 +31,6 @@ public class SupportTenantDeletePermissionCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantDeletePermissionOperation.execute(tenant, userId, permission, installation, user);
+        supportTenantDeletePermissionOperation.execute(tenant, developer, permission, installation, user);
     }
 }

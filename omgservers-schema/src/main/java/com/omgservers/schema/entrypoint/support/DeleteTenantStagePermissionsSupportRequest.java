@@ -28,8 +28,9 @@ public class DeleteTenantStagePermissionsSupportRequest {
     @Size(max = 64)
     String stage;
 
-    @NotNull
-    Long userId;
+    @NotBlank
+    @Size(max = 64)
+    String user;
 
     @NotEmpty
     Set<TenantStagePermissionQualifierEnum> permissionsToDelete;

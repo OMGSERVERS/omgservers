@@ -31,7 +31,7 @@ class SupportProjectDeletePermissionOperationImpl implements SupportProjectDelet
     @Override
     public void execute(final String tenant,
                         final String project,
-                        final Long userId,
+                        final String developer,
                         final ProjectPermissionEnum permission,
                         final String service,
                         final String user) {
@@ -49,7 +49,7 @@ class SupportProjectDeletePermissionOperationImpl implements SupportProjectDelet
         final var qualifier = permission.toQualifier();
         final var request = new DeleteTenantProjectPermissionsSupportRequest(tenant,
                 project,
-                userId,
+                developer,
                 Collections.singleton(qualifier));
         final var result = supportClient.execute(request)
                 .map(DeleteTenantProjectPermissionsSupportResponse::getDeletedPermissions)

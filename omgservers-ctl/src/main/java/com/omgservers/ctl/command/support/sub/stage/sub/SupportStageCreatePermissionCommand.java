@@ -24,8 +24,8 @@ public class SupportStageCreatePermissionCommand extends UserCommand {
     @CommandLine.Parameters(description = "Id or alias of the stage to which the permission will be granted.")
     String stage;
 
-    @CommandLine.Parameters(description = "Developer user id.")
-    Long userId;
+    @CommandLine.Parameters(description = "Id or alias of the developer user.")
+    String developer;
 
     @CommandLine.Parameters(description = "Stage permission to grant. Possible values: ${COMPLETION-CANDIDATES}.",
             converter = StagePermissionConverter.class,
@@ -40,7 +40,7 @@ public class SupportStageCreatePermissionCommand extends UserCommand {
         supportStageCreatePermissionOperation.execute(tenant,
                 project,
                 stage,
-                userId,
+                developer,
                 permission,
                 installation,
                 user);

@@ -33,7 +33,7 @@ class CreateLocalDeveloperClientOperationImpl implements CreateLocalDeveloperCli
                                 final String developerUser,
                                 final String developerPassword) {
         final var developerAnonymousClient = createDeveloperAnonymousClientOperation.execute(serviceUri);
-        final var request = new CreateTokenDeveloperRequest(Long.valueOf(developerUser), developerPassword);
+        final var request = new CreateTokenDeveloperRequest(developerUser, developerPassword);
         return developerAnonymousClient.execute(request)
                 .map(CreateTokenDeveloperResponse::getRawToken)
                 .await().indefinitely();

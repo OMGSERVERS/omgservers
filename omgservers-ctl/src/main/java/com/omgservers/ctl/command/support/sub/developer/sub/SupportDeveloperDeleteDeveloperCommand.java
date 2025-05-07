@@ -9,17 +9,19 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "delete-developer",
-        description = "Delete a developer account by user id.")
+        description = "Delete a developer user by user id or alias.")
 public class SupportDeveloperDeleteDeveloperCommand extends UserCommand {
 
-    @CommandLine.Parameters(description = "User id of the developer.")
-    Long userId;
+    @CommandLine.Parameters(description = "Id or alias of the developer user.")
+    String developer;
 
     @Inject
     SupportDeveloperDeleteDeveloperOperation supportDeveloperDeleteDeveloperOperation;
 
     @Override
     public void run() {
-        supportDeveloperDeleteDeveloperOperation.execute(userId, installation, user);
+        supportDeveloperDeleteDeveloperOperation.execute(developer,
+                installation,
+                user);
     }
 }

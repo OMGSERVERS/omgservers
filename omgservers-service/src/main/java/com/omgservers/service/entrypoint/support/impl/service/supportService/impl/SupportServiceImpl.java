@@ -1,5 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.supportService.impl;
 
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
@@ -24,10 +26,10 @@ import com.omgservers.schema.entrypoint.support.CreateTokenSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTokenSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteDeveloperSupportResponse;
-import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantPermissionsSupportResponse;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportRequest;
+import com.omgservers.schema.entrypoint.support.DeleteTenantProjectPermissionsSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportResponse;
 import com.omgservers.schema.entrypoint.support.DeleteTenantStagePermissionsSupportRequest;
@@ -37,6 +39,7 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantStageSupportResponse
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.SupportService;
+import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateDeveloperAliasMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateDeveloperMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantAliasMethod;
 import com.omgservers.service.entrypoint.support.impl.service.supportService.impl.method.CreateTenantMethod;
@@ -75,6 +78,7 @@ class SupportServiceImpl implements SupportService {
     final CreateTenantPermissionsMethod createTenantPermissionsMethod;
     final DeleteTenantPermissionsMethod deleteTenantPermissionsMethod;
     final CreateTenantStageAliasMethod createTenantStageAliasMethod;
+    final CreateDeveloperAliasMethod createDeveloperAliasMethod;
     final CreateTenantProjectMethod createTenantProjectMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final CreateTenantAliasMethod createTenantAliasMethod;
@@ -158,6 +162,11 @@ class SupportServiceImpl implements SupportService {
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(@Valid final CreateDeveloperSupportRequest request) {
         return createDeveloperMethod.execute(request);
+    }
+
+    @Override
+    public Uni<CreateDeveloperAliasSupportResponse> execute(@Valid final CreateDeveloperAliasSupportRequest request) {
+        return createDeveloperAliasMethod.execute(request);
     }
 
     @Override

@@ -18,8 +18,8 @@ public class SupportTenantCreatePermissionCommand extends UserCommand {
     @CommandLine.Parameters(description = "Id or alias of the tenant to which the permission will be granted.")
     String tenant;
 
-    @CommandLine.Parameters(description = "Developer user id.")
-    Long userId;
+    @CommandLine.Parameters(description = "Id or alias of the developer user.")
+    String developer;
 
     @CommandLine.Parameters(description = "Tenant permission to grant. Possible values: ${COMPLETION-CANDIDATES}.",
             converter = TenantPermissionConverter.class,
@@ -31,6 +31,6 @@ public class SupportTenantCreatePermissionCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantCreatePermissionOperation.execute(tenant, userId, permission, installation, user);
+        supportTenantCreatePermissionOperation.execute(tenant, developer, permission, installation, user);
     }
 }

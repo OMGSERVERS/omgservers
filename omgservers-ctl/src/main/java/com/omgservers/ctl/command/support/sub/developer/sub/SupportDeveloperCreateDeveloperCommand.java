@@ -9,7 +9,7 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "create-developer",
-        description = "Create a new developer account.")
+        description = "Create a new developer user.")
 public class SupportDeveloperCreateDeveloperCommand extends UserCommand {
 
     @Inject

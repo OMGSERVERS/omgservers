@@ -24,8 +24,9 @@ public class CreateTenantProjectPermissionsSupportRequest {
     @Size(max = 64)
     String project;
 
-    @NotNull
-    Long userId;
+    @NotBlank
+    @Size(max = 64)
+    String user;
 
     @NotEmpty
     Set<TenantProjectPermissionQualifierEnum> permissionsToCreate;

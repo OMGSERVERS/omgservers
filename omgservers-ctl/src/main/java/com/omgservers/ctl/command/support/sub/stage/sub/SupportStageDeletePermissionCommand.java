@@ -24,8 +24,8 @@ public class SupportStageDeletePermissionCommand extends UserCommand {
     @CommandLine.Parameters(description = "Id or alias of the stage from which the permission will be revoked.")
     String stage;
 
-    @CommandLine.Parameters(description = "Developer user id.")
-    Long userId;
+    @CommandLine.Parameters(description = "Id or alias of the developer user.")
+    String developer;
 
     @CommandLine.Parameters(description = "Stage permission to revoke. Possible values: ${COMPLETION-CANDIDATES}.",
             converter = StagePermissionConverter.class,
@@ -40,7 +40,7 @@ public class SupportStageDeletePermissionCommand extends UserCommand {
         supportStageDeletePermissionOperation.execute(tenant,
                 project,
                 stage,
-                userId,
+                developer,
                 permission,
                 installation,
                 user);

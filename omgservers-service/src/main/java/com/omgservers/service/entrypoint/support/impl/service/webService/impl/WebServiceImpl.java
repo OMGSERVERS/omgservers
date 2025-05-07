@@ -1,5 +1,7 @@
 package com.omgservers.service.entrypoint.support.impl.service.webService.impl;
 
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportResponse;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
@@ -118,6 +120,11 @@ class WebServiceImpl implements WebService {
 
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(final CreateDeveloperSupportRequest request) {
+        return supportService.execute(request);
+    }
+
+    @Override
+    public Uni<CreateDeveloperAliasSupportResponse> execute(final CreateDeveloperAliasSupportRequest request) {
         return supportService.execute(request);
     }
 

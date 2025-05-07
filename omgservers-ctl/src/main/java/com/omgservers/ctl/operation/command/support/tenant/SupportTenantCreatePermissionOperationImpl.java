@@ -30,7 +30,7 @@ class SupportTenantCreatePermissionOperationImpl implements SupportTenantCreateP
 
     @Override
     public void execute(final String tenant,
-                        final Long userId,
+                        final String developer,
                         final TenantPermissionEnum permission,
                         final String service,
                         final String user) {
@@ -47,7 +47,7 @@ class SupportTenantCreatePermissionOperationImpl implements SupportTenantCreateP
 
         final var qualifier = permission.toQualifier();
         final var request = new CreateTenantPermissionsSupportRequest(tenant,
-                userId,
+                developer,
                 Collections.singleton(qualifier));
         final var result = supportClient.execute(request)
                 .map(CreateTenantPermissionsSupportResponse::getCreatedPermissions)

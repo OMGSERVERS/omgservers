@@ -50,8 +50,8 @@ class DeveloperLocalDeleteTenantOperationImpl implements DeveloperLocalDeleteTen
                 .await().indefinitely();
     }
 
-    boolean deleteDeveloper(final SupportClient supportClient, final String user) {
-        final var request = new DeleteDeveloperSupportRequest(Long.valueOf(user));
+    boolean deleteDeveloper(final SupportClient supportClient, final String developer) {
+        final var request = new DeleteDeveloperSupportRequest(developer);
         return supportClient.execute(request)
                 .map(DeleteDeveloperSupportResponse::getDeleted)
                 .await().indefinitely();
