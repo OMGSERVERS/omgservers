@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateTenantProjectAliasSupportRequest {
 
-    /**
-     * Tenant id or tenant alias.
-     */
     @NotBlank
     @Size(max = 64)
     String tenant;

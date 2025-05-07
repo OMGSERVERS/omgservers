@@ -48,15 +48,15 @@ class CreateTenantImageMethodImpl implements CreateTenantImageMethod {
         final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
 
         return authorizeTenantVersionRequestOperation.execute(tenant, project, version, userId, permission)
-                .flatMap(tenantVersionAuthorization -> {
+                .flatMap(authorization -> {
                     final var image = request.getImage();
                     authorizeDockerImageOperation.execute(tenant, project, image);
 
                     final var qualifier = request.getQualifier();
-                    return createTenantImage(tenantVersionAuthorization, qualifier, image)
+                    return createTenantImage(authorization, qualifier, image)
                             .invoke(created -> {
                                 if (created) {
-                                    log.info("A new image was created in tenant \"{}\"", tenant);
+                                    log.info("Created new image in tenant \"{}\"", tenant);
                                 }
                             })
                             .map(CreateImageDeveloperResponse::new);

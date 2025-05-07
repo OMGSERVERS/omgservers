@@ -6,10 +6,11 @@ import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
+import com.omgservers.service.operation.alias.CreateTenantAliasOperation;
+import com.omgservers.service.operation.alias.CreateTenantAliasResult;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.alias.CreateTenantAliasOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,7 +43,8 @@ class CreateTenantAliasMethodImpl implements CreateTenantAliasMethod {
                     final var aliasValue = request.getAlias();
                     return createTenantAliasOperation.execute(tenantId, aliasValue);
                 })
-                .replaceWith(new CreateTenantAliasSupportResponse());
+                .map(CreateTenantAliasResult::created)
+                .map(CreateTenantAliasSupportResponse::new);
     }
 
     Uni<TenantModel> getTenant(final Long tenantId) {

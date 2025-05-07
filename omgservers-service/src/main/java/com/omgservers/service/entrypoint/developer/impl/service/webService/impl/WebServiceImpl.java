@@ -1,6 +1,39 @@
 package com.omgservers.service.entrypoint.developer.impl.service.webService.impl;
 
-import com.omgservers.schema.entrypoint.developer.*;
+import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateStageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteDeploymentDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteDeploymentDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteStageDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteStageDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.DeleteVersionDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetDeploymentDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetDeploymentDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetProjectDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetProjectDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetTenantDetailsDeveloperResponse;
+import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.GetVersionDetailsDeveloperResponse;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.DeveloperService;
 import com.omgservers.service.entrypoint.developer.impl.service.webService.WebService;
 import io.smallrye.mutiny.Uni;
@@ -21,35 +54,42 @@ class WebServiceImpl implements WebService {
         return developerService.execute(request);
     }
 
+    /*
+    Tenant
+     */
+
     @Override
-    public Uni<GetTenantDetailsDeveloperResponse> execute(
-            final GetTenantDetailsDeveloperRequest request) {
+    public Uni<GetTenantDetailsDeveloperResponse> execute(final GetTenantDetailsDeveloperRequest request) {
+        return developerService.execute(request);
+    }
+
+    /*
+    Tenant project
+     */
+
+    @Override
+    public Uni<CreateProjectDeveloperResponse> execute(final CreateProjectDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<CreateProjectDeveloperResponse> execute(
-            final CreateProjectDeveloperRequest request) {
+    public Uni<CreateProjectAliasDeveloperResponse> execute(final CreateProjectAliasDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<CreateProjectAliasDeveloperResponse> execute(
-            final CreateProjectAliasDeveloperRequest request) {
+    public Uni<GetProjectDetailsDeveloperResponse> execute(final GetProjectDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<GetProjectDetailsDeveloperResponse> execute(
-            final GetProjectDetailsDeveloperRequest request) {
+    public Uni<DeleteProjectDeveloperResponse> execute(final DeleteProjectDeveloperRequest request) {
         return developerService.execute(request);
     }
 
-    @Override
-    public Uni<DeleteProjectDeveloperResponse> execute(
-            final DeleteProjectDeveloperRequest request) {
-        return developerService.execute(request);
-    }
+    /*
+    Tenant stage
+     */
 
     @Override
     public Uni<CreateStageDeveloperResponse> execute(final CreateStageDeveloperRequest request) {
@@ -62,8 +102,7 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<GetStageDetailsDeveloperResponse> execute(
-            final GetStageDetailsDeveloperRequest request) {
+    public Uni<GetStageDetailsDeveloperResponse> execute(final GetStageDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
@@ -73,20 +112,17 @@ class WebServiceImpl implements WebService {
     }
 
     @Override
-    public Uni<CreateVersionDeveloperResponse> execute(
-            final CreateVersionDeveloperRequest request) {
+    public Uni<CreateVersionDeveloperResponse> execute(final CreateVersionDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<GetVersionDetailsDeveloperResponse> execute(
-            final GetVersionDetailsDeveloperRequest request) {
+    public Uni<GetVersionDetailsDeveloperResponse> execute(final GetVersionDetailsDeveloperRequest request) {
         return developerService.execute(request);
     }
 
     @Override
-    public Uni<DeleteVersionDeveloperResponse> execute(
-            final DeleteVersionDeveloperRequest request) {
+    public Uni<DeleteVersionDeveloperResponse> execute(final DeleteVersionDeveloperRequest request) {
         return developerService.execute(request);
     }
 

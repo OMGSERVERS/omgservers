@@ -7,11 +7,9 @@ import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataRequ
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.shard.tenant.tenantProject.dto.TenantProjectDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantProjectMapper;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.alias.GetIdByProjectOperation;
-import com.omgservers.service.operation.alias.GetIdByTenantOperation;
+import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,34 +24,28 @@ class GetTenantProjectDetailsMethodImpl implements GetTenantProjectDetailsMethod
 
     final TenantShard tenantShard;
 
-    final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
-    final GetIdByProjectOperation getIdByProjectOperation;
-    final GetIdByTenantOperation getIdByTenantOperation;
+    final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
 
     final TenantProjectMapper tenantProjectMapper;
 
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetProjectDetailsDeveloperResponse> execute(
-            final GetProjectDetailsDeveloperRequest request) {
+    public Uni<GetProjectDetailsDeveloperResponse> execute(final GetProjectDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
+        final var tenant = request.getTenant();
+        final var project = request.getProject();
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var permission = TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
 
-        final var tenant = request.getTenant();
-        return getIdByTenantOperation.execute(tenant)
-                .flatMap(tenantId -> {
-                    final var project = request.getProject();
-                    return getIdByProjectOperation.execute(tenantId, project)
-                            .flatMap(tenantProjectId -> {
-                                final var permissionQualifier = TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
-                                return checkTenantProjectPermissionOperation.execute(tenantId, tenantProjectId, userId,
-                                                permissionQualifier)
-                                        .flatMap(voidItem -> getTenantProjectData(tenantId, tenantProjectId))
-                                        .map(tenantProjectMapper::dataToDetails);
-                            });
+        return authorizeTenantProjectRequestOperation.execute(tenant, project, userId, permission)
+                .flatMap(authorization -> {
+                    final var tenantId = authorization.tenantId();
+                    final var tenantProjectId = authorization.tenantProjectId();
+                    return getTenantProjectData(tenantId, tenantProjectId)
+                            .map(tenantProjectMapper::dataToDetails);
                 })
                 .map(GetProjectDetailsDeveloperResponse::new);
     }

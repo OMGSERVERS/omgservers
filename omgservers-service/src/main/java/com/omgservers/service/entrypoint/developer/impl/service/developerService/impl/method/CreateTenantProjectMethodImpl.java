@@ -11,18 +11,13 @@ import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.shard.tenant.tenantProject.SyncTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageRequest;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CreateTenantProjectPermissionOperation;
 import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CreateTenantStagePermissionOperation;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
-import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
-import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
-import com.omgservers.service.operation.alias.GetIdByTenantOperation;
-import com.omgservers.service.operation.server.GenerateIdOperation;
+import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,18 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
     final TenantShard tenantShard;
-    final UserShard userShard;
 
     final CreateTenantProjectPermissionOperation createTenantProjectPermissionOperation;
     final CreateTenantStagePermissionOperation createTenantStagePermissionOperation;
-    final CheckTenantPermissionOperation checkTenantPermissionOperation;
-    final GetIdByTenantOperation getIdByTenantOperation;
-    final GenerateIdOperation generateIdOperation;
 
-    final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
-    final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
     final TenantProjectModelFactory tenantProjectModelFactory;
     final TenantStageModelFactory tenantStageModelFactory;
+
+    final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
 
     final SecurityIdentity securityIdentity;
 
@@ -55,26 +46,27 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     public Uni<CreateProjectDeveloperResponse> execute(final CreateProjectDeveloperRequest request) {
         log.info("Requested, {}", request);
 
+        final var tenant = request.getTenant();
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var permission = TenantPermissionQualifierEnum.PROJECT_MANAGER;
 
-        final var tenant = request.getTenant();
-        return getIdByTenantOperation.execute(tenant)
-                .flatMap(tenantId -> {
-                    final var permissionQualifier = TenantPermissionQualifierEnum.PROJECT_MANAGER;
-                    return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
-                            .flatMap(voidItem -> createTenantProject(tenantId, userId)
-                                    .flatMap(tenantProject -> createTenantStage(tenantId, tenantProject.getId(), userId)
-                                            .map(tenantStage -> {
-                                                final var tenantProjectId = tenantProject.getId();
-                                                final var tenantStageId = tenantStage.getId();
+        return authorizeTenantRequestOperation.execute(tenant, userId, permission)
+                .flatMap(authorization -> {
+                    final var tenantId = authorization.tenantId();
 
-                                                log.info("Project \"{}\" was created in tenant \"{}\"",
-                                                        tenantProjectId, tenantId);
+                    return createTenantProject(tenantId, userId)
+                            .flatMap(tenantProject -> createTenantStage(tenantId, tenantProject.getId(), userId)
+                                    .map(tenantStage -> {
+                                        final var tenantProjectId = tenantProject.getId();
+                                        final var tenantStageId = tenantStage.getId();
 
-                                                return new CreateProjectDeveloperResponse(tenantProjectId,
-                                                        tenantStageId);
-                                            })));
+                                        log.info("Created project \"{}\" in tenant \"{}\"",
+                                                tenantProjectId, tenantId);
+
+                                        return new CreateProjectDeveloperResponse(tenantProjectId,
+                                                tenantStageId);
+                                    }));
                 });
     }
 
