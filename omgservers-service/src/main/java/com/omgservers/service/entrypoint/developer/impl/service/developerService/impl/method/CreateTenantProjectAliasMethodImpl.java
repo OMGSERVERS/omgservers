@@ -2,17 +2,19 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperResponse;
-import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
+import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.shard.alias.SyncAliasRequest;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
+import com.omgservers.schema.shard.alias.SyncAliasResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
+import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
+import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.shard.user.UserShard;
-import com.omgservers.service.operation.alias.GetIdByTenantOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,8 +31,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
     final AliasShard aliasShard;
     final UserShard userShard;
 
-    final CheckTenantPermissionOperation checkTenantPermissionOperation;
-    final GetIdByTenantOperation getIdByTenantOperation;
+    final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
 
     final AliasModelFactory aliasModelFactory;
 
@@ -41,30 +42,33 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
             final CreateProjectAliasDeveloperRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
-
         final var tenant = request.getTenant();
-        return getIdByTenantOperation.execute(tenant)
-                .flatMap(tenantId -> {
-                    final var permissionQualifier =
-                            TenantPermissionQualifierEnum.PROJECT_MANAGER;
-                    return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
-                            .flatMap(voidItem -> {
-                                final var tenantProjectId = request.getProjectId();
+        final var userId = securityIdentity.<Long>getAttribute(
+                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var permission = TenantPermissionQualifierEnum.PROJECT_MANAGER;
+
+        return authorizeTenantRequestOperation.execute(tenant, userId, permission)
+                .flatMap(authorization -> {
+                    final var tenantId = authorization.tenantId();
+                    final var tenantProjectId = request.getProjectId();
+                    return getTenantProject(tenantId, tenantProjectId)
+                            .flatMap(tenantProject -> {
                                 final var aliasValue = request.getAlias();
-                                return createTenantProjectAlias(tenantId, tenantProjectId, aliasValue, userId);
+                                return createTenantProjectAlias(tenantId, tenantProjectId, aliasValue);
                             });
                 })
-                .replaceWith(new CreateProjectAliasDeveloperResponse());
-
-
+                .map(CreateProjectAliasDeveloperResponse::new);
     }
 
-    Uni<AliasModel> createTenantProjectAlias(final Long tenantId,
-                                             final Long tenantProjectId,
-                                             final String aliasValue,
-                                             final Long userId) {
+    Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
+        final var request = new GetTenantProjectRequest(tenantId, id);
+        return tenantShard.getService().execute(request)
+                .map(GetTenantProjectResponse::getTenantProject);
+    }
+
+    Uni<Boolean> createTenantProjectAlias(final Long tenantId,
+                                          final Long tenantProjectId,
+                                          final String aliasValue) {
         final var tenantProjectAlias = aliasModelFactory.create(AliasQualifierEnum.PROJECT,
                 tenantId,
                 tenantId,
@@ -74,10 +78,10 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
         return aliasShard.getService().execute(syncAliasRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
-                        log.info("The alias \"{}\" for the project \"{}\" was created",
+                        log.info("Created alias \"{}\" for the project \"{}\"",
                                 aliasValue, tenantProjectId);
                     }
                 })
-                .replaceWith(tenantProjectAlias);
+                .map(SyncAliasResponse::getCreated);
     }
 }

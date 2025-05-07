@@ -5,7 +5,6 @@ public enum ExceptionQualifierEnum {
     WRONG_MEDIA_TYPE,
     WRONG_ARGUMENT,
     WRONG_OBJECT,
-    WRONG_WEBSOCKET_MESSAGE,
     WRONG_MESSAGE,
     WRONG_CLIENT_ID,
     WRONG_RUNTIME_ID,

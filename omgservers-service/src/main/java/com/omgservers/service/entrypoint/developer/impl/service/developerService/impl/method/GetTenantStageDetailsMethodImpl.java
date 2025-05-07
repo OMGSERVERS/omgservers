@@ -3,19 +3,14 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.GetStageDetailsDeveloperResponse;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
-import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataResponse;
-import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
-import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.schema.shard.tenant.tenantStage.dto.TenantStageDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantStageMapper;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
-import com.omgservers.service.operation.alias.GetIdByTenantOperation;
+import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,53 +25,32 @@ class GetTenantStageDetailsMethodImpl implements GetTenantStageDetailsMethod {
 
     final TenantShard tenantShard;
 
-    final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
-    final GetIdByProjectOperation getIdByProjectOperation;
-    final GetIdByTenantOperation getIdByTenantOperation;
+    final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
     final GetIdByStageOperation getIdByStageOperation;
 
     final TenantStageMapper tenantStageMapper;
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<GetStageDetailsDeveloperResponse> execute(
-            final GetStageDetailsDeveloperRequest request) {
+    public Uni<GetStageDetailsDeveloperResponse> execute(final GetStageDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
+        final var tenant = request.getTenant();
+        final var project = request.getProject();
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var permission = TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
 
-        final var tenant = request.getTenant();
-        return getIdByTenantOperation.execute(tenant)
-                .flatMap(tenantId -> {
-                    final var project = request.getProject();
-                    return getIdByProjectOperation.execute(tenantId, project)
-                            .flatMap(tenantProjectId -> {
-                                final var stage = request.getStage();
-                                return getIdByStageOperation.execute(tenantId, tenantProjectId, stage)
-                                        .flatMap(tenantStageId -> getTenantStage(tenantId, tenantStageId)
-                                                .flatMap(tenantStage -> {
-                                                    final var stageProjectId = tenantStage.getProjectId();
-                                                    final var permissionQualifier =
-                                                            TenantProjectPermissionQualifierEnum
-                                                                    .PROJECT_VIEWER;
-                                                    return checkTenantProjectPermissionOperation.execute(tenantId,
-                                                                    stageProjectId,
-                                                                    userId,
-                                                                    permissionQualifier)
-                                                            .flatMap(voidItem -> getTenantStageData(tenantId,
-                                                                    tenantStageId))
-                                                            .map(tenantStageMapper::dataToDetails);
-                                                }));
-                            });
+        return authorizeTenantProjectRequestOperation.execute(tenant, project, userId, permission)
+                .flatMap(authorization -> {
+                    final var tenantId = authorization.tenantId();
+                    final var tenantProjectId = authorization.tenantProjectId();
+                    final var stage = request.getStage();
+                    return getIdByStageOperation.execute(tenantId, tenantProjectId, stage)
+                            .flatMap(tenantStageId -> getTenantStageData(tenantId, tenantStageId)
+                                    .map(tenantStageMapper::dataToDetails));
                 })
                 .map(GetStageDetailsDeveloperResponse::new);
-    }
-
-    Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
-        final var request = new GetTenantStageRequest(tenantId, tenantStageId);
-        return tenantShard.getService().execute(request)
-                .map(GetTenantStageResponse::getTenantStage);
     }
 
     Uni<TenantStageDataDto> getTenantStageData(final Long tenantId, final Long tenantStageId) {

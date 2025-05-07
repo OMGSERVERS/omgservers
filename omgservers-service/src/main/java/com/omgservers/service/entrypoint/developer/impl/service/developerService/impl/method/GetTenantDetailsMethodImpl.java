@@ -7,10 +7,9 @@ import com.omgservers.schema.shard.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.shard.tenant.tenant.dto.TenantDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantMapper;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.alias.GetIdByTenantOperation;
+import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,28 +24,25 @@ class GetTenantDetailsMethodImpl implements GetTenantDetailsMethod {
 
     final TenantShard tenantShard;
 
-    final CheckTenantPermissionOperation checkTenantPermissionOperation;
-    final GetIdByTenantOperation getIdByTenantOperation;
-
-    final TenantMapper tenantMapper;
+    final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
 
     final SecurityIdentity securityIdentity;
+    final TenantMapper tenantMapper;
+
 
     @Override
-    public Uni<GetTenantDetailsDeveloperResponse> execute(
-            final GetTenantDetailsDeveloperRequest request) {
+    public Uni<GetTenantDetailsDeveloperResponse> execute(final GetTenantDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
-
         final var tenant = request.getTenant();
-        return getIdByTenantOperation.execute(tenant)
-                .flatMap(tenantId -> {
-                    final var permissionQualifier = TenantPermissionQualifierEnum
-                            .TENANT_VIEWER;
-                    return checkTenantPermissionOperation.execute(tenantId, userId, permissionQualifier)
-                            .flatMap(voidItem -> getTenantData(tenantId))
+        final var userId = securityIdentity.<Long>getAttribute(
+                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var permission = TenantPermissionQualifierEnum.TENANT_VIEWER;
+
+        return authorizeTenantRequestOperation.execute(tenant, userId, permission)
+                .flatMap(authorization -> {
+                    final var tenantId = authorization.tenantId();
+                    return getTenantData(tenantId)
                             .map(tenantMapper::dataToDetails);
                 })
                 .map(GetTenantDetailsDeveloperResponse::new);

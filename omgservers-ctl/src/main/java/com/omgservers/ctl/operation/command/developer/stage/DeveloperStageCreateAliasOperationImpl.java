@@ -7,6 +7,7 @@ import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.developer.FindDeveloperTokenOperation;
 import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperRequest;
+import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,9 +42,10 @@ class DeveloperStageCreateAliasOperationImpl implements DeveloperStageCreateAlia
         final var developerClient = createDeveloperClientOperation.execute(serviceUri, developerToken);
 
         final var request = new CreateStageAliasDeveloperRequest(tenant, stageId, alias);
-        developerClient.execute(request)
+        final var created = developerClient.execute(request)
+                .map(CreateStageAliasDeveloperResponse::getCreated)
                 .await().indefinitely();
 
-        appendResultMapOperation.execute(path, KeyEnum.RESULT, Boolean.TRUE.toString());
+        appendResultMapOperation.execute(path, KeyEnum.RESULT, created.toString());
     }
 }

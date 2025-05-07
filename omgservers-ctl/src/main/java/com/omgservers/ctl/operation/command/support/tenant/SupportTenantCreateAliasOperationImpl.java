@@ -7,6 +7,7 @@ import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.ctl.operation.wal.support.FindSupportTokenOperation;
 import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
+import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -40,9 +41,10 @@ class SupportTenantCreateAliasOperationImpl implements SupportTenantCreateAliasO
         final var supportClient = createSupportClientOperation.execute(installationApi, supportToken);
 
         final var request = new CreateTenantAliasSupportRequest(tenantId, alias);
-        supportClient.execute(request)
+        final var created = supportClient.execute(request)
+                .map(CreateTenantAliasSupportResponse::getCreated)
                 .await().indefinitely();
 
-        appendResultMapOperation.execute(path, KeyEnum.RESULT, Boolean.TRUE.toString());
+        appendResultMapOperation.execute(path, KeyEnum.RESULT, created.toString());
     }
 }

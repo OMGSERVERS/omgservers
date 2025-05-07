@@ -2,6 +2,7 @@ package com.omgservers.service.operation.alias.testInterface;
 
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.service.operation.alias.CreateTenantAliasOperation;
+import com.omgservers.service.operation.alias.CreateTenantAliasResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ public class CreateTenantAliasOperationTestInterface {
 
     public AliasModel execute(final Long tenantId, final String aliasValue) {
         return createTenantAliasOperation.execute(tenantId, aliasValue)
+                .map(CreateTenantAliasResult::alias)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

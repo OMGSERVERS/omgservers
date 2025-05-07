@@ -2,15 +2,13 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
 import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportResponse;
-import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.shard.alias.SyncAliasRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
+import com.omgservers.service.operation.alias.CreateTenantProjectAliasOperation;
+import com.omgservers.service.operation.alias.CreateTenantProjectAliasResult;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -27,6 +25,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
     final TenantShard tenantShard;
     final AliasShard aliasShard;
 
+    final CreateTenantProjectAliasOperation createTenantProjectAliasOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
 
     final AliasModelFactory aliasModelFactory;
@@ -36,9 +35,6 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
     public Uni<CreateTenantProjectAliasSupportResponse> execute(final CreateTenantProjectAliasSupportRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
-
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
@@ -46,35 +42,18 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                     return getTenantProject(tenantId, tenantProjectId)
                             .flatMap(tenantProject -> {
                                 final var aliasValue = request.getAlias();
-                                return createProjectAlias(tenantId, tenantProjectId, aliasValue, userId);
+                                return createTenantProjectAliasOperation.execute(tenantId,
+                                        tenantProjectId,
+                                        aliasValue);
                             });
                 })
-                .replaceWith(new CreateTenantProjectAliasSupportResponse());
+                .map(CreateTenantProjectAliasResult::created)
+                .map(CreateTenantProjectAliasSupportResponse::new);
     }
 
     Uni<TenantProjectModel> getTenantProject(final Long tenantId, final Long id) {
         final var request = new GetTenantProjectRequest(tenantId, id);
         return tenantShard.getService().execute(request)
                 .map(GetTenantProjectResponse::getTenantProject);
-    }
-
-    Uni<AliasModel> createProjectAlias(final Long tenantId,
-                                       final Long tenantProjectId,
-                                       final String aliasValue,
-                                       final Long userId) {
-        final var projectAlias = aliasModelFactory.create(AliasQualifierEnum.PROJECT,
-                tenantId,
-                tenantId,
-                tenantProjectId,
-                aliasValue);
-        final var syncAliasRequest = new SyncAliasRequest(projectAlias);
-        return aliasShard.getService().execute(syncAliasRequest)
-                .invoke(response -> {
-                    if (response.getCreated()) {
-                        log.info("The alias \"{}\" for the project \"{}\" was created",
-                                aliasValue, tenantProjectId);
-                    }
-                })
-                .replaceWith(projectAlias);
     }
 }

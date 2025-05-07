@@ -2,20 +2,19 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperResponse;
-import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.shard.alias.SyncAliasRequest;
+import com.omgservers.schema.shard.alias.SyncAliasResponse;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantProjectPermissionOperation;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
+import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,37 +29,33 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
 
     final TenantShard tenantShard;
     final AliasShard aliasShard;
-    final UserShard userShard;
 
-    final CheckTenantProjectPermissionOperation checkTenantProjectPermissionOperation;
+    final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
 
     final AliasModelFactory aliasModelFactory;
-
     final SecurityIdentity securityIdentity;
 
     @Override
-    public Uni<CreateStageAliasDeveloperResponse> execute(
-            final CreateStageAliasDeveloperRequest request) {
+    public Uni<CreateStageAliasDeveloperResponse> execute(final CreateStageAliasDeveloperRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
-
         final var tenant = request.getTenant();
+        final var userId = securityIdentity.<Long>getAttribute(
+                SecurityAttributesEnum.USER_ID.getAttributeName());
+
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {
                     final var tenantStageId = request.getStageId();
                     return getTenantStage(tenantId, tenantStageId)
                             .flatMap(tenantStage -> {
                                 final var tenantProjectId = tenantStage.getProjectId();
-                                final var permissionQualifier =
-                                        TenantProjectPermissionQualifierEnum.STAGE_MANAGER;
-                                return checkTenantProjectPermissionOperation.execute(tenantId,
-                                                tenantProjectId,
+                                final var permission = TenantProjectPermissionQualifierEnum.STAGE_MANAGER;
+                                return authorizeTenantProjectRequestOperation.execute(tenantId.toString(),
+                                                tenantProjectId.toString(),
                                                 userId,
-                                                permissionQualifier)
-                                        .flatMap(voidItem -> {
+                                                permission)
+                                        .flatMap(authorization -> {
                                             final var aliasValue = request.getAlias();
                                             return createTenantStageAlias(tenantId,
                                                     tenantProjectId,
@@ -69,7 +64,7 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
                                         });
                             });
                 })
-                .replaceWith(new CreateStageAliasDeveloperResponse());
+                .map(CreateStageAliasDeveloperResponse::new);
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long tenantStageId) {
@@ -78,7 +73,7 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
                 .map(GetTenantStageResponse::getTenantStage);
     }
 
-    Uni<AliasModel> createTenantStageAlias(final Long tenantId,
+    Uni<Boolean> createTenantStageAlias(final Long tenantId,
                                            final Long tenantProjectId,
                                            final Long tenantStageId,
                                            final String aliasValue) {
@@ -91,10 +86,10 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
         return aliasShard.getService().execute(syncAliasRequest)
                 .invoke(response -> {
                     if (response.getCreated()) {
-                        log.info("The alias \"{}\" for the stage \"{}\" was created",
+                        log.info("Created alias \"{}\" for the stage \"{}\"",
                                 aliasValue, tenantStageId);
                     }
                 })
-                .replaceWith(tenantStageAlias);
+                .map(SyncAliasResponse::getCreated);
     }
 }

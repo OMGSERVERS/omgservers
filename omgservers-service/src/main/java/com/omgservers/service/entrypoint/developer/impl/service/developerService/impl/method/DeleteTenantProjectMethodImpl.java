@@ -5,12 +5,11 @@ import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperResponse
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectResponse;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantPermissionOperation;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
-import com.omgservers.service.operation.alias.GetIdByTenantOperation;
+import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,9 +24,8 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
 
     final TenantShard tenantShard;
 
-    final CheckTenantPermissionOperation checkTenantPermissionOperation;
+    final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
-    final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantVersionModelFactory tenantVersionModelFactory;
     final SecurityIdentity securityIdentity;
@@ -36,28 +34,23 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     public Uni<DeleteProjectDeveloperResponse> execute(final DeleteProjectDeveloperRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
-
         final var tenant = request.getTenant();
-        return getIdByTenantOperation.execute(tenant)
-                .flatMap(tenantId -> {
-                    final var project = request.getProject();
+        final var project = request.getProject();
+        final var userId = securityIdentity.<Long>getAttribute(
+                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var permission = TenantPermissionQualifierEnum.PROJECT_MANAGER;
+
+        return authorizeTenantRequestOperation.execute(tenant, userId, permission)
+                .flatMap(authorization -> {
+                    final var tenantId = authorization.tenantId();
                     return getIdByProjectOperation.execute(tenantId, project)
-                            .flatMap(tenantProjectId -> {
-                                final var permissionQualifier =
-                                        TenantPermissionQualifierEnum.PROJECT_MANAGER;
-                                return checkTenantPermissionOperation.execute(tenantId,
-                                                userId,
-                                                permissionQualifier)
-                                        .flatMap(voidItem -> deleteTenantProject(tenantId, tenantProjectId))
-                                        .invoke(deleted -> {
-                                            if (deleted) {
-                                                log.info("Project \"{}\" was deleted in tenant \"{}\"",
-                                                        tenantProjectId, tenantId);
-                                            }
-                                        });
-                            });
+                            .flatMap(tenantProjectId -> deleteTenantProject(tenantId, tenantProjectId)
+                                    .invoke(deleted -> {
+                                        if (deleted) {
+                                            log.info("Delete project \"{}\" in tenant \"{}\"",
+                                                    tenantProjectId, tenantId);
+                                        }
+                                    }));
                 })
                 .map(DeleteProjectDeveloperResponse::new);
     }

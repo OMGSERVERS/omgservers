@@ -41,10 +41,10 @@ class SupportDeveloperCreateAliasOperationImpl implements SupportDeveloperCreate
         final var supportClient = createSupportClientOperation.execute(installationApi, supportToken);
 
         final var request = new CreateDeveloperAliasSupportRequest(developerUserId, alias);
-        final var result = supportClient.execute(request)
+        final var created = supportClient.execute(request)
                 .map(CreateDeveloperAliasSupportResponse::getCreated)
                 .await().indefinitely();
 
-        appendResultMapOperation.execute(path, KeyEnum.RESULT, result.toString());
+        appendResultMapOperation.execute(path, KeyEnum.RESULT, created.toString());
     }
 }
