@@ -35,24 +35,34 @@ class OpenMatchmakerDeploymentCommandHandlerImpl implements DeploymentCommandHan
 
         final var deploymentId = fetchDeploymentResult.deploymentId();
 
-        fetchDeploymentResult.deploymentState().getDeploymentMatchmakerResources().stream()
+        final var deploymentMatchmakerResourceToOpen =
+                fetchDeploymentResult.deploymentState().getDeploymentMatchmakerResources().stream()
                 .filter(deploymentMatchmakerResource -> deploymentMatchmakerResource.getMatchmakerId()
                         .equals(matchmakerId))
                 .filter(deploymentMatchmakerResource -> deploymentMatchmakerResource.getStatus()
                         .equals(DeploymentMatchmakerResourceStatusEnum.PENDING))
-                .map(DeploymentMatchmakerResourceModel::getId)
-                .forEach(deploymentMatchmakerResourceId -> {
-                    final var dtoToUpdateStatus = new DeploymentMatchmakerResourceToUpdateStatusDto(
-                            deploymentMatchmakerResourceId,
-                            DeploymentMatchmakerResourceStatusEnum.CREATED);
+                        .toList();
 
-                    handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToUpdateStatus()
-                            .add(dtoToUpdateStatus);
+        if (deploymentMatchmakerResourceToOpen.isEmpty()) {
+            log.warn("No matchmaker resource found to open for matchmakerId=\"{}\" in deployment=\"{}\", skip command",
+                    matchmakerId, deploymentId);
+        } else {
+            deploymentMatchmakerResourceToOpen.stream()
+                    .map(DeploymentMatchmakerResourceModel::getId)
+                    .forEach(deploymentMatchmakerResourceId -> {
+                        final var dtoToUpdateStatus = new DeploymentMatchmakerResourceToUpdateStatusDto(
+                                deploymentMatchmakerResourceId,
+                                DeploymentMatchmakerResourceStatusEnum.CREATED);
 
-                    log.info("Matchmaker resource \"{}\" of deployment \"{}\" is opened and marked as created",
-                            deploymentMatchmakerResourceId,
-                            deploymentId);
-                });
+                        handleDeploymentResult.deploymentChangeOfState()
+                                .getDeploymentMatchmakerResourcesToUpdateStatus()
+                                .add(dtoToUpdateStatus);
+
+                        log.info("Matchmaker resource \"{}\" of deployment \"{}\" is opened and marked as created",
+                                deploymentMatchmakerResourceId,
+                                deploymentId);
+                    });
+        }
 
         return true;
     }

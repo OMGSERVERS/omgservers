@@ -37,36 +37,45 @@ class DeleteLobbyDeploymentCommandHandlerImpl implements DeploymentCommandHandle
 
         final var deploymentId = fetchDeploymentResult.deploymentId();
 
-        fetchDeploymentResult.deploymentState().getDeploymentLobbyResources().stream()
+        final var matchedLobbyResourcesToClose = fetchDeploymentResult
+                .deploymentState().getDeploymentLobbyResources().stream()
                 .filter(deploymentLobbyResource -> deploymentLobbyResource.getLobbyId().equals(lobbyId))
-                .filter(deploymentLobbyResource -> deploymentLobbyResource.getStatus()
-                        .equals(DeploymentLobbyResourceStatusEnum.CREATED))
-                .map(DeploymentLobbyResourceModel::getId)
-                .forEach(deploymentLobbyResourceId -> {
-                    final var dtoToUpdateStatus = new DeploymentLobbyResourceToUpdateStatusDto(
-                            deploymentLobbyResourceId,
-                            DeploymentLobbyResourceStatusEnum.CLOSED);
+                // Handle the lobby resource regardless of its status
+                .toList();
 
-                    handleDeploymentResult.deploymentChangeOfState()
-                            .getDeploymentLobbyResourcesToUpdateStatus()
-                            .add(dtoToUpdateStatus);
+        if (matchedLobbyResourcesToClose.isEmpty()) {
+            log.warn("No lobby resource found to close for lobbyId=\"{}\" in deployment=\"{}\", skip command",
+                    lobbyId, deploymentId);
+        } else {
+            matchedLobbyResourcesToClose.stream()
+                    .map(DeploymentLobbyResourceModel::getId)
+                    .forEach(deploymentLobbyResourceId -> {
+                        final var dtoToUpdateStatus = new DeploymentLobbyResourceToUpdateStatusDto(
+                                deploymentLobbyResourceId,
+                                DeploymentLobbyResourceStatusEnum.CLOSED);
 
-                    log.info("Lobby resource \"{}\" from deployment \"{}\" " +
-                                    "must be deleted due to \"{}\" and marked as closed, lobbyId={}",
-                            deploymentLobbyResourceId,
-                            deploymentId,
-                            reason,
-                            lobbyId);
+                        handleDeploymentResult.deploymentChangeOfState()
+                                .getDeploymentLobbyResourcesToUpdateStatus()
+                                .add(dtoToUpdateStatus);
 
-                    final var deploymentLobbyAssignmentToDelete = fetchDeploymentResult
-                            .deploymentState().getDeploymentLobbyAssignments().stream()
-                            .filter(deploymentLobbyAssignment -> deploymentLobbyAssignment.getLobbyId().equals(lobbyId))
-                            .map(DeploymentLobbyAssignmentModel::getId)
-                            .toList();
+                        log.info("Lobby resource \"{}\" from deployment \"{}\" " +
+                                        "must be deleted due to \"{}\" and marked as closed, lobbyId={}",
+                                deploymentLobbyResourceId,
+                                deploymentId,
+                                reason,
+                                lobbyId);
 
-                    handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToDelete()
-                            .addAll(deploymentLobbyAssignmentToDelete);
-                });
+                        final var deploymentLobbyAssignmentToDelete = fetchDeploymentResult
+                                .deploymentState().getDeploymentLobbyAssignments().stream()
+                                .filter(deploymentLobbyAssignment -> deploymentLobbyAssignment.getLobbyId()
+                                        .equals(lobbyId))
+                                .map(DeploymentLobbyAssignmentModel::getId)
+                                .toList();
+
+                        handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToDelete()
+                                .addAll(deploymentLobbyAssignmentToDelete);
+                    });
+        }
 
         return true;
     }

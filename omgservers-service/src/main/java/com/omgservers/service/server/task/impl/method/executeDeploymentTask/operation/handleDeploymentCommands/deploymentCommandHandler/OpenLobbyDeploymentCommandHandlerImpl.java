@@ -35,25 +35,35 @@ class OpenLobbyDeploymentCommandHandlerImpl implements DeploymentCommandHandler 
 
         final var deploymentId = fetchDeploymentResult.deploymentId();
 
-        fetchDeploymentResult.deploymentState().getDeploymentLobbyResources().stream()
+        final var deploymentLobbyResourcesToOpen =
+                fetchDeploymentResult.deploymentState().getDeploymentLobbyResources().stream()
                 .filter(deploymentLobbyResource -> deploymentLobbyResource.getLobbyId().equals(lobbyId))
                 .filter(deploymentLobbyResource -> deploymentLobbyResource.getStatus()
                         .equals(DeploymentLobbyResourceStatusEnum.PENDING))
-                .map(DeploymentLobbyResourceModel::getId)
-                .forEach(deploymentLobbyResourceId -> {
-                    final var dtoToUpdateStatus = new DeploymentLobbyResourceToUpdateStatusDto(
-                            deploymentLobbyResourceId,
-                            DeploymentLobbyResourceStatusEnum.CREATED);
+                        .toList();
 
-                    handleDeploymentResult.deploymentChangeOfState()
-                            .getDeploymentLobbyResourcesToUpdateStatus()
-                            .add(dtoToUpdateStatus);
+        if (deploymentLobbyResourcesToOpen.isEmpty()) {
+            log.warn("No lobby resource found to open for lobbyId=\"{}\" in deployment=\"{}\", skip command",
+                    lobbyId, deploymentId);
+        } else {
+            deploymentLobbyResourcesToOpen.stream()
+                    .map(DeploymentLobbyResourceModel::getId)
+                    .forEach(deploymentLobbyResourceId -> {
+                        final var dtoToUpdateStatus = new DeploymentLobbyResourceToUpdateStatusDto(
+                                deploymentLobbyResourceId,
+                                DeploymentLobbyResourceStatusEnum.CREATED);
 
-                    log.info("Lobby resource \"{}\" from deployment \"{}\" is opened and marked as created, lobbyId={}",
-                            deploymentLobbyResourceId,
-                            deploymentId,
-                            lobbyId);
-                });
+                        handleDeploymentResult.deploymentChangeOfState()
+                                .getDeploymentLobbyResourcesToUpdateStatus()
+                                .add(dtoToUpdateStatus);
+
+                        log.info(
+                                "Lobby resource \"{}\" from deployment \"{}\" is opened and marked as created, lobbyId={}",
+                                deploymentLobbyResourceId,
+                                deploymentId,
+                                lobbyId);
+                    });
+        }
 
         return true;
     }
