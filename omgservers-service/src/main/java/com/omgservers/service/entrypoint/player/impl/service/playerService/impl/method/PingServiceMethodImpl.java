@@ -14,7 +14,7 @@ class PingServiceMethodImpl implements PingServiceMethod {
 
     @Override
     public Uni<PingServicePlayerResponse> execute(final PingServicePlayerRequest request) {
-        log.trace("{}", request);
+        log.info("Requested, {}", request);
 
         return Uni.createFrom().item(new PingServicePlayerResponse("pong"));
     }
