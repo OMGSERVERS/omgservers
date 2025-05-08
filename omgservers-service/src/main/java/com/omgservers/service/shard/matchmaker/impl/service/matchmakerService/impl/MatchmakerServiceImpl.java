@@ -116,7 +116,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<GetMatchmakerResponse> execute(@Valid final GetMatchmakerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 getMatchmakerMethod::execute);
     }
@@ -124,7 +124,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<SyncMatchmakerResponse> execute(@Valid final SyncMatchmakerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 syncMatchmakerMethod::execute);
     }
@@ -149,7 +149,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<DeleteMatchmakerResponse> execute(@Valid final DeleteMatchmakerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 deleteMatchmakerMethod::deleteMatchmaker);
     }
@@ -161,7 +161,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<ViewMatchmakerCommandsResponse> execute(@Valid final ViewMatchmakerCommandsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 viewMatchmakerCommandsMethod::execute);
     }
@@ -169,7 +169,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<SyncMatchmakerCommandResponse> execute(@Valid final SyncMatchmakerCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 syncMatchmakerCommandMethod::execute);
     }
@@ -195,7 +195,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<DeleteMatchmakerCommandResponse> execute(@Valid final DeleteMatchmakerCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 deleteMatchmakerCommandMethod::execute);
     }
@@ -207,7 +207,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<GetMatchmakerMatchResourceResponse> execute(@Valid final GetMatchmakerMatchResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 getMatchmakerMatchResourceMethod::execute);
     }
@@ -215,7 +215,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<ViewMatchmakerRequestsResponse> execute(@Valid final ViewMatchmakerRequestsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 viewMatchmakerRequestsMethod::execute);
     }
@@ -223,7 +223,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<SyncMatchmakerRequestResponse> execute(@Valid final SyncMatchmakerRequestRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 syncMatchmakerRequestMethod::execute);
     }
@@ -249,7 +249,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<DeleteMatchmakerRequestResponse> execute(@Valid final DeleteMatchmakerRequestRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 deleteMatchmakerRequestMethod::execute);
     }
@@ -261,7 +261,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<ViewMatchmakerMatchResourcesResponse> execute(@Valid final ViewMatchmakerMatchResourcesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 viewMatchmakerMatchResourcesMethod::execute);
     }
@@ -269,7 +269,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<SyncMatchmakerMatchResourceResponse> execute(@Valid final SyncMatchmakerMatchResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 syncMatchmakerMatchResourceMethod::execute);
     }
@@ -278,7 +278,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     public Uni<UpdateMatchmakerMatchResourceStatusResponse> execute(
             @Valid final UpdateMatchmakerMatchResourceStatusRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 updateMatchmakerMatchResourceStatusMethod::execute);
     }
@@ -287,7 +287,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     public Uni<DeleteMatchmakerMatchResourceResponse> execute(
             @Valid final DeleteMatchmakerMatchResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 deleteMatchmakerMatchResourceMethod::execute);
     }
@@ -299,7 +299,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<GetMatchmakerMatchAssignmentResponse> execute(@Valid final GetMatchmakerMatchAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 getMatchmakerMatchAssignmentMethod::execute);
     }
@@ -308,7 +308,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     public Uni<FindMatchmakerMatchAssignmentResponse> execute(
             @Valid final FindMatchmakerMatchAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 findMatchmakerMatchAssignmentMethod::execute);
     }
@@ -317,7 +317,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     public Uni<ViewMatchmakerMatchAssignmentsResponse> execute(
             @Valid final ViewMatchmakerMatchAssignmentsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 viewMatchmakerMatchAssignmentsMethod::execute);
     }
@@ -326,7 +326,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     public Uni<SyncMatchmakerMatchAssignmentResponse> execute(
             @Valid final SyncMatchmakerMatchAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 syncMatchmakerMatchAssignmentMethod::execute);
     }
@@ -335,7 +335,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     public Uni<DeleteMatchmakerMatchAssignmentResponse> execute(
             @Valid final DeleteMatchmakerMatchAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 deleteMatchmakerMatchAssignmentMethod::execute);
     }
@@ -347,7 +347,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<GetMatchmakerStateResponse> execute(@Valid final GetMatchmakerStateRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 getMatchmakerStateMethod::execute);
     }
@@ -355,7 +355,7 @@ class MatchmakerServiceImpl implements MatchmakerService {
     @Override
     public Uni<UpdateMatchmakerStateResponse> execute(@Valid final UpdateMatchmakerStateRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchServiceApiClientOperation::getClient,
+                getMatchServiceApiClientOperation::execute,
                 MatchmakerApi::execute,
                 updateMatchmakerStateMethod::execute);
     }

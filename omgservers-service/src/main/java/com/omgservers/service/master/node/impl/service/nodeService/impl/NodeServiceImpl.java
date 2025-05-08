@@ -27,7 +27,7 @@ class NodeServiceImpl implements NodeService {
     @Override
     public Uni<AcquireNodeResponse> execute(@Valid final AcquireNodeRequest request) {
         return handleMasterRequestOperation.execute(log, request,
-                getNodeMasterClientOperation::getClient,
+                getNodeMasterClientOperation::execute,
                 NodeApi::execute,
                 acquireNodeMethod::execute);
     }

@@ -3,9 +3,5 @@ package com.omgservers.service.shard.deployment.impl.operation.getDeploymentModu
 import java.net.URI;
 
 public interface GetDeploymentModuleClientOperation {
-    DeploymentModuleClient getClient(URI uri);
-
-    Boolean hasCacheFor(URI uri);
-
-    Integer sizeOfCache();
+    DeploymentModuleClient execute(URI uri);
 }

@@ -3,9 +3,5 @@ package com.omgservers.service.shard.matchmaker.impl.operation.getMatchmakerModu
 import java.net.URI;
 
 public interface GetMatchmakerModuleClientOperation {
-    MatchmakerModuleClient getClient(URI uri);
-
-    Boolean hasCacheFor(URI uri);
-
-    Integer sizeOfCache();
+    MatchmakerModuleClient execute(URI uri);
 }

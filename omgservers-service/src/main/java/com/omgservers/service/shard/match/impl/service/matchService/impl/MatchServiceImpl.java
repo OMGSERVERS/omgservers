@@ -38,7 +38,7 @@ class MatchServiceImpl implements MatchService {
     @Override
     public Uni<GetMatchResponse> execute(@Valid final GetMatchRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchModuleClientOperation::getClient,
+                getMatchModuleClientOperation::execute,
                 MatchApi::execute,
                 getMatchMethod::execute);
     }
@@ -46,7 +46,7 @@ class MatchServiceImpl implements MatchService {
     @Override
     public Uni<SyncMatchResponse> execute(@Valid final SyncMatchRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchModuleClientOperation::getClient,
+                getMatchModuleClientOperation::execute,
                 MatchApi::execute,
                 syncMatchMethod::execute);
     }
@@ -70,7 +70,7 @@ class MatchServiceImpl implements MatchService {
     @Override
     public Uni<DeleteMatchResponse> execute(@Valid final DeleteMatchRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getMatchModuleClientOperation::getClient,
+                getMatchModuleClientOperation::execute,
                 MatchApi::execute,
                 deleteMatchMethod::execute);
     }

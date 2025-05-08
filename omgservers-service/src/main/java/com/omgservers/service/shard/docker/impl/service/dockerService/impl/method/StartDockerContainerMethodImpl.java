@@ -50,7 +50,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
 
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
                     final var dockerDaemonClient = getDockerDaemonClientOperation
-                            .getClient(dockerDaemonUri);
+                            .execute(dockerDaemonUri);
                     final var dockerNetwork = getServiceConfigOperation.getServiceConfig().runtime().dockerNetwork();
 
                     try {

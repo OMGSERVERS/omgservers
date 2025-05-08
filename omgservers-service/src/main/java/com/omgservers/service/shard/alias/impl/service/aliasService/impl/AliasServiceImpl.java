@@ -45,7 +45,7 @@ class AliasServiceImpl implements AliasService {
     @Override
     public Uni<GetAliasResponse> execute(@Valid final GetAliasRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getAliasModuleClientOperation::getClient,
+                getAliasModuleClientOperation::execute,
                 AliasApi::execute,
                 getAliasMethod::execute);
     }
@@ -53,7 +53,7 @@ class AliasServiceImpl implements AliasService {
     @Override
     public Uni<FindAliasResponse> execute(@Valid final FindAliasRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getAliasModuleClientOperation::getClient,
+                getAliasModuleClientOperation::execute,
                 AliasApi::execute,
                 findAliasMethod::execute);
     }
@@ -61,7 +61,7 @@ class AliasServiceImpl implements AliasService {
     @Override
     public Uni<ViewAliasesResponse> execute(@Valid final ViewAliasesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getAliasModuleClientOperation::getClient,
+                getAliasModuleClientOperation::execute,
                 AliasApi::execute,
                 viewAliasesMethod::execute);
     }
@@ -69,7 +69,7 @@ class AliasServiceImpl implements AliasService {
     @Override
     public Uni<SyncAliasResponse> execute(@Valid final SyncAliasRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getAliasModuleClientOperation::getClient,
+                getAliasModuleClientOperation::execute,
                 AliasApi::execute,
                 syncAliasMethod::execute);
     }
@@ -77,7 +77,7 @@ class AliasServiceImpl implements AliasService {
     @Override
     public Uni<DeleteAliasResponse> execute(@Valid final DeleteAliasRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getAliasModuleClientOperation::getClient,
+                getAliasModuleClientOperation::execute,
                 AliasApi::execute,
                 deleteAliasMethod::execute);
     }

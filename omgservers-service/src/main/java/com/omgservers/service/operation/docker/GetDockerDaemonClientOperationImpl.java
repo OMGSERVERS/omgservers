@@ -27,7 +27,7 @@ class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperati
     }
 
     @Override
-    public synchronized DockerClient getClient(final URI uri) {
+    public synchronized DockerClient execute(final URI uri) {
         if (!cache.containsKey(uri)) {
             final var tlsVerify = getServiceConfigOperation.getServiceConfig().docker().tlsVerify();
             final var certPath = getServiceConfigOperation.getServiceConfig().docker().certPath();
@@ -56,19 +56,5 @@ class GetDockerDaemonClientOperationImpl implements GetDockerDaemonClientOperati
             cache.put(uri, dockerClient);
         }
         return cache.get(uri);
-    }
-
-    @Override
-    public Boolean hasCacheFor(final URI uri) {
-        if (uri == null) {
-            throw new IllegalArgumentException("uri is null");
-        }
-
-        return cache.containsKey(uri);
-    }
-
-    @Override
-    public Integer sizeOfCache() {
-        return cache.size();
     }
 }
