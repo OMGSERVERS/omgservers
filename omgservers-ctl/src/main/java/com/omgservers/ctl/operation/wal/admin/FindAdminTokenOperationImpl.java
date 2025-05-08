@@ -35,7 +35,7 @@ class FindAdminTokenOperationImpl implements FindAdminTokenOperation {
                         return logLine.getUser().equals(user);
                     }
                 })
-                .peek(logLine -> log.debug("Token for user \"{}\" found", logLine.getUser()))
+                .peek(logLine -> log.info("Token for user \"{}\" found", logLine.getUser()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException("token for admin user not found"));
     }

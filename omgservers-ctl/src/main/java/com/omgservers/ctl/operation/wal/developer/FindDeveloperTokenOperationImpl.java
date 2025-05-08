@@ -35,7 +35,7 @@ class FindDeveloperTokenOperationImpl implements FindDeveloperTokenOperation {
                         return logLine.getUser().equals(user);
                     }
                 })
-                .peek(logLine -> log.debug("Token for developer user \"{}\" found", logLine.getUser()))
+                .peek(logLine -> log.info("Token for developer user \"{}\" found", logLine.getUser()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException("token for developer user not found"));
     }

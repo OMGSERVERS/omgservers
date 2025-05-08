@@ -21,7 +21,7 @@ class PurgeWalOperationImpl implements PurgeWalOperation {
     @SneakyThrows
     public void execute(final Path path) {
         final var fileName = path.toString();
-        log.debug("Purging \"{}\" WAL file ", fileName);
+        log.info("Purging \"{}\" WAL file ", fileName);
         new FileWriter(fileName, false).close();
     }
 }

@@ -26,7 +26,7 @@ class FindLocalTenantOperationImpl implements FindLocalTenantOperation {
                 .filter(logLine -> logLine.getTenant().equals(tenant))
                 .filter(logLine -> logLine.getProject().equals(project))
                 .filter(logLine -> logLine.getStage().equals(stage))
-                .peek(logLine -> log.debug("Local tenant \"{}\" found", tenant))
+                .peek(logLine -> log.info("Local tenant \"{}\" found", tenant))
                 .findFirst()
                 .orElseThrow(() -> new CommandException("local tenant not found"));
     }
