@@ -1,6 +1,7 @@
 package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.shard.alias.FindAliasRequest;
 import com.omgservers.schema.shard.alias.FindAliasResponse;
 import com.omgservers.service.shard.alias.AliasShard;
@@ -24,15 +25,18 @@ class GetIdByStageOperationImpl implements GetIdByStageOperation {
             final var stageId = Long.valueOf(stage);
             return Uni.createFrom().item(stageId);
         } catch (NumberFormatException e) {
-            return findProjectAlias(tenantId, projectId, stage)
+            return findStageAlias(tenantId, projectId, stage)
                     .map(AliasModel::getEntityId);
         }
     }
 
-    Uni<AliasModel> findProjectAlias(final Long tenantId,
-                                     final Long projectId,
-                                     final String stageAlias) {
-        final var request = new FindAliasRequest(tenantId, projectId, stageAlias);
+    Uni<AliasModel> findStageAlias(final Long tenantId,
+                                   final Long projectId,
+                                   final String stageAlias) {
+        final var request = new FindAliasRequest(AliasQualifierEnum.STAGE,
+                tenantId.toString(),
+                projectId,
+                stageAlias);
         return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }

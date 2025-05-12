@@ -1,6 +1,7 @@
 package com.omgservers.service.shard.alias.operation.testInterface;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.service.shard.alias.impl.operation.alias.SelectAliasByValueOperation;
 import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,11 +20,12 @@ public class SelectAliasByValueOperationTestInterface {
 
     final PgPool pgPool;
 
-    public AliasModel execute(final Long shardKey,
+    public AliasModel execute(final AliasQualifierEnum qualifier,
+                              final String shardKey,
                               final Long uniquenessGroup,
                               final String value) {
         return pgPool.withTransaction(sqlConnection -> selectAliasByValueOperation
-                        .execute(sqlConnection, 0, shardKey, uniquenessGroup, value))
+                        .execute(sqlConnection, 0, qualifier, shardKey, uniquenessGroup, value))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }
 }

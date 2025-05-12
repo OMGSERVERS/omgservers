@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ViewAliasesRequest implements ShardRequest {
 
     @NotNull
-    Long shardKey;
+    String shardKey;
 
     Long uniquenessGroup;
 
@@ -20,6 +20,6 @@ public class ViewAliasesRequest implements ShardRequest {
 
     @Override
     public String getRequestShardKey() {
-        return shardKey.toString();
+        return shardKey;
     }
 }

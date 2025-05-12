@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.alias.DeleteAliasesByEntityIdOperation;
+import com.omgservers.service.operation.alias.DeleteTenantStageAliasesOperation;
 import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantStageDeploymentResourcesOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantStagePermissionsOperation;
@@ -29,7 +29,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
 
     final DeleteTenantStageDeploymentResourcesOperation deleteTenantStageDeploymentResourcesOperation;
     final DeleteTenantStagePermissionsOperation deleteTenantStagePermissionsOperation;
-    final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
+    final DeleteTenantStageAliasesOperation deleteTenantStageAliasesOperation;
     final FindAndDeleteJobOperation findAndDeleteJobOperation;
 
     @Override
@@ -52,9 +52,9 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
                     return deleteTenantStagePermissionsOperation.execute(tenantId, tenantStageId)
                             .flatMap(voidItem -> deleteTenantStageDeploymentResourcesOperation
                                     .execute(tenantId, tenantStageId))
-                            .flatMap(voidItem -> deleteAliasesByEntityIdOperation
-                                    .execute(tenantId, tenantStageId))
                             .flatMap(voidItem -> findAndDeleteJobOperation
+                                    .execute(tenantId, tenantStageId))
+                            .flatMap(voidItem -> deleteTenantStageAliasesOperation
                                     .execute(tenantId, tenantStageId));
                 })
                 .replaceWithVoid();

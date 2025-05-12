@@ -7,6 +7,7 @@ import com.omgservers.schema.shard.user.GetUserRequest;
 import com.omgservers.schema.shard.user.GetUserResponse;
 import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.operation.alias.CreateUserAliasOperation;
+import com.omgservers.service.operation.alias.CreateUserAliasResult;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -40,6 +41,7 @@ class CreateDeveloperAliasMethodImpl implements CreateDeveloperAliasMethod {
                     final var aliasValue = request.getAlias();
                     return createUserAliasOperation.execute(developerUserId, aliasValue);
                 })
+                .map(CreateUserAliasResult::created)
                 .map(CreateDeveloperAliasSupportResponse::new);
     }
 

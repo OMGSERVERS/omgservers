@@ -4,9 +4,9 @@ import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.service.factory.alias.AliasModelFactory;
+import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.shard.alias.operation.testInterface.SelectActiveAliasesByEntityIdOperationTestInterface;
 import com.omgservers.service.shard.alias.operation.testInterface.UpsertAliasOperationTestInterface;
-import com.omgservers.service.operation.server.GenerateIdOperation;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ class SelectActiveAliasesByEntityIdOperationTest extends BaseTestClass {
     @Test
     void givenAliases_whenExecute_thenSelected() {
         final var slot = 0;
-        final var shardKey = generateIdOperation.generateId();
+        final var shardKey = generateIdOperation.generateStringId();
         final var uniquenessGroup = generateIdOperation.generateId();
         final var entityId = generateIdOperation.generateId();
 
@@ -61,7 +61,8 @@ class SelectActiveAliasesByEntityIdOperationTest extends BaseTestClass {
 
     @Test
     void givenAliases_whenExecute_thenEmptyResult() {
-        final var aliases = selectActiveAliasesByEntityIdOperation.execute(generateIdOperation.generateId(),
+        final var aliases = selectActiveAliasesByEntityIdOperation.execute(
+                String.valueOf(generateIdOperation.generateId()),
                 generateIdOperation.generateId());
         assertTrue(aliases.isEmpty());
     }

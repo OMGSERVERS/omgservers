@@ -1,8 +1,11 @@
 package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.shard.alias.DeleteAliasRequest;
 import com.omgservers.schema.shard.alias.DeleteAliasResponse;
+import com.omgservers.schema.shard.alias.FindAliasRequest;
+import com.omgservers.schema.shard.alias.FindAliasResponse;
 import com.omgservers.schema.shard.alias.ViewAliasesRequest;
 import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
@@ -19,24 +22,23 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeleteAliasesByEntityIdOperationImpl implements DeleteAliasesByEntityIdOperation {
+class DeleteTenantAliasesOperationImpl implements DeleteTenantAliasesOperation {
 
     final AliasShard aliasShard;
 
+    final ViewPtrAliasesOperation viewPtrAliasesOperation;
+
     @Override
-    public Uni<Void> execute(final Long shardKey, final Long entityId) {
-        return viewAliases(shardKey, entityId)
-                .flatMap(aliases -> Multi.createFrom().iterable(aliases)
-                        .onItem().transformToUniAndConcatenate(alias ->
-                                deleteAlias(alias.getShardKey(), alias.getId())
+    public Uni<Void> execute(final Long tenantId) {
+        return viewPtrAliasesOperation.execute(tenantId)
+                .flatMap(ptrAliases -> Multi.createFrom().iterable(ptrAliases)
+                        .onItem().transformToUniAndConcatenate(ptrAlias ->
+                                findAndDeleteAlias(tenantId, ptrAlias.getValue())
                                         .onFailure(ServerSideClientException.class)
                                         .recoverWithItem(t -> {
-                                            log.warn("Failed to delete alias, " +
-                                                            "shardKey={}, " +
-                                                            "entityId={}" +
-                                                            "{}:{}",
-                                                    alias.getShardKey(),
-                                                    alias.getId(),
+                                            log.warn("Failed to delete alias \"{}\" for tenant \"{}\", {}:{}",
+                                                    ptrAlias.getValue(),
+                                                    tenantId,
                                                     t.getClass().getSimpleName(),
                                                     t.getMessage());
                                             return null;
@@ -47,18 +49,22 @@ class DeleteAliasesByEntityIdOperationImpl implements DeleteAliasesByEntityIdOpe
                 );
     }
 
-    Uni<List<AliasModel>> viewAliases(final Long shardKey,
-                                      final Long entityId) {
-        final var request = new ViewAliasesRequest();
-        request.setShardKey(shardKey);
-        request.setEntityId(entityId);
-        return aliasShard.getService().execute(request)
-                .map(ViewAliasesResponse::getAliases);
+    Uni<Boolean> findAndDeleteAlias(final Long tenantId, final String aliasValue) {
+        return findAlias(tenantId, aliasValue)
+                .flatMap(alias -> deleteAlias(alias.getShardKey(), alias.getId()));
     }
 
-    Uni<Boolean> deleteAlias(final Long shardKey, final Long id) {
-        final var request = new DeleteAliasRequest(shardKey, id);
+    Uni<AliasModel> findAlias(final Long tenantId,
+                              final String alisValue) {
+        final var request = new FindAliasRequest(AliasQualifierEnum.TENANT, alisValue, tenantId, alisValue);
+        return aliasShard.getService().execute(request)
+                .map(FindAliasResponse::getAlias);
+    }
+
+    Uni<Boolean> deleteAlias(final String shardKey, final Long aliasId) {
+        final var request = new DeleteAliasRequest(shardKey, aliasId);
         return aliasShard.getService().execute(request)
                 .map(DeleteAliasResponse::getDeleted);
     }
+
 }

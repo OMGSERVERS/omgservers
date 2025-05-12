@@ -24,11 +24,13 @@ class DeleteAliasMethodImpl implements DeleteAliasMethod {
                                             final DeleteAliasRequest request) {
         log.trace("{}", request);
 
+        final var shardKey = request.getShardKey();
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext(
                         (changeContext, sqlConnection) -> deleteAliasOperation.execute(changeContext,
                                 sqlConnection,
                                 shardModel.slot(),
+                                shardKey,
                                 id))
                 .map(ChangeContext::getResult)
                 .map(DeleteAliasResponse::new);

@@ -6,7 +6,7 @@ create table if not exists tab_alias (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     qualifier text not null,
-    shard_key bigint not null,
+    shard_key text not null,
     uniqueness_group bigint not null,
     entity_id bigint not null,
     alias_value text not null,

@@ -9,6 +9,6 @@ import java.util.List;
 public interface SelectActiveAliasesByEntityIdOperation {
     Uni<List<AliasModel>> execute(SqlConnection sqlConnection,
                                   int slot,
-                                  Long shardKey,
+                                  String shardKey,
                                   Long entityId);
 }

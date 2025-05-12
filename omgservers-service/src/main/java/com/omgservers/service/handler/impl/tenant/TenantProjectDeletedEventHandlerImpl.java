@@ -7,11 +7,11 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.operation.alias.DeleteAliasesByEntityIdOperation;
+import com.omgservers.service.operation.alias.DeleteTenantProjectAliasesOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantProjectPermissionsOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantStagesByTenantProjectIdOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantVersionsByTenantProjectIdOperation;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -28,7 +28,7 @@ public class TenantProjectDeletedEventHandlerImpl implements EventHandler {
     final DeleteTenantVersionsByTenantProjectIdOperation deleteTenantVersionsByTenantProjectIdOperation;
     final DeleteTenantStagesByTenantProjectIdOperation deleteTenantStagesByTenantProjectIdOperation;
     final DeleteTenantProjectPermissionsOperation deleteTenantProjectPermissionsOperation;
-    final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
+    final DeleteTenantProjectAliasesOperation deleteTenantProjectAliasesOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -52,7 +52,7 @@ public class TenantProjectDeletedEventHandlerImpl implements EventHandler {
                                     .execute(tenantId, tenantProjectId))
                             .flatMap(voidItem -> deleteTenantVersionsByTenantProjectIdOperation
                                     .execute(tenantId, tenantProjectId))
-                            .flatMap(voidItem -> deleteAliasesByEntityIdOperation
+                            .flatMap(voidItem -> deleteTenantProjectAliasesOperation
                                     .execute(tenantId, tenantProjectId));
                 })
                 .replaceWithVoid();

@@ -5,6 +5,6 @@ import io.smallrye.mutiny.Uni;
 
 import java.util.List;
 
-public interface ViewTenantAliasesOperation {
-    Uni<List<AliasModel>> execute(Long tenantId);
+public interface ViewPtrAliasesOperation {
+    Uni<List<AliasModel>> execute(Long entityId);
 }

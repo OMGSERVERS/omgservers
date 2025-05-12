@@ -1,22 +1,18 @@
 package com.omgservers.service.handler.impl.tenant;
 
-import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.job.JobQualifierEnum;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefQualifierEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.shard.alias.FindAliasRequest;
-import com.omgservers.schema.shard.alias.FindAliasResponse;
 import com.omgservers.schema.shard.root.rootEntityRef.SyncRootEntityRefRequest;
 import com.omgservers.schema.shard.root.rootEntityRef.SyncRootEntityRefResponse;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.factory.root.RootEntityRefModelFactory;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.alias.FindRootAliasOperation;
 import com.omgservers.service.operation.job.CreateJobOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.alias.AliasShard;
@@ -38,6 +34,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
     final RootShard rootShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
+    final FindRootAliasOperation findRootAliasOperation;
     final CreateJobOperation createJobOperation;
 
     final RootEntityRefModelFactory rootEntityRefModelFactory;
@@ -76,7 +73,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
 
     Uni<Boolean> syncRootEntityRef(final Long tenantId,
                                    final String idempotencyKey) {
-        return findRootEntityAlias()
+        return findRootAliasOperation.execute()
                 .flatMap(alias -> {
                     final var rootId = alias.getEntityId();
 
@@ -87,13 +84,5 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                     return rootShard.getService().executeWithIdempotency(request)
                             .map(SyncRootEntityRefResponse::getCreated);
                 });
-    }
-
-    Uni<AliasModel> findRootEntityAlias() {
-        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
-                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        return aliasShard.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
     }
 }

@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 public class DeleteAliasRequest implements ShardRequest {
 
     @NotNull
-    Long shardKey;
+    String shardKey;
 
     @NotNull
     Long id;
 
     @Override
     public String getRequestShardKey() {
-        return shardKey.toString();
+        return shardKey;
     }
 }

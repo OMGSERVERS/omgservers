@@ -9,5 +9,5 @@ import java.util.List;
 public interface SelectActiveAliasesByShardKeyOperation {
     Uni<List<AliasModel>> execute(SqlConnection sqlConnection,
                                   int slot,
-                                  Long shardKey);
+                                  String shardKey);
 }

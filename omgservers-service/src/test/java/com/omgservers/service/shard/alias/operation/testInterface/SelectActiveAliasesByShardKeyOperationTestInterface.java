@@ -20,7 +20,7 @@ public class SelectActiveAliasesByShardKeyOperationTestInterface {
 
     final PgPool pgPool;
 
-    public List<AliasModel> execute(final Long shardKey) {
+    public List<AliasModel> execute(final String shardKey) {
         return pgPool.withTransaction(sqlConnection -> selectActiveAliasesByShardKeyOperation
                         .execute(sqlConnection, 0, shardKey))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));

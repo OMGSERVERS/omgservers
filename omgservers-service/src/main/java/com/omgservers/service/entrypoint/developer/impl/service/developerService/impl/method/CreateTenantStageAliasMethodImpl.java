@@ -10,6 +10,8 @@ import com.omgservers.schema.shard.alias.SyncAliasResponse;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
+import com.omgservers.service.operation.alias.CreateTenantStageAliasOperation;
+import com.omgservers.service.operation.alias.CreateTenantStageAliasResult;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
@@ -31,6 +33,7 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
     final AliasShard aliasShard;
 
     final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
+    final CreateTenantStageAliasOperation createTenantStageAliasOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
 
     final AliasModelFactory aliasModelFactory;
@@ -57,13 +60,14 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
                                                 permission)
                                         .flatMap(authorization -> {
                                             final var aliasValue = request.getAlias();
-                                            return createTenantStageAlias(tenantId,
+                                            return createTenantStageAliasOperation.execute(tenantId,
                                                     tenantProjectId,
                                                     tenantStageId,
                                                     aliasValue);
                                         });
                             });
                 })
+                .map(CreateTenantStageAliasResult::created)
                 .map(CreateStageAliasDeveloperResponse::new);
     }
 
@@ -71,25 +75,5 @@ class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
         final var request = new GetTenantStageRequest(tenantId, tenantStageId);
         return tenantShard.getService().execute(request)
                 .map(GetTenantStageResponse::getTenantStage);
-    }
-
-    Uni<Boolean> createTenantStageAlias(final Long tenantId,
-                                           final Long tenantProjectId,
-                                           final Long tenantStageId,
-                                           final String aliasValue) {
-        final var tenantStageAlias = aliasModelFactory.create(AliasQualifierEnum.STAGE,
-                tenantId,
-                tenantProjectId,
-                tenantStageId,
-                aliasValue);
-        final var syncAliasRequest = new SyncAliasRequest(tenantStageAlias);
-        return aliasShard.getService().execute(syncAliasRequest)
-                .invoke(response -> {
-                    if (response.getCreated()) {
-                        log.info("Created alias \"{}\" for the stage \"{}\"",
-                                aliasValue, tenantStageId);
-                    }
-                })
-                .map(SyncAliasResponse::getCreated);
     }
 }

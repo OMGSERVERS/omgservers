@@ -32,10 +32,11 @@ class SelectAliasOperationTest extends BaseTestClass {
     void givenAlias_whenSelectAlias_thenSelected() {
         final var slot = 0;
         final var alias1 = aliasModelFactory.create(AliasQualifierEnum.TENANT,
-                generateIdOperation.generateId(),
+                generateIdOperation.generateStringId(),
                 generateIdOperation.generateId(),
                 generateIdOperation.generateId(),
                 "alias");
+
         final var id = alias1.getId();
         upsertAliasOperation.execute(slot, alias1);
 

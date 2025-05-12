@@ -1,5 +1,6 @@
 package com.omgservers.service.shard.alias.impl.operation.alias;
 
+import com.omgservers.service.event.body.module.alias.AliasDeletedEventBodyModel;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -23,19 +24,17 @@ class DeleteAliasOperationImpl implements DeleteAliasOperation {
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,
                                 final int slot,
+                                final String shardKey,
                                 final Long id) {
         return changeObjectOperation.execute(
                 changeContext, sqlConnection, slot,
                 """
                         update $slot.tab_alias
-                        set modified = $2, deleted = true
-                        where id = $1 and deleted = false
+                        set modified = $3, deleted = true
+                        where shard_key = $1 and id = $2 and deleted = false
                         """,
-                List.of(
-                        id,
-                        Instant.now().atOffset(ZoneOffset.UTC)
-                ),
-                () -> null,
+                List.of(shardKey, id, Instant.now().atOffset(ZoneOffset.UTC)),
+                () -> new AliasDeletedEventBodyModel(shardKey, id),
                 () -> null
         );
     }

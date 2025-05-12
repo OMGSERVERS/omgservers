@@ -36,7 +36,7 @@ public class AliasModel {
     AliasQualifierEnum qualifier;
 
     @NotNull
-    Long shardKey;
+    String shardKey;
 
     @NotNull
     Long uniquenessGroup;

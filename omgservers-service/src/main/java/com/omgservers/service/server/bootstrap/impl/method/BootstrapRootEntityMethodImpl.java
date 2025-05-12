@@ -1,17 +1,12 @@
 package com.omgservers.service.server.bootstrap.impl.method;
 
-import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.root.RootModel;
-import com.omgservers.schema.shard.alias.FindAliasRequest;
-import com.omgservers.schema.shard.alias.FindAliasResponse;
-import com.omgservers.schema.shard.alias.SyncAliasRequest;
 import com.omgservers.schema.shard.root.root.SyncRootRequest;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.root.RootModelFactory;
+import com.omgservers.service.operation.alias.CreateRootAliasOperation;
+import com.omgservers.service.operation.alias.FindRootAliasOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityResponse;
@@ -32,6 +27,8 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
     final RootShard rootShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
+    final CreateRootAliasOperation createRootAliasOperation;
+    final FindRootAliasOperation findRootAliasOperation;
 
     final RootModelFactory rootModelFactory;
 
@@ -41,33 +38,14 @@ class BootstrapRootEntityMethodImpl implements BootstrapRootEntityMethod {
     public Uni<BootstrapRootEntityResponse> execute(final BootstrapRootEntityRequest request) {
         log.debug("Bootstrapping root entity");
 
-        return findRootAlias()
+        return findRootAliasOperation.execute()
                 .replaceWith(Boolean.FALSE)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> createRoot()
-                        .flatMap(root -> createRootAlias(root.getId())
+                        .flatMap(root -> createRootAliasOperation.execute(root.getId())
                                 .invoke(alias -> log.info("Root entity \"{}\" was created", root.getId())))
                         .replaceWith(Boolean.TRUE))
                 .map(BootstrapRootEntityResponse::new);
-    }
-
-    Uni<AliasModel> findRootAlias() {
-        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
-                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        return aliasShard.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
-    }
-
-    Uni<AliasModel> createRootAlias(final Long rootId) {
-        final var alias = aliasModelFactory.create(AliasQualifierEnum.ROOT,
-                GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
-                rootId,
-                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        final var request = new SyncAliasRequest(alias);
-        return aliasShard.getService().execute(request)
-                .replaceWith(alias);
     }
 
     Uni<RootModel> createRoot() {

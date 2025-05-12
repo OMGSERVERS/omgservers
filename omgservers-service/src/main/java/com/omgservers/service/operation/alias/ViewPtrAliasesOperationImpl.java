@@ -1,6 +1,7 @@
 package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.shard.alias.ViewAliasesRequest;
 import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.service.shard.alias.AliasShard;
@@ -14,18 +15,20 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class ViewTenantStageAliasesOperationImpl implements ViewTenantStageAliasesOperation {
+class ViewPtrAliasesOperationImpl implements ViewPtrAliasesOperation {
 
     final AliasShard aliasShard;
 
     @Override
-    public Uni<List<AliasModel>> execute(final Long tenantId,
-                                         final Long tenantStageId) {
+    public Uni<List<AliasModel>> execute(final Long entityId) {
         final var request = new ViewAliasesRequest();
-        request.setShardKey(tenantId);
-        request.setEntityId(tenantStageId);
+        request.setShardKey(entityId.toString());
+        request.setEntityId(entityId);
 
         return aliasShard.getService().execute(request)
-                .map(ViewAliasesResponse::getAliases);
+                .map(ViewAliasesResponse::getAliases)
+                .map(aliases -> aliases.stream()
+                        .filter(alias -> alias.getQualifier().equals(AliasQualifierEnum.PTR))
+                        .toList());
     }
 }

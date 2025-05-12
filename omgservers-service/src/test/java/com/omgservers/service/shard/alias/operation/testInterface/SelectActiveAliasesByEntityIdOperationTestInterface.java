@@ -20,7 +20,7 @@ public class SelectActiveAliasesByEntityIdOperationTestInterface {
 
     final PgPool pgPool;
 
-    public List<AliasModel> execute(final Long shardKey, final Long entityId) {
+    public List<AliasModel> execute(final String shardKey, final Long entityId) {
         return pgPool.withTransaction(sqlConnection -> selectActiveAliasesByEntityIdOperation
                         .execute(sqlConnection, 0, shardKey, entityId))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));

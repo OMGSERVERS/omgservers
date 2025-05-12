@@ -6,6 +6,7 @@ import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataResponse;
 import com.omgservers.schema.shard.tenant.tenantProject.dto.TenantProjectDataDto;
+import com.omgservers.service.operation.alias.ViewPtrAliasesOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.impl.operation.tenantProject.SelectTenantProjectOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantProjectPermission.SelectActiveTenantProjectPermissionsByTenantProjectIdOperation;
@@ -33,6 +34,8 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
             selectActiveTenantStagesByTenantProjectIdOperation;
     final SelectTenantProjectOperation selectTenantProjectOperation;
 
+    final ViewPtrAliasesOperation viewPtrAliasesOperation;
+
     final PgPool pgPool;
 
     @Override
@@ -49,8 +52,7 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
                         tenantId,
                         tenantProjectId,
                         tenantProjectData))
-                .flatMap(voidItem -> fillAliases(tenantId,
-                        tenantProjectId,
+                .flatMap(voidItem -> fillAliases(tenantProjectId,
                         tenantProjectData))
                 .flatMap(voidItem -> fillProjectAliases(tenantId,
                         tenantProjectId,
@@ -65,9 +67,7 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
                        final Long tenantProjectId,
                        final TenantProjectDataDto tenantProjectData) {
         return fillProject(sqlConnection, slot, tenantId, tenantProjectId, tenantProjectData)
-                .flatMap(voidItem -> fillAliases(tenantId,
-                        tenantProjectId,
-                        tenantProjectData))
+                .flatMap(voidItem -> fillAliases(tenantProjectId, tenantProjectData))
                 .flatMap(voidItem -> fillProjectPermissions(sqlConnection,
                         slot,
                         tenantId,
@@ -141,14 +141,9 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillAliases(final Long tenantId,
-                          final Long tenantProjectId,
+    Uni<Void> fillAliases(final Long tenantProjectId,
                           final TenantProjectDataDto tenantProjectData) {
-        final var request = new ViewAliasesRequest();
-        request.setShardKey(tenantId);
-        request.setEntityId(tenantProjectId);
-        return aliasShard.getService().execute(request)
-                .map(ViewAliasesResponse::getAliases)
+        return viewPtrAliasesOperation.execute(tenantProjectId)
                 .invoke(tenantProjectData::setAliases)
                 .replaceWithVoid();
     }
@@ -157,7 +152,7 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
                                  final Long tenantProjectId,
                                  final TenantProjectDataDto tenantProjectData) {
         final var request = new ViewAliasesRequest();
-        request.setShardKey(tenantId);
+        request.setShardKey(tenantId.toString());
         request.setUniquenessGroup(tenantProjectId);
         return aliasShard.getService().execute(request)
                 .map(ViewAliasesResponse::getAliases)

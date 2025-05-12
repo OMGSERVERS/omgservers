@@ -2,14 +2,13 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateProjectAliasDeveloperResponse;
-import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
-import com.omgservers.schema.shard.alias.SyncAliasRequest;
-import com.omgservers.schema.shard.alias.SyncAliasResponse;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
 import com.omgservers.service.factory.alias.AliasModelFactory;
+import com.omgservers.service.operation.alias.CreateTenantProjectAliasOperation;
+import com.omgservers.service.operation.alias.CreateTenantProjectAliasResult;
 import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.alias.AliasShard;
@@ -31,6 +30,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
     final AliasShard aliasShard;
     final UserShard userShard;
 
+    final CreateTenantProjectAliasOperation createTenantProjectAliasOperation;
     final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
 
     final AliasModelFactory aliasModelFactory;
@@ -54,9 +54,10 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
                     return getTenantProject(tenantId, tenantProjectId)
                             .flatMap(tenantProject -> {
                                 final var aliasValue = request.getAlias();
-                                return createTenantProjectAlias(tenantId, tenantProjectId, aliasValue);
+                                return createTenantProjectAliasOperation.execute(tenantId, tenantProjectId, aliasValue);
                             });
                 })
+                .map(CreateTenantProjectAliasResult::created)
                 .map(CreateProjectAliasDeveloperResponse::new);
     }
 
@@ -64,24 +65,5 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
         final var request = new GetTenantProjectRequest(tenantId, id);
         return tenantShard.getService().execute(request)
                 .map(GetTenantProjectResponse::getTenantProject);
-    }
-
-    Uni<Boolean> createTenantProjectAlias(final Long tenantId,
-                                          final Long tenantProjectId,
-                                          final String aliasValue) {
-        final var tenantProjectAlias = aliasModelFactory.create(AliasQualifierEnum.PROJECT,
-                tenantId,
-                tenantId,
-                tenantProjectId,
-                aliasValue);
-        final var syncAliasRequest = new SyncAliasRequest(tenantProjectAlias);
-        return aliasShard.getService().execute(syncAliasRequest)
-                .invoke(response -> {
-                    if (response.getCreated()) {
-                        log.info("Created alias \"{}\" for the project \"{}\"",
-                                aliasValue, tenantProjectId);
-                    }
-                })
-                .map(SyncAliasResponse::getCreated);
     }
 }

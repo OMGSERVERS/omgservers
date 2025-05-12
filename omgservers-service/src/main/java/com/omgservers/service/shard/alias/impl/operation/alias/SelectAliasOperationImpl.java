@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.alias.impl.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.service.shard.alias.impl.mappers.AliasModelMapper;
 import com.omgservers.service.operation.server.SelectObjectOperation;
+import com.omgservers.service.shard.alias.impl.mappers.AliasModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,6 +35,6 @@ class SelectAliasOperationImpl implements SelectAliasOperation {
                         """,
                 List.of(id),
                 "Alias",
-                aliasModelMapper::fromRow);
+                aliasModelMapper::execute);
     }
 }
