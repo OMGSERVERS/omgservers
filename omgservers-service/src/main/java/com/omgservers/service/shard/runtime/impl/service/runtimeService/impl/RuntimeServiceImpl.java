@@ -102,7 +102,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<GetRuntimeResponse> execute(@Valid final GetRuntimeRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 getRuntimeMethod::execute);
     }
@@ -110,7 +110,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<SyncRuntimeResponse> execute(@Valid final SyncRuntimeRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 syncRuntimeMethod::execute);
     }
@@ -135,7 +135,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimeResponse> execute(@Valid final DeleteRuntimeRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 deleteRuntimeMethod::execute);
     }
@@ -147,7 +147,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<ViewRuntimeCommandsResponse> execute(@Valid final ViewRuntimeCommandsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 viewRuntimeCommandsMethod::execute);
     }
@@ -155,7 +155,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<SyncRuntimeCommandResponse> execute(@Valid final SyncRuntimeCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 syncRuntimeCommandMethod::execute);
     }
@@ -180,7 +180,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimeCommandResponse> execute(@Valid final DeleteRuntimeCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 deleteRuntimeCommandMethod::execute);
     }
@@ -192,7 +192,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<ViewRuntimeMessagesResponse> execute(@Valid final ViewRuntimeMessagesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 viewRuntimeMessageMethod::execute);
     }
@@ -200,7 +200,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<SyncRuntimeMessageResponse> execute(@Valid final SyncRuntimeMessageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 syncRuntimeMessageMethod::execute);
     }
@@ -225,7 +225,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimeMessageResponse> execute(@Valid final DeleteRuntimeMessageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 deleteRuntimeMessageMethod::execute);
     }
@@ -233,7 +233,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimeMessagesResponse> execute(@Valid final DeleteRuntimeMessagesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 deleteRuntimeMessagesMethod::execute);
     }
@@ -241,7 +241,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<InterchangeMessagesResponse> execute(@Valid final InterchangeMessagesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 interchangeMessagesMethod::execute);
     }
@@ -253,7 +253,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<GetRuntimeAssignmentResponse> execute(@Valid final GetRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 getRuntimeAssignmentMethod::execute);
     }
@@ -261,7 +261,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<FindRuntimeAssignmentResponse> execute(@Valid final FindRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 findRuntimeAssignmentMethod::execute);
     }
@@ -269,7 +269,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<ViewRuntimeAssignmentsResponse> execute(@Valid final ViewRuntimeAssignmentsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 viewRuntimeAssignmentsMethod::execute);
     }
@@ -277,7 +277,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<SyncRuntimeAssignmentResponse> execute(@Valid final SyncRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 syncRuntimeAssignmentMethod::execute);
     }
@@ -302,7 +302,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<DeleteRuntimeAssignmentResponse> execute(@Valid final DeleteRuntimeAssignmentRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 deleteRuntimeAssignmentMethod::execute);
     }
@@ -314,7 +314,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<GetRuntimeStateResponse> execute(@Valid final GetRuntimeStateRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 getRuntimeStateMethod::execute);
     }
@@ -322,7 +322,7 @@ public class RuntimeServiceImpl implements RuntimeService {
     @Override
     public Uni<UpdateRuntimeStateResponse> execute(@Valid final UpdateRuntimeStateRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRuntimeModuleClientOperation::getClient,
+                getRuntimeModuleClientOperation::execute,
                 RuntimeModuleClient::execute,
                 updateRuntimeStateMethod::execute);
     }

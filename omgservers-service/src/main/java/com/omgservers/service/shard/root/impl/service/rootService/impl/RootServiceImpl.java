@@ -60,7 +60,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<GetRootResponse> execute(@Valid final GetRootRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 getRootMethod::execute);
     }
@@ -68,7 +68,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<SyncRootResponse> execute(@Valid final SyncRootRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 syncRootMethod::execute);
     }
@@ -92,7 +92,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<DeleteRootResponse> execute(@Valid final DeleteRootRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 deleteRootMethod::execute);
     }
@@ -100,7 +100,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<GetRootEntityRefResponse> execute(@Valid final GetRootEntityRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 getRootEntityRefMethod::execute);
     }
@@ -108,7 +108,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<FindRootEntityRefResponse> execute(@Valid final FindRootEntityRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 findRootEntityRefMethod::execute);
     }
@@ -116,7 +116,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<ViewRootEntityRefsResponse> execute(@Valid final ViewRootEntityRefsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 viewRootEntityRefsMethod::execute);
     }
@@ -124,7 +124,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<SyncRootEntityRefResponse> execute(@Valid final SyncRootEntityRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 syncRootEntityRefMethod::execute);
     }
@@ -150,7 +150,7 @@ class RootServiceImpl implements RootService {
     @Override
     public Uni<DeleteRootEntityRefResponse> execute(@Valid final DeleteRootEntityRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getRootModuleClientOperation::getClient,
+                getRootModuleClientOperation::execute,
                 RootApi::execute,
                 deleteRootEntityRefMethod::execute);
     }

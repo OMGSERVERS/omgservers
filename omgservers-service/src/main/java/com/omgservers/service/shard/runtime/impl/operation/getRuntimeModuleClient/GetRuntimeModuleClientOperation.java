@@ -3,9 +3,5 @@ package com.omgservers.service.shard.runtime.impl.operation.getRuntimeModuleClie
 import java.net.URI;
 
 public interface GetRuntimeModuleClientOperation {
-    RuntimeModuleClient getClient(URI uri);
-
-    Boolean hasCacheFor(URI uri);
-
-    Integer sizeOfCache();
+    RuntimeModuleClient execute(URI uri);
 }

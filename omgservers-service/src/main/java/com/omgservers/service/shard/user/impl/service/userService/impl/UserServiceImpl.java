@@ -68,7 +68,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<GetUserResponse> execute(@Valid final GetUserRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 getUserMethod::getUser);
     }
@@ -76,7 +76,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<SyncUserResponse> execute(@Valid final SyncUserRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 syncUserMethod::syncUser);
     }
@@ -100,7 +100,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<DeleteUserResponse> execute(@Valid final DeleteUserRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 deleteUserMethod::deleteUser);
     }
@@ -108,7 +108,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<CreateTokenResponse> execute(@Valid final CreateTokenRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 createTokenMethod::createToken);
     }
@@ -116,7 +116,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<GetPlayerResponse> execute(@Valid final GetPlayerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 getPlayerMethod::getPlayer);
     }
@@ -124,7 +124,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<GetPlayerProfileResponse> execute(@Valid final GetPlayerProfileRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 getPlayerProfileMethod::getPlayerProfile);
     }
@@ -132,7 +132,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<FindPlayerResponse> execute(@Valid final FindPlayerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 findPlayerMethod::findPlayer);
     }
@@ -140,7 +140,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<SyncPlayerResponse> execute(@Valid final SyncPlayerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 syncPlayerMethod::syncPlayer);
     }
@@ -148,7 +148,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<UpdatePlayerProfileResponse> execute(@Valid final UpdatePlayerProfileRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 updatePlayerProfileMethod::updatePlayerProfile);
     }
@@ -156,7 +156,7 @@ class UserServiceImpl implements UserService {
     @Override
     public Uni<DeletePlayerResponse> execute(@Valid final DeletePlayerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getUserModuleClientOperation::getClient,
+                getUserModuleClientOperation::execute,
                 UserModuleClient::execute,
                 deletePlayerMethod::deletePlayer);
     }

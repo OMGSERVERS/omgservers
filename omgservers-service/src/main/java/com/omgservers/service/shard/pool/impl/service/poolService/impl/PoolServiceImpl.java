@@ -124,7 +124,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolResponse> execute(@Valid final GetPoolRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 getPoolMethod::execute);
     }
@@ -132,7 +132,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<SyncPoolResponse> execute(@Valid final SyncPoolRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 syncPoolMethod::execute);
     }
@@ -156,7 +156,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolResponse> execute(@Valid final DeletePoolRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 deletePoolMethod::execute);
     }
@@ -168,7 +168,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolCommandResponse> execute(@Valid final GetPoolCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 getPoolCommandMethod::execute);
     }
@@ -176,7 +176,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<ViewPoolCommandResponse> execute(@Valid final ViewPoolCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 viewPoolCommandsMethod::execute);
     }
@@ -184,7 +184,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<SyncPoolCommandResponse> execute(@Valid final SyncPoolCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 syncPoolCommandMethod::execute);
     }
@@ -209,7 +209,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolCommandResponse> execute(@Valid final DeletePoolCommandRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 deletePoolCommandMethod::execute);
     }
@@ -221,7 +221,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolRequestResponse> execute(@Valid final GetPoolRequestRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 getPoolRequestMethod::execute);
     }
@@ -229,7 +229,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<FindPoolRequestResponse> execute(@Valid final FindPoolRequestRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 findPoolRequestMethod::execute);
     }
@@ -237,7 +237,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<ViewPoolRequestsResponse> execute(@Valid final ViewPoolRequestsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 viewPoolRequestsMethod::execute);
     }
@@ -245,7 +245,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<SyncPoolRequestResponse> execute(@Valid final SyncPoolRequestRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 syncPoolRequestMethod::execute);
     }
@@ -270,7 +270,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolRequestResponse> execute(@Valid final DeletePoolRequestRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 deletePoolRequestMethod::execute);
     }
@@ -282,7 +282,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolServerResponse> execute(@Valid final GetPoolServerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 getPoolServerMethod::execute);
     }
@@ -290,7 +290,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<ViewPoolServersResponse> execute(@Valid final ViewPoolServersRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 viewPoolServersMethod::execute);
     }
@@ -298,7 +298,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<SyncPoolServerResponse> execute(@Valid final SyncPoolServerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 syncPoolServerMethod::execute);
     }
@@ -323,7 +323,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolServerResponse> execute(@Valid final DeletePoolServerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 deletePoolServerMethod::execute);
     }
@@ -335,7 +335,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolContainerResponse> execute(@Valid final GetPoolContainerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 getPoolContainerMethod::execute);
     }
@@ -343,7 +343,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<FindPoolContainerResponse> execute(@Valid final FindPoolContainerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 findPoolContainerMethod::execute);
     }
@@ -351,7 +351,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<ViewPoolContainersResponse> execute(@Valid final ViewPoolContainersRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 viewPoolContainersMethod::execute);
     }
@@ -359,7 +359,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<SyncPoolContainerResponse> execute(@Valid final SyncPoolContainerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 syncPoolContainerMethod::execute);
     }
@@ -384,7 +384,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<DeletePoolContainerResponse> execute(@Valid final DeletePoolContainerRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 deletePoolContainerMethod::execute);
     }
@@ -396,7 +396,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<GetPoolStateResponse> execute(@Valid final GetPoolStateRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 getPoolStateMethod::execute);
     }
@@ -404,7 +404,7 @@ class PoolServiceImpl implements PoolService {
     @Override
     public Uni<UpdatePoolStateResponse> execute(final @Valid UpdatePoolStateRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getPoolModuleClientOperation::getClient,
+                getPoolModuleClientOperation::execute,
                 PoolApi::execute,
                 updatePoolStateMethod::execute);
     }

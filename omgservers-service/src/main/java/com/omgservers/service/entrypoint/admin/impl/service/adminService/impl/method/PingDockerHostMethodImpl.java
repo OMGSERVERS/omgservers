@@ -28,7 +28,7 @@ class PingDockerHostMethodImpl implements PingDockerHostMethod {
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .invoke(voidItem -> {
                     final var dockerDaemonClient = getDockerDaemonClientOperation
-                            .getClient(dockerDaemonUri);
+                            .execute(dockerDaemonUri);
 
                     final var response = dockerDaemonClient.pingCmd().exec();
                     log.info("The Docker host \"{}\" was successfully pinged", dockerDaemonUri);

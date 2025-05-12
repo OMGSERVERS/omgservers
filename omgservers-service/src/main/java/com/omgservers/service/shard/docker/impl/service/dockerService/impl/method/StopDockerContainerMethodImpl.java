@@ -35,7 +35,7 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
                 .map(voidItem -> {
                     final var containerName = poolContainer.getContainerName();
                     final var dockerDaemonUri = poolServer.getConfig().getDockerHostConfig().getDockerDaemonUri();
-                    final var dockerClient = getDockerDaemonClientOperation.getClient(dockerDaemonUri);
+                    final var dockerClient = getDockerDaemonClientOperation.execute(dockerDaemonUri);
 
                     stopDockerContainer(dockerDaemonUri, dockerClient, containerName);
                     // TODO: get final the container logs

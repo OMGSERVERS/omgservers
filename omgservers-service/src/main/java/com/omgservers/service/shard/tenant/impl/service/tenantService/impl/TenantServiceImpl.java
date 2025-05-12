@@ -224,7 +224,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantResponse> execute(@Valid final GetTenantRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantMethod::getTenant);
     }
@@ -232,7 +232,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantDataResponse> execute(@Valid final GetTenantDataRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantDataMethod::getTenantData);
     }
@@ -240,7 +240,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantResponse> execute(@Valid final SyncTenantRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantMethod::syncTenant);
     }
@@ -248,7 +248,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantResponse> execute(@Valid final DeleteTenantRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantMethod::deleteTenant);
     }
@@ -260,7 +260,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantPermissionsResponse> execute(@Valid final ViewTenantPermissionsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantPermissionsMethod::execute);
     }
@@ -269,7 +269,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<VerifyTenantPermissionExistsResponse> execute(
             @Valid final VerifyTenantPermissionExistsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 verifyTenantPermissionExistsMethod::execute);
     }
@@ -277,7 +277,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantPermissionResponse> execute(@Valid final SyncTenantPermissionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantPermissionMethod::execute);
     }
@@ -286,7 +286,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<DeleteTenantPermissionResponse> execute(
             @Valid final DeleteTenantPermissionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantPermissionMethod::execute);
     }
@@ -298,7 +298,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantProjectResponse> execute(@Valid final GetTenantProjectRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantProjectMethod::execute);
     }
@@ -306,7 +306,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantProjectDataResponse> execute(@Valid final GetTenantProjectDataRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantProjectDataMethod::execute);
     }
@@ -314,7 +314,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantProjectResponse> execute(@Valid final SyncTenantProjectRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantProjectMethod::execute);
     }
@@ -322,7 +322,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantProjectsResponse> execute(@Valid final ViewTenantProjectsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantProjectsMethod::execute);
     }
@@ -330,7 +330,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantProjectResponse> execute(@Valid final DeleteTenantProjectRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantProjectMethod::execute);
     }
@@ -343,7 +343,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<ViewTenantProjectPermissionsResponse> execute(
             @Valid final ViewTenantProjectPermissionsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantProjectPermissionsMethod::execute);
     }
@@ -352,7 +352,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<VerifyTenantProjectPermissionExistsResponse> execute(
             @Valid final VerifyTenantProjectPermissionExistsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 verifyTenantProjectPermissionExistsMethod::execute);
     }
@@ -361,7 +361,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<SyncTenantProjectPermissionResponse> execute(
             @Valid final SyncTenantProjectPermissionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantProjectPermissionMethod::execute);
     }
@@ -388,7 +388,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<DeleteTenantProjectPermissionResponse> execute(
             @Valid final DeleteTenantProjectPermissionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantProjectPermissionMethod::execute);
     }
@@ -400,7 +400,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantStageResponse> execute(@Valid final GetTenantStageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantStageMethod::execute);
     }
@@ -408,7 +408,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantStageDataResponse> execute(@Valid final GetTenantStageDataRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantStageDataMethod::execute);
     }
@@ -416,7 +416,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantStageResponse> execute(@Valid final SyncTenantStageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantStageMethod::execute);
     }
@@ -424,7 +424,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantStagesResponse> execute(@Valid final ViewTenantStagesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantStagesMethod::execute);
     }
@@ -432,7 +432,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantStageResponse> execute(@Valid final DeleteTenantStageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantStageMethod::execute);
     }
@@ -445,7 +445,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<ViewTenantStagePermissionsResponse> execute(
             @Valid final ViewTenantStagePermissionsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantStagePermissionsMethod::execute);
     }
@@ -454,7 +454,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<VerifyTenantStagePermissionExistsResponse> execute(
             @Valid final VerifyTenantStagePermissionExistsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 verifyTenantStagePermissionExistsMethod::execute);
     }
@@ -463,7 +463,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<SyncTenantStagePermissionResponse> execute(
             @Valid final SyncTenantStagePermissionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantStagePermissionMethod::execute);
     }
@@ -490,7 +490,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<DeleteTenantStagePermissionResponse> execute(
             @Valid final DeleteTenantStagePermissionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantStagePermissionMethod::execute);
     }
@@ -502,7 +502,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantVersionResponse> execute(@Valid final GetTenantVersionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantVersionMethod::execute);
     }
@@ -511,7 +511,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<GetTenantVersionConfigResponse> execute(
             @Valid final GetTenantVersionConfigRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantVersionConfigMethod::execute);
     }
@@ -519,7 +519,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantVersionDataResponse> execute(GetTenantVersionDataRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantVersionDataMethod::execute);
     }
@@ -527,7 +527,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantVersionsResponse> execute(@Valid final ViewTenantVersionsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantVersionsMethod::execute);
     }
@@ -535,7 +535,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantVersionResponse> execute(@Valid final SyncTenantVersionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantVersionMethod::execute);
     }
@@ -543,7 +543,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantVersionResponse> execute(@Valid final DeleteTenantVersionRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantVersionMethod::execute);
     }
@@ -555,7 +555,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantImageResponse> execute(@Valid final GetTenantImageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantImageMethod::execute);
     }
@@ -563,7 +563,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<FindTenantImageResponse> execute(@Valid final FindTenantImageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 findTenantImageMethod::execute);
     }
@@ -571,7 +571,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantImagesResponse> execute(@Valid final ViewTenantImagesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantImagesMethod::execute);
     }
@@ -579,7 +579,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantImageResponse> execute(@Valid final SyncTenantImageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantImageMethod::execute);
     }
@@ -605,7 +605,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantImageResponse> execute(@Valid final DeleteTenantImageRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantImageMethod::execute);
     }
@@ -618,7 +618,7 @@ public class TenantServiceImpl implements TenantService {
     public Uni<GetTenantDeploymentResourceResponse> execute(
             @Valid final GetTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantDeploymentResourceMethod::execute);
     }
@@ -626,7 +626,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<FindTenantDeploymentResourceResponse> execute(@Valid final FindTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 findTenantDeploymentResourceMethod::execute);
     }
@@ -634,7 +634,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantDeploymentResourcesResponse> execute(@Valid final ViewTenantDeploymentResourcesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantDeploymentResourcesMethod::execute);
     }
@@ -642,7 +642,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantDeploymentResourceResponse> execute(@Valid final SyncTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantDeploymentResourceMethod::execute);
     }
@@ -650,7 +650,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<UpdateTenantDeploymentResourceStatusResponse> execute(@Valid final UpdateTenantDeploymentResourceStatusRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 updateTenantDeploymentResourceStatusMethod::execute);
     }
@@ -658,7 +658,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantDeploymentResourceResponse> execute(@Valid final DeleteTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantDeploymentResourceMethod::execute);
     }
@@ -670,7 +670,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<GetTenantDeploymentRefResponse> execute(@Valid final GetTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 getTenantDeploymentRefMethod::execute);
     }
@@ -678,7 +678,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<FindTenantDeploymentRefResponse> execute(@Valid final FindTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 findTenantDeploymentRefMethod::execute);
     }
@@ -686,7 +686,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<ViewTenantDeploymentRefsResponse> execute(@Valid final ViewTenantDeploymentRefsRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 viewTenantDeploymentRefsMethod::execute);
     }
@@ -694,7 +694,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<SyncTenantDeploymentRefResponse> execute(@Valid final SyncTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 syncTenantDeploymentRefMethod::execute);
     }
@@ -702,7 +702,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public Uni<DeleteTenantDeploymentRefResponse> execute(@Valid final DeleteTenantDeploymentRefRequest request) {
         return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::getClient,
+                getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantDeploymentRefMethod::execute);
     }

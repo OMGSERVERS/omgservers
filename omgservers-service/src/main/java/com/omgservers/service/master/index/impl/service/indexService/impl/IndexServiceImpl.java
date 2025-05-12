@@ -33,14 +33,14 @@ class IndexServiceImpl implements IndexService {
 
     public Uni<GetIndexResponse> execute(@Valid final GetIndexRequest request) {
         return handleMasterRequestOperation.execute(log, request,
-                getIndexMasterClientOperation::getClient,
+                getIndexMasterClientOperation::execute,
                 IndexApi::execute,
                 getIndexMethod::execute);
     }
 
     public Uni<SyncIndexResponse> execute(@Valid final SyncIndexRequest request) {
         return handleMasterRequestOperation.execute(log, request,
-                getIndexMasterClientOperation::getClient,
+                getIndexMasterClientOperation::execute,
                 IndexApi::execute,
                 syncIndexMethod::execute);
     }
