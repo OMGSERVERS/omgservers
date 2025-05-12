@@ -31,7 +31,7 @@ class OutputObjectOperationImpl implements OutputObjectOperation {
             final var json = currentWriter.writeValueAsString(object);
             printColoredJson(json);
         } else {
-            System.err.println(objectMapper.writeValueAsString(object));
+            System.out.println(objectMapper.writeValueAsString(object));
         }
     }
 
@@ -39,6 +39,6 @@ class OutputObjectOperationImpl implements OutputObjectOperation {
         final var coloredJson = json
                 .replaceAll("\"(.*?)\"(?=\\s*:)", BLUE + "\"$1\"" + RESET)
                 .replaceAll(":\\s*\"(.*?)\"", ": " + GREEN + "\"$1\"" + RESET);
-        System.err.println(coloredJson);
+        System.out.println(coloredJson);
     }
 }

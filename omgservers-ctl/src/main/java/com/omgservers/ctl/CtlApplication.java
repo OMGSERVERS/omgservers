@@ -1,6 +1,7 @@
 package com.omgservers.ctl;
 
 import com.omgservers.ctl.command.CtlVersionProvider;
+import com.omgservers.ctl.command.ParentCommand;
 import com.omgservers.ctl.command.admin.AdminCommand;
 import com.omgservers.ctl.command.ctl.CtlCommand;
 import com.omgservers.ctl.command.developer.DeveloperCommand;
@@ -26,13 +27,10 @@ import picocli.CommandLine;
                 DeveloperCommand.class,
         }
 )
-public class CtlApplication implements Runnable, QuarkusApplication {
+public class CtlApplication extends ParentCommand implements QuarkusApplication {
 
     @Inject
     CommandLine.IFactory factory;
-
-    @CommandLine.Spec
-    CommandLine.Model.CommandSpec spec;
 
     public static void main(final String... args) {
         Quarkus.run(CtlApplication.class, args);
@@ -44,10 +42,5 @@ public class CtlApplication implements Runnable, QuarkusApplication {
                 .setExecutionExceptionHandler(new ExceptionHandler())
                 .execute(args);
         return commandLine;
-    }
-
-    @Override
-    public void run() {
-        spec.commandLine().usage(System.out);
     }
 }

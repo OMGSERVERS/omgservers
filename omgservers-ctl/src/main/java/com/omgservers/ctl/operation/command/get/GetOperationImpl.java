@@ -41,6 +41,6 @@ class GetOperationImpl implements GetOperation {
                 })
                 .orElseThrow(() -> new CommandException("key not found to get value"));
 
-        System.err.println(value);
+        System.out.println(value);
     }
 }

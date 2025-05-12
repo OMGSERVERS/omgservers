@@ -95,12 +95,12 @@ class DeveloperLocalDeployVersionOperationImpl implements DeveloperLocalDeployVe
                   final String tag) {
         dockerClient.tagImageCmd(image, imageNameWithRepository, tag).exec();
 
-        log.debug("Image \"{}\" tagged as \"{}\"", image, imageNameWithRepository + ":" + tag);
+        log.info("Image \"{}\" tagged as \"{}\"", image, imageNameWithRepository + ":" + tag);
     }
 
     @SneakyThrows
     void pushImage(final DockerClient dockerClient, final String image, final long timeoutInSeconds) {
-        log.debug("Pushing image \"{}\"...", image);
+        log.info("Pushing image \"{}\"...", image);
 
         dockerClient.pushImageCmd(image).start()
                 .awaitCompletion(timeoutInSeconds, TimeUnit.SECONDS);

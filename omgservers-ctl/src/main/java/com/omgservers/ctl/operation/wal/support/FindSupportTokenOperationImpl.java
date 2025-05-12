@@ -35,7 +35,7 @@ class FindSupportTokenOperationImpl implements FindSupportTokenOperation {
                         return logLine.getUser().equals(user);
                     }
                 })
-                .peek(logLine -> log.debug("Token for support user \"{}\" found", logLine.getUser()))
+                .peek(logLine -> log.info("Token for support user \"{}\" found", logLine.getUser()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException("token for support user not found"));
     }

@@ -26,7 +26,7 @@ class GetWalOperationImpl implements GetWalOperation {
             return wal;
         } else {
             Files.createFile(path);
-            log.debug("Empty WAL file \"{}\" created", path);
+            log.info("Empty WAL file \"{}\" created", path);
             return WalDto.create(path);
         }
     }

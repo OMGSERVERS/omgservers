@@ -88,7 +88,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
 
             developerUser = response.getUserId().toString();
             developerPassword = response.getPassword();
-            log.debug("Developer \"{}\" created", developerUser);
+            log.info("Developer \"{}\" created", developerUser);
         }
 
         void createTenant() {
@@ -96,7 +96,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
             tenantId = supportClient.execute(request)
                     .map(CreateTenantSupportResponse::getId)
                     .await().indefinitely();
-            log.debug("Tenant \"{}\" created", tenantId);
+            log.info("Tenant \"{}\" created", tenantId);
         }
 
         void createTenantAlias(final String alias) {
@@ -104,7 +104,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
             supportClient.execute(request)
                     .await().indefinitely();
             tenantAlias = alias;
-            log.debug("Tenant alias \"{}\" assigned", alias);
+            log.info("Tenant alias \"{}\" assigned", alias);
         }
 
         void createTenantPermission() {
@@ -115,7 +115,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
                     permissions);
             final var response = supportClient.execute(request)
                     .await().indefinitely();
-            log.debug("Tenant permissions \"{}\" created", response.getCreatedPermissions());
+            log.info("Tenant permissions \"{}\" created", response.getCreatedPermissions());
         }
 
         void createProject() {
@@ -124,8 +124,8 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
                     .await().indefinitely();
             projectId = response.getProjectId();
             stageId = response.getStageId();
-            log.debug("Project \"{}\" created", projectId);
-            log.debug("Stage \"{}\" created", stageId);
+            log.info("Project \"{}\" created", projectId);
+            log.info("Stage \"{}\" created", stageId);
         }
 
         void createProjectAlias(final String alias) {
@@ -133,7 +133,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
             supportClient.execute(request)
                     .await().indefinitely();
             projectAlias = alias;
-            log.debug("Project alias \"{}\" assigned", alias);
+            log.info("Project alias \"{}\" assigned", alias);
         }
 
         void createProjectPermission() {
@@ -146,7 +146,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
                     permissions);
             final var response = supportClient.execute(request)
                     .await().indefinitely();
-            log.debug("Project permissions \"{}\" created", response.getCreatedPermissions());
+            log.info("Project permissions \"{}\" created", response.getCreatedPermissions());
         }
 
         void createStageAlias(final String alias) {
@@ -154,7 +154,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
             supportClient.execute(request)
                     .await().indefinitely();
             stageAlias = alias;
-            log.debug("Stage alias \"{}\" assigned", alias);
+            log.info("Stage alias \"{}\" assigned", alias);
         }
 
         void createStagePermission() {
@@ -167,7 +167,7 @@ class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantO
                     permissions);
             final var response = supportClient.execute(request)
                     .await().indefinitely();
-            log.debug("Stage permissions \"{}\" created", response.getCreatedPermissions());
+            log.info("Stage permissions \"{}\" created", response.getCreatedPermissions());
         }
     }
 }

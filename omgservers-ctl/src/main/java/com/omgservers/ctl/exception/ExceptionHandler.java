@@ -10,7 +10,7 @@ public class ExceptionHandler implements CommandLine.IExecutionExceptionHandler 
     public int handleExecutionException(final Exception e,
                                         final CommandLine commandLine,
                                         final CommandLine.ParseResult fullParseResult) {
-        commandLine.getErr().println("Failed, " + e.getMessage());
+        log.error("Failed, {}", e.getMessage());
         return commandLine.getCommandSpec().exitCodeOnExecutionException();
     }
 }
