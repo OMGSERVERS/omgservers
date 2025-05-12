@@ -18,7 +18,8 @@ class BcryptHashMethodImpl implements BcryptHashMethod {
 
     @Override
     public Uni<BcryptHashAdminResponse> execute(final BcryptHashAdminRequest request) {
-        log.trace("{}", request);
+        log.info("Requested, {}", request);
+
         return Uni.createFrom().item(BcryptUtil.bcryptHash(request.getValue()))
                 .map(BcryptHashAdminResponse::new);
     }

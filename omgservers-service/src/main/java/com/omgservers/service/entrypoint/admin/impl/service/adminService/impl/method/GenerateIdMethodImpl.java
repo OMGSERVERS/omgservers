@@ -17,7 +17,8 @@ class GenerateIdMethodImpl implements GenerateIdMethod {
 
     @Override
     public Uni<GenerateIdAdminResponse> execute(final GenerateIdAdminRequest request) {
-        log.trace("{}", request);
+        log.info("Requested, {}", request);
+
         return Uni.createFrom().item(new GenerateIdAdminResponse(generateIdOperation.generateId()));
     }
 }

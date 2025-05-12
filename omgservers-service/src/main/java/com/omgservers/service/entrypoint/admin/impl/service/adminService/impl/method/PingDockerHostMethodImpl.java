@@ -21,7 +21,7 @@ class PingDockerHostMethodImpl implements PingDockerHostMethod {
 
     @Override
     public Uni<PingDockerHostAdminResponse> execute(final PingDockerHostAdminRequest request) {
-        log.trace("{}", request);
+        log.info("Requested, {}", request);
 
         final var dockerDaemonUri = request.getDockerDaemonUri();
         return Uni.createFrom().voidItem()

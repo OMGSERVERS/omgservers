@@ -52,7 +52,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
 
     @Override
     public Uni<CreateClientPlayerResponse> execute(final CreateClientPlayerRequest request) {
-        log.trace("{}", request);
+        log.info("Requested, {}", request);
 
         final var userId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
