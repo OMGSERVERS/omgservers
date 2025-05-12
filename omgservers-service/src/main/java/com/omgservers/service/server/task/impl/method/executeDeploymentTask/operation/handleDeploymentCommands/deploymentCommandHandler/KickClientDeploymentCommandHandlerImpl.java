@@ -39,12 +39,18 @@ class KickClientDeploymentCommandHandlerImpl implements DeploymentCommandHandler
                 .map(DeploymentLobbyAssignmentModel::getId)
                 .toList();
 
-        handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToDelete()
-                .addAll(deploymentLobbyAssignmentsToDelete);
+        if (deploymentLobbyAssignmentsToDelete.isEmpty()) {
+            log.warn("No lobby assignment found for clientId=\"{}\" in deployment=\"{}\", skip command",
+                    clientId, deploymentId);
+        } else {
+            handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToDelete()
+                    .addAll(deploymentLobbyAssignmentsToDelete);
 
-        log.info("Client \"{}\" must be kicked from deployment \"{}\", assignments queued for deletion",
-                clientId,
-                deploymentId);
+            log.info("Client \"{}\" must be kicked from deployment \"{}\", \"{}\" assignments queued for deletion",
+                    clientId,
+                    deploymentId,
+                    deploymentLobbyAssignmentsToDelete.size());
+        }
 
         return true;
     }
