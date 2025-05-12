@@ -49,7 +49,7 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
                                     .map(tenantStage -> {
                                         final var tenantStageId = tenantStage.getId();
 
-                                        log.info("New project \"{}\" created in tenant \"{}\"",
+                                        log.info("Created new project \"{}\" in tenant \"{}\"",
                                                 tenantProjectId, tenantId);
 
                                         return new CreateTenantProjectSupportResponse(tenantProjectId, tenantStageId);

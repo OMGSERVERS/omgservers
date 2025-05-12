@@ -18,7 +18,7 @@ public class AliasModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public AliasModel create(final AliasQualifierEnum qualifier,
-                             final Long shardKey,
+                             final String shardKey,
                              final Long uniquenessGroup,
                              final String aliasValue) {
         final var id = generateIdOperation.generateId();
@@ -28,7 +28,7 @@ public class AliasModelFactory {
     }
 
     public AliasModel create(final AliasQualifierEnum qualifier,
-                             final Long shardKey,
+                             final String shardKey,
                              final Long uniquenessGroup,
                              final Long entityId,
                              final String aliasValue) {
@@ -38,7 +38,7 @@ public class AliasModelFactory {
     }
 
     public AliasModel create(final AliasQualifierEnum qualifier,
-                             final Long shardKey,
+                             final String shardKey,
                              final Long uniquenessGroup,
                              final Long entityId,
                              final String aliasValue,
@@ -49,7 +49,7 @@ public class AliasModelFactory {
 
     public AliasModel create(final Long id,
                              final AliasQualifierEnum qualifier,
-                             final Long shardKey,
+                             final String shardKey,
                              final Long uniquenessGroup,
                              final Long entityId,
                              final String value,

@@ -31,4 +31,8 @@ public enum AliasQualifierEnum {
      */
     STAGE,
 
+    /**
+     * PTR.
+     */
+    PTR,
 }

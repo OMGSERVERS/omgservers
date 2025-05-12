@@ -17,6 +17,6 @@ public class SyncAliasRequest implements ShardRequest {
 
     @Override
     public String getRequestShardKey() {
-        return alias.getShardKey().toString();
+        return alias.getShardKey();
     }
 }

@@ -1,24 +1,20 @@
 package com.omgservers.service.handler.impl.tenant;
 
-import com.omgservers.schema.model.alias.AliasModel;
 import com.omgservers.schema.model.rootEntityRef.RootEntityRefModel;
 import com.omgservers.schema.model.tenant.TenantModel;
-import com.omgservers.schema.shard.alias.FindAliasRequest;
-import com.omgservers.schema.shard.alias.FindAliasResponse;
 import com.omgservers.schema.shard.root.rootEntityRef.DeleteRootEntityRefRequest;
 import com.omgservers.schema.shard.root.rootEntityRef.DeleteRootEntityRefResponse;
 import com.omgservers.schema.shard.root.rootEntityRef.FindRootEntityRefRequest;
 import com.omgservers.schema.shard.root.rootEntityRef.FindRootEntityRefResponse;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.alias.DeleteAliasesByEntityIdOperation;
+import com.omgservers.service.operation.alias.DeleteTenantAliasesOperation;
+import com.omgservers.service.operation.alias.FindRootAliasOperation;
 import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantPermissionsOperation;
@@ -45,10 +41,11 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     final JobService jobService;
 
     final DeleteTenantPermissionsOperation deleteTenantPermissionsOperation;
-    final DeleteAliasesByEntityIdOperation deleteAliasesByEntityIdOperation;
     final DeleteTenantProjectsOperation deleteTenantProjectsOperation;
+    final DeleteTenantAliasesOperation deleteTenantAliasesOperation;
     final FindAndDeleteJobOperation findAndDeleteJobOperation;
     final GetServiceConfigOperation getServiceConfigOperation;
+    final FindRootAliasOperation findRootAliasOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -70,8 +67,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                             .flatMap(voidItem -> deleteTenantProjectsOperation.execute(tenantId))
                             .flatMap(voidItem -> findAndDeleteRootTenantRef(tenantId))
                             .flatMap(voidItem -> findAndDeleteJobOperation.execute(tenantId, tenantId))
-                            .flatMap(voidItem -> deleteAliasesByEntityIdOperation.execute(
-                                    GlobalShardConfiguration.GLOBAL_SHARD_KEY, tenantId));
+                            .flatMap(voidItem -> deleteTenantAliasesOperation.execute(tenantId));
                 })
                 .replaceWithVoid();
     }
@@ -83,7 +79,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     }
 
     Uni<Void> findAndDeleteRootTenantRef(final Long tenantId) {
-        return findRootEntityAlias()
+        return findRootAliasOperation.execute()
                 .flatMap(alias -> {
                     final var rootId = alias.getEntityId();
                     return findRootEntityRef(rootId, tenantId)
@@ -93,14 +89,6 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                                     deleteRootEntityRef(rootId, rootEntityRef.getId()))
                             .replaceWithVoid();
                 });
-    }
-
-    Uni<AliasModel> findRootEntityAlias() {
-        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_ENTITIES_GROUP,
-                DefaultAliasConfiguration.ROOT_ENTITY_ALIAS);
-        return aliasShard.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
     }
 
     Uni<RootEntityRefModel> findRootEntityRef(final Long rootId,

@@ -2,7 +2,6 @@ package com.omgservers.service.shard.alias.operation;
 
 import com.omgservers.BaseTestClass;
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.operation.server.GenerateIdOperation;
 import com.omgservers.service.shard.alias.operation.testInterface.SelectActiveAliasesByShardKeyOperationTestInterface;
 import com.omgservers.testDataFactory.TestDataFactory;
@@ -27,17 +26,20 @@ class SelectActiveAliasesByShardKeyOperationTest extends BaseTestClass {
     GenerateIdOperation generateIdOperation;
 
     @Test
-    void givenTenantAliases_whenExecute_thenSelected() {
-        final var tenant1 = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var alias1 = testDataFactory.getAliasTestDataFactory()
-                .createAlias(tenant1, "tenant-" + UUID.randomUUID());
+    void givenAliases_whenExecute_thenSelected() {
+        final var tenant = testDataFactory.getTenantTestDataFactory().createTenant();
 
-        final var tenant2 = testDataFactory.getTenantTestDataFactory().createTenant();
-        final var alias2 = testDataFactory.getAliasTestDataFactory()
-                .createAlias(tenant2, "tenant-" + UUID.randomUUID());
+        final var project1 = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var alias1 = testDataFactory.getAliasTestDataFactory().createAlias(project1,
+                "project-" + UUID.randomUUID());
 
-        final var aliases = selectActiveAliasesByShardKeyOperation
-                .execute(GlobalShardConfiguration.GLOBAL_SHARD_KEY).stream()
+        final var project2 = testDataFactory.getTenantTestDataFactory().createTenantProject(tenant);
+        final var alias2 = testDataFactory.getAliasTestDataFactory().createAlias(project2,
+                "project-" + UUID.randomUUID());
+
+        final var shardKey = tenant.getId().toString();
+
+        final var aliases = selectActiveAliasesByShardKeyOperation.execute(shardKey).stream()
                 .map(AliasModel::getId)
                 .toList();
 
@@ -47,7 +49,8 @@ class SelectActiveAliasesByShardKeyOperationTest extends BaseTestClass {
 
     @Test
     void givenUnknownShardKey_whenExecute_thenEmptyResult() {
-        final var aliases = selectActiveAliasesByShardKeyOperation.execute(generateIdOperation.generateId());
+        final var shardKey = generateIdOperation.generateStringId();
+        final var aliases = selectActiveAliasesByShardKeyOperation.execute(shardKey);
         assertTrue(aliases.isEmpty());
     }
 }

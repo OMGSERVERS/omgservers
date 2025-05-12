@@ -12,14 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class AliasModelMapper {
 
-    public AliasModel fromRow(final Row row) {
+    public AliasModel execute(final Row row) {
         final var alias = new AliasModel();
         alias.setId(row.getLong("id"));
         alias.setIdempotencyKey(row.getString("idempotency_key"));
         alias.setCreated(row.getOffsetDateTime("created").toInstant());
         alias.setModified(row.getOffsetDateTime("modified").toInstant());
         alias.setQualifier(AliasQualifierEnum.valueOf(row.getString("qualifier")));
-        alias.setShardKey(row.getLong("shard_key"));
+        alias.setShardKey(row.getString("shard_key"));
         alias.setUniquenessGroup(row.getLong("uniqueness_group"));
         alias.setEntityId(row.getLong("entity_id"));
         alias.setValue(row.getString("alias_value"));

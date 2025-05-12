@@ -1,10 +1,9 @@
 package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.shard.alias.FindAliasRequest;
 import com.omgservers.schema.shard.alias.FindAliasResponse;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,8 +29,9 @@ class GetIdByTenantOperationImpl implements GetIdByTenantOperation {
     }
 
     Uni<AliasModel> findTenantAlias(final String tenantAlias) {
-        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.GLOBAL_TENANTS_GROUP,
+        final var request = new FindAliasRequest(AliasQualifierEnum.TENANT,
+                tenantAlias,
+                0L,
                 tenantAlias);
         return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);

@@ -1,19 +1,14 @@
 package com.omgservers.service.server.bootstrap.impl.method;
 
-import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.schema.shard.alias.FindAliasRequest;
-import com.omgservers.schema.shard.alias.FindAliasResponse;
-import com.omgservers.schema.shard.alias.SyncAliasRequest;
 import com.omgservers.schema.shard.user.SyncUserRequest;
-import com.omgservers.service.configuration.DefaultAliasConfiguration;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.exception.ServerSideNotFoundException;
 import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
+import com.omgservers.service.operation.alias.CreateUserAliasOperation;
+import com.omgservers.service.operation.alias.FindUserAliasOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserResponse;
@@ -35,6 +30,8 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
     final UserShard userShard;
 
     final GetServiceConfigOperation getServiceConfigOperation;
+    final CreateUserAliasOperation createUserAliasOperation;
+    final FindUserAliasOperation findUserAliasOperation;
 
     final AliasModelFactory aliasModelFactory;
 
@@ -45,39 +42,17 @@ class BootstrapDefaultUserMethodImpl implements BootstrapDefaultUserMethod {
         log.debug("Bootstrapping default user");
 
         final var userAlias = request.getAlias();
-        return findDefaultUserAlias(userAlias)
+        return findUserAliasOperation.execute(userAlias)
                 .replaceWith(Boolean.FALSE)
                 .onFailure(ServerSideNotFoundException.class)
                 .recoverWithUni(t -> {
                     final var password = request.getPassword();
                     final var role = request.getRole();
                     return createUser(password, role)
-                            .flatMap(user -> createDefaultUserAlias(user.getId(), userAlias)
-                                    .invoke(alias -> log.info(
-                                            "The default user \"{}\" under the alias \"{}\" was created",
-                                            user.getId(), userAlias)))
+                            .flatMap(user -> createUserAliasOperation.execute(user.getId(), userAlias))
                             .replaceWith(Boolean.TRUE);
                 })
                 .map(BootstrapDefaultUserResponse::new);
-    }
-
-    Uni<AliasModel> findDefaultUserAlias(final String alias) {
-        final var request = new FindAliasRequest(GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.DEFAULT_USER_GROUP,
-                alias);
-        return aliasShard.getService().execute(request)
-                .map(FindAliasResponse::getAlias);
-    }
-
-    Uni<AliasModel> createDefaultUserAlias(final Long userId, final String userAlias) {
-        final var alias = aliasModelFactory.create(AliasQualifierEnum.USER,
-                GlobalShardConfiguration.GLOBAL_SHARD_KEY,
-                DefaultAliasConfiguration.DEFAULT_USER_GROUP,
-                userId,
-                userAlias);
-        final var request = new SyncAliasRequest(alias);
-        return aliasShard.getService().execute(request)
-                .replaceWith(alias);
     }
 
     Uni<UserModel> createUser(final String password,

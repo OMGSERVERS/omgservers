@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.alias.impl.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
-import com.omgservers.service.shard.alias.impl.mappers.AliasModelMapper;
 import com.omgservers.service.operation.server.SelectListOperation;
+import com.omgservers.service.shard.alias.impl.mappers.AliasModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ class SelectActiveAliasesByShardKeyOperationImpl implements SelectActiveAliasesB
     @Override
     public Uni<List<AliasModel>> execute(final SqlConnection sqlConnection,
                                          final int slot,
-                                         final Long shardKey) {
+                                         final String shardKey) {
         return selectListOperation.selectList(
                 sqlConnection,
                 slot,
@@ -35,6 +35,6 @@ class SelectActiveAliasesByShardKeyOperationImpl implements SelectActiveAliasesB
                         """,
                 List.of(shardKey),
                 "Alias",
-                aliasModelMapper::fromRow);
+                aliasModelMapper::execute);
     }
 }

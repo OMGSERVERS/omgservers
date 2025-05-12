@@ -21,11 +21,12 @@ public class DeleteAliasOperationTestInterface {
     final PgPool pgPool;
 
     public ChangeContext<Boolean> execute(final int slot,
+                                          final String shardKey,
                                           final Long id) {
         return Uni.createFrom().context(context -> {
                     final var changeContext = new ChangeContext<Boolean>(context);
                     return pgPool.withTransaction(sqlConnection -> deleteAliasOperation
-                                    .execute(changeContext, sqlConnection, slot, id))
+                                    .execute(changeContext, sqlConnection, slot, shardKey, id))
                             .invoke(changeContext::setResult)
                             .replaceWith(changeContext);
                 })

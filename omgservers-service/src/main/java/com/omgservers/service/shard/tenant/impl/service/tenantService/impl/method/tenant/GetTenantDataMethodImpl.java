@@ -6,7 +6,7 @@ import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantDataRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.shard.tenant.tenant.dto.TenantDataDto;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
+import com.omgservers.service.operation.alias.ViewPtrAliasesOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.impl.operation.tenant.SelectTenantOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantPermission.SelectActiveTenantPermissionsByTenantIdOperation;
@@ -27,6 +27,7 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
 
     final SelectActiveTenantPermissionsByTenantIdOperation selectActiveTenantPermissionsByTenantIdOperation;
     final SelectActiveTenantProjectsByTenantIdOperation selectActiveTenantProjectsByTenantIdOperation;
+    final ViewPtrAliasesOperation viewPtrAliasesOperation;
     final SelectTenantOperation selectTenantOperation;
 
     final PgPool pgPool;
@@ -97,11 +98,7 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
 
     Uni<Void> fillAliases(final Long tenantId,
                           final TenantDataDto tenantData) {
-        final var request = new ViewAliasesRequest();
-        request.setShardKey(GlobalShardConfiguration.GLOBAL_SHARD_KEY);
-        request.setEntityId(tenantId);
-        return aliasShard.getService().execute(request)
-                .map(ViewAliasesResponse::getAliases)
+        return viewPtrAliasesOperation.execute(tenantId)
                 .invoke(tenantData::setAliases)
                 .replaceWithVoid();
     }
@@ -109,7 +106,7 @@ class GetTenantDataMethodImpl implements GetTenantDataMethod {
     Uni<Void> fillTenantAliases(final Long tenantId,
                                 final TenantDataDto tenantData) {
         final var request = new ViewAliasesRequest();
-        request.setShardKey(tenantId);
+        request.setShardKey(tenantId.toString());
         request.setUniquenessGroup(tenantId);
         return aliasShard.getService().execute(request)
                 .map(ViewAliasesResponse::getAliases)

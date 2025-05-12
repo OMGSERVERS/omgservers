@@ -24,19 +24,19 @@ class CreateTenantProjectAliasOperationImpl implements CreateTenantProjectAliasO
                                                        final Long tenantProjectId,
                                                        final String aliasValue) {
         final var alias = aliasModelFactory.create(AliasQualifierEnum.PROJECT,
-                tenantId,
+                tenantId.toString(),
                 tenantId,
                 tenantProjectId,
                 aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(alias);
         return aliasShard.getService().execute(syncAliasRequest)
-                .invoke(response -> {
-                    if (response.getCreated()) {
+                .map(SyncAliasResponse::getCreated)
+                .invoke(created -> {
+                    if (created) {
                         log.info("Created alias \"{}\" for the project \"{}\"",
                                 aliasValue, tenantProjectId);
                     }
                 })
-                .map(SyncAliasResponse::getCreated)
                 .map(created -> new CreateTenantProjectAliasResult(alias, created));
     }
 }

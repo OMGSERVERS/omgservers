@@ -1,11 +1,10 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage;
 
 import com.omgservers.schema.model.shard.ShardModel;
-import com.omgservers.schema.shard.alias.ViewAliasesRequest;
-import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataResponse;
 import com.omgservers.schema.shard.tenant.tenantStage.dto.TenantStageDataDto;
+import com.omgservers.service.operation.alias.ViewPtrAliasesOperation;
 import com.omgservers.service.shard.alias.AliasShard;
 import com.omgservers.service.shard.tenant.impl.operation.tenantDeploymentResource.SelectActiveTenantDeploymentResourcesByStageIdOperation;
 import com.omgservers.service.shard.tenant.impl.operation.tenantStage.SelectTenantStageOperation;
@@ -30,6 +29,8 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
             selectActiveTenantDeploymentResourcesByStageIdOperation;
     final SelectTenantStageOperation selectTenantStageOperation;
 
+    final ViewPtrAliasesOperation viewPtrAliasesOperation;
+
     final PgPool pgPool;
 
     @Override
@@ -47,8 +48,7 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
                         tenantId,
                         tenantStageId,
                         tenantStageData))
-                .flatMap(voidItem -> fillAliases(tenantId,
-                        tenantStageId,
+                .flatMap(voidItem -> fillAliases(tenantStageId,
                         tenantStageData))
                 .replaceWith(tenantStageData)
                 .map(GetTenantStageDataResponse::new);
@@ -112,14 +112,9 @@ class GetTenantStageDataMethodImpl implements GetTenantStageDataMethod {
                 .replaceWithVoid();
     }
 
-    Uni<Void> fillAliases(final Long tenantId,
-                          final Long tenantStageId,
+    Uni<Void> fillAliases(final Long tenantStageId,
                           final TenantStageDataDto tenantStageData) {
-        final var request = new ViewAliasesRequest();
-        request.setShardKey(tenantId);
-        request.setEntityId(tenantStageId);
-        return aliasShard.getService().execute(request)
-                .map(ViewAliasesResponse::getAliases)
+        return viewPtrAliasesOperation.execute(tenantStageId)
                 .invoke(tenantStageData::setAliases)
                 .replaceWithVoid();
     }

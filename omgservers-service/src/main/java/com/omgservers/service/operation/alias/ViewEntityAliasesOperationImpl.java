@@ -1,9 +1,9 @@
 package com.omgservers.service.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.shard.alias.ViewAliasesRequest;
 import com.omgservers.schema.shard.alias.ViewAliasesResponse;
-import com.omgservers.service.configuration.GlobalShardConfiguration;
 import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,17 +15,22 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
-class ViewTenantAliasesOperationImpl implements ViewTenantAliasesOperation {
+class ViewEntityAliasesOperationImpl implements ViewEntityAliasesOperation {
 
     final AliasShard aliasShard;
 
     @Override
-    public Uni<List<AliasModel>> execute(final Long tenantId) {
+    public Uni<List<AliasModel>> execute(final AliasQualifierEnum qualifier,
+                                         final String shardKey,
+                                         final Long entityId) {
         final var request = new ViewAliasesRequest();
-        request.setShardKey(GlobalShardConfiguration.GLOBAL_SHARD_KEY);
-        request.setEntityId(tenantId);
+        request.setShardKey(shardKey);
+        request.setEntityId(entityId);
 
         return aliasShard.getService().execute(request)
-                .map(ViewAliasesResponse::getAliases);
+                .map(ViewAliasesResponse::getAliases)
+                .map(aliases -> aliases.stream()
+                        .filter(alias -> alias.getQualifier().equals(qualifier))
+                        .toList());
     }
 }

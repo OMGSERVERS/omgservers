@@ -25,19 +25,19 @@ class CreateTenantStageAliasOperationImpl implements CreateTenantStageAliasOpera
                                                      final Long tenantStageId,
                                                      final String aliasValue) {
         final var alias = aliasModelFactory.create(AliasQualifierEnum.STAGE,
-                tenantId,
+                tenantId.toString(),
                 tenantProjectId,
                 tenantStageId,
                 aliasValue);
         final var syncAliasRequest = new SyncAliasRequest(alias);
         return aliasShard.getService().execute(syncAliasRequest)
-                .invoke(response -> {
-                    if (response.getCreated()) {
+                .map(SyncAliasResponse::getCreated)
+                .invoke(created -> {
+                    if (created) {
                         log.info("Created alias \"{}\" for the stage \"{}\"",
                                 aliasValue, tenantStageId);
                     }
                 })
-                .map(SyncAliasResponse::getCreated)
                 .map(created -> new CreateTenantStageAliasResult(alias, created));
     }
 }

@@ -8,5 +8,6 @@ public interface DeleteAliasOperation {
     Uni<Boolean> execute(ChangeContext<?> changeContext,
                          SqlConnection sqlConnection,
                          int slot,
+                         String shardKey,
                          Long id);
 }

@@ -23,7 +23,7 @@ class SelectActiveAliasesByUniquenessGroupOperationImpl implements SelectActiveA
     @Override
     public Uni<List<AliasModel>> execute(final SqlConnection sqlConnection,
                                          final int slot,
-                                         final Long shardKey,
+                                         final String shardKey,
                                          final Long uniquenessGroup) {
         return selectListOperation.selectList(
                 sqlConnection,
@@ -36,6 +36,6 @@ class SelectActiveAliasesByUniquenessGroupOperationImpl implements SelectActiveA
                         """,
                 List.of(shardKey, uniquenessGroup),
                 "Alias",
-                aliasModelMapper::fromRow);
+                aliasModelMapper::execute);
     }
 }

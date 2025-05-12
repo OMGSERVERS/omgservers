@@ -8,9 +8,7 @@ import com.omgservers.schema.model.runtime.RuntimeQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.service.operation.alias.ViewTenantAliasesOperation;
-import com.omgservers.service.operation.alias.ViewTenantProjectAliasesOperation;
-import com.omgservers.service.operation.alias.ViewTenantStageAliasesOperation;
+import com.omgservers.service.operation.alias.ViewPtrAliasesOperation;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
@@ -31,9 +29,7 @@ class CreatePoolContainerLabelsOperationImpl implements CreatePoolContainerLabel
     final DeploymentShard deploymentShard;
     final TenantShard tenantShard;
 
-    final ViewTenantProjectAliasesOperation viewTenantProjectAliasesOperation;
-    final ViewTenantStageAliasesOperation viewTenantStageAliasesOperation;
-    final ViewTenantAliasesOperation viewTenantAliasesOperation;
+    final ViewPtrAliasesOperation viewPtrAliasesOperation;
 
     @Override
     public Uni<Map<PoolContainerLabel, String>> execute(final RuntimeModel runtime,
@@ -62,8 +58,8 @@ class CreatePoolContainerLabelsOperationImpl implements CreatePoolContainerLabel
                                                       final RuntimeQualifierEnum runtimeQualifier) {
         final var labels = new HashMap<PoolContainerLabel, String>();
         return fillByTenantLabel(labels, tenantId)
-                .flatMap(voidItem -> fillByTenantProjectLabel(labels, tenantId, tenantProjectId))
-                .flatMap(voidItem -> fillByTenantStageLabel(labels, tenantId, tenantStageId))
+                .flatMap(voidItem -> fillByTenantProjectLabel(labels, tenantProjectId))
+                .flatMap(voidItem -> fillByTenantStageLabel(labels, tenantStageId))
                 .flatMap(voidItem -> fillByVersionLabel(labels, tenantVersionId))
                 .flatMap(voidItem -> fillByQualifierLabel(labels, runtimeQualifier))
                 .replaceWith(labels);
@@ -71,7 +67,7 @@ class CreatePoolContainerLabelsOperationImpl implements CreatePoolContainerLabel
 
     Uni<Void> fillByTenantLabel(final Map<PoolContainerLabel, String> labels,
                                 final Long tenantId) {
-        return viewTenantAliasesOperation.execute(tenantId)
+        return viewPtrAliasesOperation.execute(tenantId)
                 .invoke(tenantAliases -> tenantAliases.stream().max(Comparator.comparingLong(AliasModel::getId))
                         .ifPresentOrElse(item -> labels.put(PoolContainerLabel.TENANT, item.getValue()),
                                 () -> labels.put(PoolContainerLabel.TENANT, tenantId.toString())))
@@ -79,9 +75,8 @@ class CreatePoolContainerLabelsOperationImpl implements CreatePoolContainerLabel
     }
 
     Uni<Void> fillByTenantProjectLabel(final Map<PoolContainerLabel, String> labels,
-                                       final Long tenantId,
                                        final Long tenantProjectId) {
-        return viewTenantProjectAliasesOperation.execute(tenantId, tenantProjectId)
+        return viewPtrAliasesOperation.execute(tenantProjectId)
                 .invoke(tenantAliases -> tenantAliases.stream().max(Comparator.comparingLong(AliasModel::getId))
                         .ifPresentOrElse(alias -> labels.put(PoolContainerLabel.PROJECT, alias.getValue()),
                                 () -> labels.put(PoolContainerLabel.PROJECT, tenantProjectId.toString())))
@@ -89,9 +84,8 @@ class CreatePoolContainerLabelsOperationImpl implements CreatePoolContainerLabel
     }
 
     Uni<Void> fillByTenantStageLabel(final Map<PoolContainerLabel, String> labels,
-                                     final Long tenantId,
                                      final Long tenantStageId) {
-        return viewTenantStageAliasesOperation.execute(tenantId, tenantStageId)
+        return viewPtrAliasesOperation.execute(tenantStageId)
                 .invoke(tenantAliases -> tenantAliases.stream().max(Comparator.comparingLong(AliasModel::getId))
                         .ifPresentOrElse(alias -> labels.put(PoolContainerLabel.STAGE, alias.getValue()),
                                 () -> labels.put(PoolContainerLabel.PROJECT, tenantStageId.toString())))

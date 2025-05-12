@@ -1,5 +1,6 @@
 package com.omgservers.schema.shard.alias;
 
+import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.shard.ShardRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,10 @@ import lombok.NoArgsConstructor;
 public class FindAliasRequest implements ShardRequest {
 
     @NotNull
-    Long shardKey;
+    AliasQualifierEnum qualifier;
+
+    @NotNull
+    String shardKey;
 
     @NotNull
     Long uniquenessGroup;
@@ -22,6 +26,6 @@ public class FindAliasRequest implements ShardRequest {
 
     @Override
     public String getRequestShardKey() {
-        return shardKey.toString();
+        return shardKey;
     }
 }

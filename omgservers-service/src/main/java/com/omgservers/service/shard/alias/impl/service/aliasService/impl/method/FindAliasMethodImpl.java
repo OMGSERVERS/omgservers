@@ -25,11 +25,13 @@ class FindAliasMethodImpl implements FindAliasMethod {
         log.trace("{}", request);
 
         return pgPool.withTransaction(sqlConnection -> {
+                    final var qualifier = request.getQualifier();
                     final var shardKey = request.getShardKey();
                     final var uniquenessGroup = request.getUniquenessGroup();
                     final var value = request.getValue();
                     return selectAliasByValueOperation.execute(sqlConnection,
                             shardModel.slot(),
+                            qualifier,
                             shardKey,
                             uniquenessGroup,
                             value);

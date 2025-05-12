@@ -20,7 +20,7 @@ public class SelectActiveAliasesByUniquenessGroupOperationTestInterface {
 
     final PgPool pgPool;
 
-    public List<AliasModel> execute(final Long shardKey, final Long uniquenessGroup) {
+    public List<AliasModel> execute(final String shardKey, final Long uniquenessGroup) {
         return pgPool.withTransaction(sqlConnection -> selectActiveAliasesByUniquenessGroupOperation
                         .execute(sqlConnection, 0, shardKey, uniquenessGroup))
                 .await().atMost(Duration.ofSeconds(TIMEOUT));

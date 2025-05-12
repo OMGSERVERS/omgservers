@@ -3,6 +3,8 @@ package com.omgservers.service.event;
 import com.omgservers.service.event.body.internal.FailedClientDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveClientDetectedEventBodyModel;
 import com.omgservers.service.event.body.internal.InactiveRuntimeDetectedEventBodyModel;
+import com.omgservers.service.event.body.module.alias.AliasCreatedEventBodyModel;
+import com.omgservers.service.event.body.module.alias.AliasDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.client.ClientCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.client.ClientDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.client.ClientRuntimeRefCreatedEventBodyModel;
@@ -66,11 +68,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EventQualifierEnum {
-    // System
     INDEX_CREATED(IndexCreatedEventBodyModel.class),
     JOB_CREATED(JobCreatedEventBodyModel.class),
     JOB_DELETED(JobDeletedEventBodyModel.class),
-    // Shards
+    ALIAS_CREATED(AliasCreatedEventBodyModel.class),
+    ALIAS_DELETED(AliasDeletedEventBodyModel.class),
     ROOT_CREATED(RootCreatedEventBodyModel.class),
     ROOT_DELETED(RootDeletedEventBodyModel.class),
     POOL_CREATED(PoolCreatedEventBodyModel.class),

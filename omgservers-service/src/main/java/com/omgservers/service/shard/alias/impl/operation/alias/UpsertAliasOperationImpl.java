@@ -1,6 +1,7 @@
 package com.omgservers.service.shard.alias.impl.operation.alias;
 
 import com.omgservers.schema.model.alias.AliasModel;
+import com.omgservers.service.event.body.module.alias.AliasCreatedEventBodyModel;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -44,7 +45,7 @@ class UpsertAliasOperationImpl implements UpsertAliasOperation {
                         alias.getValue(),
                         alias.getDeleted()
                 ),
-                () -> null,
+                () -> new AliasCreatedEventBodyModel(alias.getShardKey(), alias.getId()),
                 () -> null
         );
     }
