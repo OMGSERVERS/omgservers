@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.version.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.version.DeveloperVersionDeleteVersionOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "delete-version",
         description = "Delete a version by id or alias.")
-public class DeveloperVersionDeleteVersionCommand extends UserCommand {
+public class DeveloperVersionDeleteVersionCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -29,7 +29,6 @@ public class DeveloperVersionDeleteVersionCommand extends UserCommand {
         developerVersionDeleteVersionOperation.execute(tenant,
                 project,
                 version,
-                installation,
-                user);
+                installation);
     }
 }

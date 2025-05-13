@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.stage.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.stage.DeveloperStageDeleteStageOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "delete-stage",
         description = "Delete a stage by id or alias.")
-public class DeveloperStageDeleteStageCommand extends UserCommand {
+public class DeveloperStageDeleteStageCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -29,7 +29,6 @@ public class DeveloperStageDeleteStageCommand extends UserCommand {
         developerStageDeleteStageOperation.execute(tenant,
                 project,
                 stage,
-                installation,
-                user);
+                installation);
     }
 }

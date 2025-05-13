@@ -9,6 +9,5 @@ public interface SupportStageCreatePermissionOperation {
                  String stage,
                  String developer,
                  StagePermissionEnum permission,
-                 String service,
-                 String user);
+                 String installation);
 }

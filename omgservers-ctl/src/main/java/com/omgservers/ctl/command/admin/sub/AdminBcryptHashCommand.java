@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.admin.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.admin.AdminBcryptHashOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "bcrypt-hash",
         description = "Generate a bcrypt hash of the given value.")
-public class AdminBcryptHashCommand extends UserCommand {
+public class AdminBcryptHashCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Value to be encrypted.")
     String value;
@@ -20,6 +20,6 @@ public class AdminBcryptHashCommand extends UserCommand {
 
     @Override
     public void run() {
-        adminBcryptHashOperation.execute(value, installation, user);
+        adminBcryptHashOperation.execute(value, installation);
     }
 }

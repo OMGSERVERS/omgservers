@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.support.sub.stage.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.command.support.sub.stage.sub.util.StagePermissionCandidates;
 import com.omgservers.ctl.command.support.sub.stage.sub.util.StagePermissionConverter;
 import com.omgservers.ctl.dto.permission.StagePermissionEnum;
@@ -13,7 +13,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-permission",
         description = "Grant a permission to a user for a stage.")
-public class SupportStageCreatePermissionCommand extends UserCommand {
+public class SupportStageCreatePermissionCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -42,7 +42,6 @@ public class SupportStageCreatePermissionCommand extends UserCommand {
                 stage,
                 developer,
                 permission,
-                installation,
-                user);
+                installation);
     }
 }

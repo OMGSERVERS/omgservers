@@ -15,19 +15,19 @@ import lombok.extern.slf4j.Slf4j;
 class FindAdminTokenOperationImpl implements FindAdminTokenOperation {
 
     @Override
-    public AdminTokenLogLineBodyDto execute(final WalDto wal, final String service) {
-        return execute(wal, service, null);
+    public AdminTokenLogLineBodyDto execute(final WalDto wal, final String installation) {
+        return execute(wal, installation, null);
     }
 
     @Override
     public AdminTokenLogLineBodyDto execute(final WalDto wal,
-                                            final String service,
+                                            final String installation,
                                             final String user) {
         return wal.getLogLines().stream()
                 .filter(log -> log.getQualifier().equals(LogLineQualifierEnum.ADMIN_TOKEN))
                 .map(LogLineDto::getBody)
                 .map(AdminTokenLogLineBodyDto.class::cast)
-                .filter(logLine -> logLine.getInstallation().equals(service))
+                .filter(logLine -> logLine.getInstallation().equals(installation))
                 .filter(logLine -> {
                     if (user == null) {
                         return true;

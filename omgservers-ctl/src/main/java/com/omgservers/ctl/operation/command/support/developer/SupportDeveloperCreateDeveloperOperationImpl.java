@@ -19,24 +19,24 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SupportDeveloperCreateDeveloperOperationImpl implements SupportDeveloperCreateDeveloperOperation {
 
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final CreateSupportClientOperation createSupportClientOperation;
     final FindSupportTokenOperation findSupportTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
-    public void execute(final String service, final String user) {
+    public void execute(final String installation) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
-        final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var installationDetails = findInstallationDetailsOperation.execute(wal, installation);
+        final var installationName = installationDetails.getName();
+        final var installationUri = installationDetails.getApi();
 
-        final var supportTokenLog = findSupportTokenOperation.execute(wal, serviceName, user);
+        final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName);
         final var supportToken = supportTokenLog.getToken();
-        final var supportClient = createSupportClientOperation.execute(serviceUri, supportToken);
+        final var supportClient = createSupportClientOperation.execute(installationUri, supportToken);
 
         final var request = new CreateDeveloperSupportRequest();
         final var createDeveloperSupportResponse = supportClient.execute(request)

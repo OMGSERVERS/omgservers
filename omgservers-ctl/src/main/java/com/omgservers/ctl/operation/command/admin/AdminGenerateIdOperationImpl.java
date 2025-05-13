@@ -25,15 +25,15 @@ class AdminGenerateIdOperationImpl implements AdminGenerateIdOperation {
     final GetWalOperation getWalOperation;
 
     @Override
-    public void execute(final String service, final String user) {
+    public void execute(final String installation) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, service);
+        final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, installation);
         final var installationName = installationDetailsLog.getName();
         final var installationApi = installationDetailsLog.getApi();
 
-        final var adminTokenLog = findAdminTokenOperation.execute(wal, installationName, user);
+        final var adminTokenLog = findAdminTokenOperation.execute(wal, installationName);
         final var adminToken = adminTokenLog.getToken();
         final var adminClient = createAdminClientOperation.execute(installationApi, adminToken);
 

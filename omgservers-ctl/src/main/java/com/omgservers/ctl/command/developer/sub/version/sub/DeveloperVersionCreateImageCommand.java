@@ -1,7 +1,7 @@
 package com.omgservers.ctl.command.developer.sub.version.sub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.command.developer.sub.version.sub.util.ImageTypeCandidates;
 import com.omgservers.ctl.command.developer.sub.version.sub.util.ImageTypeConverter;
 import com.omgservers.ctl.dto.image.ImageTypeEnum;
@@ -17,7 +17,7 @@ import java.net.URI;
 @CommandLine.Command(
         name = "create-image",
         description = "Create a new image.")
-public class DeveloperVersionCreateImageCommand extends UserCommand {
+public class DeveloperVersionCreateImageCommand extends InstallationCommand {
 
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
@@ -51,7 +51,6 @@ public class DeveloperVersionCreateImageCommand extends UserCommand {
                 version,
                 type,
                 url,
-                installation,
-                user);
+                installation);
     }
 }

@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.support.sub.tenant.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.support.tenant.SupportTenantCreateAliasOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-alias",
         description = "Assign an alias to a tenant.")
-public class SupportTenantCreateAliasCommand extends UserCommand {
+public class SupportTenantCreateAliasCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id of the tenant to assign the alias to.")
     Long tenantId;
@@ -23,6 +23,6 @@ public class SupportTenantCreateAliasCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantCreateAliasOperation.execute(tenantId, alias, installation, user);
+        supportTenantCreateAliasOperation.execute(tenantId, alias, installation);
     }
 }

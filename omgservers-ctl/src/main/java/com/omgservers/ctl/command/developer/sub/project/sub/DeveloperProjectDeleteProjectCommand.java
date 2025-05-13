@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.project.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.project.DeveloperProjectDeleteProjectOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "delete-project",
         description = "Delete a project by id or alias.")
-public class DeveloperProjectDeleteProjectCommand extends UserCommand {
+public class DeveloperProjectDeleteProjectCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -23,6 +23,6 @@ public class DeveloperProjectDeleteProjectCommand extends UserCommand {
 
     @Override
     public void run() {
-        developerProjectDeleteProjectOperation.execute(tenant, project, installation, user);
+        developerProjectDeleteProjectOperation.execute(tenant, project, installation);
     }
 }

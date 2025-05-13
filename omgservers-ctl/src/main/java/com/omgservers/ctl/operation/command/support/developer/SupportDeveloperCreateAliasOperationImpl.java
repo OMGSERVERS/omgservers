@@ -18,17 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SupportDeveloperCreateAliasOperationImpl implements SupportDeveloperCreateAliasOperation {
 
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final CreateSupportClientOperation createSupportClientOperation;
     final FindSupportTokenOperation findSupportTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override
     public void execute(final Long developerUserId,
                         final String alias,
-                        final String installation,
-                        final String user) {
+                        final String installation) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
@@ -36,7 +35,7 @@ class SupportDeveloperCreateAliasOperationImpl implements SupportDeveloperCreate
         final var installationName = installationDetailsLog.getName();
         final var installationApi = installationDetailsLog.getApi();
 
-        final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName, user);
+        final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName);
         final var supportToken = supportTokenLog.getToken();
         final var supportClient = createSupportClientOperation.execute(installationApi, supportToken);
 

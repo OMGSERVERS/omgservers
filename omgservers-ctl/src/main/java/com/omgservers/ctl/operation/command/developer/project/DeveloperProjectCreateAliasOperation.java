@@ -5,6 +5,5 @@ public interface DeveloperProjectCreateAliasOperation {
     void execute(String tenant,
                  Long projectId,
                  String alias,
-                 String service,
-                 String user);
+                 String installation);
 }

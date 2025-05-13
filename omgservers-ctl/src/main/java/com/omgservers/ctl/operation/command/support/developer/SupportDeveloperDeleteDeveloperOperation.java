@@ -3,6 +3,5 @@ package com.omgservers.ctl.operation.command.support.developer;
 public interface SupportDeveloperDeleteDeveloperOperation {
 
     void execute(String developer,
-                 String service,
-                 String user);
+                 String installation);
 }

@@ -8,6 +8,5 @@ public interface SupportProjectCreatePermissionOperation {
                  String project,
                  String developer,
                  ProjectPermissionEnum permission,
-                 String service,
-                 String user);
+                 String installation);
 }

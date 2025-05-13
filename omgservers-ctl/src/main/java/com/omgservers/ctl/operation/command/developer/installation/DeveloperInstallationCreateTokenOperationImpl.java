@@ -1,4 +1,4 @@
-package com.omgservers.ctl.operation.command.developer;
+package com.omgservers.ctl.operation.command.developer.installation;
 
 import com.omgservers.ctl.operation.client.CreateDeveloperAnonymousClientOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeveloperCreateTokenOperationImpl implements DeveloperCreateTokenOperation {
+class DeveloperInstallationCreateTokenOperationImpl implements DeveloperInstallationCreateTokenOperation {
 
     final CreateDeveloperAnonymousClientOperation createDeveloperAnonymousClientOperation;
     final AppendDeveloperTokenOperation appendDeveloperTokenOperation;
@@ -37,10 +37,10 @@ class DeveloperCreateTokenOperationImpl implements DeveloperCreateTokenOperation
         final var developerAnonymousClient = createDeveloperAnonymousClientOperation.execute(serviceUri);
 
         final var request = new CreateTokenDeveloperRequest(user, password);
-        final var adminToken = developerAnonymousClient.execute(request)
+        final var developerToken = developerAnonymousClient.execute(request)
                 .map(CreateTokenDeveloperResponse::getRawToken)
                 .await().indefinitely();
 
-        appendDeveloperTokenOperation.execute(path, serviceName, user, adminToken);
+        appendDeveloperTokenOperation.execute(path, serviceName, user, developerToken);
     }
 }

@@ -29,25 +29,22 @@ class DeveloperDeploymentGetDetailsOperationImpl implements DeveloperDeploymentG
 
     @Override
     @SneakyThrows
-    public void execute(final Long deploymentId,
-                        final String service,
-                        final String user,
-                        final boolean prettyPrint) {
+    public void execute(final Long deploymentId, final String installation) {
         final var wal = getWalOperation.execute();
 
-        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
-        final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var installationDetails = findInstallationDetailsOperation.execute(wal, installation);
+        final var installationName = installationDetails.getName();
+        final var installationUri = installationDetails.getApi();
 
-        final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName, user);
+        final var developerTokenLog = findDeveloperTokenOperation.execute(wal, installationName);
         final var developerToken = developerTokenLog.getToken();
-        final var developerClient = createDeveloperClientOperation.execute(serviceUri, developerToken);
+        final var developerClient = createDeveloperClientOperation.execute(installationUri, developerToken);
 
         final var request = new GetDeploymentDetailsDeveloperRequest(deploymentId);
         final var deploymentDetails = developerClient.execute(request)
                 .map(GetDeploymentDetailsDeveloperResponse::getDetails)
                 .await().indefinitely();
 
-        outputObjectOperation.execute(deploymentDetails, prettyPrint);
+        outputObjectOperation.execute(deploymentDetails);
     }
 }

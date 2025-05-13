@@ -9,6 +9,5 @@ public interface SupportStageDeletePermissionOperation {
                  String stage,
                  String developer,
                  StagePermissionEnum permission,
-                 String service,
-                 String user);
+                 String installation);
 }

@@ -32,24 +32,22 @@ class DeveloperStageGetDetailsOperationImpl implements DeveloperStageGetDetailsO
     public void execute(final String tenant,
                         final String project,
                         final String stage,
-                        final String service,
-                        final String user,
-                        final boolean prettyPrint) {
+                        final String service) {
         final var wal = getWalOperation.execute();
 
-        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
-        final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var installationDetails = findInstallationDetailsOperation.execute(wal, service);
+        final var installationName = installationDetails.getName();
+        final var installationUri = installationDetails.getApi();
 
-        final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName, user);
+        final var developerTokenLog = findDeveloperTokenOperation.execute(wal, installationName);
         final var developerToken = developerTokenLog.getToken();
-        final var developerClient = createDeveloperClientOperation.execute(serviceUri, developerToken);
+        final var developerClient = createDeveloperClientOperation.execute(installationUri, developerToken);
 
         final var request = new GetStageDetailsDeveloperRequest(tenant, project, stage);
         final var tenantDetails = developerClient.execute(request)
                 .map(GetStageDetailsDeveloperResponse::getDetails)
                 .await().indefinitely();
 
-        outputObjectOperation.execute(tenantDetails, prettyPrint);
+        outputObjectOperation.execute(tenantDetails);
     }
 }

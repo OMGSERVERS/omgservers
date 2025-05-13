@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.stage.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.stage.DeveloperStageCreateAliasOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-alias",
         description = "Assign an alias to a project.")
-public class DeveloperStageCreateAliasCommand extends UserCommand {
+public class DeveloperStageCreateAliasCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project containing the stage.")
     String tenant;
@@ -29,7 +29,6 @@ public class DeveloperStageCreateAliasCommand extends UserCommand {
         developerStageCreateAliasOperation.execute(tenant,
                 stageId,
                 alias,
-                installation,
-                user);
+                installation);
     }
 }

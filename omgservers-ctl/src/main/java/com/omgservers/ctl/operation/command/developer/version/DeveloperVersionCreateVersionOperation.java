@@ -7,6 +7,5 @@ public interface DeveloperVersionCreateVersionOperation {
     void execute(String tenant,
                  String project,
                  TenantVersionConfigDto config,
-                 String service,
-                 String user);
+                 String installation);
 }
