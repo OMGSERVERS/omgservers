@@ -6,6 +6,5 @@ public interface DeveloperDeploymentCreateDeploymentOperation {
                  String project,
                  String stage,
                  String version,
-                 String service,
-                 String user);
+                 String installation);
 }

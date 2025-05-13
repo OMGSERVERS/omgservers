@@ -5,6 +5,5 @@ public interface DeveloperVersionDeleteVersionOperation {
     void execute(String tenant,
                  String project,
                  String version,
-                 String service,
-                 String user);
+                 String installation);
 }

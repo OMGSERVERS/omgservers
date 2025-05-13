@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.version.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.version.DeveloperVersionGetDetailsOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "get-details",
         description = "Get details of a version.")
-public class DeveloperVersionGetDetailsCommand extends UserCommand {
+public class DeveloperVersionGetDetailsCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -29,8 +29,6 @@ public class DeveloperVersionGetDetailsCommand extends UserCommand {
         developerVersionGetDetailsOperation.execute(tenant,
                 project,
                 version,
-                installation,
-                user,
-                prettyPrint);
+                installation);
     }
 }

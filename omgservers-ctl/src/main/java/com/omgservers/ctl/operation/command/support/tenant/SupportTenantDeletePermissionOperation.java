@@ -7,6 +7,5 @@ public interface SupportTenantDeletePermissionOperation {
     void execute(String tenant,
                  String developer,
                  TenantPermissionEnum permission,
-                 String service,
-                 String user);
+                 String installation);
 }

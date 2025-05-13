@@ -1,4 +1,4 @@
-package com.omgservers.ctl.operation.command.local;
+package com.omgservers.ctl.operation.command.developer.localtesting;
 
 import com.omgservers.ctl.client.SupportClient;
 import com.omgservers.ctl.dto.key.KeyEnum;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeveloperLocalDeleteTenantOperationImpl implements DeveloperLocalDeleteTenantOperation {
+class DeveloperLocalTestingDeleteTenantOperationImpl implements DeveloperLocalTestingDeleteTenantOperation {
 
     final CreateLocalSupportClientOperation createLocalSupportClientOperation;
     final FindLocalTenantOperation findLocalTenantOperation;

@@ -4,6 +4,5 @@ public interface DeveloperStageCreateStageOperation {
 
     void execute(String tenant,
                  String project,
-                 String service,
-                 String user);
+                 String installation);
 }

@@ -1,4 +1,4 @@
-package com.omgservers.ctl.operation.command.local;
+package com.omgservers.ctl.operation.command.developer.localtesting;
 
 import com.omgservers.ctl.client.SupportClient;
 import com.omgservers.ctl.operation.client.CreateLocalDeveloperClientOperation;
@@ -29,7 +29,7 @@ import java.util.Set;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeveloperLocalInitTenantOperationImpl implements DeveloperLocalInitTenantOperation {
+class DeveloperLocalTestingInitTenantOperationImpl implements DeveloperLocalTestingInitTenantOperation {
 
     final CreateLocalDeveloperClientOperation createLocalDeveloperClientOperation;
     final CreateLocalSupportClientOperation createLocalSupportClientOperation;

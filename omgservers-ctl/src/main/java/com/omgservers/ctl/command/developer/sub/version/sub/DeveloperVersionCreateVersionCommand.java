@@ -1,7 +1,7 @@
 package com.omgservers.ctl.command.developer.sub.version.sub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.version.DeveloperVersionCreateVersionOperation;
 import com.omgservers.ctl.operation.ctl.HandleFileOptionOperation;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
@@ -14,7 +14,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-version",
         description = "Create a new version.")
-public class DeveloperVersionCreateVersionCommand extends UserCommand {
+public class DeveloperVersionCreateVersionCommand extends InstallationCommand {
 
     @CommandLine.Option(names = {"-c", "--config"},
             description = "Path to a file to read config from. Use '-' to read from stdin.",
@@ -45,7 +45,6 @@ public class DeveloperVersionCreateVersionCommand extends UserCommand {
         developerVersionCreateVersionOperation.execute(tenant,
                 project,
                 config,
-                installation,
-                user);
+                installation);
     }
 }

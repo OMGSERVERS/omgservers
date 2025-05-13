@@ -1,8 +1,8 @@
-package com.omgservers.ctl.operation.command.local;
+package com.omgservers.ctl.operation.command.developer.localtesting;
 
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 
-public interface DeveloperLocalDeployVersionOperation {
+public interface DeveloperLocalTestingDeployVersionOperation {
 
     void execute(String tenant,
                  String project,

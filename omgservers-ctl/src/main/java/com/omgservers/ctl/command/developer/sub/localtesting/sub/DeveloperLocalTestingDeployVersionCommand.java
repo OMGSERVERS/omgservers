@@ -1,7 +1,7 @@
-package com.omgservers.ctl.command.developer.sub.local.sub;
+package com.omgservers.ctl.command.developer.sub.localtesting.sub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.omgservers.ctl.operation.command.local.DeveloperLocalDeployVersionOperation;
+import com.omgservers.ctl.operation.command.developer.localtesting.DeveloperLocalTestingDeployVersionOperation;
 import com.omgservers.ctl.operation.ctl.HandleFileOptionOperation;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import jakarta.inject.Inject;
@@ -13,7 +13,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "deploy-version",
         description = "Deploy a new version for local testing.")
-public class DeveloperLocalDeployVersionCommand implements Runnable {
+public class DeveloperLocalTestingDeployVersionCommand implements Runnable {
 
     @CommandLine.Option(names = {"-c", "--config"},
             description = "Path to a file to read config from. Use '-' to read from stdin.",
@@ -21,7 +21,7 @@ public class DeveloperLocalDeployVersionCommand implements Runnable {
     String config;
 
     @CommandLine.Option(names = {"-i", "--image"},
-            description = "Image name to deploy.",
+            description = "Docker image to deploy.",
             required = true)
     String image;
 
@@ -41,7 +41,7 @@ public class DeveloperLocalDeployVersionCommand implements Runnable {
     HandleFileOptionOperation handleFileOptionOperation;
 
     @Inject
-    DeveloperLocalDeployVersionOperation developerLocalDeployVersionOperation;
+    DeveloperLocalTestingDeployVersionOperation developerLocalTestingDeployVersionOperation;
 
     @Inject
     ObjectMapper objectMapper;
@@ -52,6 +52,6 @@ public class DeveloperLocalDeployVersionCommand implements Runnable {
         final var configString = handleFileOptionOperation.execute(config);
         final var config = objectMapper.readValue(configString, TenantVersionConfigDto.class);
 
-        developerLocalDeployVersionOperation.execute(tenant, project, stage, config, image);
+        developerLocalTestingDeployVersionOperation.execute(tenant, project, stage, config, image);
     }
 }

@@ -5,7 +5,5 @@ public interface DeveloperStageGetDetailsOperation {
     void execute(String tenant,
                  String project,
                  String stage,
-                 String service,
-                 String user,
-                 boolean prettyPrint);
+                 String service);
 }

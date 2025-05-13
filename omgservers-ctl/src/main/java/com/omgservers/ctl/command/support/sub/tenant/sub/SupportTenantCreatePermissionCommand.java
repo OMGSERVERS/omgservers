@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.support.sub.tenant.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.command.support.sub.tenant.sub.util.TenantPermissionCandidates;
 import com.omgservers.ctl.command.support.sub.tenant.sub.util.TenantPermissionConverter;
 import com.omgservers.ctl.dto.permission.TenantPermissionEnum;
@@ -13,7 +13,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-permission",
         description = "Grant a permission to a user for a tenant.")
-public class SupportTenantCreatePermissionCommand extends UserCommand {
+public class SupportTenantCreatePermissionCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant to which the permission will be granted.")
     String tenant;
@@ -31,6 +31,6 @@ public class SupportTenantCreatePermissionCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantCreatePermissionOperation.execute(tenant, developer, permission, installation, user);
+        supportTenantCreatePermissionOperation.execute(tenant, developer, permission, installation);
     }
 }

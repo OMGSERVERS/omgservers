@@ -4,6 +4,5 @@ public interface SupportDeveloperCreateAliasOperation {
 
     void execute(Long developerUserId,
                  String alias,
-                 String installation,
-                 String user);
+                 String installation);
 }

@@ -1,14 +1,15 @@
-package com.omgservers.ctl.operation.command.local;
+package com.omgservers.ctl.operation.service;
 
 import com.github.dockerjava.api.DockerClient;
 import com.omgservers.ctl.client.DeveloperClient;
-import com.omgservers.ctl.configuration.LocalConfiguration;
+import com.omgservers.ctl.operation.client.CreateDeveloperClientOperation;
 import com.omgservers.ctl.operation.client.CreateLocalDeveloperClientOperation;
 import com.omgservers.ctl.operation.docker.CreateDockerDaemonClientOperation;
 import com.omgservers.ctl.operation.docker.CreateDockerImageNameOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
-import com.omgservers.ctl.operation.wal.local.FindLocalTenantOperation;
+import com.omgservers.ctl.operation.wal.developer.FindDeveloperTokenOperation;
+import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperRequest;
@@ -23,69 +24,51 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeveloperLocalDeployVersionOperationImpl implements DeveloperLocalDeployVersionOperation {
+class DeployVersionOperationImpl implements DeployVersionOperation {
 
     final CreateLocalDeveloperClientOperation createLocalDeveloperClientOperation;
     final CreateDockerDaemonClientOperation createDockerDaemonClientOperation;
     final CreateDockerImageNameOperation createDockerImageNameOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindLocalTenantOperation findLocalTenantOperation;
     final GetWalOperation getWalOperation;
 
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
+    final CreateDeveloperClientOperation createDeveloperClientOperation;
+    final FindDeveloperTokenOperation findDeveloperTokenOperation;
+
     @Override
-    public void execute(final String tenant,
-                        final String project,
-                        final String stage,
-                        final TenantVersionConfigDto config,
-                        final String image) {
-        final var wal = getWalOperation.execute();
-        final var path = wal.getPath();
-
-        final var localTenantLog = findLocalTenantOperation.execute(wal, tenant, project, stage);
-
-        final var developer = localTenantLog.getDeveloper();
-        final var password = localTenantLog.getPassword();
-
-        final var developerClient = createLocalDeveloperClientOperation.execute(developer, password);
-
-        final var versionId = createVersion(developerClient, tenant, project, config);
-
-        final var dockerDaemonUri = LocalConfiguration.DOCKER_URI;
-        final var registryUri = LocalConfiguration.REGISTRY_URI;
-
-        final var dockerClient = createDockerDaemonClientOperation
-                .execute(dockerDaemonUri, registryUri, developer, password);
+    public DeployVersionResult execute(final DeveloperClient developerClient,
+                                       final DockerClient dockerClient,
+                                       final URI registryUri,
+                                       final String tenant,
+                                       final String project,
+                                       final String stage,
+                                       final TenantVersionConfigDto config,
+                                       final String image) {
         pingDocker(dockerClient);
 
-        final var dockerImageName = createDockerImageNameOperation
-                .execute(registryUri, tenant, project, versionId.toString());
-
+        final var dockerImageName = createDockerImageNameOperation.execute(registryUri,
+                tenant,
+                project,
+                String.valueOf(System.currentTimeMillis()));
         tagImage(dockerClient, image, dockerImageName.imageNameWithRepository(), dockerImageName.tag());
         pushImage(dockerClient, dockerImageName.fullImageName(), 60L);
 
+        final var versionId = createVersion(developerClient, tenant, project, config);
         createImage(developerClient, tenant, project, String.valueOf(versionId), dockerImageName.imageNameWithTag());
+        final var deploymentId = createDeployment(developerClient, tenant, project, stage, String.valueOf(versionId));
 
-        createDeployment(developerClient, tenant, project, stage, String.valueOf(versionId));
-    }
-
-    Long createVersion(final DeveloperClient developerClient,
-                       final String tenant,
-                       final String project,
-                       final TenantVersionConfigDto config) {
-        final var request = new CreateVersionDeveloperRequest(tenant, project, config);
-        final var versionId = developerClient.execute(request)
-                .map(CreateVersionDeveloperResponse::getVersionId)
-                .await().indefinitely();
-
-        return versionId;
+        return new DeployVersionResult(versionId, deploymentId);
     }
 
     void pingDocker(final DockerClient dockerClient) {
+        log.info("Ping docker daemon");
         dockerClient.pingCmd().exec();
     }
 
@@ -120,6 +103,20 @@ class DeveloperLocalDeployVersionOperationImpl implements DeveloperLocalDeployVe
                 .map(CreateImageDeveloperResponse::getCreated)
                 .await().indefinitely();
         return created;
+    }
+
+    Long createVersion(final DeveloperClient developerClient,
+                       final String tenant,
+                       final String project,
+                       final TenantVersionConfigDto config) {
+        final var request = new CreateVersionDeveloperRequest(tenant, project, config);
+        final var versionId = developerClient.execute(request)
+                .map(CreateVersionDeveloperResponse::getVersionId)
+                .await().indefinitely();
+
+        log.info("Version \"{}\" created", versionId);
+
+        return versionId;
     }
 
     Long createDeployment(final DeveloperClient developerClient,

@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.deployment.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.deployment.DeveloperDeploymentCreateDeploymentOperation;
 import jakarta.inject.Inject;
 import lombok.SneakyThrows;
@@ -11,7 +11,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-deployment",
         description = "Create a new deployment.")
-public class DeveloperDeploymentCreateDeploymentCommand extends UserCommand {
+public class DeveloperDeploymentCreateDeploymentCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -35,7 +35,6 @@ public class DeveloperDeploymentCreateDeploymentCommand extends UserCommand {
                 project,
                 stage,
                 version,
-                installation,
-                user);
+                installation);
     }
 }

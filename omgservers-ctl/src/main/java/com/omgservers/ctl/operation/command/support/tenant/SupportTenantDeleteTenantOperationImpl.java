@@ -26,16 +26,15 @@ class SupportTenantDeleteTenantOperationImpl implements SupportTenantDeleteTenan
 
     @Override
     public void execute(final String tenant,
-                        final String service,
-                        final String user) {
+                        final String installation) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, service);
+        final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, installation);
         final var installationName = installationDetailsLog.getName();
         final var installationApi = installationDetailsLog.getApi();
 
-        final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName, user);
+        final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName);
         final var supportToken = supportTokenLog.getToken();
         final var supportClient = createSupportClientOperation.execute(installationApi, supportToken);
 

@@ -2,9 +2,9 @@ package com.omgservers.ctl.command;
 
 import picocli.CommandLine;
 
-public abstract class ServiceCommand implements Runnable {
+public abstract class InstallationCommand implements Runnable {
 
-    @CommandLine.Option(names = {"-i", "--installation"},
+    @CommandLine.Option(names = {"-n", "--installation"},
             description = "Name of the installation to send commands to.")
     protected String installation;
 }

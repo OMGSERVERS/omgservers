@@ -18,14 +18,14 @@ class CreateDockerDaemonClientOperationImpl implements CreateDockerDaemonClientO
     @Override
     public synchronized DockerClient execute(final URI dockerDaemonUri,
                                              final URI registryUri,
-                                             final String developer,
-                                             final String password) {
+                                             final String registryUsername,
+                                             final String registryPassword) {
 
         final var config = DefaultDockerClientConfig.createDefaultConfigBuilder()
                 .withDockerHost(dockerDaemonUri.toString())
                 .withRegistryUrl(registryUri.toString())
-                .withRegistryUsername(developer)
-                .withRegistryPassword(password)
+                .withRegistryUsername(registryUsername)
+                .withRegistryPassword(registryPassword)
                 .build();
 
         final var httpClient = new ZerodepDockerHttpClient.Builder()

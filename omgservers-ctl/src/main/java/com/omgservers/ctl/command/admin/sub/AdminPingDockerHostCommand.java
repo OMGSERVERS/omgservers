@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.admin.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.admin.AdminPingDockerHostOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import java.net.URI;
 @CommandLine.Command(
         name = "ping-docker-host",
         description = "Check the status of the specified Docker daemon.")
-public class AdminPingDockerHostCommand extends UserCommand {
+public class AdminPingDockerHostCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Host's docker daemon uri to ping.")
     URI dockerDaemonUri;
@@ -22,6 +22,6 @@ public class AdminPingDockerHostCommand extends UserCommand {
 
     @Override
     public void run() {
-        pingDockerHostOperation.execute(dockerDaemonUri, installation, user);
+        pingDockerHostOperation.execute(dockerDaemonUri, installation);
     }
 }

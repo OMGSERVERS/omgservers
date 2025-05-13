@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.admin.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.admin.AdminCalculateShardOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "calculate-shard",
         description = "Calculate shard server based on the provided key.")
-public class AdminCalculateShardCommand extends UserCommand {
+public class AdminCalculateShardCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Key to calculate shard.")
     String key;
@@ -20,6 +20,6 @@ public class AdminCalculateShardCommand extends UserCommand {
 
     @Override
     public void run() {
-        adminCalculateShardOperation.execute(key, installation, user);
+        adminCalculateShardOperation.execute(key, installation);
     }
 }

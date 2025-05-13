@@ -6,8 +6,6 @@ import com.omgservers.schema.shard.alias.DeleteAliasRequest;
 import com.omgservers.schema.shard.alias.DeleteAliasResponse;
 import com.omgservers.schema.shard.alias.FindAliasRequest;
 import com.omgservers.schema.shard.alias.FindAliasResponse;
-import com.omgservers.schema.shard.alias.ViewAliasesRequest;
-import com.omgservers.schema.shard.alias.ViewAliasesResponse;
 import com.omgservers.service.exception.ServerSideClientException;
 import com.omgservers.service.shard.alias.AliasShard;
 import io.smallrye.mutiny.Multi;
@@ -16,8 +14,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 @Slf4j
 @ApplicationScoped
@@ -56,7 +52,7 @@ class DeleteTenantAliasesOperationImpl implements DeleteTenantAliasesOperation {
 
     Uni<AliasModel> findAlias(final Long tenantId,
                               final String alisValue) {
-        final var request = new FindAliasRequest(AliasQualifierEnum.TENANT, alisValue, tenantId, alisValue);
+        final var request = new FindAliasRequest(AliasQualifierEnum.TENANT, alisValue, 0L, alisValue);
         return aliasShard.getService().execute(request)
                 .map(FindAliasResponse::getAlias);
     }

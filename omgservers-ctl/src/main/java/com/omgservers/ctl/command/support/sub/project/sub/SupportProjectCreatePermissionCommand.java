@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.support.sub.project.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.command.support.sub.project.sub.util.ProjectPermissionCandidates;
 import com.omgservers.ctl.command.support.sub.project.sub.util.ProjectPermissionConverter;
 import com.omgservers.ctl.dto.permission.ProjectPermissionEnum;
@@ -13,7 +13,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-permission",
         description = "Grant a permission to a user for a project.")
-public class SupportProjectCreatePermissionCommand extends UserCommand {
+public class SupportProjectCreatePermissionCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -38,7 +38,6 @@ public class SupportProjectCreatePermissionCommand extends UserCommand {
                 project,
                 developer,
                 permission,
-                installation,
-                user);
+                installation);
     }
 }

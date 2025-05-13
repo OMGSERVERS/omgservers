@@ -25,17 +25,17 @@ class SupportTenantCreateTenantOperationImpl implements SupportTenantCreateTenan
     final GetWalOperation getWalOperation;
 
     @Override
-    public void execute(final String service, final String user) {
+    public void execute(final String service) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
-        final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var installationDetails = findInstallationDetailsOperation.execute(wal, service);
+        final var installationName = installationDetails.getName();
+        final var installationUri = installationDetails.getApi();
 
-        final var supportTokenLog = findSupportTokenOperation.execute(wal, serviceName, user);
+        final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName);
         final var supportToken = supportTokenLog.getToken();
-        final var supportClient = createSupportClientOperation.execute(serviceUri, supportToken);
+        final var supportClient = createSupportClientOperation.execute(installationUri, supportToken);
 
         final var request = new CreateTenantSupportRequest();
         final var tenantId = supportClient.execute(request)

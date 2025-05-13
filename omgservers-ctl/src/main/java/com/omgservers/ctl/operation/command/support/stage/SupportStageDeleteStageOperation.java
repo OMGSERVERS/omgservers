@@ -5,6 +5,5 @@ public interface SupportStageDeleteStageOperation {
     void execute(String tenant,
                  String project,
                  String stage,
-                 String service,
-                 String user);
+                 String installation);
 }

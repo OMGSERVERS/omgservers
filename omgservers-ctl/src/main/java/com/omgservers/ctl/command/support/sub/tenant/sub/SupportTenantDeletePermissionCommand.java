@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.support.sub.tenant.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.command.support.sub.tenant.sub.util.TenantPermissionCandidates;
 import com.omgservers.ctl.command.support.sub.tenant.sub.util.TenantPermissionConverter;
 import com.omgservers.ctl.dto.permission.TenantPermissionEnum;
@@ -13,7 +13,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "delete-permission",
         description = "Revoke a user's permission for a tenant.")
-public class SupportTenantDeletePermissionCommand extends UserCommand {
+public class SupportTenantDeletePermissionCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant from which the permission will be revoked.")
     String tenant;
@@ -31,6 +31,9 @@ public class SupportTenantDeletePermissionCommand extends UserCommand {
 
     @Override
     public void run() {
-        supportTenantDeletePermissionOperation.execute(tenant, developer, permission, installation, user);
+        supportTenantDeletePermissionOperation.execute(tenant,
+                developer,
+                permission,
+                installation);
     }
 }

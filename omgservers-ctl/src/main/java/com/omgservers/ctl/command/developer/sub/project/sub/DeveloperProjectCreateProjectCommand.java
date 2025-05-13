@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.project.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.project.DeveloperProjectCreateProjectOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-project",
         description = "Create a new project.")
-public class DeveloperProjectCreateProjectCommand extends UserCommand {
+public class DeveloperProjectCreateProjectCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant to which the project will be added.")
     String tenant;
@@ -20,6 +20,6 @@ public class DeveloperProjectCreateProjectCommand extends UserCommand {
 
     @Override
     public void run() {
-        developerProjectCreateProjectOperation.execute(tenant, installation, user);
+        developerProjectCreateProjectOperation.execute(tenant, installation);
     }
 }

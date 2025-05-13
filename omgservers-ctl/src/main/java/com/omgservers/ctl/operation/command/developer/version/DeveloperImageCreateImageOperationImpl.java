@@ -33,18 +33,17 @@ class DeveloperImageCreateImageOperationImpl implements DeveloperImageCreateImag
                         final String version,
                         final ImageTypeEnum type,
                         final URI url,
-                        final String service,
-                        final String user) {
+                        final String installation) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
-        final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var installationDetails = findInstallationDetailsOperation.execute(wal, installation);
+        final var installationName = installationDetails.getName();
+        final var installationUri = installationDetails.getApi();
 
-        final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName, user);
+        final var developerTokenLog = findDeveloperTokenOperation.execute(wal, installationName);
         final var developerToken = developerTokenLog.getToken();
-        final var developerClient = createDeveloperClientOperation.execute(serviceUri, developerToken);
+        final var developerClient = createDeveloperClientOperation.execute(installationUri, developerToken);
 
         final var qualifier = type.toQualifier();
         final var request = new CreateImageDeveloperRequest(tenant, project, version, qualifier, url.toString());

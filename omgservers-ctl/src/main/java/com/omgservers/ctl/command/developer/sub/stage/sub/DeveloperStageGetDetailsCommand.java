@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.developer.sub.stage.sub;
 
-import com.omgservers.ctl.command.UserCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.stage.DeveloperStageGetDetailsOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "get-details",
         description = "Get details of a stage.")
-public class DeveloperStageGetDetailsCommand extends UserCommand {
+public class DeveloperStageGetDetailsCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -26,6 +26,9 @@ public class DeveloperStageGetDetailsCommand extends UserCommand {
 
     @Override
     public void run() {
-        developerStageGetDetailsOperation.execute(tenant, project, stage, installation, user, prettyPrint);
+        developerStageGetDetailsOperation.execute(tenant,
+                project,
+                stage,
+                installation);
     }
 }

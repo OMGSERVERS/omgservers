@@ -11,6 +11,5 @@ public interface DeveloperImageCreateImageOperation {
                  String version,
                  ImageTypeEnum type,
                  URI url,
-                 String service,
-                 String user);
+                 String installation);
 }

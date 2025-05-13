@@ -1,6 +1,6 @@
 package com.omgservers.ctl.command.admin.sub;
 
-import com.omgservers.ctl.command.ServiceCommand;
+import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.admin.AdminCreateTokenOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "create-token",
         description = "Create admin token using credentials.")
-public class AdminCreateTokenCommand extends ServiceCommand {
+public class AdminCreateTokenCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Admin user alias or id.")
     String user;

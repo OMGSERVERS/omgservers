@@ -7,6 +7,6 @@ import java.net.URI;
 public interface CreateDockerDaemonClientOperation {
     DockerClient execute(URI dockerDaemonUri,
                          URI registryUri,
-                         String developer,
-                         String password);
+                         String registryUsername,
+                         String registryPassword);
 }
