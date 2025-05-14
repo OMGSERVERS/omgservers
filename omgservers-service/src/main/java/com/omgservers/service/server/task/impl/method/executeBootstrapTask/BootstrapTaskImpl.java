@@ -9,8 +9,6 @@ import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolResponse;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserResponse;
-import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityRequest;
-import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityResponse;
 import com.omgservers.service.server.task.Task;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,7 +25,7 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
     final GetServiceConfigOperation getServiceConfigOperation;
 
     public Uni<Boolean> execute(final BootstrapTaskArguments taskArguments) {
-        return bootstrapRootEntity()
+        return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
                 .flatMap(voidItem -> bootstrapServiceUser())
@@ -37,16 +35,6 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                         t -> new ServerSideInternalException(ExceptionQualifierEnum.BOOTSTRAP_FAILED,
                                 t.getMessage(),
                                 t));
-    }
-
-    Uni<Boolean> bootstrapRootEntity() {
-        return bootstrapService.execute(new BootstrapRootEntityRequest())
-                .map(BootstrapRootEntityResponse::getCreated)
-                .invoke(created -> {
-                    if (created) {
-                        log.info("Root created");
-                    }
-                });
     }
 
     Uni<Boolean> bootstrapAdminUser() {

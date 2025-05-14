@@ -35,8 +35,6 @@ import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolServerCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.pool.PoolServerDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.root.RootCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.root.RootDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyModel;
@@ -73,8 +71,6 @@ public enum EventQualifierEnum {
     JOB_DELETED(JobDeletedEventBodyModel.class),
     ALIAS_CREATED(AliasCreatedEventBodyModel.class),
     ALIAS_DELETED(AliasDeletedEventBodyModel.class),
-    ROOT_CREATED(RootCreatedEventBodyModel.class),
-    ROOT_DELETED(RootDeletedEventBodyModel.class),
     POOL_CREATED(PoolCreatedEventBodyModel.class),
     POOL_DELETED(PoolDeletedEventBodyModel.class),
     POOL_SERVER_CREATED(PoolServerCreatedEventBodyModel.class),

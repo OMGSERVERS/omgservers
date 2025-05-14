@@ -54,7 +54,6 @@ public class TestDataFactory {
     final LobbyTestDataFactory lobbyTestDataFactory;
     final MatchTestDataFactory matchTestDataFactory;
     final AliasTestDataFactory aliasTestDataFactory;
-    final RootTestDataFactory rootTestDataFactory;
     final PoolTestDataFactory poolTestDataFactory;
     final UserTestDataFactory userTestDataFactory;
 
