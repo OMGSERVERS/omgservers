@@ -5,11 +5,8 @@ import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolResponse;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserResponse;
-import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityRequest;
-import com.omgservers.service.server.bootstrap.dto.BootstrapRootEntityResponse;
 import com.omgservers.service.server.bootstrap.impl.method.BootstrapDefaultPoolMethod;
 import com.omgservers.service.server.bootstrap.impl.method.BootstrapDefaultUserMethod;
-import com.omgservers.service.server.bootstrap.impl.method.BootstrapRootEntityMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
@@ -24,12 +21,6 @@ class BootstrapServiceImpl implements BootstrapService {
 
     final BootstrapDefaultPoolMethod bootstrapDefaultPoolMethod;
     final BootstrapDefaultUserMethod bootstrapDefaultUserMethod;
-    final BootstrapRootEntityMethod bootstrapRootEntityMethod;
-
-    @Override
-    public Uni<BootstrapRootEntityResponse> execute(@Valid final BootstrapRootEntityRequest request) {
-        return bootstrapRootEntityMethod.execute(request);
-    }
 
     @Override
     public Uni<BootstrapDefaultUserResponse> execute(@Valid final BootstrapDefaultUserRequest request) {

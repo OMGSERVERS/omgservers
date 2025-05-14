@@ -15,27 +15,6 @@ create table if not exists tab_alias (
 
 create unique index idx_alias_uniqueness on tab_alias(qualifier, shard_key, uniqueness_group, alias_value) where deleted = false;
 
--- root module
-
-create table if not exists tab_root (
-    id bigint primary key,
-    idempotency_key text not null unique,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    deleted boolean not null
-);
-
-create table if not exists tab_root_entity_ref (
-    id bigint primary key,
-    idempotency_key text not null unique,
-    root_id bigint not null references tab_root(id) on delete restrict on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    qualifier text not null,
-    entity_id bigint not null,
-    deleted boolean not null
-);
-
 -- pool module
 
 create table if not exists tab_pool (
