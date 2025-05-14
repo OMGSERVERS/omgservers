@@ -5,7 +5,6 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +23,6 @@ import java.util.List;
 class UpsertMatchmakerOperationImpl implements UpsertMatchmakerOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override

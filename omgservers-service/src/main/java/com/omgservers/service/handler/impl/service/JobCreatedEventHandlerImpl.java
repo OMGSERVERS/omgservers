@@ -1,13 +1,13 @@
 package com.omgservers.service.handler.impl.service;
 
-import com.omgservers.schema.model.job.JobModel;
+import com.omgservers.schema.master.task.GetTaskRequest;
+import com.omgservers.schema.master.task.GetTaskResponse;
+import com.omgservers.schema.model.task.TaskModel;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
-import com.omgservers.service.event.body.system.JobCreatedEventBodyModel;
+import com.omgservers.service.event.body.system.TaskCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.server.job.JobService;
-import com.omgservers.service.server.job.dto.GetJobRequest;
-import com.omgservers.service.server.job.dto.GetJobResponse;
+import com.omgservers.service.master.task.TaskMaster;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -19,31 +19,31 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class JobCreatedEventHandlerImpl implements EventHandler {
 
-    final JobService jobService;
+    final TaskMaster taskMaster;
 
     @Override
     public EventQualifierEnum getQualifier() {
-        return EventQualifierEnum.JOB_CREATED;
+        return EventQualifierEnum.TASK_CREATED;
     }
 
     @Override
     public Uni<Void> handle(final EventModel event) {
         log.trace("Handle event, {}", event);
 
-        final var body = (JobCreatedEventBodyModel) event.getBody();
-        final var jobId = body.getId();
+        final var body = (TaskCreatedEventBodyModel) event.getBody();
+        final var taskId = body.getId();
 
-        return getJob(jobId)
-                .flatMap(job -> {
-                    log.debug("Created, {}", job);
+        return getTask(taskId)
+                .flatMap(task -> {
+                    log.debug("Created, {}", task);
                     return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();
     }
 
-    Uni<JobModel> getJob(final Long id) {
-        final var request = new GetJobRequest(id);
-        return jobService.getJob(request)
-                .map(GetJobResponse::getJob);
+    Uni<TaskModel> getTask(final Long id) {
+        final var request = new GetTaskRequest(id);
+        return taskMaster.getService().execute(request)
+                .map(GetTaskResponse::getTask);
     }
 }

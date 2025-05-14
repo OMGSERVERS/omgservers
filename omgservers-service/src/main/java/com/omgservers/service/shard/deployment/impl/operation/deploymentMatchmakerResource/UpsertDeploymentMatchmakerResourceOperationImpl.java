@@ -3,7 +3,6 @@ package com.omgservers.service.shard.deployment.impl.operation.deploymentMatchma
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.service.event.body.module.deployment.DeploymentMatchmakerResourceCreatedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -21,7 +20,6 @@ import java.util.List;
 class UpsertDeploymentMatchmakerResourceOperationImpl implements UpsertDeploymentMatchmakerResourceOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override

@@ -1,6 +1,5 @@
 package com.omgservers.service.shard.deployment.impl.operation.deploymentDeploymentCommand;
 
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -19,7 +18,6 @@ import java.util.List;
 class DeleteDeploymentCommandOperationImpl implements DeleteDeploymentCommandOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,

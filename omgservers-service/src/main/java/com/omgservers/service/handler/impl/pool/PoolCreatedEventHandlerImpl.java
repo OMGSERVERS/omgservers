@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.impl.pool;
 
-import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.model.pool.PoolModel;
 import com.omgservers.schema.shard.pool.pool.GetPoolRequest;
 import com.omgservers.schema.shard.pool.pool.GetPoolResponse;
@@ -8,7 +8,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.operation.task.CreateTaskOperation;
 import com.omgservers.service.shard.pool.PoolShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
 
     final PoolShard poolShard;
 
-    final CreateJobOperation createJobOperation;
+    final CreateTaskOperation createTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -43,7 +43,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(pool -> {
                     log.debug("Created, {}", pool);
 
-                    return createJobOperation.execute(JobQualifierEnum.POOL, poolId, idempotencyKey);
+                    return createTaskOperation.execute(TaskQualifierEnum.POOL, poolId, idempotencyKey);
                 })
                 .replaceWithVoid();
     }

@@ -1,14 +1,14 @@
 package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deployment.DeploymentModel;
-import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentRequest;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.operation.task.CreateTaskOperation;
 import com.omgservers.service.operation.tenant.CreateTenantDeploymentRefOperation;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;
@@ -25,7 +25,7 @@ public class DeploymentCreatedEventHandlerImpl implements EventHandler {
     final DeploymentShard deploymentShard;
 
     final CreateTenantDeploymentRefOperation createTenantDeploymentRefOperation;
-    final CreateJobOperation createJobOperation;
+    final CreateTaskOperation createTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -53,7 +53,7 @@ public class DeploymentCreatedEventHandlerImpl implements EventHandler {
                                     tenantVersionId,
                                     deploymentId,
                                     idempotencyKey)
-                            .flatMap(created -> createJobOperation.execute(JobQualifierEnum.DEPLOYMENT,
+                            .flatMap(created -> createTaskOperation.execute(TaskQualifierEnum.DEPLOYMENT,
                                     deploymentId,
                                     idempotencyKey));
                 })

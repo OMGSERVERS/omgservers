@@ -5,7 +5,6 @@ import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -25,7 +24,6 @@ import java.util.List;
 class UpsertDeploymentOperationImpl implements UpsertDeploymentOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override

@@ -1,6 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeDeploymentTask;
 
-import com.omgservers.service.operation.job.ExecuteTaskOperation;
+import com.omgservers.service.operation.task.ExecuteTaskOperation;
 import com.omgservers.service.server.task.dto.ExecuteDeploymentTaskRequest;
 import com.omgservers.service.server.task.dto.ExecuteDeploymentTaskResponse;
 import io.smallrye.mutiny.Uni;

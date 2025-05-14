@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.impl.runtime;
 
 import com.omgservers.schema.model.deployment.DeploymentModel;
-import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentRequest;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
@@ -11,7 +11,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.operation.task.CreateTaskOperation;
 import com.omgservers.service.operation.pool.CreatePoolRequestOperation;
 import com.omgservers.service.operation.runtime.CreateRuntimeCreatedRuntimeMessageOperation;
 import com.omgservers.service.server.cache.CacheService;
@@ -35,7 +35,7 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
 
     final CreateRuntimeCreatedRuntimeMessageOperation createRuntimeCreatedRuntimeMessageOperation;
     final CreatePoolRequestOperation createPoolRequestOperation;
-    final CreateJobOperation createJobOperation;
+    final CreateTaskOperation createTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -61,8 +61,8 @@ public class RuntimeCreatedEventHandlerImpl implements EventHandler {
                                     .execute(runtime, idempotencyKey)
                                     .flatMap(created -> createPoolRequestOperation
                                             .execute(runtime, deployment, idempotencyKey))
-                                    .flatMap(created -> createJobOperation
-                                            .execute(JobQualifierEnum.RUNTIME, runtimeId, idempotencyKey))
+                                    .flatMap(created -> createTaskOperation
+                                            .execute(TaskQualifierEnum.RUNTIME, runtimeId, idempotencyKey))
                             );
                 })
                 .replaceWithVoid();

@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.entity.EntityQualifierEnum;
-import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
@@ -10,7 +10,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.entity.CreateEntityOperation;
-import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.operation.task.CreateTaskOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +26,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
     final TenantShard tenantShard;
 
     final CreateEntityOperation createEntityOperation;
-    final CreateJobOperation createJobOperation;
+    final CreateTaskOperation createTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -47,7 +47,7 @@ public class TenantCreatedEventHandlerImpl implements EventHandler {
                     log.debug("Created, {}", tenant);
 
                     return createEntityOperation.execute(EntityQualifierEnum.TENANT, tenantId, idempotencyKey)
-                            .flatMap(created -> createJobOperation.execute(JobQualifierEnum.TENANT,
+                            .flatMap(created -> createTaskOperation.execute(TaskQualifierEnum.TENANT,
                                     tenantId,
                                     idempotencyKey));
                 })

@@ -9,7 +9,7 @@ import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyMod
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.alias.DeleteTenantAliasesOperation;
 import com.omgservers.service.operation.entity.DeleteEntityOperation;
-import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
+import com.omgservers.service.operation.task.DeleteTaskOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantPermissionsOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantProjectsOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
@@ -29,7 +29,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
     final DeleteTenantPermissionsOperation deleteTenantPermissionsOperation;
     final DeleteTenantProjectsOperation deleteTenantProjectsOperation;
     final DeleteTenantAliasesOperation deleteTenantAliasesOperation;
-    final FindAndDeleteJobOperation findAndDeleteJobOperation;
+    final DeleteTaskOperation deleteTaskOperation;
     final DeleteEntityOperation deleteEntityOperation;
 
     @Override
@@ -51,7 +51,7 @@ public class TenantDeletedEventHandlerImpl implements EventHandler {
                     return deleteTenantPermissionsOperation.execute(tenantId)
                             .flatMap(voidItem -> deleteTenantProjectsOperation.execute(tenantId))
                             .flatMap(voidItem -> deleteEntityOperation.executeFailSafe(tenantId))
-                            .flatMap(voidItem -> findAndDeleteJobOperation.execute(tenantId, tenantId))
+                            .flatMap(voidItem -> deleteTaskOperation.execute(tenantId, tenantId))
                             .flatMap(voidItem -> deleteTenantAliasesOperation.execute(tenantId));
                 })
                 .replaceWithVoid();

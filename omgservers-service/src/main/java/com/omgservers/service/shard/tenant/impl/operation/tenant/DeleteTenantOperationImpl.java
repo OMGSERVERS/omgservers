@@ -1,7 +1,6 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenant;
 
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -21,7 +20,6 @@ class DeleteTenantOperationImpl implements DeleteTenantOperation {
 
     final ChangeObjectOperation changeObjectOperation;
     final SelectTenantOperation selectTenantOperation;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,

@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
+import com.omgservers.service.operation.task.DeleteTaskOperation;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
 
     final MatchmakerShard matchmakerShard;
 
-    final FindAndDeleteJobOperation findAndDeleteJobOperation;
+    final DeleteTaskOperation deleteTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -59,7 +59,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                                 matchmakerMatchAssignments.size());
                     }
 
-                    return findAndDeleteJobOperation.execute(matchmakerId, matchmakerId);
+                    return deleteTaskOperation.execute(matchmakerId, matchmakerId);
                 })
                 .replaceWithVoid();
     }

@@ -1,7 +1,6 @@
 package com.omgservers.service.operation.server;
 
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -24,7 +23,6 @@ class ReturnCountOperationImpl implements ReturnCountOperation {
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Integer> returnCount(final SqlConnection sqlConnection,

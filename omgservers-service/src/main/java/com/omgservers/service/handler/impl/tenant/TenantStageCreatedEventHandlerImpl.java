@@ -1,6 +1,6 @@
 package com.omgservers.service.handler.impl.tenant;
 
-import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
@@ -8,7 +8,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantStageCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.operation.task.CreateTaskOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,7 +23,7 @@ public class TenantStageCreatedEventHandlerImpl implements EventHandler {
 
     final TenantShard tenantShard;
 
-    final CreateJobOperation createJobOperation;
+    final CreateTaskOperation createTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -44,7 +44,7 @@ public class TenantStageCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(tenantStage -> {
                     log.debug("Created, {}", tenantStage);
 
-                    return createJobOperation.execute(JobQualifierEnum.STAGE,
+                    return createTaskOperation.execute(TaskQualifierEnum.STAGE,
                             tenantId,
                             tenantStageId,
                             idempotencyKey);

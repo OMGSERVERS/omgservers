@@ -11,7 +11,7 @@ import com.omgservers.service.operation.deployment.DeleteDeploymentCommandsOpera
 import com.omgservers.service.operation.deployment.DeleteDeploymentLobbyResourcesOperation;
 import com.omgservers.service.operation.deployment.DeleteDeploymentMatchmakerResourcesOperation;
 import com.omgservers.service.operation.deployment.DeleteDeploymentRequestsOperation;
-import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
+import com.omgservers.service.operation.task.DeleteTaskOperation;
 import com.omgservers.service.operation.tenant.FindAndDeleteTenantDeploymentRefOperation;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;
@@ -32,7 +32,7 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
     final DeleteDeploymentLobbyResourcesOperation deleteDeploymentLobbyResourcesOperation;
     final DeleteDeploymentCommandsOperation deleteDeploymentCommandsOperation;
     final DeleteDeploymentRequestsOperation deleteDeploymentRequestsOperation;
-    final FindAndDeleteJobOperation findAndDeleteJobOperation;
+    final DeleteTaskOperation deleteTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -82,7 +82,7 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
 
                     final var tenantId = deployment.getTenantId();
                     return findAndDeleteTenantDeploymentRefOperation.execute(tenantId, deploymentId)
-                            .flatMap(voidItem -> findAndDeleteJobOperation.execute(deploymentId, deploymentId));
+                            .flatMap(voidItem -> deleteTaskOperation.execute(deploymentId, deploymentId));
                 })
                 .replaceWithVoid();
     }

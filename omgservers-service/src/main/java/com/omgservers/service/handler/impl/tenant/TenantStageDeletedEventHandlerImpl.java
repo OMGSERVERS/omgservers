@@ -8,7 +8,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantStageDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.alias.DeleteTenantStageAliasesOperation;
-import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
+import com.omgservers.service.operation.task.DeleteTaskOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantStageDeploymentResourcesOperation;
 import com.omgservers.service.operation.tenant.DeleteTenantStagePermissionsOperation;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
@@ -30,7 +30,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
     final DeleteTenantStageDeploymentResourcesOperation deleteTenantStageDeploymentResourcesOperation;
     final DeleteTenantStagePermissionsOperation deleteTenantStagePermissionsOperation;
     final DeleteTenantStageAliasesOperation deleteTenantStageAliasesOperation;
-    final FindAndDeleteJobOperation findAndDeleteJobOperation;
+    final DeleteTaskOperation deleteTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -52,7 +52,7 @@ public class TenantStageDeletedEventHandlerImpl implements EventHandler {
                     return deleteTenantStagePermissionsOperation.execute(tenantId, tenantStageId)
                             .flatMap(voidItem -> deleteTenantStageDeploymentResourcesOperation
                                     .execute(tenantId, tenantStageId))
-                            .flatMap(voidItem -> findAndDeleteJobOperation
+                            .flatMap(voidItem -> deleteTaskOperation
                                     .execute(tenantId, tenantStageId))
                             .flatMap(voidItem -> deleteTenantStageAliasesOperation
                                     .execute(tenantId, tenantStageId));

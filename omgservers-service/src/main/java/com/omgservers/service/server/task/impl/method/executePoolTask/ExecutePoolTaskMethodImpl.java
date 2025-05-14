@@ -1,6 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executePoolTask;
 
-import com.omgservers.service.operation.job.ExecuteTaskOperation;
+import com.omgservers.service.operation.task.ExecuteTaskOperation;
 import com.omgservers.service.server.task.dto.ExecutePoolTaskRequest;
 import com.omgservers.service.server.task.dto.ExecutePoolTaskResponse;
 import io.smallrye.mutiny.Uni;

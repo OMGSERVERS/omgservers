@@ -58,8 +58,8 @@ import com.omgservers.service.event.body.module.user.PlayerDeletedEventBodyModel
 import com.omgservers.service.event.body.module.user.UserCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.user.UserDeletedEventBodyModel;
 import com.omgservers.service.event.body.system.IndexCreatedEventBodyModel;
-import com.omgservers.service.event.body.system.JobCreatedEventBodyModel;
-import com.omgservers.service.event.body.system.JobDeletedEventBodyModel;
+import com.omgservers.service.event.body.system.TaskCreatedEventBodyModel;
+import com.omgservers.service.event.body.system.TaskDeletedEventBodyModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -67,8 +67,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum EventQualifierEnum {
     INDEX_CREATED(IndexCreatedEventBodyModel.class),
-    JOB_CREATED(JobCreatedEventBodyModel.class),
-    JOB_DELETED(JobDeletedEventBodyModel.class),
+    TASK_CREATED(TaskCreatedEventBodyModel.class),
+    TASK_DELETED(TaskDeletedEventBodyModel.class),
     ALIAS_CREATED(AliasCreatedEventBodyModel.class),
     ALIAS_DELETED(AliasDeletedEventBodyModel.class),
     POOL_CREATED(PoolCreatedEventBodyModel.class),
