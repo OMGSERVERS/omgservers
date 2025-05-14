@@ -2,7 +2,6 @@ package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchRe
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceStatusEnum;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -22,7 +21,6 @@ class UpdateMatchmakerMatchResourceStatusOperationImpl implements UpdateMatchmak
 
     final ChangeObjectOperation changeObjectOperation;
 
-    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override

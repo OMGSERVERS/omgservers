@@ -1,7 +1,7 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
 import com.omgservers.schema.model.deploymentCommand.body.OpenMatchmakerDeploymentCommandBodyDto;
-import com.omgservers.schema.model.job.JobQualifierEnum;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandRequest;
 import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandResponse;
@@ -12,7 +12,7 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerCreatedEventBodyModel;
 import com.omgservers.service.factory.deployment.DeploymentCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.job.CreateJobOperation;
+import com.omgservers.service.operation.task.CreateTaskOperation;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import io.smallrye.mutiny.Uni;
@@ -29,7 +29,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
     final MatchmakerShard matchmakerShard;
     final DeploymentShard deploymentShard;
 
-    final CreateJobOperation createJobOperation;
+    final CreateTaskOperation createTaskOperation;
 
     final DeploymentCommandModelFactory deploymentCommandModelFactory;
 
@@ -54,7 +54,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                     final var deploymentId = matchmaker.getDeploymentId();
 
                     return createOpenMatchmakerDeploymentCommand(deploymentId, matchmakerId, idempotencyKey)
-                            .flatMap(created -> createJobOperation.execute(JobQualifierEnum.MATCHMAKER,
+                            .flatMap(created -> createTaskOperation.execute(TaskQualifierEnum.MATCHMAKER,
                                     matchmakerId,
                                     idempotencyKey));
                 })

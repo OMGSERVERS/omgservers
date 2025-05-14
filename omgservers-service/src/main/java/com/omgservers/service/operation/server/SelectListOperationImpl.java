@@ -1,7 +1,6 @@
 package com.omgservers.service.operation.server;
 
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.Row;
@@ -28,7 +27,6 @@ class SelectListOperationImpl implements SelectListOperation {
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
-    final LogModelFactory logModelFactory;
 
     @Override
     public <T> Uni<List<T>> selectList(final SqlConnection sqlConnection,

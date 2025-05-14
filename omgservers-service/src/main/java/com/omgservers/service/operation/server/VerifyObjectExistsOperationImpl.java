@@ -1,6 +1,5 @@
 package com.omgservers.service.operation.server;
 
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.factory.system.EventModelFactory;
 import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
@@ -23,7 +22,6 @@ class VerifyObjectExistsOperationImpl implements VerifyObjectExistsOperation {
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> execute(final SqlConnection sqlConnection,

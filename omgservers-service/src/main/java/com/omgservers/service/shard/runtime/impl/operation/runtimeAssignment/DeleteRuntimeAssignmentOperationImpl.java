@@ -1,7 +1,6 @@
 package com.omgservers.service.shard.runtime.impl.operation.runtimeAssignment;
 
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentDeletedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -20,7 +19,6 @@ import java.util.List;
 class DeleteRuntimeAssignmentOperationImpl implements DeleteRuntimeAssignmentOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,

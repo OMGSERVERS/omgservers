@@ -1,9 +1,10 @@
 package com.omgservers.service.server.task.impl.method.executeSchedulerTask;
 
-import com.omgservers.schema.model.job.JobModel;
-import com.omgservers.service.server.job.JobService;
-import com.omgservers.service.server.job.dto.ViewJobsRequest;
-import com.omgservers.service.server.job.dto.ViewJobsResponse;
+import com.omgservers.schema.master.task.ViewTasksRequest;
+import com.omgservers.schema.master.task.ViewTasksResponse;
+import com.omgservers.schema.model.task.TaskModel;
+import com.omgservers.service.master.task.TaskMaster;
+import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.task.Task;
 import com.omgservers.service.server.task.TaskService;
 import com.omgservers.service.server.task.dto.ExecuteDeploymentTaskRequest;
@@ -27,7 +28,9 @@ import java.util.List;
 public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
 
     final TaskService taskService;
-    final JobService jobService;
+    final TaskMaster taskMaster;
+
+    final GetServiceConfigOperation getServiceConfigOperation;
 
     public Uni<Boolean> execute(final SchedulerTaskArguments taskArguments) {
         return viewJobs()
@@ -39,12 +42,14 @@ public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
                 .replaceWith(Boolean.TRUE);
     }
 
-    Uni<List<JobModel>> viewJobs() {
-        return jobService.viewJobs(new ViewJobsRequest())
-                .map(ViewJobsResponse::getJobs);
+    Uni<List<TaskModel>> viewJobs() {
+        final var thisUri = getServiceConfigOperation.getServiceConfig().shard().uri();
+        final var request = new ViewTasksRequest(thisUri);
+        return taskMaster.getService().execute(request)
+                .map(ViewTasksResponse::getTasks);
     }
 
-    Uni<Void> executeJob(final JobModel job) {
+    Uni<Void> executeJob(final TaskModel job) {
         return (switch (job.getQualifier()) {
             case TENANT -> taskService
                     .execute(new ExecuteTenantTaskRequest(job.getEntityId()));

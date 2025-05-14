@@ -2,7 +2,6 @@ package com.omgservers.service.shard.tenant.impl.operation.tenantDeploymentResou
 
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentResourceCreatedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -20,7 +19,6 @@ import java.util.List;
 class UpsertTenantDeploymentResourceOperationImpl implements UpsertTenantDeploymentResourceOperation {
 
     final ChangeObjectOperation changeObjectOperation;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,

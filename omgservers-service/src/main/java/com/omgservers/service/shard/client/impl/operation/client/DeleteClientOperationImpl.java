@@ -1,7 +1,6 @@
 package com.omgservers.service.shard.client.impl.operation.client;
 
 import com.omgservers.service.event.body.module.client.ClientDeletedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -21,7 +20,6 @@ class DeleteClientOperationImpl implements DeleteClientOperation {
 
     final ChangeObjectOperation changeObjectOperation;
     final SelectClientOperation selectClientOperation;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> deleteClient(final ChangeContext<?> changeContext,

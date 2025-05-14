@@ -5,13 +5,11 @@ import com.omgservers.schema.model.shard.ShardModel;
 import com.omgservers.schema.shard.client.clientRuntimeRef.SyncClientRuntimeRefRequest;
 import com.omgservers.schema.shard.client.clientRuntimeRef.SyncClientRuntimeRefResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeWithContextOperation;
 import com.omgservers.service.shard.client.impl.operation.client.VerifyClientExistsOperation;
 import com.omgservers.service.shard.client.impl.operation.clientRuntimeRef.UpsertClientRuntimeRefOperation;
 import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +22,6 @@ class SyncClientRuntimeRefMethodImpl implements SyncClientRuntimeRefMethod {
     final UpsertClientRuntimeRefOperation upsertClientRuntimeRefOperation;
     final VerifyClientExistsOperation verifyClientExistsOperation;
     final ChangeWithContextOperation changeWithContextOperation;
-
-    final LogModelFactory logModelFactory;
-    final PgPool pgPool;
 
     @Override
     public Uni<SyncClientRuntimeRefResponse> execute(final ShardModel shardModel,

@@ -7,7 +7,7 @@ import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolDeletedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
-import com.omgservers.service.operation.job.FindAndDeleteJobOperation;
+import com.omgservers.service.operation.task.DeleteTaskOperation;
 import com.omgservers.service.shard.pool.PoolShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +22,7 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
 
     final PoolShard poolShard;
 
-    final FindAndDeleteJobOperation findAndDeleteJobOperation;
+    final DeleteTaskOperation deleteTaskOperation;
 
     @Override
     public EventQualifierEnum getQualifier() {
@@ -58,7 +58,7 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
                                 poolContainers.size());
                     }
 
-                    return findAndDeleteJobOperation.execute(poolId);
+                    return deleteTaskOperation.execute(poolId);
                 })
                 .replaceWithVoid();
     }

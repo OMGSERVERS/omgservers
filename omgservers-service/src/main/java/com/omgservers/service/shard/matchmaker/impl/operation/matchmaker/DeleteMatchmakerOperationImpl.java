@@ -1,7 +1,6 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmaker;
 
 import com.omgservers.service.event.body.module.matchmaker.MatchmakerDeletedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -19,9 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 class DeleteMatchmakerOperationImpl implements DeleteMatchmakerOperation {
 
-    final ChangeObjectOperation changeObjectOperation;
     final SelectMatchmakerOperation selectMatchmakerOperation;
-    final LogModelFactory logModelFactory;
+    final ChangeObjectOperation changeObjectOperation;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,

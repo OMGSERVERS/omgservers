@@ -1,10 +1,9 @@
 package com.omgservers.service.shard.client.impl.operation.clientRuntimeRef;
 
 import com.omgservers.service.event.body.module.client.ClientRuntimeRefDeletedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
-import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource.SelectMatchmakerMatchResourceOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
+import com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource.SelectMatchmakerMatchResourceOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +21,6 @@ class DeleteClientRuntimeRefOperationImpl implements DeleteClientRuntimeRefOpera
 
     final ChangeObjectOperation changeObjectOperation;
     final SelectMatchmakerMatchResourceOperation selectMatchmakerMatchResourceOperation;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> deleteClientRuntimeRef(final ChangeContext<?> changeContext,

@@ -1,6 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeBootstrapTask;
 
-import com.omgservers.service.operation.job.ExecuteTaskOperation;
+import com.omgservers.service.operation.task.ExecuteTaskOperation;
 import com.omgservers.service.server.task.dto.ExecuteBootstrapTaskRequest;
 import com.omgservers.service.server.task.dto.ExecuteBootstrapTaskResponse;
 import io.smallrye.mutiny.Uni;

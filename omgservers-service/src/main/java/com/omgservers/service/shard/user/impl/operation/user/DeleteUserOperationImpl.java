@@ -1,10 +1,9 @@
 package com.omgservers.service.shard.user.impl.operation.user;
 
 import com.omgservers.service.event.body.module.user.UserDeletedEventBodyModel;
-import com.omgservers.service.factory.system.LogModelFactory;
-import com.omgservers.service.shard.user.impl.operation.userPlayer.SelectPlayerOperation;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
+import com.omgservers.service.shard.user.impl.operation.userPlayer.SelectPlayerOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +21,6 @@ class DeleteUserOperationImpl implements DeleteUserOperation {
 
     final ChangeObjectOperation changeObjectOperation;
     final SelectPlayerOperation selectPlayerOperation;
-    final LogModelFactory logModelFactory;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,

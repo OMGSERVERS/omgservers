@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -24,7 +23,6 @@ class UpsertEventOperationImpl implements UpsertEventOperation {
 
     final ChangeObjectOperation changeObjectOperation;
 
-    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override

@@ -3,7 +3,6 @@ package com.omgservers.service.operation.server;
 import com.omgservers.schema.model.log.LogModel;
 import com.omgservers.service.event.EventBodyModel;
 import com.omgservers.service.factory.system.EventModelFactory;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.server.event.operation.UpsertEventOperation;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
@@ -28,7 +27,6 @@ class ChangeObjectOperationImpl implements ChangeObjectOperation {
     final UpsertEventOperation upsertEventOperation;
 
     final EventModelFactory eventModelFactory;
-    final LogModelFactory logModelFactory;
 
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
                                 final SqlConnection sqlConnection,

@@ -5,7 +5,6 @@ import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.event.body.module.runtime.RuntimeAssignmentCreatedEventBodyModel;
 import com.omgservers.service.exception.ServerSideBadRequestException;
-import com.omgservers.service.factory.system.LogModelFactory;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -25,7 +24,6 @@ class UpsertRuntimeAssignmentOperationImpl implements UpsertRuntimeAssignmentOpe
 
     final ChangeObjectOperation changeObjectOperation;
 
-    final LogModelFactory logModelFactory;
     final ObjectMapper objectMapper;
 
     @Override
