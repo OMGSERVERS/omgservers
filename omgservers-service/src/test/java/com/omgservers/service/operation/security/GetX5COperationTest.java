@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Slf4j
 @QuarkusTest
-class IssueJwtTokenOperationTest extends BaseTestClass {
+class GetX5COperationTest extends BaseTestClass {
 
     @Inject
     IssueJwtTokenOperation issueJwtTokenOperation;

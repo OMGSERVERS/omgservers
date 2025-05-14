@@ -13,11 +13,13 @@ class ExecuteStateOperationImpl implements ExecuteStateOperation {
     final AtomicReference<IndexConfigDto> indexConfig;
     final AtomicReference<String> serverToken;
     final AtomicReference<Long> nodeId;
+    final AtomicReference<String> x5c;
 
     ExecuteStateOperationImpl() {
         indexConfig = new AtomicReference<>();
         serverToken = new AtomicReference<>();
         nodeId = new AtomicReference<>();
+        x5c = new AtomicReference<>();
     }
 
     @Override
@@ -48,5 +50,15 @@ class ExecuteStateOperationImpl implements ExecuteStateOperation {
     @Override
     public Long getNodeId() {
         return nodeId.get();
+    }
+
+    @Override
+    public void setX5C(final String x5c) {
+        this.x5c.set(x5c);
+    }
+
+    @Override
+    public String getX5C() {
+        return x5c.get();
     }
 }

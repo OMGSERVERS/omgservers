@@ -8,6 +8,7 @@ import com.omgservers.service.server.initializer.impl.method.IssueServiceTokenMe
 import com.omgservers.service.server.initializer.impl.method.MigrateMasterSchemaMethod;
 import com.omgservers.service.server.initializer.impl.method.MigrateShardSchemaMethod;
 import com.omgservers.service.server.initializer.impl.method.MigrateSlotsSchemasMethod;
+import com.omgservers.service.server.initializer.impl.method.ReadX5CMethod;
 import com.omgservers.service.server.initializer.impl.method.ScheduleBootstrapJobMethod;
 import com.omgservers.service.server.initializer.impl.method.ScheduleEventHandlerJobMethod;
 import com.omgservers.service.server.initializer.impl.method.ScheduleSchedulerJobMethod;
@@ -33,6 +34,7 @@ class InitializerServiceImpl implements InitializerService {
     final SetIndexConfigMethod setIndexConfigMethod;
     final AcquireNodeIdMethod acquireNodeIdMethod;
     final CreateIndexMethod createIndexMethod;
+    final ReadX5CMethod readX5CMethod;
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
@@ -45,6 +47,7 @@ class InitializerServiceImpl implements InitializerService {
                 .flatMap(voidItem -> createIndex())
                 .flatMap(voidItem -> setIndexConfig())
                 .flatMap(voidItem -> migrateSlotsSchemas())
+                .flatMap(voidItem -> readX5C())
                 .flatMap(voidItem -> scheduleEventHandlerJob())
                 .flatMap(voidItem -> scheduleSchedulerJob())
                 .flatMap(voidItem -> scheduleBootstrapJob());
@@ -77,6 +80,10 @@ class InitializerServiceImpl implements InitializerService {
 
     Uni<Void> migrateSlotsSchemas() {
         return migrateSlotsSchemasMethod.execute();
+    }
+
+    Uni<Void> readX5C() {
+        return readX5CMethod.execute();
     }
 
     Uni<Void> scheduleEventHandlerJob() {

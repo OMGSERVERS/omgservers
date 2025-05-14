@@ -15,4 +15,8 @@ public interface ExecuteStateOperation {
     void setNodeId(Long nodeId);
 
     Long getNodeId();
+
+    void setX5C(String x5c);
+
+    String getX5C();
 }
