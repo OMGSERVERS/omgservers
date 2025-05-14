@@ -46,7 +46,7 @@ public interface ServiceConfig {
     interface JwtConfig {
         String issuer();
 
-        String x5c();
+        String certLocation();
     }
 
     interface MigrationConfig {
