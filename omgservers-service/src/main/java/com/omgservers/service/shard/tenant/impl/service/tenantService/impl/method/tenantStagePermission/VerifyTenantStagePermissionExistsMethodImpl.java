@@ -21,7 +21,7 @@ class VerifyTenantStagePermissionExistsMethodImpl implements VerifyTenantStagePe
     @Override
     public Uni<VerifyTenantStagePermissionExistsResponse> execute(final ShardModel shardModel,
                                                                   final VerifyTenantStagePermissionExistsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();

@@ -26,7 +26,7 @@ class SyncMatchmakerMatchAssignmentMethodImpl implements SyncMatchmakerMatchAssi
     @Override
     public Uni<SyncMatchmakerMatchAssignmentResponse> execute(final ShardModel shardModel,
                                                               final SyncMatchmakerMatchAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerMatchAssignment = request.getMatchmakerMatchAssignment();
         final var matchmakerId = matchmakerMatchAssignment.getMatchmakerId();

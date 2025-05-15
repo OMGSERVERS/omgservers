@@ -23,7 +23,7 @@ class FindPoolRequestMethodImpl implements FindPoolRequestMethod {
     @Override
     public Uni<FindPoolRequestResponse> execute(final ShardModel shardModel,
                                                 final FindPoolRequestRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var lobbyId = request.getPoolId();
         final var runtimeId = request.getRuntimeId();

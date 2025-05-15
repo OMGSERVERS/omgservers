@@ -21,7 +21,7 @@ class GetPlayerProfileMethodImpl implements GetPlayerProfileMethod {
     @Override
     public Uni<GetPlayerProfileResponse> getPlayerProfile(final ShardModel shardModel,
                                                           final GetPlayerProfileRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();

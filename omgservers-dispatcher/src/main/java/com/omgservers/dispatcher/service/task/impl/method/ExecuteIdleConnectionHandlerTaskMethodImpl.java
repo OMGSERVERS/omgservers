@@ -19,7 +19,7 @@ class ExecuteIdleConnectionHandlerTaskMethodImpl implements ExecuteIdleConnectio
 
     @Override
     public Uni<ExecuteIdleConnectionsHandlerTaskResponse> execute(final ExecuteIdleConnectionsHandlerTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var taskArguments = new IdleConnectionsHandlerTaskArguments();
         return executeTaskOperation.executeFailSafe(idleConnectionsHandlerTask, taskArguments)

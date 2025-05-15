@@ -53,9 +53,9 @@ class UpdateDeploymentStateMethodImpl implements UpdateDeploymentStateMethod {
     final ChangeWithContextOperation changeWithContextOperation;
 
     @Override
-    public Uni<UpdateDeploymentStateResponse> execute(ShardModel shardModel,
+    public Uni<UpdateDeploymentStateResponse> execute(final ShardModel shardModel,
                                                       final UpdateDeploymentStateRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();

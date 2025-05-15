@@ -29,7 +29,7 @@ class SyncDeploymentLobbyAssignmentMethodImpl implements SyncDeploymentLobbyAssi
     @Override
     public Uni<SyncDeploymentLobbyAssignmentResponse> execute(final ShardModel shardModel,
                                                               final SyncDeploymentLobbyAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentLobbyAssignment = request.getDeploymentLobbyAssignment();
         final var deploymentId = deploymentLobbyAssignment.getDeploymentId();

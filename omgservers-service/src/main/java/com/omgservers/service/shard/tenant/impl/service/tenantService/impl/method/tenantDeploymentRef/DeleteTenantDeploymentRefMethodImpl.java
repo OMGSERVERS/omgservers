@@ -22,7 +22,7 @@ class DeleteTenantDeploymentRefMethodImpl implements DeleteTenantDeploymentRefMe
     @Override
     public Uni<DeleteTenantDeploymentRefResponse> execute(final ShardModel shardModel,
                                                           final DeleteTenantDeploymentRefRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

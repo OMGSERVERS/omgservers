@@ -22,7 +22,7 @@ class SyncLobbyMethodImpl implements SyncLobbyMethod {
     @Override
     public Uni<SyncLobbyResponse> execute(final ShardModel shardModel,
                                           final SyncLobbyRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var lobby = request.getLobby();
         return changeWithContextOperation.<Boolean>changeWithContext(

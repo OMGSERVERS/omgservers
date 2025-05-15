@@ -22,7 +22,7 @@ class GetTenantMethodImpl implements GetTenantMethod {
     @Override
     public Uni<GetTenantResponse> getTenant(final ShardModel shardModel,
                                             final GetTenantRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectTenantOperation

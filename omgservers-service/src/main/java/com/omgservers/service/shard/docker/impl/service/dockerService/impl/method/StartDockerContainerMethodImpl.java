@@ -29,7 +29,7 @@ class StartDockerContainerMethodImpl implements StartDockerContainerMethod {
     @Override
     public Uni<StartDockerContainerResponse> execute(final ShardModel shardModel,
                                                      final StartDockerContainerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolServer = request.getPoolServer();
         final var poolContainer = request.getPoolContainer();

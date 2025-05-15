@@ -29,7 +29,7 @@ class SyncTenantImageMethodImpl implements SyncTenantImageMethod {
     @Override
     public Uni<SyncTenantImageResponse> execute(final ShardModel shardModel,
                                                 final SyncTenantImageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantImage = request.getTenantImage();
         final var tenantId = tenantImage.getTenantId();

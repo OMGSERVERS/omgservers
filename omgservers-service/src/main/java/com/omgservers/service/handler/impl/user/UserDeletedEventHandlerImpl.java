@@ -38,7 +38,7 @@ public class UserDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (UserDeletedEventBodyModel) event.getBody();
         final var userId = body.getId();

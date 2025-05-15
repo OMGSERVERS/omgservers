@@ -27,7 +27,7 @@ class HandleOpenedConnectionMethodImpl implements HandleOpenedConnectionMethod {
 
     @Override
     public Uni<Void> execute(final HandleOpenedConnectionRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var runtimeId = request.getRuntimeId();

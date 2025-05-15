@@ -22,7 +22,7 @@ GetTenantProjectMethodImpl implements GetTenantProjectMethod {
     @Override
     public Uni<GetTenantProjectResponse> execute(final ShardModel shardModel,
                                                  final GetTenantProjectRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

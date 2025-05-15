@@ -19,7 +19,7 @@ public class ExecuteDeploymentTaskMethodImpl implements ExecuteDeploymentTaskMet
 
     @Override
     public Uni<ExecuteDeploymentTaskResponse> execute(final ExecuteDeploymentTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
 

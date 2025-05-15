@@ -22,7 +22,7 @@ class DeleteUserMethodImpl implements DeleteUserMethod {
     @Override
     public Uni<DeleteUserResponse> deleteUser(final ShardModel shardModel,
                                               final DeleteUserRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

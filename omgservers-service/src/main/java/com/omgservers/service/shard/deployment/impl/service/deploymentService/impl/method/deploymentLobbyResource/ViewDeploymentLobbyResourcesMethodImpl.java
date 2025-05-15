@@ -28,7 +28,7 @@ class ViewDeploymentLobbyResourcesMethodImpl implements ViewDeploymentLobbyResou
     @Override
     public Uni<ViewDeploymentLobbyResourcesResponse> execute(final ShardModel shardModel,
                                                              final ViewDeploymentLobbyResourcesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(

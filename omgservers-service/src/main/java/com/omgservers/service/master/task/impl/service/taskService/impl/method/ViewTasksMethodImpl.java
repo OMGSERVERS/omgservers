@@ -27,7 +27,7 @@ class ViewTasksMethodImpl implements ViewTasksMethod {
 
     @Override
     public Uni<ViewTasksResponse> execute(final ViewTasksRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var uri = request.getUri();
 

@@ -22,7 +22,7 @@ class ViewMatchmakerRequestsMethodImpl implements ViewMatchmakerRequestsMethod {
     @Override
     public Uni<ViewMatchmakerRequestsResponse> execute(final ShardModel shardModel,
                                                        final ViewMatchmakerRequestsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         return pgPool.withTransaction(sqlConnection -> selectActiveMatchmakerRequestsByMatchmakerIdOperation

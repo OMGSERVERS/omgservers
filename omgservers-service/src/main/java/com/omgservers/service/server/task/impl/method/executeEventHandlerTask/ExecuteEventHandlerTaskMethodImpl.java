@@ -19,7 +19,7 @@ public class ExecuteEventHandlerTaskMethodImpl implements ExecuteEventHandlerTas
 
     @Override
     public Uni<ExecuteEventHandlerTaskResponse> execute(final ExecuteEventHandlerTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var taskArguments = new EventHandlerTaskArguments();
         return executeTaskOperation.executeFailSafe(eventHandlerTask, taskArguments)

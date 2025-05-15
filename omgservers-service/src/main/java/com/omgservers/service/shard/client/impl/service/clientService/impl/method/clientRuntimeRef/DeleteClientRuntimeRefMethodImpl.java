@@ -22,7 +22,7 @@ class DeleteClientRuntimeRefMethodImpl implements DeleteClientRuntimeRefMethod {
     @Override
     public Uni<DeleteClientRuntimeRefResponse> execute(final ShardModel shardModel,
                                                        final DeleteClientRuntimeRefRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var clientId = request.getClientId();
         final var id = request.getId();

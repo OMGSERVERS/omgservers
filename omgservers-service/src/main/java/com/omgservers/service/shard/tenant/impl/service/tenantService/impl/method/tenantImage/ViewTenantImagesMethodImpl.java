@@ -26,7 +26,7 @@ class ViewTenantImagesMethodImpl implements ViewTenantImagesMethod {
     @Override
     public Uni<ViewTenantImagesResponse> execute(final ShardModel shardModel,
                                                  final ViewTenantImagesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         return pgPool.withTransaction(sqlConnection -> {

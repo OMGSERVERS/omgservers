@@ -23,7 +23,7 @@ class ViewTenantStagePermissionsMethodImpl implements ViewTenantStagePermissions
     @Override
     public Uni<ViewTenantStagePermissionsResponse> execute(final ShardModel shardModel,
                                                            final ViewTenantStagePermissionsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();

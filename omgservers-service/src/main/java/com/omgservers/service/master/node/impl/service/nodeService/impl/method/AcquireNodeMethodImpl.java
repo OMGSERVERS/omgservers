@@ -23,7 +23,7 @@ class AcquireNodeMethodImpl implements AcquireNodeMethod {
 
     @Override
     public Uni<AcquireNodeResponse> execute(final AcquireNodeRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         return changeWithContextOperation.changeWithContext(acquireNodeOperation::execute)
                 .map(ChangeContext::getResult)

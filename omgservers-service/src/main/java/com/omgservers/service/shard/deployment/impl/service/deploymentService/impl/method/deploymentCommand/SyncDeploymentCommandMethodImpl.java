@@ -26,7 +26,7 @@ class SyncDeploymentCommandMethodImpl implements SyncDeploymentCommandMethod {
     @Override
     public Uni<SyncDeploymentCommandResponse> execute(final ShardModel shardModel,
                                                       final SyncDeploymentCommandRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentCommand = request.getDeploymentCommand();
         final var deploymentId = deploymentCommand.getDeploymentId();

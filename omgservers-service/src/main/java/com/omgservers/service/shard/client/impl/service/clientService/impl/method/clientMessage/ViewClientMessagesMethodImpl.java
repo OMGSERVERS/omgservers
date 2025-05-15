@@ -22,7 +22,7 @@ class ViewClientMessagesMethodImpl implements ViewClientMessagesMethod {
     @Override
     public Uni<ViewClientMessagesResponse> execute(final ShardModel shardModel,
                                                    final ViewClientMessagesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var clientId = request.getClientId();
         return pgPool.withTransaction(sqlConnection -> selectActiveClientMessagesByClientIdOperation

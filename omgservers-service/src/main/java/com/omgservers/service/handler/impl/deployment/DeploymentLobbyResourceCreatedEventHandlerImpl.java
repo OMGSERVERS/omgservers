@@ -36,7 +36,7 @@ public class DeploymentLobbyResourceCreatedEventHandlerImpl implements EventHand
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (DeploymentLobbyResourceCreatedEventBodyModel) event.getBody();
         final var deploymentId = body.getDeploymentId();

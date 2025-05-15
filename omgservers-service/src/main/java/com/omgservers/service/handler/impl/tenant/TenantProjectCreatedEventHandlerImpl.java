@@ -39,7 +39,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (TenantProjectCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();

@@ -32,7 +32,7 @@ public class AliasDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("{}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (AliasDeletedEventBodyModel) event.getBody();
         final var shardKey = body.getShardKey();

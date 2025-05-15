@@ -22,7 +22,7 @@ class GetUserMethodImpl implements GetUserMethod {
     @Override
     public Uni<GetUserResponse> getUser(final ShardModel shardModel,
                                         final GetUserRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectUserOperation

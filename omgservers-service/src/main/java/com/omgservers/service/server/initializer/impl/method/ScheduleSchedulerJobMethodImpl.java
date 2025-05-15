@@ -25,6 +25,7 @@ class ScheduleSchedulerJobMethodImpl implements ScheduleSchedulerJobMethod {
                 scheduledExecution -> {
                     final var request = new ExecuteSchedulerTaskRequest();
                     return taskService.execute(request)
+                            // Scheduler can never be unscheduled
                             .replaceWith(Boolean.FALSE);
                 });
 

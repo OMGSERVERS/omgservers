@@ -22,7 +22,7 @@ class FindAliasMethodImpl implements FindAliasMethod {
     @Override
     public Uni<FindAliasResponse> execute(final ShardModel shardModel,
                                           final FindAliasRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         return pgPool.withTransaction(sqlConnection -> {
                     final var qualifier = request.getQualifier();

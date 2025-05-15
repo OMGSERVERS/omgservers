@@ -22,7 +22,7 @@ class ViewRuntimeCommandsMethodImpl implements ViewRuntimeCommandsMethod {
     @Override
     public Uni<ViewRuntimeCommandsResponse> execute(final ShardModel shardModel,
                                                     final ViewRuntimeCommandsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeCommandsByRuntimeIdOperation

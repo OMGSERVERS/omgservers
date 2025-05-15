@@ -22,7 +22,7 @@ class DeleteDeploymentRequestMethodImpl implements DeleteDeploymentRequestMethod
     @Override
     public Uni<DeleteDeploymentRequestResponse> execute(final ShardModel shardModel,
                                                         final DeleteDeploymentRequestRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();

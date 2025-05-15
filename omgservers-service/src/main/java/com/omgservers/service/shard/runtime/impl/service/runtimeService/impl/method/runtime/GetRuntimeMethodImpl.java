@@ -22,7 +22,7 @@ class GetRuntimeMethodImpl implements GetRuntimeMethod {
     @Override
     public Uni<GetRuntimeResponse> execute(final ShardModel shardModel,
                                            final GetRuntimeRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectRuntimeOperation
                         .execute(sqlConnection, shardModel.slot(), id))

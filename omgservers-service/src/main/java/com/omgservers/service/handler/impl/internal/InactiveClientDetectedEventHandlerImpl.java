@@ -38,7 +38,7 @@ public class InactiveClientDetectedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (InactiveClientDetectedEventBodyModel) event.getBody();
         final var clientId = body.getId();

@@ -22,7 +22,7 @@ class ViewPoolServersMethodImpl implements ViewPoolServersMethod {
     @Override
     public Uni<ViewPoolServersResponse> execute(final ShardModel shardModel,
                                                 final ViewPoolServersRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         return pgPool.withTransaction(sqlConnection -> selectActivePoolServersByPoolIdOperation

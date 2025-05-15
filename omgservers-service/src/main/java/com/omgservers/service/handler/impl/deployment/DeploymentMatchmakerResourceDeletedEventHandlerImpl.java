@@ -32,7 +32,7 @@ public class DeploymentMatchmakerResourceDeletedEventHandlerImpl implements Even
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (DeploymentMatchmakerResourceDeletedEventBodyModel) event.getBody();
         final var deploymentId = body.getDeploymentId();

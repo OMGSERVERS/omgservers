@@ -1,6 +1,7 @@
 package com.omgservers.service.server.task.impl.method.executePoolTask;
 
 import com.omgservers.service.server.task.Task;
+import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.impl.method.executePoolTask.operation.FetchPoolOperation;
 import com.omgservers.service.server.task.impl.method.executePoolTask.operation.HandlePoolOperation;
 import com.omgservers.service.server.task.impl.method.executePoolTask.operation.UpdatePoolOperation;
@@ -18,19 +19,22 @@ public class PoolTaskImpl implements Task<PoolTaskArguments> {
     final UpdatePoolOperation updatePoolOperation;
     final FetchPoolOperation fetchPoolOperation;
 
-    public Uni<Boolean> execute(final PoolTaskArguments taskArguments) {
+    public Uni<TaskResult> execute(final PoolTaskArguments taskArguments) {
         final var poolId = taskArguments.poolId();
 
         return fetchPoolOperation.execute(poolId)
                 .map(handlePoolOperation::execute)
-                .invoke(handlePoolResult -> {
+                .flatMap(handlePoolResult -> {
                     final var poolChangeOfState = handlePoolResult.poolChangeOfState();
                     if (poolChangeOfState.isNotEmpty()) {
                         log.info("Update pool state, poolId={}, {}",
                                 poolId, poolChangeOfState);
+
+                        return updatePoolOperation.execute(handlePoolResult)
+                                .replaceWith(TaskResult.DONE);
+                    } else {
+                        return Uni.createFrom().item(TaskResult.NOOP);
                     }
-                })
-                .flatMap(updatePoolOperation::execute)
-                .replaceWith(Boolean.TRUE);
+                });
     }
 }

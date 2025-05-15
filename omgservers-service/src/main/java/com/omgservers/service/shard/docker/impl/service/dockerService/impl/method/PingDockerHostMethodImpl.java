@@ -22,7 +22,7 @@ class PingDockerHostMethodImpl implements PingDockerHostMethod {
     @Override
     public Uni<PingDockerHostResponse> execute(final ShardModel shardModel,
                                                final PingDockerHostRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolServer = request.getPoolServer();
 

@@ -22,7 +22,7 @@ class GetDeploymentLobbyAssignmentMethodImpl implements GetDeploymentLobbyAssign
     @Override
     public Uni<GetDeploymentLobbyAssignmentResponse> execute(final ShardModel shardModel,
                                                              final GetDeploymentLobbyAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();

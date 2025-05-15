@@ -25,7 +25,7 @@ class HandleIdleConnectionsMethodImpl implements HandleIdleConnectionsMethod {
 
     @Override
     public Uni<Void> execute(final HandleIdleConnectionsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var now = Instant.now();
         final var idleTimeout = getDispatcherConfigOperation.getDispatcherConfig().idleConnectionTimeout();

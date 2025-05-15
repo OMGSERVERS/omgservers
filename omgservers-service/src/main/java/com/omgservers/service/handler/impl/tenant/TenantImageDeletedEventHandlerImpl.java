@@ -28,7 +28,7 @@ public class TenantImageDeletedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (TenantImageDeletedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();

@@ -10,6 +10,7 @@ import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolResponse;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserResponse;
 import com.omgservers.service.server.task.Task;
+import com.omgservers.service.server.task.TaskResult;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,13 +25,13 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
-    public Uni<Boolean> execute(final BootstrapTaskArguments taskArguments) {
+    public Uni<TaskResult> execute(final BootstrapTaskArguments taskArguments) {
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
                 .flatMap(voidItem -> bootstrapServiceUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
-                .replaceWith(Boolean.TRUE)
+                .replaceWith(TaskResult.DONE)
                 .onFailure().transform(
                         t -> new ServerSideInternalException(ExceptionQualifierEnum.BOOTSTRAP_FAILED,
                                 t.getMessage(),

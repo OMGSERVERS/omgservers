@@ -10,6 +10,7 @@ import com.omgservers.schema.shard.tenant.tenantDeploymentResource.ViewTenantDep
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
 import com.omgservers.service.server.task.Task;
+import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Multi;
@@ -28,13 +29,13 @@ public class StageTaskImpl implements Task<StageTaskArguments> {
     final RuntimeShard runtimeShard;
     final TenantShard tenantShard;
 
-    public Uni<Boolean> execute(final StageTaskArguments taskArguments) {
+    public Uni<TaskResult> execute(final StageTaskArguments taskArguments) {
         final var tenantId = taskArguments.tenantId();
         final var tenantStageId = taskArguments.tenantStageId();
 
         return getTenantStage(tenantId, tenantStageId)
                 .flatMap(tenantStage -> handleTenantStage(tenantStage)
-                        .replaceWith(Boolean.TRUE));
+                        .replaceWith(TaskResult.DONE));
     }
 
     Uni<TenantStageModel> getTenantStage(final Long tenantId, final Long id) {

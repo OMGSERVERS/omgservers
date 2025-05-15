@@ -36,7 +36,7 @@ class GetMatchmakerStateMethodImpl implements GetMatchmakerStateMethod {
     @Override
     public Uni<GetMatchmakerStateResponse> execute(final ShardModel shardModel,
                                                    final GetMatchmakerStateRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var matchmakerId = request.getMatchmakerId();

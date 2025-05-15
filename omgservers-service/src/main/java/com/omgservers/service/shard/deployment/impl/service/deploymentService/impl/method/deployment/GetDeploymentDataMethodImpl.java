@@ -31,7 +31,7 @@ class GetDeploymentDataMethodImpl implements GetDeploymentDataMethod {
     @Override
     public Uni<GetDeploymentDataResponse> execute(final ShardModel shardModel,
                                                   final GetDeploymentDataRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final int slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();

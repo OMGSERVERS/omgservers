@@ -22,7 +22,7 @@ class SyncMatchmakerMethodImpl implements SyncMatchmakerMethod {
     @Override
     public Uni<SyncMatchmakerResponse> execute(final ShardModel shardModel,
                                                final SyncMatchmakerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmaker = request.getMatchmaker();
         return changeWithContextOperation.<Boolean>changeWithContext((context, sqlConnection) ->

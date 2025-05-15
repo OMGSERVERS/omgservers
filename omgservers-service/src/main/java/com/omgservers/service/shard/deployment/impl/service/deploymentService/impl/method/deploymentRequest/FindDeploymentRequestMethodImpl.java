@@ -23,7 +23,7 @@ class FindDeploymentRequestMethodImpl implements FindDeploymentRequestMethod {
     @Override
     public Uni<FindDeploymentRequestResponse> execute(final ShardModel shardModel,
                                                       final FindDeploymentRequestRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var clientId = request.getClientId();

@@ -22,7 +22,7 @@ class GetTenantDeploymentRefMethodImpl implements GetTenantDeploymentRefMethod {
     @Override
     public Uni<GetTenantDeploymentRefResponse> execute(final ShardModel shardModel,
                                                        final GetTenantDeploymentRefRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var tenantId = request.getTenantId();

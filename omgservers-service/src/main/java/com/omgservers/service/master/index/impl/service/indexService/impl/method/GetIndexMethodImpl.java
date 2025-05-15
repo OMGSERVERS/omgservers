@@ -20,7 +20,7 @@ class GetIndexMethodImpl implements GetIndexMethod {
 
     @Override
     public Uni<GetIndexResponse> execute(final GetIndexRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         return pgPool.withTransaction(getIndexOperation::execute)
                 .map(GetIndexResponse::new);

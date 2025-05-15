@@ -22,7 +22,7 @@ class GetTenantImageMethodImpl implements GetTenantImageMethod {
     @Override
     public Uni<GetTenantImageResponse> execute(final ShardModel shardModel,
                                                final GetTenantImageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var tenantId = request.getTenantId();

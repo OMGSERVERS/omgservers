@@ -23,7 +23,7 @@ class FindMatchmakerMatchAssignmentMethodImpl implements FindMatchmakerMatchAssi
     @Override
     public Uni<FindMatchmakerMatchAssignmentResponse> execute(final ShardModel shardModel,
                                                               final FindMatchmakerMatchAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var clientId = request.getClientId();

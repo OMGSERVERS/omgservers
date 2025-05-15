@@ -22,7 +22,7 @@ class GetClientRuntimeRefMethodImpl implements GetClientRuntimeRefMethod {
     @Override
     public Uni<GetClientRuntimeRefResponse> execute(final ShardModel shardModel,
                                                     final GetClientRuntimeRefRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var clientId = request.getClientId();
         final var id = request.getId();

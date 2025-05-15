@@ -24,6 +24,7 @@ class ScheduleEventHandlerJobMethodImpl implements ScheduleEventHandlerJobMethod
                 scheduledExecution -> {
                     final var request = new ExecuteEventHandlerTaskRequest();
                     return taskService.execute(request)
+                            // Event handler can never be unscheduled
                             .replaceWith(Boolean.FALSE);
                 });
 

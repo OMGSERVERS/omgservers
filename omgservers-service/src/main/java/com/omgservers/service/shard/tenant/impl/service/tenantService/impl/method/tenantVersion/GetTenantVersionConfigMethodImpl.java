@@ -22,7 +22,7 @@ class GetTenantVersionConfigMethodImpl implements GetTenantVersionConfigMethod {
     @Override
     public Uni<GetTenantVersionConfigResponse> execute(final ShardModel shardModel,
                                                        final GetTenantVersionConfigRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantVersionId = request.getTenantVersionId();

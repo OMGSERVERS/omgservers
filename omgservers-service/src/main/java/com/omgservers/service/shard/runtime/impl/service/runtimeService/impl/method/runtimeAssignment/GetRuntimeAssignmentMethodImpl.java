@@ -22,7 +22,7 @@ class GetRuntimeAssignmentMethodImpl implements GetRuntimeAssignmentMethod {
     @Override
     public Uni<GetRuntimeAssignmentResponse> execute(final ShardModel shardModel,
                                                      final GetRuntimeAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();

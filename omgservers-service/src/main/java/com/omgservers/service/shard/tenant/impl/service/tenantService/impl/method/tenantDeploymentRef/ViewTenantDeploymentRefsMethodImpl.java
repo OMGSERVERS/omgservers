@@ -22,7 +22,7 @@ class ViewTenantDeploymentRefsMethodImpl implements ViewTenantDeploymentRefsMeth
     @Override
     public Uni<ViewTenantDeploymentRefsResponse> execute(final ShardModel shardModel,
                                                          final ViewTenantDeploymentRefsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();

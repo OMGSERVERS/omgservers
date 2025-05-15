@@ -21,7 +21,7 @@ class DeleteTaskMethodImpl implements DeleteTaskMethod {
 
     @Override
     public Uni<DeleteTaskResponse> execute(final DeleteTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

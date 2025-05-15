@@ -20,7 +20,7 @@ class HandleFailedConnectionMethodImpl implements HandleFailedConnectionMethod {
 
     @Override
     public Uni<Void> execute(final HandleFailedConnectionRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var t = request.getThrowable();

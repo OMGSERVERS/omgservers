@@ -22,7 +22,7 @@ class SyncPlayerMethodImpl implements SyncPlayerMethod {
     @Override
     public Uni<SyncPlayerResponse> syncPlayer(final ShardModel shardModel,
                                               final SyncPlayerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var player = request.getPlayer();
         return changeWithContextOperation.<Boolean>changeWithContext(

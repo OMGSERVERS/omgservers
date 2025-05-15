@@ -20,7 +20,7 @@ class SyncEntityMethodImpl implements SyncEntityMethod {
 
     @Override
     public Uni<SyncEntityResponse> execute(final SyncEntityRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var entity = request.getEntity();
 

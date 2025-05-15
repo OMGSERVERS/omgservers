@@ -22,7 +22,7 @@ class GetAliasMethodImpl implements GetAliasMethod {
     @Override
     public Uni<GetAliasResponse> execute(final ShardModel shardModel,
                                          final GetAliasRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectAliasOperation

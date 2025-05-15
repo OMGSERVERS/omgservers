@@ -51,7 +51,7 @@ public class LobbyCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (LobbyCreatedEventBodyModel) event.getBody();
         final var lobbyId = body.getId();

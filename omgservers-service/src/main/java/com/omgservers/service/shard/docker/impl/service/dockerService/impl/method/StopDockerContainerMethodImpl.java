@@ -25,7 +25,7 @@ class StopDockerContainerMethodImpl implements StopDockerContainerMethod {
     @Override
     public Uni<StopDockerContainerResponse> execute(final ShardModel shardModel,
                                                     final StopDockerContainerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolServer = request.getPoolServer();
         final var poolContainer = request.getPoolContainer();

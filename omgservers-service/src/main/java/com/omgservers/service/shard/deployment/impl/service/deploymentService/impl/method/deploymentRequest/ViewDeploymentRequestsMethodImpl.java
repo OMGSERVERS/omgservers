@@ -22,7 +22,7 @@ class ViewDeploymentRequestsMethodImpl implements ViewDeploymentRequestsMethod {
     @Override
     public Uni<ViewDeploymentRequestsResponse> execute(final ShardModel shardModel,
                                                        final ViewDeploymentRequestsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(sqlConnection ->

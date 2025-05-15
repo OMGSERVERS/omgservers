@@ -25,7 +25,7 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
     @Override
     public Uni<DeleteTenantResponse> deleteTenant(final ShardModel shardModel,
                                                   final DeleteTenantRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext(

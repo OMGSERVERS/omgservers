@@ -23,7 +23,7 @@ class ViewMatchmakerMatchResourcesMethodImpl implements ViewMatchmakerMatchResou
     @Override
     public Uni<ViewMatchmakerMatchResourcesResponse> execute(final ShardModel shardModel,
                                                              final ViewMatchmakerMatchResourcesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         return pgPool.withTransaction(sqlConnection -> selectActiveMatchmakerMatchResourcesByMatchmakerIdOperation

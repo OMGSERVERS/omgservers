@@ -29,7 +29,7 @@ class SyncDeploymentMatchmakerResourceMethodImpl implements SyncDeploymentMatchm
     @Override
     public Uni<SyncDeploymentMatchmakerResourceResponse> execute(final ShardModel shardModel,
                                                                  final SyncDeploymentMatchmakerResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var deploymentMatchmakerResource = request.getDeploymentMatchmakerResource();

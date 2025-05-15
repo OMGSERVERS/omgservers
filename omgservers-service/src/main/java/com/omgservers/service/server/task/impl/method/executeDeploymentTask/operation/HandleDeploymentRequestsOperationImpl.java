@@ -32,7 +32,7 @@ class HandleDeploymentRequestsOperationImpl implements HandleDeploymentRequestsO
 
         final var deploymentRequests = fetchDeploymentResult.deploymentState().getDeploymentRequests();
         if (deploymentRequests.isEmpty()) {
-            log.trace("Deployment \"{}\" has no requests to process", deploymentId);
+            log.debug("Deployment \"{}\" has no requests to process", deploymentId);
         } else {
             final var lobbyAssigner = createLobbyAssignerOperation.execute(fetchDeploymentResult,
                     handleDeploymentResult);

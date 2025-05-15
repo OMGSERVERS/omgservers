@@ -26,7 +26,7 @@ class SyncPoolContainerMethodImpl implements SyncPoolContainerMethod {
     @Override
     public Uni<SyncPoolContainerResponse> execute(final ShardModel shardModel,
                                                   final SyncPoolContainerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var poolContainer = request.getPoolContainer();

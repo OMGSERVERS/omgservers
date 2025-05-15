@@ -22,7 +22,7 @@ class DeleteRuntimeAssignmentMethodImpl implements DeleteRuntimeAssignmentMethod
     @Override
     public Uni<DeleteRuntimeAssignmentResponse> execute(final ShardModel shardModel,
                                                         final DeleteRuntimeAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var id = request.getId();

@@ -29,7 +29,7 @@ class SyncDeploymentMatchmakerAssignmentMethodImpl implements SyncDeploymentMatc
     @Override
     public Uni<SyncDeploymentMatchmakerAssignmentResponse> execute(final ShardModel shardModel,
                                                                    final SyncDeploymentMatchmakerAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentMatchmakerAssignment = request.getDeploymentMatchmakerAssignment();
         final var deploymentId = deploymentMatchmakerAssignment.getDeploymentId();

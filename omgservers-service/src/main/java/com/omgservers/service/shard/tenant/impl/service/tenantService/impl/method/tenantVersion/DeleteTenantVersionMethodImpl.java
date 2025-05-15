@@ -25,7 +25,7 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
     @Override
     public Uni<DeleteTenantVersionResponse> execute(final ShardModel shardModel,
                                                     final DeleteTenantVersionRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
         final var tenantId = request.getTenantId();
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

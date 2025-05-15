@@ -39,7 +39,7 @@ class IssueRegistryTokensMethodImpl implements IssueRegistryTokensMethod {
 
     @Override
     public Uni<IssueRegistryTokensResponse> execute(final IssueRegistryTokensRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var userId = request.getUserId();
 

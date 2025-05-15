@@ -22,7 +22,7 @@ class DeleteLobbyMethodImpl implements DeleteLobbyMethod {
     @Override
     public Uni<DeleteLobbyResponse> execute(final ShardModel shardModel,
                                             final DeleteLobbyRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

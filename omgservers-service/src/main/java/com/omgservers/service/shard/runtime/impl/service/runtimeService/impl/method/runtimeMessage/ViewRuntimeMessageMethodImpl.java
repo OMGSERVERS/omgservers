@@ -22,7 +22,7 @@ class ViewRuntimeMessageMethodImpl implements ViewRuntimeMessageMethod {
     @Override
     public Uni<ViewRuntimeMessagesResponse> execute(final ShardModel shardModel,
                                                     final ViewRuntimeMessagesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeMessagesByRuntimeIdOperation

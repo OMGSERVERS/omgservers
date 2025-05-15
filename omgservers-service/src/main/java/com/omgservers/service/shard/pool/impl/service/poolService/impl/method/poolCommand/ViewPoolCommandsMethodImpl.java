@@ -22,7 +22,7 @@ class ViewPoolCommandsMethodImpl implements ViewPoolCommandsMethod {
     @Override
     public Uni<ViewPoolCommandResponse> execute(final ShardModel shardModel,
                                                 final ViewPoolCommandRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         return pgPool.withTransaction(sqlConnection -> selectActivePoolCommandsByPoolIdOperation.execute(sqlConnection,

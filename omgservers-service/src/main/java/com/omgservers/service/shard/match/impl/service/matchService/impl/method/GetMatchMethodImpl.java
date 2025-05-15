@@ -22,7 +22,7 @@ class GetMatchMethodImpl implements GetMatchMethod {
     @Override
     public Uni<GetMatchResponse> execute(final ShardModel shardModel,
                                          final GetMatchRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectMatchOperation

@@ -20,7 +20,7 @@ class GetEntityMethodImpl implements GetEntityMethod {
 
     @Override
     public Uni<GetEntityResponse> execute(final GetEntityRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectEntityOperation

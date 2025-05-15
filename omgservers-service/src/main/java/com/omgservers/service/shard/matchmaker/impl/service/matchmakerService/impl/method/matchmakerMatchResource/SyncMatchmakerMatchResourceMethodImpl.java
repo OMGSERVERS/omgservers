@@ -26,7 +26,7 @@ class SyncMatchmakerMatchResourceMethodImpl implements SyncMatchmakerMatchResour
     @Override
     public Uni<SyncMatchmakerMatchResourceResponse> execute(final ShardModel shardModel,
                                                             final SyncMatchmakerMatchResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var matchmakerMatchResource = request.getMatchmakerMatchResource();

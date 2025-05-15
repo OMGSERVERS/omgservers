@@ -22,7 +22,7 @@ class ViewTenantProjectsMethodImpl implements ViewTenantProjectsMethod {
     @Override
     public Uni<ViewTenantProjectsResponse> execute(final ShardModel shardModel,
                                                    final ViewTenantProjectsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         return pgPool.withTransaction(sqlConnection -> selectActiveTenantProjectsByTenantIdOperation

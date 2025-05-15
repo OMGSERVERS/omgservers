@@ -22,7 +22,7 @@ class FindDeploymentMatchmakerAssignmentMethodImpl implements FindDeploymentMatc
     @Override
     public Uni<FindDeploymentMatchmakerAssignmentResponse> execute(final ShardModel shardModel,
                                                                    final FindDeploymentMatchmakerAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(sqlConnection -> {

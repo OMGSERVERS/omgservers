@@ -36,7 +36,7 @@ public class TenantDeploymentResourceCreatedEventHandlerImpl implements EventHan
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (TenantDeploymentResourceCreatedEventBodyModel) event.getBody();
         final var tenantId = body.getTenantId();

@@ -31,7 +31,7 @@ class SyncTenantDeploymentRefMethodImpl implements SyncTenantDeploymentRefMethod
     @Override
     public Uni<SyncTenantDeploymentRefResponse> execute(final ShardModel shardModel,
                                                         final SyncTenantDeploymentRefRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var shardKey = request.getRequestShardKey();
         final var tenantDeploymentRef = request.getTenantDeploymentRef();

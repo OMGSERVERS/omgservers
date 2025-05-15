@@ -20,7 +20,7 @@ class DeleteEntityMethodImpl implements DeleteEntityMethod {
 
     @Override
     public Uni<DeleteEntityResponse> execute(final DeleteEntityRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext(

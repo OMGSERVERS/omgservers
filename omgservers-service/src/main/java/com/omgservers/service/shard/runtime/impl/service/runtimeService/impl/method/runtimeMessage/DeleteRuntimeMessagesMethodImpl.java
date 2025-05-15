@@ -22,7 +22,7 @@ class DeleteRuntimeMessagesMethodImpl implements DeleteRuntimeMessagesMethod {
     @Override
     public Uni<DeleteRuntimeMessagesResponse> execute(final ShardModel shardModel,
                                                       final DeleteRuntimeMessagesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         final var ids = request.getIds();

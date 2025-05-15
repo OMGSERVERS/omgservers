@@ -22,7 +22,7 @@ class GetLobbyMethodImpl implements GetLobbyMethod {
     @Override
     public Uni<GetLobbyResponse> execute(final ShardModel shardModel,
                                          final GetLobbyRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectLobbyOperation

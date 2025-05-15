@@ -22,7 +22,7 @@ class UpdateMatchmakerMatchResourceStatusMethodImpl implements UpdateMatchmakerM
     @Override
     public Uni<UpdateMatchmakerMatchResourceStatusResponse> execute(final ShardModel shardModel,
                                                                     final UpdateMatchmakerMatchResourceStatusRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getId();

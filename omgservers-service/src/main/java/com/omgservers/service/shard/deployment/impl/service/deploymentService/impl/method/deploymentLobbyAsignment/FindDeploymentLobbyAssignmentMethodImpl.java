@@ -21,7 +21,7 @@ class FindDeploymentLobbyAssignmentMethodImpl implements FindDeploymentLobbyAssi
     @Override
     public Uni<FindDeploymentLobbyAssignmentResponse> execute(final ShardModel shardModel,
                                                               final FindDeploymentLobbyAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(sqlConnection -> {

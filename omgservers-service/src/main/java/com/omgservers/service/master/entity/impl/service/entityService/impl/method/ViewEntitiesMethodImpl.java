@@ -20,7 +20,7 @@ class ViewEntitiesMethodImpl implements ViewEntitiesMethod {
 
     @Override
     public Uni<ViewEntitiesResponse> execute(final ViewEntitiesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         return pgPool.withTransaction(selectActiveEntitiesOperation::execute)
                 .map(ViewEntitiesResponse::new);
