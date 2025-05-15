@@ -22,7 +22,7 @@ class SyncAliasMethodImpl implements SyncAliasMethod {
     @Override
     public Uni<SyncAliasResponse> execute(final ShardModel shardModel,
                                           final SyncAliasRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var alias = request.getAlias();
         return changeWithContextOperation.<Boolean>changeWithContext(

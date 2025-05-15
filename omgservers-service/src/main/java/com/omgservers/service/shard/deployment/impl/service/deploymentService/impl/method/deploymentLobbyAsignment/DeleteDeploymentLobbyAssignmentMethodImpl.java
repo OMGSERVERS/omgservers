@@ -22,7 +22,7 @@ class DeleteDeploymentLobbyAssignmentMethodImpl implements DeleteDeploymentLobby
     @Override
     public Uni<DeleteDeploymentLobbyAssignmentResponse> execute(final ShardModel shardModel,
                                                                 final DeleteDeploymentLobbyAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();

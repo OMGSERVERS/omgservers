@@ -32,7 +32,7 @@ class UpdateRuntimeStateMethodImpl implements UpdateRuntimeStateMethod {
     @Override
     public Uni<UpdateRuntimeStateResponse> execute(final ShardModel shardModel,
                                                    final UpdateRuntimeStateRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var runtimeId = request.getRuntimeId();

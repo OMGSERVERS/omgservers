@@ -22,7 +22,7 @@ class DeletePoolMethodImpl implements DeletePoolMethod {
     @Override
     public Uni<DeletePoolResponse> execute(final ShardModel shardModel,
                                            final DeletePoolRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

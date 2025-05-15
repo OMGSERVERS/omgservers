@@ -26,7 +26,7 @@ class HandleTextMessageMethodImpl implements HandleTextMessageMethod {
 
     @Override
     public Uni<Void> execute(final HandleTextMessageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var webSocketConnection = request.getWebSocketConnection();
         final var message = request.getMessage();

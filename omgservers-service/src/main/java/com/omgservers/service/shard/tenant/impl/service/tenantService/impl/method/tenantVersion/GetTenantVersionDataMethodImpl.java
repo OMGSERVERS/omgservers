@@ -27,7 +27,7 @@ class GetTenantVersionDataMethodImpl implements GetTenantVersionDataMethod {
     @Override
     public Uni<GetTenantVersionDataResponse> execute(final ShardModel shardModel,
                                                      final GetTenantVersionDataRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final int slot = shardModel.slot();
         final var tenantId = request.getTenantId();

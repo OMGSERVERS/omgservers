@@ -21,7 +21,7 @@ class FindTaskMethodImpl implements FindTaskMethod {
 
     @Override
     public Uni<FindTaskResponse> execute(final FindTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var shard_key = request.getShardKey();
         final var entityId = request.getEntityId();

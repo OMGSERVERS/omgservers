@@ -22,7 +22,7 @@ class ViewTenantPermissionsMethodImpl implements ViewTenantPermissionsMethod {
     @Override
     public Uni<ViewTenantPermissionsResponse> execute(final ShardModel shardModel,
                                                       final ViewTenantPermissionsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         return pgPool.withTransaction(sqlConnection ->

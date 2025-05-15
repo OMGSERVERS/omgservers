@@ -22,7 +22,7 @@ class DeleteAliasMethodImpl implements DeleteAliasMethod {
     @Override
     public Uni<DeleteAliasResponse> execute(final ShardModel shardModel,
                                             final DeleteAliasRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var shardKey = request.getShardKey();
         final var id = request.getId();

@@ -25,7 +25,7 @@ class SyncTenantMethodImpl implements SyncTenantMethod {
     @Override
     public Uni<SyncTenantResponse> syncTenant(final ShardModel shardModel,
                                               final SyncTenantRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenant = request.getTenant();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

@@ -22,7 +22,7 @@ class SyncMatchMethodImpl implements SyncMatchMethod {
     @Override
     public Uni<SyncMatchResponse> execute(final ShardModel shardModel,
                                           final SyncMatchRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var match = request.getMatch();
         return changeWithContextOperation.<Boolean>changeWithContext(

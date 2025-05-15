@@ -55,7 +55,7 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
     @Override
     public Uni<InterchangeMessagesResponse> execute(final ShardModel shardModel,
                                                     final InterchangeMessagesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var clientId = request.getClientId();
         final var consumedMessages = request.getConsumedMessages();

@@ -22,7 +22,7 @@ class GetDeploymentMatchmakerAssignmentMethodImpl implements GetDeploymentMatchm
     @Override
     public Uni<GetDeploymentMatchmakerAssignmentResponse> execute(final ShardModel shardModel,
                                                                   final GetDeploymentMatchmakerAssignmentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();

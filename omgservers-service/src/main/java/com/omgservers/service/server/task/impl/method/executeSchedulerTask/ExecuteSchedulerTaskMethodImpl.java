@@ -19,7 +19,7 @@ public class ExecuteSchedulerTaskMethodImpl implements ExecuteSchedulerTaskMetho
 
     @Override
     public Uni<ExecuteSchedulerTaskResponse> execute(final ExecuteSchedulerTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var taskArguments = new SchedulerTaskArguments();
         return executeTaskOperation.executeFailSafe(schedulerTask, taskArguments)

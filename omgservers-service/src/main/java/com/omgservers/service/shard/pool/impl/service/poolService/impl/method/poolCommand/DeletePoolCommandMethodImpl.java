@@ -22,7 +22,7 @@ class DeletePoolCommandMethodImpl implements DeletePoolCommandMethod {
     @Override
     public Uni<DeletePoolCommandResponse> execute(final ShardModel shardModel,
                                                   final DeletePoolCommandRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         final var id = request.getId();

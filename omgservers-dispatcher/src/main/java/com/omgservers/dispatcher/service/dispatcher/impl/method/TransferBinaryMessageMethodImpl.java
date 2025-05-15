@@ -20,7 +20,7 @@ class TransferBinaryMessageMethodImpl implements TransferBinaryMessageMethod {
 
     @Override
     public Uni<TransferBinaryMessageResponse> execute(final TransferBinaryMessageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var dispatcherConnection = request.getDispatcherConnection();
         final var buffer = request.getBuffer();

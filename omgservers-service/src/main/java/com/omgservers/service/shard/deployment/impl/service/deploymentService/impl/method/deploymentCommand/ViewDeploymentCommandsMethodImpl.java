@@ -23,7 +23,7 @@ class ViewDeploymentCommandsMethodImpl implements ViewDeploymentCommandsMethod {
     @Override
     public Uni<ViewDeploymentCommandsResponse> execute(final ShardModel shardModel,
                                                        final ViewDeploymentCommandsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
 

@@ -23,7 +23,7 @@ class FindPoolContainerMethodImpl implements FindPoolContainerMethod {
     @Override
     public Uni<FindPoolContainerResponse> execute(final ShardModel shardModel,
                                                   final FindPoolContainerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         final var runtimeId = request.getRuntimeId();

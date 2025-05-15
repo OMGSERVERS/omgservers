@@ -26,7 +26,7 @@ class SyncPoolServerMethodImpl implements SyncPoolServerMethod {
     @Override
     public Uni<SyncPoolServerResponse> execute(final ShardModel shardModel,
                                                final SyncPoolServerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolServer = request.getPoolServer();
         final var poolId = poolServer.getPoolId();

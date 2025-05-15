@@ -1,6 +1,7 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask;
 
 import com.omgservers.service.server.task.Task;
+import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation.FetchMatchmakerOperation;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation.HandleMatchmakerOperation;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation.UpdateMatchmakerOperation;
@@ -19,19 +20,22 @@ public class MatchmakerTaskImpl implements Task<MatchmakerTaskArguments> {
     final UpdateMatchmakerOperation updateMatchmakerOperation;
     final FetchMatchmakerOperation fetchMatchmakerOperation;
 
-    public Uni<Boolean> execute(final MatchmakerTaskArguments taskArguments) {
+    public Uni<TaskResult> execute(final MatchmakerTaskArguments taskArguments) {
         final var matchmakerId = taskArguments.matchmakerId();
 
         return fetchMatchmakerOperation.execute(matchmakerId)
                 .map(handleMatchmakerOperation::execute)
-                .invoke(handleMatchmakerResult -> {
+                .flatMap(handleMatchmakerResult -> {
                     final var matchmakerChangeOfState = handleMatchmakerResult.matchmakerChangeOfState();
                     if (matchmakerChangeOfState.isNotEmpty()) {
                         log.info("Update matchmaker state, matchmakerId={}, {}",
                                 matchmakerId, matchmakerChangeOfState);
+
+                        return updateMatchmakerOperation.execute(handleMatchmakerResult)
+                                .replaceWith(TaskResult.DONE);
+                    } else {
+                        return Uni.createFrom().item(TaskResult.NOOP);
                     }
-                })
-                .flatMap(updateMatchmakerOperation::execute)
-                .replaceWith(Boolean.TRUE);
+                });
     }
 }

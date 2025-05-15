@@ -22,7 +22,7 @@ class UpdateTenantDeploymentResourceStatusMethodImpl implements UpdateTenantDepl
     @Override
     public Uni<UpdateTenantDeploymentResourceStatusResponse> execute(final ShardModel shardModel,
                                                                      final UpdateTenantDeploymentResourceStatusRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

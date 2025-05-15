@@ -22,7 +22,7 @@ class GetPoolContainerMethodImpl implements GetPoolContainerMethod {
     @Override
     public Uni<GetPoolContainerResponse> execute(final ShardModel shardModel,
                                                  final GetPoolContainerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         final var id = request.getId();

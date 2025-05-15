@@ -22,7 +22,7 @@ class DeleteMatchmakerCommandMethodImpl implements DeleteMatchmakerCommandMethod
     @Override
     public Uni<DeleteMatchmakerCommandResponse> execute(final ShardModel shardModel,
                                                         final DeleteMatchmakerCommandRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();

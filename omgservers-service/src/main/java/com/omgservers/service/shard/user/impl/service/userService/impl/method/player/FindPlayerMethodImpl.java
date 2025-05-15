@@ -21,7 +21,7 @@ class FindPlayerMethodImpl implements FindPlayerMethod {
     @Override
     public Uni<FindPlayerResponse> findPlayer(final ShardModel shardModel,
                                               final FindPlayerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var userId = request.getUserId();
         final var tenantStageId = request.getTenantStageId();

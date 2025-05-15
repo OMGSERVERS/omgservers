@@ -27,7 +27,7 @@ class GetRuntimeStateMethodImpl implements GetRuntimeStateMethod {
     @Override
     public Uni<GetRuntimeStateResponse> execute(final ShardModel shardModel,
                                                 final GetRuntimeStateRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var runtimeId = request.getId();

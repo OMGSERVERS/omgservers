@@ -22,7 +22,7 @@ class DeletePlayerMethodImpl implements DeletePlayerMethod {
     @Override
     public Uni<DeletePlayerResponse> deletePlayer(final ShardModel shardModel,
                                                   final DeletePlayerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var userId = request.getUserId();
         final var id = request.getId();

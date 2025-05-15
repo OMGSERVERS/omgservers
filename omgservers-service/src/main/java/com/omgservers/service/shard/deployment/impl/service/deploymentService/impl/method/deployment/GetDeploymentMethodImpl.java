@@ -22,7 +22,7 @@ class GetDeploymentMethodImpl implements GetDeploymentMethod {
     @Override
     public Uni<GetDeploymentResponse> execute(final ShardModel shardModel,
                                               final GetDeploymentRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var id = request.getId();

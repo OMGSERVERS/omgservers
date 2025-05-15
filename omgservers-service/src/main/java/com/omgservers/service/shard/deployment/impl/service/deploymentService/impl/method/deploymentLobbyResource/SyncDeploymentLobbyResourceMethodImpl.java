@@ -29,7 +29,7 @@ class SyncDeploymentLobbyResourceMethodImpl implements SyncDeploymentLobbyResour
     @Override
     public Uni<SyncDeploymentLobbyResourceResponse> execute(final ShardModel shardModel,
                                                             final SyncDeploymentLobbyResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentLobbyResource = request.getDeploymentLobbyResource();
         final var deploymentId = deploymentLobbyResource.getDeploymentId();

@@ -22,7 +22,7 @@ class ViewRuntimeAssignmentsMethodImpl implements ViewRuntimeAssignmentsMethod {
     @Override
     public Uni<ViewRuntimeAssignmentsResponse> execute(final ShardModel shardModel,
                                                        final ViewRuntimeAssignmentsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeId = request.getRuntimeId();
         return pgPool.withTransaction(sqlConnection -> selectActiveRuntimeAssignmentsByRuntimeIdOperation

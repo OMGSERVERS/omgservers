@@ -23,7 +23,7 @@ class ViewTenantProjectPermissionsMethodImpl implements ViewTenantProjectPermiss
     @Override
     public Uni<ViewTenantProjectPermissionsResponse> execute(final ShardModel shardModel,
                                                              final ViewTenantProjectPermissionsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getTenantProjectId();

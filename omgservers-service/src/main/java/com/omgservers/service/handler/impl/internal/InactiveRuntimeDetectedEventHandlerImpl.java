@@ -39,7 +39,7 @@ public class InactiveRuntimeDetectedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (InactiveRuntimeDetectedEventBodyModel) event.getBody();
         final var runtimeId = body.getRuntimeId();

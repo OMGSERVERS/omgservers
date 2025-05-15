@@ -26,7 +26,7 @@ class SyncTenantPermissionMethodImpl implements SyncTenantPermissionMethod {
     @Override
     public Uni<SyncTenantPermissionResponse> execute(final ShardModel shardModel,
                                                      final SyncTenantPermissionRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var permission = request.getTenantPermission();
         final var tenantId = permission.getTenantId();

@@ -22,7 +22,7 @@ class GetMatchmakerMatchResourceMethodImpl implements GetMatchmakerMatchResource
     @Override
     public Uni<GetMatchmakerMatchResourceResponse> execute(final ShardModel shardModel,
                                                            final GetMatchmakerMatchResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var id = request.getId();

@@ -1,5 +1,6 @@
 package com.omgservers.service.server.task.dto;
 
+import com.omgservers.service.server.task.TaskResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ExecuteTenantTaskResponse {
 
-    Boolean finished;
+    TaskResult taskResult;
 }

@@ -23,7 +23,7 @@ class ViewMatchmakerMatchAssignmentsMethodImpl implements ViewMatchmakerMatchAss
     @Override
     public Uni<ViewMatchmakerMatchAssignmentsResponse> execute(final ShardModel shardModel,
                                                                final ViewMatchmakerMatchAssignmentsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var matchmakerId = request.getMatchmakerId();
         final var matchId = request.getMatchId();

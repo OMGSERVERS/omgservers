@@ -31,7 +31,7 @@ class GetPoolStateMethodImpl implements GetPoolStateMethod {
     @Override
     public Uni<GetPoolStateResponse> execute(final ShardModel shardModel,
                                              final GetPoolStateRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var poolId = request.getPoolId();

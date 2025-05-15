@@ -19,7 +19,7 @@ public class ExecuteTenantTaskMethodImpl implements ExecuteTenantTaskMethod {
 
     @Override
     public Uni<ExecuteTenantTaskResponse> execute(final ExecuteTenantTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var taskArgument = new TenantTaskArguments(tenantId);

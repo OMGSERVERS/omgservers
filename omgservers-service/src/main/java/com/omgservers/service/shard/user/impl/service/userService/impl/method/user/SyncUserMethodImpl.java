@@ -22,7 +22,7 @@ class SyncUserMethodImpl implements SyncUserMethod {
     @Override
     public Uni<SyncUserResponse> syncUser(final ShardModel shardModel,
                                           final SyncUserRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var user = request.getUser();
         return changeWithContextOperation.<Boolean>changeWithContext(

@@ -18,7 +18,7 @@ class TransferTextMessageMethodImpl implements TransferTextMessageMethod {
 
     @Override
     public Uni<TransferTextMessageResponse> execute(final TransferTextMessageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var dispatcherConnection = request.getDispatcherConnection();
         final var message = request.getMessage();

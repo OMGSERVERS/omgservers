@@ -3,6 +3,7 @@ package com.omgservers.service.server.initializer.impl.method;
 import com.omgservers.service.configuration.JobQualifierEnum;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.operation.server.ScheduleJobExecutionOperation;
+import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.TaskService;
 import com.omgservers.service.server.task.dto.ExecuteBootstrapTaskRequest;
 import com.omgservers.service.server.task.dto.ExecuteBootstrapTaskResponse;
@@ -30,7 +31,16 @@ class ScheduleBootstrapJobMethodImpl implements ScheduleBootstrapJobMethod {
                     scheduledExecution -> {
                         final var request = new ExecuteBootstrapTaskRequest();
                         return taskService.execute(request)
-                                .map(ExecuteBootstrapTaskResponse::getFinished);
+
+                                .map(ExecuteBootstrapTaskResponse::getTaskResult)
+                                .map(taskResult -> {
+                                    if (taskResult.equals(TaskResult.DONE)) {
+                                        // TRUE means job can be unscheduled
+                                        return Boolean.TRUE;
+                                    } else {
+                                        return Boolean.FALSE;
+                                    }
+                                });
                     });
 
             log.info("Bootstrap job scheduled");

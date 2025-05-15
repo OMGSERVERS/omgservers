@@ -32,7 +32,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     @Override
     public Uni<CreateTokenResponse> createToken(final ShardModel shardModel,
                                                 final CreateTokenRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var userId = request.getUserId();
         final var password = request.getPassword();

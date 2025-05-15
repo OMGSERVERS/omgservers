@@ -22,7 +22,7 @@ class GetClientMethodImpl implements GetClientMethod {
     @Override
     public Uni<GetClientResponse> execute(final ShardModel shardModel,
                                           final GetClientRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectClientOperation

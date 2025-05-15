@@ -31,7 +31,7 @@ class SyncTenantDeploymentResourceMethodImpl implements SyncTenantDeploymentReso
     @Override
     public Uni<SyncTenantDeploymentResourceResponse> execute(final ShardModel shardModel,
                                                              final SyncTenantDeploymentResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantDeploymentResource = request.getTenantDeploymentResource();
         final var tenantId = tenantDeploymentResource.getTenantId();

@@ -21,7 +21,7 @@ class GetPoolMethodImpl implements GetPoolMethod {
 
     @Override
     public Uni<GetPoolResponse> execute(final ShardModel shardModel, final GetPoolRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectPoolOperation

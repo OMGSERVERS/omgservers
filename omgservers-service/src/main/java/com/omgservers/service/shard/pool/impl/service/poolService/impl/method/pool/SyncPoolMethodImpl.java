@@ -22,7 +22,7 @@ class SyncPoolMethodImpl implements SyncPoolMethod {
     @Override
     public Uni<SyncPoolResponse> execute(final ShardModel shardModel,
                                          final SyncPoolRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var pool = request.getPool();
         return changeWithContextOperation.<Boolean>changeWithContext(

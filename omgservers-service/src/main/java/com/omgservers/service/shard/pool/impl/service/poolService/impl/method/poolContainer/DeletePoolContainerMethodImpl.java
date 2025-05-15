@@ -22,7 +22,7 @@ class DeletePoolContainerMethodImpl implements DeletePoolContainerMethod {
     @Override
     public Uni<DeletePoolContainerResponse> execute(final ShardModel shardModel,
                                                     final DeletePoolContainerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         final var id = request.getId();

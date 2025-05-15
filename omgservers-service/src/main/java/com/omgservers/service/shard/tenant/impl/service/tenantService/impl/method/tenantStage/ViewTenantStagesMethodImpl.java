@@ -22,7 +22,7 @@ class ViewTenantStagesMethodImpl implements ViewTenantStagesMethod {
     @Override
     public Uni<ViewTenantStagesResponse> execute(final ShardModel shardModel,
                                                  final ViewTenantStagesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getTenantProjectId();

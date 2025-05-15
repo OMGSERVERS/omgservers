@@ -22,7 +22,7 @@ class DeleteMatchMethodImpl implements DeleteMatchMethod {
     @Override
     public Uni<DeleteMatchResponse> execute(final ShardModel shardModel,
                                             final DeleteMatchRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext(

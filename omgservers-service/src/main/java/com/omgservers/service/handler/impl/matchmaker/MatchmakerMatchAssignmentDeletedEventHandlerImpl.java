@@ -44,7 +44,7 @@ public class MatchmakerMatchAssignmentDeletedEventHandlerImpl implements EventHa
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (MatchmakerMatchAssignmentDeletedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();

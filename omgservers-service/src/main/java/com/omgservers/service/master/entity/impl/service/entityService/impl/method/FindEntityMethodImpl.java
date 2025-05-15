@@ -20,7 +20,7 @@ class FindEntityMethodImpl implements FindEntityMethod {
 
     @Override
     public Uni<FindEntityResponse> execute(final FindEntityRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var entityId = request.getEntityId();
         return pgPool.withTransaction(sqlConnection -> selectEntityByEntityIdOperation

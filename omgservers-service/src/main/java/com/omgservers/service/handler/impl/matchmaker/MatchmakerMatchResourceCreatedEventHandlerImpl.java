@@ -36,7 +36,7 @@ public class MatchmakerMatchResourceCreatedEventHandlerImpl implements EventHand
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("Handle event, {}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (MatchmakerMatchResourceCreatedEventBodyModel) event.getBody();
         final var matchmakerId = body.getMatchmakerId();

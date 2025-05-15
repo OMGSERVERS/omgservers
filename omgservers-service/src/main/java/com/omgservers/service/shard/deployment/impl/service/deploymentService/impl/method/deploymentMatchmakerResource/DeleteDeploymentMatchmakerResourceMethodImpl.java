@@ -22,7 +22,7 @@ class DeleteDeploymentMatchmakerResourceMethodImpl implements DeleteDeploymentMa
     @Override
     public Uni<DeleteDeploymentMatchmakerResourceResponse> execute(final ShardModel shardModel,
                                                                    final DeleteDeploymentMatchmakerResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();

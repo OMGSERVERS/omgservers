@@ -19,7 +19,7 @@ public class ExecutePoolTaskMethodImpl implements ExecutePoolTaskMethod {
 
     @Override
     public Uni<ExecutePoolTaskResponse> execute(final ExecutePoolTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         final var taskArguments = new PoolTaskArguments(poolId);

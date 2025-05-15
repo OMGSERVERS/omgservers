@@ -22,7 +22,7 @@ class GetDeploymentLobbyResourceMethodImpl implements GetDeploymentLobbyResource
     @Override
     public Uni<GetDeploymentLobbyResourceResponse> execute(final ShardModel shardModel,
                                                            final GetDeploymentLobbyResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var slot = shardModel.slot();
         final var deploymentId = request.getDeploymentId();

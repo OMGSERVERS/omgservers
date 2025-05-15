@@ -48,7 +48,7 @@ public class ClientCreatedEventHandlerImpl implements EventHandler {
 
     @Override
     public Uni<Void> handle(final EventModel event) {
-        log.trace("{}", event);
+        log.debug("Handle event, {}", event);
 
         final var body = (ClientCreatedEventBodyModel) event.getBody();
         final var clientId = body.getId();

@@ -21,7 +21,7 @@ class FindDeploymentLobbyResourceMethodImpl implements FindDeploymentLobbyResour
     @Override
     public Uni<FindDeploymentLobbyResourceResponse> execute(final ShardModel shardModel,
                                                             final FindDeploymentLobbyResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var lobbyId = request.getLobbyId();

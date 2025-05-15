@@ -22,7 +22,7 @@ class DeleteTenantPermissionMethodImpl implements DeleteTenantPermissionMethod {
     @Override
     public Uni<DeleteTenantPermissionResponse> execute(final ShardModel shardModel,
                                                        final DeleteTenantPermissionRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

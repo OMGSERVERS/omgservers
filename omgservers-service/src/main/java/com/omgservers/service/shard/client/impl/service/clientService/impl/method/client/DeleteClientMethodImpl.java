@@ -25,7 +25,7 @@ class DeleteClientMethodImpl implements DeleteClientMethod {
     @Override
     public Uni<DeleteClientResponse> execute(final ShardModel shardModel,
                                              final DeleteClientRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext(

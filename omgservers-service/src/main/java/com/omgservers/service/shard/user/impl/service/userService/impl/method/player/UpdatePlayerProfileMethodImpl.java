@@ -22,7 +22,7 @@ class UpdatePlayerProfileMethodImpl implements UpdatePlayerProfileMethod {
     @Override
     public Uni<UpdatePlayerProfileResponse> updatePlayerProfile(final ShardModel shardModel,
                                                                 final UpdatePlayerProfileRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var userId = request.getUserId();
         final var playerId = request.getPlayerId();

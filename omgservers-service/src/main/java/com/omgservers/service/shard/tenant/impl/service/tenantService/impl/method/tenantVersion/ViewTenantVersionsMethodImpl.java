@@ -23,7 +23,7 @@ class ViewTenantVersionsMethodImpl implements ViewTenantVersionsMethod {
     @Override
     public Uni<ViewTenantVersionsResponse> execute(final ShardModel shardModel,
                                                    final ViewTenantVersionsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantProjectId = request.getTenantProjectId();

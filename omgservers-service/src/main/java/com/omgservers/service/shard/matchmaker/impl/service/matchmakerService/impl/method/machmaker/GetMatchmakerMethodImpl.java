@@ -22,7 +22,7 @@ class GetMatchmakerMethodImpl implements GetMatchmakerMethod {
     @Override
     public Uni<GetMatchmakerResponse> execute(final ShardModel shardModel,
                                               final GetMatchmakerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectMatchmakerOperation

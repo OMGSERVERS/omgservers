@@ -26,7 +26,7 @@ class SyncClientRuntimeRefMethodImpl implements SyncClientRuntimeRefMethod {
     @Override
     public Uni<SyncClientRuntimeRefResponse> execute(final ShardModel shardModel,
                                                      final SyncClientRuntimeRefRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var clientRuntimeRef = request.getClientRuntimeRef();
         final var clientId = clientRuntimeRef.getClientId();

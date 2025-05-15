@@ -22,7 +22,7 @@ class ViewClientRuntimeRefsMethodImpl implements ViewClientRuntimeRefsMethod {
     @Override
     public Uni<ViewClientRuntimeRefsResponse> execute(final ShardModel shardModel,
                                                       final ViewClientRuntimeRefsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var clientId = request.getClientId();
         return pgPool.withTransaction(sqlConnection -> selectActiveClientRuntimeRefsByClientIdOperation

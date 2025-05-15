@@ -22,7 +22,7 @@ class DeleteMatchmakerMethodImpl implements DeleteMatchmakerMethod {
     @Override
     public Uni<DeleteMatchmakerResponse> deleteMatchmaker(final ShardModel shardModel,
                                                           final DeleteMatchmakerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

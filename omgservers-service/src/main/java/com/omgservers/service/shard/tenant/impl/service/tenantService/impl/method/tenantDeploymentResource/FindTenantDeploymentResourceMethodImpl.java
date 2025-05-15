@@ -21,7 +21,7 @@ class FindTenantDeploymentResourceMethodImpl implements FindTenantDeploymentReso
     @Override
     public Uni<FindTenantDeploymentResourceResponse> execute(final ShardModel shardModel,
                                                              final FindTenantDeploymentResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var deploymentId = request.getDeploymentId();

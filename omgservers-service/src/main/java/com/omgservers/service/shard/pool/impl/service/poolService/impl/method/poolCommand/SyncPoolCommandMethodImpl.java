@@ -26,7 +26,7 @@ class SyncPoolCommandMethodImpl implements SyncPoolCommandMethod {
     @Override
     public Uni<SyncPoolCommandResponse> execute(final ShardModel shardModel,
                                                 final SyncPoolCommandRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolCommand = request.getPoolCommand();
         final var poolId = poolCommand.getPoolId();

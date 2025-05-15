@@ -22,7 +22,7 @@ class DeleteRuntimeMethodImpl implements DeleteRuntimeMethod {
     @Override
     public Uni<DeleteRuntimeResponse> execute(final ShardModel shardModel,
                                               final DeleteRuntimeRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

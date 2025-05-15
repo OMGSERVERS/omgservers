@@ -21,7 +21,7 @@ class GetTaskMethodImpl implements GetTaskMethod {
 
     @Override
     public Uni<GetTaskResponse> execute(final GetTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var id = request.getId();
         return pgPool.withTransaction(sqlConnection -> selectTaskOperation

@@ -22,7 +22,7 @@ class DeleteTenantImageMethodImpl implements DeleteTenantImageMethod {
     @Override
     public Uni<DeleteTenantImageResponse> execute(final ShardModel shardModel,
                                                   final DeleteTenantImageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

@@ -21,7 +21,7 @@ class SyncTaskMethodImpl implements SyncTaskMethod {
 
     @Override
     public Uni<SyncTaskResponse> execute(final SyncTaskRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var job = request.getTask();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

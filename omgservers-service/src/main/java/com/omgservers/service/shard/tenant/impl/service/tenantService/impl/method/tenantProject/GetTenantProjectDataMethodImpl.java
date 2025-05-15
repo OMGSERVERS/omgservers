@@ -41,7 +41,7 @@ class GetTenantProjectDataMethodImpl implements GetTenantProjectDataMethod {
     @Override
     public Uni<GetTenantProjectDataResponse> execute(final ShardModel shardModel,
                                                      final GetTenantProjectDataRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final int slot = shardModel.slot();
         final var tenantId = request.getTenantId();

@@ -21,7 +21,7 @@ class DeleteDispatcherMethodImpl implements DeleteDispatcherMethod {
 
     @Override
     public Uni<DeleteDispatcherResponse> execute(final DeleteDispatcherRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeId = request.getRuntimeId();
 

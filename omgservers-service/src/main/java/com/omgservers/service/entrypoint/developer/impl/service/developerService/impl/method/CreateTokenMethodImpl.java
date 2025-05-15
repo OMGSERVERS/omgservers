@@ -26,7 +26,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
 
     @Override
     public Uni<CreateTokenDeveloperResponse> execute(final CreateTokenDeveloperRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         return getIdByUserOperation.execute(request.getUser())
                 .flatMap(userId -> {

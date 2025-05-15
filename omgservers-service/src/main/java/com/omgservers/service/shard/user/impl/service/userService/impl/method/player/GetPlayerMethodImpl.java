@@ -21,7 +21,7 @@ class GetPlayerMethodImpl implements GetPlayerMethod {
     @Override
     public Uni<GetPlayerResponse> getPlayer(final ShardModel shardModel,
                                             final GetPlayerRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var userId = request.getUserId();
         final var id = request.getId();

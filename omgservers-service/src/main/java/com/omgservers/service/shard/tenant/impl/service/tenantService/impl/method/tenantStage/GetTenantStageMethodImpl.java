@@ -21,7 +21,7 @@ class GetTenantStageMethodImpl implements GetTenantStageMethod {
     @Override
     public Uni<GetTenantStageResponse> execute(final ShardModel shardModel,
                                                final GetTenantStageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var id = request.getId();

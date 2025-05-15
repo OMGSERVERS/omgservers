@@ -28,7 +28,7 @@ class ViewTenantDeploymentResourcesMethodImpl implements ViewTenantDeploymentRes
     @Override
     public Uni<ViewTenantDeploymentResourcesResponse> execute(final ShardModel shardModel,
                                                               final ViewTenantDeploymentResourcesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var tenantStageId = request.getTenantStageId();

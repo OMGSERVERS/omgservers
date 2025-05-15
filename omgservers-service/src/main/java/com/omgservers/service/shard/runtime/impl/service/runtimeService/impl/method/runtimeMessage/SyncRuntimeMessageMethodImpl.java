@@ -29,7 +29,7 @@ class SyncRuntimeMessageMethodImpl implements SyncRuntimeMessageMethod {
     @Override
     public Uni<SyncRuntimeMessageResponse> execute(final ShardModel shardModel,
                                                    final SyncRuntimeMessageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeMessage = request.getRuntimeMessage();
         final var runtimeId = runtimeMessage.getRuntimeId();

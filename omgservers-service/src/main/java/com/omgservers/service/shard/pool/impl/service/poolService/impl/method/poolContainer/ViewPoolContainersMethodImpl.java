@@ -28,7 +28,7 @@ class ViewPoolContainersMethodImpl implements ViewPoolContainersMethod {
     @Override
     public Uni<ViewPoolContainersResponse> execute(final ShardModel shardModel,
                                                    final ViewPoolContainersRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var poolId = request.getPoolId();
         return pgPool.withTransaction(sqlConnection -> {

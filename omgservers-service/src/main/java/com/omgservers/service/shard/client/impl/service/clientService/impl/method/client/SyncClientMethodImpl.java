@@ -25,7 +25,7 @@ class SyncClientMethodImpl implements SyncClientMethod {
     @Override
     public Uni<SyncClientResponse> execute(final ShardModel shardModel,
                                            final SyncClientRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var client = request.getClient();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

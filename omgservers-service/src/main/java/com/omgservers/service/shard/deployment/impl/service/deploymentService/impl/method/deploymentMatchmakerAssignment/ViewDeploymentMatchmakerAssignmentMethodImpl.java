@@ -23,7 +23,7 @@ class ViewDeploymentMatchmakerAssignmentMethodImpl implements ViewDeploymentMatc
     @Override
     public Uni<ViewDeploymentMatchmakerAssignmentsResponse> execute(final ShardModel shardModel,
                                                                     final ViewDeploymentMatchmakerAssignmentsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(

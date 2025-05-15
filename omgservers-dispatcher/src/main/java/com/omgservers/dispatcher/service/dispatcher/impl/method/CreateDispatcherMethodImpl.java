@@ -20,7 +20,7 @@ class CreateDispatcherMethodImpl implements CreateDispatcherMethod {
 
     @Override
     public Uni<CreateDispatcherResponse> execute(final CreateDispatcherRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeConnection = request.getRuntimeConnection();
         final var runtimeId = runtimeConnection.getRuntimeId();

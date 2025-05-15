@@ -22,7 +22,7 @@ class SyncRuntimeMethodImpl implements SyncRuntimeMethod {
     @Override
     public Uni<SyncRuntimeResponse> execute(final ShardModel shardModel,
                                             final SyncRuntimeRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtime = request.getRuntime();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

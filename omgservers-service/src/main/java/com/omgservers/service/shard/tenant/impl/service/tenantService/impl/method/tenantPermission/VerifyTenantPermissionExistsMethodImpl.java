@@ -22,7 +22,7 @@ class VerifyTenantPermissionExistsMethodImpl implements VerifyTenantPermissionEx
     @Override
     public Uni<VerifyTenantPermissionExistsResponse> execute(final ShardModel shardModel,
                                                              final VerifyTenantPermissionExistsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var tenantId = request.getTenantId();
         final var userId = request.getUserId();

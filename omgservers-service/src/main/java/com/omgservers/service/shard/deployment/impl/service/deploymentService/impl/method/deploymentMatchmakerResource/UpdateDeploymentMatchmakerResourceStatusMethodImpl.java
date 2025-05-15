@@ -23,7 +23,7 @@ class UpdateDeploymentMatchmakerResourceStatusMethodImpl implements UpdateDeploy
     @Override
     public Uni<UpdateDeploymentMatchmakerResourceStatusResponse> execute(final ShardModel shardModel,
                                                                          final UpdateDeploymentMatchmakerResourceStatusRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();

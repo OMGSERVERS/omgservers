@@ -28,7 +28,7 @@ class ViewDeploymentMatchmakerResourcesMethodImpl implements ViewDeploymentMatch
     @Override
     public Uni<ViewDeploymentMatchmakerResourcesResponse> execute(final ShardModel shardModel,
                                                                   final ViewDeploymentMatchmakerResourcesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(

@@ -1,6 +1,7 @@
 package com.omgservers.service.server.task.impl.method.executeDeploymentTask;
 
 import com.omgservers.service.server.task.Task;
+import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation.FetchDeploymentOperation;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation.HandleDeploymentOperation;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation.UpdateDeploymentOperation;
@@ -18,19 +19,22 @@ public class DeploymentTaskImpl implements Task<DeploymentTaskArguments> {
     final UpdateDeploymentOperation updateDeploymentOperation;
     final FetchDeploymentOperation fetchDeploymentOperation;
 
-    public Uni<Boolean> execute(final DeploymentTaskArguments taskArguments) {
+    public Uni<TaskResult> execute(final DeploymentTaskArguments taskArguments) {
         final var deploymentId = taskArguments.deploymentId();
 
         return fetchDeploymentOperation.execute(deploymentId)
                 .map(handleDeploymentOperation::execute)
-                .invoke(handleDeploymentResult -> {
+                .flatMap(handleDeploymentResult -> {
                     final var deploymentChangeOfState = handleDeploymentResult.deploymentChangeOfState();
                     if (deploymentChangeOfState.isNotEmpty()) {
                         log.info("Update deployment state, deploymentId={}, {}",
                                 deploymentId, deploymentChangeOfState);
+
+                        return updateDeploymentOperation.execute(handleDeploymentResult)
+                                .replaceWith(TaskResult.DONE);
+                    } else {
+                        return Uni.createFrom().item(TaskResult.NOOP);
                     }
-                })
-                .flatMap(updateDeploymentOperation::execute)
-                .replaceWith(Boolean.TRUE);
+                });
     }
 }

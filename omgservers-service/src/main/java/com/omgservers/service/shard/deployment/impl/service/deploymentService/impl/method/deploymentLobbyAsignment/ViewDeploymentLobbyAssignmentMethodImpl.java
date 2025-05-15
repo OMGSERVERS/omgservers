@@ -23,7 +23,7 @@ class ViewDeploymentLobbyAssignmentMethodImpl implements ViewDeploymentLobbyAssi
     @Override
     public Uni<ViewDeploymentLobbyAssignmentsResponse> execute(final ShardModel shardModel,
                                                                final ViewDeploymentLobbyAssignmentsRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         return pgPool.withTransaction(

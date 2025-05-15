@@ -21,7 +21,7 @@ class FindDeploymentMatchmakerResourceMethodImpl implements FindDeploymentMatchm
     @Override
     public Uni<FindDeploymentMatchmakerResourceResponse> execute(final ShardModel shardModel,
                                                                  final FindDeploymentMatchmakerResourceRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var matchmakerId = request.getMatchmakerId();

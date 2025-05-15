@@ -22,7 +22,7 @@ class SyncClientMessageMethodImpl implements SyncClientMessageMethod {
     @Override
     public Uni<SyncClientMessageResponse> execute(final ShardModel shardModel,
                                                   final SyncClientMessageRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var clientMessage = request.getClientMessage();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

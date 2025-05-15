@@ -28,7 +28,7 @@ class ViewAliasesMethodImpl implements ViewAliasesMethod {
     @Override
     public Uni<ViewAliasesResponse> execute(final ShardModel shardModel,
                                             final ViewAliasesRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var shardKey = request.getShardKey();
         return pgPool.withTransaction(

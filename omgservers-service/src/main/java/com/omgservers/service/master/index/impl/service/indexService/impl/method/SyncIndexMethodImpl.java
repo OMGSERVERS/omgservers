@@ -20,7 +20,7 @@ class SyncIndexMethodImpl implements SyncIndexMethod {
 
     @Override
     public Uni<SyncIndexResponse> execute(final SyncIndexRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var index = request.getIndex();
         return changeWithContextOperation.<Boolean>changeWithContext((changeContext, sqlConnection) ->

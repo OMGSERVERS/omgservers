@@ -29,7 +29,7 @@ class SyncRuntimeCommandMethodImpl implements SyncRuntimeCommandMethod {
     @Override
     public Uni<SyncRuntimeCommandResponse> execute(final ShardModel shardModel,
                                                    final SyncRuntimeCommandRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var runtimeCommand = request.getRuntimeCommand();
         final var runtimeId = runtimeCommand.getRuntimeId();

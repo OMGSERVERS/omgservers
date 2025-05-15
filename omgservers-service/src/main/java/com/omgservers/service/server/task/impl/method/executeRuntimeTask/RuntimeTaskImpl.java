@@ -1,6 +1,7 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask;
 
 import com.omgservers.service.server.task.Task;
+import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation.FetchRuntimeOperation;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation.HandleRuntimeOperation;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation.UpdateRuntimeOperation;
@@ -18,18 +19,21 @@ public class RuntimeTaskImpl implements Task<RuntimeTaskArguments> {
     final UpdateRuntimeOperation updateRuntimeOperation;
     final FetchRuntimeOperation fetchRuntimeOperation;
 
-    public Uni<Boolean> execute(final RuntimeTaskArguments taskArguments) {
+    public Uni<TaskResult> execute(final RuntimeTaskArguments taskArguments) {
         final var runtimeId = taskArguments.runtimeId();
         return fetchRuntimeOperation.execute(runtimeId)
                 .map(handleRuntimeOperation::execute)
-                .invoke(handleRuntimeResult -> {
+                .flatMap(handleRuntimeResult -> {
                     final var runtimeChangeOfState = handleRuntimeResult.runtimeChangeOfState();
                     if (runtimeChangeOfState.isNotEmpty()) {
                         log.info("Update runtime state, runtimeId={}, {}",
                                 runtimeId, runtimeChangeOfState);
+
+                        return updateRuntimeOperation.execute(handleRuntimeResult)
+                                .replaceWith(TaskResult.DONE);
+                    } else {
+                        return Uni.createFrom().item(TaskResult.NOOP);
                     }
-                })
-                .flatMap(updateRuntimeOperation::execute)
-                .replaceWith(Boolean.TRUE);
+                });
     }
 }

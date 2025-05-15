@@ -22,7 +22,7 @@ class UpdateDeploymentLobbyResourceStatusMethodImpl implements UpdateDeploymentL
     @Override
     public Uni<UpdateDeploymentLobbyResourceStatusResponse> execute(final ShardModel shardModel,
                                                                     final UpdateDeploymentLobbyResourceStatusRequest request) {
-        log.trace("{}", request);
+        log.debug("{}", request);
 
         final var deploymentId = request.getDeploymentId();
         final var id = request.getId();
