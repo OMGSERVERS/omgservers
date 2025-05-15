@@ -7,7 +7,7 @@
    ```
 3. Update the `VERSION` variable in `install.sh`
 4. Update the **"How to try it"** section in `README.md`
-5. Update all `OMGSERVERS_VERSION` variable values in `.env` files
+5. Update all `OMGSERVERS_VERSION` variable values in `.env` files, set to X.Y.Z version
 6. Commit and create a pull request to merge into `main`
 7. Verify build pipelines is successfully finished
 8. Create and push tag X.Y.Z

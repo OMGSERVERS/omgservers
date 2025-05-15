@@ -9,7 +9,7 @@
 
 OMGSERVERS is a backend for authoritative game servers.
 
-## How to try it
+## How to test it
 
 ```bash
 curl -L https://github.com/OMGSERVERS/omgservers/releases/download/0.4.0/install.sh | bash
@@ -17,11 +17,12 @@ curl -L https://github.com/OMGSERVERS/omgservers/releases/download/0.4.0/install
 
 # Features
 
-- Developer account and permission management
-- Structured organization of tenants, projects, stages, versions, and deployments
-- Support for two game runtime types: lobbies and matches
-- Runtime execution in Docker containers
-- Player assignment and distribution across lobbies and matches
-- Player data storage and lifecycle management
-- [Defold SDK](https://github.com/OMGSERVERS/omgdefold) support for both clients and servers
-- Command-line tool for administrative and development tasks
+- Developer accounts and permissions
+- Tenants, projects, stages, versions and deployments
+- Lobbies and matches in Docker containers
+- Player lifecycle management
+- Data storage and control
+- [Defold SDK](https://github.com/OMGSERVERS/omgdefold) for client and server integration
+- CLI for admin and dev tasks
+- Integrated Docker registry
+- Sharding across servers
