@@ -1,5 +1,7 @@
 package com.omgservers.schema.entrypoint.developer;
 
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,4 +28,7 @@ public class CreateDeploymentDeveloperRequest {
 
     @NotNull
     Long versionId;
+
+    @Valid
+    DeploymentConfigDto config;
 }

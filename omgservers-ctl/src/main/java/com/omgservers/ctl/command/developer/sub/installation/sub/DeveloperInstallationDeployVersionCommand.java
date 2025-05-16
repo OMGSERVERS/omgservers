@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.developer.installation.DeveloperInstallationDeployVersionOperation;
 import com.omgservers.ctl.operation.ctl.HandleFileOptionOperation;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
+
+import java.util.Objects;
 
 @Slf4j
 @CommandLine.Command(
@@ -17,9 +20,13 @@ import picocli.CommandLine;
 public class DeveloperInstallationDeployVersionCommand extends InstallationCommand {
 
     @CommandLine.Option(names = {"-c", "--config"},
-            description = "Path to a file to read config from. Use '-' to read from stdin.",
+            description = "Path to a file to read version config from. Use '-' to read from stdin.",
             required = true)
     String config;
+
+    @CommandLine.Option(names = {"-s", "--spec"},
+            description = "Path to a file to read deployment spec from. Use '-' to read from stdin.")
+    String spec;
 
     @CommandLine.Option(names = {"-i", "--image"},
             description = "Docker image to deploy.",
@@ -53,16 +60,25 @@ public class DeveloperInstallationDeployVersionCommand extends InstallationComma
     @Override
     @SneakyThrows
     public void run() {
-        final var configString = handleFileOptionOperation.execute(config);
-        final var config = objectMapper.readValue(configString, TenantVersionConfigDto.class);
+        final var versionConfigString = handleFileOptionOperation.execute(config);
+        final var versionConfig = objectMapper.readValue(versionConfigString, TenantVersionConfigDto.class);
+
+        final DeploymentConfigDto deploymentConfig;
+        if (Objects.isNull(spec)) {
+            deploymentConfig = new DeploymentConfigDto();
+        } else {
+            final var deploymentConfigString = handleFileOptionOperation.execute(spec);
+            deploymentConfig = objectMapper.readValue(deploymentConfigString, DeploymentConfigDto.class);
+        }
 
         developerInstallationDeployVersionOperation.execute(developer,
                 password,
                 tenant,
                 project,
                 stage,
-                config,
                 image,
+                versionConfig,
+                deploymentConfig,
                 installation);
     }
 }

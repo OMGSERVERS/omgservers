@@ -1,11 +1,5 @@
 package com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation;
 
-import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
-import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
-import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
-import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
-import com.omgservers.service.factory.deployment.DeploymentLobbyResourceModelFactory;
-import com.omgservers.service.factory.deployment.DeploymentMatchmakerResourceModelFactory;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.FetchDeploymentResult;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.HandleDeploymentResult;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +16,8 @@ class HandleDeploymentRequestsOperationImpl implements HandleDeploymentRequestsO
     final CreateMatchmakerAssignerOperation createMatchmakerAssignerOperation;
     final CreateLobbyAssignerOperation createLobbyAssignerOperation;
 
-    final DeploymentMatchmakerResourceModelFactory deploymentMatchmakerResourceModelFactory;
-    final DeploymentLobbyResourceModelFactory deploymentLobbyResourceModelFactory;
+    final CreateMatchmakerResourceOperation createMatchmakerResourceOperation;
+    final CreateLobbyResourceOperation createLobbyResourceOperation;
 
     @Override
     public void execute(final FetchDeploymentResult fetchDeploymentResult,
@@ -58,7 +52,7 @@ class HandleDeploymentRequestsOperationImpl implements HandleDeploymentRequestsO
                         handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyAssignmentToSync()
                                 .add(lobbyAssignment);
                     } else {
-                        createLobbyResource(fetchDeploymentResult, handleDeploymentResult);
+                        createLobbyResourceOperation.execute(fetchDeploymentResult, handleDeploymentResult);
                     }
                 }
 
@@ -77,7 +71,7 @@ class HandleDeploymentRequestsOperationImpl implements HandleDeploymentRequestsO
                         handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerAssignmentToSync()
                                 .add(matchmakerAssignment);
                     } else {
-                        createMatchmakerResource(fetchDeploymentResult, handleDeploymentResult);
+                        createMatchmakerResourceOperation.execute(fetchDeploymentResult, handleDeploymentResult);
                     }
                 }
 
@@ -86,46 +80,6 @@ class HandleDeploymentRequestsOperationImpl implements HandleDeploymentRequestsO
                     handleDeploymentResult.deploymentChangeOfState().getDeploymentRequestsToDelete()
                             .add(deploymentRequest.getId());
                 }
-            }
-        }
-    }
-
-    // TODO: Check deployment limits
-
-    void createLobbyResource(final FetchDeploymentResult fetchDeploymentResult,
-                             final HandleDeploymentResult handleDeploymentResult) {
-        if (handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToSync().isEmpty()) {
-
-            final var deploymentId = fetchDeploymentResult.deploymentId();
-
-            final var noPendingLobbies = fetchDeploymentResult.deploymentState()
-                    .getDeploymentLobbyResources().stream()
-                    .map(DeploymentLobbyResourceModel::getStatus)
-                    .noneMatch(DeploymentLobbyResourceStatusEnum.PENDING::equals);
-
-            if (noPendingLobbies) {
-                final var deploymentLobbyResource = deploymentLobbyResourceModelFactory.create(deploymentId);
-                handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToSync()
-                        .add(deploymentLobbyResource);
-            }
-        }
-    }
-
-    void createMatchmakerResource(final FetchDeploymentResult fetchDeploymentResult,
-                                  final HandleDeploymentResult handleDeploymentResult) {
-        if (handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToSync().isEmpty()) {
-
-            final var deploymentId = fetchDeploymentResult.deploymentId();
-
-            final var noPendingMatchmakers = fetchDeploymentResult.deploymentState()
-                    .getDeploymentMatchmakerResources().stream()
-                    .map(DeploymentMatchmakerResourceModel::getStatus)
-                    .noneMatch(DeploymentMatchmakerResourceStatusEnum.PENDING::equals);
-
-            if (noPendingMatchmakers) {
-                final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory.create(deploymentId);
-                handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToSync()
-                        .add(deploymentMatchmakerResource);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.omgservers.service.factory.tenant;
 
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceConfigDto;
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceStatusEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
@@ -19,20 +20,22 @@ public class TenantDeploymentResourceModelFactory {
 
     public TenantDeploymentResourceModel create(final Long tenantId,
                                                 final Long tenantStageId,
-                                                final Long tenantVersionId) {
+                                                final Long tenantVersionId,
+                                                final TenantDeploymentResourceConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var deploymentId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, tenantId, tenantStageId, tenantVersionId, deploymentId, idempotencyKey);
+        return create(id, tenantId, tenantStageId, tenantVersionId, deploymentId, config, idempotencyKey);
     }
 
     public TenantDeploymentResourceModel create(final Long tenantId,
                                                 final Long tenantStageId,
                                                 final Long tenantVersionId,
+                                                final TenantDeploymentResourceConfigDto config,
                                                 final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         final var deploymentId = generateIdOperation.generateId();
-        return create(id, tenantId, tenantStageId, tenantVersionId, deploymentId, idempotencyKey);
+        return create(id, tenantId, tenantStageId, tenantVersionId, deploymentId, config, idempotencyKey);
     }
 
     public TenantDeploymentResourceModel create(final Long id,
@@ -40,6 +43,7 @@ public class TenantDeploymentResourceModelFactory {
                                                 final Long tenantStageId,
                                                 final Long tenantVersionId,
                                                 final Long deploymentId,
+                                                final TenantDeploymentResourceConfigDto config,
                                                 final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -53,6 +57,7 @@ public class TenantDeploymentResourceModelFactory {
         tenantDeploymentResource.setModified(now);
         tenantDeploymentResource.setDeploymentId(deploymentId);
         tenantDeploymentResource.setStatus(TenantDeploymentResourceStatusEnum.PENDING);
+        tenantDeploymentResource.setConfig(config);
         tenantDeploymentResource.setDeleted(false);
         return tenantDeploymentResource;
     }

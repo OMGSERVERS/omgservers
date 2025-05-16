@@ -16,6 +16,7 @@ class HandleMatchmakerOperationImpl implements HandleMatchmakerOperation {
     final HandleMatchmakerCommandsOperation handleMatchmakerCommandsOperation;
     final HandleMatchmakerRequestsOperation handleMatchmakerRequestsOperation;
     final HandleClosedMatchesOperation handleClosedMatchesOperation;
+    final EnsureMinMatchesOperation ensureMinMatchesOperation;
 
     @Override
     public HandleMatchmakerResult execute(final FetchMatchmakerResult fetchMatchmakerResult) {
@@ -23,11 +24,12 @@ class HandleMatchmakerOperationImpl implements HandleMatchmakerOperation {
         final var handleMatchmakerResult = new HandleMatchmakerResult(matchmakerId,
                 new MatchmakerChangeOfStateDto());
 
-        final var tenantVersionConfig = fetchMatchmakerResult.tenantVersionConfig();
-
         handleClosedMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
+
+        ensureMinMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
+
         handleMatchmakerCommandsOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
-        handleMatchmakerRequestsOperation.execute(fetchMatchmakerResult, handleMatchmakerResult, tenantVersionConfig);
+        handleMatchmakerRequestsOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
 
         return handleMatchmakerResult;
     }

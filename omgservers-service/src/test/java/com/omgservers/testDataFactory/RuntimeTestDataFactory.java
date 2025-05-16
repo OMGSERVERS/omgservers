@@ -39,7 +39,7 @@ public class RuntimeTestDataFactory {
         final var deploymentId = deployment.getId();
         final var runtimeId = lobby.getRuntimeId();
 
-        final var config = RuntimeConfigDto.create(TenantVersionConfigDto.create());
+        final var config = RuntimeConfigDto.create(new TenantVersionConfigDto());
         config.setLobby(new RuntimeConfigDto.LobbyConfigDto(lobby.getId()));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 deploymentId,
@@ -57,7 +57,7 @@ public class RuntimeTestDataFactory {
         final var runtimeId = match.getRuntimeId();
         final var mode = match.getConfig().getMode();
 
-        final var config = RuntimeConfigDto.create(TenantVersionConfigDto.create());
+        final var config = RuntimeConfigDto.create(new TenantVersionConfigDto());
         config.setMatch(new RuntimeConfigDto.MatchConfigDto(match.getMatchmakerId(), match.getId(), mode));
         final var runtime = runtimeModelFactory.create(runtimeId,
                 deploymentId,

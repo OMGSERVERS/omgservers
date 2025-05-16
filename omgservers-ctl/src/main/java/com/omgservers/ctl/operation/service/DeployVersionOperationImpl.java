@@ -16,6 +16,7 @@ import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateImageDeveloperResponse;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateVersionDeveloperResponse;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantImage.TenantImageQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -49,7 +50,8 @@ class DeployVersionOperationImpl implements DeployVersionOperation {
                                        final String tenant,
                                        final String project,
                                        final String stage,
-                                       final TenantVersionConfigDto config,
+                                       final TenantVersionConfigDto versionConfig,
+                                       final DeploymentConfigDto deploymentConfig,
                                        final String image) {
         pingDocker(dockerClient);
 
@@ -60,9 +62,23 @@ class DeployVersionOperationImpl implements DeployVersionOperation {
         tagImage(dockerClient, image, dockerImageName.imageNameWithRepository(), dockerImageName.tag());
         pushImage(dockerClient, dockerImageName.fullImageName(), 60L);
 
-        final var versionId = createVersion(developerClient, tenant, project, config);
-        createImage(developerClient, tenant, project, String.valueOf(versionId), dockerImageName.imageNameWithTag());
-        final var deploymentId = createDeployment(developerClient, tenant, project, stage, String.valueOf(versionId));
+        final var versionId = createVersion(developerClient,
+                tenant,
+                project,
+                versionConfig);
+
+        createImage(developerClient,
+                tenant,
+                project,
+                String.valueOf(versionId),
+                dockerImageName.imageNameWithTag());
+
+        final var deploymentId = createDeployment(developerClient,
+                tenant,
+                project,
+                stage,
+                String.valueOf(versionId),
+                deploymentConfig);
 
         return new DeployVersionResult(versionId, deploymentId);
     }
@@ -123,11 +139,13 @@ class DeployVersionOperationImpl implements DeployVersionOperation {
                           final String tenant,
                           final String project,
                           final String stage,
-                          final String version) {
+                          final String version,
+                          final DeploymentConfigDto config) {
         final var request = new CreateDeploymentDeveloperRequest(tenant,
                 project,
                 stage,
-                Long.valueOf(version));
+                Long.valueOf(version),
+                config);
         final var deploymentId = developerClient.execute(request)
                 .map(CreateDeploymentDeveloperResponse::getDeploymentId)
                 .await().indefinitely();

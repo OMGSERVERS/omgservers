@@ -8,6 +8,7 @@ import com.omgservers.ctl.operation.wal.developer.FindDeveloperTokenOperation;
 import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperResponse;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ class DeveloperDeploymentCreateDeploymentOperationImpl implements DeveloperDeplo
                         final String project,
                         final String stage,
                         final String version,
+                        final DeploymentConfigDto deploymentConfig,
                         final String installation) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
@@ -41,7 +43,11 @@ class DeveloperDeploymentCreateDeploymentOperationImpl implements DeveloperDeplo
         final var developerToken = developerTokenLog.getToken();
         final var developerClient = createDeveloperClientOperation.execute(installationUri, developerToken);
 
-        final var request = new CreateDeploymentDeveloperRequest(tenant, project, stage, Long.valueOf(version));
+        final var request = new CreateDeploymentDeveloperRequest(tenant,
+                project,
+                stage,
+                Long.valueOf(version),
+                deploymentConfig);
         final var deploymentId = developerClient.execute(request)
                 .map(CreateDeploymentDeveloperResponse::getDeploymentId)
                 .await().indefinitely();

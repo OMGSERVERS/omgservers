@@ -8,6 +8,7 @@ import com.omgservers.ctl.operation.service.DeployVersionOperation;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.local.FindLocalTenantOperation;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -32,8 +33,9 @@ class DeveloperLocalTestingDeployVersionOperationImpl implements DeveloperLocalT
     public void execute(final String tenant,
                         final String project,
                         final String stage,
-                        final TenantVersionConfigDto config,
-                        final String image) {
+                        final String image,
+                        final TenantVersionConfigDto versionConfig,
+                        final DeploymentConfigDto deploymentConfig) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
@@ -56,7 +58,8 @@ class DeveloperLocalTestingDeployVersionOperationImpl implements DeveloperLocalT
                 tenant,
                 project,
                 stage,
-                config,
+                versionConfig,
+                deploymentConfig,
                 image);
 
         appendResultMapOperation.execute(path, Map.of(

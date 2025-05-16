@@ -222,6 +222,7 @@ create table if not exists tab_tenant_deployment_resource (
     modified timestamp with time zone not null,
     deployment_id bigint not null,
     status text not null,
+    config jsonb not null,
     deleted boolean not null
 );
 

@@ -3,11 +3,14 @@ package com.omgservers.ctl.command.developer.sub.localtesting.sub;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.ctl.operation.command.developer.localtesting.DeveloperLocalTestingDeployVersionOperation;
 import com.omgservers.ctl.operation.ctl.HandleFileOptionOperation;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
+
+import java.util.Objects;
 
 @Slf4j
 @CommandLine.Command(
@@ -19,6 +22,10 @@ public class DeveloperLocalTestingDeployVersionCommand implements Runnable {
             description = "Path to a file to read config from. Use '-' to read from stdin.",
             required = true)
     String config;
+
+    @CommandLine.Option(names = {"-s", "--spec"},
+            description = "Path to a file to read deployment spec from. Use '-' to read from stdin.")
+    String spec;
 
     @CommandLine.Option(names = {"-i", "--image"},
             description = "Docker image to deploy.",
@@ -49,9 +56,22 @@ public class DeveloperLocalTestingDeployVersionCommand implements Runnable {
     @Override
     @SneakyThrows
     public void run() {
-        final var configString = handleFileOptionOperation.execute(config);
-        final var config = objectMapper.readValue(configString, TenantVersionConfigDto.class);
+        final var versionConfigString = handleFileOptionOperation.execute(config);
+        final var versionConfig = objectMapper.readValue(versionConfigString, TenantVersionConfigDto.class);
 
-        developerLocalTestingDeployVersionOperation.execute(tenant, project, stage, config, image);
+        final DeploymentConfigDto deploymentConfig;
+        if (Objects.isNull(spec)) {
+            deploymentConfig = new DeploymentConfigDto();
+        } else {
+            final var deploymentConfigString = handleFileOptionOperation.execute(spec);
+            deploymentConfig = objectMapper.readValue(deploymentConfigString, DeploymentConfigDto.class);
+        }
+
+        developerLocalTestingDeployVersionOperation.execute(tenant,
+                project,
+                stage,
+                image,
+                versionConfig,
+                deploymentConfig);
     }
 }

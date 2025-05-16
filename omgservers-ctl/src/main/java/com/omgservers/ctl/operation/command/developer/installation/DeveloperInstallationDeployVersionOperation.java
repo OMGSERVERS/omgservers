@@ -1,5 +1,6 @@
 package com.omgservers.ctl.operation.command.developer.installation;
 
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 
 public interface DeveloperInstallationDeployVersionOperation {
@@ -9,7 +10,8 @@ public interface DeveloperInstallationDeployVersionOperation {
                  String tenant,
                  String project,
                  String stage,
-                 TenantVersionConfigDto config,
                  String image,
+                 TenantVersionConfigDto versionConfig,
+                 DeploymentConfigDto deploymentConfig,
                  String installation);
 }

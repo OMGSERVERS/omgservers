@@ -25,6 +25,14 @@ class CloseDanglingLobbiesOperationImpl implements CloseDanglingLobbiesOperation
         final var deploymentId = fetchDeploymentResult.deploymentId();
 
         final var deploymentState = fetchDeploymentResult.deploymentState();
+        final var deploymentConfig = fetchDeploymentResult.deploymentState().getDeployment().getConfig();
+
+        final var countLobbies = deploymentState.getDeploymentLobbyResources().size();
+        final var minLobbies = deploymentConfig.getMinLobbies();
+        if (countLobbies <= minLobbies) {
+            log.debug("Reached minimum number of lobbies \"{}\", skip operation", minLobbies);
+            return;
+        }
 
         final var deploymentLobbyResourcesToUpdateStatus = deploymentState.getDeploymentLobbyResources().stream()
                 .filter(deploymentLobbyResource -> deploymentLobbyResource.getStatus()
@@ -38,8 +46,7 @@ class CloseDanglingLobbiesOperationImpl implements CloseDanglingLobbiesOperation
                 .filter(deploymentLobbyResource -> {
                     final var lobbyResourceCreated = deploymentLobbyResource.getCreated();
                     final var lobbyCurrentLifetime = Duration.between(lobbyResourceCreated, Instant.now());
-                    final var lobbyMinLifetime = getServiceConfigOperation.getServiceConfig().runtime()
-                            .minLifetime();
+                    final var lobbyMinLifetime = deploymentConfig.getLobby().getMinLifetime();
                     return lobbyCurrentLifetime.toSeconds() > lobbyMinLifetime;
                 })
                 .map(deploymentLobbyResource -> {

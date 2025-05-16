@@ -120,7 +120,7 @@ public class TenantTestDataFactory {
     public TenantVersionModel createTenantVersion(final TenantProjectModel tenantProject) {
         final var tenantId = tenantProject.getTenantId();
         final var tenantProjectId = tenantProject.getId();
-        final var tenantVersionConfig = TenantVersionConfigDto.create();
+        final var tenantVersionConfig = new TenantVersionConfigDto();
         final var tenantVersion = tenantVersionModelFactory.create(tenantId,
                 tenantProjectId,
                 tenantVersionConfig);

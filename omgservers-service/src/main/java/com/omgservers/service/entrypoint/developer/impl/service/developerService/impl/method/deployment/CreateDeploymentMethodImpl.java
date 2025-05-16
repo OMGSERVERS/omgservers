@@ -3,7 +3,9 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperResponse;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceConfigDto;
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
@@ -28,6 +30,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Objects;
 
 @Slf4j
 @ApplicationScoped
@@ -59,14 +63,21 @@ class CreateDeploymentMethodImpl implements CreateDeploymentMethod {
                     final var tenantId = authorization.tenantId();
                     final var tenantStageId = authorization.tenantStageId();
                     final var tenantVersionId = request.getVersionId();
-                    return createDeployment(tenantId, tenantStageId, tenantVersionId);
+                    final DeploymentConfigDto deploymentConfig;
+                    if (Objects.isNull(request.getConfig())) {
+                        deploymentConfig = new DeploymentConfigDto();
+                    } else {
+                        deploymentConfig = request.getConfig();
+                    }
+                    return createDeployment(tenantId, tenantStageId, tenantVersionId, deploymentConfig);
                 })
                 .map(CreateDeploymentDeveloperResponse::new);
     }
 
     Uni<Long> createDeployment(final Long tenantId,
                                final Long tenantStageId,
-                               final Long tenantVersionId) {
+                               final Long tenantVersionId,
+                               final DeploymentConfigDto deploymentConfig) {
         return verifyAtLeastOneTenantImageExists(tenantId, tenantVersionId)
                 .flatMap(voidItem -> getTenantVersion(tenantId, tenantVersionId))
                 .flatMap(tenantVersion -> getTenantStage(tenantId, tenantStageId)
@@ -75,7 +86,10 @@ class CreateDeploymentMethodImpl implements CreateDeploymentMethod {
                             final var stageProjectId = tenantStage.getProjectId();
                             // Version and stage must belong to the same project
                             if (versionProjectId.equals(stageProjectId)) {
-                                return createTenantDeploymentResource(tenantId, tenantStageId, tenantVersionId)
+                                return createTenantDeploymentResource(tenantId,
+                                        tenantStageId,
+                                        tenantVersionId,
+                                        deploymentConfig)
                                         .map(tenantDeploymentResourceModel -> {
                                             final var deploymentId = tenantDeploymentResourceModel.getDeploymentId();
                                             log.info("Created new deployment \"{}\" for version \"{}\"",
@@ -115,10 +129,15 @@ class CreateDeploymentMethodImpl implements CreateDeploymentMethod {
 
     Uni<TenantDeploymentResourceModel> createTenantDeploymentResource(final Long tenantId,
                                                                       final Long tenantStageId,
-                                                                      final Long tenantVersionId) {
+                                                                      final Long tenantVersionId,
+                                                                      final DeploymentConfigDto deploymentConfig) {
+        final var tenantDeploymentResourceConfigDto = new TenantDeploymentResourceConfigDto();
+        tenantDeploymentResourceConfigDto.setDeploymentConfig(deploymentConfig);
+
         final var tenantDeploymentResource = tenantDeploymentResourceModelFactory.create(tenantId,
                 tenantStageId,
-                tenantVersionId);
+                tenantVersionId,
+                tenantDeploymentResourceConfigDto);
 
         final var request = new SyncTenantDeploymentResourceRequest(tenantDeploymentResource);
         return tenantShard.getService().execute(request)

@@ -29,7 +29,7 @@ class RuntimeMessageModelTest extends Assertions {
         final var created = Instant.now();
         final var modified = Instant.now();
         final var qualifier = MessageQualifierEnum.RUNTIME_CREATED;
-        final var body = new RuntimeCreatedMessageBodyDto(RuntimeConfigDto.create(TenantVersionConfigDto.create()));
+        final var body = new RuntimeCreatedMessageBodyDto(RuntimeConfigDto.create(new TenantVersionConfigDto()));
         final var deleted = false;
 
         final var runtimeCommandModel = new RuntimeMessageModel(id,

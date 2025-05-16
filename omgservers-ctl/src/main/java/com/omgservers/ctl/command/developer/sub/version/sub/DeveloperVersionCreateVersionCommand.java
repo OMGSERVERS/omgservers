@@ -19,7 +19,7 @@ public class DeveloperVersionCreateVersionCommand extends InstallationCommand {
     @CommandLine.Option(names = {"-c", "--config"},
             description = "Path to a file to read config from. Use '-' to read from stdin.",
             required = true)
-    String filename;
+    String config;
 
     @CommandLine.Parameters(description = "Id or alias of the tenant that owns the project.")
     String tenant;
@@ -39,7 +39,7 @@ public class DeveloperVersionCreateVersionCommand extends InstallationCommand {
     @Override
     @SneakyThrows
     public void run() {
-        final var versionConfigString = handleFileOptionOperation.execute(filename);
+        final var versionConfigString = handleFileOptionOperation.execute(config);
 
         final var config = objectMapper.readValue(versionConfigString, TenantVersionConfigDto.class);
         developerVersionCreateVersionOperation.execute(tenant,

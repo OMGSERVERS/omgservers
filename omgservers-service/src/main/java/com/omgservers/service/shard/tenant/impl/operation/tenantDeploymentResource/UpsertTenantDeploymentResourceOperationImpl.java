@@ -1,7 +1,10 @@
 package com.omgservers.service.shard.tenant.impl.operation.tenantDeploymentResource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentResourceCreatedEventBodyModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -10,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -19,6 +23,8 @@ import java.util.List;
 class UpsertTenantDeploymentResourceOperationImpl implements UpsertTenantDeploymentResourceOperation {
 
     final ChangeObjectOperation changeObjectOperation;
+
+    final ObjectMapper objectMapper;
 
     @Override
     public Uni<Boolean> execute(final ChangeContext<?> changeContext,
@@ -30,8 +36,8 @@ class UpsertTenantDeploymentResourceOperationImpl implements UpsertTenantDeploym
                 """
                         insert into $slot.tab_tenant_deployment_resource(
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id,
-                            status, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                            status, config, deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
                         on conflict (id) do
                         nothing
                         """,
@@ -45,11 +51,20 @@ class UpsertTenantDeploymentResourceOperationImpl implements UpsertTenantDeploym
                         tenantDeploymentResource.getModified().atOffset(ZoneOffset.UTC),
                         tenantDeploymentResource.getDeploymentId(),
                         tenantDeploymentResource.getStatus(),
+                        getConfigString(tenantDeploymentResource),
                         tenantDeploymentResource.getDeleted()
                 ),
                 () -> new TenantDeploymentResourceCreatedEventBodyModel(tenantDeploymentResource.getTenantId(),
                         tenantDeploymentResource.getId()),
                 () -> null
         );
+    }
+
+    String getConfigString(final TenantDeploymentResourceModel tenantDeploymentResource) {
+        try {
+            return objectMapper.writeValueAsString(tenantDeploymentResource.getConfig());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
+        }
     }
 }

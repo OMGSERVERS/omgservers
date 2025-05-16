@@ -1,7 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation;
 
 import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
-import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.FetchMatchmakerResult;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.HandleMatchmakerResult;
 import com.omgservers.service.shard.matchmaker.MatchmakerShard;
@@ -26,8 +25,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
 
     @Override
     public void execute(final FetchMatchmakerResult fetchMatchmakerResult,
-                        final HandleMatchmakerResult handleMatchmakerResult,
-                        final TenantVersionConfigDto tenantVersionConfig) {
+                        final HandleMatchmakerResult handleMatchmakerResult) {
         final var matchmakerId = fetchMatchmakerResult.matchmakerId();
 
         // Skip the operation if there are no matchmaking requests
@@ -48,7 +46,7 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
             final var modeAssignments = indexMatchmakerResult.matchAssignmentsByMode()
                     .getOrDefault(modeName, new ArrayList<>());
 
-            final var modeConfigOptional = tenantVersionConfig.getModes().stream()
+            final var modeConfigOptional = fetchMatchmakerResult.tenantVersionConfig().getModes().stream()
                     .filter(mode -> mode.getName().equals(modeName))
                     .findFirst();
             if (modeConfigOptional.isEmpty()) {
@@ -64,10 +62,10 @@ class HandleMatchmakerRequestsOperationImpl implements HandleMatchmakerRequestsO
                         modeMatchResources,
                         modeAssignments);
 
-                executeMatchmakerMatcherOperation.execute(matchmakerId,
-                        matchmakerMatcher,
+                executeMatchmakerMatcherOperation.execute(fetchMatchmakerResult,
                         handleMatchmakerResult,
-                        modeRequests);
+                        modeRequests,
+                        matchmakerMatcher);
             }
         }
     }

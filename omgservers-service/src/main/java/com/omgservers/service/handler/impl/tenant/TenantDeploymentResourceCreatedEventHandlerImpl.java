@@ -1,6 +1,5 @@
 package com.omgservers.service.handler.impl.tenant;
 
-import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceModel;
 import com.omgservers.schema.shard.deployment.deployment.SyncDeploymentRequest;
 import com.omgservers.schema.shard.deployment.deployment.SyncDeploymentResponse;
@@ -69,7 +68,7 @@ public class TenantDeploymentResourceCreatedEventHandlerImpl implements EventHan
                 tenantId,
                 tenantStageId,
                 tenantVersionId,
-                DeploymentConfigDto.create(),
+                tenantDeploymentResource.getConfig().getDeploymentConfig(),
                 idempotencyKey);
         final var request = new SyncDeploymentRequest(lobby);
         return deploymentShard.getService().executeWithIdempotency(request)

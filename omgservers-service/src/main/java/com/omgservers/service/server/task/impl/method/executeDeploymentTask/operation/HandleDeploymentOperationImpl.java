@@ -18,7 +18,10 @@ class HandleDeploymentOperationImpl implements HandleDeploymentOperation {
     final CloseDanglingMatchmakersOperation closeDanglingMatchmakersOperation;
     final DeleteClosedMatchmakersOperation deleteClosedMatchmakersOperation;
     final CloseDanglingLobbiesOperation closeDanglingLobbiesOperation;
+    final EnsureMinMatchmakersOperation ensureMinMatchmakersOperation;
     final DeleteClosedLobbiesOperation deleteClosedLobbiesOperation;
+    final EnsureMinLobbiesOperation ensureMinLobbiesOperation;
+
 
     @Override
     public HandleDeploymentResult execute(final FetchDeploymentResult fetchDeploymentResult) {
@@ -31,6 +34,9 @@ class HandleDeploymentOperationImpl implements HandleDeploymentOperation {
 
         closeDanglingMatchmakersOperation.execute(fetchDeploymentResult, handleDeploymentResult);
         closeDanglingLobbiesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+
+        ensureMinMatchmakersOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+        ensureMinLobbiesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
 
         handleDeploymentCommandsOperation.execute(fetchDeploymentResult, handleDeploymentResult);
         handleDeploymentRequestsOperation.execute(fetchDeploymentResult, handleDeploymentResult);

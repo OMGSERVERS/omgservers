@@ -13,16 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TenantVersionGroupDto {
 
-    static public TenantVersionGroupDto create(final String name,
-                                               final Integer minPlayers,
-                                               final Integer maxPlayers) {
-        final var group = new TenantVersionGroupDto();
-        group.setName(name);
-        group.setMinPlayers(minPlayers);
-        group.setMaxPlayers(maxPlayers);
-        return group;
-    }
-
     @NotEmpty
     @Size(max = 64)
     String name;
