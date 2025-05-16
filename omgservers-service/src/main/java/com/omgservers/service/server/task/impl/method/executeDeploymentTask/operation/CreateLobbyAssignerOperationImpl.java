@@ -17,12 +17,13 @@ import static com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobb
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class CreateLobbyAssignerOperationImpl implements CreateLobbyAssignerOperation {
 
-    private static final int MAX_LOBBY_ASSIGNMENTS = 128;
-
     @Override
     public LobbyAssigner execute(final FetchDeploymentResult fetchDeploymentResult,
                                  final HandleDeploymentResult handleDeploymentResult) {
-        final var lobbyAssigner = new LobbyAssigner(MAX_LOBBY_ASSIGNMENTS);
+        final var deploymentConfig = fetchDeploymentResult.deploymentState().getDeployment().getConfig();
+
+        final var maxAssignments = deploymentConfig.getLobby().getMaxAssignments();
+        final var lobbyAssigner = new LobbyAssigner(maxAssignments);
 
         final var deploymentState = fetchDeploymentResult.deploymentState();
         final var deploymentChangeOfState = handleDeploymentResult.deploymentChangeOfState();

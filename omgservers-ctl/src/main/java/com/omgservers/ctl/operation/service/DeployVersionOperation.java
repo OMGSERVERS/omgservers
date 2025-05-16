@@ -2,6 +2,7 @@ package com.omgservers.ctl.operation.service;
 
 import com.github.dockerjava.api.DockerClient;
 import com.omgservers.ctl.client.DeveloperClient;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 
 import java.net.URI;
@@ -14,6 +15,7 @@ public interface DeployVersionOperation {
                                 String tenant,
                                 String project,
                                 String stage,
-                                TenantVersionConfigDto config,
+                                TenantVersionConfigDto versionConfig,
+                                DeploymentConfigDto deploymentConfig,
                                 String image);
 }

@@ -11,6 +11,7 @@ import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.installation.FindInstallationDetailsOperation;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateTokenDeveloperResponse;
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -39,8 +40,9 @@ class DeveloperInstallationDeployVersionOperationImpl implements DeveloperInstal
                         final String tenant,
                         final String project,
                         final String stage,
-                        final TenantVersionConfigDto config,
                         final String image,
+                        final TenantVersionConfigDto versionConfig,
+                        final DeploymentConfigDto deploymentConfig,
                         final String installation) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
@@ -64,7 +66,8 @@ class DeveloperInstallationDeployVersionOperationImpl implements DeveloperInstal
                 tenant,
                 project,
                 stage,
-                config,
+                versionConfig,
+                deploymentConfig,
                 image);
 
         appendResultMapOperation.execute(path, Map.of(

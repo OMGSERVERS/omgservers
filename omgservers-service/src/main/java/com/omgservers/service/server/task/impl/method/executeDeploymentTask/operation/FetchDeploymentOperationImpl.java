@@ -17,10 +17,15 @@ class FetchDeploymentOperationImpl implements FetchDeploymentOperation {
 
     final DeploymentShard deploymentShard;
 
+    final GetTenantVersionConfigOperation getTenantVersionConfigOperation;
+
     @Override
     public Uni<FetchDeploymentResult> execute(final Long deploymentId) {
-        return getDeploymentState(deploymentId)
-                .map(deploymentState -> new FetchDeploymentResult(deploymentId, deploymentState));
+        return getTenantVersionConfigOperation.execute(deploymentId)
+                .flatMap(tenantVersionConfig -> getDeploymentState(deploymentId)
+                        .map(deploymentState -> new FetchDeploymentResult(deploymentId,
+                                tenantVersionConfig,
+                                deploymentState)));
     }
 
     Uni<DeploymentStateDto> getDeploymentState(final Long deploymentId) {

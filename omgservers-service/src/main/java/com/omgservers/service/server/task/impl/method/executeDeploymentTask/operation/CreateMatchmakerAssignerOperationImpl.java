@@ -17,12 +17,13 @@ import static com.omgservers.schema.model.deploymentMatchmakerResource.Deploymen
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class CreateMatchmakerAssignerOperationImpl implements CreateMatchmakerAssignerOperation {
 
-    private static final int MAX_MATCHMAKER_ASSIGNMENTS = 1024;
-
     @Override
     public MatchmakerAssigner execute(final FetchDeploymentResult fetchDeploymentResult,
                                       final HandleDeploymentResult handleDeploymentResult) {
-        final var matchmakerAssigner = new MatchmakerAssigner(MAX_MATCHMAKER_ASSIGNMENTS);
+        final var deploymentConfig = fetchDeploymentResult.deploymentState().getDeployment().getConfig();
+
+        final var maxAssignments = deploymentConfig.getMatchmaker().getMaxAssignments();
+        final var matchmakerAssigner = new MatchmakerAssigner(maxAssignments);
 
         final var deploymentState = fetchDeploymentResult.deploymentState();
         final var deploymentChangeOfState = handleDeploymentResult.deploymentChangeOfState();

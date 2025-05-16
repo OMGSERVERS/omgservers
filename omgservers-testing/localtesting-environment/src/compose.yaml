@@ -87,6 +87,7 @@ services:
     restart: unless-stopped
     environment:
       - OMGSERVERS_APP_LOG_LEVEL=${DISPATCHER_LOG_LEVEL}
+      - OMGSERVERS_IDLE_CONNECTION_TIMEOUT=600
     ports:
       - "8081:8080"
     networks:

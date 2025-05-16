@@ -1,12 +1,9 @@
-package com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation;
+package com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation;
 
 import com.omgservers.schema.model.deployment.DeploymentModel;
-import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentRequest;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
-import com.omgservers.schema.shard.matchmaker.matchmaker.GetMatchmakerRequest;
-import com.omgservers.schema.shard.matchmaker.matchmaker.GetMatchmakerResponse;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigRequest;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigResponse;
 import com.omgservers.service.shard.deployment.DeploymentShard;
@@ -27,23 +24,13 @@ class GetTenantVersionConfigOperationImpl implements GetTenantVersionConfigOpera
     final TenantShard tenantShard;
 
     @Override
-    public Uni<TenantVersionConfigDto> execute(final Long matchmakerId) {
-        return getMatchmaker(matchmakerId)
-                .flatMap(matchmaker -> {
-                    final var deploymentId = matchmaker.getDeploymentId();
-                    return getDeployment(deploymentId)
-                            .flatMap(deployment -> {
-                                final var tenantId = deployment.getTenantId();
-                                final var tenantVersionId = deployment.getVersionId();
-                                return getTenantVersionConfig(tenantId, tenantVersionId);
-                            });
+    public Uni<TenantVersionConfigDto> execute(final Long deploymentId) {
+        return getDeployment(deploymentId)
+                .flatMap(deployment -> {
+                    final var tenantId = deployment.getTenantId();
+                    final var tenantVersionId = deployment.getVersionId();
+                    return getTenantVersionConfig(tenantId, tenantVersionId);
                 });
-    }
-
-    Uni<MatchmakerModel> getMatchmaker(final Long matchmakerId) {
-        final var request = new GetMatchmakerRequest(matchmakerId);
-        return matchmakerShard.getService().execute(request)
-                .map(GetMatchmakerResponse::getMatchmaker);
     }
 
     Uni<DeploymentModel> getDeployment(final Long deploymentId) {

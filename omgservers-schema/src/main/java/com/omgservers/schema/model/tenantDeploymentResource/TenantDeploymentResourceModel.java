@@ -2,7 +2,11 @@ package com.omgservers.schema.model.tenantDeploymentResource;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.Instant;
 
@@ -42,6 +46,9 @@ public class TenantDeploymentResourceModel {
 
     @NotNull
     TenantDeploymentResourceStatusEnum status;
+
+    @NotNull
+    TenantDeploymentResourceConfigDto config;
 
     @NotNull
     Boolean deleted;

@@ -38,7 +38,7 @@ public class DeploymentTestDataFactory {
         final var tenantDeployment = deploymentModelFactory.create(tenantId,
                 tenantStageId,
                 tenantVersionId,
-                DeploymentConfigDto.create());
+                new DeploymentConfigDto());
         final var request = new SyncDeploymentRequest(tenantDeployment);
         deploymentService.execute(request);
         return tenantDeployment;
