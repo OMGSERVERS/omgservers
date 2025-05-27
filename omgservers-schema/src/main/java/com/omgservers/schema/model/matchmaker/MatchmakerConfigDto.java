@@ -1,5 +1,7 @@
 package com.omgservers.schema.model.matchmaker;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,5 +19,6 @@ public class MatchmakerConfigDto {
     }
 
     @NotNull
-    MatchmakerConfigVersionEnum version;
+    @JsonSetter(nulls = Nulls.SKIP)
+    MatchmakerConfigVersionEnum version = MatchmakerConfigVersionEnum.V1;
 }

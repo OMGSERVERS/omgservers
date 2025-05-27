@@ -1,5 +1,7 @@
 package com.omgservers.schema.model.lobby;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LobbyConfigDto {
 
-    static public LobbyConfigDto create() {
-        final var lobbyConfig = new LobbyConfigDto();
-        lobbyConfig.setVersion(LobbyConfigVersionEnum.V1);
-        return lobbyConfig;
-    }
-
     @NotNull
-    LobbyConfigVersionEnum version;
+    @JsonSetter(nulls = Nulls.SKIP)
+    LobbyConfigVersionEnum version = LobbyConfigVersionEnum.V1;
 }

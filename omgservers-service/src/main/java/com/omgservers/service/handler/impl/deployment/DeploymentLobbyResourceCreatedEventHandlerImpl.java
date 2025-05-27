@@ -1,7 +1,6 @@
 package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
-import com.omgservers.schema.model.lobby.LobbyConfigDto;
 import com.omgservers.schema.shard.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceRequest;
 import com.omgservers.schema.shard.deployment.deploymentLobbyResource.GetDeploymentLobbyResourceResponse;
 import com.omgservers.schema.shard.lobby.SyncLobbyRequest;
@@ -59,13 +58,15 @@ public class DeploymentLobbyResourceCreatedEventHandlerImpl implements EventHand
                 .map(GetDeploymentLobbyResourceResponse::getDeploymentLobbyResource);
     }
 
-    Uni<Boolean> createLobby(final DeploymentLobbyResourceModel tenantLobbyResource,
+    Uni<Boolean> createLobby(final DeploymentLobbyResourceModel deploymentLobbyResource,
                              final String idempotencyKey) {
-        final var deploymentId = tenantLobbyResource.getDeploymentId();
-        final var lobbyId = tenantLobbyResource.getLobbyId();
+        final var lobbyConfig = deploymentLobbyResource.getConfig().getLobbyConfig();
+
+        final var deploymentId = deploymentLobbyResource.getDeploymentId();
+        final var lobbyId = deploymentLobbyResource.getLobbyId();
         final var lobby = lobbyModelFactory.create(lobbyId,
                 deploymentId,
-                LobbyConfigDto.create(),
+                lobbyConfig,
                 idempotencyKey);
         final var request = new SyncLobbyRequest(lobby);
         return lobbyShard.getService().executeWithIdempotency(request)

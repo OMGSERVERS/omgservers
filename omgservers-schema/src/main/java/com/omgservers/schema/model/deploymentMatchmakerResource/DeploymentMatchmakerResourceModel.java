@@ -1,5 +1,6 @@
 package com.omgservers.schema.model.deploymentMatchmakerResource;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,10 @@ public class DeploymentMatchmakerResourceModel {
 
     @NotNull
     DeploymentMatchmakerResourceStatusEnum status;
+
+    @Valid
+    @NotNull
+    DeploymentMatchmakerResourceConfigDto config;
 
     @NotNull
     Boolean deleted;

@@ -30,7 +30,8 @@ class SelectActiveDeploymentMatchmakerResourcesByDeploymentIdOperationImpl
                 slot,
                 """
                         select
-                            id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, deleted
+                            id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, config, 
+                            deleted
                         from $slot.tab_deployment_matchmaker_resource
                         where deployment_id = $1 and deleted = false
                         order by id asc

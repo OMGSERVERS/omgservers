@@ -298,6 +298,7 @@ create table if not exists tab_deployment_lobby_resource (
     modified timestamp with time zone not null,
     lobby_id bigint not null,
     status text not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -320,6 +321,7 @@ create table if not exists tab_deployment_matchmaker_resource (
     modified timestamp with time zone not null,
     matchmaker_id bigint not null,
     status text not null,
+    config jsonb not null,
     deleted boolean not null
 );
 
@@ -389,8 +391,8 @@ create table if not exists tab_matchmaker_match_resource (
     created timestamp with time zone not null,
     modified timestamp with time zone not null,
     match_id bigint not null,
-    mode text not null,
     status text not null,
+    config jsonb not null,
     deleted boolean not null
 );
 

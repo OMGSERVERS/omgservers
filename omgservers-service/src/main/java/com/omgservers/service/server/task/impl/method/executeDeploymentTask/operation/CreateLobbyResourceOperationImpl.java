@@ -1,5 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation;
 
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceConfigDto;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
 import com.omgservers.service.factory.deployment.DeploymentLobbyResourceModelFactory;
@@ -38,7 +39,9 @@ class CreateLobbyResourceOperationImpl implements CreateLobbyResourceOperation {
                     .noneMatch(DeploymentLobbyResourceStatusEnum.PENDING::equals);
 
             if (noPendingLobbies) {
-                final var deploymentLobbyResource = deploymentLobbyResourceModelFactory.create(deploymentId);
+                final var deploymentLobbyResourceConfig = new DeploymentLobbyResourceConfigDto();
+                final var deploymentLobbyResource = deploymentLobbyResourceModelFactory.create(deploymentId,
+                        deploymentLobbyResourceConfig);
                 handleDeploymentResult.deploymentChangeOfState().getDeploymentLobbyResourcesToSync()
                         .add(deploymentLobbyResource);
             }

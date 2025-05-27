@@ -1,7 +1,6 @@
 package com.omgservers.service.handler.impl.deployment;
 
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
-import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
 import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceRequest;
 import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.GetDeploymentMatchmakerResourceResponse;
 import com.omgservers.schema.shard.matchmaker.matchmaker.SyncMatchmakerRequest;
@@ -61,11 +60,13 @@ public class DeploymentMatchmakerResourceCreatedEventHandlerImpl implements Even
 
     Uni<Boolean> createMatchmaker(final DeploymentMatchmakerResourceModel deploymentMatchmakerResource,
                                   final String idempotencyKey) {
+        final var matchmakerConfig = deploymentMatchmakerResource.getConfig().getMatchmakerConfig();
+
         final var deploymentId = deploymentMatchmakerResource.getDeploymentId();
         final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
         final var matchmaker = matchmakerModelFactory.create(matchmakerId,
                 deploymentId,
-                MatchmakerConfigDto.create(),
+                matchmakerConfig,
                 idempotencyKey);
         final var request = new SyncMatchmakerRequest(matchmaker);
         return matchmakerShard.getService().executeWithIdempotency(request)

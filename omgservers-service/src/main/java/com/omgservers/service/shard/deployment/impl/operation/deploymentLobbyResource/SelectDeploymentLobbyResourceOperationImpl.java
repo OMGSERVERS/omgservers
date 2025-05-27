@@ -30,7 +30,7 @@ class SelectDeploymentLobbyResourceOperationImpl implements SelectDeploymentLobb
                 slot,
                 """
                         select
-                            id, idempotency_key, deployment_id, created, modified, lobby_id, status, deleted
+                            id, idempotency_key, deployment_id, created, modified, lobby_id, status, config, deleted
                         from $slot.tab_deployment_lobby_resource
                         where deployment_id = $1 and id = $2
                         limit 1
