@@ -17,12 +17,14 @@ curl -L https://github.com/OMGSERVERS/omgservers/releases/download/0.4.0/install
 
 # Features
 
-- Developer accounts and permissions
 - Tenants, projects, stages, versions and deployments
-- Lobbies and matches in Docker containers
-- Player lifecycle management
-- Data storage and control
-- [Defold SDK](https://github.com/OMGSERVERS/omgdefold) for client and server integration
-- CLI for admin and dev tasks
-- Integrated Docker registry
-- Sharding across servers
+- Developer account and permission management
+- Running lobbies and matches in Docker containers
+- Integrated Docker registry for images
+- Scheduler for distributing containers across servers
+- Player and game runtime lifecycle management
+- Asynchronous APIs for backend interactions
+- WebSocket dispatcher for player and server connections
+- Game engine support: [Defold SDK](https://github.com/OMGSERVERS/omgdefold)
+- CLI tool for administrative and development tasks
+- Multiple installation options: standalone, sharded, ha cluster, cloud
