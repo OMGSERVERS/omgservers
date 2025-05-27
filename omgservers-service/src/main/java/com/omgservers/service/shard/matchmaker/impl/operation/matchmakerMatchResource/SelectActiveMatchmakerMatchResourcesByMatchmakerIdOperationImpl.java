@@ -1,8 +1,8 @@
 package com.omgservers.service.shard.matchmaker.impl.operation.matchmakerMatchResource;
 
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
-import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerMatchResourceModelMapper;
 import com.omgservers.service.operation.server.SelectListOperation;
+import com.omgservers.service.shard.matchmaker.impl.mappers.MatchmakerMatchResourceModelMapper;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.sqlclient.SqlConnection;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,7 +30,7 @@ class SelectActiveMatchmakerMatchResourcesByMatchmakerIdOperationImpl
                 slot,
                 """
                         select
-                            id, idempotency_key, matchmaker_id, created, modified, match_id, mode, status, deleted
+                            id, idempotency_key, matchmaker_id, created, modified, match_id, status, config, deleted
                         from $slot.tab_matchmaker_match_resource
                         where matchmaker_id = $1 and deleted = false
                         order by id asc

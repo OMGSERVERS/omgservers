@@ -1,5 +1,6 @@
 package com.omgservers.service.factory.matchmaker;
 
+import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceConfigDto;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceStatusEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
@@ -18,25 +19,25 @@ public class MatchmakerMatchResourceModelFactory {
     final GenerateIdOperation generateIdOperation;
 
     public MatchmakerMatchResourceModel create(final Long matchmakerId,
-                                               final String mode) {
+                                               final MatchmakerMatchResourceConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var matchId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, matchmakerId, matchId, mode, idempotencyKey);
+        return create(id, matchmakerId, matchId, config, idempotencyKey);
     }
 
     public MatchmakerMatchResourceModel create(final Long matchmakerId,
-                                               final String mode,
+                                               final MatchmakerMatchResourceConfigDto config,
                                                final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         final var matchId = generateIdOperation.generateId();
-        return create(id, matchmakerId, matchId, mode, idempotencyKey);
+        return create(id, matchmakerId, matchId, config, idempotencyKey);
     }
 
     public MatchmakerMatchResourceModel create(final Long id,
                                                final Long matchmakerId,
                                                final Long matchId,
-                                               final String mode,
+                                               final MatchmakerMatchResourceConfigDto config,
                                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -47,8 +48,8 @@ public class MatchmakerMatchResourceModelFactory {
         matchmakerMatchResource.setCreated(now);
         matchmakerMatchResource.setModified(now);
         matchmakerMatchResource.setMatchId(matchId);
-        matchmakerMatchResource.setMode(mode);
         matchmakerMatchResource.setStatus(MatchmakerMatchResourceStatusEnum.PENDING);
+        matchmakerMatchResource.setConfig(config);
         matchmakerMatchResource.setDeleted(Boolean.FALSE);
         return matchmakerMatchResource;
     }

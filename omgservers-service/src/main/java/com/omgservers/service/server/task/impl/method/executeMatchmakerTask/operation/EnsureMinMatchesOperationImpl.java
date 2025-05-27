@@ -20,7 +20,8 @@ class EnsureMinMatchesOperationImpl implements EnsureMinMatchesOperation {
                 .forEach((mode, config) -> {
                     final var countMatches = fetchMatchmakerResult
                             .matchmakerState().getMatchmakerMatchResources().stream()
-                            .filter(matchmakerMatchResource -> matchmakerMatchResource.getMode().equals(mode))
+                            .filter(matchmakerMatchResource ->
+                                    matchmakerMatchResource.getConfig().getMatchConfig().getMode().equals(mode))
                             .count();
                     final var minMatches = config.getMinMatches();
                     if (countMatches < minMatches) {

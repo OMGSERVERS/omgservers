@@ -1,5 +1,6 @@
 package com.omgservers.service.operation.deployment;
 
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceConfigDto;
 import com.omgservers.schema.shard.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceRequest;
 import com.omgservers.schema.shard.deployment.deploymentLobbyResource.SyncDeploymentLobbyResourceResponse;
 import com.omgservers.service.factory.deployment.DeploymentLobbyResourceModelFactory;
@@ -22,8 +23,9 @@ class CreateDeploymentLobbyResourceOperationImpl implements CreateDeploymentLobb
     @Override
     public Uni<Boolean> execute(final Long deploymentId,
                                 final String idempotencyKey) {
+        final var deploymentLobbyResourceConfigDto = new DeploymentLobbyResourceConfigDto();
         final var deploymentLobbyResource = deploymentLobbyResourceModelFactory
-                .create(deploymentId, idempotencyKey);
+                .create(deploymentId, deploymentLobbyResourceConfigDto, idempotencyKey);
         final var request = new SyncDeploymentLobbyResourceRequest(deploymentLobbyResource);
         return deploymentShard.getService().execute(request)
                 .map(SyncDeploymentLobbyResourceResponse::getCreated);

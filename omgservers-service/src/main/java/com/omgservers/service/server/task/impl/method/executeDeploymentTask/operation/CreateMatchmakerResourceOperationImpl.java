@@ -1,5 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation;
 
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceConfigDto;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
 import com.omgservers.service.factory.deployment.DeploymentMatchmakerResourceModelFactory;
@@ -38,7 +39,9 @@ class CreateMatchmakerResourceOperationImpl implements CreateMatchmakerResourceO
                     .noneMatch(DeploymentMatchmakerResourceStatusEnum.PENDING::equals);
 
             if (noPendingMatchmakers) {
-                final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory.create(deploymentId);
+                final var deploymentMatchmakerResourceConfig = new DeploymentMatchmakerResourceConfigDto();
+                final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory.create(deploymentId,
+                        deploymentMatchmakerResourceConfig);
                 handleDeploymentResult.deploymentChangeOfState().getDeploymentMatchmakerResourcesToSync()
                         .add(deploymentMatchmakerResource);
             }

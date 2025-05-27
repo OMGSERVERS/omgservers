@@ -1,5 +1,7 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation;
 
+import com.omgservers.schema.model.match.MatchConfigDto;
+import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceConfigDto;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.service.factory.matchmaker.MatchmakerMatchResourceModelFactory;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.FetchMatchmakerResult;
@@ -32,7 +34,8 @@ class CreateMatchmakerMatchResourceOperationImpl implements CreateMatchmakerMatc
 
             final var matchmakerId = fetchMatchmakerResult.matchmakerId();
 
-            final var matchmakerMatchResource = matchmakerMatchResourceModelFactory.create(matchmakerId, modeName);
+            final var config = MatchmakerMatchResourceConfigDto.create(MatchConfigDto.create(modeName));
+            final var matchmakerMatchResource = matchmakerMatchResourceModelFactory.create(matchmakerId, config);
             handleMatchmakerResult.matchmakerChangeOfState().getMatchmakerMatchResourcesToSync()
                     .add(matchmakerMatchResource);
 

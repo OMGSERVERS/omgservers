@@ -1,5 +1,6 @@
 package com.omgservers.service.factory.deployment;
 
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceConfigDto;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
 import com.omgservers.service.operation.server.GenerateIdOperation;
@@ -17,23 +18,26 @@ public class DeploymentLobbyResourceModelFactory {
 
     final GenerateIdOperation generateIdOperation;
 
-    public DeploymentLobbyResourceModel create(final Long deploymentId) {
+    public DeploymentLobbyResourceModel create(final Long deploymentId,
+                                               final DeploymentLobbyResourceConfigDto config) {
         final var id = generateIdOperation.generateId();
         final var lobbyId = generateIdOperation.generateId();
         final var idempotencyKey = generateIdOperation.generateStringId();
-        return create(id, deploymentId, lobbyId, idempotencyKey);
+        return create(id, deploymentId, lobbyId, config, idempotencyKey);
     }
 
     public DeploymentLobbyResourceModel create(final Long deploymentId,
+                                               final DeploymentLobbyResourceConfigDto config,
                                                final String idempotencyKey) {
         final var id = generateIdOperation.generateId();
         final var lobbyId = generateIdOperation.generateId();
-        return create(id, deploymentId, lobbyId, idempotencyKey);
+        return create(id, deploymentId, lobbyId, config, idempotencyKey);
     }
 
     public DeploymentLobbyResourceModel create(final Long id,
                                                final Long deploymentId,
                                                final Long lobbyId,
+                                               final DeploymentLobbyResourceConfigDto config,
                                                final String idempotencyKey) {
         final var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
@@ -45,6 +49,7 @@ public class DeploymentLobbyResourceModelFactory {
         deploymentLobbyResource.setModified(now);
         deploymentLobbyResource.setLobbyId(lobbyId);
         deploymentLobbyResource.setStatus(DeploymentLobbyResourceStatusEnum.PENDING);
+        deploymentLobbyResource.setConfig(config);
         deploymentLobbyResource.setDeleted(false);
         return deploymentLobbyResource;
     }

@@ -32,7 +32,7 @@ class SelectActiveDeploymentLobbyResourcesByDeploymentIdAndStatusOperationImpl
                 slot,
                 """
                         select
-                            id, idempotency_key, deployment_id, created, modified, lobby_id, status, deleted
+                            id, idempotency_key, deployment_id, created, modified, lobby_id, status, config, deleted
                         from $slot.tab_deployment_lobby_resource
                         where deployment_id = $1 and status = $2 and deleted = false
                         order by id asc

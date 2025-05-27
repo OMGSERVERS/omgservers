@@ -2,10 +2,12 @@ package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.client.ClientModel;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
+import com.omgservers.schema.model.match.MatchConfigDto;
 import com.omgservers.schema.model.matchmaker.MatchmakerConfigDto;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentConfigDto;
 import com.omgservers.schema.model.matchmakerMatchAssignment.MatchmakerMatchAssignmentModel;
+import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceConfigDto;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestConfigDto;
 import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
@@ -66,7 +68,8 @@ public class MatchmakerTestDataFactory {
     public MatchmakerMatchResourceModel createMatchmakerMatchResource(final MatchmakerModel matchmaker) {
         final var matchmakerId = matchmaker.getId();
 
-        final var matchmakerMatchResource = matchmakerMatchResourceModelFactory.create(matchmakerId, "mode");
+        final var matchmakerMatchResource = matchmakerMatchResourceModelFactory.create(matchmakerId,
+                MatchmakerMatchResourceConfigDto.create(MatchConfigDto.create("mode")));
         final var syncMatchmakerMatchRequest = new SyncMatchmakerMatchResourceRequest(matchmakerMatchResource);
         matchmakerService.execute(syncMatchmakerMatchRequest);
         return matchmakerMatchResource;

@@ -2,7 +2,9 @@ package com.omgservers.service.shard.deployment.impl.operation.deploymentMatchma
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
+import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentMatchmakerResourceCreatedEventBodyModel;
+import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.operation.server.ChangeContext;
 import com.omgservers.service.operation.server.ChangeObjectOperation;
 import io.smallrye.mutiny.Uni;
@@ -11,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -31,8 +34,9 @@ class UpsertDeploymentMatchmakerResourceOperationImpl implements UpsertDeploymen
                 changeContext, sqlConnection, slot,
                 """
                         insert into $slot.tab_deployment_matchmaker_resource(
-                            id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, deleted)
-                        values($1, $2, $3, $4, $5, $6, $7, $8)
+                            id, idempotency_key, deployment_id, created, modified, matchmaker_id, status, config, 
+                            deleted)
+                        values($1, $2, $3, $4, $5, $6, $7, $8, $9)
                         on conflict (id) do
                         nothing
                         """,
@@ -44,6 +48,7 @@ class UpsertDeploymentMatchmakerResourceOperationImpl implements UpsertDeploymen
                         deploymentMatchmakerResource.getModified().atOffset(ZoneOffset.UTC),
                         deploymentMatchmakerResource.getMatchmakerId(),
                         deploymentMatchmakerResource.getStatus(),
+                        getConfigString(deploymentMatchmakerResource),
                         deploymentMatchmakerResource.getDeleted()
                 ),
                 () -> new DeploymentMatchmakerResourceCreatedEventBodyModel(
@@ -51,5 +56,13 @@ class UpsertDeploymentMatchmakerResourceOperationImpl implements UpsertDeploymen
                         deploymentMatchmakerResource.getId()),
                 () -> null
         );
+    }
+
+    String getConfigString(final DeploymentMatchmakerResourceModel deploymentMatchmakerResource) {
+        try {
+            return objectMapper.writeValueAsString(deploymentMatchmakerResource.getConfig());
+        } catch (IOException e) {
+            throw new ServerSideBadRequestException(ExceptionQualifierEnum.WRONG_OBJECT, e.getMessage(), e);
+        }
     }
 }

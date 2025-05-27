@@ -1,6 +1,5 @@
 package com.omgservers.testDataFactory;
 
-import com.omgservers.schema.model.match.MatchConfigDto;
 import com.omgservers.schema.model.match.MatchModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.shard.match.SyncMatchRequest;
@@ -22,9 +21,9 @@ public class MatchTestDataFactory {
     public MatchModel createMatch(final MatchmakerMatchResourceModel matchmakerMatchResource) {
         final var matchmakerId = matchmakerMatchResource.getMatchmakerId();
         final var matchId = matchmakerMatchResource.getMatchId();
-        final var mode = matchmakerMatchResource.getMode();
 
-        final var match = matchModelFactory.create(matchId, matchmakerId, MatchConfigDto.create(mode));
+        final var match = matchModelFactory.create(matchId, matchmakerId,
+                matchmakerMatchResource.getConfig().getMatchConfig());
         final var request = new SyncMatchRequest(match);
         matchService.execute(request);
         return match;

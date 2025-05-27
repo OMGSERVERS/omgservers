@@ -1,5 +1,6 @@
 package com.omgservers.service.operation.deployment;
 
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceConfigDto;
 import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceRequest;
 import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.SyncDeploymentMatchmakerResourceResponse;
 import com.omgservers.service.factory.deployment.DeploymentMatchmakerResourceModelFactory;
@@ -22,8 +23,9 @@ class CreateDeploymentMatchmakerResourceOperationImpl implements CreateDeploymen
     @Override
     public Uni<Boolean> execute(final Long deploymentId,
                                 final String idempotencyKey) {
+        final var deploymentMatchmakerResourceConfigDto = new DeploymentMatchmakerResourceConfigDto();
         final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory
-                .create(deploymentId, idempotencyKey);
+                .create(deploymentId, deploymentMatchmakerResourceConfigDto, idempotencyKey);
         final var request = new SyncDeploymentMatchmakerResourceRequest(deploymentMatchmakerResource);
         return deploymentShard.getService().execute(request)
                 .map(SyncDeploymentMatchmakerResourceResponse::getCreated);

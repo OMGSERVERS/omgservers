@@ -2,8 +2,10 @@ package com.omgservers.testDataFactory;
 
 import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.deployment.DeploymentModel;
+import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceConfigDto;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceConfigDto;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
@@ -46,7 +48,8 @@ public class DeploymentTestDataFactory {
 
     public DeploymentLobbyResourceModel createDeploymentLobbyResource(final DeploymentModel deployment) {
         final var deploymentId = deployment.getId();
-        final var deploymentLobbyResource = deploymentLobbyResourceModelFactory.create(deploymentId);
+        final var deploymentLobbyResource = deploymentLobbyResourceModelFactory.create(deploymentId,
+                new DeploymentLobbyResourceConfigDto());
         deploymentLobbyResource.setStatus(DeploymentLobbyResourceStatusEnum.CREATED);
         final var request = new SyncDeploymentLobbyResourceRequest(deploymentLobbyResource);
         deploymentService.execute(request);
@@ -55,7 +58,8 @@ public class DeploymentTestDataFactory {
 
     public DeploymentMatchmakerResourceModel createDeploymentMatchmakerResource(final DeploymentModel deployment) {
         final var deploymentId = deployment.getId();
-        final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory.create(deploymentId);
+        final var deploymentMatchmakerResource = deploymentMatchmakerResourceModelFactory.create(deploymentId,
+                new DeploymentMatchmakerResourceConfigDto());
         deploymentMatchmakerResource.setStatus(DeploymentMatchmakerResourceStatusEnum.CREATED);
         final var request = new SyncDeploymentMatchmakerResourceRequest(deploymentMatchmakerResource);
         deploymentService.execute(request);

@@ -23,7 +23,7 @@ public class LobbyTestDataFactory {
         final var deploymentId = deploymentLobbyResource.getDeploymentId();
         final var lobbyId = deploymentLobbyResource.getLobbyId();
 
-        final var lobby = lobbyModelFactory.create(lobbyId, deploymentId, LobbyConfigDto.create());
+        final var lobby = lobbyModelFactory.create(lobbyId, deploymentId, new LobbyConfigDto());
         final var syncLobbyRequest = new SyncLobbyRequest(lobby);
         lobbyService.syncLobby(syncLobbyRequest);
         return lobby;

@@ -1,7 +1,10 @@
 package com.omgservers.schema.model.match;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +22,10 @@ public class MatchConfigDto {
     }
 
     @NotNull
-    MatchConfigVersionEnum version;
+    @JsonSetter(nulls = Nulls.SKIP)
+    MatchConfigVersionEnum version = MatchConfigVersionEnum.V1;
 
     @NotBlank
+    @Size(max = 64)
     String mode;
 }

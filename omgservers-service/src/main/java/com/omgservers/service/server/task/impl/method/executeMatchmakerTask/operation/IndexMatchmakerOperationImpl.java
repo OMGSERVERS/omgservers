@@ -1,6 +1,5 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation;
 
-import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceModel;
 import com.omgservers.schema.model.matchmakerMatchResource.MatchmakerMatchResourceStatusEnum;
 import com.omgservers.schema.model.matchmakerRequest.MatchmakerRequestModel;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.FetchMatchmakerResult;
@@ -30,7 +29,8 @@ class IndexMatchmakerOperationImpl implements IndexMatchmakerOperation {
                     return status.equals(MatchmakerMatchResourceStatusEnum.PENDING) ||
                             status.equals(MatchmakerMatchResourceStatusEnum.CREATED);
                 })
-                .collect(Collectors.groupingBy(MatchmakerMatchResourceModel::getMode));
+                .collect(Collectors.groupingBy(matchmakerMatchResource ->
+                        matchmakerMatchResource.getConfig().getMatchConfig().getMode()));
 
         final var matchAssignmentsByMode = matchmakerState.getMatchmakerMatchAssignments().stream()
                 .collect(Collectors.groupingBy(matchmakerMatchAssignment ->

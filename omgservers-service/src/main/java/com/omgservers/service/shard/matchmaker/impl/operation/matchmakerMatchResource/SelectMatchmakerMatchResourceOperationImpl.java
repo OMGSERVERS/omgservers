@@ -30,7 +30,7 @@ class SelectMatchmakerMatchResourceOperationImpl implements SelectMatchmakerMatc
                 slot,
                 """
                         select
-                            id, idempotency_key, matchmaker_id, created, modified, match_id, mode, status, deleted
+                            id, idempotency_key, matchmaker_id, created, modified, match_id, status, config, deleted
                         from $slot.tab_matchmaker_match_resource
                         where matchmaker_id = $1 and id = $2
                         limit 1
