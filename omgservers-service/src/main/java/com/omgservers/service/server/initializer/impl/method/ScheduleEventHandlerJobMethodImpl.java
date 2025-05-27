@@ -18,7 +18,7 @@ class ScheduleEventHandlerJobMethodImpl implements ScheduleEventHandlerJobMethod
 
     @Override
     public void execute() {
-        log.debug("Schedule event handler job");
+        log.info("Schedule event handler job");
 
         scheduleJobExecutionOperation.execute(JobQualifierEnum.EVENT_HANDLER,
                 scheduledExecution -> {

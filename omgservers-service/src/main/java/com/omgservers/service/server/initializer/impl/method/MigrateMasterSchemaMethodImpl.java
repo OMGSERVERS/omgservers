@@ -24,12 +24,20 @@ class MigrateMasterSchemaMethodImpl implements MigrateMasterSchemaMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Migrate \"{}\"", SCRIPTS_LOCATION);
+        final var masterUri = getServiceConfigOperation.getServiceConfig().master().uri();
+        final var thisUri = getServiceConfigOperation.getServiceConfig().shard().uri();
+        if (masterUri.equals(thisUri)) {
+            log.info("Migrate \"{}\"", SCRIPTS_LOCATION);
 
-        return Uni.createFrom().voidItem()
-                .emitOn(Infrastructure.getDefaultWorkerPool())
-                .invoke(voidItem -> migrateMasterSchema())
-                .invoke(voidItem -> log.info("Master schema migrated"));
+            return Uni.createFrom().voidItem()
+                    .emitOn(Infrastructure.getDefaultWorkerPool())
+                    .invoke(voidItem -> migrateMasterSchema())
+                    .invoke(voidItem -> log.info("Master schema migrated"));
+        } else {
+            log.info("Master schema migration is being executed on master, skip operation");
+            return Uni.createFrom().voidItem();
+        }
+
     }
 
     void migrateMasterSchema() {

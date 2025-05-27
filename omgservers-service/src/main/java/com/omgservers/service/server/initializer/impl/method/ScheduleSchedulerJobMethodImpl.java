@@ -19,7 +19,7 @@ class ScheduleSchedulerJobMethodImpl implements ScheduleSchedulerJobMethod {
 
     @Override
     public void execute() {
-        log.debug("Schedule scheduler job");
+        log.info("Schedule scheduler job");
 
         scheduleJobExecutionOperation.execute(JobQualifierEnum.SCHEDULER,
                 scheduledExecution -> {
