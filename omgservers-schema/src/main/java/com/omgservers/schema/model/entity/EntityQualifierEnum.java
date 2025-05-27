@@ -7,6 +7,11 @@ public enum EntityQualifierEnum {
     TENANT,
 
     /**
+     * Pool.
+     */
+    POOL,
+
+    /**
      * Admin user.
      */
     ADMIN_USER,
