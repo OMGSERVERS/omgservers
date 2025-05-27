@@ -1,13 +1,15 @@
 package com.omgservers.service.handler.impl.pool;
 
-import com.omgservers.schema.model.task.TaskQualifierEnum;
+import com.omgservers.schema.model.entity.EntityQualifierEnum;
 import com.omgservers.schema.model.pool.PoolModel;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.shard.pool.pool.GetPoolRequest;
 import com.omgservers.schema.shard.pool.pool.GetPoolResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.pool.PoolCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
+import com.omgservers.service.operation.entity.CreateEntityOperation;
 import com.omgservers.service.operation.task.CreateTaskOperation;
 import com.omgservers.service.shard.pool.PoolShard;
 import io.smallrye.mutiny.Uni;
@@ -23,6 +25,7 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
 
     final PoolShard poolShard;
 
+    final CreateEntityOperation createEntityOperation;
     final CreateTaskOperation createTaskOperation;
 
     @Override
@@ -43,7 +46,10 @@ public class PoolCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(pool -> {
                     log.debug("Created, {}", pool);
 
-                    return createTaskOperation.execute(TaskQualifierEnum.POOL, poolId, idempotencyKey);
+                    return createEntityOperation.execute(EntityQualifierEnum.POOL, poolId, idempotencyKey)
+                            .flatMap(result -> createTaskOperation.execute(TaskQualifierEnum.POOL,
+                                    poolId,
+                                    idempotencyKey));
                 })
                 .replaceWithVoid();
     }
