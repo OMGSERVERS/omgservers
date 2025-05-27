@@ -22,7 +22,7 @@ class AcquireNodeIdMethodImpl implements AcquireNodeIdMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Acquire nodeId");
+        log.info("Acquire nodeId");
 
         return acquireNode()
                 .invoke(node -> {

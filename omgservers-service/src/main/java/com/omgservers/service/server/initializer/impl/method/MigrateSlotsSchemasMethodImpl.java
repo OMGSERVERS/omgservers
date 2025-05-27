@@ -27,7 +27,7 @@ class MigrateSlotsSchemasMethodImpl implements MigrateSlotsSchemasMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Migrate \"{}\"", SCRIPTS_LOCATION);
+        log.info("Migrate \"{}\"", SCRIPTS_LOCATION);
 
         return Uni.createFrom().voidItem()
                 .emitOn(Infrastructure.getDefaultWorkerPool())

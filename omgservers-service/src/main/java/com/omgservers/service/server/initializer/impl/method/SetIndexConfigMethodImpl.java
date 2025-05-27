@@ -20,7 +20,7 @@ class SetIndexConfigMethodImpl implements SetIndexConfigMethod {
 
     @Override
     public Uni<Void> execute() {
-        log.debug("Set index config");
+        log.info("Set index config");
 
         return getIndexConfigOperation.execute()
                 .invoke(this::setIndexConfig)

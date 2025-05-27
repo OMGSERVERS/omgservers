@@ -26,6 +26,8 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
     final GetServiceConfigOperation getServiceConfigOperation;
 
     public Uni<TaskResult> execute(final BootstrapTaskArguments taskArguments) {
+        log.info("Started bootstrap task");
+
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())

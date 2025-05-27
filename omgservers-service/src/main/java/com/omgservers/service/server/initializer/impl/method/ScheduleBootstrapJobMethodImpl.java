@@ -22,11 +22,11 @@ class ScheduleBootstrapJobMethodImpl implements ScheduleBootstrapJobMethod {
 
     @Override
     public void execute() {
-        log.debug("Schedule bootstrap job");
-
         final var masterUri = getServiceConfigOperation.getServiceConfig().master().uri();
         final var thisUri = getServiceConfigOperation.getServiceConfig().shard().uri();
         if (masterUri.equals(thisUri)) {
+            log.info("Schedule bootstrap job");
+
             scheduleJobExecutionOperation.execute(JobQualifierEnum.BOOTSTRAP,
                     scheduledExecution -> {
                         final var request = new ExecuteBootstrapTaskRequest();
@@ -44,6 +44,8 @@ class ScheduleBootstrapJobMethodImpl implements ScheduleBootstrapJobMethod {
                     });
 
             log.info("Bootstrap job scheduled");
+        } else {
+            log.info("Bootstrap job is being scheduled on master, skip operation");
         }
     }
 }
