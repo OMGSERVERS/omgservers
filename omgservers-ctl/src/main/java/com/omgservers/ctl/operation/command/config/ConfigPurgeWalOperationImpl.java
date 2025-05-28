@@ -1,4 +1,4 @@
-package com.omgservers.ctl.operation.command.ctl;
+package com.omgservers.ctl.operation.command.config;
 
 import com.omgservers.ctl.dto.key.KeyEnum;
 import com.omgservers.ctl.operation.wal.AppendResultMapOperation;
@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
-public class CtlPurgeWalOperationImpl implements CtlPurgeWalOperation {
+public class ConfigPurgeWalOperationImpl implements ConfigPurgeWalOperation {
 
     final GetDefaultWalPathOperation getDefaultWalPathOperation;
     final AppendResultMapOperation appendResultMapOperation;

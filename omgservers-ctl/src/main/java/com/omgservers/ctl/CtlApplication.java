@@ -3,7 +3,7 @@ package com.omgservers.ctl;
 import com.omgservers.ctl.command.CtlVersionProvider;
 import com.omgservers.ctl.command.ParentCommand;
 import com.omgservers.ctl.command.admin.AdminCommand;
-import com.omgservers.ctl.command.ctl.CtlCommand;
+import com.omgservers.ctl.command.config.ConfigCommand;
 import com.omgservers.ctl.command.developer.DeveloperCommand;
 import com.omgservers.ctl.command.get.GetCommand;
 import com.omgservers.ctl.command.support.SupportCommand;
@@ -21,7 +21,7 @@ import picocli.CommandLine;
         mixinStandardHelpOptions = true,
         subcommands = {
                 GetCommand.class,
-                CtlCommand.class,
+                ConfigCommand.class,
                 AdminCommand.class,
                 SupportCommand.class,
                 DeveloperCommand.class,

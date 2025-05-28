@@ -1,6 +1,6 @@
-package com.omgservers.ctl.command.ctl.sub.installation.sub;
+package com.omgservers.ctl.command.config.sub.installation.sub;
 
-import com.omgservers.ctl.operation.command.ctl.installation.CtlInstallationUseCustomOperation;
+import com.omgservers.ctl.operation.command.config.installation.ConfigInstallationUseCustomOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
@@ -11,7 +11,7 @@ import java.net.URI;
 @CommandLine.Command(
         name = "use-custom",
         description = "Use a custom service installation.")
-public class CtlInstallationUseCustomCommand implements Runnable {
+public class ConfigInstallationUseCustomCommand implements Runnable {
 
     @CommandLine.Parameters(description = "Service name.")
     String name;
@@ -23,10 +23,10 @@ public class CtlInstallationUseCustomCommand implements Runnable {
     URI registry;
 
     @Inject
-    CtlInstallationUseCustomOperation ctlInstallationUseCustomOperation;
+    ConfigInstallationUseCustomOperation configInstallationUseCustomOperation;
 
     @Override
     public void run() {
-        ctlInstallationUseCustomOperation.execute(name, api, registry);
+        configInstallationUseCustomOperation.execute(name, api, registry);
     }
 }

@@ -1,4 +1,4 @@
-package com.omgservers.ctl.command.ctl.sub.installation.sub.util;
+package com.omgservers.ctl.command.config.sub.installation.sub.util;
 
 import com.omgservers.ctl.dto.region.RegionEnum;
 import picocli.CommandLine;

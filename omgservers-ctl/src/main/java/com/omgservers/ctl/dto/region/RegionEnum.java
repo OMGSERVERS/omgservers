@@ -12,8 +12,8 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum RegionEnum {
     FRA1("fra1",
-            URI.create("https://api.fra1.omgservers.com"),
-            URI.create("https://registry.fra1.omgservers.com"));
+            URI.create("https://api.fra1-cloud-a.omgservers.com"),
+            URI.create("https://registry.fra1-cloud-a.omgservers.com"));
 
     final String region;
     final URI api;
