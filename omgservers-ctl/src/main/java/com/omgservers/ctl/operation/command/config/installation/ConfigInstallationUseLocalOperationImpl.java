@@ -1,4 +1,4 @@
-package com.omgservers.ctl.operation.command.ctl.installation;
+package com.omgservers.ctl.operation.command.config.installation;
 
 import com.omgservers.ctl.configuration.LocalConfiguration;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 
 @ApplicationScoped
 @AllArgsConstructor
-public class CtlInstallationUseLocalOperationImpl implements CtlInstallationUseLocalOperation {
+public class ConfigInstallationUseLocalOperationImpl implements ConfigInstallationUseLocalOperation {
 
     final AppendInstallationDetailsOperation appendInstallationDetailsOperation;
     final GetWalOperation getWalOperation;

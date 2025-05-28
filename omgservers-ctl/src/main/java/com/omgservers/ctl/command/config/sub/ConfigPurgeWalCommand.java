@@ -1,7 +1,7 @@
-package com.omgservers.ctl.command.ctl.sub;
+package com.omgservers.ctl.command.config.sub;
 
 import com.omgservers.ctl.command.InstallationCommand;
-import com.omgservers.ctl.operation.command.ctl.CtlPurgeWalOperation;
+import com.omgservers.ctl.operation.command.config.ConfigPurgeWalOperation;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
@@ -10,13 +10,13 @@ import picocli.CommandLine;
 @CommandLine.Command(
         name = "purge-wal",
         description = "Purge WAL file.")
-public class CtlPurgeWalCommand extends InstallationCommand {
+public class ConfigPurgeWalCommand extends InstallationCommand {
 
     @Inject
-    CtlPurgeWalOperation ctlPurgeWalOperation;
+    ConfigPurgeWalOperation configPurgeWalOperation;
 
     @Override
     public void run() {
-        ctlPurgeWalOperation.execute();
+        configPurgeWalOperation.execute();
     }
 }
