@@ -78,7 +78,7 @@ public class Initializer {
         final var permissions = Set.of(TenantPermissionQualifierEnum.PROJECT_MANAGER,
                 TenantPermissionQualifierEnum.TENANT_VIEWER);
         final var request = new CreateTenantPermissionsSupportRequest(tenantAlias,
-                developerAlias,
+                developerUserId.toString(),
                 permissions);
         final var response = supportClient.execute(request)
                 .await().indefinitely();
@@ -109,7 +109,7 @@ public class Initializer {
                 TenantProjectPermissionQualifierEnum.PROJECT_VIEWER);
         final var request = new CreateTenantProjectPermissionsSupportRequest(tenantAlias,
                 projectAlias,
-                developerAlias,
+                developerUserId.toString(),
                 permissions);
         final var response = supportClient.execute(request)
                 .await().indefinitely();
@@ -130,7 +130,7 @@ public class Initializer {
         final var request = new CreateTenantStagePermissionsSupportRequest(tenantAlias,
                 projectAlias,
                 stageAlias,
-                developerAlias,
+                developerUserId.toString(),
                 permissions);
         final var response = supportClient.execute(request)
                 .await().indefinitely();
