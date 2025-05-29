@@ -10,7 +10,7 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "developer",
-        description = "Manage developer users.",
+        description = "Support commands for managing developers.",
         subcommands = {
                 SupportDeveloperCreateDeveloperCommand.class,
                 SupportDeveloperCreateAliasCommand.class,

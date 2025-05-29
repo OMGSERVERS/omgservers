@@ -12,7 +12,7 @@ import picocli.CommandLine;
 
 @CommandLine.Command(
         name = "developer",
-        description = "Game developer commands.",
+        description = "Commands for developer users.",
         subcommands = {
                 DeveloperInstallationCommand.class,
                 DeveloperLocalTestingCommand.class,

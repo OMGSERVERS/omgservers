@@ -9,7 +9,7 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "create-token",
-        description = "Create admin token using credentials.")
+        description = "Create token using credentials.")
 public class AdminCreateTokenCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Admin user alias or id.")

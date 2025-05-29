@@ -12,7 +12,7 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "project",
-        description = "Manage tenant projects.",
+        description = "Support commands for managing projects.",
         subcommands = {
                 SupportProjectCreateProjectCommand.class,
                 SupportProjectCreateAliasCommand.class,

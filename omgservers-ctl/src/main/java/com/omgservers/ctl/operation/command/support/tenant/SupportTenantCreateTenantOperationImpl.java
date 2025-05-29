@@ -18,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class SupportTenantCreateTenantOperationImpl implements SupportTenantCreateTenantOperation {
 
+    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final CreateSupportClientOperation createSupportClientOperation;
     final FindSupportTokenOperation findSupportTokenOperation;
     final AppendResultMapOperation appendResultMapOperation;
-    final FindInstallationDetailsOperation findInstallationDetailsOperation;
     final GetWalOperation getWalOperation;
 
     @Override

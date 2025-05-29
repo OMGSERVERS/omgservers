@@ -1,4 +1,4 @@
-package com.omgservers.ctl.command.support.sub;
+package com.omgservers.ctl.command.support.sub.installation.sub;
 
 import com.omgservers.ctl.command.InstallationCommand;
 import com.omgservers.ctl.operation.command.support.SupportCreateTokenOperation;
@@ -9,8 +9,8 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "create-token",
-        description = "Create support token using credentials.")
-public class SupportCreateTokenCommand extends InstallationCommand {
+        description = "Create token using credentials.")
+public class SupportInstallationCreateTokenCommand extends InstallationCommand {
 
     @CommandLine.Parameters(description = "Support user alias or id.")
     String user;
