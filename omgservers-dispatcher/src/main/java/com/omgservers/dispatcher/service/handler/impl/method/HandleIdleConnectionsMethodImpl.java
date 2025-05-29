@@ -4,6 +4,7 @@ import com.omgservers.dispatcher.operation.GetDispatcherConfigOperation;
 import com.omgservers.dispatcher.service.handler.component.DispatcherCloseReason;
 import com.omgservers.dispatcher.service.handler.dto.HandleIdleConnectionsRequest;
 import com.omgservers.dispatcher.service.handler.impl.components.DispatcherConnections;
+import com.omgservers.schema.model.user.UserRoleEnum;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,7 +31,13 @@ class HandleIdleConnectionsMethodImpl implements HandleIdleConnectionsMethod {
         final var now = Instant.now();
         final var idleTimeout = getDispatcherConfigOperation.getDispatcherConfig().idleConnectionTimeout();
 
-        return Multi.createFrom().iterable(dispatcherConnections.getAll())
+        // Ignore runtime connections
+        final var playerConnections = dispatcherConnections.getAll().stream()
+                .filter(dispatcherConnection ->
+                        dispatcherConnection.getUserRole().equals(UserRoleEnum.PLAYER))
+                .toList();
+
+        return Multi.createFrom().iterable(playerConnections)
                 .onItem().transformToUniAndConcatenate(dispatcherConnection -> {
                     final var lastUsage = dispatcherConnection.getLastUsage();
                     final var idleInterval = Duration.between(lastUsage, now).toSeconds();
