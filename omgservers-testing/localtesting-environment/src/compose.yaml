@@ -15,9 +15,10 @@ services:
     container_name: "database"
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=omgservers
-      - POSTGRES_PASSWORD=omgservers
-      - POSTGRES_DB=omgservers
+      POSTGRES_USER: "omgservers"
+      POSTGRES_PASSWORD: "omgservers"
+      POSTGRES_DB: "omgservers"
+      PAGER: "cat"
     ports:
       - "5432:5432"
     networks:
@@ -87,7 +88,6 @@ services:
     restart: unless-stopped
     environment:
       - OMGSERVERS_APP_LOG_LEVEL=${DISPATCHER_LOG_LEVEL}
-      - OMGSERVERS_IDLE_CONNECTION_TIMEOUT=600
     ports:
       - "8081:8080"
     networks:

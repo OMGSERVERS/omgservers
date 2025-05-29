@@ -56,9 +56,10 @@ services:
     container_name: "database1"
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=omgservers
-      - POSTGRES_PASSWORD=omgservers
-      - POSTGRES_DB=omgservers
+      POSTGRES_USER: "omgservers"
+      POSTGRES_PASSWORD: "omgservers"
+      POSTGRES_DB: "omgservers"
+      PAGER: "cat"
     networks:
       - omgservers
   service1:
@@ -113,9 +114,10 @@ services:
     container_name: "database2"
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=omgservers
-      - POSTGRES_PASSWORD=omgservers
-      - POSTGRES_DB=omgservers
+      POSTGRES_USER: "omgservers"
+      POSTGRES_PASSWORD: "omgservers"
+      POSTGRES_DB: "omgservers"
+      PAGER: "cat"
     networks:
       - omgservers
   service2:
@@ -170,9 +172,10 @@ services:
     container_name: "database3"
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=omgservers
-      - POSTGRES_PASSWORD=omgservers
-      - POSTGRES_DB=omgservers
+      POSTGRES_USER: "omgservers"
+      POSTGRES_PASSWORD: "omgservers"
+      POSTGRES_DB: "omgservers"
+      PAGER: "cat"
     networks:
       - omgservers
   service3:

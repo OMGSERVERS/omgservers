@@ -26,9 +26,10 @@ services:
     container_name: "database"
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=omgservers
-      - POSTGRES_PASSWORD=omgservers
-      - POSTGRES_DB=omgservers
+      POSTGRES_USER: "omgservers"
+      POSTGRES_PASSWORD: "omgservers"
+      POSTGRES_DB: "omgservers"
+      PAGER: "cat"
     networks:
       - omgservers
   cache:
