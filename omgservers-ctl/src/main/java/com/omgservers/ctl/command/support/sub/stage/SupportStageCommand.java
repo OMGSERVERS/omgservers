@@ -12,7 +12,7 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "stage",
-        description = "Manage project stages.",
+        description = "Support commands for managing stages.",
         subcommands = {
                 SupportStageCreateStageCommand.class,
                 SupportStageCreateAliasCommand.class,

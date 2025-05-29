@@ -1,38 +1,21 @@
 package com.omgservers.ctl.operation.command.developer.localtesting;
 
-import com.omgservers.ctl.client.SupportClient;
-import com.omgservers.ctl.operation.client.CreateLocalDeveloperClientOperation;
 import com.omgservers.ctl.operation.client.CreateLocalSupportClientOperation;
+import com.omgservers.ctl.operation.initializer.CreateInitializerOperation;
 import com.omgservers.ctl.operation.wal.GetWalOperation;
 import com.omgservers.ctl.operation.wal.local.AppendLocalTenantOperation;
-import com.omgservers.schema.entrypoint.support.CreateDeveloperSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantAliasSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantPermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantProjectAliasSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantProjectPermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantProjectSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantStageAliasSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantStagePermissionsSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantSupportRequest;
-import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
-import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
-import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Set;
 
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class DeveloperLocalTestingInitTenantOperationImpl implements DeveloperLocalTestingInitTenantOperation {
 
-    final CreateLocalDeveloperClientOperation createLocalDeveloperClientOperation;
     final CreateLocalSupportClientOperation createLocalSupportClientOperation;
+    final CreateInitializerOperation createInitializerOperation;
     final AppendLocalTenantOperation appendLocalTenantOperation;
     final GetWalOperation getWalOperation;
 
@@ -45,7 +28,7 @@ class DeveloperLocalTestingInitTenantOperationImpl implements DeveloperLocalTest
 
         final var supportClient = createLocalSupportClientOperation.execute();
 
-        final var initializer = new Initializer(supportClient);
+        final var initializer = createInitializerOperation.execute(supportClient);
         initializer.createDeveloper();
         initializer.createTenant();
         initializer.createTenantAlias(tenant);
@@ -57,117 +40,10 @@ class DeveloperLocalTestingInitTenantOperationImpl implements DeveloperLocalTest
         initializer.createStagePermission();
 
         appendLocalTenantOperation.execute(path,
-                initializer.developerUser,
-                initializer.developerPassword,
-                initializer.tenantAlias,
-                initializer.projectAlias,
-                initializer.stageAlias);
-    }
-
-    @RequiredArgsConstructor
-    class Initializer {
-
-        final SupportClient supportClient;
-
-        String developerUser;
-        String developerPassword;
-
-        Long tenantId;
-        String tenantAlias;
-
-        Long projectId;
-        String projectAlias;
-
-        Long stageId;
-        String stageAlias;
-
-        void createDeveloper() {
-            final var request = new CreateDeveloperSupportRequest();
-            final var response = supportClient.execute(request)
-                    .await().indefinitely();
-
-            developerUser = response.getUserId().toString();
-            developerPassword = response.getPassword();
-            log.info("Developer \"{}\" created", developerUser);
-        }
-
-        void createTenant() {
-            final var request = new CreateTenantSupportRequest();
-            tenantId = supportClient.execute(request)
-                    .map(CreateTenantSupportResponse::getId)
-                    .await().indefinitely();
-            log.info("Tenant \"{}\" created", tenantId);
-        }
-
-        void createTenantAlias(final String alias) {
-            final var request = new CreateTenantAliasSupportRequest(tenantId, alias);
-            supportClient.execute(request)
-                    .await().indefinitely();
-            tenantAlias = alias;
-            log.info("Tenant alias \"{}\" assigned", alias);
-        }
-
-        void createTenantPermission() {
-            final var permissions = Set.of(TenantPermissionQualifierEnum.PROJECT_MANAGER,
-                    TenantPermissionQualifierEnum.TENANT_VIEWER);
-            final var request = new CreateTenantPermissionsSupportRequest(tenantAlias,
-                    developerUser,
-                    permissions);
-            final var response = supportClient.execute(request)
-                    .await().indefinitely();
-            log.info("Tenant permissions \"{}\" created", response.getCreatedPermissions());
-        }
-
-        void createProject() {
-            final var request = new CreateTenantProjectSupportRequest(tenantAlias);
-            final var response = supportClient.execute(request)
-                    .await().indefinitely();
-            projectId = response.getProjectId();
-            stageId = response.getStageId();
-            log.info("Project \"{}\" created", projectId);
-            log.info("Stage \"{}\" created", stageId);
-        }
-
-        void createProjectAlias(final String alias) {
-            final var request = new CreateTenantProjectAliasSupportRequest(tenantAlias, projectId, alias);
-            supportClient.execute(request)
-                    .await().indefinitely();
-            projectAlias = alias;
-            log.info("Project alias \"{}\" assigned", alias);
-        }
-
-        void createProjectPermission() {
-            final var permissions = Set.of(TenantProjectPermissionQualifierEnum.STAGE_MANAGER,
-                    TenantProjectPermissionQualifierEnum.VERSION_MANAGER,
-                    TenantProjectPermissionQualifierEnum.PROJECT_VIEWER);
-            final var request = new CreateTenantProjectPermissionsSupportRequest(tenantAlias,
-                    projectAlias,
-                    developerUser,
-                    permissions);
-            final var response = supportClient.execute(request)
-                    .await().indefinitely();
-            log.info("Project permissions \"{}\" created", response.getCreatedPermissions());
-        }
-
-        void createStageAlias(final String alias) {
-            final var request = new CreateTenantStageAliasSupportRequest(tenantAlias, stageId, alias);
-            supportClient.execute(request)
-                    .await().indefinitely();
-            stageAlias = alias;
-            log.info("Stage alias \"{}\" assigned", alias);
-        }
-
-        void createStagePermission() {
-            final var permissions = Set.of(TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER,
-                    TenantStagePermissionQualifierEnum.STAGE_VIEWER);
-            final var request = new CreateTenantStagePermissionsSupportRequest(tenantAlias,
-                    projectAlias,
-                    stageAlias,
-                    developerUser,
-                    permissions);
-            final var response = supportClient.execute(request)
-                    .await().indefinitely();
-            log.info("Stage permissions \"{}\" created", response.getCreatedPermissions());
-        }
+                initializer.getDeveloperUserId().toString(),
+                initializer.getDeveloperPassword(),
+                initializer.getTenantAlias(),
+                initializer.getProjectAlias(),
+                initializer.getStageAlias());
     }
 }

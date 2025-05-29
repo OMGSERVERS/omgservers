@@ -9,7 +9,7 @@ import picocli.CommandLine;
 @Slf4j
 @CommandLine.Command(
         name = "config",
-        description = "CTL configuration commands.",
+        description = "Commands for CTL configuration.",
         subcommands = {
                 ConfigPurgeWalCommand.class,
                 ConfigInstallationCommand.class,
