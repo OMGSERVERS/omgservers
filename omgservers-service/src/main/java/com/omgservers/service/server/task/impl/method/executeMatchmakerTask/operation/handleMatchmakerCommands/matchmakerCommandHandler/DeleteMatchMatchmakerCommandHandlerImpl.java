@@ -38,36 +38,45 @@ class DeleteMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandle
 
         final var matchmakerId = fetchMatchmakerResult.matchmakerId();
 
-        matchmakerState.getMatchmakerMatchResources().stream()
-                .filter(matchmakerMatchResource -> matchmakerMatchResource.getMatchId().equals(matchId))
-                .filter(matchmakerMatchResource -> matchmakerMatchResource.getStatus()
-                        .equals(MatchmakerMatchResourceStatusEnum.CREATED))
-                .map(MatchmakerMatchResourceModel::getId)
-                .forEach(matchmakerMatchResourceId -> {
-                    final var dtoToUpdateStatus = new MatchmakerMatchResourceToUpdateStatusDto(
-                            matchmakerMatchResourceId,
-                            MatchmakerMatchResourceStatusEnum.CLOSED);
+        final var matchmakerMatchResourcesToClose = matchmakerState.getMatchmakerMatchResources().stream()
+                .filter(matchmakerMatchResource ->
+                        matchmakerMatchResource.getMatchId().equals(matchId))
+                // Handle the match resource regardless of its status
+                .toList();
 
-                    handleMatchmakerResult.matchmakerChangeOfState()
-                            .getMatchmakerMatchResourcesToUpdateStatus()
-                            .add(dtoToUpdateStatus);
+        if (matchmakerMatchResourcesToClose.isEmpty()) {
+            log.warn("No match resource found to close for matchId=\"{}\" in matchmaker=\"{}\", " +
+                    "skip command", matchId, matchmakerId);
+        } else {
+            matchmakerMatchResourcesToClose.stream()
+                    .map(MatchmakerMatchResourceModel::getId)
+                    .forEach(matchmakerMatchResourceId -> {
+                        final var dtoToUpdateStatus = new MatchmakerMatchResourceToUpdateStatusDto(
+                                matchmakerMatchResourceId,
+                                MatchmakerMatchResourceStatusEnum.CLOSED);
 
-                    log.info("Match resource \"{}\" from matchmaker \"{}\" " +
-                                    "must be deleted due to \"{}\" and marked as closed, matchId={}",
-                            matchmakerMatchResourceId,
-                            matchmakerId,
-                            reason,
-                            matchId);
+                        handleMatchmakerResult.matchmakerChangeOfState()
+                                .getMatchmakerMatchResourcesToUpdateStatus()
+                                .add(dtoToUpdateStatus);
 
-                    final var matchmakerMatchAssignmentToDelete = fetchMatchmakerResult
-                            .matchmakerState().getMatchmakerMatchAssignments().stream()
-                            .filter(matchmakerMatchAssignment -> matchmakerMatchAssignment.getMatchId().equals(matchId))
-                            .map(MatchmakerMatchAssignmentModel::getId)
-                            .toList();
+                        log.info("Match resource \"{}\" from matchmaker \"{}\" " +
+                                        "must be deleted due to \"{}\" and marked as closed, matchId={}",
+                                matchmakerMatchResourceId,
+                                matchmakerId,
+                                reason,
+                                matchId);
 
-                    handleMatchmakerResult.matchmakerChangeOfState().getMatchmakerMatchAssignmentsToDelete()
-                            .addAll(matchmakerMatchAssignmentToDelete);
-                });
+                        final var matchmakerMatchAssignmentToDelete = fetchMatchmakerResult
+                                .matchmakerState().getMatchmakerMatchAssignments().stream()
+                                .filter(matchmakerMatchAssignment -> matchmakerMatchAssignment.getMatchId()
+                                        .equals(matchId))
+                                .map(MatchmakerMatchAssignmentModel::getId)
+                                .toList();
+
+                        handleMatchmakerResult.matchmakerChangeOfState().getMatchmakerMatchAssignmentsToDelete()
+                                .addAll(matchmakerMatchAssignmentToDelete);
+                    });
+        }
 
         return true;
     }
