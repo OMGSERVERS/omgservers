@@ -17,22 +17,12 @@ class UpdateRuntimeOperationImpl implements UpdateRuntimeOperation {
 
     final RuntimeShard runtimeShard;
 
-    final SyncProducedDeploymentCommandsOperation syncProducedDeploymentCommandsOperation;
-    final SyncProducedMatchmakerCommandsOperation syncProducedMatchmakerCommandsOperation;
-    final DeleteInactiveClientsOperation deleteInactiveClientsOperation;
-
     @Override
     public Uni<Void> execute(final HandleRuntimeResult handleRuntimeResult) {
         final var runtimeId = handleRuntimeResult.runtimeId();
-        final var deploymentCommandsToSync = handleRuntimeResult.deploymentCommandsToSync();
-        final var matchmakerCommandsToSync = handleRuntimeResult.matchmakerCommandsToSync();
-        final var clientsToDelete = handleRuntimeResult.clientsToDelete();
         final var runtimeChangeOfState = handleRuntimeResult.runtimeChangeOfState();
 
-        return deleteInactiveClientsOperation.execute(clientsToDelete)
-                .flatMap(voidItem -> syncProducedDeploymentCommandsOperation.execute(deploymentCommandsToSync))
-                .flatMap(voidItem -> syncProducedMatchmakerCommandsOperation.execute(matchmakerCommandsToSync))
-                .flatMap(voidItem -> updateDeploymentState(runtimeId, runtimeChangeOfState))
+        return updateDeploymentState(runtimeId, runtimeChangeOfState)
                 .replaceWithVoid();
     }
 
