@@ -21,16 +21,15 @@ class DeleteTaskOperationImpl implements DeleteTaskOperation {
     final TaskMaster taskMaster;
 
     @Override
-    public Uni<Void> execute(final Long shardKey, final Long entityId) {
+    public Uni<Boolean> execute(final Long shardKey, final Long entityId) {
         return findJob(shardKey, entityId)
+                .flatMap(job -> deleteJob(job.getId()))
                 .onFailure(ServerSideNotFoundException.class)
-                .recoverWithNull()
-                .onItem().ifNotNull().transformToUni(job -> deleteJob(job.getId()))
-                .replaceWithVoid();
+                .recoverWithItem(Boolean.FALSE);
     }
 
     @Override
-    public Uni<Void> execute(Long entityId) {
+    public Uni<Boolean> execute(Long entityId) {
         return execute(entityId, entityId);
     }
 

@@ -26,7 +26,6 @@ import java.util.List;
 @AllArgsConstructor
 public class StageTaskImpl implements Task<StageTaskArguments> {
 
-    final RuntimeShard runtimeShard;
     final TenantShard tenantShard;
 
     public Uni<TaskResult> execute(final StageTaskArguments taskArguments) {

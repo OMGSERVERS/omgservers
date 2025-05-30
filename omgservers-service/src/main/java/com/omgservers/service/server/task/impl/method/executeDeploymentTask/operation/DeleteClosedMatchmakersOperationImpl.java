@@ -19,8 +19,6 @@ class DeleteClosedMatchmakersOperationImpl implements DeleteClosedMatchmakersOpe
 
     static private final long GRACEFUL_INTERVAL = 16;
 
-    final GetServiceConfigOperation getServiceConfigOperation;
-
     @Override
     public void execute(final FetchDeploymentResult fetchDeploymentResult,
                         final HandleDeploymentResult handleDeploymentResult) {

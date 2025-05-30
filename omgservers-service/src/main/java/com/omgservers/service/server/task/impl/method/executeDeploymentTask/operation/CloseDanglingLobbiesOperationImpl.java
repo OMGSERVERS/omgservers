@@ -17,8 +17,6 @@ import java.time.Instant;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class CloseDanglingLobbiesOperationImpl implements CloseDanglingLobbiesOperation {
 
-    final GetServiceConfigOperation getServiceConfigOperation;
-
     @Override
     public void execute(final FetchDeploymentResult fetchDeploymentResult,
                         final HandleDeploymentResult handleDeploymentResult) {

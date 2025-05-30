@@ -14,7 +14,6 @@ public class ViewMatchmakerMatchAssignmentsRequest implements ShardRequest {
     @NotNull
     Long matchmakerId;
 
-    @NotNull
     Long matchId;
 
     @Override

@@ -11,13 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
-class HandleClosedMatchesOperationImpl implements HandleClosedMatchesOperation {
+class DeleteClosedMatchesOperationImpl implements DeleteClosedMatchesOperation {
 
     @Override
     public void execute(final FetchMatchmakerResult fetchMatchmakerResult,
                         final HandleMatchmakerResult handleMatchmakerResult) {
-
-        // Detecting closed matches that are without assignments
 
         final var matchmakerState = fetchMatchmakerResult.matchmakerState();
         final var matchmakerMatchResourcesToDelete = matchmakerState.getMatchmakerMatchResources().stream()

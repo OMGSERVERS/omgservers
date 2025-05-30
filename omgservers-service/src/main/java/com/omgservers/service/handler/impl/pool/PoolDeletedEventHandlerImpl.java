@@ -48,7 +48,7 @@ public class PoolDeletedEventHandlerImpl implements EventHandler {
                     if (!poolCommands.isEmpty() ||
                             !poolRequests.isEmpty() ||
                             !poolContainers.isEmpty()) {
-                        log.error("Pool \"{}\" deleted, but some data remains, " +
+                        log.warn("Pool \"{}\" deleted, but some data remains, " +
                                         "commands={}, " +
                                         "requests={}, " +
                                         "containers={}",

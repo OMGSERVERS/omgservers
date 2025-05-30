@@ -22,7 +22,6 @@ class HandleDeploymentOperationImpl implements HandleDeploymentOperation {
     final DeleteClosedLobbiesOperation deleteClosedLobbiesOperation;
     final EnsureMinLobbiesOperation ensureMinLobbiesOperation;
 
-
     @Override
     public HandleDeploymentResult execute(final FetchDeploymentResult fetchDeploymentResult) {
         final var deploymentId = fetchDeploymentResult.deploymentId();

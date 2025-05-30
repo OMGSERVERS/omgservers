@@ -15,7 +15,7 @@ class HandleMatchmakerOperationImpl implements HandleMatchmakerOperation {
 
     final HandleMatchmakerCommandsOperation handleMatchmakerCommandsOperation;
     final HandleMatchmakerRequestsOperation handleMatchmakerRequestsOperation;
-    final HandleClosedMatchesOperation handleClosedMatchesOperation;
+    final DeleteClosedMatchesOperation deleteClosedMatchesOperation;
     final EnsureMinMatchesOperation ensureMinMatchesOperation;
 
     @Override
@@ -24,7 +24,7 @@ class HandleMatchmakerOperationImpl implements HandleMatchmakerOperation {
         final var handleMatchmakerResult = new HandleMatchmakerResult(matchmakerId,
                 new MatchmakerChangeOfStateDto());
 
-        handleClosedMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
+        deleteClosedMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
 
         ensureMinMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
 
