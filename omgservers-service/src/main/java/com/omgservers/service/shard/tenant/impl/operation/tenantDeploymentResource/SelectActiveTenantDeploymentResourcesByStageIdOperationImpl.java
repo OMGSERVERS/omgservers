@@ -34,7 +34,7 @@ class SelectActiveTenantDeploymentResourcesByStageIdOperationImpl
                             id, idempotency_key, tenant_id, stage_id, version_id, created, modified, deployment_id, 
                             status, config, deleted
                         from $slot.tab_tenant_deployment_resource
-                        where deployment_id = $1 and stage_id = $2 and deleted = false
+                        where tenant_id = $1 and stage_id = $2 and deleted = false
                         order by id asc
                         """,
                 List.of(tenantId, tenantStageId),
