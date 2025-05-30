@@ -2,7 +2,6 @@ package com.omgservers.service.server.task.impl.method.executeDeploymentTask.ope
 
 import com.omgservers.schema.model.deploymentChangeOfState.DeploymentMatchmakerResourceToUpdateStatusDto;
 import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
-import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.FetchDeploymentResult;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.HandleDeploymentResult;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,9 +16,7 @@ import java.time.Instant;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class CloseDanglingMatchmakersOperationImpl implements CloseDanglingMatchmakersOperation {
 
-    static private final long MATCHMAKER_MIN_LIFETIME = 300;
-
-    final GetServiceConfigOperation getServiceConfigOperation;
+    static private final long MATCHMAKER_MIN_LIFETIME = 600;
 
     @Override
     public void execute(final FetchDeploymentResult fetchDeploymentResult,
@@ -30,8 +27,8 @@ class CloseDanglingMatchmakersOperationImpl implements CloseDanglingMatchmakersO
 
         final var deploymentMatchmakerResourcesToUpdateStatus = deploymentState
                 .getDeploymentMatchmakerResources().stream()
-                .filter(deploymentMatchmakerResource -> deploymentMatchmakerResource.getStatus()
-                        .equals(DeploymentMatchmakerResourceStatusEnum.CREATED))
+                .filter(deploymentMatchmakerResource ->
+                        deploymentMatchmakerResource.getStatus().equals(DeploymentMatchmakerResourceStatusEnum.CREATED))
                 .filter(deploymentMatchmakerResource -> {
                     final var matchmakerId = deploymentMatchmakerResource.getMatchmakerId();
                     return deploymentState.getDeploymentMatchmakerAssignments().stream()

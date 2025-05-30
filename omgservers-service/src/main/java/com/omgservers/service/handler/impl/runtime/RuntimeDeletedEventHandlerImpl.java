@@ -16,11 +16,8 @@ import com.omgservers.service.factory.pool.PoolCommandModelFactory;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.alias.GetDefaultPoolIdOperation;
 import com.omgservers.service.operation.task.DeleteTaskOperation;
-import com.omgservers.service.shard.lobby.LobbyShard;
-import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.shard.runtime.RuntimeShard;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.shard.user.UserShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -33,10 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class RuntimeDeletedEventHandlerImpl implements EventHandler {
 
-    final MatchmakerShard matchmakerShard;
     final RuntimeShard runtimeShard;
-    final TenantShard tenantShard;
-    final LobbyShard lobbyShard;
     final UserShard userShard;
     final PoolShard poolShard;
 
@@ -67,7 +61,7 @@ public class RuntimeDeletedEventHandlerImpl implements EventHandler {
                     final var runtimeCommands = runtimeState.getRuntimeCommands();
                     final var runtimeAssignments = runtimeState.getRuntimeAssignments();
                     if (!runtimeCommands.isEmpty() || !runtimeAssignments.isEmpty()) {
-                        log.error("Runtime \"{}\" deleted, but some data remains, commands={}, assignments={}",
+                        log.warn("Runtime \"{}\" deleted, but some data remains, commands={}, assignments={}",
                                 runtimeId,
                                 runtimeCommands.size(),
                                 runtimeAssignments.size());

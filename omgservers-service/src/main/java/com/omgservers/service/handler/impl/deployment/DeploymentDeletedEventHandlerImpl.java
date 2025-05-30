@@ -27,11 +27,7 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
 
     final DeploymentShard deploymentShard;
 
-    final DeleteDeploymentMatchmakerResourcesOperation deleteDeploymentMatchmakerResourcesOperation;
     final FindAndDeleteTenantDeploymentRefOperation findAndDeleteTenantDeploymentRefOperation;
-    final DeleteDeploymentLobbyResourcesOperation deleteDeploymentLobbyResourcesOperation;
-    final DeleteDeploymentCommandsOperation deleteDeploymentCommandsOperation;
-    final DeleteDeploymentRequestsOperation deleteDeploymentRequestsOperation;
     final DeleteTaskOperation deleteTaskOperation;
 
     @Override
@@ -64,7 +60,7 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
                             !deploymentLobbyAssignments.isEmpty() ||
                             !deploymentMatchmakerResources.isEmpty() ||
                             !deploymentMatchmakerAssignments.isEmpty()) {
-                        log.error("Deployment \"{}\" deleted, but some data remains, " +
+                        log.warn("Deployment \"{}\" deleted, but some data remains, " +
                                         "commands={}, " +
                                         "requests={}, " +
                                         "lobbyResources={}, " +

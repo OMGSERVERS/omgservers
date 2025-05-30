@@ -2,7 +2,6 @@ package com.omgservers.service.server.task.impl.method.executeDeploymentTask.ope
 
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceModel;
 import com.omgservers.schema.model.deploymentLobbyResource.DeploymentLobbyResourceStatusEnum;
-import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.FetchDeploymentResult;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.HandleDeploymentResult;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,8 +18,6 @@ class DeleteClosedLobbiesOperationImpl implements DeleteClosedLobbiesOperation {
 
     static private final long GRACEFUL_INTERVAL = 16;
 
-    final GetServiceConfigOperation getServiceConfigOperation;
-
     @Override
     public void execute(final FetchDeploymentResult fetchDeploymentResult,
                         final HandleDeploymentResult handleDeploymentResult) {
@@ -34,8 +31,8 @@ class DeleteClosedLobbiesOperationImpl implements DeleteClosedLobbiesOperation {
                 .filter(deploymentLobbyResource -> {
                     final var lobbyId = deploymentLobbyResource.getLobbyId();
                     return deploymentState.getDeploymentLobbyAssignments().stream()
-                            .noneMatch(deploymentLobbyAssignment -> deploymentLobbyAssignment.getLobbyId()
-                                    .equals(lobbyId));
+                            .noneMatch(deploymentLobbyAssignment ->
+                                    deploymentLobbyAssignment.getLobbyId().equals(lobbyId));
                 })
                 .filter(deploymentLobbyResource -> {
                     final var lobbyResourceModified = deploymentLobbyResource.getModified();

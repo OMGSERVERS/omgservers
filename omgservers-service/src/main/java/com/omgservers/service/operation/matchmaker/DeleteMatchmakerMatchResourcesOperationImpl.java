@@ -18,39 +18,40 @@ import java.util.List;
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-class DeleteMatchmakerMatchesOperationImpl implements DeleteMatchmakerMatchesOperation {
+class DeleteMatchmakerMatchResourcesOperationImpl implements DeleteMatchmakerMatchResourcesOperation {
 
     final MatchmakerShard matchmakerShard;
 
     @Override
     public Uni<Void> execute(final Long matchmakerId) {
-        return viewMatchmakerMatches(matchmakerId)
-                .flatMap(matchmakerMatches -> Multi.createFrom().iterable(matchmakerMatches)
-                        .onItem().transformToUniAndConcatenate(matchmakerMatch -> {
-                            final var matchmakerMatchId = matchmakerMatch.getId();
-                            return deleteMatchmakerMatches(matchmakerId, matchmakerMatchId)
-                                    .onFailure()
-                                    .recoverWithItem(t -> {
-                                        log.error("Failed to delete, id={}/{}, {}:{}",
-                                                matchmakerId,
-                                                matchmakerMatchId,
-                                                t.getClass().getSimpleName(),
-                                                t.getMessage());
-                                        return Boolean.FALSE;
-                                    });
-                        })
-                        .collect().asList()
+        return viewMatchmakerMatchResources(matchmakerId)
+                .flatMap(matchmakerMatchResources ->
+                        Multi.createFrom().iterable(matchmakerMatchResources)
+                                .onItem().transformToUniAndConcatenate(matchmakerMatchResource -> {
+                                    final var matchmakerMatchResourceId = matchmakerMatchResource.getId();
+                                    return deleteMatchmakerMatchResource(matchmakerId, matchmakerMatchResourceId)
+                                            .onFailure()
+                                            .recoverWithItem(t -> {
+                                                log.error("Failed to delete, id={}/{}, {}:{}",
+                                                        matchmakerId,
+                                                        matchmakerMatchResourceId,
+                                                        t.getClass().getSimpleName(),
+                                                        t.getMessage());
+                                                return Boolean.FALSE;
+                                            });
+                                })
+                                .collect().asList()
                 )
                 .replaceWithVoid();
     }
 
-    Uni<List<MatchmakerMatchResourceModel>> viewMatchmakerMatches(final Long matchmakerId) {
+    Uni<List<MatchmakerMatchResourceModel>> viewMatchmakerMatchResources(final Long matchmakerId) {
         final var request = new ViewMatchmakerMatchResourcesRequest(matchmakerId);
         return matchmakerShard.getService().execute(request)
                 .map(ViewMatchmakerMatchResourcesResponse::getMatchmakerMatchResources);
     }
 
-    Uni<Boolean> deleteMatchmakerMatches(final Long matchmakerId, final Long id) {
+    Uni<Boolean> deleteMatchmakerMatchResource(final Long matchmakerId, final Long id) {
         final var request = new DeleteMatchmakerMatchResourceRequest(matchmakerId, id);
         return matchmakerShard.getService().execute(request)
                 .map(DeleteMatchmakerMatchResourceResponse::getDeleted);
