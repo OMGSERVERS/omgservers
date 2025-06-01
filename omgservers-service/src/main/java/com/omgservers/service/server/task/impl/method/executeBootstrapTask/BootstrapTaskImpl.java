@@ -50,9 +50,12 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                     .invoke(created -> {
                         if (created) {
                             log.info("Admin user \"{}\" created", alias);
+                        } else {
+                            log.info("Admin user \"{}\" already created", alias);
                         }
                     });
         } else {
+            log.warn("Default admin user password is not set, user won't be created");
             return Uni.createFrom().item(Boolean.FALSE);
         }
     }
@@ -67,9 +70,12 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                     .invoke(created -> {
                         if (created) {
                             log.info("Support user \"{}\" created", alias);
+                        } else {
+                            log.info("Support user \"{}\" already created", alias);
                         }
                     });
         } else {
+            log.warn("Default support user password is not set, user won't be created");
             return Uni.createFrom().item(Boolean.FALSE);
         }
     }
@@ -84,9 +90,12 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                     .invoke(created -> {
                         if (created) {
                             log.info("Service user \"{}\" created", alias);
+                        } else {
+                            log.info("Service user \"{}\" already created", alias);
                         }
                     });
         } else {
+            log.warn("Default service user password is not set, user won't be created");
             return Uni.createFrom().item(Boolean.FALSE);
         }
     }
