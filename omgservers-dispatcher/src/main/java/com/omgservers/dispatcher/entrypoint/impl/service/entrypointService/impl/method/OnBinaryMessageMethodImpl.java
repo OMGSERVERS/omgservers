@@ -1,8 +1,8 @@
 package com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl.method;
 
 import com.omgservers.dispatcher.entrypoint.impl.dto.OnBinaryMessageEntrypointRequest;
-import com.omgservers.dispatcher.service.handler.HandlerService;
-import com.omgservers.dispatcher.service.handler.dto.HandleBinaryMessageRequest;
+import com.omgservers.dispatcher.server.handler.HandlerService;
+import com.omgservers.dispatcher.server.handler.dto.HandleBinaryMessageRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

@@ -1,6 +1,5 @@
 package com.omgservers.dispatcher.operation;
 
-import com.omgservers.dispatcher.service.task.Task;
 import io.smallrye.mutiny.Uni;
 
 public interface ExecuteTaskOperation {
