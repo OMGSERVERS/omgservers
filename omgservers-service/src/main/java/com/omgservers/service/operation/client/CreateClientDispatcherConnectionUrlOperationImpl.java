@@ -26,7 +26,7 @@ class CreateClientDispatcherConnectionUrlOperationImpl implements CreateClientDi
     public URI execute(final Long clientId, final Long runtimeId) {
         final var dispatcherUri = getServiceConfigOperation.getServiceConfig().client().dispatcherUri();
         final var wsToken = issueJwtTokenOperation
-                .issueDispatcherClientWebsocketToken(clientId, runtimeId, UserRoleEnum.PLAYER);
+                .issueDispatcherClientWsToken(clientId, runtimeId, UserRoleEnum.PLAYER);
 
         final var connectionUrl = UriBuilder.fromUri(dispatcherUri)
                 .path(WEBSOCKET_ENDPOINT)

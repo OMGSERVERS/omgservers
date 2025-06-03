@@ -46,7 +46,29 @@ public interface ServiceConfig {
     interface JwtConfig {
         String issuer();
 
+        JwtAudienceConfig audience();
+
+        JwtExpiresInConfig expiresIn();
+
         String certLocation();
+    }
+
+    interface JwtAudienceConfig {
+        String service();
+
+        String connector();
+
+        String dispatcher();
+    }
+
+    interface JwtExpiresInConfig {
+        Long service();
+
+        Long user();
+
+        Long runtime();
+
+        Long wsToken();
     }
 
     interface MigrationConfig {
