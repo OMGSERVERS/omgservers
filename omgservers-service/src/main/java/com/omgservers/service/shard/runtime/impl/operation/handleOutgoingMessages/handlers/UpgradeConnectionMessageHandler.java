@@ -7,7 +7,7 @@ import com.omgservers.schema.message.body.UpgradeConnectionQualifierEnum;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.runtimeAssignment.RuntimeAssignmentModel;
 import com.omgservers.service.operation.client.CreateDispatcherConnectionUpgradedClientMessageOperation;
-import com.omgservers.service.operation.runtime.CreateClientDispatcherConnectionUrlOperation;
+import com.omgservers.service.operation.client.CreateClientDispatcherConnectionUrlOperation;
 import com.omgservers.service.operation.security.IssueJwtTokenOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.shard.runtime.impl.operation.handleOutgoingMessages.OutgoingMessageHandler;

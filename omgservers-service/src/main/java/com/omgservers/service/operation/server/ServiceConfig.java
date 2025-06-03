@@ -77,6 +77,8 @@ public interface ServiceConfig {
     interface ClientConfig {
         long inactiveInterval();
 
+        URI connectorUri();
+
         URI dispatcherUri();
     }
 
@@ -129,6 +131,8 @@ public interface ServiceConfig {
         BootstrapDefaultUserConfig supportUser();
 
         BootstrapDefaultUserConfig serviceUser();
+
+        BootstrapDefaultUserConfig connectorUser();
 
         BootstrapDefaultPoolConfig defaultPool();
     }

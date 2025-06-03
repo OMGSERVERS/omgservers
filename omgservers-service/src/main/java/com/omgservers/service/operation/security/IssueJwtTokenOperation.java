@@ -11,5 +11,7 @@ public interface IssueJwtTokenOperation {
 
     String issueRuntimeJwtToken(Long runtimeId);
 
-    String issueWsJwtToken(Long subject, Long runtimeId, UserRoleEnum role);
+    String issueDispatcherClientWebsocketToken(Long subject, Long runtimeId, UserRoleEnum role);
+
+    String issueConnectorClientWebsocketToken(Long clientId);
 }

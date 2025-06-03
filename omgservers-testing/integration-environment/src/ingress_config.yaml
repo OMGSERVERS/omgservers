@@ -35,6 +35,10 @@ static_resources:
                           route:
                             cluster: service
                         - match:
+                            prefix: "/connector"
+                          route:
+                            cluster: connector
+                        - match:
                             prefix: "/dispatcher"
                           route:
                             cluster: dispatcher
@@ -68,6 +72,18 @@ static_resources:
                   address:
                     socket_address:
                       address: gateway3
+                      port_value: 8080
+    - name: connector
+      type: STRICT_DNS
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: connector
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: connector
                       port_value: 8080
     - name: dispatcher
       type: STRICT_DNS

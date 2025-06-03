@@ -67,15 +67,30 @@ class IssueJwtTokenOperationImpl implements IssueJwtTokenOperation {
     }
 
     @Override
-    public String issueWsJwtToken(final Long subject,
-                                  final Long runtimeId,
-                                  final UserRoleEnum role) {
+    public String issueDispatcherClientWebsocketToken(final Long subject,
+                                                      final Long runtimeId,
+                                                      final UserRoleEnum role) {
         final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
         final var jwtToken = Jwt.issuer(issuer)
                 .audience(issuer)
                 .subject(subject.toString())
                 .claim(SecurityAttributesEnum.RUNTIME_ID.getAttributeName(), runtimeId.toString())
                 .claim(SecurityAttributesEnum.USER_ROLE.getAttributeName(), role.getName())
+                .expiresIn(WS_TOKEN_DURATION)
+                .groups(UserRoleEnum.WEBSOCKET.getName())
+                .sign();
+
+        return jwtToken;
+    }
+
+    @Override
+    public String issueConnectorClientWebsocketToken(final Long clientId) {
+        final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
+        final var jwtToken = Jwt.issuer(issuer)
+                .audience(issuer)
+                .subject(clientId.toString())
+                .claim(SecurityAttributesEnum.USER_ROLE.getAttributeName(), UserRoleEnum.PLAYER.getName())
+                .claim(SecurityAttributesEnum.CLIENT_ID.getAttributeName(), clientId.toString())
                 .expiresIn(WS_TOKEN_DURATION)
                 .groups(UserRoleEnum.WEBSOCKET.getName())
                 .sign();

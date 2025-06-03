@@ -62,13 +62,15 @@ services:
       - OMGSERVERS_MASTER_URI=http://localhost:8080
       - OMGSERVERS_SHARD_ID=0
       - OMGSERVERS_SHARD_URI=http://localhost:8080
-      - OMGSERVERS_CLIENT_DISPATCHER_URI=ws://localhost:8081
+      - OMGSERVERS_CLIENT_CONNECTOR_URI=ws://localhost:8081
+      - OMGSERVERS_CLIENT_DISPATCHER_URI=ws://localhost:8082
       - OMGSERVERS_RUNTIME_SERVICE_URI=http://service:8080
       - OMGSERVERS_RUNTIME_DISPATCHER_URI=ws://dispatcher:8080
       - OMGSERVERS_REGISTRY_URI=http://localhost:5000
       - OMGSERVERS_BOOTSTRAP_ADMIN_USER_PASSWORD=admin
       - OMGSERVERS_BOOTSTRAP_SUPPORT_USER_PASSWORD=support
       - OMGSERVERS_BOOTSTRAP_SERVICE_USER_PASSWORD=service
+      - OMGSERVERS_BOOTSTRAP_CONNECTOR_USER_PASSWORD=connector
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__SERVER_URI=localhost
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__DOCKER_DAEMON_URI=tcp://docker:2375
       - OMGSERVERS_BOOTSTRAP_DEFAULT_POOL_SERVERS_0__CPU_COUNT=800
@@ -82,14 +84,28 @@ services:
       - ./jwt_private_key.pem:/jwt_issuer/private_key.pem:ro
       - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
       - ./jwt_issuer_cert.pem:/jwt_issuer/cert.pem:ro
+  connector:
+    image: "omgservers/connector:${OMGSERVERS_VERSION}"
+    container_name: "connector"
+    restart: unless-stopped
+    environment:
+      OMGSERVERS_APP_LOG_LEVEL: "${CONNECTOR_LOG_LEVEL}"
+      OMGSERVERS_SERVICE_URI: "http://service:8080"
+      OMGSERVERS_USER_PASSWORD: "connector"
+    ports:
+      - "8081:8080"
+    networks:
+      - omgservers
+    volumes:
+      - ./jwt_public_key.pem:/jwt_issuer/public_key.pem:ro
   dispatcher:
     image: "omgservers/dispatcher:${OMGSERVERS_VERSION}"
     container_name: "dispatcher"
     restart: unless-stopped
     environment:
-      - OMGSERVERS_APP_LOG_LEVEL=${DISPATCHER_LOG_LEVEL}
+      OMGSERVERS_APP_LOG_LEVEL: "${DISPATCHER_LOG_LEVEL}"
     ports:
-      - "8081:8080"
+      - "8082:8080"
     networks:
       - omgservers
     volumes:

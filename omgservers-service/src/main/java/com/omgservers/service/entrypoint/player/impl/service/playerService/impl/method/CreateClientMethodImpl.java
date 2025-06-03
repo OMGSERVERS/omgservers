@@ -21,6 +21,7 @@ import com.omgservers.service.factory.user.PlayerModelFactory;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
+import com.omgservers.service.operation.client.CreateClientConnectorUrlOperation;
 import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.shard.tenant.TenantShard;
@@ -41,6 +42,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
     final TenantShard tenantShard;
     final UserShard userShard;
 
+    final CreateClientConnectorUrlOperation createClientConnectorUrlOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
     final GetIdByStageOperation getIdByStageOperation;
@@ -76,7 +78,10 @@ class CreateClientMethodImpl implements CreateClientMethod {
                                         }))
                         )
                 )
-                .map(CreateClientPlayerResponse::new);
+                .map(clientId -> {
+                    final var connectionUrl = createClientConnectorUrlOperation.execute(clientId);
+                    return new CreateClientPlayerResponse(clientId, connectionUrl);
+                });
     }
 
     Uni<PlayerModel> findOrCreatePlayer(final Long userId,
