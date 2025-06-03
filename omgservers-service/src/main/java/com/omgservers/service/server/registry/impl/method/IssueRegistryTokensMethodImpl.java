@@ -27,15 +27,11 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 class IssueRegistryTokensMethodImpl implements IssueRegistryTokensMethod {
 
-    final UserShard userShard;
-
     final IssueRegistryRefreshTokenOperation issueRegistryRefreshTokenOperation;
     final IssueRegistryAccessTokenOperation issueRegistryAccessTokenOperation;
     final IntersectScopeAndPermissionsOperation intersectScopeAndPermissionsOperation;
 
     final ParseResourceScopeOperation parseResourceScopeOperation;
-
-    final ObjectMapper objectMapper;
 
     @Override
     public Uni<IssueRegistryTokensResponse> execute(final IssueRegistryTokensRequest request) {
