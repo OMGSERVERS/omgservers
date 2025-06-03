@@ -1,11 +1,8 @@
 package com.omgservers.service.handler.impl.tenant;
 
 import com.omgservers.schema.model.project.TenantProjectModel;
-import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
-import com.omgservers.schema.shard.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
-import com.omgservers.schema.shard.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
 import com.omgservers.service.event.EventModel;
 import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.tenant.TenantProjectCreatedEventBodyModel;
@@ -51,7 +48,7 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(tenantProject -> {
                     log.debug("Created, {}", tenantProject);
 
-                    return createServiceUserPermission(tenantId, tenantProjectId, idempotencyKey);
+                    return Uni.createFrom().voidItem();
                 })
                 .replaceWithVoid();
     }
@@ -60,23 +57,5 @@ public class TenantProjectCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetTenantProjectRequest(tenantId, id);
         return tenantShard.getService().execute(request)
                 .map(GetTenantProjectResponse::getTenantProject);
-    }
-
-    Uni<Boolean> createServiceUserPermission(final Long tenantId,
-                                             final Long tenantStageId,
-                                             final String idempotencyKey) {
-        return getIdByUserOperation.execute(getServiceConfigOperation.getServiceConfig()
-                        .bootstrap().serviceUser().alias())
-                .flatMap(serviceUserId -> {
-                    final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
-                    final var projectPermission = tenantProjectPermissionModelFactory.create(tenantId,
-                            tenantStageId,
-                            serviceUserId,
-                            permission,
-                            idempotencyKey + "/" + serviceUserId + "/" + permission);
-                    final var request = new SyncTenantProjectPermissionRequest(projectPermission);
-                    return tenantShard.getService().executeWithIdempotency(request)
-                            .map(SyncTenantProjectPermissionResponse::getCreated);
-                });
     }
 }
