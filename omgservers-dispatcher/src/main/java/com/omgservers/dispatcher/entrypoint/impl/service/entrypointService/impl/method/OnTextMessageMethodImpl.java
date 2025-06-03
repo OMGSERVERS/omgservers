@@ -1,8 +1,8 @@
 package com.omgservers.dispatcher.entrypoint.impl.service.entrypointService.impl.method;
 
 import com.omgservers.dispatcher.entrypoint.impl.dto.OnTextMessageEntrypointRequest;
-import com.omgservers.dispatcher.service.handler.HandlerService;
-import com.omgservers.dispatcher.service.handler.dto.HandleTextMessageRequest;
+import com.omgservers.dispatcher.server.handler.HandlerService;
+import com.omgservers.dispatcher.server.handler.dto.HandleTextMessageRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;

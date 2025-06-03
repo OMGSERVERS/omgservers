@@ -1,6 +1,6 @@
 package com.omgservers.dispatcher;
 
-import com.omgservers.dispatcher.initializer.InitializerService;
+import com.omgservers.dispatcher.server.initializer.InitializerService;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
