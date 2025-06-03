@@ -8,12 +8,10 @@ import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionReque
 import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionResponse;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionRequest;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionResponse;
-import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -28,17 +26,14 @@ class DeleteTenantVersionMethodImpl implements DeleteTenantVersionMethod {
     final TenantShard tenantShard;
 
     final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
-
-    final TenantVersionModelFactory tenantVersionModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<DeleteVersionDeveloperResponse> execute(final DeleteVersionDeveloperRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
 
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)

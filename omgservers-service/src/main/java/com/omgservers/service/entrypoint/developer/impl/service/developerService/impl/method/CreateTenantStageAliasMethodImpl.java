@@ -2,22 +2,16 @@ package com.omgservers.service.entrypoint.developer.impl.service.developerServic
 
 import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateStageAliasDeveloperResponse;
-import com.omgservers.schema.model.alias.AliasQualifierEnum;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
-import com.omgservers.schema.shard.alias.SyncAliasRequest;
-import com.omgservers.schema.shard.alias.SyncAliasResponse;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
-import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.operation.alias.CreateTenantStageAliasOperation;
 import com.omgservers.service.operation.alias.CreateTenantStageAliasResult;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
-import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -30,22 +24,18 @@ import lombok.extern.slf4j.Slf4j;
 class CreateTenantStageAliasMethodImpl implements CreateTenantStageAliasMethod {
 
     final TenantShard tenantShard;
-    final AliasShard aliasShard;
 
     final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
     final CreateTenantStageAliasOperation createTenantStageAliasOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
-
-    final AliasModelFactory aliasModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateStageAliasDeveloperResponse> execute(final CreateStageAliasDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var tenant = request.getTenant();
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
 
         return getIdByTenantOperation.execute(tenant)
                 .flatMap(tenantId -> {

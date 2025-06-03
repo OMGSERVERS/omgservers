@@ -11,11 +11,9 @@ import com.omgservers.service.factory.tenant.TenantImageModelFactory;
 import com.omgservers.service.operation.authz.AuthorizeDockerImageOperation;
 import com.omgservers.service.operation.authz.AuthorizeTenantVersionRequestOperation;
 import com.omgservers.service.operation.authz.TenantVersionAuthorization;
-import com.omgservers.service.operation.docker.ParseDockerImageOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.lobby.LobbyShard;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -32,10 +30,9 @@ class CreateTenantImageMethodImpl implements CreateTenantImageMethod {
 
     final AuthorizeTenantVersionRequestOperation authorizeTenantVersionRequestOperation;
     final AuthorizeDockerImageOperation authorizeDockerImageOperation;
-    final ParseDockerImageOperation parseDockerImageOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     final TenantImageModelFactory tenantImageModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateImageDeveloperResponse> execute(final CreateImageDeveloperRequest request) {
@@ -44,7 +41,7 @@ class CreateTenantImageMethodImpl implements CreateTenantImageMethod {
         final var tenant = request.getTenant();
         final var project = request.getProject();
         final var version = request.getVersion();
-        final var userId = securityIdentity.<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
 
         return authorizeTenantVersionRequestOperation.execute(tenant, project, version, userId, permission)

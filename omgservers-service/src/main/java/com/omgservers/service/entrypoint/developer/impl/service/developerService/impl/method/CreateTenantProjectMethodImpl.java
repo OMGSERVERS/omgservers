@@ -16,9 +16,8 @@ import com.omgservers.service.entrypoint.developer.impl.service.developerService
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -34,21 +33,20 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
 
     final CreateTenantProjectPermissionOperation createTenantProjectPermissionOperation;
     final CreateTenantStagePermissionOperation createTenantStagePermissionOperation;
+    final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     final TenantProjectModelFactory tenantProjectModelFactory;
     final TenantStageModelFactory tenantStageModelFactory;
 
-    final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
 
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateProjectDeveloperResponse> execute(final CreateProjectDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var tenant = request.getTenant();
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantPermissionQualifierEnum.PROJECT_MANAGER;
 
         return authorizeTenantRequestOperation.execute(tenant, userId, permission)

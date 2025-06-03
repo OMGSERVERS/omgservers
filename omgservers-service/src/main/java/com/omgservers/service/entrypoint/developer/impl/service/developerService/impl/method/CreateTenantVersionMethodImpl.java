@@ -8,9 +8,8 @@ import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
 import com.omgservers.schema.shard.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,9 +24,9 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
     final TenantShard tenantShard;
 
     final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     final TenantVersionModelFactory tenantVersionModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateVersionDeveloperResponse> execute(final CreateVersionDeveloperRequest request) {
@@ -35,7 +34,7 @@ class CreateTenantVersionMethodImpl implements CreateTenantVersionMethod {
 
         final var tenant = request.getTenant();
         final var project = request.getProject();
-        final var userId = securityIdentity.<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantProjectPermissionQualifierEnum.VERSION_MANAGER;
 
         return authorizeTenantProjectRequestOperation.execute(tenant, project, userId, permission)

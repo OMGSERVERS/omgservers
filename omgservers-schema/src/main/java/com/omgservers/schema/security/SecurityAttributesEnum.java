@@ -1,4 +1,4 @@
-package com.omgservers.connector.security;
+package com.omgservers.schema.security;
 
 import lombok.Getter;
 
@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum SecurityAttributesEnum {
     TOKEN_ID("token_id"),
     RAW_TOKEN("raw_token"),
+    RUNTIME_ID("runtime_id"),
     USER_ID("user_id"),
     CLIENT_ID("client_id"),
     SUBJECT("subject"),

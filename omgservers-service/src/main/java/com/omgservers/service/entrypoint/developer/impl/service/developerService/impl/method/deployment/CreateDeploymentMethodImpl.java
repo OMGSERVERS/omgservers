@@ -1,6 +1,5 @@
 package com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.method.deployment;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperRequest;
 import com.omgservers.schema.entrypoint.developer.CreateDeploymentDeveloperResponse;
 import com.omgservers.schema.model.deployment.DeploymentConfigDto;
@@ -21,10 +20,8 @@ import com.omgservers.service.exception.ServerSideBadRequestException;
 import com.omgservers.service.exception.ServerSideConflictException;
 import com.omgservers.service.factory.tenant.TenantDeploymentResourceModelFactory;
 import com.omgservers.service.operation.authz.AuthorizeTenantStageRequestOperation;
-import com.omgservers.service.operation.authz.AuthorizeTenantVersionRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -40,12 +37,10 @@ class CreateDeploymentMethodImpl implements CreateDeploymentMethod {
 
     final TenantShard tenantShard;
 
-    final AuthorizeTenantVersionRequestOperation authorizeTenantVersionRequestOperation;
     final AuthorizeTenantStageRequestOperation authorizeTenantStageRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     final TenantDeploymentResourceModelFactory tenantDeploymentResourceModelFactory;
-    final SecurityIdentity securityIdentity;
-    final ObjectMapper objectMapper;
 
     @Override
     public Uni<CreateDeploymentDeveloperResponse> execute(final CreateDeploymentDeveloperRequest request) {
@@ -54,8 +49,7 @@ class CreateDeploymentMethodImpl implements CreateDeploymentMethod {
         final var tenant = request.getTenant();
         final var project = request.getProject();
         final var stage = request.getStage();
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
 
         return authorizeTenantStageRequestOperation.execute(tenant, project, stage, userId, permission)

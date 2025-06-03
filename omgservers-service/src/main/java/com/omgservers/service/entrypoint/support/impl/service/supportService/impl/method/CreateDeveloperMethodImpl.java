@@ -6,15 +6,11 @@ import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.schema.shard.user.SyncUserRequest;
-import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.user.UserModelFactory;
-import com.omgservers.service.operation.server.GenerateIdOperation;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.elytron.security.common.BcryptUtil;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -25,22 +21,18 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 class CreateDeveloperMethodImpl implements CreateDeveloperMethod {
 
-    final TenantShard tenantShard;
     final UserShard userShard;
 
     final GenerateSecureStringOperation generateSecureStringOperation;
-    final GenerateIdOperation generateIdOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
-    final TenantPermissionModelFactory tenantPermissionModelFactory;
     final UserModelFactory userModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateDeveloperSupportResponse> execute(final CreateDeveloperSupportRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
 
         final var password = generateSecureStringOperation.generateSecureString();
         return createDeveloperUser(password)

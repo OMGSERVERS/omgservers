@@ -1,8 +1,8 @@
 package com.omgservers.service.operation.security;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.security.SecurityAttributesEnum;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

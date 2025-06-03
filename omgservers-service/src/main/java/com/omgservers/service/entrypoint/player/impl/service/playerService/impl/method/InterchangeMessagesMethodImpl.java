@@ -5,9 +5,8 @@ import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerResponse
 import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesRequest;
 import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesResponse;
 import com.omgservers.service.operation.authz.AuthorizeClientRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.client.ClientShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -22,16 +21,14 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
     final ClientShard clientShard;
 
     final AuthorizeClientRequestOperation authorizeClientRequestOperation;
-
-    final SecurityIdentity securityIdentity;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     @Override
     public Uni<InterchangeMessagesPlayerResponse> execute(final InterchangeMessagesPlayerRequest request) {
         log.debug("Requested, {}", request);
 
         final var clientId = request.getClientId();
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
 
         return authorizeClientRequestOperation.execute(clientId, userId)
                 .flatMap(authorization -> {

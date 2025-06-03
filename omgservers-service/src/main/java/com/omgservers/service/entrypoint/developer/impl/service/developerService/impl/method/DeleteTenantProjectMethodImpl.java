@@ -5,12 +5,10 @@ import com.omgservers.schema.entrypoint.developer.DeleteProjectDeveloperResponse
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectResponse;
-import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,10 +23,8 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     final TenantShard tenantShard;
 
     final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
-
-    final TenantVersionModelFactory tenantVersionModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<DeleteProjectDeveloperResponse> execute(final DeleteProjectDeveloperRequest request) {
@@ -36,8 +32,7 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
 
         final var tenant = request.getTenant();
         final var project = request.getProject();
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantPermissionQualifierEnum.PROJECT_MANAGER;
 
         return authorizeTenantRequestOperation.execute(tenant, userId, permission)

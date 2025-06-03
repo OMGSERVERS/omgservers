@@ -8,13 +8,9 @@ import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantD
 import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceResponse;
 import com.omgservers.schema.shard.tenant.tenantDeploymentResource.FindTenantDeploymentResourceRequest;
 import com.omgservers.schema.shard.tenant.tenantDeploymentResource.FindTenantDeploymentResourceResponse;
-import com.omgservers.service.entrypoint.developer.impl.service.developerService.impl.operation.CheckTenantStagePermissionOperation;
-import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
-import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.authz.AuthorizeDeploymentRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -29,21 +25,14 @@ class DeleteDeploymentMethodImpl implements DeleteDeploymentMethod {
     final TenantShard tenantShard;
 
     final AuthorizeDeploymentRequestOperation authorizeDeploymentRequestOperation;
-
-    final CheckTenantStagePermissionOperation checkTenantStagePermissionOperation;
-    final GetIdByTenantOperation getIdByTenantOperation;
-
-
-    final TenantVersionModelFactory tenantVersionModelFactory;
-    final SecurityIdentity securityIdentity;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     @Override
     public Uni<DeleteDeploymentDeveloperResponse> execute(final DeleteDeploymentDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var deploymentId = request.getDeploymentId();
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantStagePermissionQualifierEnum.DEPLOYMENT_MANAGER;
         return authorizeDeploymentRequestOperation.execute(deploymentId, userId, permission)
                 .flatMap(authorization -> {

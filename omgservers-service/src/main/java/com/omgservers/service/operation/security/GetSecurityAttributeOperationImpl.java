@@ -1,7 +1,7 @@
 package com.omgservers.service.operation.security;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.schema.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -19,6 +19,13 @@ class GetSecurityAttributeOperationImpl implements GetSecurityAttributeOperation
         final var runtimeId = securityIdentity
                 .<Long>getAttribute(SecurityAttributesEnum.RUNTIME_ID.getAttributeName());
         return runtimeId;
+    }
+
+    @Override
+    public Long getUserId() {
+        final var userId = securityIdentity
+                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        return userId;
     }
 
     @Override

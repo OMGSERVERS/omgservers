@@ -7,9 +7,7 @@ import com.omgservers.schema.shard.tenant.tenantStage.DeleteTenantStageResponse;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -26,14 +24,9 @@ class DeleteTenantStageMethodImpl implements DeleteTenantStageMethod {
     final GetIdByTenantOperation getIdByTenantOperation;
     final GetIdByStageOperation getIdByStageOperation;
 
-    final SecurityIdentity securityIdentity;
-
     @Override
     public Uni<DeleteTenantStageSupportResponse> execute(final DeleteTenantStageSupportRequest request) {
         log.info("Requested, {}", request);
-
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)

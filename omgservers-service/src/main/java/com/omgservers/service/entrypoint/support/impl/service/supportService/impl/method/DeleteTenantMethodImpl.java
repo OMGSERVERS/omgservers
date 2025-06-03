@@ -3,12 +3,8 @@ package com.omgservers.service.entrypoint.support.impl.service.supportService.im
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportRequest;
 import com.omgservers.schema.entrypoint.support.DeleteTenantSupportResponse;
 import com.omgservers.schema.shard.tenant.tenant.DeleteTenantRequest;
-import com.omgservers.service.factory.tenant.TenantModelFactory;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
-import com.omgservers.service.operation.server.GenerateIdOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
-import io.quarkus.security.identity.SecurityIdentity;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -22,17 +18,10 @@ class DeleteTenantMethodImpl implements DeleteTenantMethod {
     final TenantShard tenantShard;
 
     final GetIdByTenantOperation getIdByTenantOperation;
-    final GenerateIdOperation generateIdOperation;
-
-    final TenantModelFactory tenantModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<DeleteTenantSupportResponse> execute(final DeleteTenantSupportRequest request) {
         log.info("Requested, {}", request);
-
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)
