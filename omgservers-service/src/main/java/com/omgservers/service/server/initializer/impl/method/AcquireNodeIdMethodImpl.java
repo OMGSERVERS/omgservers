@@ -4,8 +4,7 @@ import com.omgservers.schema.master.node.AcquireNodeRequest;
 import com.omgservers.schema.master.node.AcquireNodeResponse;
 import com.omgservers.schema.model.node.NodeModel;
 import com.omgservers.service.master.node.NodeMaster;
-import com.omgservers.service.server.state.StateService;
-import com.omgservers.service.server.state.dto.SetNodeIdRequest;
+import com.omgservers.service.operation.server.ExecuteStateOperation;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,7 @@ class AcquireNodeIdMethodImpl implements AcquireNodeIdMethod {
 
     final NodeMaster nodeMaster;
 
-    final StateService stateService;
+    final ExecuteStateOperation executeStateOperation;
 
     @Override
     public Uni<Void> execute() {
@@ -27,7 +26,7 @@ class AcquireNodeIdMethodImpl implements AcquireNodeIdMethod {
         return acquireNode()
                 .invoke(node -> {
                     final var nodeId = node.getId();
-                    setNodeId(nodeId);
+                    executeStateOperation.setNodeId(nodeId);
 
                     log.info("NodeId \"{}\" acquired", nodeId);
                 })
@@ -38,10 +37,5 @@ class AcquireNodeIdMethodImpl implements AcquireNodeIdMethod {
         final var request = new AcquireNodeRequest();
         return nodeMaster.getService().execute(request)
                 .map(AcquireNodeResponse::getNode);
-    }
-
-    void setNodeId(final Long nodeId) {
-        final var request = new SetNodeIdRequest(nodeId);
-        stateService.execute(request);
     }
 }

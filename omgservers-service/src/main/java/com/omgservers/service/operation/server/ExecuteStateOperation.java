@@ -1,4 +1,4 @@
-package com.omgservers.service.server.state.impl.operation;
+package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.index.IndexConfigDto;
 
@@ -8,9 +8,9 @@ public interface ExecuteStateOperation {
 
     IndexConfigDto getIndexConfig();
 
-    void setServerToken(String sererToken);
+    void setServiceToken(String serviceToken);
 
-    String getServerToken();
+    String getServiceToken();
 
     void setNodeId(Long nodeId);
 

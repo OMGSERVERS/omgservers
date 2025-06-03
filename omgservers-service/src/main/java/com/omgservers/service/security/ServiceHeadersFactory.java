@@ -2,9 +2,8 @@ package com.omgservers.service.security;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
+import com.omgservers.service.operation.server.ExecuteStateOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
-import com.omgservers.service.server.state.StateService;
-import com.omgservers.service.server.state.dto.GetServiceTokenRequest;
 import io.quarkus.rest.client.reactive.ReactiveClientHeadersFactory;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,14 +18,14 @@ import java.util.Objects;
 public class ServiceHeadersFactory extends ReactiveClientHeadersFactory {
 
     final GetServiceConfigOperation getServiceConfigOperation;
-    final StateService stateService;
+    final ExecuteStateOperation executeStateOperation;
 
     volatile HeadersProvider headersProvider;
 
-    public ServiceHeadersFactory(final StateService stateService,
-                                 final GetServiceConfigOperation getServiceConfigOperation) {
+    public ServiceHeadersFactory(final GetServiceConfigOperation getServiceConfigOperation,
+                                 final ExecuteStateOperation executeStateOperation) {
         this.getServiceConfigOperation = getServiceConfigOperation;
-        this.stateService = stateService;
+        this.executeStateOperation = executeStateOperation;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class ServiceHeadersFactory extends ReactiveClientHeadersFactory {
 
     HeadersProvider createHeadersProvider() {
         final var userAgent = getServiceConfigOperation.getServiceConfig().shard().uri().getHost();
-        final var serviceToken = stateService.execute(new GetServiceTokenRequest()).getServiceToken();
+        final var serviceToken = executeStateOperation.getServiceToken();
 
         if (Objects.nonNull(serviceToken)) {
             return new HeadersProvider(userAgent, serviceToken);

@@ -2,8 +2,6 @@ package com.omgservers.service.operation.server;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
-import com.omgservers.service.server.state.StateService;
-import com.omgservers.service.server.state.dto.GetNodeIdRequest;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,12 +11,12 @@ import java.util.Objects;
 @ApplicationScoped
 class GenerateIdOperationImpl implements GenerateIdOperation {
 
-    final StateService stateService;
+    final ExecuteStateOperation executeStateOperation;
 
     volatile Generator generator;
 
-    public GenerateIdOperationImpl(final StateService stateService) {
-        this.stateService = stateService;
+    public GenerateIdOperationImpl(final ExecuteStateOperation executeStateOperation) {
+        this.executeStateOperation = executeStateOperation;
     }
 
     @Override
@@ -35,8 +33,7 @@ class GenerateIdOperationImpl implements GenerateIdOperation {
     }
 
     Generator createGenerator() {
-        final var nodeId = stateService.execute(new GetNodeIdRequest())
-                .getNodeId();
+        final var nodeId = executeStateOperation.getNodeId();
         if (Objects.nonNull(nodeId)) {
             return new Generator(nodeId);
         } else {
