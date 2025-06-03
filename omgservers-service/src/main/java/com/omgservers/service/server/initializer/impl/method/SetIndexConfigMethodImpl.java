@@ -1,9 +1,7 @@
 package com.omgservers.service.server.initializer.impl.method;
 
-import com.omgservers.schema.model.index.IndexConfigDto;
+import com.omgservers.service.operation.server.ExecuteStateOperation;
 import com.omgservers.service.operation.server.GetIndexConfigOperation;
-import com.omgservers.service.server.state.StateService;
-import com.omgservers.service.server.state.dto.SetIndexConfigRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -15,22 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 class SetIndexConfigMethodImpl implements SetIndexConfigMethod {
 
     final GetIndexConfigOperation getIndexConfigOperation;
-
-    final StateService stateService;
+    final ExecuteStateOperation executeStateOperation;
 
     @Override
     public Uni<Void> execute() {
         log.info("Set index config");
 
         return getIndexConfigOperation.execute()
-                .invoke(this::setIndexConfig)
+                .invoke(indexConfig -> {
+                    executeStateOperation.setIndexConfig(indexConfig);
+                    log.info("Index config set");
+                })
                 .replaceWithVoid();
-    }
-
-    void setIndexConfig(final IndexConfigDto indexConfig) {
-        final var request = new SetIndexConfigRequest(indexConfig);
-        stateService.execute(request);
-
-        log.info("Index config set");
     }
 }

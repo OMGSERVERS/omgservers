@@ -2,11 +2,10 @@ package com.omgservers.service.server.registry.operation;
 
 import com.omgservers.schema.model.exception.ExceptionQualifierEnum;
 import com.omgservers.service.exception.ServerSideInternalException;
+import com.omgservers.service.operation.server.ExecuteStateOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.registry.dto.RegistryActionEnum;
 import com.omgservers.service.server.registry.dto.RegistryResourceAccess;
-import com.omgservers.service.server.state.StateService;
-import com.omgservers.service.server.state.dto.GetX5CRequest;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.smallrye.jwt.auth.principal.ParseException;
 import io.smallrye.jwt.build.Jwt;
@@ -27,9 +26,9 @@ class IssueRegistryAccessTokenOperationImpl implements IssueRegistryAccessTokenO
 
     static private final String REGISTRY_AUDIENCE = "registry";
 
-    final StateService stateService;
-
     final GetServiceConfigOperation getServiceConfigOperation;
+    final ExecuteStateOperation executeStateOperation;
+
     final JWTParser jwtParser;
 
     @Override
@@ -38,7 +37,7 @@ class IssueRegistryAccessTokenOperationImpl implements IssueRegistryAccessTokenO
 
         try {
             final var issuer = getServiceConfigOperation.getServiceConfig().jwt().issuer();
-            final var x5c = stateService.execute(new GetX5CRequest()).getX5c();
+            final var x5c = executeStateOperation.getX5C();
             final var jwtToken = Jwt.issuer(issuer)
                     .subject(userId.toString())
                     .audience(REGISTRY_AUDIENCE)
