@@ -1,4 +1,4 @@
-package com.omgservers.service.operation.runtime;
+package com.omgservers.service.operation.client;
 
 import java.net.URI;
 

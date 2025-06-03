@@ -1,4 +1,4 @@
-package com.omgservers.service.operation.runtime;
+package com.omgservers.service.operation.client;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
 import com.omgservers.service.operation.security.IssueJwtTokenOperation;
@@ -16,7 +16,7 @@ import java.net.URI;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreateClientDispatcherConnectionUrlOperationImpl implements CreateClientDispatcherConnectionUrlOperation {
 
-    static final String DISPATCHER_ENDPOINT = "/dispatcher/v1/entrypoint/websocket/endpoint";
+    static final String WEBSOCKET_ENDPOINT = "/dispatcher/v1/entrypoint/websocket/endpoint";
     static final String WS_TOKEN_PARAM = "ws_token";
 
     final GetServiceConfigOperation getServiceConfigOperation;
@@ -25,10 +25,11 @@ class CreateClientDispatcherConnectionUrlOperationImpl implements CreateClientDi
     @Override
     public URI execute(final Long clientId, final Long runtimeId) {
         final var dispatcherUri = getServiceConfigOperation.getServiceConfig().client().dispatcherUri();
-        final var wsToken = issueJwtTokenOperation.issueWsJwtToken(clientId, runtimeId, UserRoleEnum.PLAYER);
+        final var wsToken = issueJwtTokenOperation
+                .issueDispatcherClientWebsocketToken(clientId, runtimeId, UserRoleEnum.PLAYER);
 
         final var connectionUrl = UriBuilder.fromUri(dispatcherUri)
-                .path(DISPATCHER_ENDPOINT)
+                .path(WEBSOCKET_ENDPOINT)
                 .queryParam(WS_TOKEN_PARAM, wsToken)
                 .build();
 

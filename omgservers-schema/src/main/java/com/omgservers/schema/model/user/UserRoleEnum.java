@@ -37,7 +37,12 @@ public enum UserRoleEnum {
     /**
      * Role which is used to connect to the service WebSocket endpoint.
      */
-    WEBSOCKET(Names.WEBSOCKET);
+    WEBSOCKET(Names.WEBSOCKET),
+
+    /**
+     * Role which is used to interact with the service through Connector Api.
+     */
+    CONNECTOR(Names.CONNECTOR);
 
     public static UserRoleEnum fromString(final String name) {
         for (var value : UserRoleEnum.values()) {
@@ -65,5 +70,6 @@ public enum UserRoleEnum {
         static public final String PLAYER = "player";
         static public final String RUNTIME = "runtime";
         static public final String WEBSOCKET = "websocket";
+        static public final String CONNECTOR = "connector";
     }
 }

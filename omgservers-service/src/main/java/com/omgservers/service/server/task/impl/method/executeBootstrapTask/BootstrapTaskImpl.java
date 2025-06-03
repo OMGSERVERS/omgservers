@@ -32,6 +32,7 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                 .flatMap(voidItem -> bootstrapAdminUser())
                 .flatMap(voidItem -> bootstrapSupportUser())
                 .flatMap(voidItem -> bootstrapServiceUser())
+                .flatMap(voidItem -> bootstrapConnectorUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
                 .replaceWith(TaskResult.DONE)
                 .onFailure().transform(
@@ -96,6 +97,26 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                     });
         } else {
             log.warn("Default service user password is not set, user won't be created");
+            return Uni.createFrom().item(Boolean.FALSE);
+        }
+    }
+
+    Uni<Boolean> bootstrapConnectorUser() {
+        final var alias = getServiceConfigOperation.getServiceConfig().bootstrap().connectorUser().alias();
+        final var password = getServiceConfigOperation.getServiceConfig().bootstrap().connectorUser().password();
+        if (password.isPresent()) {
+            final var request = new BootstrapDefaultUserRequest(alias, password.get(), UserRoleEnum.CONNECTOR);
+            return bootstrapService.execute(request)
+                    .map(BootstrapDefaultUserResponse::getCreated)
+                    .invoke(created -> {
+                        if (created) {
+                            log.info("Connector user \"{}\" created", alias);
+                        } else {
+                            log.info("Connector user \"{}\" already created", alias);
+                        }
+                    });
+        } else {
+            log.warn("Default connector user password is not set, user won't be created");
             return Uni.createFrom().item(Boolean.FALSE);
         }
     }

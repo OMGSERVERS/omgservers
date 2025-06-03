@@ -30,6 +30,7 @@
 
     <modules>
         <module>omgservers-api</module>
+        <module>omgservers-connector</module>
         <module>omgservers-ctl</module>
         <module>omgservers-dispatcher</module>
         <module>omgservers-testing</module>
