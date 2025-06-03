@@ -25,7 +25,7 @@ class CreateClientConnectorUrlOperationImpl implements CreateClientConnectorUrlO
     public URI execute(final Long clientId) {
         final var connectorUri = getServiceConfigOperation.getServiceConfig().client().connectorUri();
         final var wsToken = issueJwtTokenOperation
-                .issueConnectorClientWebsocketToken(clientId);
+                .issueConnectorClientWsToken(clientId);
 
         final var connectionUrl = UriBuilder.fromUri(connectorUri)
                 .path(WEBSOCKET_ENDPOINT)
