@@ -1,6 +1,7 @@
 package com.omgservers.dispatcher.security;
 
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.identity.SecurityIdentityAugmentor;

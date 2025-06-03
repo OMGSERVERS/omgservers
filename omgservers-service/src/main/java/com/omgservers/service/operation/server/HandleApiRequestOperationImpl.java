@@ -1,6 +1,6 @@
 package com.omgservers.service.operation.server;
 
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,6 +16,7 @@ import java.util.function.Function;
 class HandleApiRequestOperationImpl implements HandleApiRequestOperation {
 
     final PutIntoMdcOperation putIntoMdcOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     final SecurityIdentity securityIdentity;
 
@@ -24,8 +25,7 @@ class HandleApiRequestOperationImpl implements HandleApiRequestOperation {
         if (securityIdentity.isAnonymous()) {
             putIntoMdcOperation.putAnonymousSubject();
         } else {
-            final var subject = securityIdentity
-                    .<String>getAttribute(SecurityAttributesEnum.SUBJECT.getAttributeName());
+            final var subject = getSecurityAttributeOperation.<String>getSubject();
             if (Objects.nonNull(subject)) {
                 putIntoMdcOperation.putArbitrarySubject(subject);
             } else {

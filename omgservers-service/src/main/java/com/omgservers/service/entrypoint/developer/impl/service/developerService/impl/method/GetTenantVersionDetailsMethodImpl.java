@@ -12,7 +12,7 @@ import com.omgservers.schema.shard.tenant.tenantVersion.dto.TenantVersionDataDto
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantVersionMapper;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
@@ -29,17 +29,16 @@ class GetTenantVersionDetailsMethodImpl implements GetTenantVersionDetailsMethod
     final TenantShard tenantShard;
 
     final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
 
     final TenantVersionMapper tenantVersionMapper;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<GetVersionDetailsDeveloperResponse> execute(final GetVersionDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
 
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)

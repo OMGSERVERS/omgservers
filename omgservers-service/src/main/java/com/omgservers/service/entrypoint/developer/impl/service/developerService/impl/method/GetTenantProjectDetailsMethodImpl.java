@@ -8,9 +8,8 @@ import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataResp
 import com.omgservers.schema.shard.tenant.tenantProject.dto.TenantProjectDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantProjectMapper;
 import com.omgservers.service.operation.authz.AuthorizeTenantProjectRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,10 +24,9 @@ class GetTenantProjectDetailsMethodImpl implements GetTenantProjectDetailsMethod
     final TenantShard tenantShard;
 
     final AuthorizeTenantProjectRequestOperation authorizeTenantProjectRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     final TenantProjectMapper tenantProjectMapper;
-
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<GetProjectDetailsDeveloperResponse> execute(final GetProjectDetailsDeveloperRequest request) {
@@ -36,8 +34,7 @@ class GetTenantProjectDetailsMethodImpl implements GetTenantProjectDetailsMethod
 
         final var tenant = request.getTenant();
         final var project = request.getProject();
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantProjectPermissionQualifierEnum.PROJECT_VIEWER;
 
         return authorizeTenantProjectRequestOperation.execute(tenant, project, userId, permission)

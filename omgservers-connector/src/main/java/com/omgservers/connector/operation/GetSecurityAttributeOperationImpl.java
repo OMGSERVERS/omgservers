@@ -1,7 +1,7 @@
 package com.omgservers.connector.operation;
 
-import com.omgservers.connector.security.SecurityAttributesEnum;
 import com.omgservers.schema.model.user.UserRoleEnum;
+import com.omgservers.schema.security.SecurityAttributesEnum;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;

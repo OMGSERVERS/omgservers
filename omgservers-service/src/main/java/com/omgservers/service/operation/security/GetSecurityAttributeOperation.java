@@ -6,6 +6,8 @@ public interface GetSecurityAttributeOperation {
 
     Long getRuntimeId();
 
+    Long getUserId();
+
     UserRoleEnum getUserRole();
 
     <T> T getSubject();

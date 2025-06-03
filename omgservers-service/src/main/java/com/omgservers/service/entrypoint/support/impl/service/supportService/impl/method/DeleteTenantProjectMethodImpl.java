@@ -4,11 +4,9 @@ import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportReques
 import com.omgservers.schema.entrypoint.support.DeleteTenantProjectSupportResponse;
 import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectResponse;
-import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
-import io.quarkus.security.identity.SecurityIdentity;
+import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -24,14 +22,9 @@ class DeleteTenantProjectMethodImpl implements DeleteTenantProjectMethod {
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
 
-    final SecurityIdentity securityIdentity;
-
     @Override
     public Uni<DeleteTenantProjectSupportResponse> execute(final DeleteTenantProjectSupportRequest request) {
         log.info("Requested, {}", request);
-
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)

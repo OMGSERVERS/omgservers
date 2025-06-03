@@ -11,9 +11,7 @@ import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -31,14 +29,9 @@ class CreateTenantProjectMethodImpl implements CreateTenantProjectMethod {
     final TenantProjectModelFactory tenantProjectModelFactory;
     final TenantStageModelFactory tenantStageModelFactory;
 
-    final SecurityIdentity securityIdentity;
-
     @Override
     public Uni<CreateTenantProjectSupportResponse> execute(final CreateTenantProjectSupportRequest request) {
         log.info("Requested, {}", request);
-
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = request.getTenant();
         return getIdByTenantOperation.execute(tenant)

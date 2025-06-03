@@ -4,10 +4,8 @@ import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeReques
 import com.omgservers.schema.entrypoint.runtime.InterchangeMessagesRuntimeResponse;
 import com.omgservers.schema.shard.runtime.runtimeMessage.InterchangeMessagesRequest;
 import com.omgservers.schema.shard.runtime.runtimeMessage.InterchangeMessagesResponse;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.runtime.RuntimeShard;
-import com.omgservers.service.shard.user.UserShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -20,16 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
 
     final RuntimeShard runtimeShard;
-    final UserShard userShard;
 
-    final SecurityIdentity securityIdentity;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     @Override
     public Uni<InterchangeMessagesRuntimeResponse> execute(final InterchangeMessagesRuntimeRequest request) {
         log.debug("Requested, {}", request);
 
-        final var runtimeId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.RUNTIME_ID.getAttributeName());
+        final var runtimeId = getSecurityAttributeOperation.getRuntimeId();
 
         final var outgoingMessages = request.getOutgoingMessages();
         final var consumedMessages = request.getConsumedMessages();

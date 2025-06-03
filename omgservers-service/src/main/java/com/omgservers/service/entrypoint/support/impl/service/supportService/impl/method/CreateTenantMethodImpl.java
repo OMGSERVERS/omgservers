@@ -5,10 +5,7 @@ import com.omgservers.schema.entrypoint.support.CreateTenantSupportResponse;
 import com.omgservers.schema.model.tenant.TenantConfigDto;
 import com.omgservers.schema.shard.tenant.tenant.SyncTenantRequest;
 import com.omgservers.service.factory.tenant.TenantModelFactory;
-import com.omgservers.service.operation.server.GenerateIdOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -21,17 +18,11 @@ class CreateTenantMethodImpl implements CreateTenantMethod {
 
     final TenantShard tenantShard;
 
-    final GenerateIdOperation generateIdOperation;
-
     final TenantModelFactory tenantModelFactory;
-    final SecurityIdentity securityIdentity;
 
     @Override
     public Uni<CreateTenantSupportResponse> execute(final CreateTenantSupportRequest request) {
         log.info("Requested, {}", request);
-
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var tenant = tenantModelFactory.create(TenantConfigDto.create());
         final var syncTenantInternalRequest = new SyncTenantRequest(tenant);

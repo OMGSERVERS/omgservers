@@ -6,15 +6,11 @@ import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnum;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
-import com.omgservers.service.factory.alias.AliasModelFactory;
 import com.omgservers.service.operation.alias.CreateTenantProjectAliasOperation;
 import com.omgservers.service.operation.alias.CreateTenantProjectAliasResult;
 import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
-import com.omgservers.service.shard.alias.AliasShard;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import com.omgservers.service.shard.user.UserShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -27,15 +23,10 @@ import lombok.extern.slf4j.Slf4j;
 class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMethod {
 
     final TenantShard tenantShard;
-    final AliasShard aliasShard;
-    final UserShard userShard;
 
     final CreateTenantProjectAliasOperation createTenantProjectAliasOperation;
     final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
-
-    final AliasModelFactory aliasModelFactory;
-
-    final SecurityIdentity securityIdentity;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
     @Override
     public Uni<CreateProjectAliasDeveloperResponse> execute(
@@ -43,8 +34,7 @@ class CreateTenantProjectAliasMethodImpl implements CreateTenantProjectAliasMeth
         log.info("Requested, {}", request);
 
         final var tenant = request.getTenant();
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantPermissionQualifierEnum.PROJECT_MANAGER;
 
         return authorizeTenantRequestOperation.execute(tenant, userId, permission)

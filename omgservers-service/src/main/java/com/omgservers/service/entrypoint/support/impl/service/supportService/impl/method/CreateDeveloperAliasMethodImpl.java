@@ -5,12 +5,9 @@ import com.omgservers.schema.entrypoint.support.CreateDeveloperAliasSupportRespo
 import com.omgservers.schema.model.user.UserModel;
 import com.omgservers.schema.shard.user.GetUserRequest;
 import com.omgservers.schema.shard.user.GetUserResponse;
-import com.omgservers.service.factory.user.UserModelFactory;
 import com.omgservers.service.operation.alias.CreateUserAliasOperation;
 import com.omgservers.service.operation.alias.CreateUserAliasResult;
-import com.omgservers.service.security.SecurityAttributesEnum;
 import com.omgservers.service.shard.user.UserShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -25,15 +22,9 @@ class CreateDeveloperAliasMethodImpl implements CreateDeveloperAliasMethod {
 
     final CreateUserAliasOperation createUserAliasOperation;
 
-    final UserModelFactory userModelFactory;
-    final SecurityIdentity securityIdentity;
-
     @Override
     public Uni<CreateDeveloperAliasSupportResponse> execute(final CreateDeveloperAliasSupportRequest request) {
         log.info("Requested, {}", request);
-
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
 
         final var developerUserId = request.getDeveloperUserId();
         return getUser(developerUserId)

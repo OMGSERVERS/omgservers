@@ -8,9 +8,8 @@ import com.omgservers.schema.shard.tenant.tenant.GetTenantDataResponse;
 import com.omgservers.schema.shard.tenant.tenant.dto.TenantDataDto;
 import com.omgservers.service.entrypoint.developer.impl.mappers.TenantMapper;
 import com.omgservers.service.operation.authz.AuthorizeTenantRequestOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.tenant.TenantShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -25,18 +24,16 @@ class GetTenantDetailsMethodImpl implements GetTenantDetailsMethod {
     final TenantShard tenantShard;
 
     final AuthorizeTenantRequestOperation authorizeTenantRequestOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
 
-    final SecurityIdentity securityIdentity;
     final TenantMapper tenantMapper;
-
 
     @Override
     public Uni<GetTenantDetailsDeveloperResponse> execute(final GetTenantDetailsDeveloperRequest request) {
         log.info("Requested, {}", request);
 
         final var tenant = request.getTenant();
-        final var userId = securityIdentity.<Long>getAttribute(
-                SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
         final var permission = TenantPermissionQualifierEnum.TENANT_VIEWER;
 
         return authorizeTenantRequestOperation.execute(tenant, userId, permission)

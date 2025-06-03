@@ -22,11 +22,10 @@ import com.omgservers.service.operation.alias.GetIdByProjectOperation;
 import com.omgservers.service.operation.alias.GetIdByStageOperation;
 import com.omgservers.service.operation.alias.GetIdByTenantOperation;
 import com.omgservers.service.operation.client.CreateClientConnectorUrlOperation;
-import com.omgservers.service.security.SecurityAttributesEnum;
+import com.omgservers.service.operation.security.GetSecurityAttributeOperation;
 import com.omgservers.service.shard.client.ClientShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import com.omgservers.service.shard.user.UserShard;
-import io.quarkus.security.identity.SecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -43,6 +42,7 @@ class CreateClientMethodImpl implements CreateClientMethod {
     final UserShard userShard;
 
     final CreateClientConnectorUrlOperation createClientConnectorUrlOperation;
+    final GetSecurityAttributeOperation getSecurityAttributeOperation;
     final GetIdByProjectOperation getIdByProjectOperation;
     final GetIdByTenantOperation getIdByTenantOperation;
     final GetIdByStageOperation getIdByStageOperation;
@@ -50,14 +50,11 @@ class CreateClientMethodImpl implements CreateClientMethod {
     final ClientModelFactory clientModelFactory;
     final PlayerModelFactory playerModelFactory;
 
-    final SecurityIdentity securityIdentity;
-
     @Override
     public Uni<CreateClientPlayerResponse> execute(final CreateClientPlayerRequest request) {
         log.info("Requested, {}", request);
 
-        final var userId = securityIdentity
-                .<Long>getAttribute(SecurityAttributesEnum.USER_ID.getAttributeName());
+        final var userId = getSecurityAttributeOperation.getUserId();
 
         final var tenant = request.getTenant();
         final var project = request.getProject();
