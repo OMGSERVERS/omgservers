@@ -130,6 +130,8 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Push image for omgservers-service
         run: ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true -pl omgservers-service -am
+      - name: Push image for omgservers-connector
+        run: ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true -pl omgservers-connector -am
       - name: Push image for omgservers-dispatcher
         run: ./mvnw -B install -DskipTests -Dquarkus.container-image.push=true -pl omgservers-dispatcher -am
 
