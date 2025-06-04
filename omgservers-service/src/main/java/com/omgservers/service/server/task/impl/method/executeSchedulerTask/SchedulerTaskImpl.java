@@ -41,17 +41,11 @@ public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
 
     public Uni<TaskResult> execute(final SchedulerTaskArguments taskArguments) {
         return viewTasks()
-                .flatMap(this::executeAll)
-                .flatMap(tasksToRepeat -> {
-                    if (tasksToRepeat.isEmpty()) {
-                        return Uni.createFrom().voidItem();
-                    } else {
-                        return executeAll(tasksToRepeat)
-                                .onItem().delayIt().by(Duration.ofMillis(250))
-                                .flatMap(this::executeAll)
-                                .onItem().delayIt().by(Duration.ofMillis(250))
-                                .flatMap(this::executeAll);
-                    }
+                .flatMap(tasks -> {
+                    return Uni.createFrom().voidItem()
+                            .flatMap(voidItem -> executeAll(tasks))
+                            .onItem().delayIt().by(Duration.ofMillis(500))
+                            .flatMap(voidItem -> executeAll(tasks));
                 })
                 .replaceWith(TaskResult.DONE);
     }
@@ -63,14 +57,11 @@ public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
                 .map(ViewTasksResponse::getTasks);
     }
 
-    Uni<List<TaskModel>> executeAll(final List<TaskModel> tasks) {
+    Uni<Void> executeAll(final List<TaskModel> tasks) {
         return Multi.createFrom().iterable(tasks)
                 .onItem().transformToUniAndMerge(this::executeTask)
                 .collect().asList()
-                .map(results -> results.stream()
-                        .filter(ExecuteTaskResult::repeat)
-                        .map(ExecuteTaskResult::task)
-                        .toList());
+                .replaceWithVoid();
     }
 
     Uni<ExecuteTaskResult> executeTask(final TaskModel task) {
@@ -86,17 +77,15 @@ public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
             case DEPLOYMENT -> taskService
                     .execute(new ExecuteDeploymentTaskRequest(task.getEntityId()))
                     .map(ExecuteDeploymentTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task,
-                            taskResult.equals(TaskResult.DONE)));
+                    .map(taskResult -> new ExecuteTaskResult(task, true));
             case MATCHMAKER -> taskService
                     .execute(new ExecuteMatchmakerTaskRequest(task.getEntityId()))
                     .map(ExecuteMatchmakerTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task,
-                            taskResult.equals(TaskResult.DONE)));
+                    .map(taskResult -> new ExecuteTaskResult(task, true));
             case RUNTIME -> taskService
                     .execute(new ExecuteRuntimeTaskRequest(task.getEntityId()))
                     .map(ExecuteRuntimeTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task, false));
+                    .map(taskResult -> new ExecuteTaskResult(task, true));
             case POOL -> taskService
                     .execute(new ExecutePoolTaskRequest(task.getEntityId()))
                     .map(ExecutePoolTaskResponse::getTaskResult)
