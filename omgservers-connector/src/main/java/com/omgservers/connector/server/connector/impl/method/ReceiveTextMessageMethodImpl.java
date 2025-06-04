@@ -34,7 +34,10 @@ class ReceiveTextMessageMethodImpl implements ReceiveTextMessageMethod {
                 final var outgoingMessage = objectMapper.readValue(message, MessageModel.class);
                 connector.addOutgoingMessage(outgoingMessage);
 
-                log.info("Received from \"{}\", \"{}\"", connector.getConnection().getClientId(), outgoingMessage);
+                log.info("Message \"{}\" received from \"{}\", \"{}\"",
+                        outgoingMessage.getQualifier(),
+                        connector.getConnection().getClientId(),
+                        outgoingMessage.getBody());
                 return Uni.createFrom().item(new ReceiveTextMessageResponse(Boolean.TRUE));
             } catch (IOException e) {
                 log.warn("Failed to parse message from \"{}\", {}:{}",

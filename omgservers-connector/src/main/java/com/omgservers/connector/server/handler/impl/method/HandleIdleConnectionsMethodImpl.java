@@ -27,9 +27,16 @@ class HandleIdleConnectionsMethodImpl implements HandleIdleConnectionsMethod {
     public Uni<Void> execute(final HandleIdleConnectionsRequest request) {
         log.debug("{}", request);
 
-        final var now = Instant.now();
         final var idleTimeout = getConnectorConfigOperation.getConnectorConfig().idleConnectionTimeout();
+        if (idleTimeout == 0) {
+            return Uni.createFrom().voidItem();
+        } else {
+            return handleIdleConnections(idleTimeout);
+        }
+    }
 
+    Uni<Void> handleIdleConnections(final long idleTimeout) {
+        final var now = Instant.now();
         return Multi.createFrom().iterable(connectorConnections.getAll())
                 .onItem().transformToUniAndConcatenate(connectorConnection -> {
                     final var lastUsage = connectorConnection.getLastUsage();
