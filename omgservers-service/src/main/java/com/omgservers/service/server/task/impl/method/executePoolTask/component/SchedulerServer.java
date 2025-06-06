@@ -42,17 +42,17 @@ public class SchedulerServer {
     }
 
     public boolean schedule(final SchedulerContainer container) {
-        if (containers.size() >= maxContainers) {
+        if (containers.size() + 1 > maxContainers) {
             return false;
         }
 
         final var cpuLimit = container.getCpuLimit();
-        if (cpuTime + cpuLimit >= maxCpuTime) {
+        if (cpuTime + cpuLimit > maxCpuTime) {
             return false;
         }
 
         final var memoryLimit = container.getMemoryLimit();
-        if (memoryUsage + memoryLimit >= maxMemoryUsage) {
+        if (memoryUsage + memoryLimit > maxMemoryUsage) {
             return false;
         }
 
