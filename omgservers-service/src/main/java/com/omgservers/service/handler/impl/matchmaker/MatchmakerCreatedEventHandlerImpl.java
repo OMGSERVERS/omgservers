@@ -1,10 +1,7 @@
 package com.omgservers.service.handler.impl.matchmaker;
 
-import com.omgservers.schema.model.deploymentCommand.body.OpenMatchmakerDeploymentCommandBodyDto;
-import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.model.matchmaker.MatchmakerModel;
-import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandRequest;
-import com.omgservers.schema.shard.deployment.deploymentCommand.SyncDeploymentCommandResponse;
+import com.omgservers.schema.model.task.TaskQualifierEnum;
 import com.omgservers.schema.shard.matchmaker.matchmaker.GetMatchmakerRequest;
 import com.omgservers.schema.shard.matchmaker.matchmaker.GetMatchmakerResponse;
 import com.omgservers.service.event.EventModel;
@@ -51,12 +48,7 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(matchmaker -> {
                     log.debug("Created, {}", matchmaker);
 
-                    final var deploymentId = matchmaker.getDeploymentId();
-
-                    return createOpenMatchmakerDeploymentCommand(deploymentId, matchmakerId, idempotencyKey)
-                            .flatMap(created -> createTaskOperation.execute(TaskQualifierEnum.MATCHMAKER,
-                                    matchmakerId,
-                                    idempotencyKey));
+                    return createTaskOperation.execute(TaskQualifierEnum.MATCHMAKER, matchmakerId, idempotencyKey);
                 })
                 .replaceWithVoid();
     }
@@ -65,18 +57,5 @@ public class MatchmakerCreatedEventHandlerImpl implements EventHandler {
         final var request = new GetMatchmakerRequest(matchmakerId);
         return matchmakerShard.getService().execute(request)
                 .map(GetMatchmakerResponse::getMatchmaker);
-    }
-
-    Uni<Boolean> createOpenMatchmakerDeploymentCommand(final Long deploymentId,
-                                                       final Long matchmakerId,
-                                                       final String idempotencyKey) {
-        final var commandBody = new OpenMatchmakerDeploymentCommandBodyDto(matchmakerId);
-        final var deploymentCommand = deploymentCommandModelFactory.create(deploymentId,
-                commandBody,
-                idempotencyKey);
-
-        final var request = new SyncDeploymentCommandRequest(deploymentCommand);
-        return deploymentShard.getService().executeWithIdempotency(request)
-                .map(SyncDeploymentCommandResponse::getCreated);
     }
 }

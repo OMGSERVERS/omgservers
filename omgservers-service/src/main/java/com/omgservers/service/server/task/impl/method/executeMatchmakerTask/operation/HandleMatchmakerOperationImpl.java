@@ -1,5 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation;
 
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceStatusEnum;
 import com.omgservers.schema.model.matchmakerChangeOfState.MatchmakerChangeOfStateDto;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.FetchMatchmakerResult;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.HandleMatchmakerResult;
@@ -16,6 +17,7 @@ class HandleMatchmakerOperationImpl implements HandleMatchmakerOperation {
     final HandleMatchmakerCommandsOperation handleMatchmakerCommandsOperation;
     final HandleMatchmakerRequestsOperation handleMatchmakerRequestsOperation;
     final DeleteClosedMatchesOperation deleteClosedMatchesOperation;
+    final CloseMatchmakerResourcesOperation closeMatchmakerResourcesOperation;
     final EnsureMinMatchesOperation ensureMinMatchesOperation;
 
     @Override
@@ -24,12 +26,20 @@ class HandleMatchmakerOperationImpl implements HandleMatchmakerOperation {
         final var handleMatchmakerResult = new HandleMatchmakerResult(matchmakerId,
                 new MatchmakerChangeOfStateDto());
 
+        final var status = fetchMatchmakerResult.deploymentMatchmakerResource().getStatus();
+
         deleteClosedMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
 
-        ensureMinMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
+        if (status.equals(DeploymentMatchmakerResourceStatusEnum.CREATED)) {
+            ensureMinMatchesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
+        }
 
         handleMatchmakerCommandsOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
         handleMatchmakerRequestsOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
+
+        if (status.equals(DeploymentMatchmakerResourceStatusEnum.CLOSED)) {
+            closeMatchmakerResourcesOperation.execute(fetchMatchmakerResult, handleMatchmakerResult);
+        }
 
         return handleMatchmakerResult;
     }

@@ -6,6 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -18,6 +20,8 @@ class HandlePoolRequestsOperationImpl implements HandlePoolRequestsOperation {
     public void execute(final FetchPoolResult fetchPoolResult,
                         final HandlePoolResult handlePoolResult) {
         final var poolScheduler = createPoolSchedulerOperation.execute(fetchPoolResult);
+
+        final var failures = new AtomicInteger();
 
         fetchPoolResult.poolState().getPoolRequests()
                 .forEach(poolRequest -> {
@@ -34,11 +38,14 @@ class HandlePoolRequestsOperationImpl implements HandlePoolRequestsOperation {
                             handlePoolResult.poolChangeOfState().getPoolContainersToSync().add(poolContainer);
                             handlePoolResult.poolChangeOfState().getPoolRequestsToDelete().add(poolRequest.getId());
                         } else {
-                            log.error("Failed to schedule container, request={}/{}",
-                                    poolRequest.getPoolId(), poolRequest.getId());
+                            failures.incrementAndGet();
                         }
                     }
                 });
+
+        if (failures.get() > 0) {
+            log.error("Failed to schedule \"{}\" container/s", failures);
+        }
     }
 
 }

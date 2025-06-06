@@ -50,7 +50,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                     final var matchmaker = matchmakerState.getMatchmaker();
                     log.debug("Deleted, {}", matchmaker);
 
-                    return deleteTaskOperation.execute(matchmakerId, matchmakerId)
+                    return deleteTaskOperation.execute(matchmakerId)
                             .flatMap(deleted -> {
                                 final var matchmakerCommands = matchmakerState.getMatchmakerCommands();
                                 final var matchmakerRequests = matchmakerState.getMatchmakerRequests();
@@ -61,7 +61,7 @@ public class MatchmakerDeletedEventHandlerImpl implements EventHandler {
                                         !matchmakerRequests.isEmpty() ||
                                         !matchmakerMatchResources.isEmpty() ||
                                         !matchmakerMatchAssignments.isEmpty()) {
-                                    log.warn("Matchmaker \"{}\" deleted, but some data remains, " +
+                                    log.error("Matchmaker \"{}\" deleted, but some data remains, " +
                                                     "commands={}, requests={}, matchResources={}, matchAssignments={}",
                                             matchmakerId,
                                             matchmakerCommands.size(),
