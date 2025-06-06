@@ -26,7 +26,7 @@ class KickClientDeploymentCommandHandlerImpl implements DeploymentCommandHandler
     public boolean handle(final FetchDeploymentResult fetchDeploymentResult,
                           final HandleDeploymentResult handleDeploymentResult,
                           final DeploymentCommandModel deploymentCommand) {
-        log.trace("Handle command, {}", deploymentCommand);
+        log.debug("Handle command, {}", deploymentCommand);
 
         final var body = (KickClientDeploymentCommandBodyDto) deploymentCommand.getBody();
         final var clientId = body.getClientId();

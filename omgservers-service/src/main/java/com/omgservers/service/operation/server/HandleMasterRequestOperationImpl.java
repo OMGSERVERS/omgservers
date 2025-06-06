@@ -32,7 +32,7 @@ class HandleMasterRequestOperationImpl implements HandleMasterRequestOperation {
             operation = handle.apply(request);
         } else {
             final var client = api.apply(masterUri);
-            log.trace("Route request, targetServer={}, request={}", masterUri, request);
+            log.debug("Route request, targetServer={}, request={}", masterUri, request);
             operation = route.apply(client, request);
         }
 

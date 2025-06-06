@@ -28,7 +28,7 @@ class OpenMatchmakerDeploymentCommandHandlerImpl implements DeploymentCommandHan
     public boolean handle(final FetchDeploymentResult fetchDeploymentResult,
                           final HandleDeploymentResult handleDeploymentResult,
                           final DeploymentCommandModel deploymentCommand) {
-        log.trace("Handle command, {}", deploymentCommand);
+        log.debug("Handle command, {}", deploymentCommand);
 
         final var body = (OpenMatchmakerDeploymentCommandBodyDto) deploymentCommand.getBody();
         final var matchmakerId = body.getMatchmakerId();

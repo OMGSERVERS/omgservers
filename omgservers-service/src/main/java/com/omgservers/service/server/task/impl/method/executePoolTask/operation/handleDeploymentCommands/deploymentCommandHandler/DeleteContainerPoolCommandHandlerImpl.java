@@ -27,7 +27,7 @@ class DeleteContainerPoolCommandHandlerImpl implements PoolCommandHandler {
     public boolean handle(final FetchPoolResult fetchPoolResult,
                           final HandlePoolResult handlePoolResult,
                           final PoolCommandModel poolCommand) {
-        log.trace("Handle command, {}", poolCommand);
+        log.debug("Handle command, {}", poolCommand);
 
         final var body = (DeleteContainerPoolCommandBodyDto) poolCommand.getBody();
         final var runtimeId = body.getRuntimeId();

@@ -29,7 +29,7 @@ class DeleteLobbyDeploymentCommandHandlerImpl implements DeploymentCommandHandle
     public boolean handle(final FetchDeploymentResult fetchDeploymentResult,
                           final HandleDeploymentResult handleDeploymentResult,
                           final DeploymentCommandModel deploymentCommand) {
-        log.trace("Handle command, {}", deploymentCommand);
+        log.debug("Handle command, {}", deploymentCommand);
 
         final var body = (DeleteLobbyDeploymentCommandBodyDto) deploymentCommand.getBody();
         final var lobbyId = body.getLobbyId();

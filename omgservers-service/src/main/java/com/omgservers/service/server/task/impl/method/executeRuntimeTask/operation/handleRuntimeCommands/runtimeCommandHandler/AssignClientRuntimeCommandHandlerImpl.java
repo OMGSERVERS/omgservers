@@ -31,7 +31,7 @@ class AssignClientRuntimeCommandHandlerImpl implements RuntimeCommandHandler {
     public boolean handle(final FetchRuntimeResult fetchRuntimeResult,
                           final HandleRuntimeResult handleRuntimeResult,
                           final RuntimeCommandModel runtimeCommand) {
-        log.trace("Handle command, {}", runtimeCommand);
+        log.debug("Handle command, {}", runtimeCommand);
 
         final var body = (AssignClientRuntimeCommandBodyDto) runtimeCommand.getBody();
         final var clientId = body.getClientId();

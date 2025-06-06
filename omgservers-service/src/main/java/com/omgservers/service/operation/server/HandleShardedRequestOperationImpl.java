@@ -39,7 +39,7 @@ class HandleShardedRequestOperationImpl implements HandleShardedRequestOperation
                     final var serverUri = shardModel.uri();
                     if (shardModel.foreign()) {
                         final var client = api.apply(serverUri);
-                        log.trace("Route request, targetServer={}, request={}", serverUri, request);
+                        log.debug("Route request, targetServer={}, request={}", serverUri, request);
                         operation = route.apply(client, request);
                     } else {
                         log.trace("Handle request, request={}", request);

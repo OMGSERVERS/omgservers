@@ -28,7 +28,7 @@ class RemoveClientDeploymentCommandHandlerImpl implements DeploymentCommandHandl
     public boolean handle(final FetchDeploymentResult fetchDeploymentResult,
                           final HandleDeploymentResult handleDeploymentResult,
                           final DeploymentCommandModel deploymentCommand) {
-        log.trace("Handle command, {}", deploymentCommand);
+        log.debug("Handle command, {}", deploymentCommand);
 
         final var body = (RemoveClientDeploymentCommandBodyDto) deploymentCommand.getBody();
         final var clientId = body.getClientId();

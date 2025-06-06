@@ -29,7 +29,7 @@ class DeleteMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandle
     public boolean handle(final FetchMatchmakerResult fetchMatchmakerResult,
                           final HandleMatchmakerResult handleMatchmakerResult,
                           final MatchmakerCommandModel matchmakerCommand) {
-        log.trace("Handle command, {}", matchmakerCommand);
+        log.debug("Handle command, {}", matchmakerCommand);
 
         final var matchmakerState = fetchMatchmakerResult.matchmakerState();
         final var body = (DeleteMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
