@@ -34,7 +34,7 @@ class SupportStageCreateAliasOperationImpl implements SupportStageCreateAliasOpe
 
         final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, installation);
         final var installationName = installationDetailsLog.getName();
-        final var installationApi = installationDetailsLog.getApi();
+        final var installationApi = installationDetailsLog.getAddress();
 
         final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName);
         final var supportToken = supportTokenLog.getToken();

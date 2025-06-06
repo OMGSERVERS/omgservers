@@ -4,5 +4,5 @@ import java.net.URI;
 
 public interface ConfigInstallationUseCustomOperation {
 
-    void execute(String name, URI api, URI registry);
+    void execute(String name, URI address, URI registry);
 }

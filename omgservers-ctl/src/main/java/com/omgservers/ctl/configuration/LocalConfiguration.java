@@ -3,7 +3,7 @@ package com.omgservers.ctl.configuration;
 import java.net.URI;
 
 public class LocalConfiguration {
-    public static final URI API_URI = URI.create("http://localhost:8080");
+    public static final URI ADDRESS_URI = URI.create("http://localhost:8080");
     public static final URI REGISTRY_URI = URI.create("http://localhost:5000");
     public static final URI DOCKER_URI = URI.create("unix:///var/run/docker.sock");
 

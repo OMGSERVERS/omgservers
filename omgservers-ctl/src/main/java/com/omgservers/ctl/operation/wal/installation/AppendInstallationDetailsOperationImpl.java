@@ -20,10 +20,9 @@ class AppendInstallationDetailsOperationImpl implements AppendInstallationDetail
     @Override
     public void execute(final Path path,
                         final String name,
-                        final URI api,
+                        final URI address,
                         final URI registry) {
-
-        final var logBody = new InstallationDetailsLogLineBodyDto(name, api, registry);
+        final var logBody = new InstallationDetailsLogLineBodyDto(name, address, registry);
 
         final var logLine = new LogLineDto();
         logLine.setQualifier(logBody.getQualifier());

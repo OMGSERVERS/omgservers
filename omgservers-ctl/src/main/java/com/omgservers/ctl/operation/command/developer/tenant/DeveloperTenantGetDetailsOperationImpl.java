@@ -36,7 +36,7 @@ class DeveloperTenantGetDetailsOperationImpl implements DeveloperTenantGetDetail
 
         final var installationDetails = findInstallationDetailsOperation.execute(wal, installation);
         final var installationName = installationDetails.getName();
-        final var installationUri = installationDetails.getApi();
+        final var installationUri = installationDetails.getAddress();
 
         final var developerTokenLog = findDeveloperTokenOperation.execute(wal, installationName);
         final var developerToken = developerTokenLog.getToken();

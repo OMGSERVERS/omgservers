@@ -19,9 +19,9 @@ public class ConfigInstallationUseLocalOperationImpl implements ConfigInstallati
         final var path = wal.getPath();
 
         final var name = LocalConfiguration.SERVICE_NAME;
-        final var api = LocalConfiguration.API_URI;
+        final var address = LocalConfiguration.ADDRESS_URI;
         final var registry = LocalConfiguration.REGISTRY_URI;
 
-        appendInstallationDetailsOperation.execute(path, name, api, registry);
+        appendInstallationDetailsOperation.execute(path, name, address, registry);
     }
 }

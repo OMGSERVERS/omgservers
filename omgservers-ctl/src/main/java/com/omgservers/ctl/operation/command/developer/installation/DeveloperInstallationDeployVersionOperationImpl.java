@@ -48,7 +48,7 @@ class DeveloperInstallationDeployVersionOperationImpl implements DeveloperInstal
         final var path = wal.getPath();
 
         final var installationDetails = findInstallationDetailsOperation.execute(wal, installation);
-        final var serviceUri = installationDetails.getApi();
+        final var serviceUri = installationDetails.getAddress();
         final var serviceRegistry = installationDetails.getRegistry();
 
         final var developerToken = createDeveloperToken(serviceUri, developer, password);

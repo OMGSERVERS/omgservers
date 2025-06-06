@@ -32,7 +32,7 @@ class DeveloperInstallationCreateTokenOperationImpl implements DeveloperInstalla
 
         final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var serviceUri = serviceUrl.getAddress();
 
         final var developerAnonymousClient = createDeveloperAnonymousClientOperation.execute(serviceUri);
 

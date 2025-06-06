@@ -19,9 +19,9 @@ public class ConfigInstallationUseCloudOperationImpl implements ConfigInstallati
         final var path = wal.getPath();
 
         final var name = region.getRegion();
-        final var api = region.getApi();
+        final var address = region.getAddress();
         final var registry = region.getRegistry();
 
-        appendInstallationDetailsOperation.execute(path, name, api, registry);
+        appendInstallationDetailsOperation.execute(path, name, address, registry);
     }
 }
