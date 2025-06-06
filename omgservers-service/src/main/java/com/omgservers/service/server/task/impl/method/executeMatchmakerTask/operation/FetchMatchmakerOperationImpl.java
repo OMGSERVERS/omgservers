@@ -1,10 +1,13 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation;
 
 import com.omgservers.schema.model.deployment.DeploymentModel;
+import com.omgservers.schema.model.deploymentMatchmakerResource.DeploymentMatchmakerResourceModel;
 import com.omgservers.schema.model.matchmakerState.MatchmakerStateDto;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentRequest;
 import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.FindDeploymentMatchmakerResourceRequest;
+import com.omgservers.schema.shard.deployment.deploymentMatchmakerResource.FindDeploymentMatchmakerResourceResponse;
 import com.omgservers.schema.shard.matchmaker.matchmakerState.GetMatchmakerStateRequest;
 import com.omgservers.schema.shard.matchmaker.matchmakerState.GetMatchmakerStateResponse;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigRequest;
@@ -32,16 +35,21 @@ class FetchMatchmakerOperationImpl implements FetchMatchmakerOperation {
         return getMatchmakerState(matchmakerId)
                 .flatMap(matchmakerState -> {
                     final var deploymentId = matchmakerState.getMatchmaker().getDeploymentId();
-                    return getDeployment(deploymentId)
-                            .flatMap(deployment -> {
-                                final var tenantId = deployment.getTenantId();
-                                final var tenantVersionId = deployment.getVersionId();
-                                return getTenantVersionConfig(tenantId, tenantVersionId)
-                                        .map(tenantVersionConfig -> new FetchMatchmakerResult(matchmakerId,
-                                                tenantVersionConfig,
-                                                deployment.getConfig(),
-                                                matchmakerState));
-                            });
+                    return findDeploymentMatchmakerResource(deploymentId, matchmakerId)
+                            .flatMap(deploymentMatchmakerResource ->
+                                    getDeployment(deploymentId)
+                                            .flatMap(deployment -> {
+                                                final var tenantId = deployment.getTenantId();
+                                                final var tenantVersionId = deployment.getVersionId();
+                                                return getTenantVersionConfig(tenantId, tenantVersionId)
+                                                        .map(tenantVersionConfig ->
+                                                                new FetchMatchmakerResult(
+                                                                        matchmakerId,
+                                                                        deploymentMatchmakerResource,
+                                                                        tenantVersionConfig,
+                                                                        deployment.getConfig(),
+                                                                        matchmakerState));
+                                            }));
                 });
     }
 
@@ -55,6 +63,13 @@ class FetchMatchmakerOperationImpl implements FetchMatchmakerOperation {
         final var request = new GetDeploymentRequest(deploymentId);
         return deploymentShard.getService().execute(request)
                 .map(GetDeploymentResponse::getDeployment);
+    }
+
+    Uni<DeploymentMatchmakerResourceModel> findDeploymentMatchmakerResource(final Long deploymentId,
+                                                                            final Long matchmakerId) {
+        final var request = new FindDeploymentMatchmakerResourceRequest(deploymentId, matchmakerId);
+        return deploymentShard.getService().execute(request)
+                .map(FindDeploymentMatchmakerResourceResponse::getDeploymentMatchmakerResource);
     }
 
     Uni<TenantVersionConfigDto> getTenantVersionConfig(final Long tenantId, final Long tenantVersionId) {

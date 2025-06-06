@@ -7,7 +7,6 @@ import com.omgservers.schema.shard.deployment.deployment.GetDeploymentResponse;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigRequest;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigResponse;
 import com.omgservers.service.shard.deployment.DeploymentShard;
-import com.omgservers.service.shard.matchmaker.MatchmakerShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
 class GetTenantVersionConfigOperationImpl implements GetTenantVersionConfigOperation {
 
-    final MatchmakerShard matchmakerShard;
     final DeploymentShard deploymentShard;
     final TenantShard tenantShard;
 

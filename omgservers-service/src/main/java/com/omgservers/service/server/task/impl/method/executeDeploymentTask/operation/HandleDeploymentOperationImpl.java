@@ -1,6 +1,7 @@
 package com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation;
 
 import com.omgservers.schema.model.deploymentChangeOfState.DeploymentChangeOfStateDto;
+import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceStatusEnum;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.FetchDeploymentResult;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.dto.HandleDeploymentResult;
 import com.omgservers.service.server.task.impl.method.executeDeploymentTask.operation.handleDeploymentCommands.HandleDeploymentCommandsOperation;
@@ -16,6 +17,7 @@ class HandleDeploymentOperationImpl implements HandleDeploymentOperation {
     final HandleDeploymentRequestsOperation handleDeploymentRequestsOperation;
     final HandleDeploymentCommandsOperation handleDeploymentCommandsOperation;
     final CloseDanglingMatchmakersOperation closeDanglingMatchmakersOperation;
+    final CloseDeploymentResourcesOperation closeDeploymentResourcesOperation;
     final DeleteClosedMatchmakersOperation deleteClosedMatchmakersOperation;
     final CloseDanglingLobbiesOperation closeDanglingLobbiesOperation;
     final EnsureMinMatchmakersOperation ensureMinMatchmakersOperation;
@@ -28,17 +30,25 @@ class HandleDeploymentOperationImpl implements HandleDeploymentOperation {
         final var handleDeploymentResult = new HandleDeploymentResult(deploymentId,
                 new DeploymentChangeOfStateDto());
 
+        final var status = fetchDeploymentResult.tenantDeploymentResource().getStatus();
+
         deleteClosedMatchmakersOperation.execute(fetchDeploymentResult, handleDeploymentResult);
         deleteClosedLobbiesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
 
-        closeDanglingMatchmakersOperation.execute(fetchDeploymentResult, handleDeploymentResult);
-        closeDanglingLobbiesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+        if (status.equals(TenantDeploymentResourceStatusEnum.CREATED)) {
+            closeDanglingMatchmakersOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+            closeDanglingLobbiesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
 
-        ensureMinMatchmakersOperation.execute(fetchDeploymentResult, handleDeploymentResult);
-        ensureMinLobbiesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+            ensureMinMatchmakersOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+            ensureMinLobbiesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+        }
 
         handleDeploymentCommandsOperation.execute(fetchDeploymentResult, handleDeploymentResult);
         handleDeploymentRequestsOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+
+        if (status.equals(TenantDeploymentResourceStatusEnum.CLOSED)) {
+            closeDeploymentResourcesOperation.execute(fetchDeploymentResult, handleDeploymentResult);
+        }
 
         return handleDeploymentResult;
     }

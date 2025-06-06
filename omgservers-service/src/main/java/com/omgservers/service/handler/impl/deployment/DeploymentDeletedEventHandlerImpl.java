@@ -77,7 +77,7 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
                                         !deploymentLobbyAssignments.isEmpty() ||
                                         !deploymentMatchmakerResources.isEmpty() ||
                                         !deploymentMatchmakerAssignments.isEmpty()) {
-                                    log.warn("Deployment \"{}\" deleted, but some data remains, " +
+                                    log.error("Deployment \"{}\" deleted, but some data remains, " +
                                                     "commands={}, " +
                                                     "requests={}, " +
                                                     "lobbyResources={}, " +
