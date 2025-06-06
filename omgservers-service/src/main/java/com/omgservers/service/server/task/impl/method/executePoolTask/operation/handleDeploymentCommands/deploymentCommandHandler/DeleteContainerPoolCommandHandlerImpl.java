@@ -4,6 +4,7 @@ import com.omgservers.schema.model.poolCommand.PoolCommandModel;
 import com.omgservers.schema.model.poolCommand.PoolCommandQualifierEnum;
 import com.omgservers.schema.model.poolCommand.body.DeleteContainerPoolCommandBodyDto;
 import com.omgservers.schema.model.poolContainer.PoolContainerModel;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.service.server.task.impl.method.executePoolTask.dto.FetchPoolResult;
 import com.omgservers.service.server.task.impl.method.executePoolTask.dto.HandlePoolResult;
 import com.omgservers.service.server.task.impl.method.executePoolTask.operation.handleDeploymentCommands.PoolCommandHandler;
@@ -39,8 +40,22 @@ class DeleteContainerPoolCommandHandlerImpl implements PoolCommandHandler {
         handlePoolResult.poolChangeOfState().getPoolContainersToDelete()
                 .addAll(poolContainersToDelete);
 
-        if (!poolContainersToDelete.isEmpty()) {
-            log.info("Container for runtime \"{}\" queued for deletion", runtimeId);
+        if (poolContainersToDelete.isEmpty()) {
+            log.warn("Containers for runtime \"{}\" not found for deletion", runtimeId);
+        } else {
+            log.info("Containers for runtime \"{}\" queued for deletion", runtimeId);
+        }
+
+        final var poolRequestsToDelete = fetchPoolResult.poolState().getPoolRequests().stream()
+                .filter(poolRequest -> poolRequest.getRuntimeId().equals(runtimeId))
+                .map(PoolRequestModel::getId)
+                .toList();
+
+        handlePoolResult.poolChangeOfState().getPoolRequestsToDelete()
+                .addAll(poolRequestsToDelete);
+
+        if (!poolRequestsToDelete.isEmpty()) {
+            log.info("Pool requests for runtime \"{}\" queued for deletion", runtimeId);
         }
 
         return true;
