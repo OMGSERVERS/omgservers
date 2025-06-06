@@ -36,7 +36,7 @@ class AdminPingDockerHostOperationImpl implements AdminPingDockerHostOperation {
 
         final var installationDetailsLog = findInstallationDetailsOperation.execute(wal, installation);
         final var installationName = installationDetailsLog.getName();
-        final var installationApi = installationDetailsLog.getApi();
+        final var installationApi = installationDetailsLog.getAddress();
 
         final var adminTokenLog = findAdminTokenOperation.execute(wal, installationName);
         final var adminToken = adminTokenLog.getToken();

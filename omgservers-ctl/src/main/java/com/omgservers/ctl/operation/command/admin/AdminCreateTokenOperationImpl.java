@@ -32,7 +32,7 @@ class AdminCreateTokenOperationImpl implements AdminCreateTokenOperation {
 
         final var serviceUrl = findInstallationDetailsOperation.execute(wal, service);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var serviceUri = serviceUrl.getAddress();
 
         final var adminAnonymousClient = createAdminAnonymousClientOperation.execute(serviceUri);
 

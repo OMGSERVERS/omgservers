@@ -33,7 +33,7 @@ class FindInstallationDetailsOperationImpl implements FindInstallationDetailsOpe
                         return logLine.getName().equals(name);
                     }
                 })
-                .peek(logLine -> log.info("Installation \"{}\" details found, \"{}\"", logLine.getName(), logLine.getApi()))
+                .peek(logLine -> log.info("Installation \"{}\" details found, \"{}\"", logLine.getName(), logLine.getAddress()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException("installation details not found"));
     }

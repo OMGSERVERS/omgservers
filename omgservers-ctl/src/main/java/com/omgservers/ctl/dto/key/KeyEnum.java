@@ -13,7 +13,7 @@ public enum KeyEnum {
     ID("id"),
     MAP("map"),
     INSTALLATION("installation"),
-    API("api"),
+    ADDRESS("address"),
     REGISTRY("registry"),
     USER("user"),
     USER_ID("user_id"),

@@ -21,7 +21,7 @@ class CreateLocalDeveloperClientOperationImpl implements CreateLocalDeveloperCli
     @Override
     public DeveloperClient execute(final String developer,
                                    final String password) {
-        final var serviceUri = LocalConfiguration.API_URI;
+        final var serviceUri = LocalConfiguration.ADDRESS_URI;
 
         final var developerToken = developerCreateToken(serviceUri, developer, password);
         final var developerClient = createDeveloperClientOperation.execute(serviceUri, developerToken);

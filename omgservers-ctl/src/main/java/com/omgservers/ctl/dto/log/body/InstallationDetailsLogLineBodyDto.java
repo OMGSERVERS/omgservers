@@ -16,7 +16,7 @@ import java.net.URI;
 public class InstallationDetailsLogLineBodyDto extends LogLineBodyDto {
 
     String name;
-    URI api;
+    URI address;
     URI registry;
 
     @Override

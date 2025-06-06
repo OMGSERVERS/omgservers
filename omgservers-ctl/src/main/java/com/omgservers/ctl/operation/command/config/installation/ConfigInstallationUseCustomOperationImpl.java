@@ -16,11 +16,11 @@ public class ConfigInstallationUseCustomOperationImpl implements ConfigInstallat
 
     @Override
     public void execute(final String name,
-                        final URI api,
+                        final URI address,
                         final URI registry) {
         final var wal = getWalOperation.execute();
         final var path = wal.getPath();
 
-        appendInstallationDetailsOperation.execute(path, name, api, registry);
+        appendInstallationDetailsOperation.execute(path, name, address, registry);
     }
 }

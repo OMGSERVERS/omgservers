@@ -5,5 +5,5 @@ import java.nio.file.Path;
 
 public interface AppendInstallationDetailsOperation {
 
-    void execute(Path path, String name, URI api, URI registry);
+    void execute(Path path, String name, URI address, URI registry);
 }

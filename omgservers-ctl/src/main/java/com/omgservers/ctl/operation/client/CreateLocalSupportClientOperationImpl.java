@@ -20,7 +20,7 @@ class CreateLocalSupportClientOperationImpl implements CreateLocalSupportClientO
 
     @Override
     public SupportClient execute() {
-        final var serviceUri = LocalConfiguration.API_URI;
+        final var serviceUri = LocalConfiguration.ADDRESS_URI;
         final var supportUser = LocalConfiguration.SUPPORT_USER_ALIAS;
         final var supportPassword = LocalConfiguration.SUPPORT_USER_PASSWORD;
 

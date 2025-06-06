@@ -35,7 +35,7 @@ class DeveloperVersionCreateVersionOperationImpl implements DeveloperVersionCrea
 
         final var serviceUrl = findInstallationDetailsOperation.execute(wal, installation);
         final var serviceName = serviceUrl.getName();
-        final var serviceUri = serviceUrl.getApi();
+        final var serviceUri = serviceUrl.getAddress();
 
         final var developerTokenLog = findDeveloperTokenOperation.execute(wal, serviceName);
         final var developerToken = developerTokenLog.getToken();

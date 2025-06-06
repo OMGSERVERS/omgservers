@@ -31,7 +31,7 @@ class SupportTenantCreateTenantOperationImpl implements SupportTenantCreateTenan
 
         final var installationDetails = findInstallationDetailsOperation.execute(wal, service);
         final var installationName = installationDetails.getName();
-        final var installationUri = installationDetails.getApi();
+        final var installationUri = installationDetails.getAddress();
 
         final var supportTokenLog = findSupportTokenOperation.execute(wal, installationName);
         final var supportToken = supportTokenLog.getToken();
