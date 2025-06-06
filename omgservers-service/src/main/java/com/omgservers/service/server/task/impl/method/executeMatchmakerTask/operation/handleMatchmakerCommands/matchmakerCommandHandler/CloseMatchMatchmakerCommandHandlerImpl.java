@@ -28,7 +28,7 @@ class CloseMatchMatchmakerCommandHandlerImpl implements MatchmakerCommandHandler
     public boolean handle(final FetchMatchmakerResult fetchMatchmakerResult,
                           final HandleMatchmakerResult handleMatchmakerResult,
                           final MatchmakerCommandModel matchmakerCommand) {
-        log.trace("Handle command, {}", matchmakerCommand);
+        log.debug("Handle command, {}", matchmakerCommand);
 
         final var matchmakerState = fetchMatchmakerResult.matchmakerState();
         final var body = (CloseMatchMatchmakerCommandBodyDto) matchmakerCommand.getBody();
