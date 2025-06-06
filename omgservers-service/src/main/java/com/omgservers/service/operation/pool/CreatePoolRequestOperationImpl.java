@@ -1,10 +1,11 @@
 package com.omgservers.service.operation.pool;
 
+import com.omgservers.schema.model.deployment.DeploymentConfigDto;
 import com.omgservers.schema.model.deployment.DeploymentModel;
-import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
-import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.poolContainer.PoolContainerEnvironmentEnum;
 import com.omgservers.schema.model.poolContainer.PoolContainerLabel;
+import com.omgservers.schema.model.poolRequest.PoolRequestConfigDto;
+import com.omgservers.schema.model.poolRequest.PoolRequestModel;
 import com.omgservers.schema.model.runtime.RuntimeModel;
 import com.omgservers.schema.model.user.UserConfigDto;
 import com.omgservers.schema.model.user.UserRoleEnum;
@@ -18,8 +19,6 @@ import com.omgservers.service.operation.alias.GetDefaultPoolIdOperation;
 import com.omgservers.service.operation.runtime.SelectTenantImageForRuntimeOperation;
 import com.omgservers.service.operation.server.GenerateSecureStringOperation;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
-import com.omgservers.service.shard.alias.AliasShard;
-import com.omgservers.service.shard.deployment.DeploymentShard;
 import com.omgservers.service.shard.pool.PoolShard;
 import com.omgservers.service.shard.user.UserShard;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -37,14 +36,14 @@ import java.util.Map;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
 
-    final DeploymentShard deploymentShard;
-    final AliasShard aliasShard;
     final UserShard userShard;
     final PoolShard poolShard;
 
     final CreatePoolContainerEnvironmentOperation createPoolContainerEnvironmentOperation;
+    final GetPoolContainerMemoryLimitOperation getPoolContainerMemoryLimitOperation;
     final SelectTenantImageForRuntimeOperation selectTenantImageForRuntimeOperation;
     final CreatePoolContainerLabelsOperation createPoolContainerLabelsOperation;
+    final GetPoolContainerCpuLimitOperation getPoolContainerCpuLimitOperation;
     final GenerateSecureStringOperation generateSecureStringOperation;
     final GetServiceConfigOperation getServiceConfigOperation;
     final GetDefaultPoolIdOperation getDefaultPoolIdOperation;
@@ -74,6 +73,7 @@ class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
                                             image,
                                             environment,
                                             labels,
+                                            deployment.getConfig(),
                                             idempotencyKey));
                         }));
     }
@@ -96,6 +96,7 @@ class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
                                           final String image,
                                           final HashMap<PoolContainerEnvironmentEnum, String> environment,
                                           final Map<PoolContainerLabel, String> labels,
+                                          final DeploymentConfigDto deploymentConfig,
                                           final String idempotencyKey) {
         return getDefaultPoolIdOperation.execute()
                 .flatMap(defaultPoolId -> {
@@ -104,12 +105,14 @@ class CreatePoolRequestOperationImpl implements CreatePoolRequestOperation {
                     containerConfig.setLabels(labels);
 
                     // TODO: get limits from version config
-                    final var defaultCpuLimit = getServiceConfigOperation.getServiceConfig()
-                            .runtime().defaultCpuLimit();
-                    containerConfig.setCpuLimitInMilliseconds(defaultCpuLimit);
-                    final var defaultMemoryLimit = getServiceConfigOperation.getServiceConfig()
-                            .runtime().defaultMemoryLimit();
-                    containerConfig.setMemoryLimitInMegabytes(defaultMemoryLimit);
+
+                    final var cpuLimit = getPoolContainerCpuLimitOperation
+                            .execute(runtime.getQualifier(), deploymentConfig);
+                    containerConfig.setCpuLimitInMilliseconds(cpuLimit);
+
+                    final var memoryLimit = getPoolContainerMemoryLimitOperation
+                            .execute(runtime.getQualifier(), deploymentConfig);
+                    containerConfig.setMemoryLimitInMegabytes(memoryLimit);
 
                     containerConfig.setEnvironment(environment);
 
