@@ -37,5 +37,9 @@ public class DeploymentConfigDto {
 
     @Valid
     @JsonSetter(nulls = Nulls.SKIP)
+    DeploymentConfigMatchDto match = new DeploymentConfigMatchDto();
+
+    @Valid
+    @JsonSetter(nulls = Nulls.SKIP)
     DeploymentConfigMatchmakerDto matchmaker = new DeploymentConfigMatchmakerDto();
 }
