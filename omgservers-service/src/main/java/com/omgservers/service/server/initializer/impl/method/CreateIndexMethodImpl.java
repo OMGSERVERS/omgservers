@@ -53,9 +53,13 @@ class CreateIndexMethodImpl implements CreateIndexMethod {
         final var index = indexModelFactory.create(indexConfig, "initialization");
 
         final var request = new SyncIndexRequest(index);
-        return indexMaster.getService().execute(request)
+        return indexMaster.getService().executeWithIdempotency(request)
                 .map(SyncIndexResponse::getCreated)
-                .invoke(created -> log.info("Index created"))
+                .invoke(created -> {
+                    if (created) {
+                        log.info("Index created");
+                    }
+                })
                 .replaceWithVoid();
     }
 }
