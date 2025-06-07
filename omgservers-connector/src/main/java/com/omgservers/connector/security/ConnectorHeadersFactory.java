@@ -20,56 +20,28 @@ public class ConnectorHeadersFactory extends ReactiveClientHeadersFactory {
     final ExecuteStateOperation executeStateOperation;
     final GetUserAgentOperation getUserAgentOperation;
 
-    volatile HeadersProvider headersProvider;
-
     public ConnectorHeadersFactory(final ExecuteStateOperation executeStateOperation,
                                    final GetUserAgentOperation getUserAgentOperation) {
-        this.getUserAgentOperation = getUserAgentOperation;
         this.executeStateOperation = executeStateOperation;
+        this.getUserAgentOperation = getUserAgentOperation;
     }
 
     @Override
     public Uni<MultivaluedMap<String, String>> getHeaders(final MultivaluedMap<String, String> incomingHeaders,
                                                           final MultivaluedMap<String, String> clientOutgoingHeaders) {
-        if (headersProvider == null) {
-            synchronized (this) {
-                if (headersProvider == null) {
-                    headersProvider = createHeadersProvider();
-                }
-            }
-        }
+        final var multivaluedHashMap = new MultivaluedHashMap<String, String>();
 
-        return headersProvider.provide();
-    }
-
-    HeadersProvider createHeadersProvider() {
-        final var userAgent = getUserAgentOperation.execute();
         final var connectorToken = executeStateOperation.getConnectorToken();
-
         if (Objects.nonNull(connectorToken)) {
-            return new HeadersProvider(userAgent, connectorToken);
+            multivaluedHashMap.add("Authorization", "Bearer " + connectorToken);
         } else {
             throw new ServerSideInternalException(ExceptionQualifierEnum.INTERNAL_EXCEPTION_OCCURRED,
                     "connector token not issued yet");
         }
-    }
 
-    static class HeadersProvider {
+        final var userAgent = getUserAgentOperation.execute();
+        multivaluedHashMap.add("User-Agent", userAgent);
 
-        final String userAgent;
-        final String bearerToken;
-
-        public HeadersProvider(final String userAgent,
-                               final String bearerToken) {
-            this.userAgent = userAgent;
-            this.bearerToken = bearerToken;
-        }
-
-        Uni<MultivaluedMap<String, String>> provide() {
-            final var multivaluedHashMap = new MultivaluedHashMap<String, String>();
-            multivaluedHashMap.add("User-Agent", userAgent);
-            multivaluedHashMap.add("Authorization", "Bearer " + bearerToken);
-            return Uni.createFrom().item(multivaluedHashMap);
-        }
+        return Uni.createFrom().item(multivaluedHashMap);
     }
 }
