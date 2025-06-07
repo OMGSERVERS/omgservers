@@ -4,6 +4,7 @@ import com.omgservers.connector.server.initializer.InitializerService;
 import com.omgservers.connector.server.initializer.impl.method.CreateConnectorTokenMethod;
 import com.omgservers.connector.server.initializer.impl.method.ScheduleIdleConnectionsHandlerJobMethod;
 import com.omgservers.connector.server.initializer.impl.method.ScheduleMessageInterchangerJobMethod;
+import com.omgservers.connector.server.initializer.impl.method.ScheduleTokenRefresherJobMethod;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
@@ -17,6 +18,7 @@ class InitializerServiceImpl implements InitializerService {
 
     final ScheduleIdleConnectionsHandlerJobMethod scheduleIdleConnectionsHandlerJobMethod;
     final ScheduleMessageInterchangerJobMethod scheduleMessageInterchangerJobMethod;
+    final ScheduleTokenRefresherJobMethod scheduleTokenRefresherJobMethod;
     final CreateConnectorTokenMethod createConnectorTokenMethod;
 
     @Override
@@ -24,7 +26,8 @@ class InitializerServiceImpl implements InitializerService {
         return Uni.createFrom().voidItem()
                 .flatMap(voidItem -> createConnectorToken())
                 .flatMap(voidItem -> scheduleIdleConnectionsHandlerJob())
-                .flatMap(voidItem -> scheduleMessageInterchangerJob());
+                .flatMap(voidItem -> scheduleMessageInterchangerJob())
+                .flatMap(voidItem -> scheduleTokenRefresherJob());
     }
 
     Uni<Void> createConnectorToken() {
@@ -40,5 +43,10 @@ class InitializerServiceImpl implements InitializerService {
     Uni<Void> scheduleMessageInterchangerJob() {
         return Uni.createFrom().voidItem()
                 .invoke(voidItem -> scheduleMessageInterchangerJobMethod.execute());
+    }
+
+    Uni<Void> scheduleTokenRefresherJob() {
+        return Uni.createFrom().voidItem()
+                .invoke(voidItem -> scheduleTokenRefresherJobMethod.execute());
     }
 }

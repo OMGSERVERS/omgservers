@@ -28,6 +28,7 @@ class ScheduleJobExecutionOperationImpl implements ScheduleJobExecutionOperation
         final var jobInterval = jobQualifier.getInterval();
         final var trigger = scheduler.newJob(jobIdentity)
                 .setInterval(jobInterval)
+                .setDelayed(jobInterval)
                 .setConcurrentExecution(Scheduled.ConcurrentExecution.SKIP)
                 .setAsyncTask(scheduledExecution -> {
                     putIntoMdcOperation.putArbitrarySubject(jobIdentity);
