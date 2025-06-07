@@ -10,6 +10,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 @Slf4j
 @ApplicationScoped
 @AllArgsConstructor
@@ -36,6 +38,13 @@ class AcquireNodeIdMethodImpl implements AcquireNodeIdMethod {
     Uni<NodeModel> acquireNode() {
         final var request = new AcquireNodeRequest();
         return nodeMaster.getService().execute(request)
-                .map(AcquireNodeResponse::getNode);
+                .map(AcquireNodeResponse::getNode)
+                .onFailure()
+                .recoverWithUni(t -> {
+                    log.info("Failed, trying again, {}:{}", t.getClass().getSimpleName(), t.getMessage());
+                    return Uni.createFrom().failure(t);
+                })
+                .onFailure()
+                .retry().withBackOff(Duration.ofSeconds(1)).indefinitely();
     }
 }
