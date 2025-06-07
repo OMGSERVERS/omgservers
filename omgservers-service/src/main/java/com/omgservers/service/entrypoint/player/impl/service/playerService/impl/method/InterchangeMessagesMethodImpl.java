@@ -2,6 +2,7 @@ package com.omgservers.service.entrypoint.player.impl.service.playerService.impl
 
 import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerRequest;
 import com.omgservers.schema.entrypoint.player.InterchangeMessagesPlayerResponse;
+import com.omgservers.schema.model.incomingMessage.IncomingMessageModel;
 import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesRequest;
 import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesResponse;
 import com.omgservers.service.operation.authz.AuthorizeClientRequestOperation;
@@ -40,7 +41,14 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                             consumedMessages);
                     return clientShard.getService().execute(interchangeMessagesRequest)
                             .map(InterchangeMessagesResponse::getIncomingMessages)
-                            .map(InterchangeMessagesPlayerResponse::new);
+                            .map(clientMessages -> {
+                                        final var incomingMessages = clientMessages.stream()
+                                                .map(clientMessage -> new IncomingMessageModel(clientMessage.getId(),
+                                                        clientMessage.getQualifier(), clientMessage.getBody()))
+                                                .toList();
+                                        return new InterchangeMessagesPlayerResponse(incomingMessages);
+                                    }
+                            );
                 });
     }
 }

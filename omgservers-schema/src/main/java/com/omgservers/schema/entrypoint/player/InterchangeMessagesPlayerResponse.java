@@ -1,6 +1,6 @@
 package com.omgservers.schema.entrypoint.player;
 
-import com.omgservers.schema.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.model.incomingMessage.IncomingMessageModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class InterchangeMessagesPlayerResponse {
 
-    List<ClientMessageModel> incomingMessages;
+    List<IncomingMessageModel> incomingMessages;
 }

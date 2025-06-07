@@ -9,7 +9,7 @@ import com.omgservers.connector.server.connector.impl.component.Connector;
 import com.omgservers.connector.server.connector.impl.component.Connectors;
 import com.omgservers.schema.entrypoint.connector.InterchangeMessagesConnectorRequest;
 import com.omgservers.schema.entrypoint.connector.InterchangeMessagesConnectorResponse;
-import com.omgservers.schema.model.clientMessage.ClientMessageModel;
+import com.omgservers.schema.model.incomingMessage.IncomingMessageModel;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -66,7 +66,7 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
     }
 
     Uni<Void> transferIncomingMessages(final Connector connector,
-                                       final List<ClientMessageModel> incomingMessages) {
+                                       final List<IncomingMessageModel> incomingMessages) {
         return Multi.createFrom().iterable(incomingMessages)
                 .onItem().transformToUniAndConcatenate(incomingMessage -> {
                     try {
