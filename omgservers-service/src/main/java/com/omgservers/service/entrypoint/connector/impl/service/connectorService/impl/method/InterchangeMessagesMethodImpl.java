@@ -2,6 +2,7 @@ package com.omgservers.service.entrypoint.connector.impl.service.connectorServic
 
 import com.omgservers.schema.entrypoint.connector.InterchangeMessagesConnectorRequest;
 import com.omgservers.schema.entrypoint.connector.InterchangeMessagesConnectorResponse;
+import com.omgservers.schema.model.incomingMessage.IncomingMessageModel;
 import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesRequest;
 import com.omgservers.schema.shard.client.clientMessage.InterchangeMessagesResponse;
 import com.omgservers.service.shard.client.ClientShard;
@@ -31,6 +32,13 @@ class InterchangeMessagesMethodImpl implements InterchangeMessagesMethod {
                 consumedMessages);
         return clientShard.getService().execute(interchangeMessagesRequest)
                 .map(InterchangeMessagesResponse::getIncomingMessages)
-                .map(InterchangeMessagesConnectorResponse::new);
+                .map(clientMessages -> {
+                            final var incomingMessages = clientMessages.stream()
+                                    .map(clientMessage -> new IncomingMessageModel(clientMessage.getId(),
+                                            clientMessage.getQualifier(), clientMessage.getBody()))
+                                    .toList();
+                            return new InterchangeMessagesConnectorResponse(incomingMessages);
+                        }
+                );
     }
 }
