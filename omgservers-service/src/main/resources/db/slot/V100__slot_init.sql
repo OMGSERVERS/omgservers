@@ -189,6 +189,18 @@ create table if not exists tab_tenant_stage (
     deleted boolean not null
 );
 
+create table if not exists tab_tenant_stage_command (
+    id bigint primary key,
+    idempotency_key text not null unique,
+    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
+    stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
+    created timestamp with time zone not null,
+    modified timestamp with time zone not null,
+    qualifier text not null,
+    body jsonb not null,
+    deleted boolean not null
+);
+
 create table if not exists tab_tenant_stage_permission (
     id bigint primary key,
     idempotency_key text not null unique,
@@ -223,18 +235,6 @@ create table if not exists tab_tenant_deployment_resource (
     deployment_id bigint not null,
     status text not null,
     config jsonb not null,
-    deleted boolean not null
-);
-
-create table if not exists tab_tenant_deployment_ref (
-    id bigint primary key,
-    idempotency_key text not null unique,
-    tenant_id bigint not null references tab_tenant(id) on delete restrict on update restrict,
-    stage_id bigint not null references tab_tenant_stage(id) on delete restrict on update restrict,
-    version_id bigint not null references tab_tenant_version(id) on delete restrict on update restrict,
-    created timestamp with time zone not null,
-    modified timestamp with time zone not null,
-    deployment_id bigint not null,
     deleted boolean not null
 );
 

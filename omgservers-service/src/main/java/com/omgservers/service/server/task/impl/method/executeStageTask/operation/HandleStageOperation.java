@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executeStageTask.operation;
 
-import com.omgservers.service.server.task.impl.method.executeStageTask.dto.FetchStageResult;
-import com.omgservers.service.server.task.impl.method.executeStageTask.dto.HandleStageResult;
+import com.omgservers.service.server.task.impl.method.executeStageTask.dto.FetchTenantStageResult;
+import com.omgservers.service.server.task.impl.method.executeStageTask.dto.HandleTenantStageResult;
 
 public interface HandleStageOperation {
-    HandleStageResult execute(FetchStageResult fetchStageResult);
+    HandleTenantStageResult execute(FetchTenantStageResult fetchTenantStageResult);
 }

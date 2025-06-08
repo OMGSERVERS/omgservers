@@ -10,7 +10,6 @@ import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultPoolResponse;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserRequest;
 import com.omgservers.service.server.bootstrap.dto.BootstrapDefaultUserResponse;
 import com.omgservers.service.server.task.Task;
-import com.omgservers.service.server.task.TaskResult;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
@@ -25,7 +24,7 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
-    public Uni<TaskResult> execute(final BootstrapTaskArguments taskArguments) {
+    public Uni<Boolean> execute(final BootstrapTaskArguments taskArguments) {
         log.info("Started bootstrap task");
 
         return Uni.createFrom().voidItem()
@@ -34,7 +33,8 @@ public class BootstrapTaskImpl implements Task<BootstrapTaskArguments> {
                 .flatMap(voidItem -> bootstrapServiceUser())
                 .flatMap(voidItem -> bootstrapConnectorUser())
                 .flatMap(voidItem -> bootstrapDefaultPool())
-                .replaceWith(TaskResult.DONE)
+                // TRUE - task is fully finished, job can be unscheduled
+                .replaceWith(Boolean.TRUE)
                 .onFailure().transform(
                         t -> new ServerSideInternalException(ExceptionQualifierEnum.BOOTSTRAP_FAILED,
                                 t.getMessage(),

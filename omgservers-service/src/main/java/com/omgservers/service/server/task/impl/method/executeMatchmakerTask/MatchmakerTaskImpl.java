@@ -1,7 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeMatchmakerTask;
 
 import com.omgservers.service.server.task.Task;
-import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.dto.FetchMatchmakerResult;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation.FetchMatchmakerOperation;
 import com.omgservers.service.server.task.impl.method.executeMatchmakerTask.operation.HandleMatchmakerOperation;
@@ -23,14 +22,14 @@ public class MatchmakerTaskImpl implements Task<MatchmakerTaskArguments> {
     final FetchMatchmakerOperation fetchMatchmakerOperation;
     final OpenMatchmakerOperation openMatchmakerOperation;
 
-    public Uni<TaskResult> execute(final MatchmakerTaskArguments taskArguments) {
+    public Uni<Boolean> execute(final MatchmakerTaskArguments taskArguments) {
         final var matchmakerId = taskArguments.matchmakerId();
         return fetchMatchmakerOperation.execute(matchmakerId)
                 .flatMap(fetchMatchmakerResult -> {
                     final var deleted = fetchMatchmakerResult.matchmakerState().getMatchmaker().getDeleted();
                     if (deleted) {
                         log.warn("Matchmaker \"{}\" deleted, skip task execution", matchmakerId);
-                        return Uni.createFrom().item(TaskResult.DONE);
+                        return Uni.createFrom().item(Boolean.TRUE);
                     } else {
                         final var status = fetchMatchmakerResult.deploymentMatchmakerResource().getStatus();
                         return switch (status) {
@@ -42,20 +41,20 @@ public class MatchmakerTaskImpl implements Task<MatchmakerTaskArguments> {
                 });
     }
 
-    Uni<TaskResult> handlePendingMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
+    Uni<Boolean> handlePendingMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
         return openMatchmakerOperation.execute(fetchMatchmakerResult)
-                .replaceWith(TaskResult.DONE);
+                .replaceWith(Boolean.FALSE);
     }
 
-    Uni<TaskResult> handleCreatedMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
+    Uni<Boolean> handleCreatedMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
         return handleMatchmaker(fetchMatchmakerResult);
     }
 
-    Uni<TaskResult> handleClosedMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
+    Uni<Boolean> handleClosedMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
         return handleMatchmaker(fetchMatchmakerResult);
     }
 
-    Uni<TaskResult> handleMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
+    Uni<Boolean> handleMatchmaker(final FetchMatchmakerResult fetchMatchmakerResult) {
         final var matchmakerId = fetchMatchmakerResult.matchmakerId();
         return Uni.createFrom().item(fetchMatchmakerResult)
                 .map(handleMatchmakerOperation::execute)
@@ -63,11 +62,11 @@ public class MatchmakerTaskImpl implements Task<MatchmakerTaskArguments> {
                     final var matchmakerChangeOfState = handleMatchmakerResult.matchmakerChangeOfState();
                     if (matchmakerChangeOfState.isNotEmpty()) {
                         log.info("Update matchmaker state, matchmakerId={}, {}", matchmakerId, matchmakerChangeOfState);
-                        return updateMatchmakerOperation.execute(handleMatchmakerResult)
-                                .replaceWith(TaskResult.DONE);
+                        return updateMatchmakerOperation.execute(handleMatchmakerResult);
                     } else {
-                        return Uni.createFrom().item(TaskResult.NOOP);
+                        return Uni.createFrom().voidItem();
                     }
-                });
+                })
+                .replaceWith(Boolean.FALSE);
     }
 }

@@ -27,6 +27,8 @@ import com.omgservers.schema.model.tenantPermission.TenantPermissionQualifierEnu
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionModel;
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStageCommand.TenantStageCommandModel;
+import com.omgservers.schema.model.tenantStageCommand.TenantStageCommandQualifierEnum;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionModel;
@@ -91,8 +93,10 @@ public class TestDataFactory {
         final var tenantVersion = tenantTestDataFactory.createTenantVersion(tenantProject);
         final var tenantImage = tenantTestDataFactory.createTenantImage(tenantVersion);
 
-
         final var deployment = deploymentTestDataFactory.createDeployment(tenantStage, tenantVersion);
+        final var openDeploymentTenantStageCommand = tenantTestDataFactory.createTenantStageCommand(tenantStage,
+                deployment,
+                TenantStageCommandQualifierEnum.OPEN_DEPLOYMENT);
         final var deploymentLobbyResource = deploymentTestDataFactory.createDeploymentLobbyResource(deployment);
         final var deploymentMatchmakerResource =
                 deploymentTestDataFactory.createDeploymentMatchmakerResource(deployment);
@@ -145,6 +149,7 @@ public class TestDataFactory {
                 .tenantStage(tenantStage)
                 .tenantStageDeploymentManagerPermission(tenantStageDeploymentManagerPermission)
                 .tenantStageViewerPermission(tenantStageViewerPermission)
+                .openDeploymentTenantStageCommand(openDeploymentTenantStageCommand)
 
                 .tenantVersion(tenantVersion)
                 .tenantImage(tenantImage)
@@ -197,6 +202,7 @@ public class TestDataFactory {
         TenantStageModel tenantStage;
         TenantStagePermissionModel tenantStageDeploymentManagerPermission;
         TenantStagePermissionModel tenantStageViewerPermission;
+        TenantStageCommandModel openDeploymentTenantStageCommand;
 
         TenantVersionModel tenantVersion;
         TenantImageModel tenantImage;

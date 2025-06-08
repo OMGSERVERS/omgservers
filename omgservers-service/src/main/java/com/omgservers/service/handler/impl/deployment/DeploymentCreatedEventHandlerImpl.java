@@ -9,7 +9,6 @@ import com.omgservers.service.event.EventQualifierEnum;
 import com.omgservers.service.event.body.module.deployment.DeploymentCreatedEventBodyModel;
 import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.task.CreateTaskOperation;
-import com.omgservers.service.operation.tenant.CreateTenantDeploymentRefOperation;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,7 +23,6 @@ public class DeploymentCreatedEventHandlerImpl implements EventHandler {
 
     final DeploymentShard deploymentShard;
 
-    final CreateTenantDeploymentRefOperation createTenantDeploymentRefOperation;
     final CreateTaskOperation createTaskOperation;
 
     @Override
@@ -45,17 +43,9 @@ public class DeploymentCreatedEventHandlerImpl implements EventHandler {
                 .flatMap(deployment -> {
                     log.debug("Created, {}", deployment);
 
-                    final var tenantId = deployment.getTenantId();
-                    final var tenantStageId = deployment.getStageId();
-                    final var tenantVersionId = deployment.getVersionId();
-                    return createTenantDeploymentRefOperation.execute(tenantId,
-                                    tenantStageId,
-                                    tenantVersionId,
-                                    deploymentId,
-                                    idempotencyKey)
-                            .flatMap(created -> createTaskOperation.execute(TaskQualifierEnum.DEPLOYMENT,
-                                    deploymentId,
-                                    idempotencyKey));
+                    return createTaskOperation.execute(TaskQualifierEnum.DEPLOYMENT,
+                            deploymentId,
+                            idempotencyKey);
                 })
                 .replaceWithVoid();
     }
