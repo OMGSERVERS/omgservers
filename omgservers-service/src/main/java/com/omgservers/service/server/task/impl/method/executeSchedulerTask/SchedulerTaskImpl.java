@@ -6,7 +6,6 @@ import com.omgservers.schema.model.task.TaskModel;
 import com.omgservers.service.master.task.TaskMaster;
 import com.omgservers.service.operation.server.GetServiceConfigOperation;
 import com.omgservers.service.server.task.Task;
-import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.TaskService;
 import com.omgservers.service.server.task.dto.ExecuteDeploymentTaskRequest;
 import com.omgservers.service.server.task.dto.ExecuteDeploymentTaskResponse;
@@ -39,15 +38,13 @@ public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
 
     final GetServiceConfigOperation getServiceConfigOperation;
 
-    public Uni<TaskResult> execute(final SchedulerTaskArguments taskArguments) {
+    public Uni<Boolean> execute(final SchedulerTaskArguments taskArguments) {
         return viewTasks()
-                .flatMap(tasks -> {
-                    return Uni.createFrom().voidItem()
-                            .flatMap(voidItem -> executeAll(tasks))
-                            .onItem().delayIt().by(Duration.ofMillis(500))
-                            .flatMap(voidItem -> executeAll(tasks));
-                })
-                .replaceWith(TaskResult.DONE);
+                .flatMap(tasks -> Uni.createFrom().voidItem()
+                        .flatMap(voidItem -> executeAll(tasks))
+                        .onItem().delayIt().by(Duration.ofMillis(500))
+                        .flatMap(voidItem -> executeAll(tasks)))
+                .replaceWith(Boolean.FALSE);
     }
 
     Uni<List<TaskModel>> viewTasks() {
@@ -64,35 +61,26 @@ public class SchedulerTaskImpl implements Task<SchedulerTaskArguments> {
                 .replaceWithVoid();
     }
 
-    Uni<ExecuteTaskResult> executeTask(final TaskModel task) {
+    Uni<Boolean> executeTask(final TaskModel task) {
         return (switch (task.getQualifier()) {
             case TENANT -> taskService
                     .execute(new ExecuteTenantTaskRequest(task.getEntityId()))
-                    .map(ExecuteTenantTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task, false));
+                    .map(ExecuteTenantTaskResponse::getFinished);
             case STAGE -> taskService
                     .execute(new ExecuteStageTaskRequest(task.getShardKey(), task.getEntityId()))
-                    .map(ExecuteStageTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task, false));
+                    .map(ExecuteStageTaskResponse::getFinished);
             case DEPLOYMENT -> taskService
                     .execute(new ExecuteDeploymentTaskRequest(task.getEntityId()))
-                    .map(ExecuteDeploymentTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task, true));
+                    .map(ExecuteDeploymentTaskResponse::getFinished);
             case MATCHMAKER -> taskService
                     .execute(new ExecuteMatchmakerTaskRequest(task.getEntityId()))
-                    .map(ExecuteMatchmakerTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task, true));
+                    .map(ExecuteMatchmakerTaskResponse::getFinished);
             case RUNTIME -> taskService
                     .execute(new ExecuteRuntimeTaskRequest(task.getEntityId()))
-                    .map(ExecuteRuntimeTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task, true));
+                    .map(ExecuteRuntimeTaskResponse::getFinished);
             case POOL -> taskService
                     .execute(new ExecutePoolTaskRequest(task.getEntityId()))
-                    .map(ExecutePoolTaskResponse::getTaskResult)
-                    .map(taskResult -> new ExecuteTaskResult(task, false));
+                    .map(ExecutePoolTaskResponse::getFinished);
         });
-    }
-
-    record ExecuteTaskResult(TaskModel task, boolean repeat) {
     }
 }

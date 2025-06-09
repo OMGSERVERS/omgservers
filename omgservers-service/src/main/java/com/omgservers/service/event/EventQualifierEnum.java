@@ -41,8 +41,6 @@ import com.omgservers.service.event.body.module.runtime.RuntimeCreatedEventBodyM
 import com.omgservers.service.event.body.module.runtime.RuntimeDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeletedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.TenantDeploymentRefCreatedEventBodyModel;
-import com.omgservers.service.event.body.module.tenant.TenantDeploymentRefDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentResourceCreatedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantDeploymentResourceDeletedEventBodyModel;
 import com.omgservers.service.event.body.module.tenant.TenantImageCreatedEventBodyModel;
@@ -89,8 +87,6 @@ public enum EventQualifierEnum {
     TENANT_IMAGE_DELETED(TenantImageDeletedEventBodyModel.class),
     TENANT_DEPLOYMENT_RESOURCE_CREATED(TenantDeploymentResourceCreatedEventBodyModel.class),
     TENANT_DEPLOYMENT_RESOURCE_DELETED(TenantDeploymentResourceDeletedEventBodyModel.class),
-    TENANT_DEPLOYMENT_REF_CREATED(TenantDeploymentRefCreatedEventBodyModel.class),
-    TENANT_DEPLOYMENT_REF_DELETED(TenantDeploymentRefDeletedEventBodyModel.class),
     DEPLOYMENT_CREATED(DeploymentCreatedEventBodyModel.class),
     DEPLOYMENT_DELETED(DeploymentDeletedEventBodyModel.class),
     DEPLOYMENT_LOBBY_RESOURCE_CREATED(DeploymentLobbyResourceCreatedEventBodyModel.class),

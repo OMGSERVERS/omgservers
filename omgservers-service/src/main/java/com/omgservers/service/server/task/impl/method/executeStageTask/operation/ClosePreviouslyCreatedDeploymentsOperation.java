@@ -1,9 +1,9 @@
 package com.omgservers.service.server.task.impl.method.executeStageTask.operation;
 
-import com.omgservers.service.server.task.impl.method.executeStageTask.dto.FetchStageResult;
-import com.omgservers.service.server.task.impl.method.executeStageTask.dto.HandleStageResult;
+import com.omgservers.service.server.task.impl.method.executeStageTask.dto.FetchTenantStageResult;
+import com.omgservers.service.server.task.impl.method.executeStageTask.dto.HandleTenantStageResult;
 
 public interface ClosePreviouslyCreatedDeploymentsOperation {
-    void execute(FetchStageResult fetchStageResult,
-                 HandleStageResult handleStageResult);
+    void execute(FetchTenantStageResult fetchTenantStageResult,
+                 HandleTenantStageResult handleTenantStageResult);
 }

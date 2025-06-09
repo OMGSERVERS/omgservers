@@ -1,15 +1,101 @@
 package com.omgservers.service.shard.tenant.impl.service.tenantService;
 
-import com.omgservers.schema.shard.tenant.tenant.*;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.*;
-import com.omgservers.schema.shard.tenant.tenantDeploymentResource.*;
-import com.omgservers.schema.shard.tenant.tenantImage.*;
-import com.omgservers.schema.shard.tenant.tenantPermission.*;
-import com.omgservers.schema.shard.tenant.tenantProject.*;
-import com.omgservers.schema.shard.tenant.tenantProjectPermission.*;
-import com.omgservers.schema.shard.tenant.tenantStage.*;
-import com.omgservers.schema.shard.tenant.tenantStagePermission.*;
-import com.omgservers.schema.shard.tenant.tenantVersion.*;
+import com.omgservers.schema.shard.tenant.tenant.DeleteTenantRequest;
+import com.omgservers.schema.shard.tenant.tenant.DeleteTenantResponse;
+import com.omgservers.schema.shard.tenant.tenant.GetTenantDataRequest;
+import com.omgservers.schema.shard.tenant.tenant.GetTenantDataResponse;
+import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
+import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
+import com.omgservers.schema.shard.tenant.tenant.SyncTenantRequest;
+import com.omgservers.schema.shard.tenant.tenant.SyncTenantResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.FindTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.FindTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.GetTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.GetTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.SyncTenantDeploymentResourceRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.SyncTenantDeploymentResourceResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.UpdateTenantDeploymentResourceStatusRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.UpdateTenantDeploymentResourceStatusResponse;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesRequest;
+import com.omgservers.schema.shard.tenant.tenantDeploymentResource.ViewTenantDeploymentResourcesResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.DeleteTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.DeleteTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.FindTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.FindTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.GetTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.GetTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.SyncTenantImageRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.SyncTenantImageResponse;
+import com.omgservers.schema.shard.tenant.tenantImage.ViewTenantImagesRequest;
+import com.omgservers.schema.shard.tenant.tenantImage.ViewTenantImagesResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.DeleteTenantPermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.DeleteTenantPermissionResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.SyncTenantPermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.SyncTenantPermissionResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.VerifyTenantPermissionExistsRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.VerifyTenantPermissionExistsResponse;
+import com.omgservers.schema.shard.tenant.tenantPermission.ViewTenantPermissionsRequest;
+import com.omgservers.schema.shard.tenant.tenantPermission.ViewTenantPermissionsResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.DeleteTenantProjectResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectDataResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.GetTenantProjectResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.SyncTenantProjectRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.SyncTenantProjectResponse;
+import com.omgservers.schema.shard.tenant.tenantProject.ViewTenantProjectsRequest;
+import com.omgservers.schema.shard.tenant.tenantProject.ViewTenantProjectsResponse;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.DeleteTenantProjectPermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.DeleteTenantProjectPermissionResponse;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.SyncTenantProjectPermissionResponse;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsRequest;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.VerifyTenantProjectPermissionExistsResponse;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.ViewTenantProjectPermissionsRequest;
+import com.omgservers.schema.shard.tenant.tenantProjectPermission.ViewTenantProjectPermissionsResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.DeleteTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.DeleteTenantStageResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageDataResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.GetTenantStageResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageResponse;
+import com.omgservers.schema.shard.tenant.tenantStage.ViewTenantStagesRequest;
+import com.omgservers.schema.shard.tenant.tenantStage.ViewTenantStagesResponse;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.DeleteTenantStageCommandRequest;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.DeleteTenantStageCommandResponse;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.SyncTenantStageCommandRequest;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.SyncTenantStageCommandResponse;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.ViewTenantStageCommandRequest;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.ViewTenantStageCommandResponse;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.SyncTenantStagePermissionResponse;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsRequest;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
+import com.omgservers.schema.shard.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
+import com.omgservers.schema.shard.tenant.tenantStageState.GetTenantStageStateRequest;
+import com.omgservers.schema.shard.tenant.tenantStageState.GetTenantStageStateResponse;
+import com.omgservers.schema.shard.tenant.tenantStageState.UpdateTenantStageStateRequest;
+import com.omgservers.schema.shard.tenant.tenantStageState.UpdateTenantStageStateResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionDataRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionDataResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.SyncTenantVersionRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.SyncTenantVersionResponse;
+import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsRequest;
+import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsResponse;
 import io.smallrye.mutiny.Uni;
 import jakarta.validation.Valid;
 
@@ -82,6 +168,18 @@ public interface TenantService {
     Uni<DeleteTenantStageResponse> execute(@Valid DeleteTenantStageRequest request);
 
     /*
+    TenantStageCommand
+     */
+
+    Uni<ViewTenantStageCommandResponse> execute(@Valid ViewTenantStageCommandRequest request);
+
+    Uni<SyncTenantStageCommandResponse> execute(@Valid SyncTenantStageCommandRequest request);
+
+    Uni<SyncTenantStageCommandResponse> executeWithIdempotency(@Valid SyncTenantStageCommandRequest request);
+
+    Uni<DeleteTenantStageCommandResponse> execute(@Valid DeleteTenantStageCommandRequest request);
+
+    /*
     TenantStagePermission
      */
 
@@ -94,6 +192,14 @@ public interface TenantService {
     Uni<SyncTenantStagePermissionResponse> executeWithIdempotency(@Valid SyncTenantStagePermissionRequest request);
 
     Uni<DeleteTenantStagePermissionResponse> execute(@Valid DeleteTenantStagePermissionRequest request);
+
+    /*
+    TenantStageState
+     */
+
+    Uni<GetTenantStageStateResponse> execute(@Valid GetTenantStageStateRequest request);
+
+    Uni<UpdateTenantStageStateResponse> execute(@Valid UpdateTenantStageStateRequest request);
 
     /*
     TenantVersion
@@ -142,18 +248,4 @@ public interface TenantService {
     Uni<UpdateTenantDeploymentResourceStatusResponse> execute(@Valid UpdateTenantDeploymentResourceStatusRequest request);
 
     Uni<DeleteTenantDeploymentResourceResponse> execute(@Valid DeleteTenantDeploymentResourceRequest request);
-
-    /*
-    TenantDeploymentRef
-     */
-
-    Uni<GetTenantDeploymentRefResponse> execute(@Valid GetTenantDeploymentRefRequest request);
-
-    Uni<FindTenantDeploymentRefResponse> execute(@Valid FindTenantDeploymentRefRequest request);
-
-    Uni<ViewTenantDeploymentRefsResponse> execute(@Valid ViewTenantDeploymentRefsRequest request);
-
-    Uni<SyncTenantDeploymentRefResponse> execute(@Valid SyncTenantDeploymentRefRequest request);
-
-    Uni<DeleteTenantDeploymentRefResponse> execute(@Valid DeleteTenantDeploymentRefRequest request);
 }

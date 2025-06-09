@@ -1,8 +1,8 @@
 package com.omgservers.service.server.task.impl.method.executeStageTask.operation;
 
 import com.omgservers.schema.model.tenantDeploymentResource.TenantDeploymentResourceStatusEnum;
-import com.omgservers.service.server.task.impl.method.executeStageTask.dto.FetchStageResult;
-import com.omgservers.service.server.task.impl.method.executeStageTask.dto.HandleStageResult;
+import com.omgservers.service.server.task.impl.method.executeStageTask.dto.FetchTenantStageResult;
+import com.omgservers.service.server.task.impl.method.executeStageTask.dto.HandleTenantStageResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,21 +18,22 @@ class DeleteClosedDeploymentsOperationImpl implements DeleteClosedDeploymentsOpe
     static private final long GRACEFUL_INTERVAL = 16;
 
     @Override
-    public void execute(final FetchStageResult fetchStageResult,
-                        final HandleStageResult handleStageResult) {
+    public void execute(final FetchTenantStageResult fetchTenantStageResult,
+                        final HandleTenantStageResult handleTenantStageResult) {
 
-        final var tenantDeploymentResourcesToDelete = fetchStageResult.tenantDeploymentResources().stream()
-                .filter(tenantDeploymentResourceModel ->
-                        tenantDeploymentResourceModel.getStatus().equals(TenantDeploymentResourceStatusEnum.CLOSED))
-                .filter(tenantDeploymentResourceModel -> {
-                    final var tenantDeploymentResourceModified = tenantDeploymentResourceModel.getModified();
+        final var tenantDeploymentResourcesToDelete = fetchTenantStageResult.tenantStageState()
+                .getTenantDeploymentResources().stream()
+                .filter(tenantDeploymentResource ->
+                        tenantDeploymentResource.getStatus().equals(TenantDeploymentResourceStatusEnum.CLOSED))
+                .filter(tenantDeploymentResource -> {
+                    final var tenantDeploymentResourceModified = tenantDeploymentResource.getModified();
                     final var tenantDeploymentCurrentInterval = Duration.between(tenantDeploymentResourceModified,
                             Instant.now());
                     return tenantDeploymentCurrentInterval.toSeconds() > GRACEFUL_INTERVAL;
                 })
                 .toList();
 
-        handleStageResult.tenantDeploymentResourcesToDelete()
+        handleTenantStageResult.tenantStageChangeOfState().getTenantDeploymentResourcesToDelete()
                 .addAll(tenantDeploymentResourcesToDelete);
     }
 }

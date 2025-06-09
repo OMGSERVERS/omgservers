@@ -6,6 +6,7 @@ import com.omgservers.schema.shard.tenant.tenantPermission.*;
 import com.omgservers.schema.shard.tenant.tenantProject.*;
 import com.omgservers.schema.shard.tenant.tenantProjectPermission.*;
 import com.omgservers.schema.shard.tenant.tenantStage.*;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.*;
 import com.omgservers.schema.shard.tenant.tenantStagePermission.*;
 import com.omgservers.schema.shard.tenant.tenantVersion.*;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.TenantService;
@@ -154,6 +155,31 @@ public class TenantServiceTestInterface {
     }
 
     public DeleteTenantStageResponse deleteTenantStage(final DeleteTenantStageRequest request) {
+        return tenantService.execute(request)
+                .await().atMost(Duration.ofSeconds(TIMEOUT));
+    }
+
+    /*
+    TenantStageCommand
+     */
+
+    public ViewTenantStageCommandResponse viewTenantStageCommands(final ViewTenantStageCommandRequest request) {
+        return tenantService.execute(request)
+                .await().atMost(Duration.ofSeconds(TIMEOUT));
+    }
+
+    public SyncTenantStageCommandResponse syncTenantStageCommand(final SyncTenantStageCommandRequest request) {
+        return tenantService.execute(request)
+                .await().atMost(Duration.ofSeconds(TIMEOUT));
+    }
+
+    public SyncTenantStageCommandResponse syncTenantStageCommandWithIdempotency(
+            final SyncTenantStageCommandRequest request) {
+        return tenantService.executeWithIdempotency(request)
+                .await().atMost(Duration.ofSeconds(TIMEOUT));
+    }
+
+    public DeleteTenantStageCommandResponse deleteTenantStageCommand(final DeleteTenantStageCommandRequest request) {
         return tenantService.execute(request)
                 .await().atMost(Duration.ofSeconds(TIMEOUT));
     }

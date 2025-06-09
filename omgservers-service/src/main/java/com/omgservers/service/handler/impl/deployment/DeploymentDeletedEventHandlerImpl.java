@@ -10,11 +10,10 @@ import com.omgservers.service.handler.EventHandler;
 import com.omgservers.service.operation.deployment.DeleteDeploymentCommandsOperation;
 import com.omgservers.service.operation.deployment.DeleteDeploymentLobbyAssignmentsOperation;
 import com.omgservers.service.operation.deployment.DeleteDeploymentLobbyResourcesOperation;
+import com.omgservers.service.operation.deployment.DeleteDeploymentMatchmakerAssignmentsOperation;
 import com.omgservers.service.operation.deployment.DeleteDeploymentMatchmakerResourcesOperation;
 import com.omgservers.service.operation.deployment.DeleteDeploymentRequestsOperation;
-import com.omgservers.service.operation.deployment.DeleteDeploymentMatchmakerAssignmentsOperation;
 import com.omgservers.service.operation.task.DeleteTaskOperation;
-import com.omgservers.service.operation.tenant.FindAndDeleteTenantDeploymentRefOperation;
 import com.omgservers.service.shard.deployment.DeploymentShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,7 +28,6 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
 
     final DeploymentShard deploymentShard;
 
-    final FindAndDeleteTenantDeploymentRefOperation findAndDeleteTenantDeploymentRefOperation;
     final DeleteTaskOperation deleteTaskOperation;
 
     final DeleteDeploymentMatchmakerAssignmentsOperation deleteDeploymentMatchmakerAssignmentsOperation;
@@ -56,9 +54,7 @@ public class DeploymentDeletedEventHandlerImpl implements EventHandler {
                     final var deployment = deploymentState.getDeployment();
                     log.debug("Deleted, {}", deployment);
 
-                    final var tenantId = deployment.getTenantId();
-                    return findAndDeleteTenantDeploymentRefOperation.execute(tenantId, deploymentId)
-                            .flatMap(voidItem -> deleteTaskOperation.execute(deploymentId, deploymentId))
+                    return deleteTaskOperation.execute(deploymentId, deploymentId)
                             .flatMap(deleted -> {
                                 final var deploymentCommands = deploymentState.getDeploymentCommands();
                                 final var deploymentRequests = deploymentState.getDeploymentRequests();

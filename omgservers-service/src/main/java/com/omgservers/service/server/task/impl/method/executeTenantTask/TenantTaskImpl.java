@@ -4,8 +4,6 @@ import com.omgservers.schema.model.tenant.TenantModel;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
 import com.omgservers.service.server.task.Task;
-import com.omgservers.service.server.task.TaskResult;
-import com.omgservers.service.shard.runtime.RuntimeShard;
 import com.omgservers.service.shard.tenant.TenantShard;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,14 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class TenantTaskImpl implements Task<TenantTaskArguments> {
 
-    final RuntimeShard runtimeShard;
     final TenantShard tenantShard;
 
-    public Uni<TaskResult> execute(final TenantTaskArguments taskArguments) {
+    public Uni<Boolean> execute(final TenantTaskArguments taskArguments) {
         final var tenantId = taskArguments.tenantId();
 
         return getTenant(tenantId)
-                .replaceWith(TaskResult.DONE);
+                .replaceWith(Boolean.FALSE);
     }
 
     Uni<TenantModel> getTenant(final Long id) {

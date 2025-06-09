@@ -1,7 +1,6 @@
 package com.omgservers.service.server.task.impl.method.executeRuntimeTask;
 
 import com.omgservers.service.server.task.Task;
-import com.omgservers.service.server.task.TaskResult;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation.DeleteInactiveClientsOperation;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation.FetchRuntimeOperation;
 import com.omgservers.service.server.task.impl.method.executeRuntimeTask.operation.HandleRuntimeOperation;
@@ -26,7 +25,7 @@ public class RuntimeTaskImpl implements Task<RuntimeTaskArguments> {
     final SyncProducedMatchmakerCommandsOperation syncProducedMatchmakerCommandsOperation;
     final DeleteInactiveClientsOperation deleteInactiveClientsOperation;
 
-    public Uni<TaskResult> execute(final RuntimeTaskArguments taskArguments) {
+    public Uni<Boolean> execute(final RuntimeTaskArguments taskArguments) {
         final var runtimeId = taskArguments.runtimeId();
         return fetchRuntimeOperation.execute(runtimeId)
                 .map(handleRuntimeOperation::execute)
@@ -46,11 +45,11 @@ public class RuntimeTaskImpl implements Task<RuntimeTaskArguments> {
                         log.info("Update runtime state, runtimeId={}, {}",
                                 runtimeId, runtimeChangeOfState);
 
-                        return updateRuntimeOperation.execute(handleRuntimeResult)
-                                .replaceWith(TaskResult.DONE);
+                        return updateRuntimeOperation.execute(handleRuntimeResult);
                     } else {
-                        return Uni.createFrom().item(TaskResult.NOOP);
+                        return Uni.createFrom().voidItem();
                     }
-                });
+                })
+                .replaceWith(Boolean.FALSE);
     }
 }

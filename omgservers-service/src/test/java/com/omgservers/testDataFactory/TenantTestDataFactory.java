@@ -1,5 +1,6 @@
 package com.omgservers.testDataFactory;
 
+import com.omgservers.schema.model.deployment.DeploymentModel;
 import com.omgservers.schema.model.project.TenantProjectConfigDto;
 import com.omgservers.schema.model.project.TenantProjectModel;
 import com.omgservers.schema.model.tenant.TenantConfigDto;
@@ -13,6 +14,9 @@ import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissi
 import com.omgservers.schema.model.tenantProjectPermission.TenantProjectPermissionQualifierEnum;
 import com.omgservers.schema.model.tenantStage.TenantStageConfigDto;
 import com.omgservers.schema.model.tenantStage.TenantStageModel;
+import com.omgservers.schema.model.tenantStageCommand.TenantStageCommandModel;
+import com.omgservers.schema.model.tenantStageCommand.TenantStageCommandQualifierEnum;
+import com.omgservers.schema.model.tenantStageCommand.body.OpenDeploymentTenantStageCommandBodyDto;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionModel;
 import com.omgservers.schema.model.tenantStagePermission.TenantStagePermissionQualifierEnum;
 import com.omgservers.schema.model.tenantVersion.TenantVersionConfigDto;
@@ -24,6 +28,7 @@ import com.omgservers.schema.shard.tenant.tenantPermission.SyncTenantPermissionR
 import com.omgservers.schema.shard.tenant.tenantProject.SyncTenantProjectRequest;
 import com.omgservers.schema.shard.tenant.tenantProjectPermission.SyncTenantProjectPermissionRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageRequest;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.SyncTenantStageCommandRequest;
 import com.omgservers.schema.shard.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
 import com.omgservers.schema.shard.tenant.tenantVersion.SyncTenantVersionRequest;
 import com.omgservers.service.factory.tenant.TenantImageModelFactory;
@@ -31,6 +36,7 @@ import com.omgservers.service.factory.tenant.TenantModelFactory;
 import com.omgservers.service.factory.tenant.TenantPermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectModelFactory;
 import com.omgservers.service.factory.tenant.TenantProjectPermissionModelFactory;
+import com.omgservers.service.factory.tenant.TenantStageCommandModelFactory;
 import com.omgservers.service.factory.tenant.TenantStageModelFactory;
 import com.omgservers.service.factory.tenant.TenantStagePermissionModelFactory;
 import com.omgservers.service.factory.tenant.TenantVersionModelFactory;
@@ -48,6 +54,7 @@ public class TenantTestDataFactory {
 
     final TenantProjectPermissionModelFactory tenantProjectPermissionModelFactory;
     final TenantStagePermissionModelFactory tenantStagePermissionModelFactory;
+    final TenantStageCommandModelFactory tenantStageCommandModelFactory;
     final TenantPermissionModelFactory tenantPermissionModelFactory;
     final TenantVersionModelFactory tenantVersionModelFactory;
     final TenantProjectModelFactory tenantProjectModelFactory;
@@ -140,5 +147,29 @@ public class TenantTestDataFactory {
         final var syncTenantImageRequest = new SyncTenantImageRequest(tenantImage);
         tenantService.syncTenantImage(syncTenantImageRequest);
         return tenantImage;
+    }
+
+    public TenantStageCommandModel createOpenDeploymentTenantStageCommand(final TenantStageModel tenantStage, 
+                                                                 final DeploymentModel deployment) {
+        final var tenantId = tenantStage.getTenantId();
+        final var tenantStageId = tenantStage.getId();
+        final var deploymentId = deployment.getId();
+        final var body = new OpenDeploymentTenantStageCommandBodyDto(deploymentId);
+        final var tenantStageCommand = tenantStageCommandModelFactory.create(tenantId,
+                tenantStageId,
+                body);
+        final var syncTenantStageCommandRequest = new SyncTenantStageCommandRequest(tenantStageCommand);
+        tenantService.syncTenantStageCommand(syncTenantStageCommandRequest);
+        return tenantStageCommand;
+    }
+
+    public TenantStageCommandModel createTenantStageCommand(final TenantStageModel tenantStage, 
+                                                           final DeploymentModel deployment,
+                                                           final TenantStageCommandQualifierEnum qualifier) {
+        if (qualifier == TenantStageCommandQualifierEnum.OPEN_DEPLOYMENT) {
+            return createOpenDeploymentTenantStageCommand(tenantStage, deployment);
+        } else {
+            throw new IllegalArgumentException("Unsupported qualifier: " + qualifier);
+        }
     }
 }

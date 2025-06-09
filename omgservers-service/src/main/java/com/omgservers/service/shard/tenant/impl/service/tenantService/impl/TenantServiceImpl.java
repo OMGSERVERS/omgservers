@@ -9,16 +9,6 @@ import com.omgservers.schema.shard.tenant.tenant.GetTenantRequest;
 import com.omgservers.schema.shard.tenant.tenant.GetTenantResponse;
 import com.omgservers.schema.shard.tenant.tenant.SyncTenantRequest;
 import com.omgservers.schema.shard.tenant.tenant.SyncTenantResponse;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefRequest;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.DeleteTenantDeploymentRefResponse;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.FindTenantDeploymentRefRequest;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.FindTenantDeploymentRefResponse;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.GetTenantDeploymentRefRequest;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.GetTenantDeploymentRefResponse;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.SyncTenantDeploymentRefRequest;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.SyncTenantDeploymentRefResponse;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.ViewTenantDeploymentRefsRequest;
-import com.omgservers.schema.shard.tenant.tenantDeploymentRef.ViewTenantDeploymentRefsResponse;
 import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceRequest;
 import com.omgservers.schema.shard.tenant.tenantDeploymentResource.DeleteTenantDeploymentResourceResponse;
 import com.omgservers.schema.shard.tenant.tenantDeploymentResource.FindTenantDeploymentResourceRequest;
@@ -77,6 +67,12 @@ import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.SyncTenantStageResponse;
 import com.omgservers.schema.shard.tenant.tenantStage.ViewTenantStagesRequest;
 import com.omgservers.schema.shard.tenant.tenantStage.ViewTenantStagesResponse;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.DeleteTenantStageCommandRequest;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.DeleteTenantStageCommandResponse;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.SyncTenantStageCommandRequest;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.SyncTenantStageCommandResponse;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.ViewTenantStageCommandRequest;
+import com.omgservers.schema.shard.tenant.tenantStageCommand.ViewTenantStageCommandResponse;
 import com.omgservers.schema.shard.tenant.tenantStagePermission.DeleteTenantStagePermissionRequest;
 import com.omgservers.schema.shard.tenant.tenantStagePermission.DeleteTenantStagePermissionResponse;
 import com.omgservers.schema.shard.tenant.tenantStagePermission.SyncTenantStagePermissionRequest;
@@ -85,6 +81,10 @@ import com.omgservers.schema.shard.tenant.tenantStagePermission.VerifyTenantStag
 import com.omgservers.schema.shard.tenant.tenantStagePermission.VerifyTenantStagePermissionExistsResponse;
 import com.omgservers.schema.shard.tenant.tenantStagePermission.ViewTenantStagePermissionsRequest;
 import com.omgservers.schema.shard.tenant.tenantStagePermission.ViewTenantStagePermissionsResponse;
+import com.omgservers.schema.shard.tenant.tenantStageState.GetTenantStageStateRequest;
+import com.omgservers.schema.shard.tenant.tenantStageState.GetTenantStageStateResponse;
+import com.omgservers.schema.shard.tenant.tenantStageState.UpdateTenantStageStateRequest;
+import com.omgservers.schema.shard.tenant.tenantStageState.UpdateTenantStageStateResponse;
 import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionRequest;
 import com.omgservers.schema.shard.tenant.tenantVersion.DeleteTenantVersionResponse;
 import com.omgservers.schema.shard.tenant.tenantVersion.GetTenantVersionConfigRequest;
@@ -99,7 +99,6 @@ import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsReques
 import com.omgservers.schema.shard.tenant.tenantVersion.ViewTenantVersionsResponse;
 import com.omgservers.service.exception.ServerSideBaseException;
 import com.omgservers.service.exception.ServerSideConflictException;
-import com.omgservers.service.operation.server.CalculateShardOperation;
 import com.omgservers.service.operation.server.HandleShardedRequestOperation;
 import com.omgservers.service.shard.tenant.impl.operation.getTenantModuleClient.GetTenantModuleClientOperation;
 import com.omgservers.service.shard.tenant.impl.operation.getTenantModuleClient.TenantModuleClient;
@@ -108,11 +107,6 @@ import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.metho
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenant.GetTenantDataMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenant.GetTenantMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenant.SyncTenantMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentRef.DeleteTenantDeploymentRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentRef.FindTenantDeploymentRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentRef.GetTenantDeploymentRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentRef.SyncTenantDeploymentRefMethod;
-import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentRef.ViewTenantDeploymentRefsMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentResource.DeleteTenantDeploymentResourceMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentResource.FindTenantDeploymentResourceMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantDeploymentResource.GetTenantDeploymentResourceMethod;
@@ -142,10 +136,15 @@ import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.metho
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.GetTenantStageMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.SyncTenantStageMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStage.ViewTenantStagesMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStageCommand.DeleteTenantStageCommandMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStageCommand.SyncTenantStageCommandMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStageCommand.ViewTenantStageCommandsMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.DeleteTenantStagePermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.SyncTenantStagePermissionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.VerifyTenantStagePermissionExistsMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStagePermission.ViewTenantStagePermissionsMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStageState.GetTenantStageStateMethod;
+import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantStageState.UpdateTenantStageStateMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.DeleteTenantVersionMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.GetTenantVersionConfigMethod;
 import com.omgservers.service.shard.tenant.impl.service.tenantService.impl.method.tenantVersion.GetTenantVersionDataMethod;
@@ -179,17 +178,17 @@ public class TenantServiceImpl implements TenantService {
     final SyncTenantProjectPermissionMethod syncTenantProjectPermissionMethod;
     final ViewTenantStagePermissionsMethod viewTenantStagePermissionsMethod;
     final SyncTenantStagePermissionMethod syncTenantStagePermissionMethod;
-    final DeleteTenantDeploymentRefMethod deleteTenantDeploymentRefMethod;
-    final ViewTenantDeploymentRefsMethod viewTenantDeploymentRefsMethod;
-    final FindTenantDeploymentRefMethod findTenantDeploymentRefMethod;
-    final SyncTenantDeploymentRefMethod syncTenantDeploymentRefMethod;
+    final DeleteTenantStageCommandMethod deleteTenantStageCommandMethod;
+    final ViewTenantStageCommandsMethod viewTenantStageCommandsMethod;
+    final UpdateTenantStageStateMethod updateTenantStageStateMethod;
+    final SyncTenantStageCommandMethod syncTenantStageCommandMethod;
     final DeleteTenantPermissionMethod deleteTenantPermissionMethod;
     final GetTenantVersionConfigMethod getTenantVersionConfigMethod;
-    final GetTenantDeploymentRefMethod getTenantDeploymentRefMethod;
     final ViewTenantPermissionsMethod viewTenantPermissionsMethod;
     final GetTenantProjectDataMethod getTenantProjectDataMethod;
     final SyncTenantPermissionMethod syncTenantPermissionMethod;
     final GetTenantVersionDataMethod getTenantVersionDataMethod;
+    final GetTenantStageStateMethod getTenantStageStateMethod;
     final DeleteTenantVersionMethod deleteTenantVersionMethod;
     final DeleteTenantProjectMethod deleteTenantProjectMethod;
     final GetTenantStageDataMethod getTenantStageDataMethod;
@@ -215,7 +214,6 @@ public class TenantServiceImpl implements TenantService {
 
     final GetTenantModuleClientOperation getTenantModuleClientOperation;
     final HandleShardedRequestOperation handleShardedRequestOperation;
-    final CalculateShardOperation calculateShardOperation;
 
     /*
     Tenant
@@ -438,6 +436,52 @@ public class TenantServiceImpl implements TenantService {
     }
 
     /*
+    TenantStageCommand
+     */
+
+    @Override
+    public Uni<ViewTenantStageCommandResponse> execute(@Valid final ViewTenantStageCommandRequest request) {
+        return handleShardedRequestOperation.execute(log, request,
+                getTenantModuleClientOperation::execute,
+                TenantModuleClient::execute,
+                viewTenantStageCommandsMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncTenantStageCommandResponse> execute(@Valid final SyncTenantStageCommandRequest request) {
+        return handleShardedRequestOperation.execute(log, request,
+                getTenantModuleClientOperation::execute,
+                TenantModuleClient::execute,
+                syncTenantStageCommandMethod::execute);
+    }
+
+    @Override
+    public Uni<SyncTenantStageCommandResponse> executeWithIdempotency(
+            @Valid final SyncTenantStageCommandRequest request) {
+        return execute(request)
+                .onFailure(ServerSideConflictException.class)
+                .recoverWithUni(t -> {
+                    if (t instanceof final ServerSideBaseException exception) {
+                        if (exception.getQualifier().equals(ExceptionQualifierEnum.IDEMPOTENCY_VIOLATED)) {
+                            log.debug("Idempotency was violated, object={}, {}", request.getTenantStageCommand(),
+                                    t.getMessage());
+                            return Uni.createFrom().item(new SyncTenantStageCommandResponse(Boolean.FALSE));
+                        }
+                    }
+
+                    return Uni.createFrom().failure(t);
+                });
+    }
+
+    @Override
+    public Uni<DeleteTenantStageCommandResponse> execute(@Valid final DeleteTenantStageCommandRequest request) {
+        return handleShardedRequestOperation.execute(log, request,
+                getTenantModuleClientOperation::execute,
+                TenantModuleClient::execute,
+                deleteTenantStageCommandMethod::execute);
+    }
+
+    /*
     TenantStagePermission
      */
 
@@ -493,6 +537,26 @@ public class TenantServiceImpl implements TenantService {
                 getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantStagePermissionMethod::execute);
+    }
+
+    /*
+    TenantStageState
+     */
+
+    @Override
+    public Uni<GetTenantStageStateResponse> execute(@Valid final GetTenantStageStateRequest request) {
+        return handleShardedRequestOperation.execute(log, request,
+                getTenantModuleClientOperation::execute,
+                TenantModuleClient::execute,
+                getTenantStageStateMethod::execute);
+    }
+
+    @Override
+    public Uni<UpdateTenantStageStateResponse> execute(@Valid final UpdateTenantStageStateRequest request) {
+        return handleShardedRequestOperation.execute(log, request,
+                getTenantModuleClientOperation::execute,
+                TenantModuleClient::execute,
+                updateTenantStageStateMethod::execute);
     }
 
     /*
@@ -632,7 +696,8 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<ViewTenantDeploymentResourcesResponse> execute(@Valid final ViewTenantDeploymentResourcesRequest request) {
+    public Uni<ViewTenantDeploymentResourcesResponse> execute(
+            @Valid final ViewTenantDeploymentResourcesRequest request) {
         return handleShardedRequestOperation.execute(log, request,
                 getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
@@ -648,7 +713,8 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<UpdateTenantDeploymentResourceStatusResponse> execute(@Valid final UpdateTenantDeploymentResourceStatusRequest request) {
+    public Uni<UpdateTenantDeploymentResourceStatusResponse> execute(
+            @Valid final UpdateTenantDeploymentResourceStatusRequest request) {
         return handleShardedRequestOperation.execute(log, request,
                 getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
@@ -656,54 +722,11 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Uni<DeleteTenantDeploymentResourceResponse> execute(@Valid final DeleteTenantDeploymentResourceRequest request) {
+    public Uni<DeleteTenantDeploymentResourceResponse> execute(
+            @Valid final DeleteTenantDeploymentResourceRequest request) {
         return handleShardedRequestOperation.execute(log, request,
                 getTenantModuleClientOperation::execute,
                 TenantModuleClient::execute,
                 deleteTenantDeploymentResourceMethod::execute);
-    }
-
-    /*
-    TenantDeploymentRef
-     */
-
-    @Override
-    public Uni<GetTenantDeploymentRefResponse> execute(@Valid final GetTenantDeploymentRefRequest request) {
-        return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::execute,
-                TenantModuleClient::execute,
-                getTenantDeploymentRefMethod::execute);
-    }
-
-    @Override
-    public Uni<FindTenantDeploymentRefResponse> execute(@Valid final FindTenantDeploymentRefRequest request) {
-        return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::execute,
-                TenantModuleClient::execute,
-                findTenantDeploymentRefMethod::execute);
-    }
-
-    @Override
-    public Uni<ViewTenantDeploymentRefsResponse> execute(@Valid final ViewTenantDeploymentRefsRequest request) {
-        return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::execute,
-                TenantModuleClient::execute,
-                viewTenantDeploymentRefsMethod::execute);
-    }
-
-    @Override
-    public Uni<SyncTenantDeploymentRefResponse> execute(@Valid final SyncTenantDeploymentRefRequest request) {
-        return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::execute,
-                TenantModuleClient::execute,
-                syncTenantDeploymentRefMethod::execute);
-    }
-
-    @Override
-    public Uni<DeleteTenantDeploymentRefResponse> execute(@Valid final DeleteTenantDeploymentRefRequest request) {
-        return handleShardedRequestOperation.execute(log, request,
-                getTenantModuleClientOperation::execute,
-                TenantModuleClient::execute,
-                deleteTenantDeploymentRefMethod::execute);
     }
 }
