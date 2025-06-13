@@ -80,6 +80,8 @@ jobs:
             arch: arm64
             os: macos
             executable: "*-runner"
+    if: |
+      startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
         with:
