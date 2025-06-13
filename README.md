@@ -12,7 +12,7 @@ OMGSERVERS is a backend for authoritative game servers.
 ## How to test it
 
 ```bash
-curl -L https://github.com/OMGSERVERS/omgservers/releases/download/0.5.0/install.sh | bash
+curl -L https://github.com/OMGSERVERS/omgservers/releases/download/0.6.0/install.sh | bash
 ```
 
 # Features
