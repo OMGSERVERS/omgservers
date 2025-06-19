@@ -30,6 +30,8 @@ class HandleClosedConnectionMethodImpl implements HandleClosedConnectionMethod {
         final var webSocketConnection = request.getWebSocketConnection();
         final var closeReason = request.getCloseReason();
 
+        log.info("Websocket \"{}\" closed with reason=\"{}\"", webSocketConnection.id(), closeReason);
+
         final var connectorConnection = connectorConnections.get(webSocketConnection);
         if (Objects.nonNull(connectorConnection)) {
             return handleConnectorConnection(connectorConnection)

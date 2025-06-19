@@ -3,6 +3,7 @@ package com.omgservers.schema.entrypoint.player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.net.URI;
 
@@ -13,5 +14,15 @@ public class CreateClientPlayerResponse {
 
     Long clientId;
 
-    URI connectionUrl;
+    ConnectorConfig connectorConfig;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ConnectorConfig {
+        URI connectionUrl;
+
+        @ToString.Exclude
+        String secWebSocketProtocol;
+    }
 }

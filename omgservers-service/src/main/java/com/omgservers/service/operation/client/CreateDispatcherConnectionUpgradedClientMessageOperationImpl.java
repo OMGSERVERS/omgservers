@@ -2,6 +2,7 @@ package com.omgservers.service.operation.client;
 
 import com.omgservers.schema.message.body.ConnectionUpgradeQualifierEnum;
 import com.omgservers.schema.message.body.ConnectionUpgradedMessageBodyDto;
+import com.omgservers.schema.security.WebSocketConfig;
 import com.omgservers.schema.shard.client.clientMessage.SyncClientMessageRequest;
 import com.omgservers.schema.shard.client.clientMessage.SyncClientMessageResponse;
 import com.omgservers.service.factory.client.ClientMessageModelFactory;
@@ -11,8 +12,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URI;
 
 @Slf4j
 @ApplicationScoped
@@ -25,9 +24,11 @@ class CreateDispatcherConnectionUpgradedClientMessageOperationImpl
     final ClientMessageModelFactory clientMessageModelFactory;
 
     @Override
-    public Uni<Boolean> executeFailSafe(final URI connectionUrl,
+    public Uni<Boolean> executeFailSafe(final WebSocketConfig webSocketConfig,
                                         final Long clientId) {
-        final var dispatcherConfig = new ConnectionUpgradedMessageBodyDto.DispatcherConfig(connectionUrl);
+        final var dispatcherConfig = new ConnectionUpgradedMessageBodyDto
+                .DispatcherConfig(webSocketConfig.connectionUrl(),
+                webSocketConfig.secWebsocketProtocol());
         final var messageBody = ConnectionUpgradedMessageBodyDto.builder()
                 .protocol(ConnectionUpgradeQualifierEnum.DISPATCHER)
                 .dispatcherConfig(dispatcherConfig)
