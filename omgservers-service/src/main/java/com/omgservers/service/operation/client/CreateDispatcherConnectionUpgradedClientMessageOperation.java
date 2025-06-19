@@ -1,10 +1,9 @@
 package com.omgservers.service.operation.client;
 
+import com.omgservers.schema.security.WebSocketConfig;
 import io.smallrye.mutiny.Uni;
 
-import java.net.URI;
-
 public interface CreateDispatcherConnectionUpgradedClientMessageOperation {
-    Uni<Boolean> executeFailSafe(URI connectionUrl,
+    Uni<Boolean> executeFailSafe(WebSocketConfig webSocketConfig,
                                  Long clientId);
 }

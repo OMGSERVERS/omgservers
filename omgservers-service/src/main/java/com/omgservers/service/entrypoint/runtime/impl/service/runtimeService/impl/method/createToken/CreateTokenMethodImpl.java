@@ -9,7 +9,7 @@ import com.omgservers.schema.shard.runtime.runtime.GetRuntimeResponse;
 import com.omgservers.schema.shard.user.CreateTokenRequest;
 import com.omgservers.schema.shard.user.CreateTokenResponse;
 import com.omgservers.service.exception.ServerSideNotFoundException;
-import com.omgservers.service.operation.runtime.CreateRuntimeDispatcherConnectionUrlOperation;
+import com.omgservers.service.operation.runtime.CreateDispatcherRuntimeWebSocketConfigOperation;
 import com.omgservers.service.operation.runtime.CreateOpenRuntimeCommandOperation;
 import com.omgservers.service.operation.security.IssueJwtTokenOperation;
 import com.omgservers.service.shard.runtime.RuntimeShard;
@@ -28,7 +28,7 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
     final RuntimeShard runtimeShard;
     final UserShard userShard;
 
-    final CreateRuntimeDispatcherConnectionUrlOperation createRuntimeDispatcherConnectionUrlOperation;
+    final CreateDispatcherRuntimeWebSocketConfigOperation createDispatcherRuntimeWebSocketConfigOperation;
     final CreateOpenRuntimeCommandOperation createOpenRuntimeCommandOperation;
     final IssueJwtTokenOperation issueJwtTokenOperation;
 
@@ -51,11 +51,15 @@ class CreateTokenMethodImpl implements CreateTokenMethod {
                             .flatMap(userToken -> createOpenRuntimeCommandOperation.execute(runtime)
                                     .map(created -> {
                                         final var apiToken = issueJwtTokenOperation.issueRuntimeJwtToken(runtimeId);
-                                        final var dispatcherUrl = createRuntimeDispatcherConnectionUrlOperation
+                                        final var webSocketConfig = createDispatcherRuntimeWebSocketConfigOperation
                                                 .execute(userId, runtimeId);
 
+                                        final var dispatcherConfig = new CreateTokenRuntimeResponse
+                                                .DispatcherConfig(webSocketConfig.connectionUrl(),
+                                                webSocketConfig.secWebsocketProtocol());
+
                                         log.info("Tokens issued to use by runtime \"{}\"", runtimeId);
-                                        return new CreateTokenRuntimeResponse(apiToken, dispatcherUrl);
+                                        return new CreateTokenRuntimeResponse(apiToken, dispatcherConfig);
                                     }));
                 });
     }

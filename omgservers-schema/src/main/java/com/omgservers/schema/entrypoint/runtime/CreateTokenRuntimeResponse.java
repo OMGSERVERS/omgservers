@@ -15,6 +15,15 @@ public class CreateTokenRuntimeResponse {
     @ToString.Exclude
     String apiToken;
 
-    @ToString.Exclude
-    URI dispatcherUrl;
+    DispatcherConfig dispatcherConfig;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DispatcherConfig {
+        URI connectionUrl;
+
+        @ToString.Exclude
+        String secWebSocketProtocol;
+    }
 }

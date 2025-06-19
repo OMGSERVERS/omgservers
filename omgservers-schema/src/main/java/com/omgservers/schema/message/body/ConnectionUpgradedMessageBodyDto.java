@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.net.URI;
 
@@ -29,6 +30,9 @@ public class ConnectionUpgradedMessageBodyDto extends MessageBodyDto {
     @AllArgsConstructor
     public static class DispatcherConfig {
         URI connectionUrl;
+
+        @ToString.Exclude
+        String secWebSocketProtocol;
     }
 
     @Override
